@@ -65,12 +65,6 @@ val spineCoreVersion: String by extra
 val spineBaseVersion: String by extra
 val spineTimeVersion: String by extra
 
-extra["projectsToPublish"] = listOf(
-        "template-client",
-        "template-server"
-)
-extra["credentialsPropertyFile"] = PublishingRepos.cloudRepo.credentials
-
 allprojects {
     apply {
         plugin("jacoco")
@@ -79,34 +73,15 @@ allprojects {
         apply(from = "$rootDir/version.gradle.kts")
     }
 
-    group = "io.spine.template"
+    group = "io.spine"
     version = extra["versionToPublish"]!!
 }
 
 subprojects {
     apply {
         plugin("java-library")
-        plugin("net.ltgt.errorprone")
-        plugin("pmd")
-        plugin("io.spine.tools.gradle.bootstrap")
 
-        from(Deps.scripts.javacArgs(project))
-        from(Deps.scripts.pmd(project))
         from(Deps.scripts.projectLicenseReport(project))
-        from(Deps.scripts.testOutput(project))
-        from(Deps.scripts.javadocOptions(project))
-
-        from(Deps.scripts.testArtifacts(project))
-    }
-
-    val isTravis = System.getenv("TRAVIS") == "true"
-    if (isTravis) {
-        tasks.javadoc {
-            val opt = options
-            if (opt is CoreJavadocOptions) {
-                opt.addStringOption("Xmaxwarns", "1")
-            }
-        }
     }
 
     java {
@@ -117,36 +92,11 @@ subprojects {
     DependencyResolution.defaultRepositories(repositories)
 
     dependencies {
-        errorprone(Deps.build.errorProneCore)
-        errorproneJavac(Deps.build.errorProneJavac)
-
-        implementation(Deps.build.guava)
-        compileOnlyApi(Deps.build.jsr305Annotations)
-        compileOnlyApi(Deps.build.checkerAnnotations)
-        Deps.build.errorProneAnnotations.forEach { compileOnlyApi(it) }
-
-        testImplementation(Deps.test.guavaTestlib)
         Deps.test.junit5Api.forEach { testImplementation(it) }
         Deps.test.truth.forEach { testImplementation(it) }
         testImplementation("io.spine.tools:spine-mute-logging:$spineBaseVersion")
-
         testRuntimeOnly(Deps.test.junit5Runner)
     }
-
-    DependencyResolution.forceConfiguration(configurations)
-    configurations {
-        all {
-            resolutionStrategy {
-                force(
-                        "io.spine:spine-base:$spineBaseVersion",
-                        "io.spine:spine-testlib:$spineBaseVersion",
-                        "io.spine:spine-base:$spineBaseVersion",
-                        "io.spine:spine-time:$spineTimeVersion"
-                )
-            }
-        }
-    }
-    DependencyResolution.excludeProtobufLite(configurations)
 
     tasks.test {
         useJUnitPlatform {
@@ -179,14 +129,7 @@ subprojects {
 }
 
 apply {
-    from(Deps.scripts.publish(project))
-
-    // Aggregated coverage report across all subprojects.
     from(Deps.scripts.jacoco(project))
-
-    // Generate a repository-wide report of 3rd-party dependencies and their licenses.
     from(Deps.scripts.repoLicenseReport(project))
-
-    // Generate a `pom.xml` file containing first-level dependency of all projects in the repository.
     from(Deps.scripts.generatePom(project))
 }

@@ -24,9 +24,4 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "spine-template"
-
-include(
-        "template-client",
-        "template-server"
-)
+rootProject.name = "validation"
