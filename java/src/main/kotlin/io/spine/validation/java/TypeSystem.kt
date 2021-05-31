@@ -204,14 +204,14 @@ private constructor(
 
         @CanIgnoreReturnValue
         fun put(file: File, messageType: MessageType): Builder {
-            val javaClassName = ClassName(messageType.javaClassName(declaredIn = file))
+            val javaClassName = messageType.javaClassName(declaredIn = file)
             knownTypes[messageType.typeUrl()] = javaClassName
             return this
         }
 
         @CanIgnoreReturnValue
         fun put(file: File, enumType: EnumType): Builder {
-            val javaClassName = ClassName(enumType.javaClassName(declaredIn = file))
+            val javaClassName = enumType.javaClassName(declaredIn = file)
             knownTypes[enumType.typeUrl()] = javaClassName
             return this
         }
