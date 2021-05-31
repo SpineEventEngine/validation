@@ -28,11 +28,12 @@
 
 import io.spine.gradle.internal.DependencyResolution
 import io.spine.gradle.internal.Deps
-import io.spine.gradle.internal.PublishingRepos
+import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.Scripts
 
 buildscript {
     apply(from = "version.gradle.kts")
-    apply(from = "$rootDir/config/gradle/dependencies.gradle")
 
     val dependencyResolution = io.spine.gradle.internal.DependencyResolution
 
@@ -55,8 +56,8 @@ buildscript {
 plugins {
     `java-library`
     idea
-    id("com.google.protobuf").version(io.spine.gradle.internal.Deps.versions.protobufPlugin)
-    id("net.ltgt.errorprone").version(io.spine.gradle.internal.Deps.versions.errorPronePlugin)
+    id("com.google.protobuf").version(io.spine.internal.dependency.Protobuf.GradlePlugin.version)
+    id("net.ltgt.errorprone").version(io.spine.internal.dependency.ErrorProne.GradlePlugin.version)
     id("io.spine.tools.gradle.bootstrap") version "1.7.0" apply false
 }
 
@@ -92,9 +93,9 @@ subprojects {
     DependencyResolution.defaultRepositories(repositories)
 
     dependencies {
-        Deps.test.junit5Api.forEach { testImplementation(it) }
-        Deps.test.truth.forEach { testImplementation(it) }
-        testRuntimeOnly(Deps.test.junit5Runner)
+        JUnit.api.forEach { testImplementation(it) }
+        Truth.libs.forEach { testImplementation(it) }
+        testRuntimeOnly(JUnit.runner)
     }
 
     tasks.test {
@@ -104,9 +105,9 @@ subprojects {
     }
 
     apply {
-        from(Deps.scripts.slowTests(project))
-        from(Deps.scripts.testOutput(project))
-        from(Deps.scripts.javadocOptions(project))
+        from(Scripts.slowTests(project))
+        from(Scripts.testOutput(project))
+        from(Scripts.javadocOptions(project))
     }
 
     tasks.register("sourceJar", Jar::class) {
@@ -128,7 +129,7 @@ subprojects {
 }
 
 apply {
-    from(Deps.scripts.jacoco(project))
-    from(Deps.scripts.repoLicenseReport(project))
-    from(Deps.scripts.generatePom(project))
+    from(Scripts.jacoco(project))
+    from(Scripts.repoLicenseReport(project))
+    from(Scripts.generatePom(project))
 }
