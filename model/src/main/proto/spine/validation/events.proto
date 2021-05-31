@@ -38,8 +38,8 @@ option java_multiple_files = true;
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
-// The event emitted whenever a validation rule is attached to a message type.
-message RuleAdded {
+// The event emitted whenever a simple validation rule is attached to a message type.
+message SimpleRuleAdded {
 
     protodata.TypeName type = 1;
 

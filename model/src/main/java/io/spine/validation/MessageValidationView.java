@@ -32,15 +32,11 @@ import io.spine.protodata.MessageType;
 import io.spine.protodata.TypeEntered;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.View;
-import io.spine.validation.CompositeRuleAdded;
-import io.spine.validation.MessageValidation;
-import io.spine.validation.Rule;
-import io.spine.validation.RuleAdded;
 
 /**
  * A view which accumulates validation data for a message type.
  *
- * <p>To add more rules to the message validation, emit {@code RuleAdded} or
+ * <p>To add more rules to the message validation, emit {@code SimpleRuleAdded} or
  * {@code CompositeRuleAdded} events.
  */
 class MessageValidationView
@@ -54,7 +50,7 @@ class MessageValidationView
     }
 
     @Subscribe
-    void on(RuleAdded event) {
+    void on(SimpleRuleAdded event) {
         Rule roc = Rule
                 .newBuilder()
                 .setSimple(event.getRule())

@@ -56,7 +56,7 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     @NotNull
     @Override
     @React
-    public EitherOf2<RuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
         Option option = event.getOption();
         if (isOption(option, OptionsProto.required)) {
             ProtobufSourceFile file = select(ProtobufSourceFile.class)
@@ -79,7 +79,7 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
         return EitherOf2.withB(nothing());
     }
 
-    private static RuleAdded requiredRule(Field field) {
+    private static SimpleRuleAdded requiredRule(Field field) {
         Value defaultValue = DefaultValue.forField(field);
         @SuppressWarnings("DuplicateStringLiteralInspection") // Duplication in generated code.
         SimpleRule rule = SimpleRule.newBuilder()
@@ -88,7 +88,7 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                                     .setSign(ComparisonOperator.NOT_EQUAL)
                                     .setOtherValue(defaultValue)
                                     .vBuild();
-        return RuleAdded.newBuilder()
+        return SimpleRuleAdded.newBuilder()
                         .setType(field.getDeclaringType())
                         .setRule(rule)
                         .vBuild();
