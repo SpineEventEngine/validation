@@ -94,7 +94,6 @@ subprojects {
     dependencies {
         Deps.test.junit5Api.forEach { testImplementation(it) }
         Deps.test.truth.forEach { testImplementation(it) }
-        testImplementation("io.spine.tools:spine-mute-logging:$spineBaseVersion")
         testRuntimeOnly(Deps.test.junit5Runner)
     }
 
