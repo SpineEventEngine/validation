@@ -81,7 +81,8 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
 
     private static SimpleRuleAdded requiredRule(Field field) {
         Value defaultValue = DefaultValue.forField(field);
-        @SuppressWarnings("DuplicateStringLiteralInspection") // Duplication in generated code.
+        @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
+            // Duplication in generated code.
         SimpleRule rule = SimpleRule.newBuilder()
                                     .setErrorMessage("Field must be set.")
                                     .setField(field)
