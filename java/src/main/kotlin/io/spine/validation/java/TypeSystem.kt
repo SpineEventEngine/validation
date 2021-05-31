@@ -182,7 +182,7 @@ private constructor(
             TYPE_BYTES -> ByteString::class
             UNRECOGNIZED, PT_UNKNOWN -> unknownType(label, this)
         }
-        return ClassName(klass.javaObjectType.canonicalName)
+        return ClassName(klass.javaObjectType)
     }
 
     private fun unknownType(label: String, key: Any): Nothing {

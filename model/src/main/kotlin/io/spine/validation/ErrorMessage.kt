@@ -43,7 +43,7 @@ private const val OPERATION = "operation"
 public class ErrorMessage
 private constructor(private val value: String) {
 
-    companion object {
+    public companion object {
 
         /**
          * Produces an error message for a simple validation rule.
@@ -54,7 +54,7 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        fun forRule(format: String, value: String = "", other: String = "") =
+        public fun forRule(format: String, value: String = "", other: String = ""): ErrorMessage =
             ErrorMessage(
                 format
                     .replacePlaceholder(VALUE, value)
@@ -71,10 +71,10 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        fun forComposite(format: String,
+        public fun forComposite(format: String,
                          left: ErrorMessage,
                          right: ErrorMessage,
-                         operation: LogicalOperator = BO_UNKNOWN) =
+                         operation: LogicalOperator = BO_UNKNOWN): ErrorMessage =
             ErrorMessage(
                 format
                     .replacePlaceholder(LEFT, left.value)
@@ -83,7 +83,7 @@ private constructor(private val value: String) {
             )
     }
 
-    override fun toString() = value
+    override fun toString(): String = value
 }
 
 private fun String.replacePlaceholder(placeholder: String, newValue: String): String {

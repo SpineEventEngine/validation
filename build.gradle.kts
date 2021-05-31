@@ -49,21 +49,10 @@ plugins {
     id(protobuf.id).version(protobuf.version)
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
     id(errorProne.id).version(errorProne.version)
-    kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version) apply(false)
+    kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
 }
 
 allprojects {
-    apply {
-        plugin("idea")
-        plugin("project-report")
-    }
-
-    val protoDataVersion: String by extra("0.0.11")
-    group = "io.spine"
-    version = protoDataVersion
-}
-
-subprojects {
     repositories {
         applyStandard()
         val protoDataRepo = gitHub("ProtoData")
@@ -77,6 +66,17 @@ subprojects {
         }
     }
 
+    apply {
+        plugin("idea")
+        plugin("project-report")
+    }
+
+    val protoDataVersion: String by extra("0.0.11")
+    group = "io.spine"
+    version = protoDataVersion
+}
+
+subprojects {
     apply {
         plugin("kotlin")
         plugin("io.spine.mc-java")

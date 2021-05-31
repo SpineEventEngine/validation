@@ -30,3 +30,7 @@ dependencies {
     api("io.spine:spine-server:2.0.0-SNAPSHOT.23")
     api("io.spine.protodata:compiler:$protoDataVersion")
 }
+
+kotlin {
+    explicitApi()
+}
