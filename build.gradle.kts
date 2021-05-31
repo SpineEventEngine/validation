@@ -32,10 +32,11 @@ import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.spinePublishing
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
-    io.spine.internal.gradle.doForceVersions(configurations)
 
     dependencies {
         classpath("io.spine.tools:spine-mc-java:2.0.0-SNAPSHOT.30")
@@ -50,6 +51,7 @@ plugins {
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
     id(errorProne.id).version(errorProne.version)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
+    id("org.jetbrains.dokka") version "1.4.32"
 }
 
 allprojects {
@@ -79,6 +81,7 @@ allprojects {
 subprojects {
     apply {
         plugin("kotlin")
+        plugin("org.jetbrains.dokka")
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
         from(Scripts.projectLicenseReport(project))
@@ -98,6 +101,24 @@ subprojects {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
         }
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-Xinline-classes",
+                "-Xjvm-default=all"
+            )
+        }
+    }
+
+    val dokkaJavadoc by tasks.getting(DokkaTask::class)
+
+    tasks.register("javadocJar", Jar::class) {
+        from(dokkaJavadoc.outputDirectory)
+        archiveClassifier.set("javadoc")
+        dependsOn(dokkaJavadoc)
     }
 }
 

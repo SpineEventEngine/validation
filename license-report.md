@@ -173,6 +173,35 @@
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.11.1
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-databind **Version:** 2.11.1
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.dataformat **Name:** jackson-dataformat-xml **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.module **Name:** jackson-module-jaxb-annotations **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-modules-base](https://github.com/FasterXML/jackson-modules-base)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.module **Name:** jackson-module-kotlin **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.woodstox **Name:** woodstox-core **Version:** 6.2.1
+     * **Project URL:** [https://github.com/FasterXML/woodstox](https://github.com/FasterXML/woodstox)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** com.github.ben-manes.caffeine **Name:** caffeine **Version:** 2.8.8
      * **POM Project URL:** [https://github.com/ben-manes/caffeine](https://github.com/ben-manes/caffeine)
      * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -321,6 +350,10 @@
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.soywiz.korlibs.korte **Name:** korte-jvm **Version:** 2.0.7
+     * **POM Project URL:** [https://github.com/korlibs/korte](https://github.com/korlibs/korte)
+     * **POM License: MIT License** - [https://raw.githubusercontent.com/korlibs/korte/master/LICENSE](https://raw.githubusercontent.com/korlibs/korte/master/LICENSE)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -368,6 +401,18 @@
 1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.11
 
 1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+
+1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
+     * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
+     * **POM License: EDL 1.0** - [http://www.eclipse.org/org/documents/edl-v10.php](http://www.eclipse.org/org/documents/edl-v10.php)
+     * **POM License: Eclipse Public License v. 2.0** - [https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt](https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt)
+     * **POM License: GNU General Public License, version 2 with the GNU Classpath Exception** - [https://www.gnu.org/software/classpath/license.html](https://www.gnu.org/software/classpath/license.html)
+
+1. **Group:** jakarta.xml.bind **Name:** jakarta.xml.bind-api **Version:** 2.3.2
+     * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
+     * **POM License: Eclipse Distribution License - v 1.0** - [http://www.eclipse.org/org/documents/edl-v10.php](http://www.eclipse.org/org/documents/edl-v10.php)
+     * **POM License: Eclipse Public License v. 2.0** - [https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt](https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt)
+     * **POM License: GNU General Public License, version 2 with the GNU Classpath Exception** - [https://www.gnu.org/software/classpath/license.html](https://www.gnu.org/software/classpath/license.html)
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -418,6 +463,11 @@
      * **POM License: MIT license** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.codehaus.woodstox **Name:** stax2-api **Version:** 4.2.1
+     * **Project URL:** [http://github.com/FasterXML/stax2-api](http://github.com/FasterXML/stax2-api)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM License: The BSD License** - [http://www.opensource.org/licenses/bsd-license.php](http://www.opensource.org/licenses/bsd-license.php)
+
 1. **Group:** org.eclipse.jgit **Name:** org.eclipse.jgit **Version:** 4.4.1.201607150455-r
      * **POM License: Eclipse Distribution License (New BSD License)**
 
@@ -436,6 +486,39 @@
      * **POM Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.jetbrains **Name:** markdown **Version:** 0.2.1 **No license information found**
+1. **Group:** org.jetbrains **Name:** markdown-jvm **Version:** 0.2.1
+     * **POM Project URL:** [https://github.com/JetBrains/markdown](https://github.com/JetBrains/markdown)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-analysis **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-base **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-core **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** javadoc-plugin **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-analysis-compiler **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-analysis-intellij **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-as-java-plugin **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** org.jetbrains.intellij.deps **Name:** trove4j **Version:** 1.0.20181211
      * **POM Project URL:** [https://github.com/JetBrains/intellij-deps-trove4j](https://github.com/JetBrains/intellij-deps-trove4j)
      * **POM License: GNU LESSER GENERAL PUBLIC LICENSE 2.1** - [https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
@@ -449,6 +532,10 @@
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-klib-commonizer-embeddable **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-reflect **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -476,7 +563,15 @@
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib **Version:** 1.4.32
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-common **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -484,7 +579,15 @@
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk7 **Version:** 1.4.32
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk7 **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk8 **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -495,6 +598,19 @@
 1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core **Version:** 1.3.8
      * **POM Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **POM License: The Apache Software License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core **Version:** 1.4.1 **No license information found**
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core-jvm **Version:** 1.4.1
+     * **POM Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **POM License: The Apache Software License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-html-jvm **Version:** 0.7.3
+     * **POM Project URL:** [https://github.com/Kotlin/kotlinx.html](https://github.com/Kotlin/kotlinx.html)
+     * **POM License: The Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jsoup **Name:** jsoup **Version:** 1.13.1
+     * **Project URL:** [https://jsoup.org/](https://jsoup.org/)
+     * **POM License: The MIT License** - [https://jsoup.org/license](https://jsoup.org/license)
 
 1. **Group:** org.junit **Name:** junit-bom **Version:** 5.7.1 **No license information found**
 1. **Group:** org.junit.jupiter **Name:** junit-jupiter-api **Version:** 5.7.1
@@ -545,7 +661,7 @@
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon May 31 17:58:45 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -709,6 +825,35 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.11.1
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.core **Name:** jackson-databind **Version:** 2.11.1
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.dataformat **Name:** jackson-dataformat-xml **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.module **Name:** jackson-module-jaxb-annotations **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-modules-base](https://github.com/FasterXML/jackson-modules-base)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.jackson.module **Name:** jackson-module-kotlin **Version:** 2.11.1
+     * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.fasterxml.woodstox **Name:** woodstox-core **Version:** 6.2.1
+     * **Project URL:** [https://github.com/FasterXML/woodstox](https://github.com/FasterXML/woodstox)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** com.github.ben-manes.caffeine **Name:** caffeine **Version:** 2.8.8
      * **POM Project URL:** [https://github.com/ben-manes/caffeine](https://github.com/ben-manes/caffeine)
      * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -857,6 +1002,10 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.soywiz.korlibs.korte **Name:** korte-jvm **Version:** 2.0.7
+     * **POM Project URL:** [https://github.com/korlibs/korte](https://github.com/korlibs/korte)
+     * **POM License: MIT License** - [https://raw.githubusercontent.com/korlibs/korte/master/LICENSE](https://raw.githubusercontent.com/korlibs/korte/master/LICENSE)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -902,6 +1051,18 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
 1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+
+1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
+     * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
+     * **POM License: EDL 1.0** - [http://www.eclipse.org/org/documents/edl-v10.php](http://www.eclipse.org/org/documents/edl-v10.php)
+     * **POM License: Eclipse Public License v. 2.0** - [https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt](https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt)
+     * **POM License: GNU General Public License, version 2 with the GNU Classpath Exception** - [https://www.gnu.org/software/classpath/license.html](https://www.gnu.org/software/classpath/license.html)
+
+1. **Group:** jakarta.xml.bind **Name:** jakarta.xml.bind-api **Version:** 2.3.2
+     * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
+     * **POM License: Eclipse Distribution License - v 1.0** - [http://www.eclipse.org/org/documents/edl-v10.php](http://www.eclipse.org/org/documents/edl-v10.php)
+     * **POM License: Eclipse Public License v. 2.0** - [https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt](https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt)
+     * **POM License: GNU General Public License, version 2 with the GNU Classpath Exception** - [https://www.gnu.org/software/classpath/license.html](https://www.gnu.org/software/classpath/license.html)
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -952,6 +1113,11 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM License: MIT license** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.codehaus.woodstox **Name:** stax2-api **Version:** 4.2.1
+     * **Project URL:** [http://github.com/FasterXML/stax2-api](http://github.com/FasterXML/stax2-api)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM License: The BSD License** - [http://www.opensource.org/licenses/bsd-license.php](http://www.opensource.org/licenses/bsd-license.php)
+
 1. **Group:** org.eclipse.jgit **Name:** org.eclipse.jgit **Version:** 4.4.1.201607150455-r
      * **POM License: Eclipse Distribution License (New BSD License)**
 
@@ -960,6 +1126,39 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
 
 1. **Group:** org.jetbrains **Name:** annotations **Version:** 13.0
      * **POM Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains **Name:** markdown **Version:** 0.2.1 **No license information found**
+1. **Group:** org.jetbrains **Name:** markdown-jvm **Version:** 0.2.1
+     * **POM Project URL:** [https://github.com/JetBrains/markdown](https://github.com/JetBrains/markdown)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-analysis **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-base **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** dokka-core **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** javadoc-plugin **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-analysis-compiler **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-analysis-intellij **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.dokka **Name:** kotlin-as-java-plugin **Version:** 1.4.32
+     * **POM Project URL:** [https://github.com/Kotlin/dokka](https://github.com/Kotlin/dokka)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.jetbrains.intellij.deps **Name:** trove4j **Version:** 1.0.20181211
@@ -975,6 +1174,10 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-klib-commonizer-embeddable **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-reflect **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1002,7 +1205,15 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib **Version:** 1.4.32
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-common **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1010,7 +1221,15 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk7 **Version:** 1.4.32
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk7 **Version:** 1.5.0
+     * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
+     * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk8 **Version:** 1.4.32
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1021,6 +1240,19 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
 1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core **Version:** 1.3.8
      * **POM Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **POM License: The Apache Software License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core **Version:** 1.4.1 **No license information found**
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-coroutines-core-jvm **Version:** 1.4.1
+     * **POM Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **POM License: The Apache Software License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jetbrains.kotlinx **Name:** kotlinx-html-jvm **Version:** 0.7.3
+     * **POM Project URL:** [https://github.com/Kotlin/kotlinx.html](https://github.com/Kotlin/kotlinx.html)
+     * **POM License: The Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** org.jsoup **Name:** jsoup **Version:** 1.13.1
+     * **Project URL:** [https://jsoup.org/](https://jsoup.org/)
+     * **POM License: The MIT License** - [https://jsoup.org/license](https://jsoup.org/license)
 
 1. **Group:** org.junit **Name:** junit-bom **Version:** 5.7.1 **No license information found**
 1. **Group:** org.junit.jupiter **Name:** junit-jupiter-api **Version:** 5.7.1
@@ -1071,4 +1303,4 @@ This report was generated on **Mon May 31 15:46:03 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon May 31 15:46:04 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon May 31 17:58:53 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
