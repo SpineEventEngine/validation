@@ -26,71 +26,67 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.gradle.internal.DependencyResolution
-import io.spine.gradle.internal.Deps
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.spinePublishing
 
 buildscript {
-    apply(from = "version.gradle.kts")
+    io.spine.internal.gradle.doApplyStandard(repositories)
+    io.spine.internal.gradle.doForceVersions(configurations)
 
-    val dependencyResolution = io.spine.gradle.internal.DependencyResolution
-
-    val spineBaseVersion: String by extra
-    val spineTimeVersion: String by extra
-
-    dependencyResolution.defaultRepositories(repositories)
-    dependencyResolution.forceConfiguration(configurations)
-
-    configurations.all {
-        resolutionStrategy {
-            force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine:spine-time:$spineTimeVersion"
-            )
-        }
+    dependencies {
+        classpath("io.spine.tools:spine-mc-java:2.0.0-SNAPSHOT.30")
     }
 }
 
 plugins {
     `java-library`
     idea
-    id("com.google.protobuf").version(io.spine.internal.dependency.Protobuf.GradlePlugin.version)
-    id("net.ltgt.errorprone").version(io.spine.internal.dependency.ErrorProne.GradlePlugin.version)
-    id("io.spine.tools.gradle.bootstrap") version "1.7.0" apply false
+    val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
+    id(protobuf.id).version(protobuf.version)
+    val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
+    id(errorProne.id).version(errorProne.version)
+    kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version) apply(false)
 }
-
-apply(from = "version.gradle.kts")
-val spineCoreVersion: String by extra
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
 
 allprojects {
     apply {
-        plugin("jacoco")
         plugin("idea")
         plugin("project-report")
-        apply(from = "$rootDir/version.gradle.kts")
     }
 
+    val protoDataVersion: String by extra("0.0.10")
     group = "io.spine"
-    version = extra["versionToPublish"]!!
+    version = protoDataVersion
 }
 
 subprojects {
+    repositories {
+        applyStandard()
+        val protoDataRepo = gitHub("ProtoData")
+        maven {
+            url = uri(protoDataRepo.releases)
+            credentials {
+                val creds = protoDataRepo.credentials(project)!!
+                username = creds.username
+                password = creds.password
+            }
+        }
+    }
+
     apply {
-        plugin("java-library")
-
-        from(Deps.scripts.projectLicenseReport(project))
+        plugin("kotlin")
+        plugin("io.spine.mc-java")
+        plugin("com.google.protobuf")
+        from(Scripts.projectLicenseReport(project))
+        from(Scripts.slowTests(project))
+        from(Scripts.testOutput(project))
+        from(Scripts.javadocOptions(project))
+        from(Scripts.modelCompiler(project))
     }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    DependencyResolution.defaultRepositories(repositories)
 
     dependencies {
         JUnit.api.forEach { testImplementation(it) }
@@ -103,33 +99,18 @@ subprojects {
             includeEngines("junit-jupiter")
         }
     }
+}
 
-    apply {
-        from(Scripts.slowTests(project))
-        from(Scripts.testOutput(project))
-        from(Scripts.javadocOptions(project))
-    }
-
-    tasks.register("sourceJar", Jar::class) {
-        from(sourceSets.main.get().allJava)
-        archiveClassifier.set("sources")
-    }
-
-    tasks.register("testOutputJar", Jar::class) {
-        from(sourceSets.test.get().output)
-        archiveClassifier.set("test")
-    }
-
-    tasks.register("javadocJar", Jar::class) {
-        from("$projectDir/build/docs/javadoc")
-        archiveClassifier.set("javadoc")
-
-        dependsOn(tasks.javadoc)
-    }
+spinePublishing {
+    projectsToPublish.addAll(
+        "model"
+    )
+    spinePrefix.set(false)
+    // Publish to the ProtoData repository reduce configuration for end users.
+    targetRepositories.add(gitHub("ProtoData"))
 }
 
 apply {
-    from(Scripts.jacoco(project))
     from(Scripts.repoLicenseReport(project))
     from(Scripts.generatePom(project))
 }
