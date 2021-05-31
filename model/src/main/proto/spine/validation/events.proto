@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/rule.proto";
+
+// The event emitted whenever a validation rule is attached to a message type.
+message RuleAdded {
+
+    protodata.TypeName type = 1;
+
+    SimpleRule rule = 2;
+}
+
+// The event emitted whenever a composite validation rule is attached to a message type.
+message CompositeRuleAdded {
+
+    protodata.TypeName type = 1;
+
+    CompositeRule rule = 2;
+}

@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "RuleProto";
+option java_multiple_files = true;
+
+import "spine/validation/value.proto";
+import "spine/protodata/ast.proto";
+import "google/protobuf/any.proto";
+
+// A simple validation rule.
+//
+// May be expressed as a comparison between two operands. The first operand is always a field value.
+// The second operand is the `other_value`. `other_value` is typically derived from the Protobuf
+// definition of the validation rule.
+//
+message SimpleRule {
+
+    // The field which is being compared.
+    protodata.Field field = 1;
+
+    oneof operation {
+
+        // A simple comparison sign.
+        ComparisonOperator sign = 2;
+
+        // A custom comparison method, which cannot be covered by a combination of `Sign`s.
+        CustomOperator custom_operator = 3;
+    }
+
+    // The value to which the field is compared.
+    Value other_value = 4;
+
+    // A human-readable message explaining the error.
+    //
+    // May include tokens `{value}` and `{other}`, which will be replaced with the runtime values
+    // when the error is constructed.
+    //
+    string error_message = 5;
+}
+
+// A predefined comparison operator.
+//
+// Comparison between two values of the same type must always yield a boolean result.
+//
+enum ComparisonOperator {
+
+    OPERATION_UNKNOWN = 0;
+
+    EQUAL = 1;
+
+    NOT_EQUAL = 2;
+
+    LESS_THAN = 3;
+
+    GREATER_THAN = 4;
+
+    LESS_OR_EQUAL = 5;
+
+    GREATER_OR_EQUAL = 6;
+
+    DISTINCT = 7;
+}
+
+// A non-predefined comparison operator.
+message CustomOperator {
+
+    // Describes how the renderer should compare the values.
+    string description = 1;
+}
+
+message Rule {
+
+    oneof kind {
+
+        SimpleRule simple = 1;
+
+        CompositeRule composite = 2;
+    }
+}
+
+// A validation rule which is a combination of two or more rules.
+//
+// For example, if a value must be less than 100 and greater than 0, the two simple rules are
+// combined into a composite rule with the `AND` operator.
+//
+message CompositeRule {
+
+    // First rule.
+    Rule left = 1;
+
+    // The operation which joins two rules.
+    LogicalOperator operator = 2;
+
+    // Second rule.
+    Rule right = 3;
+
+    // A human-readable message explaining the error.
+    //
+    // May include tokens `{left}`, `{right}`, and `{operation}`, which will be replaced with at
+    // runtime with the error messages of the `left` and `right` rules and the words "and" or "or"
+    // or "xor".
+    //
+    string error_message = 4;
+}
+
+// A boolean operator.
+enum LogicalOperator {
+
+    BO_UNKNOWN = 0;
+
+    // Joins two boolean values with the "and" operator.
+    //
+    // Whenever generating code for this operator, renderers should prefer using short-circuit
+    // evaluation, i.e. if the left operand evaluates to `false`, the right will not be evaluated
+    // at all. However, there is no guarantee renderers will adhere to this recommendation.
+    //
+    AND = 1;
+
+    // Joins two boolean values with the "or" operator.
+    //
+    // Whenever generating code for this operator, renderers should prefer using short-circuit
+    // evaluation, i.e. if the left operand evaluates to `true`, the right will not be evaluated
+    // at all. However, there is no guarantee renderers will adhere to this recommendation.
+    //
+    OR = 2;
+
+    // Joins two boolean values with the "exclusive or" operator.
+    //
+    // Lazy evaluation of "exclusive or" is impossible, so both operands will always be evaluated.
+    //
+    XOR = 3;
+}
