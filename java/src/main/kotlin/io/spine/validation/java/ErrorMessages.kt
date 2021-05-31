@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("ErrorMessages")
+
 package io.spine.validation.java
 
 import io.spine.validation.ErrorMessage
@@ -36,7 +38,6 @@ import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.LiteralString
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
-
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -64,7 +65,6 @@ private fun addViolation(violation: Expression, violationsList: String): CodeBlo
         .builder()
         .addStatement("\$N.add(\$L)", violationsList, violation)
         .build()
-
 
 private fun ErrorMessage.buildViolation(type: TypeName,
                                         field: Field?,
