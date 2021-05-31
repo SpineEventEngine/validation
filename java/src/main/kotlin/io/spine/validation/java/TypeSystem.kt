@@ -55,7 +55,16 @@ import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
 import io.spine.protodata.Type.KindCase.PRIMITIVE
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.LiteralBytes
+import io.spine.protodata.codegen.java.LiteralString
+import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.codegen.java.Null
 import io.spine.protodata.codegen.java.javaClassName
+import io.spine.protodata.codegen.java.listExpression
+import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.typeUrl
 import io.spine.validation.Value.KindCase.BOOL_VALUE
 import io.spine.validation.Value.KindCase.BYTES_VALUE

@@ -32,6 +32,8 @@ import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.ProtobufSourceFile;
+import io.spine.protodata.codegen.java.MessageReference;
+import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceSet;

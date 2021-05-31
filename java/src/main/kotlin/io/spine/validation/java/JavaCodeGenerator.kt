@@ -31,6 +31,9 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Type.KindCase.PRIMITIVE
 import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.MessageReference
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN

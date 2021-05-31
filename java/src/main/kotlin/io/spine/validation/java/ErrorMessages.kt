@@ -31,6 +31,9 @@ import io.spine.protodata.Field
 import io.spine.protodata.TypeName
 import io.spine.base.FieldPath
 import com.squareup.javapoet.CodeBlock
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.LiteralString
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
 
@@ -40,8 +43,8 @@ import io.spine.validate.ConstraintViolation
  * to the given mutable [violationsList].
  */
 fun ErrorMessage.createViolation(field: Field,
-                    fieldValue: Expression,
-                    violationsList: String): CodeBlock {
+                                 fieldValue: Expression,
+                                 violationsList: String): CodeBlock {
     val type = field.declaringType
     val violation = buildViolation(type, field, fieldValue)
     return addViolation(violation, violationsList)
@@ -56,14 +59,16 @@ fun ErrorMessage.createCompositeViolation(type: TypeName, violationsList: String
     return addViolation(violation, violationsList)
 }
 
-private fun ErrorMessage.addViolation(violation: Expression, violationsList: String): CodeBlock =
+private fun addViolation(violation: Expression, violationsList: String): CodeBlock =
     CodeBlock
         .builder()
         .addStatement("\$N.add(\$L)", violationsList, violation)
         .build()
 
 
-private fun ErrorMessage.buildViolation(type: TypeName, field: Field?, fieldValue: Expression?): Expression {
+private fun ErrorMessage.buildViolation(type: TypeName,
+                                        field: Field?,
+                                        fieldValue: Expression?): Expression {
     var violationBuilder = ClassName(ConstraintViolation::class.java)
         .newBuilder()
         .chainSet("msg_format", LiteralString(this.toString()))
