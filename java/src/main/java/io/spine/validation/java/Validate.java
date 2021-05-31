@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+package io.spine.validation.java;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -70,7 +70,7 @@ final class Validate implements InsertionPoint {
     @NotNull
     @Override
     public String getLabel() {
-        return format("validate:%s", typeUrl(type));
+        return String.format("validate:%s", typeUrl(type));
     }
 
     @NotNull

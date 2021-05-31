@@ -1,3 +1,6 @@
+import io.spine.internal.dependency.JavaPoet
+import io.spine.internal.dependency.Roaster
+
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -24,24 +27,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+val protoDataVersion: String by extra
 
-import com.google.protobuf.ExtensionRegistry;
-import io.spine.option.OptionsProto;
-import io.spine.protodata.option.OptionsProvider;
-import org.jetbrains.annotations.NotNull;
-
-/**
- * An {@link OptionsProvider} which registers Spine options from {@code options.proto}.
- *
- * <p>By registering Spine options we allow ProtoData to access them when reading the descriptors.
- * Otherwise, validation options would be unrecognized and validation would not work.
- */
-@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
-public final class SpineOptionsProvider implements OptionsProvider {
-
-    @Override
-    public void dumpTo(@NotNull ExtensionRegistry registry) {
-        OptionsProto.registerAllExtensions(registry);
-    }
+dependencies {
+    implementation(project(":model"))
+    implementation("io.spine.protodata:codegen-java:$protoDataVersion")
+    implementation(Roaster.api)
+    implementation(Roaster.jdt)
+    implementation(JavaPoet.lib)
 }

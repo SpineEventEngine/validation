@@ -26,7 +26,7 @@
 
 @file:JvmName("JavaCodeGeneration")
 
-package io.spine.kanban.codegen
+package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Type.KindCase.PRIMITIVE
@@ -43,6 +43,7 @@ import io.spine.validation.LogicalOperator.XOR
 import io.spine.validation.Rule
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.SIMPLE
+import io.spine.validation.ErrorMessage
 
 /**
  * Java code comparing two objects.

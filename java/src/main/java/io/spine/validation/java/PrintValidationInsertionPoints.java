@@ -24,50 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+package io.spine.validation.java;
 
-import io.spine.core.External;
-import io.spine.core.Subscribe;
-import io.spine.protodata.MessageType;
-import io.spine.protodata.TypeEntered;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.plugin.View;
-import io.spine.validation.CompositeRuleAdded;
+import com.google.common.collect.ImmutableSet;
+import io.spine.protodata.language.CommonLanguages;
+import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.protodata.renderer.InsertionPointPrinter;
 import io.spine.validation.MessageValidation;
-import io.spine.validation.Rule;
-import io.spine.validation.RuleAdded;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+
+import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 /**
- * A view which accumulates validation data for a message type.
- *
- * <p>To add more rules to the message validation, emit {@code RuleAdded} or
- * {@code CompositeRuleAdded} events.
+ * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types
+ * which have an associated {@link MessageValidation} view.
  */
-class MessageValidationView
-        extends View<TypeName, MessageValidation, MessageValidation.Builder> {
+@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
+public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
 
-    @Subscribe
-    void on(@External TypeEntered event) {
-        MessageType type = event.getType();
-        builder().setName(type.getName())
-                 .setType(type);
+    public PrintValidationInsertionPoints() {
+        super(CommonLanguages.getJava());
     }
 
-    @Subscribe
-    void on(RuleAdded event) {
-        Rule roc = Rule
-                .newBuilder()
-                .setSimple(event.getRule())
-                .buildPartial();
-        builder().addRule(roc);
-    }
-
-    @Subscribe
-    void on(CompositeRuleAdded event) {
-        Rule roc = Rule
-                .newBuilder()
-                .setComposite(event.getRule())
-                .buildPartial();
-        builder().addRule(roc);
+    @NotNull
+    @Override
+    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
+        Set<MessageValidation> types = select(MessageValidation.class).all();
+        return types.stream()
+                    .map(validation -> new Validate(validation.getName()))
+                    .collect(ImmutableSet.toImmutableSet());
     }
 }

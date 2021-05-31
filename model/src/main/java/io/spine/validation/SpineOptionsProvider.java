@@ -24,18 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Poet")
+package io.spine.validation;
 
-package io.spine.kanban.codegen
-
-import com.google.common.collect.ImmutableList
-import com.squareup.javapoet.CodeBlock
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProto;
+import io.spine.protodata.option.OptionsProvider;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Splits this `CodeBlock` into lines.
+ * An {@link OptionsProvider} which registers Spine options from {@code options.proto}.
+ *
+ * <p>By registering Spine options we allow ProtoData to access them when reading the descriptors.
+ * Otherwise, validation options would be unrecognized and validation would not work.
  */
-fun CodeBlock.lines(): ImmutableList<String> {
-    val code = this.toString()
-    val lines = code.split(System.lineSeparator())
-    return ImmutableList.copyOf(lines)
+@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
+public final class SpineOptionsProvider implements OptionsProvider {
+
+    @Override
+    public void dumpTo(@NotNull ExtensionRegistry registry) {
+        OptionsProto.registerAllExtensions(registry);
+    }
 }

@@ -24,10 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen
+package io.spine.validation.java
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.ByteString
+import io.spine.validation.Value
 import io.spine.protodata.EnumType
 import io.spine.protodata.FieldName
 import io.spine.protodata.File
@@ -54,9 +55,8 @@ import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
 import io.spine.protodata.Type.KindCase.PRIMITIVE
-import io.spine.protodata.javaClassName
+import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.typeUrl
-import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
 import io.spine.validation.Value.KindCase.BYTES_VALUE
 import io.spine.validation.Value.KindCase.ENUM_VALUE

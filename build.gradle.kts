@@ -58,7 +58,7 @@ allprojects {
         plugin("project-report")
     }
 
-    val protoDataVersion: String by extra("0.0.10")
+    val protoDataVersion: String by extra("0.0.11")
     group = "io.spine"
     version = protoDataVersion
 }

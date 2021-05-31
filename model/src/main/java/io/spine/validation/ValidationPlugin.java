@@ -24,29 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+package io.spine.validation;
 
-import io.spine.protodata.TypeEntered;
-import io.spine.protodata.TypeName;
+import com.google.common.collect.ImmutableSet;
+import io.spine.protodata.plugin.Plugin;
+import io.spine.protodata.plugin.Policy;
 import io.spine.protodata.plugin.ViewRepository;
-import io.spine.server.route.EventRouting;
-import io.spine.validation.MessageValidation;
 import org.jetbrains.annotations.NotNull;
 
-import static io.spine.server.route.EventRoute.withId;
-
 /**
- * A repository for the {@link MessageValidationView}.
- *
- * <p>Routes the {@code TypeEntered} events to the view by the type name.
+ * A ProtoData plugin which attaches validation-related policies and views.
  */
-class MessageValidationRepository
-        extends ViewRepository<TypeName, MessageValidationView, MessageValidation> {
+@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
+public class ValidationPlugin implements Plugin {
 
+    @NotNull
     @Override
-    protected void setupEventRouting(@NotNull EventRouting<TypeName> routing) {
-        super.setupEventRouting(routing);
-        routing.route(TypeEntered.class,
-                      (message, context) -> withId(message.getType().getName()));
+    public ImmutableSet<Policy<?>> policies() {
+        return ImmutableSet.of(new RequiredRulePolicy());
+    }
+
+    @NotNull
+    @Override
+    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
+        return ImmutableSet.of(new MessageValidationRepository());
     }
 }

@@ -24,12 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Contains the ProtoData validation plugin which generates Java code.
- */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.kanban.codegen;
+package io.spine.validation;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

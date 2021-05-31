@@ -24,36 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+@file:JvmName("Poet")
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.language.CommonLanguages;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.InsertionPointPrinter;
-import io.spine.validation.MessageValidation;
-import org.jetbrains.annotations.NotNull;
+package io.spine.validation.java
 
-import java.util.Set;
-
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import com.google.common.collect.ImmutableList
+import com.squareup.javapoet.CodeBlock
 
 /**
- * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types
- * which have an associated {@link MessageValidation} view.
+ * Splits this `CodeBlock` into lines.
  */
-@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
-public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
-
-    public PrintValidationInsertionPoints() {
-        super(CommonLanguages.getJava());
-    }
-
-    @NotNull
-    @Override
-    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        Set<MessageValidation> types = select(MessageValidation.class).all();
-        return types.stream()
-                    .map(validation -> new Validate(validation.getName()))
-                    .collect(toImmutableSet());
-    }
+fun CodeBlock.lines(): ImmutableList<String> {
+    val code = this.toString()
+    val lines = code.split(System.lineSeparator())
+    return ImmutableList.copyOf(lines)
 }

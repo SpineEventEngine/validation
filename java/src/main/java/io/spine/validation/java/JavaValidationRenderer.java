@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.kanban.codegen;
+package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -45,8 +45,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Set;
 
-import static io.spine.kanban.codegen.Poet.lines;
-import static io.spine.protodata.Ast.javaFile;
+import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -115,7 +114,7 @@ public final class JavaValidationRenderer extends Renderer {
         code.add(newAccumulator());
         code.add(generateValidationCode(validation, result));
         code.add(throwValidationException());
-        return lines(code.build());
+        return Poet.lines(code.build());
     }
 
     private static CodeBlock newAccumulator() {

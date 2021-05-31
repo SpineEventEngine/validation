@@ -26,7 +26,7 @@
 
 @file:JvmName("Expressions")
 
-package io.spine.kanban.codegen
+package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap

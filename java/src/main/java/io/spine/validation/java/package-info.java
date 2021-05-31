@@ -24,9 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
+/**
+ * Contains the ProtoData validation plugin which generates Java code.
+ */
 
-dependencies {
-    api("io.spine:spine-server:2.0.0-SNAPSHOT.23")
-    api("io.spine.protodata:compiler:$protoDataVersion")
-}
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.validation.java;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;
