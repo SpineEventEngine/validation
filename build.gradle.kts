@@ -130,7 +130,8 @@ subprojects {
 
 spinePublishing {
     projectsToPublish.addAll(
-        "model"
+        "model",
+        "java"
     )
     spinePrefix.set(false)
     // Publish to the ProtoData repository reduce configuration for end users.
