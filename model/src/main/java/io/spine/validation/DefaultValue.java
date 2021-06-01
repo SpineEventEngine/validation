@@ -36,6 +36,12 @@ import io.spine.util.Exceptions;
 import org.jetbrains.annotations.NotNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.PrimitiveType.PT_UNKNOWN;
+import static io.spine.protodata.PrimitiveType.TYPE_BYTES;
+import static io.spine.protodata.PrimitiveType.TYPE_STRING;
+import static io.spine.protodata.PrimitiveType.UNRECOGNIZED;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A factory of default values of Protobuf message fields.
@@ -87,20 +93,20 @@ public final class DefaultValue {
     @NotNull
     private static Value primitiveValue(Type type) {
         PrimitiveType primitiveType = type.getPrimitive();
-        if (primitiveType == PrimitiveType.PT_UNKNOWN || primitiveType == PrimitiveType.UNRECOGNIZED) {
-            throw Exceptions.newIllegalArgumentException("Unknown type `%s`.", primitiveType);
+        if (primitiveType == PT_UNKNOWN || primitiveType == UNRECOGNIZED) {
+            throw newIllegalArgumentException("Unknown type `%s`.", primitiveType);
         }
-        if (primitiveType == PrimitiveType.TYPE_STRING) {
+        if (primitiveType == TYPE_STRING) {
             return Value.newBuilder()
                         .setStringValue("")
                         .vBuild();
         }
-        if (primitiveType == PrimitiveType.TYPE_BYTES) {
+        if (primitiveType == TYPE_BYTES) {
             return Value.newBuilder()
                         .setBytesValue(ByteString.EMPTY)
                         .vBuild();
         }
-        throw Exceptions.newIllegalStateException(
+        throw newIllegalStateException(
                 "Fields of type `%s` do not support `(required)` validation.",
                 primitiveType
         );
