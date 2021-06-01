@@ -24,6 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Contains the components for generating validation code.
+ *
+ * This package defines the validation model. Subpackages may contain language-specific codegen
+ * implementation.
+ */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
 package io.spine.validation;
