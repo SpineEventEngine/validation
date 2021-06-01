@@ -51,19 +51,17 @@ class MessageValidationView
 
     @Subscribe
     void on(SimpleRuleAdded event) {
-        Rule roc = Rule
-                .newBuilder()
-                .setSimple(event.getRule())
-                .buildPartial();
-        builder().addRule(roc);
+        Rule rule = Rule.newBuilder()
+                        .setSimple(event.getRule())
+                        .buildPartial();
+        builder().addRule(rule);
     }
 
     @Subscribe
     void on(CompositeRuleAdded event) {
-        Rule roc = Rule
-                .newBuilder()
-                .setComposite(event.getRule())
-                .buildPartial();
-        builder().addRule(roc);
+        Rule rule = Rule.newBuilder()
+                        .setComposite(event.getRule())
+                        .buildPartial();
+        builder().addRule(rule);
     }
 }
