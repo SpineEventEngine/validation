@@ -36,6 +36,7 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.SimpleRuleAdded;
 import org.jetbrains.annotations.NotNull;
 
 import static io.spine.option.OptionsProto.required;

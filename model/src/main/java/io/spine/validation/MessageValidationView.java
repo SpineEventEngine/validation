@@ -32,6 +32,8 @@ import io.spine.protodata.MessageType;
 import io.spine.protodata.TypeEntered;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.View;
+import io.spine.validation.event.CompositeRuleAdded;
+import io.spine.validation.event.SimpleRuleAdded;
 
 /**
  * A view which accumulates validation data for a message type.
