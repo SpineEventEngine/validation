@@ -38,8 +38,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
 
+    apply(from = "$rootDir/version.gradle.kts")
+
+    val spineBaseVersion: String by extra
+
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:2.0.0-SNAPSHOT.30")
+        classpath("io.spine.tools:spine-mc-java:$spineBaseVersion")
     }
 }
 
@@ -55,6 +59,8 @@ plugins {
 }
 
 allprojects {
+    apply(from = "$rootDir/version.gradle.kts")
+
     repositories {
         applyStandard()
         val protoDataRepo = gitHub("ProtoData")
@@ -73,9 +79,9 @@ allprojects {
         plugin("project-report")
     }
 
-    val protoDataVersion: String by extra("0.0.11")
     group = "io.spine"
-    version = protoDataVersion
+    val validationVersion: String by extra
+    version = validationVersion
 }
 
 subprojects {
