@@ -73,7 +73,7 @@ message Value {
         // Represents a repeated `Value`.
         ListValue list_value = 8;
 
-        // Represents a repeated `Value`.
+        // Represents a map of `Value`s.
         MapValue map_value = 9;
     }
 
