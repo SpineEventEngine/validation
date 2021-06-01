@@ -26,12 +26,7 @@
 
 package io.spine.validation;
 
-import com.google.protobuf.DescriptorProtos.FieldOptions;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Extension;
 import io.spine.core.External;
-import io.spine.option.OptionsProto;
-import io.spine.protodata.Ast;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.MessageType;
@@ -41,8 +36,12 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.util.Exceptions;
 import org.jetbrains.annotations.NotNull;
+
+import static io.spine.option.OptionsProto.required;
+import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 
 /**
  * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
@@ -58,20 +57,20 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
         Option option = event.getOption();
-        if (isOption(option, OptionsProto.required)) {
+        if (isRequired(option)) {
             ProtobufSourceFile file = select(ProtobufSourceFile.class)
                     .withId(event.getFile())
-                    .orElseThrow(() -> Exceptions.newIllegalArgumentException(
+                    .orElseThrow(() -> newIllegalArgumentException(
                             "Unknown file `%s`.", event.getFile()
                                                        .getValue()
                     ));
             MessageType type = file.getTypeMap()
-                                   .get(Ast.typeUrl(event.getType()));
+                                   .get(typeUrl(event.getType()));
             Field field = type.getFieldList()
                               .stream()
                               .filter(f -> f.getName().equals(event.getField()))
                               .findAny()
-                              .orElseThrow(() -> Exceptions.newIllegalArgumentException(
+                              .orElseThrow(() -> newIllegalArgumentException(
                                       "Unknown field `%s`.", event.getField()
                               ));
             return EitherOf2.withA(requiredRule(field));
@@ -86,18 +85,19 @@ public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
         SimpleRule rule = SimpleRule.newBuilder()
                                     .setErrorMessage("Field must be set.")
                                     .setField(field)
-                                    .setSign(ComparisonOperator.NOT_EQUAL)
+                                    .setSign(NOT_EQUAL)
                                     .setOtherValue(defaultValue)
                                     .vBuild();
         return SimpleRuleAdded.newBuilder()
-                        .setType(field.getDeclaringType())
-                        .setRule(rule)
-                        .vBuild();
+                              .setType(field.getDeclaringType())
+                              .setRule(rule)
+                              .vBuild();
     }
 
-    private static boolean isOption(Option option, Extension<FieldOptions, ?> extension) {
-        FieldDescriptor descriptor = extension.getDescriptor();
-        return option.getName().equals(descriptor.getName())
-                && option.getNumber() == extension.getNumber();
+    private static boolean isRequired(Option option) {
+        String name = required.getDescriptor().getName();
+        int number = required.getNumber();
+        return option.getName().equals(name)
+                && option.getNumber() == number;
     }
 }
