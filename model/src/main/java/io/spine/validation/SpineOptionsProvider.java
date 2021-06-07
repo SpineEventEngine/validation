@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SpineOptionsProvider implements OptionsProvider {
 
     @Override
-    public void dumpTo(@NotNull ExtensionRegistry registry) {
+    public void dumpTo(ExtensionRegistry registry) {
         OptionsProto.registerAllExtensions(registry);
     }
 }
