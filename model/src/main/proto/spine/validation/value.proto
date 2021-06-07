@@ -17,7 +17,7 @@ import "spine/protodata/ast.proto";
 // These definitions are built to encompass any value which can be represented in a typed fashion
 // in Protobuf.
 //
-// Inspired by the `google/protobuf/struct.proto`.
+// These definitions are inspired by the `google/protobuf/struct.proto`.
 //
 // Unlike types defined in `struct.proto`, these definitions keep strict typing at runtime. Values
 // are bound to their precise types.
