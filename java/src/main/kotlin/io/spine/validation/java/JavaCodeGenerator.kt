@@ -50,6 +50,9 @@ import io.spine.validation.ErrorMessage
 
 /**
  * Java code comparing two objects.
+ *
+ * This map describes correspondence between the [io.spine.validation.ComparisonOperator]s and
+ * the way they are rendered in Java for reference types.
  */
 private val OBJECT_COMPARISON_OPS = mapOf(
     EQUAL to { left: String, right: String -> "$left.equals($right)" },
@@ -58,6 +61,9 @@ private val OBJECT_COMPARISON_OPS = mapOf(
 
 /**
  * Java code comparing two primitive (numeric) types.
+ *
+ * This map describes correspondence between the [io.spine.validation.ComparisonOperator]s and
+ * the way they are rendered in Java for Java primitive types.
  */
 private val PRIMITIVE_COMPARISON_OPS = mapOf(
     EQUAL to { left: String, right: String -> "$left == $right" },
@@ -70,6 +76,9 @@ private val PRIMITIVE_COMPARISON_OPS = mapOf(
 
 /**
  * Java code comparing two boolean values.
+ *
+ * This map describes correspondence between the [io.spine.validation.LogicalOperator]s and
+ * the way they are rendered in Java.
  */
 private val BOOLEAN_OPS = mapOf(
     AND to { left: String, right: String -> "($left) && ($right)" },
