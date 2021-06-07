@@ -161,15 +161,14 @@ private constructor(
      * @throws IllegalStateException if the type is unknown
      */
     @JvmOverloads
-    fun toClass(type: Type, label: String = "type"): ClassName =
-        when (type.kindCase) {
-            PRIMITIVE -> type.primitive.toClass(label)
-            MESSAGE -> knownTypes[type.message.typeUrl()]
-                ?: unknownType(label, type.message.typeUrl())
-            ENUMERATION -> knownTypes[type.message.typeUrl()]
-                ?: unknownType(label, type.message.typeUrl())
-            else -> throw IllegalArgumentException("Type is empty.")
+    fun toClass(type: Type, label: String = "type"): ClassName = when (type.kindCase) {
+        PRIMITIVE -> type.primitive.toClass(label)
+        MESSAGE, ENUMERATION -> {
+            val typeUrl = type.message.typeUrl()
+            knownTypes[typeUrl] ?: unknownType(label, typeUrl)
         }
+        else -> throw IllegalArgumentException("Type is empty.")
+    }
 
     private fun PrimitiveType.toClass(label: String): ClassName {
         val klass = when (this) {
