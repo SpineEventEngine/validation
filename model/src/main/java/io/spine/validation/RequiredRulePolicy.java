@@ -58,41 +58,52 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
         Option option = event.getOption();
-        if (isRequired(option)) {
-            ProtobufSourceFile file = select(ProtobufSourceFile.class)
-                    .withId(event.getFile())
-                    .orElseThrow(() -> newIllegalArgumentException(
-                            "Unknown file `%s`.", event.getFile()
-                                                       .getValue()
-                    ));
-            MessageType type = file.getTypeMap()
-                                   .get(typeUrl(event.getType()));
-            Field field = type.getFieldList()
-                              .stream()
-                              .filter(f -> f.getName().equals(event.getField()))
-                              .findAny()
-                              .orElseThrow(() -> newIllegalArgumentException(
-                                      "Unknown field `%s`.", event.getField()
-                              ));
-            return EitherOf2.withA(requiredRule(field));
+        if (!isRequired(option)) {
+            return EitherOf2.withB(nothing());
         }
-        return EitherOf2.withB(nothing());
+        ProtobufSourceFile file = select(ProtobufSourceFile.class)
+                .withId(event.getFile())
+                .orElseThrow(() -> unknownFile(event));
+        MessageType type = file.getTypeMap()
+                               .get(typeUrl(event.getType()));
+        Field field = type.getFieldList()
+                          .stream()
+                          .filter(f -> f.getName()
+                                        .equals(event.getField()))
+                          .findAny()
+                          .orElseThrow(() -> unknownField(event));
+        return EitherOf2.withA(requiredRule(field));
+    }
+
+    private static IllegalArgumentException unknownField(FieldOptionDiscovered event) {
+        return newIllegalArgumentException(
+                "Unknown field `%s`.", event.getField()
+        );
+    }
+
+    private static IllegalArgumentException unknownFile(FieldOptionDiscovered event) {
+        return newIllegalArgumentException(
+                "Unknown file `%s`.", event.getFile()
+                                           .getValue()
+        );
     }
 
     private static SimpleRuleAdded requiredRule(Field field) {
         Value defaultValue = DefaultValue.forField(field);
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
             // Duplication in generated code.
-        SimpleRule rule = SimpleRule.newBuilder()
-                                    .setErrorMessage("Field must be set.")
-                                    .setField(field)
-                                    .setSign(NOT_EQUAL)
-                                    .setOtherValue(defaultValue)
-                                    .vBuild();
-        return SimpleRuleAdded.newBuilder()
-                              .setType(field.getDeclaringType())
-                              .setRule(rule)
-                              .vBuild();
+        SimpleRule rule = SimpleRule
+                .newBuilder()
+                .setErrorMessage("Field must be set.")
+                .setField(field)
+                .setSign(NOT_EQUAL)
+                .setOtherValue(defaultValue)
+                .vBuild();
+        return SimpleRuleAdded
+                .newBuilder()
+                .setType(field.getDeclaringType())
+                .setRule(rule)
+                .vBuild();
     }
 
     private static boolean isRequired(Option option) {
