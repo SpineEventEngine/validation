@@ -41,7 +41,7 @@ import io.spine.validation.event.SimpleRuleAdded;
  * <p>To add more rules to the message validation, emit {@code SimpleRuleAdded} or
  * {@code CompositeRuleAdded} events.
  */
-class MessageValidationView
+final class MessageValidationView
         extends View<TypeName, MessageValidation, MessageValidation.Builder> {
 
     @Subscribe

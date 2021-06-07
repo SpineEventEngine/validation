@@ -39,7 +39,7 @@ import static io.spine.server.route.EventRoute.withId;
  *
  * <p>Routes the {@code TypeEntered} events to the view by the type name.
  */
-class MessageValidationRepository
+final class MessageValidationRepository
         extends ViewRepository<TypeName, MessageValidationView, MessageValidation> {
 
     @Override
