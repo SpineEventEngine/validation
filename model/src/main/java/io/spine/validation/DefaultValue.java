@@ -44,7 +44,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A factory of default values of Protobuf message fields.
+ * A factory of {@link Value}s representing default states of Protobuf message fields.
  */
 public final class DefaultValue {
 
