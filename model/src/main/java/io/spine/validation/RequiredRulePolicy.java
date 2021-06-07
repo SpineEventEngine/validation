@@ -37,7 +37,6 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
-import org.jetbrains.annotations.NotNull;
 
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protodata.Ast.typeUrl;
@@ -53,7 +52,6 @@ import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
  */
 final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
 
-    @NotNull
     @Override
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
