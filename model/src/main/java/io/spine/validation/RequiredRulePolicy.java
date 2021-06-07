@@ -51,7 +51,7 @@ import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
  * the value is {@code true}, and the field type supports such validation, a validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
-public final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
+final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
 
     @NotNull
     @Override
