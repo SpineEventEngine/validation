@@ -66,6 +66,15 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 @SuppressWarnings("unused") // Loaded by ProtoData via reflection.
 public final class JavaValidationRenderer extends Renderer {
 
+    /**
+     * Amount of indents to add before the validation code.
+     *
+     * <p>One unit corresponds to four space characters.
+     *
+     * <p>We could in theory calculate a more appropriate indentation level for every case, taking
+     * into account the level of nesting of a message, etc. It is, however, good enough for now
+     * for generated code just to have eight spaces of indentation.
+     */
     private static final int INDENT_LEVEL = 2;
     private static final String VIOLATIONS = "violations";
 
