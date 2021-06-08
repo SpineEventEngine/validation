@@ -64,7 +64,6 @@ public final class UnsetValue {
      * set or just be the default values. For these cases, and only for these cases, the method
      * returns {@code Optional.empty()}.
      *
-     *
      * @return a {@link Value} with the field's default value or {@code Optional.empty()} if
      *         the field does not have an easily distinguished not-set value
      */
