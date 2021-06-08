@@ -31,6 +31,7 @@ import io.spine.protodata.Field;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.Option;
+import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
@@ -42,6 +43,7 @@ import static io.spine.option.OptionsProto.required;
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
+import static java.lang.String.format;
 
 /**
  * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
@@ -87,7 +89,8 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     }
 
     private static SimpleRuleAdded requiredRule(Field field) {
-        Value defaultValue = DefaultValue.forField(field);
+        Value notSetValue = NotSetValue.forField(field)
+                                       .orElseThrow(() -> doeNotSupportRequired(field));
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
             // Duplication in generated code.
         SimpleRule rule = SimpleRule
@@ -95,13 +98,23 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .setErrorMessage("Field must be set.")
                 .setField(field)
                 .setSign(NOT_EQUAL)
-                .setOtherValue(defaultValue)
+                .setOtherValue(notSetValue)
                 .vBuild();
         return SimpleRuleAdded
                 .newBuilder()
                 .setType(field.getDeclaringType())
                 .setRule(rule)
                 .vBuild();
+    }
+
+    private static IllegalStateException doeNotSupportRequired(Field field) {
+        String fieldName = field.getName().getValue();
+        String typeUrl = typeUrl(field.getDeclaringType());
+        PrimitiveType type = field.getType().getPrimitive();
+        return new IllegalStateException(format(
+                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
+                typeUrl, fieldName, type
+        ));
     }
 
     private static boolean isRequired(Option option) {
