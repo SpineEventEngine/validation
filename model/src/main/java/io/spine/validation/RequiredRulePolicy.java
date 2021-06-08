@@ -89,8 +89,8 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     }
 
     private static SimpleRuleAdded requiredRule(Field field) {
-        Value notSetValue = NotSetValue.forField(field)
-                                       .orElseThrow(() -> doeNotSupportRequired(field));
+        Value unsetValue = UnsetValue.forField(field)
+                                     .orElseThrow(() -> doeNotSupportRequired(field));
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
             // Duplication in generated code.
         SimpleRule rule = SimpleRule
@@ -98,7 +98,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .setErrorMessage("Field must be set.")
                 .setField(field)
                 .setSign(NOT_EQUAL)
-                .setOtherValue(notSetValue)
+                .setOtherValue(unsetValue)
                 .vBuild();
         return SimpleRuleAdded
                 .newBuilder()

@@ -48,16 +48,16 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>This class does not instantiate default values of Protobuf messages. It merely creates
  * instances of {@link Value} which represent values of Protobuf message fields, which are not set.
  */
-public final class NotSetValue {
+public final class UnsetValue {
 
     /**
      * Prevents the utility class instantiation.
      */
-    private NotSetValue() {
+    private UnsetValue() {
     }
 
     /**
-     * Obtains a not set value for the given field.
+     * Obtains an unset value for the given field.
      *
      * <p>If a field is a number or a {@code bool}, it is impossible to tell if it's set or not.
      * In the binary representation, the {@code 0} and {@code false} values may either be explicitly
