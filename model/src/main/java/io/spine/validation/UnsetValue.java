@@ -67,7 +67,7 @@ public final class UnsetValue {
      * @return a {@link Value} with the field's default value or {@code Optional.empty()} if
      *         the field does not have an easily distinguished not-set value
      */
-    @SuppressWarnings("EnumSwitchStatementWhichMissesCases") // Covered by `default`.
+    @SuppressWarnings("EnumSwitchStatementWhichMissesCases") // Covered by the "default" branch.
     public static Optional<Value> forField(Field field) {
         checkNotNull(field);
         switch (field.getCardinalityCase()) {
