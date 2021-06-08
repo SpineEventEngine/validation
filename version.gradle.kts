@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
  */
 
 project.extra.apply {
-    this["versionToPublish"] = "0.0.1"
-    this["spineCoreVersion"] = "1.7.0"
-    this["spineBaseVersion"] = "1.7.0"
-    this["spineTimeVersion"] = "1.7.0"
+    this["spineBaseVersion"] = "2.0.0-SNAPSHOT.30"
+    this["protoDataVersion"] = "0.0.11"
+    this["validationVersion"] = this["protoDataVersion"]
 }
+

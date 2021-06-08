@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,76 +26,81 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.gradle.internal.DependencyResolution
-import io.spine.gradle.internal.Deps
-import io.spine.gradle.internal.PublishingRepos
+import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.PublishingRepos.gitHub
+import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.spinePublishing
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    apply(from = "version.gradle.kts")
-    apply(from = "$rootDir/config/gradle/dependencies.gradle")
+    io.spine.internal.gradle.doApplyStandard(repositories)
 
-    val dependencyResolution = io.spine.gradle.internal.DependencyResolution
+    apply(from = "$rootDir/version.gradle.kts")
 
     val spineBaseVersion: String by extra
-    val spineTimeVersion: String by extra
 
-    dependencyResolution.defaultRepositories(repositories)
-    dependencyResolution.forceConfiguration(configurations)
-
-    configurations.all {
-        resolutionStrategy {
-            force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine:spine-time:$spineTimeVersion"
-            )
-        }
+    dependencies {
+        classpath("io.spine.tools:spine-mc-java:$spineBaseVersion")
     }
 }
 
 plugins {
     `java-library`
     idea
-    id("com.google.protobuf").version(io.spine.gradle.internal.Deps.versions.protobufPlugin)
-    id("net.ltgt.errorprone").version(io.spine.gradle.internal.Deps.versions.errorPronePlugin)
-    id("io.spine.tools.gradle.bootstrap") version "1.7.0" apply false
+    val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
+    id(protobuf.id).version(protobuf.version)
+    val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
+    id(errorProne.id).version(errorProne.version)
+    kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
+    id(io.spine.internal.dependency.Kotlin.Dokka.pluginId) version(io.spine.internal.dependency.Kotlin.Dokka.version)
 }
 
-apply(from = "version.gradle.kts")
-val spineCoreVersion: String by extra
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
-
 allprojects {
+    apply(from = "$rootDir/version.gradle.kts")
+
+    repositories {
+        applyStandard()
+        val protoDataRepo = gitHub("ProtoData")
+        maven {
+            url = uri(protoDataRepo.releases)
+            credentials {
+                val creds = protoDataRepo.credentials(project)!!
+                username = creds.username
+                password = creds.password
+            }
+        }
+    }
+
     apply {
-        plugin("jacoco")
         plugin("idea")
         plugin("project-report")
-        apply(from = "$rootDir/version.gradle.kts")
     }
 
     group = "io.spine"
-    version = extra["versionToPublish"]!!
+    val validationVersion: String by extra
+    version = validationVersion
 }
 
 subprojects {
     apply {
-        plugin("java-library")
-
-        from(Deps.scripts.projectLicenseReport(project))
+        plugin("kotlin")
+        plugin("org.jetbrains.dokka")
+        plugin("io.spine.mc-java")
+        plugin("com.google.protobuf")
+        from(Scripts.projectLicenseReport(project))
+        from(Scripts.slowTests(project))
+        from(Scripts.testOutput(project))
+        from(Scripts.javadocOptions(project))
+        from(Scripts.modelCompiler(project))
     }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    DependencyResolution.defaultRepositories(repositories)
 
     dependencies {
-        Deps.test.junit5Api.forEach { testImplementation(it) }
-        Deps.test.truth.forEach { testImplementation(it) }
-        testImplementation("io.spine.tools:spine-mute-logging:$spineBaseVersion")
-        testRuntimeOnly(Deps.test.junit5Runner)
+        JUnit.api.forEach { testImplementation(it) }
+        Truth.libs.forEach { testImplementation(it) }
+        testRuntimeOnly(JUnit.runner)
     }
 
     tasks.test {
@@ -104,32 +109,36 @@ subprojects {
         }
     }
 
-    apply {
-        from(Deps.scripts.slowTests(project))
-        from(Deps.scripts.testOutput(project))
-        from(Deps.scripts.javadocOptions(project))
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-Xinline-classes",
+                "-Xjvm-default=all"
+            )
+        }
     }
 
-    tasks.register("sourceJar", Jar::class) {
-        from(sourceSets.main.get().allJava)
-        archiveClassifier.set("sources")
-    }
-
-    tasks.register("testOutputJar", Jar::class) {
-        from(sourceSets.test.get().output)
-        archiveClassifier.set("test")
-    }
+    val dokkaJavadoc by tasks.getting(DokkaTask::class)
 
     tasks.register("javadocJar", Jar::class) {
-        from("$projectDir/build/docs/javadoc")
+        from(dokkaJavadoc.outputDirectory)
         archiveClassifier.set("javadoc")
-
-        dependsOn(tasks.javadoc)
+        dependsOn(dokkaJavadoc)
     }
 }
 
+spinePublishing {
+    projectsToPublish.addAll(
+        "model",
+        "java"
+    )
+    spinePrefix.set(false)
+    // Publish to the ProtoData repository reduce configuration for end users.
+    targetRepositories.add(gitHub("ProtoData"))
+}
+
 apply {
-    from(Deps.scripts.jacoco(project))
-    from(Deps.scripts.repoLicenseReport(project))
-    from(Deps.scripts.generatePom(project))
+    from(Scripts.repoLicenseReport(project))
+    from(Scripts.generatePom(project))
 }
