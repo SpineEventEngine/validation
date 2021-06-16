@@ -25,9 +25,10 @@
  */
 
 val protoDataVersion: String by extra
+val spineServerVersion: String by extra
 
 dependencies {
-    api("io.spine:spine-server:2.0.0-SNAPSHOT.23")
+    api("io.spine:spine-server:$spineServerVersion")
     api("io.spine.protodata:compiler:$protoDataVersion")
 }
 
