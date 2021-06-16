@@ -26,7 +26,7 @@
 
 project.extra.apply {
     this["spineBaseVersion"] = "2.0.0-SNAPSHOT.30"
-    this["protoDataVersion"] = "0.0.11"
+    this["protoDataVersion"] = "0.0.19"
     this["validationVersion"] = this["protoDataVersion"]
 }
 
