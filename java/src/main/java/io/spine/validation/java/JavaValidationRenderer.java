@@ -81,11 +81,11 @@ public final class JavaValidationRenderer extends Renderer {
     private @MonotonicNonNull TypeSystem typeSystem;
 
     public JavaValidationRenderer() {
-        super(ImmutableSet.of(CommonLanguages.getJava()));
+        super(ImmutableSet.of(CommonLanguages.java()));
     }
 
     @Override
-    protected void doRender(SourceSet sources) {
+    protected void render(SourceSet sources) {
         this.typeSystem = bakeTypeSystem();
         select(MessageValidation.class)
                 .all()

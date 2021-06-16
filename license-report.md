@@ -1,6 +1,6 @@
 
     
-# Dependencies of `io.spine:spine-java:0.0.11`
+# Dependencies of `io.spine:spine-java:2.0.0-SNAPSHOT.1`
 
 ## Runtime
 1. **Group:** com.google.android **Name:** annotations **Version:** 4.1.1.4
@@ -10,10 +10,6 @@
 1. **Group:** com.google.api.grpc **Name:** proto-google-common-protos **Version:** 2.0.1
      * **POM Project URL:** [https://github.com/googleapis/java-iam/proto-google-common-protos](https://github.com/googleapis/java-iam/proto-google-common-protos)
      * **POM License: Apache-2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7.4
-     * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
-     * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.code.findbugs **Name:** jsr305 **Version:** 3.0.2
      * **POM Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
@@ -59,18 +55,6 @@
      * **Manifest Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **POM License: 3-Clause BSD License** - [https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
-1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -103,18 +87,14 @@
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.19
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.19
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
      * **POM Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **POM License: CDDL + GPLv2 with classpath exception** - [https://github.com/javaee/javax.annotation/blob/master/LICENSE](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
-
-1. **Group:** junit **Name:** junit **Version:** 4.13.1
-     * **POM Project URL:** [http://junit.org](http://junit.org)
-     * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
 1. **Group:** org.checkerframework **Name:** checker-compat-qual **Version:** 2.5.3
      * **POM Project URL:** [https://checkerframework.org](https://checkerframework.org)
@@ -129,9 +109,6 @@
 1. **Group:** org.codehaus.mojo **Name:** animal-sniffer-annotations **Version:** 1.19
      * **POM License: MIT license** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** org.hamcrest **Name:** hamcrest-core **Version:** 1.3
-     * **POM License: New BSD License** - [http://www.opensource.org/licenses/bsd-license.php](http://www.opensource.org/licenses/bsd-license.php)
 
 1. **Group:** org.jboss.forge.roaster **Name:** roaster-api **Version:** 2.22.2.Final
      * **POM License: Eclipse Public License version 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
@@ -164,13 +141,6 @@
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk8 **Version:** 1.5.0
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.0
-     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.11.1
@@ -226,10 +196,6 @@
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7
-     * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
-     * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7.4
      * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -326,25 +292,13 @@
      * **POM License: 3-Clause BSD License** - [https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.3
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.2
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.3
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.2
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
@@ -398,9 +352,9 @@
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.19
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.19
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -418,10 +372,6 @@
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
      * **POM Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **POM License: CDDL + GPLv2 with classpath exception** - [https://github.com/javaee/javax.annotation/blob/master/LICENSE](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
-
-1. **Group:** junit **Name:** junit **Version:** 4.13.1
-     * **POM Project URL:** [http://junit.org](http://junit.org)
-     * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
 1. **Group:** junit **Name:** junit **Version:** 4.13.2
      * **POM Project URL:** [http://junit.org](http://junit.org)
@@ -638,13 +588,6 @@
      * **POM Project URL:** [https://github.com/ota4j-team/opentest4j](https://github.com/ota4j-team/opentest4j)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.0
-     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
      * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
      * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
@@ -661,12 +604,12 @@
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jun 16 11:24:40 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
     
-# Dependencies of `io.spine:spine-model:0.0.11`
+# Dependencies of `io.spine:spine-model:2.0.0-SNAPSHOT.1`
 
 ## Runtime
 1. **Group:** com.google.android **Name:** annotations **Version:** 4.1.1.4
@@ -676,10 +619,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.api.grpc **Name:** proto-google-common-protos **Version:** 2.0.1
      * **POM Project URL:** [https://github.com/googleapis/java-iam/proto-google-common-protos](https://github.com/googleapis/java-iam/proto-google-common-protos)
      * **POM License: Apache-2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7.4
-     * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
-     * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.code.findbugs **Name:** jsr305 **Version:** 3.0.2
      * **POM Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
@@ -725,18 +664,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **Manifest Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **POM License: 3-Clause BSD License** - [https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
-1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** io.grpc **Name:** grpc-api **Version:** 1.38.0
      * **POM Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
@@ -765,16 +692,12 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.19
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
      * **POM Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **POM License: CDDL + GPLv2 with classpath exception** - [https://github.com/javaee/javax.annotation/blob/master/LICENSE](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
-
-1. **Group:** junit **Name:** junit **Version:** 4.13.1
-     * **POM Project URL:** [http://junit.org](http://junit.org)
-     * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
 1. **Group:** org.checkerframework **Name:** checker-compat-qual **Version:** 2.5.3
      * **POM Project URL:** [https://checkerframework.org](https://checkerframework.org)
@@ -789,9 +712,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
 1. **Group:** org.codehaus.mojo **Name:** animal-sniffer-annotations **Version:** 1.19
      * **POM License: MIT license** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** org.hamcrest **Name:** hamcrest-core **Version:** 1.3
-     * **POM License: New BSD License** - [http://www.opensource.org/licenses/bsd-license.php](http://www.opensource.org/licenses/bsd-license.php)
 
 1. **Group:** org.jetbrains **Name:** annotations **Version:** 13.0
      * **POM Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
@@ -816,13 +736,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
 1. **Group:** org.jetbrains.kotlin **Name:** kotlin-stdlib-jdk8 **Version:** 1.5.0
      * **POM Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.0
-     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.11.1
@@ -878,10 +791,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7
-     * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
-     * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.auto.value **Name:** auto-value-annotations **Version:** 1.7.4
      * **POM Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -978,25 +887,13 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **POM License: 3-Clause BSD License** - [https://opensource.org/licenses/BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** com.google.truth **Name:** truth **Version:** 1.1.3
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.2
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.truth.extensions **Name:** truth-java8-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.2
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** com.google.truth.extensions **Name:** truth-liteproto-extension **Version:** 1.1.3
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.2
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
@@ -1050,7 +947,7 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.11
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.19
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -1068,10 +965,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
      * **POM Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **POM License: CDDL + GPLv2 with classpath exception** - [https://github.com/javaee/javax.annotation/blob/master/LICENSE](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
-
-1. **Group:** junit **Name:** junit **Version:** 4.13.1
-     * **POM Project URL:** [http://junit.org](http://junit.org)
-     * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
 1. **Group:** junit **Name:** junit **Version:** 4.13.2
      * **POM Project URL:** [http://junit.org](http://junit.org)
@@ -1280,13 +1173,6 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/ota4j-team/opentest4j](https://github.com/ota4j-team/opentest4j)
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.0
-     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
      * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
      * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
@@ -1303,4 +1189,4 @@ This report was generated on **Mon Jun 07 13:32:00 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Jun 07 13:32:07 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jun 16 11:24:48 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

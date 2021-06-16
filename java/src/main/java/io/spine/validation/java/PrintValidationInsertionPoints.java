@@ -45,7 +45,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
 
     public PrintValidationInsertionPoints() {
-        super(CommonLanguages.getJava());
+        super(CommonLanguages.java());
     }
 
     @NotNull

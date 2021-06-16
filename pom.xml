@@ -12,7 +12,7 @@ all modules and does not describe the project structure per-subproject.
 
 <groupId>io.spine</groupId>
 <artifactId>validation</artifactId>
-<version>0.0.11</version>
+<version>2.0.0-SNAPSHOT.1</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -40,13 +40,13 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>codegen-java</artifactId>
-    <version>0.0.11</version>
+    <version>0.0.19</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>compiler</artifactId>
-    <version>0.0.11</version>
+    <version>0.0.19</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
