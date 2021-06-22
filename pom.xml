@@ -120,6 +120,16 @@ all modules and does not describe the project structure per-subproject.
     <version>1.38.0</version>
   </dependency>
   <dependency>
+    <groupId>io.spine.protodata</groupId>
+    <artifactId>executable</artifactId>
+    <version>0.0.19</version>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.protodata</groupId>
+    <artifactId>protoc</artifactId>
+    <version>0.0.19</version>
+  </dependency>
+  <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-mc-java-checks</artifactId>
     <version>2.0.0-SNAPSHOT.34</version>

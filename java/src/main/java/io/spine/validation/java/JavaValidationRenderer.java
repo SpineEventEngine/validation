@@ -81,7 +81,7 @@ public final class JavaValidationRenderer extends Renderer {
     private @MonotonicNonNull TypeSystem typeSystem;
 
     public JavaValidationRenderer() {
-        super(ImmutableSet.of(CommonLanguages.java()));
+        super(CommonLanguages.java());
     }
 
     @Override

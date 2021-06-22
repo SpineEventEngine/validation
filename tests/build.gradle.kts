@@ -24,10 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+plugins {
+    id("io.spine.proto-data")
+}
 
-include(
-    "java",
-    "model",
-    "tests"
-)
+protoData {
+    renderers(
+        "io.spine.validation.java.PrintValidationInsertionPoints",
+        "io.spine.validation.java.JavaValidationRenderer"
+    )
+    plugins("io.spine.validation.ValidationPlugin")
+    optionProviders("io.spine.validation.SpineOptionsProvider")
+}
+
+dependencies {
+    protoData(project(":java"))
+}

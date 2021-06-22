@@ -41,9 +41,11 @@ buildscript {
     apply(from = "$rootDir/version.gradle.kts")
 
     val spineBaseVersion: String by extra
+    val protoDataVersion: String by extra
 
     dependencies {
         classpath("io.spine.tools:spine-mc-java:$spineBaseVersion")
+        classpath("io.spine:proto-data:$protoDataVersion")
     }
 }
 
