@@ -1,3 +1,5 @@
+import io.spine.internal.dependency.Protobuf
+
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -37,6 +39,11 @@ protoData {
     optionProviders("io.spine.validation.SpineOptionsProvider")
 }
 
+val spineBaseVersion: String by extra
+
 dependencies {
-    protoData(project(":java"))
+    protoData(project(":test-extensions"))
+    implementation(project(":test-extensions"))
+    implementation("io.spine:spine-base:$spineBaseVersion")
+    Protobuf.libs.forEach { implementation(it) }
 }

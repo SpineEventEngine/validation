@@ -26,6 +26,18 @@ all modules and does not describe the project structure per-subproject.
 
 <dependencies>
   <dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protobuf-java</artifactId>
+    <version>3.17.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protobuf-java-util</artifactId>
+    <version>3.17.0</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
     <groupId>com.squareup</groupId>
     <artifactId>javapoet</artifactId>
     <version>1.13.0</version>
@@ -33,20 +45,26 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
+    <artifactId>spine-base</artifactId>
+    <version>2.0.0-SNAPSHOT.34</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
     <artifactId>spine-server</artifactId>
-    <version>2.0.0-SNAPSHOT.25</version>
+    <version>2.0.0-SNAPSHOT.26</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>codegen-java</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.24</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>compiler</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.24</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -121,13 +139,13 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
-    <artifactId>executable</artifactId>
-    <version>0.0.19</version>
+    <artifactId>cli</artifactId>
+    <version>0.0.24</version>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protoc</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.24</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>

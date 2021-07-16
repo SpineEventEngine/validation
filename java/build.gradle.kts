@@ -30,8 +30,8 @@ import io.spine.internal.dependency.Roaster
 val protoDataVersion: String by extra
 
 dependencies {
-    implementation(project(":model"))
-    implementation("io.spine.protodata:codegen-java:$protoDataVersion")
+    api(project(":model"))
+    api("io.spine.protodata:codegen-java:$protoDataVersion")
     implementation(Roaster.api)
     implementation(Roaster.jdt)
     implementation(JavaPoet.lib)
