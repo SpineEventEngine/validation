@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package spine.validation.test.money;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "CurrencyProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/test/money_options.proto";
+
+message CurrencyType {
+    option (entity).kind = PROJECTION;
+
+    protodata.TypeName type = 1;
+
+    Currency currency = 2;
+}

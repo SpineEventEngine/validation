@@ -1,5 +1,3 @@
-import io.spine.internal.dependency.Protobuf
-
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -26,27 +24,17 @@ import io.spine.internal.dependency.Protobuf
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("io.spine.proto-data")
-}
+package io.spine.validation.test
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer"
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options("spine/options.proto")
-}
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.ViewRepository
 
-val spineBaseVersion: String by extra
+class MoneyValidationPlugin : Plugin {
 
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    Protobuf.libs.forEach { implementation(it) }
+    override fun viewRepositories(): Set<ViewRepository<*, *, *>> =
+        setOf(CurrencyTypeView.Repo())
+
+    override fun policies(): Set<Policy<*>> =
+        setOf(CurrencyValidationPolicy())
 }

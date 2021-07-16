@@ -1,5 +1,3 @@
-import io.spine.internal.dependency.Protobuf
-
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -26,27 +24,36 @@ import io.spine.internal.dependency.Protobuf
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("io.spine.proto-data")
-}
+package io.spine.validation.test
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer"
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options("spine/options.proto")
-}
+import io.spine.core.External
+import io.spine.core.Subscribe
+import io.spine.core.Where
+import io.spine.protobuf.AnyPacker
+import io.spine.protodata.TypeName
+import io.spine.protodata.TypeOptionDiscovered
+import io.spine.protodata.plugin.View
+import io.spine.protodata.plugin.ViewRepository
+import io.spine.server.entity.alter
+import io.spine.server.route.EventRoute.withId
+import io.spine.server.route.EventRouting
+import io.spine.validation.test.money.Currency
+import io.spine.validation.test.money.CurrencyType
 
-val spineBaseVersion: String by extra
+class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    Protobuf.libs.forEach { implementation(it) }
+    @Subscribe
+    fun on(@External @Where(field = "option.name", equals = "currency")
+           event: TypeOptionDiscovered) = alter {
+        val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
+        this.currency = currency
+    }
+
+    internal class Repo : ViewRepository<TypeName, CurrencyTypeView, CurrencyType>() {
+
+        override fun setupEventRouting(routing: EventRouting<TypeName>) {
+            super.setupEventRouting(routing)
+            routing.route(TypeOptionDiscovered::class.java) { e, _ -> withId(e.type) }
+        }
+    }
 }
