@@ -24,14 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+val spineBaseVersion: String by extra
 
-include(
-    "java",
-    "model",
-    "test-extensions",
-    "test-consumer"
-)
-
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+dependencies {
+    implementation(project(":java"))
+    implementation("io.spine:spine-base:$spineBaseVersion")
+}

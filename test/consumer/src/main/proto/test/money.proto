@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package spine.validation.test.money;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "MoneyProto";
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+import "spine/validation/test/money_options.proto";
+
+message Usd {
+    option (currency) = { name: "US Dollar" code: "USD" nano_units: 100 };
+
+    int32 dollars = 1;
+
+    int32 cents = 2;
+}
+
+message Mru {
+    option (currency) = { name: "Mauritanian Ouguiya" code: "MRU" nano_units: 5 };
+
+    int32 ouguiyas = 1;
+
+    int32 khoums = 2;
+}

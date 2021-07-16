@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package spine.validation.test.money;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "MoneyOptionsProto";
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+
+message Currency {
+
+    string name = 1;
+
+    string code = 2;
+
+    uint32 nano_units = 3;
+}
+
+extend google.protobuf.MessageOptions {
+
+    Currency currency = 73938;
+}
