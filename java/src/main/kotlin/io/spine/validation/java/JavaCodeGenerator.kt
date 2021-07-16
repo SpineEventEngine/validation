@@ -122,7 +122,7 @@ private class SimpleRuleGenerator(
     private val field = rule.field
 
     private val fieldValue: Expression by lazy { ctx.msg.field(field).getter }
-    private val otherValue: Expression by lazy {  ctx.typeSystem.valueToJava(rule.otherValue) }
+    private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
 
     override fun code(): CodeBlock {
         val binaryCondition = condition()
