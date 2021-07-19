@@ -24,6 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Integration tests for generated Java validation code.
+ */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
 package io.spine.validation.test;
