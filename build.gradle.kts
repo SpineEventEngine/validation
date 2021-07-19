@@ -140,7 +140,7 @@ spinePublishing {
     )
     spinePrefix.set(false)
     // Publish to the ProtoData repository reduce configuration for end users.
-    targetRepositories.add(gitHub("ProtoData"))
+    targetRepositories.add(gitHub("validation"))
 }
 
 apply {
