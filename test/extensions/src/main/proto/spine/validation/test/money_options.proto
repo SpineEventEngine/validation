@@ -11,16 +11,28 @@ option java_multiple_files = true;
 
 import "google/protobuf/descriptor.proto";
 
+// Descriptor of a monetary currency.
+//
 message Currency {
 
     string name = 1;
 
     string code = 2;
 
+    // Number of nano units per major unit of the currency.
     uint32 nano_units = 3;
 }
 
 extend google.protobuf.MessageOptions {
 
+    // Marks a type which represents a monetary value in a fixed currency.
+    //
+    // A currency type must have exactly two integer fields: for the major and minor (a.k.a. nano)
+    // units.
+    //
+    // The amount of nano units is limited by the number of nano units per major unit —
+    // `Currency.nano_units`. The value of the second field of the message must always be lower than
+    // this limit.
+    //
     Currency currency = 73938;
 }
