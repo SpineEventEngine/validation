@@ -148,7 +148,12 @@ private class SimpleRuleGenerator(
     }
 
     override fun error(): ErrorMessage {
-        return ErrorMessage.forRule(rule.errorMessage, fieldValue.toCode(), otherValue.toCode())
+        return ErrorMessage.forRule(
+            rule.errorMessage,
+            fieldValue.toCode(),
+            otherValue.toCode(),
+            JavaInterpolation
+        )
     }
 }
 
@@ -187,7 +192,13 @@ private class CompositeRuleGenerator(
         val composite = ctx.rule.composite
         val format = composite.errorMessage
         val operation = composite.operator
-        return ErrorMessage.forComposite(format, left.error(), right.error(), operation)
+        return ErrorMessage.forComposite(
+            format,
+            left.error(),
+            right.error(),
+            operation,
+            JavaInterpolation
+        )
     }
 }
 

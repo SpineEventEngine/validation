@@ -30,12 +30,12 @@ import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.LO_UNKNOWN
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
-
-private const val VALUE = "value"
-private const val OTHER = "other"
-private const val LEFT = "left"
-private const val RIGHT = "right"
-private const val OPERATION = "operation"
+import io.spine.validation.Placeholder.LEFT
+import io.spine.validation.Placeholder.OPERATION
+import io.spine.validation.Placeholder.OTHER
+import io.spine.validation.Placeholder.RIGHT
+import io.spine.validation.Placeholder.VALUE
+import io.spine.validation.StringExpression.Companion.inQuotes
 
 /**
  * A human-readable error message, describing a validation constraint violation.
@@ -54,12 +54,16 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        public fun forRule(format: String, value: String = "", other: String = ""): ErrorMessage =
-            ErrorMessage(
-                format
-                    .replacePlaceholder(VALUE, value)
-                    .replacePlaceholder(OTHER, other)
-            )
+        public fun forRule(
+            format: String,
+            value: String = "",
+            other: String = "",
+            interpol: Interpolation
+        ): ErrorMessage {
+            var msg = interpol.inTemplate(inQuotes(format)) replace inQuotes(VALUE.fmt) with value
+            msg = interpol.inTemplate(msg) replace inQuotes(OTHER.fmt) with other
+            return ErrorMessage(msg.value)
+        }
 
         /**
          * Produces an error message for a composite validation rule.
@@ -75,25 +79,35 @@ private constructor(private val value: String) {
             format: String,
             left: ErrorMessage,
             right: ErrorMessage,
-            operation: LogicalOperator = LO_UNKNOWN
-        ): ErrorMessage =
-            ErrorMessage(
-                format
-                    .replacePlaceholder(LEFT, left.value)
-                    .replacePlaceholder(RIGHT, right.value)
-                    .replacePlaceholder(OPERATION, operation.printableString())
-            )
+            operation: LogicalOperator = LO_UNKNOWN,
+            interpol: Interpolation
+        ): ErrorMessage {
+            var msg =
+                interpol.inTemplate(inQuotes(format)) replace inQuotes(LEFT.fmt) with left.value
+            msg = interpol.inTemplate(msg) replace inQuotes(RIGHT.fmt) with right.value
+            msg = interpol.inTemplate(msg)
+                .replace(inQuotes(OPERATION.fmt))
+                .with(operation.printableString())
+            return ErrorMessage(msg.value)
+        }
     }
 
     override fun toString(): String = value
 }
 
-private fun String.replacePlaceholder(placeholder: String, newValue: String): String {
-    val formattedPlaceholder = "{$placeholder}"
-    return replace(formattedPlaceholder, newValue)
-}
-
-private fun LogicalOperator.printableString() = when(this) {
+private fun LogicalOperator.printableString() = when (this) {
     AND, OR, XOR -> name.lowercase()
     else -> "<unknown operation>"
+}
+
+private enum class Placeholder {
+
+    VALUE,
+    OTHER,
+    LEFT,
+    RIGHT,
+    OPERATION;
+
+    val fmt: String
+        get() = "{${name.lowercase()}}"
 }

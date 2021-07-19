@@ -35,6 +35,7 @@ import io.spine.base.FieldPath
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.LiteralString
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
@@ -71,7 +72,7 @@ private fun ErrorMessage.buildViolation(type: TypeName,
                                         fieldValue: Expression?): Expression {
     var violationBuilder = ClassName(ConstraintViolation::class.java)
         .newBuilder()
-        .chainSet("msg_format", LiteralString(this.toString()))
+        .chainSet("msg_format", Literal(this))
         .chainSet("type_name", LiteralString(type.typeUrl()))
     if (field != null) {
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
