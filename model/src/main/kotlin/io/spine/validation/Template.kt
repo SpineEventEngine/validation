@@ -38,9 +38,8 @@ internal class Template(template: String) {
     /**
      * Obtains this formatted template as a code expression.
      *
-     * If the message contains dynamic values, i.e. values which are unknown at the time of
-     * code generation, they will be concatenated with the string literals using
-     * the plus (`+`) operators.
+     * If the message contains dynamic values, i.e. values which are unknown at the design time,
+     * they will be concatenated with the string literals using the plus (`+`) operators.
      * Otherwise, the whole expression is a single string literal enclosed in
      * double quotation marks (`"`).
      */
