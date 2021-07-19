@@ -52,12 +52,15 @@ buildscript {
 plugins {
     `java-library`
     idea
+
     val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
-    id(protobuf.id).version(protobuf.version)
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
+    val dokka = io.spine.internal.dependency.Kotlin.Dokka
+
+    id(protobuf.id).version(protobuf.version)
     id(errorProne.id).version(errorProne.version)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
-    id(io.spine.internal.dependency.Kotlin.Dokka.pluginId) version(io.spine.internal.dependency.Kotlin.Dokka.version)
+    id(dokka.pluginId) version(dokka.version)
 }
 
 allprojects {
