@@ -53,6 +53,6 @@ class ErrorMessageTest {
         ConstraintViolation violation = error.getConstraintViolation(0);
         StringSubject assertMessage = assertThat(violation.getMsgFormat());
         assertMessage
-                .isEqualTo("Expected less than 100 Cents per one US Dollar, but got 101.");
+                .isEqualTo("Expected less than 100 Cents per one Dollars, but got 101.");
     }
 }

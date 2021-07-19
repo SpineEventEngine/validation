@@ -30,6 +30,8 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protobuf.AnyPacker
+import io.spine.protodata.FieldEntered
+import io.spine.protodata.TypeExited
 import io.spine.protodata.TypeName
 import io.spine.protodata.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
@@ -40,6 +42,9 @@ import io.spine.server.route.EventRouting
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyType
 
+/**
+ * A view on a message type which stores an amount of money is a certain currency.
+ */
 class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
     @Subscribe
@@ -49,11 +54,30 @@ class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
         this.currency = currency
     }
 
+    @Subscribe
+    internal fun on(@External event: FieldEntered) = alter {
+        val field = event.field
+        if (field.orderOfDeclaration == 0) {
+            majorUnitField = field
+        } else if (field.orderOfDeclaration == 1) {
+            minorUnitField = field
+        }
+    }
+
+    @Subscribe
+    internal fun on(@Suppress("UNUSED_PARAMETER") @External e: TypeExited) {
+        if (!builder().hasCurrency()) {
+            deleted = true
+        }
+    }
+
     internal class Repo : ViewRepository<TypeName, CurrencyTypeView, CurrencyType>() {
 
         override fun setupEventRouting(routing: EventRouting<TypeName>) {
             super.setupEventRouting(routing)
             routing.route(TypeOptionDiscovered::class.java) { e, _ -> withId(e.type) }
+            routing.route(FieldEntered::class.java) { e, _ -> withId(e.type) }
+            routing.route(TypeExited::class.java) { e, _ -> withId(e.type) }
         }
     }
 }

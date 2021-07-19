@@ -48,6 +48,7 @@ import io.spine.validation.LogicalOperator.XOR
 import io.spine.validation.Rule
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.SIMPLE
+import java.lang.IllegalStateException
 
 /**
  * Java code comparing two objects.
@@ -144,7 +145,8 @@ private class SimpleRuleGenerator(
         } else {
             OBJECT_COMPARISON_OPS
         }
-        val compare = signs[rule.sign]!!
+        val compare = signs[rule.sign]
+            ?: throw IllegalStateException("Cannot render ${rule.sign} in Java for type `$type`.")
         return Literal(compare(fieldValue.toCode(), otherValue.toCode()))
     }
 

@@ -47,8 +47,7 @@ import io.spine.validation.test.money.CurrencyType
  * A policy which, if a type is a currency type, produces an event with a validation rule.
  *
  * We do not have enough data on `TypeOptionDiscovered`, thus we collect info in the `CurrencyType`
- * view, query additional data from the built-in `ProtobufSourceFile` view, and only then decide
- * if we want to emit the validation event.
+ * view and only then decide if we want to emit the validation event.
  */
 class CurrencyValidationPolicy : Policy<TypeExited>() {
 
@@ -58,10 +57,10 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
         if (!currencyType.isPresent) {
             return EitherOf2.withB(nothing())
         }
-        val nanoUnits = nanoUnits(event)
         val currency = currencyType.get()
-        val otherValue = nanoUnitsPerUnit(currency)
-        val rule = constructRule(currency.currency.name, nanoUnits, otherValue)
+        val minorUnits = currency.minorUnitField
+        val otherValue = minorUnitsPerUnit(currency)
+        val rule = constructRule(currency.majorUnitField, minorUnits, otherValue)
         return EitherOf2.withA(
             SimpleRuleAdded
                 .newBuilder()
@@ -71,48 +70,24 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
         )
     }
 
-    private fun nanoUnitsPerUnit(currencyType: CurrencyType): Value {
+    private fun minorUnitsPerUnit(currencyType: CurrencyType): Value {
         return Value
             .newBuilder()
-            .setIntValue(currencyType.currency.nanoUnits.toLong())
+            .setIntValue(currencyType.currency.minorUnits.toLong())
             .build()
     }
 
-    private fun constructRule(units: String, nanoUnits: Field, otherValue: Value): SimpleRule {
-        val msg = "Expected less than {other} ${nanoUnits.name.value.firstCapital()} per one " +
-                "$units, but got {value}."
+    private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule {
+        val msg = "Expected less than {other} ${minorUnits.name()} per one " +
+                "${majorUnits.name()}, but got {value}."
         return SimpleRule
             .newBuilder()
             .setErrorMessage(msg)
-            .setField(nanoUnits)
+            .setField(minorUnits)
             .setSign(LESS_THAN)
             .setOtherValue(otherValue)
             .build()
     }
-
-    private fun nanoUnits(event: TypeExited): Field {
-        val typeUrl = event.type.typeUrl()
-        val file = select<ProtobufSourceFile>()
-            .withId(event.file)
-            .orElseThrow {
-                IllegalStateException(
-                    "File `${event.file.value}` of type `$typeUrl` not found."
-                )
-            }
-        val message = file.typeMap[typeUrl]!!
-        if (message.fieldCount != 2) {
-            throw IllegalStateException(
-                "A currency type must have exactly two fields: major and minor currency units."
-            )
-        }
-        val nanoUnits = message.fieldList[1]
-        if (nanoUnits.type.primitive != TYPE_INT32) {
-            throw IllegalStateException(
-                "Currency field must be of type `int32`."
-            )
-        }
-        return nanoUnits
-    }
 }
 
-private fun String.firstCapital() = replaceFirstChar { it.uppercase() }
+private fun Field.name() = name.value.replaceFirstChar { it.uppercase() }

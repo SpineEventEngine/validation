@@ -29,10 +29,6 @@ package io.spine.validation
 internal class Template(template: String) {
 
     private var spans: List<Span> = listOf(LiteralSpan(template))
-        set(value) {
-            println(value)
-            field = value
-        }
 
     fun joinExpression(): String =
         spans.joinToString(separator = " + ")

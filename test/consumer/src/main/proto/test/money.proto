@@ -17,7 +17,7 @@ import "spine/validation/test/money_options.proto";
 // A single Dollar is equal to exactly 100 Cents.
 //
 message Usd {
-    option (currency) = { name: "US Dollar" code: "USD" nano_units: 100 };
+    option (currency) = { name: "US Dollar" code: "USD" minor_units: 100 };
 
     int32 dollars = 1;
 
@@ -29,7 +29,7 @@ message Usd {
 // A single Ouguiya is equal to exactly 5 Khoums.
 //
 message Mru {
-    option (currency) = { name: "Mauritanian Ouguiya" code: "MRU" nano_units: 5 };
+    option (currency) = { name: "Mauritanian Ouguiya" code: "MRU" minor_units: 5 };
 
     int32 ouguiyas = 1;
 
