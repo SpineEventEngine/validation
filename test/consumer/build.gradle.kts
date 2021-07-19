@@ -39,7 +39,7 @@ protoData {
         "io.spine.validation.ValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )
-    options("spine/options.proto")
+    options("spine/options.proto", "spine/validation/test/money_options.proto")
 }
 
 val spineBaseVersion: String by extra
