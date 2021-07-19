@@ -26,7 +26,7 @@
 
 package io.spine.validation
 
-internal open class Template(template: String) {
+internal class Template(template: String) {
 
     private var spans: List<Span> = listOf(LiteralSpan(template))
         set(value) {
@@ -34,10 +34,10 @@ internal open class Template(template: String) {
             field = value
         }
 
-    open fun joinExpression(): String =
+    fun joinExpression(): String =
         spans.joinToString(separator = " + ")
 
-    open fun formatDynamic(placeholder: Placeholder, expression: String) {
+    fun formatDynamic(placeholder: Placeholder, expression: String) {
         spans = spans.flatMap { span ->
             if (span is LiteralSpan) {
                 span.splitOn(placeholder)
@@ -49,7 +49,7 @@ internal open class Template(template: String) {
         }
     }
 
-    open fun formatStatic(placeholder: Placeholder, value: String) {
+    fun formatStatic(placeholder: Placeholder, value: String) {
         spans = spans.map { span ->
             if (span is LiteralSpan) {
                 span.replace(placeholder, value)

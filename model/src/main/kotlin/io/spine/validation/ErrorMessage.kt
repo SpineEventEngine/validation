@@ -40,7 +40,7 @@ import io.spine.validation.Placeholder.VALUE
  * A human-readable error message, describing a validation constraint violation.
  */
 public class ErrorMessage
-private constructor(private val value: String) {
+private constructor(private val expression: String) {
 
     public companion object {
 
@@ -83,14 +83,14 @@ private constructor(private val value: String) {
         ): ErrorMessage {
             val msg = Template(format).apply {
                 formatStatic(OPERATION, operation.printableString())
-                formatDynamic(LEFT, left.value)
-                formatDynamic(RIGHT, right.value)
+                formatDynamic(LEFT, left.expression)
+                formatDynamic(RIGHT, right.expression)
             }
             return ErrorMessage(msg.joinExpression())
         }
     }
 
-    override fun toString(): String = value
+    override fun toString(): String = expression
 }
 
 private fun LogicalOperator.printableString() = when (this) {
