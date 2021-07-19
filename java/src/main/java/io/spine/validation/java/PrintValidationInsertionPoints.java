@@ -27,7 +27,6 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
 import io.spine.validation.MessageValidation;
@@ -36,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static io.spine.protodata.language.CommonLanguages.java;
 
 /**
  * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types
@@ -45,7 +45,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
 
     public PrintValidationInsertionPoints() {
-        super(CommonLanguages.java());
+        super(java());
     }
 
     @NotNull
@@ -54,6 +54,6 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
         Set<MessageValidation> types = select(MessageValidation.class).all();
         return types.stream()
                     .map(validation -> new Validate(validation.getName()))
-                    .collect(ImmutableSet.toImmutableSet());
+                    .collect(toImmutableSet());
     }
 }

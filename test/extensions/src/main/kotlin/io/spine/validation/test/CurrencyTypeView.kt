@@ -43,8 +43,8 @@ import io.spine.validation.test.money.CurrencyType
 class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
     @Subscribe
-    fun on(@External @Where(field = "option.name", equals = "currency")
-           event: TypeOptionDiscovered) = alter {
+    internal fun on(@External @Where(field = "option.name", equals = "currency")
+                    event: TypeOptionDiscovered) = alter {
         val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
         this.currency = currency
     }
