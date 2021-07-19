@@ -71,10 +71,12 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        public fun forComposite(format: String,
-                         left: ErrorMessage,
-                         right: ErrorMessage,
-                         operation: LogicalOperator = LO_UNKNOWN): ErrorMessage =
+        public fun forComposite(
+            format: String,
+            left: ErrorMessage,
+            right: ErrorMessage,
+            operation: LogicalOperator = LO_UNKNOWN
+        ): ErrorMessage =
             ErrorMessage(
                 format
                     .replacePlaceholder(LEFT, left.value)
