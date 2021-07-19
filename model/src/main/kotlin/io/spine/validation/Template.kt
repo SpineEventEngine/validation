@@ -26,13 +26,33 @@
 
 package io.spine.validation
 
+/**
+ * A template of an error message.
+ *
+ * @see ErrorMessage
+ */
 internal class Template(template: String) {
 
     private var spans: List<Span> = listOf(LiteralSpan(template))
 
+    /**
+     * Obtains this formatted template as a code expression.
+     *
+     * If the message contains dynamic values, i.e. values which are unknown at the time of
+     * code generation, they will be concatenated with the string literals using
+     * the plus (`+`) operators.
+     * Otherwise, the whole expression is a single string literal enclosed in
+     * double quotation marks (`"`).
+     */
     fun joinExpression(): String =
         spans.joinToString(separator = " + ")
 
+    /**
+     * Adds a dynamic value to the template.
+     *
+     * A dynamic value is one which cannot be known at design time. Thus, a dynamic value is
+     * represented with a code expression.
+     */
     fun formatDynamic(placeholder: Placeholder, expression: String) {
         spans = spans.flatMap { span ->
             if (span is LiteralSpan) {
@@ -45,6 +65,12 @@ internal class Template(template: String) {
         }
     }
 
+    /**
+     * Adds a static value to the template.
+     *
+     * A static value is one which is known at design time. Thus, a static value is inserted right
+     * into the template.
+     */
     fun formatStatic(placeholder: Placeholder, value: String) {
         spans = spans.map { span ->
             if (span is LiteralSpan) {
@@ -56,8 +82,14 @@ internal class Template(template: String) {
     }
 }
 
+/**
+ * A piece of a string.
+ */
 private sealed class Span
 
+/**
+ * A string literal.
+ */
 private class LiteralSpan(private val value: String): Span() {
 
     override fun toString(): String = "\"$value\""
@@ -71,6 +103,9 @@ private class LiteralSpan(private val value: String): Span() {
         value.split(placeholder.fmt).map { LiteralSpan(it) }
 }
 
+/**
+ * A code expression which yields a string.
+ */
 private class ExpressionSpan(private val code: String): Span() {
 
     override fun toString(): String = code

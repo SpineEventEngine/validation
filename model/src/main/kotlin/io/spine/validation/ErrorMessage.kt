@@ -38,6 +38,15 @@ import io.spine.validation.Placeholder.VALUE
 
 /**
  * A human-readable error message, describing a validation constraint violation.
+ *
+ * The error message can contain dynamic references to values in the generated code.
+ * If such references are present, they are inserted into the message via the string plus (`+`)
+ * operators.
+ *
+ * If the target language uses a different way of concatenating strings (e.g. dots in PHP, etc.),
+ * or if it defines string literals in another way rather than enclosing them in quotation marks,
+ * renderers for such a language mustn't use this class and instead compile the error message on
+ * their own.
  */
 public class ErrorMessage
 private constructor(private val expression: String) {
@@ -98,14 +107,41 @@ private fun LogicalOperator.printableString() = when (this) {
     else -> "<unknown operation>"
 }
 
+/**
+ * A placeholder which can be present in a validation error message.
+ */
 internal enum class Placeholder {
 
+    /**
+     * The actual value of the validated field.
+     */
     VALUE,
+
+    /**
+     * The value to which the validated field is compared.
+     */
     OTHER,
+
+    /**
+     * In a composite validation rule, the left condition.
+     */
     LEFT,
+
+    /**
+     * In a composite validation rule, the right condition.
+     */
     RIGHT,
+
+    /**
+     * In a composite validation rule, the boolean operator which joins the two conditions.
+     *
+     * @see LogicalOperator
+     */
     OPERATION;
 
+    /**
+     * The placeholder as it appears in the error message template.
+     */
     val fmt: String
         get() = "{${name.lowercase()}}"
 }
