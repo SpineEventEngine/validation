@@ -27,7 +27,7 @@
 package io.spine.validation
 
 import io.spine.validation.LogicalOperator.AND
-import io.spine.validation.LogicalOperator.BO_UNKNOWN
+import io.spine.validation.LogicalOperator.LO_UNKNOWN
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
 
@@ -74,7 +74,7 @@ private constructor(private val value: String) {
         public fun forComposite(format: String,
                          left: ErrorMessage,
                          right: ErrorMessage,
-                         operation: LogicalOperator = BO_UNKNOWN): ErrorMessage =
+                         operation: LogicalOperator = LO_UNKNOWN): ErrorMessage =
             ErrorMessage(
                 format
                     .replacePlaceholder(LEFT, left.value)

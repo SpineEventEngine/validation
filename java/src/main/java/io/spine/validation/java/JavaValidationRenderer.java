@@ -118,14 +118,14 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private ImmutableList<String> rulesToCode(MessageValidation validation) {
         MessageReference result = new MessageReference("result");
         CodeBlock.Builder code = CodeBlock.builder();
-        code.add(newAccumulator());
+        code.addStatement(newAccumulator());
         code.add(generateValidationCode(validation, result));
         code.add(throwValidationException());
         return Poet.lines(code.build());
     }
 
     private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $N = new $T<>();",
+        return CodeBlock.of("$T<$T> $N = new $T<>()",
                             ArrayList.class,
                             ConstraintViolation.class,
                             VIOLATIONS,

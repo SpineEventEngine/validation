@@ -40,13 +40,13 @@ import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.ComparisonOperator.NOT_EQUAL
+import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
 import io.spine.validation.Rule
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.SIMPLE
-import io.spine.validation.ErrorMessage
 
 /**
  * Java code comparing two objects.

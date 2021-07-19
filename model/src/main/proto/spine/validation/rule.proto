@@ -138,7 +138,7 @@ message CompositeRule {
 // A boolean operator.
 enum LogicalOperator {
 
-    BO_UNKNOWN = 0;
+    LO_UNKNOWN = 0;
 
     // Joins two boolean values with the "and" operator.
     //
