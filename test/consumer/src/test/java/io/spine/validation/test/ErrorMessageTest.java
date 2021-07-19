@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ErrorMessageTest {
 
     @Test
-    @DisplayName("include expected and actal values")
+    @DisplayName("include expected and actual values")
     void values() {
         ValidationException exception = assertThrows(
                 ValidationException.class, () -> Usd.newBuilder()
