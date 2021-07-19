@@ -27,7 +27,6 @@
 package io.spine.validation.test
 
 import io.spine.core.External
-import io.spine.core.Subscribe
 import io.spine.protodata.Field
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ProtobufSourceFile
@@ -59,9 +58,10 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
         if (!currencyType.isPresent) {
             return EitherOf2.withB(nothing())
         }
-        val nanoUnits = nanosField(event)
-        val otherValue = nanoUnitsPerUnit(currencyType.get())
-        val rule = constructRule(nanoUnits, otherValue)
+        val nanoUnits = nanoUnits(event)
+        val currency = currencyType.get()
+        val otherValue = nanoUnitsPerUnit(currency)
+        val rule = constructRule(currency.currency.name, nanoUnits, otherValue)
         return EitherOf2.withA(
             SimpleRuleAdded
                 .newBuilder()
@@ -74,20 +74,23 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
     private fun nanoUnitsPerUnit(currencyType: CurrencyType): Value {
         return Value
             .newBuilder()
-            .setNumberValue(currencyType.currency.nanoUnits.toDouble())
+            .setIntValue(currencyType.currency.nanoUnits.toLong())
             .build()
     }
 
-    private fun constructRule(nanoUnits: Field, otherValue: Value): SimpleRule {
+    private fun constructRule(units: String, nanoUnits: Field, otherValue: Value): SimpleRule {
+        val msg = "Expected less than {other} ${nanoUnits.name.value.firstCapital()} per one " +
+                "$units, but got {value}."
         return SimpleRule
             .newBuilder()
+            .setErrorMessage(msg)
             .setField(nanoUnits)
             .setSign(LESS_THAN)
             .setOtherValue(otherValue)
             .build()
     }
 
-    private fun nanosField(event: TypeExited): Field {
+    private fun nanoUnits(event: TypeExited): Field {
         val typeUrl = event.type.typeUrl()
         val file = select<ProtobufSourceFile>()
             .withId(event.file)
@@ -111,3 +114,5 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
         return nanoUnits
     }
 }
+
+private fun String.firstCapital() = replaceFirstChar { it.uppercase() }
