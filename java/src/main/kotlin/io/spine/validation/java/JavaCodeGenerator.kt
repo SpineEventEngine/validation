@@ -31,6 +31,7 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Type.KindCase.PRIMITIVE
 import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MessageReference
@@ -148,11 +149,11 @@ private class SimpleRuleGenerator(
     }
 
     override fun error(): ErrorMessage {
+        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
         return ErrorMessage.forRule(
             rule.errorMessage,
-            fieldValue.toCode(),
-            otherValue.toCode(),
-            JavaInterpolation
+            actualValue.toCode(),
+            otherValue.toCode()
         )
     }
 }
@@ -196,8 +197,7 @@ private class CompositeRuleGenerator(
             format,
             left.error(),
             right.error(),
-            operation,
-            JavaInterpolation
+            operation
         )
     }
 }

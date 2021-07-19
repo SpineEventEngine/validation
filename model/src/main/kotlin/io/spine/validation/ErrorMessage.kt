@@ -35,7 +35,6 @@ import io.spine.validation.Placeholder.OPERATION
 import io.spine.validation.Placeholder.OTHER
 import io.spine.validation.Placeholder.RIGHT
 import io.spine.validation.Placeholder.VALUE
-import io.spine.validation.StringExpression.Companion.inQuotes
 
 /**
  * A human-readable error message, describing a validation constraint violation.
@@ -57,12 +56,13 @@ private constructor(private val value: String) {
         public fun forRule(
             format: String,
             value: String = "",
-            other: String = "",
-            interpol: Interpolation
+            other: String = ""
         ): ErrorMessage {
-            var msg = interpol.inTemplate(inQuotes(format)) replace inQuotes(VALUE.fmt) with value
-            msg = interpol.inTemplate(msg) replace inQuotes(OTHER.fmt) with other
-            return ErrorMessage(msg.value)
+            val msg = Template(format).apply {
+                formatDynamic(VALUE, value)
+                formatStatic(OTHER, other)
+            }
+            return ErrorMessage(msg.joinExpression())
         }
 
         /**
@@ -80,15 +80,13 @@ private constructor(private val value: String) {
             left: ErrorMessage,
             right: ErrorMessage,
             operation: LogicalOperator = LO_UNKNOWN,
-            interpol: Interpolation
         ): ErrorMessage {
-            var msg =
-                interpol.inTemplate(inQuotes(format)) replace inQuotes(LEFT.fmt) with left.value
-            msg = interpol.inTemplate(msg) replace inQuotes(RIGHT.fmt) with right.value
-            msg = interpol.inTemplate(msg)
-                .replace(inQuotes(OPERATION.fmt))
-                .with(operation.printableString())
-            return ErrorMessage(msg.value)
+            val msg = Template(format).apply {
+                formatStatic(OPERATION, operation.printableString())
+                formatDynamic(LEFT, left.value)
+                formatDynamic(RIGHT, right.value)
+            }
+            return ErrorMessage(msg.joinExpression())
         }
     }
 
@@ -100,7 +98,7 @@ private fun LogicalOperator.printableString() = when (this) {
     else -> "<unknown operation>"
 }
 
-private enum class Placeholder {
+internal enum class Placeholder {
 
     VALUE,
     OTHER,
