@@ -35,6 +35,7 @@ import io.spine.protodata.TypeExited
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.select
 import io.spine.protodata.typeUrl
+import io.spine.server.event.React
 import io.spine.server.model.Nothing
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ComparisonOperator.LESS_THAN
@@ -52,7 +53,7 @@ import io.spine.validation.test.money.CurrencyType
  */
 class CurrencyValidationPolicy : Policy<TypeExited>() {
 
-    @Subscribe
+    @React
     override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {
         val currencyType = select<CurrencyType>().withId(event.type)
         if (!currencyType.isPresent) {
