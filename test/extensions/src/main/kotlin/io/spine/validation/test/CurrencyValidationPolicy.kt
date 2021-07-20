@@ -28,12 +28,9 @@ package io.spine.validation.test
 
 import io.spine.core.External
 import io.spine.protodata.Field
-import io.spine.protodata.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeExited
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.select
-import io.spine.protodata.typeUrl
 import io.spine.server.event.React
 import io.spine.server.model.Nothing
 import io.spine.server.tuple.EitherOf2
@@ -78,16 +75,16 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
     }
 
     private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule {
-        val msg = "Expected less than {other} ${minorUnits.name()} per one " +
-                "${majorUnits.name()}, but got {value}."
+        val msg = "Expected less than {other} ${minorUnits.prettyName()} per one " +
+                "${majorUnits.prettyName()}, but got {value}."
         return SimpleRule
             .newBuilder()
             .setErrorMessage(msg)
-            .setField(minorUnits)
+            .setField(minorUnits.name)
             .setSign(LESS_THAN)
             .setOtherValue(otherValue)
             .build()
     }
 }
 
-private fun Field.name() = name.value.replaceFirstChar { it.uppercase() }
+private fun Field.prettyName() = name.value.replaceFirstChar { it.uppercase() }

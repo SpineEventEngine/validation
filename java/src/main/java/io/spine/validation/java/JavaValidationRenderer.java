@@ -31,6 +31,7 @@ import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.ProtobufSourceFile;
+import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.Poet;
@@ -136,8 +137,10 @@ public final class JavaValidationRenderer extends JavaRenderer {
                                              MessageReference result) {
         CodeBlock.Builder code = CodeBlock.builder();
         for (Rule rule : validation.getRuleList()) {
+            FilePath file = validation.getType().getFile();
+            TypeName typeName = validation.getType().getName();
             GenerationContext context = new GenerationContext(
-                    rule, result, typeSystem, validation.getType().getName(), VIOLATIONS
+                    rule, result, file, typeSystem, typeName, VIOLATIONS, this
             );
             JavaCodeGenerator generator = JavaCodeGeneration.generatorFor(context);
             CodeBlock block = generator.code();

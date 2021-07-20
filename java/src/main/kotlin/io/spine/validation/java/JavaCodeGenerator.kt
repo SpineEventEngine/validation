@@ -30,11 +30,9 @@ package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Type.KindCase.PRIMITIVE
-import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MessageReference
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
@@ -45,10 +43,8 @@ import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
-import io.spine.validation.Rule
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.SIMPLE
-import java.lang.IllegalStateException
 
 /**
  * Java code comparing two objects.
@@ -121,7 +117,7 @@ private class SimpleRuleGenerator(
 ) : JavaCodeGenerator {
 
     private val rule = ctx.rule.simple
-    private val field = rule.field
+    private val field = ctx.fieldFromSimpleRule!!
 
     private val fieldValue: Expression by lazy { ctx.msg.field(field).getter }
     private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
@@ -138,7 +134,6 @@ private class SimpleRuleGenerator(
     }
 
     override fun condition(): Expression {
-        val field = rule.field
         val type = field.type
         val signs = if (type.kindCase == PRIMITIVE) {
             PRIMITIVE_COMPARISON_OPS
@@ -213,40 +208,4 @@ internal fun generatorFor(ctx: GenerationContext): JavaCodeGenerator = with(ctx)
         COMPOSITE -> CompositeRuleGenerator(ctx)
         else -> throw IllegalArgumentException("Empty rule.")
     }
-}
-
-/**
- * Context of a [JavaCodeGenerator].
- */
-internal data class GenerationContext(
-    /**
-     * The rule for which the code is generated.
-     */
-    val rule: Rule,
-
-    /**
-     * A reference to the validated message.
-     */
-    val msg: MessageReference,
-
-    /**
-     * The Protobuf types known to the application.
-     */
-    val typeSystem: TypeSystem,
-
-    /**
-     * The type of the validated message.
-     */
-    val declaringType: TypeName,
-
-    /**
-     * A reference to the mutable violations list, which accumulates all the constraint violations.
-     */
-    val violationsList: String
-) {
-
-    /**
-     * Obtains the same context but with the given validation [rule].
-     */
-    fun withRule(rule: Rule): GenerationContext = copy(rule = rule)
 }

@@ -90,13 +90,13 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
 
     private static SimpleRuleAdded requiredRule(Field field) {
         Value unsetValue = UnsetValue.forField(field)
-                                     .orElseThrow(() -> doeNotSupportRequired(field));
+                                     .orElseThrow(() -> doesNotSupportRequired(field));
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
             // Duplication in generated code.
         SimpleRule rule = SimpleRule
                 .newBuilder()
                 .setErrorMessage("Field must be set.")
-                .setField(field)
+                .setField(field.getName())
                 .setSign(NOT_EQUAL)
                 .setOtherValue(unsetValue)
                 .vBuild();
@@ -107,7 +107,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .vBuild();
     }
 
-    private static IllegalStateException doeNotSupportRequired(Field field) {
+    private static IllegalStateException doesNotSupportRequired(Field field) {
         String fieldName = field.getName().getValue();
         String typeUrl = typeUrl(field.getDeclaringType());
         PrimitiveType type = field.getType().getPrimitive();

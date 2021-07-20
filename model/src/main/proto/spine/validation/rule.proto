@@ -48,7 +48,7 @@ import "google/protobuf/any.proto";
 message SimpleRule {
 
     // The field which is being compared.
-    protodata.Field field = 1;
+    protodata.FieldName field = 1;
 
     oneof operation {
 
