@@ -84,7 +84,10 @@ internal class Template(template: String) {
 /**
  * A piece of a string.
  */
-private sealed class Span
+private sealed class Span {
+
+    abstract override fun toString(): String
+}
 
 /**
  * A string literal.
