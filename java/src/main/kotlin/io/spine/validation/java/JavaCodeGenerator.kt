@@ -182,7 +182,7 @@ private class CompositeRuleGenerator(
         val composite = ctx.rule.composite
         val format = composite.errorMessage
         val operation = composite.operator
-        val commonField = composite.commonField
+        val commonField = composite.field
         val fieldAccessor = if (isNotDefault(commonField)) {
             val found = ctx.lookUpField(commonField)
             ctx.msg.field(found).getter.toCode()

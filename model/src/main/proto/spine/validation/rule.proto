@@ -132,7 +132,7 @@ message CompositeRule {
     // runtime with the error messages of the `left` and `right` rules and the words "and" or "or"
     // or "xor".
     //
-    // May also include the token `{value}`, but only if the `common_field` is also set.
+    // May also include the token `{value}`, but only if the `field` is also set.
     //
     string error_message = 4;
 
@@ -143,7 +143,7 @@ message CompositeRule {
     //
     // If `left` and `right` do not describe constraints of the same field, this value is empty.
     //
-    protodata.FieldName common_field = 5;
+    protodata.FieldName field = 5;
 }
 
 // A boolean operator.
