@@ -28,4 +28,7 @@
 
 package io.spine.validation
 
+/**
+ * Path to the name field of the option in the [io.spine.protodata.FieldOptionDiscovered] event.
+ */
 public const val OPTION_NAME: String = "option.name"
