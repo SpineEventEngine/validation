@@ -70,6 +70,10 @@ internal data class GenerationContext(
 
     /**
      * A reference to the mutable violations list, which accumulates all the constraint violations.
+     *
+     * This is a variable name in the generated code. The variable holds
+     * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
+     * the generated code should add it to this list.
      */
     val violationsList: String,
 
