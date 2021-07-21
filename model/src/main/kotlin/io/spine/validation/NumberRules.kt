@@ -41,6 +41,9 @@ import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.LogicalOperator.AND
+import io.spine.validation.Value.KindCase.DOUBLE_VALUE
+import io.spine.validation.Value.KindCase.INT_VALUE
+import java.lang.IllegalStateException
 
 /**
  * A factory of validation rules for number fields.
@@ -93,7 +96,26 @@ private constructor(
             .setLeft(minRule(field).wrap())
             .setRight(maxRule(field).wrap())
             .setOperator(AND)
+            .setCommonField(field)
+            .setErrorMessage(rangeErrorMessage)
             .build()
+
+    private val rangeErrorMessage
+        get() = "The number must be between ${lowerBound!!.toNumberString()} " +
+                "(${inclusive(lowerInclusive)}) and ${upperBound!!.toNumberString()} " +
+                "(${inclusive(uppedInclusive)}), but was {value}."
+
+    private fun inclusive(value: Boolean): String = if (value) {
+        "inclusive"
+    } else {
+        "exclusive"
+    }
+
+    private fun Value.toNumberString(): String = when(kindCase) {
+        DOUBLE_VALUE -> doubleValue.toString()
+        INT_VALUE -> intValue.toString()
+        else -> throw IllegalStateException("Unexpected Value: `$this`.")
+    }
 
     private fun SimpleRule.wrap(): Rule =
         Rule.newBuilder()
