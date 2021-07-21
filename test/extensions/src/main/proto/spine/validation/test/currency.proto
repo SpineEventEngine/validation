@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package spine.validation.test.money;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "CurrencyProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/test/money_options.proto";
+
+// A view on a message type which represents an amount of money in a certain currency.
+//
+// Such a message must have exactly 2 integer fields, one for the major currency and another one
+// for the minor currency.
+//
+message CurrencyType {
+    option (entity).kind = PROJECTION;
+
+    protodata.TypeName type = 1;
+
+    Currency currency = 2;
+
+    // The field of the message which stores the major units of the currency.
+    protodata.Field major_unit_field = 3;
+
+    // The field of the message which stores the minor units of the currency.
+    protodata.Field minor_unit_field = 4;
+}

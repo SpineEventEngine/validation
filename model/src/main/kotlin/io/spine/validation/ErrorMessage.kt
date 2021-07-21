@@ -27,21 +27,28 @@
 package io.spine.validation
 
 import io.spine.validation.LogicalOperator.AND
-import io.spine.validation.LogicalOperator.BO_UNKNOWN
+import io.spine.validation.LogicalOperator.LO_UNKNOWN
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
-
-private const val VALUE = "value"
-private const val OTHER = "other"
-private const val LEFT = "left"
-private const val RIGHT = "right"
-private const val OPERATION = "operation"
+import io.spine.validation.Placeholder.LEFT
+import io.spine.validation.Placeholder.OPERATOR
+import io.spine.validation.Placeholder.OTHER
+import io.spine.validation.Placeholder.RIGHT
+import io.spine.validation.Placeholder.VALUE
 
 /**
  * A human-readable error message, describing a validation constraint violation.
+ *
+ * The error message can contain dynamic references to values in the generated code.
+ * If such references are present, they are inserted into the message via the plus (`+`) operator.
+ *
+ * If the target language uses a different way of concatenating strings (e.g. dots in PHP, etc.),
+ * or if it defines string literals in another way rather than enclosing them in quotation marks,
+ * renderers for such a language mustn't use this class and instead compile the error message on
+ * their own.
  */
 public class ErrorMessage
-private constructor(private val value: String) {
+private constructor(private val expression: String) {
 
     public companion object {
 
@@ -54,12 +61,17 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        public fun forRule(format: String, value: String = "", other: String = ""): ErrorMessage =
-            ErrorMessage(
-                format
-                    .replacePlaceholder(VALUE, value)
-                    .replacePlaceholder(OTHER, other)
-            )
+        public fun forRule(
+            format: String,
+            value: String = "",
+            other: String = ""
+        ): ErrorMessage {
+            val msg = Template(format).apply {
+                formatDynamic(VALUE, value)
+                formatStatic(OTHER, other)
+            }
+            return ErrorMessage(msg.joinExpression())
+        }
 
         /**
          * Produces an error message for a composite validation rule.
@@ -71,27 +83,68 @@ private constructor(private val value: String) {
          */
         @JvmStatic
         @JvmOverloads
-        public fun forComposite(format: String,
-                         left: ErrorMessage,
-                         right: ErrorMessage,
-                         operation: LogicalOperator = BO_UNKNOWN): ErrorMessage =
-            ErrorMessage(
-                format
-                    .replacePlaceholder(LEFT, left.value)
-                    .replacePlaceholder(RIGHT, right.value)
-                    .replacePlaceholder(OPERATION, operation.printableString())
-            )
+        public fun forComposite(
+            format: String,
+            left: ErrorMessage,
+            right: ErrorMessage,
+            operation: LogicalOperator = LO_UNKNOWN,
+            value: String = ""
+        ): ErrorMessage {
+            val msg = Template(format).apply {
+                formatStatic(OPERATOR, operation.printableString())
+                formatDynamic(LEFT, left.expression)
+                formatDynamic(RIGHT, right.expression)
+                if (value.isNotBlank()) {
+                    formatDynamic(VALUE, value)
+                }
+            }
+            return ErrorMessage(msg.joinExpression())
+        }
     }
 
-    override fun toString(): String = value
+    override fun toString(): String = expression
 }
 
-private fun String.replacePlaceholder(placeholder: String, newValue: String): String {
-    val formattedPlaceholder = "{$placeholder}"
-    return replace(formattedPlaceholder, newValue)
-}
-
-private fun LogicalOperator.printableString() = when(this) {
+private fun LogicalOperator.printableString() = when (this) {
     AND, OR, XOR -> name.lowercase()
     else -> "<unknown operation>"
+}
+
+/**
+ * A placeholder which can be present in a validation error message.
+ */
+internal enum class Placeholder {
+
+    /**
+     * The actual value of the validated field.
+     */
+    VALUE,
+
+    /**
+     * The value to which the validated field is compared.
+     */
+    OTHER,
+
+    /**
+     * In a composite validation rule, the left condition.
+     */
+    LEFT,
+
+    /**
+     * In a composite validation rule, the right condition.
+     */
+    RIGHT,
+
+    /**
+     * In a composite validation rule, the boolean operator which joins the two conditions.
+     *
+     * @see LogicalOperator
+     */
+    OPERATOR;
+
+    /**
+     * The placeholder as it appears in the error message template.
+     */
+    val fmt: String
+        get() = "{${name.lowercase()}}"
 }

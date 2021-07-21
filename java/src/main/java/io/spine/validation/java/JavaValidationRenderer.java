@@ -27,14 +27,14 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.ProtobufSourceFile;
+import io.spine.protodata.TypeName;
+import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceSet;
 import io.spine.validate.ConstraintViolation;
@@ -64,7 +64,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  * <p>If the validation rules are broken, throws a {@link io.spine.validate.ValidationException}.
  */
 @SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public final class JavaValidationRenderer extends Renderer {
+public final class JavaValidationRenderer extends JavaRenderer {
 
     /**
      * Amount of indents to add before the validation code.
@@ -80,12 +80,8 @@ public final class JavaValidationRenderer extends Renderer {
 
     private @MonotonicNonNull TypeSystem typeSystem;
 
-    public JavaValidationRenderer() {
-        super(ImmutableSet.of(CommonLanguages.getJava()));
-    }
-
     @Override
-    protected void doRender(SourceSet sources) {
+    protected void render(SourceSet sources) {
         this.typeSystem = bakeTypeSystem();
         select(MessageValidation.class)
                 .all()
@@ -96,7 +92,8 @@ public final class JavaValidationRenderer extends Renderer {
                     Path javaFile = javaFile(validation.getType(), protoFile);
                     sources.file(javaFile)
                            .at(new Validate(validation.getName()))
-                           .add(rulesToCode(validation), INDENT_LEVEL);
+                           .withExtraIndentation(INDENT_LEVEL)
+                           .add(rulesToCode(validation));
                 });
     }
 
@@ -122,14 +119,14 @@ public final class JavaValidationRenderer extends Renderer {
     private ImmutableList<String> rulesToCode(MessageValidation validation) {
         MessageReference result = new MessageReference("result");
         CodeBlock.Builder code = CodeBlock.builder();
-        code.add(newAccumulator());
+        code.addStatement(newAccumulator());
         code.add(generateValidationCode(validation, result));
         code.add(throwValidationException());
         return Poet.lines(code.build());
     }
 
     private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $N = new $T<>();",
+        return CodeBlock.of("$T<$T> $N = new $T<>()",
                             ArrayList.class,
                             ConstraintViolation.class,
                             VIOLATIONS,
@@ -139,9 +136,11 @@ public final class JavaValidationRenderer extends Renderer {
     private CodeBlock generateValidationCode(MessageValidation validation,
                                              MessageReference result) {
         CodeBlock.Builder code = CodeBlock.builder();
+        FilePath file = validation.getType().getFile();
+        TypeName typeName = validation.getType().getName();
         for (Rule rule : validation.getRuleList()) {
             GenerationContext context = new GenerationContext(
-                    rule, result, typeSystem, validation.getType().getName(), VIOLATIONS
+                    rule, result, file, typeSystem, typeName, VIOLATIONS, this
             );
             JavaCodeGenerator generator = JavaCodeGeneration.generatorFor(context);
             CodeBlock block = generator.code();

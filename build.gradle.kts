@@ -41,21 +41,26 @@ buildscript {
     apply(from = "$rootDir/version.gradle.kts")
 
     val spineBaseVersion: String by extra
+    val protoDataVersion: String by extra
 
     dependencies {
         classpath("io.spine.tools:spine-mc-java:$spineBaseVersion")
+        classpath("io.spine:proto-data:$protoDataVersion")
     }
 }
 
 plugins {
     `java-library`
     idea
+
     val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
-    id(protobuf.id).version(protobuf.version)
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
+    val dokka = io.spine.internal.dependency.Kotlin.Dokka
+
+    id(protobuf.id).version(protobuf.version)
     id(errorProne.id).version(errorProne.version)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
-    id(io.spine.internal.dependency.Kotlin.Dokka.pluginId) version(io.spine.internal.dependency.Kotlin.Dokka.version)
+    id(dokka.pluginId) version(dokka.version)
 }
 
 allprojects {
@@ -135,7 +140,7 @@ spinePublishing {
     )
     spinePrefix.set(false)
     // Publish to the ProtoData repository reduce configuration for end users.
-    targetRepositories.add(gitHub("ProtoData"))
+    targetRepositories.add(gitHub("validation"))
 }
 
 apply {

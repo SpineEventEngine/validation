@@ -48,7 +48,7 @@ import "google/protobuf/any.proto";
 message SimpleRule {
 
     // The field which is being compared.
-    protodata.Field field = 1;
+    protodata.FieldName field = 1;
 
     oneof operation {
 
@@ -128,17 +128,28 @@ message CompositeRule {
 
     // A human-readable message explaining the error.
     //
-    // May include tokens `{left}`, `{right}`, and `{operation}`, which will be replaced with at
+    // May include tokens `{left}`, `{right}`, and `{operator}`, which will be replaced with at
     // runtime with the error messages of the `left` and `right` rules and the words "and" or "or"
     // or "xor".
     //
+    // May also include the token `{value}`, but only if the `field` is also set.
+    //
     string error_message = 4;
+
+    // If this rule describes several constraints of the same field, this is the name of the field.
+    //
+    // It is only used for diagnostic purposes. The constraints themselves are always validated
+    // according to the rules `left` and `right`.
+    //
+    // If `left` and `right` do not describe constraints of the same field, this value is empty.
+    //
+    protodata.FieldName field = 5;
 }
 
 // A boolean operator.
 enum LogicalOperator {
 
-    BO_UNKNOWN = 0;
+    LO_UNKNOWN = 0;
 
     // Joins two boolean values with the "and" operator.
     //

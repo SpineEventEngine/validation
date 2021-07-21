@@ -41,7 +41,12 @@ public class ValidationPlugin implements Plugin {
     @NotNull
     @Override
     public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(new RequiredRulePolicy());
+        return ImmutableSet.of(
+                new RequiredRulePolicy(),
+                new RangePolicy(),
+                new MinPolicy(),
+                new MaxPolicy()
+        );
     }
 
     @NotNull

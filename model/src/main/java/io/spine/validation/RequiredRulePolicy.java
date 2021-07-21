@@ -43,6 +43,7 @@ import static io.spine.option.OptionsProto.required;
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
+import static io.spine.validation.Options.is;
 import static java.lang.String.format;
 
 /**
@@ -58,7 +59,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
         Option option = event.getOption();
-        if (!isRequired(option)) {
+        if (!is(option, required)) {
             return EitherOf2.withB(nothing());
         }
         ProtobufSourceFile file = select(ProtobufSourceFile.class)
@@ -90,13 +91,13 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
 
     private static SimpleRuleAdded requiredRule(Field field) {
         Value unsetValue = UnsetValue.forField(field)
-                                     .orElseThrow(() -> doeNotSupportRequired(field));
+                                     .orElseThrow(() -> doesNotSupportRequired(field));
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
             // Duplication in generated code.
         SimpleRule rule = SimpleRule
                 .newBuilder()
                 .setErrorMessage("Field must be set.")
-                .setField(field)
+                .setField(field.getName())
                 .setSign(NOT_EQUAL)
                 .setOtherValue(unsetValue)
                 .vBuild();
@@ -107,7 +108,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .vBuild();
     }
 
-    private static IllegalStateException doeNotSupportRequired(Field field) {
+    private static IllegalStateException doesNotSupportRequired(Field field) {
         String fieldName = field.getName().getValue();
         String typeUrl = typeUrl(field.getDeclaringType());
         PrimitiveType type = field.getType().getPrimitive();
@@ -115,12 +116,5 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 "Field `%s.%s` of type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type
         ));
-    }
-
-    private static boolean isRequired(Option option) {
-        String name = required.getDescriptor().getName();
-        int number = required.getNumber();
-        return option.getName().equals(name)
-                && option.getNumber() == number;
     }
 }

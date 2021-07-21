@@ -27,6 +27,11 @@
 rootProject.name = "validation"
 
 include(
+    "java",
     "model",
-    "java"
+    "test-extensions",
+    "test-consumer"
 )
+
+project(":test-extensions").projectDir = file("$rootDir/test/extensions")
+project(":test-consumer").projectDir = file("$rootDir/test/consumer")

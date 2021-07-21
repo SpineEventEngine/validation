@@ -68,12 +68,13 @@ import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.typeUrl
 import io.spine.validation.Value.KindCase.BOOL_VALUE
 import io.spine.validation.Value.KindCase.BYTES_VALUE
+import io.spine.validation.Value.KindCase.DOUBLE_VALUE
 import io.spine.validation.Value.KindCase.ENUM_VALUE
+import io.spine.validation.Value.KindCase.INT_VALUE
 import io.spine.validation.Value.KindCase.LIST_VALUE
 import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
-import io.spine.validation.Value.KindCase.NUMBER_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
 
 /**
@@ -100,7 +101,8 @@ private constructor(
         return when (value.kindCase) {
             NULL_VALUE -> Null
             BOOL_VALUE -> Literal(value.boolValue)
-            NUMBER_VALUE -> Literal(value.numberValue)
+            DOUBLE_VALUE -> Literal(value.doubleValue)
+            INT_VALUE -> Literal(value.intValue)
             STRING_VALUE -> LiteralString(value.stringValue)
             BYTES_VALUE -> LiteralBytes(value.bytesValue)
             MESSAGE_VALUE -> messageValueToJava(value)
