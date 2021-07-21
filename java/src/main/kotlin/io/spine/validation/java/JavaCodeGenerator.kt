@@ -141,7 +141,7 @@ private class SimpleRuleGenerator(
             OBJECT_COMPARISON_OPS
         }
         val compare = signs[rule.sign]
-            ?: throw IllegalStateException("Cannot render ${rule.sign} in Java for type `$type`.")
+            ?: throw IllegalStateException("Unsupported operation `${rule.sign}` for type `$type`.")
         return Literal(compare(fieldValue.toCode(), otherValue.toCode()))
     }
 
