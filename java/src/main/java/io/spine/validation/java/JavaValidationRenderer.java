@@ -136,9 +136,9 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private CodeBlock generateValidationCode(MessageValidation validation,
                                              MessageReference result) {
         CodeBlock.Builder code = CodeBlock.builder();
+        FilePath file = validation.getType().getFile();
+        TypeName typeName = validation.getType().getName();
         for (Rule rule : validation.getRuleList()) {
-            FilePath file = validation.getType().getFile();
-            TypeName typeName = validation.getType().getName();
             GenerationContext context = new GenerationContext(
                     rule, result, file, typeSystem, typeName, VIOLATIONS, this
             );
