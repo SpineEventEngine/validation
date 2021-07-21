@@ -26,11 +26,13 @@
 
 package io.spine.validation
 
-import com.google.protobuf.GeneratedMessage
+import com.google.protobuf.Message
 import com.google.protobuf.StringValue
 import io.spine.option.MaxOption
 import io.spine.option.MinOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.max
+import io.spine.option.OptionsProto.min
+import io.spine.option.OptionsProto.range
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.FieldName
 import io.spine.protodata.Option
@@ -40,6 +42,9 @@ import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.LogicalOperator.AND
 
+/**
+ * A factory of validation rules for number fields.
+ */
 internal class NumberRules
 private constructor(
     private val upperBound: Value? = null,
@@ -48,9 +53,15 @@ private constructor(
     private val lowerInclusive: Boolean = false
 ) {
 
+    /**
+     * Creates a [SimpleRule] which states that the value must be greater than a threshold.
+     */
     fun minRule(field: FieldName): SimpleRule =
         simpleRule(field, lowerBound!!, lowerInclusive, GREATER_OR_EQUAL, GREATER_THAN, "greater")
 
+    /**
+     * Creates a [SimpleRule] which states that the value must be less than a threshold.
+     */
     fun maxRule(field: FieldName): SimpleRule =
         simpleRule(field, upperBound!!, uppedInclusive, LESS_OR_EQUAL, LESS_THAN, "less")
 
@@ -74,6 +85,9 @@ private constructor(
         return "The number must be $adjective than $orEqual{other}, but was {value}."
     }
 
+    /**
+     * Creates a [CompositeRule] which states that the value must lie within a range.
+     */
     fun rangeRule(field: FieldName): CompositeRule =
         CompositeRule.newBuilder()
             .setLeft(minRule(field).wrap())
@@ -86,68 +100,60 @@ private constructor(
             .setSimple(this)
             .build()
 
-    override fun toString(): String {
-        return "NumberRules(upperBound=$upperBound, lowerBound=$lowerBound, uppedInclusive=$uppedInclusive, lowerInclusive=$lowerInclusive)"
-    }
-
-
     companion object {
 
+        /**
+         * Creates a new `NumberRules` from the given option.
+         *
+         * The option must be the `(min)`, the `(max)`, or the `(range)`.
+         *
+         * @throws IllegalArgumentException upon an unsupported option
+         */
         @JvmStatic
         fun from(option: Option): NumberRules {
-            when {
-                option.isRange() -> {
-                    val optionValue = AnyPacker.unpack(option.value, StringValue::class.java).value
-                    val notation = RangeNotation.parse(optionValue)
-                    return NumberRules(
-                        upperBound = notation.max,
-                        lowerBound = notation.min,
-                        uppedInclusive = notation.maxInclusive,
-                        lowerInclusive = notation.minInclusive
-                    )
-                }
-                option.isMin() -> {
-                    val optionValue = AnyPacker.unpack(option.value, MinOption::class.java)
-                    val threshold = optionValue.value.parseToNumber()
-                    return NumberRules(
-                        lowerBound = threshold,
-                        lowerInclusive = !optionValue.exclusive
-                    )
-                }
-                option.isMax() -> {
-                    val optionValue = AnyPacker.unpack(option.value, MaxOption::class.java)
-                    val threshold = optionValue.value.parseToNumber()
-                    return NumberRules(
-                        upperBound = threshold,
-                        uppedInclusive = !optionValue.exclusive
-                    )
-                }
-                else -> {
-                    throw IllegalArgumentException(
-                        "Option ${option.name} is not a number range option."
-                    )
-                }
+            return when {
+                option.`is`(range) -> forRange(option)
+                option.`is`(min) -> forMin(option)
+                option.`is`(max) -> forMax(option)
+                else -> throw IllegalArgumentException(
+                    "Option ${option.name} is not a number range option."
+                )
             }
+        }
+
+        private fun forMax(option: Option): NumberRules {
+            val optionValue = option.value<MaxOption>()
+            val threshold = optionValue.value.parseToNumber()
+            return NumberRules(
+                upperBound = threshold,
+                uppedInclusive = !optionValue.exclusive
+            )
+        }
+
+        private fun forMin(option: Option): NumberRules {
+            val optionValue = option.value<MinOption>()
+            val threshold = optionValue.value.parseToNumber()
+            return NumberRules(
+                lowerBound = threshold,
+                lowerInclusive = !optionValue.exclusive
+            )
+        }
+
+        private fun forRange(option: Option): NumberRules {
+            val optionValue = option.value<StringValue>().value
+            val notation = RangeNotation.parse(optionValue)
+            return NumberRules(
+                upperBound = notation.max,
+                lowerBound = notation.min,
+                uppedInclusive = notation.maxInclusive,
+                lowerInclusive = notation.minInclusive
+            )
         }
     }
 }
 
-private fun Option.isMin(): Boolean {
-    return isOption(this, OptionsProto.min)
-}
-
-private fun Option.isMax(): Boolean {
-    return isOption(this, OptionsProto.max)
-}
-
-private fun Option.isRange(): Boolean {
-    return isOption(this, OptionsProto.range)
-}
-
-private fun isOption(
-    option: Option,
-    generatedOpt: GeneratedMessage.GeneratedExtension<*, *>
-): Boolean {
-    val descriptor = generatedOpt.descriptor
-    return option.name == descriptor.name && option.number == descriptor.number
-}
+/**
+ * Unpacks the value of this option into a message of the given type `T`.
+ */
+private inline fun <reified T : Message> Option.value() =
+    AnyPacker.unpack(value, T::class.java)
