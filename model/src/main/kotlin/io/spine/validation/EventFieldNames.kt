@@ -29,4 +29,3 @@
 package io.spine.validation
 
 public const val OPTION_NAME: String = "option.name"
-
