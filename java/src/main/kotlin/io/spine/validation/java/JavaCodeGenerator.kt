@@ -87,26 +87,36 @@ private val BOOLEAN_OPS = mapOf(
 /**
  * A Java code generator for a validation rule.
  */
-internal sealed interface JavaCodeGenerator {
+internal sealed class JavaCodeGenerator {
 
     /**
      * Obtains the code checking the rule.
      *
      * Implementations report any found violations.
      */
-    fun code(): CodeBlock
+    fun code(): CodeBlock {
+        val binaryCondition = condition()
+        return CodeBlock
+            .builder()
+            .beginControlFlow("if (!(\$L))", binaryCondition)
+            .add(createViolation())
+            .endControlFlow()
+            .build()
+    }
 
     /**
      * Obtains an expression checking if the rule is violated.
      *
      * The expression evaluates to `true` if there is a violation and to `false` otherwise.
      */
-    fun condition(): Expression
+    abstract fun condition(): Expression
 
     /**
      * Forms an error message for the found violation.
      */
-    fun error(): ErrorMessage
+    abstract fun error(): ErrorMessage
+
+    protected abstract fun createViolation(): CodeBlock
 }
 
 /**
@@ -114,24 +124,13 @@ internal sealed interface JavaCodeGenerator {
  */
 private class SimpleRuleGenerator(
     private val ctx: GenerationContext
-) : JavaCodeGenerator {
+) : JavaCodeGenerator() {
 
     private val rule = ctx.rule.simple
     private val field = ctx.fieldFromSimpleRule!!
 
     private val fieldValue: Expression by lazy { ctx.msg.field(field).getter }
     private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
-
-    override fun code(): CodeBlock {
-        val binaryCondition = condition()
-        val errorMsg = error()
-        return CodeBlock
-            .builder()
-            .beginControlFlow("if (!(\$L))", binaryCondition)
-            .add(errorMsg.createViolation(field, fieldValue, ctx.violationsList))
-            .endControlFlow()
-            .build()
-    }
 
     override fun condition(): Expression {
         val type = field.type
@@ -153,6 +152,9 @@ private class SimpleRuleGenerator(
             otherValue.toCode()
         )
     }
+
+    override fun createViolation(): CodeBlock =
+        error().createViolation(field, fieldValue, ctx.violationsList)
 }
 
 /**
@@ -162,21 +164,10 @@ private class SimpleRuleGenerator(
  */
 private class CompositeRuleGenerator(
     private val ctx: GenerationContext,
-) : JavaCodeGenerator {
+) : JavaCodeGenerator() {
 
     private val left = generatorFor(ctx.withRule(ctx.rule.composite.left))
     private val right = generatorFor(ctx.withRule(ctx.rule.composite.right))
-
-    override fun code(): CodeBlock {
-        val binaryCondition = condition()
-        val error = error()
-        return CodeBlock
-            .builder()
-            .beginControlFlow("if (!(%s))", binaryCondition)
-            .add(error.createCompositeViolation(ctx.declaringType, ctx.violationsList))
-            .endControlFlow()
-            .build()
-    }
 
     override fun condition(): Expression = with(ctx) {
         val composite = rule.composite
@@ -197,6 +188,9 @@ private class CompositeRuleGenerator(
             operation
         )
     }
+
+    override fun createViolation(): CodeBlock =
+        error().createCompositeViolation(ctx.declaringType, ctx.violationsList)
 }
 
 /**
