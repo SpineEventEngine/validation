@@ -40,8 +40,7 @@ import io.spine.validation.Placeholder.VALUE
  * A human-readable error message, describing a validation constraint violation.
  *
  * The error message can contain dynamic references to values in the generated code.
- * If such references are present, they are inserted into the message via the string plus (`+`)
- * operators.
+ * If such references are present, they are inserted into the message via the plus (`+`) operator.
  *
  * If the target language uses a different way of concatenating strings (e.g. dots in PHP, etc.),
  * or if it defines string literals in another way rather than enclosing them in quotation marks,
