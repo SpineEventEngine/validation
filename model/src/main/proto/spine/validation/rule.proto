@@ -128,7 +128,7 @@ message CompositeRule {
 
     // A human-readable message explaining the error.
     //
-    // May include tokens `{left}`, `{right}`, and `{operation}`, which will be replaced with at
+    // May include tokens `{left}`, `{right}`, and `{operator}`, which will be replaced with at
     // runtime with the error messages of the `left` and `right` rules and the words "and" or "or"
     // or "xor".
     //

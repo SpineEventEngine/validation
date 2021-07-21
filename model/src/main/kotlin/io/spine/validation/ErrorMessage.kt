@@ -31,7 +31,7 @@ import io.spine.validation.LogicalOperator.LO_UNKNOWN
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
 import io.spine.validation.Placeholder.LEFT
-import io.spine.validation.Placeholder.OPERATION
+import io.spine.validation.Placeholder.OPERATOR
 import io.spine.validation.Placeholder.OTHER
 import io.spine.validation.Placeholder.RIGHT
 import io.spine.validation.Placeholder.VALUE
@@ -91,7 +91,7 @@ private constructor(private val expression: String) {
             value: String = ""
         ): ErrorMessage {
             val msg = Template(format).apply {
-                formatStatic(OPERATION, operation.printableString())
+                formatStatic(OPERATOR, operation.printableString())
                 formatDynamic(LEFT, left.expression)
                 formatDynamic(RIGHT, right.expression)
                 if (value.isNotBlank()) {
@@ -140,7 +140,7 @@ internal enum class Placeholder {
      *
      * @see LogicalOperator
      */
-    OPERATION;
+    OPERATOR;
 
     /**
      * The placeholder as it appears in the error message template.
