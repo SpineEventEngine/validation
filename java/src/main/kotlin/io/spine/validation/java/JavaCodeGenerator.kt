@@ -184,7 +184,7 @@ private class CompositeRuleGenerator(
         val operation = composite.operator
         val commonField = composite.commonField
         val fieldAccessor = if (isNotDefault(commonField)) {
-            val found = ctx.lookupField(commonField)
+            val found = ctx.lookUpField(commonField)
             ctx.msg.field(found).getter.toCode()
         } else {
             ""

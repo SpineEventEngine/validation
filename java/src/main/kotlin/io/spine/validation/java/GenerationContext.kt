@@ -86,7 +86,7 @@ internal data class GenerationContext(
      */
     val fieldFromSimpleRule: Field?
         get() = if (rule.hasSimple()) {
-            lookupField(rule.simple.field)
+            lookUpField(rule.simple.field)
         } else {
             null
         }
@@ -101,7 +101,7 @@ internal data class GenerationContext(
      *
      * @throws IllegalArgumentException if there is no such field
      */
-    fun lookupField(name: FieldName): Field =
+    fun lookUpField(name: FieldName): Field =
         querying.lookUpField(protoFile, declaringType, name)
 }
 
@@ -111,11 +111,11 @@ private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldNam
     }
     val messageType = protoFile.typeMap[type.typeUrl()]
         ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl()}`.")
-    return messageType.findField(field)
+    return messageType.lookUpField(field)
         ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl()}.${field.value}`.")
 }
 
-private fun MessageType.findField(name: FieldName): Field? {
+private fun MessageType.lookUpField(name: FieldName): Field? {
     var field = fieldList.find { it.name == name }
     if (field == null) {
         field = oneofGroupList
