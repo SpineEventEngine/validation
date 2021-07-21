@@ -27,16 +27,21 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.core.Where;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
-import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
+import io.spine.server.model.Nothing;
+import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.CompositeRuleAdded;
 
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import static io.spine.option.OptionsProto.range;
+import static io.spine.validation.Options.is;
 
+/**
+ * A policy to add validation rules to a type whenever the {@code (range)} field option
+ * is discovered.
+ */
 final class RangePolicy extends Policy<FieldOptionDiscovered> {
 
     @Override

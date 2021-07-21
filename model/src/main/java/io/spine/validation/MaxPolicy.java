@@ -38,6 +38,10 @@ import io.spine.validation.event.SimpleRuleAdded;
 import static io.spine.option.OptionsProto.max;
 import static io.spine.validation.Options.is;
 
+/**
+ * A policy to add a validation rule to a type whenever the {@code (max)} field option
+ * is discovered.
+ */
 final class MaxPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
