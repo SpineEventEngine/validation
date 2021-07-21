@@ -68,8 +68,8 @@ private val PRIMITIVE_COMPARISON_OPS = mapOf(
     NOT_EQUAL to { left: String, right: String -> "$left != $right" },
     GREATER_THAN to { left: String, right: String -> "$left > $right" },
     LESS_THAN to { left: String, right: String -> "$left < $right" },
-    GREATER_OR_EQUAL to { left: String, right: String -> "$left < $right" },
-    LESS_OR_EQUAL to { left: String, right: String -> "$left < $right" }
+    GREATER_OR_EQUAL to { left: String, right: String -> "$left >= $right" },
+    LESS_OR_EQUAL to { left: String, right: String -> "$left <= $right" }
 )
 
 /**
