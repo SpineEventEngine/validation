@@ -41,21 +41,17 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public Just<CompositeRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
-    ) {
-        try {
-            Option option = event.getOption();
-            NumberRules rules = NumberRules.from(option);
-            return new Just<>(CompositeRuleAdded
-                                      .newBuilder()
-                                      .setType(event.getType())
-                                      .setRule(rules.rangeRule(event.getField()))
-                                      .build()
-            );
-        } catch (Throwable e) {
-            e.printStackTrace();
-            throw e;
+    public EitherOf2<CompositeRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+        Option option = event.getOption();
+        if (!is(option, range)) {
+            return EitherOf2.withB(nothing());
         }
+        NumberRules rules = NumberRules.from(option);
+        return EitherOf2.withA(CompositeRuleAdded
+                                       .newBuilder()
+                                       .setType(event.getType())
+                                       .setRule(rules.rangeRule(event.getField()))
+                                       .build()
+        );
     }
 }
