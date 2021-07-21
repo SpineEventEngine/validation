@@ -24,16 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+package io.spine.validation;
 
-dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
+import io.spine.core.External;
+import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.Option;
+import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.React;
+import io.spine.server.model.Nothing;
+import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.SimpleRuleAdded;
 
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
-}
+import static io.spine.option.OptionsProto.min;
+import static io.spine.validation.Options.is;
 
-kotlin {
-    explicitApi()
+final class MinPolicy extends Policy<FieldOptionDiscovered> {
+
+    @Override
+    @React
+    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+        Option option = event.getOption();
+        if (!is(option, min)) {
+            return EitherOf2.withB(nothing());
+        }
+        NumberRules rules = NumberRules.from(option);
+        SimpleRule rule = rules.minRule(event.getField());
+        return EitherOf2.withA(SimpleRuleAdded
+                                  .newBuilder()
+                                  .setType(event.getType())
+                                  .setRule(rule)
+                                  .build()
+        );
+    }
 }

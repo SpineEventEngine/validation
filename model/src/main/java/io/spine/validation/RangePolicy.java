@@ -24,16 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+package io.spine.validation;
 
-dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
+import io.spine.core.External;
+import io.spine.core.Where;
+import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.Option;
+import io.spine.protodata.plugin.Just;
+import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.React;
+import io.spine.validation.event.CompositeRuleAdded;
 
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
-}
+import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
-kotlin {
-    explicitApi()
+final class RangePolicy extends Policy<FieldOptionDiscovered> {
+
+    @Override
+    @React
+    public Just<CompositeRuleAdded> whenever(
+            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
+    ) {
+        try {
+            Option option = event.getOption();
+            NumberRules rules = NumberRules.from(option);
+            return new Just<>(CompositeRuleAdded
+                                      .newBuilder()
+                                      .setType(event.getType())
+                                      .setRule(rules.rangeRule(event.getField()))
+                                      .build()
+            );
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

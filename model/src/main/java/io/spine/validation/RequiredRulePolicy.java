@@ -43,6 +43,7 @@ import static io.spine.option.OptionsProto.required;
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
+import static io.spine.validation.Options.is;
 import static java.lang.String.format;
 
 /**
@@ -58,7 +59,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
         Option option = event.getOption();
-        if (!isRequired(option)) {
+        if (!is(option, required)) {
             return EitherOf2.withB(nothing());
         }
         ProtobufSourceFile file = select(ProtobufSourceFile.class)
@@ -115,12 +116,5 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 "Field `%s.%s` of type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type
         ));
-    }
-
-    private static boolean isRequired(Option option) {
-        String name = required.getDescriptor().getName();
-        int number = required.getNumber();
-        return option.getName().equals(name)
-                && option.getNumber() == number;
     }
 }

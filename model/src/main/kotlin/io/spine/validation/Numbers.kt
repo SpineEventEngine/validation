@@ -24,16 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+package io.spine.validation
 
-dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
-
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
-}
-
-kotlin {
-    explicitApi()
+internal fun String.parseToNumber(): Value {
+    val fraction = contains('.')
+    return if (fraction) {
+        Value
+            .newBuilder()
+            .setDoubleValue(toDouble())
+            .build()
+    } else {
+        Value
+            .newBuilder()
+            .setIntValue(toLong())
+            .build()
+    }
 }

@@ -658,7 +658,7 @@
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Jul 20 15:40:29 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jul 21 11:24:18 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -957,6 +957,9 @@ This report was generated on **Tue Jul 20 15:40:29 EEST 2021** using [Gradle-Lic
 
 1. **Group:** com.google.guava **Name:** guava **Version:** 30.1.1-jre
      * **Manifest Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** com.google.guava **Name:** guava-testlib **Version:** 30.1.1-jre
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.guava **Name:** listenablefuture **Version:** 9999.0-empty-to-avoid-conflict-with-guava
@@ -1297,7 +1300,7 @@ This report was generated on **Tue Jul 20 15:40:29 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Jul 20 15:40:35 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jul 21 11:24:25 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1969,7 +1972,7 @@ This report was generated on **Tue Jul 20 15:40:35 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Jul 20 15:40:43 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jul 21 11:24:33 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2632,4 +2635,4 @@ This report was generated on **Tue Jul 20 15:40:43 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Jul 20 15:40:44 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Wed Jul 21 11:24:34 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

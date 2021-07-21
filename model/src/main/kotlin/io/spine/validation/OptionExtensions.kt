@@ -24,16 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+@file:JvmName("Options")
 
-dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
+package io.spine.validation
 
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
-}
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protodata.Option
 
-kotlin {
-    explicitApi()
+public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
+    return name == generated.descriptor.name
+            && number == generated.number
 }

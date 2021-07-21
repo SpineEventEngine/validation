@@ -24,16 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+@file:JvmName("EventFieldNames")
 
-dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
+package io.spine.validation
 
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
-}
+public const val OPTION_NAME: String = "option.name"
 
-kotlin {
-    explicitApi()
-}
