@@ -9,7 +9,6 @@ option java_package = "io.spine.validation.test.money";
 option java_outer_classname = "MoneyProto";
 option java_multiple_files = true;
 
-import "google/protobuf/descriptor.proto";
 import "spine/validation/test/money_options.proto";
 
 // An amount of money in US Dollars.

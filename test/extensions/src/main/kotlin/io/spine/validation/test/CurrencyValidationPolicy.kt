@@ -51,7 +51,7 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
     @React
     override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {
         val currencyType = select<CurrencyType>().withId(event.type)
-        if (!currencyType.isPresent) {
+        if (!currencyType.isPresent || !currencyType.get().hasCurrency()) {
             return EitherOf2.withB(nothing())
         }
         val currency = currencyType.get()
