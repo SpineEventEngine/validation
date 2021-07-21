@@ -96,7 +96,7 @@ private constructor(
             .setLeft(minRule(field).wrap())
             .setRight(maxRule(field).wrap())
             .setOperator(AND)
-            .setCommonField(field)
+            .setField(field)
             .setErrorMessage(rangeErrorMessage)
             .build()
 
