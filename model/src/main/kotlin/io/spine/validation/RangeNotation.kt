@@ -33,8 +33,7 @@ import java.util.regex.Pattern
 
 
 /**
- * Transforms a string value defined in a field declaration into a [Range] of
- * [ComparableNumber]s.
+ * Transforms a string value defined in a field declaration into a [Range] of [ComparableNumber]s.
  */
 internal class RangeNotation
 private constructor(
