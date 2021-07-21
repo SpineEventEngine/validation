@@ -26,6 +26,11 @@
 
 package io.spine.validation
 
+/**
+ * Parses this string into a number value.
+ *
+ * @return a `Value` with either `double_value` or `int_value`
+ */
 internal fun String.parseToNumber(): Value {
     val fraction = contains('.')
     return if (fraction) {

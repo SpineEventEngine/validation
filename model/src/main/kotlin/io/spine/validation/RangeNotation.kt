@@ -38,9 +38,27 @@ import java.util.regex.Pattern
  */
 internal class RangeNotation
 private constructor(
+
+    /**
+     * If `true`, this lower bound of the range is inclusive, meaning that the threshold value lies
+     * within the range.
+     */
     val minInclusive: Boolean,
+
+    /**
+     * If `true`, this upper bound of the range is inclusive, meaning that the threshold value lies
+     * within the range.
+     */
     val maxInclusive: Boolean,
+
+    /**
+     * The lower threshold.
+     */
     val min: Value,
+
+    /**
+     * The upper threshold.
+     */
     val max: Value
 ) {
 
@@ -67,7 +85,7 @@ private constructor(
          * Examples of an invalid number range:
          *  - `1..5` - missing brackets.
          *  - `[0 - 1]` - wrong divider.
-         *  - `[0 . . 1]` - divider cannot be split with spaces.
+         *  - `[0 . . 1]` - divider cannot be split by spaces.
          *  - `( .. 0)` - missing lower bound.
          */
         private val NUMBER_RANGE = Pattern.compile(
@@ -75,7 +93,7 @@ private constructor(
         )
 
         /**
-         * Transforms the passed range declaration into a range of numbers.
+         * Parses a range expression from the given notation.
          */
         fun parse(rawNotation: String): RangeNotation {
             val rangeMatcher = NUMBER_RANGE.matcher(rawNotation.trim { it <= ' ' })
