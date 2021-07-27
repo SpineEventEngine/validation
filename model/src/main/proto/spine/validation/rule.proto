@@ -97,6 +97,16 @@ message CustomOperator {
 
     // Describes how the generated code should behave in a human-readable way.
     string description = 1;
+
+    // A Protobuf message which dictates the expected validation behaviour to a renderer.
+    //
+    // Renderers match the type of this message to the types of custom validation featured known to
+    // them. Unknown validation features are ignored.
+    //
+    // Validation code generation may involve several renderers adding code sequentially. Some
+    // renderers may only generate code for certain custom validation features and nothing more.
+    //
+    google.protobuf.Any feature = 2;
 }
 
 // A validation rule which is either a simple rule for one field or a composite rule.
