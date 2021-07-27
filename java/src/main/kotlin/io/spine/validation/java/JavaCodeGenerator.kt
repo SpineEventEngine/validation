@@ -55,7 +55,7 @@ import io.spine.validation.Rule.KindCase.SIMPLE
  */
 private val OBJECT_COMPARISON_OPS = mapOf(
     EQUAL to { left: String, right: String -> "$left.equals($right)" },
-    NOT_EQUAL to { left: String, right: String -> "!$left.equals($right)" }
+    NOT_EQUAL to { left: String, right: String -> "!$left.equals($right)" },
 )
 
 /**
@@ -140,8 +140,8 @@ private class SimpleRuleGenerator(
         } else {
             OBJECT_COMPARISON_OPS
         }
-        val compare = signs[rule.sign]
-            ?: throw IllegalStateException("Unsupported operation `${rule.sign}` for type `$type`.")
+        val compare = signs[rule.operator]
+            ?: throw IllegalStateException("Unsupported operation `${rule.operator}` for type `$type`.")
         return Literal(compare(fieldValue.toCode(), otherValue.toCode()))
     }
 
