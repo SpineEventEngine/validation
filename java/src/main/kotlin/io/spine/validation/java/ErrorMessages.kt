@@ -28,17 +28,17 @@
 
 package io.spine.validation.java
 
-import io.spine.validation.ErrorMessage
+import com.squareup.javapoet.CodeBlock
+import io.spine.base.FieldPath
 import io.spine.protodata.Field
 import io.spine.protodata.TypeName
-import io.spine.base.FieldPath
-import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.LiteralString
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
+import io.spine.validation.ErrorMessage
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -49,6 +49,15 @@ fun ErrorMessage.createViolation(field: Field,
                                  violationsList: String): CodeBlock {
     val type = field.declaringType
     val violation = buildViolation(type, field, fieldValue)
+    return addViolation(violation, violationsList)
+}
+
+fun ErrorMessage.createParentViolation(field: Field,
+                                       fieldValue: Expression,
+                                       violationsList: String,
+                                       childViolations: Expression): CodeBlock {
+    val type = field.declaringType
+    val violation = buildViolation(type, field, fieldValue, childViolations)
     return addViolation(violation, violationsList)
 }
 
@@ -67,9 +76,12 @@ private fun addViolation(violation: Expression, violationsList: String): CodeBlo
         .addStatement("\$N.add(\$L)", violationsList, violation)
         .build()
 
-private fun ErrorMessage.buildViolation(type: TypeName,
-                                        field: Field?,
-                                        fieldValue: Expression?): Expression {
+private fun ErrorMessage.buildViolation(
+    type: TypeName,
+    field: Field?,
+    fieldValue: Expression?,
+    childViolations: Expression? = null
+): Expression {
     var violationBuilder = ClassName(ConstraintViolation::class.java)
         .newBuilder()
         .chainSet("msg_format", Literal(this))
@@ -79,6 +91,9 @@ private fun ErrorMessage.buildViolation(type: TypeName,
     }
     if (fieldValue != null) {
         violationBuilder = violationBuilder.chainSet("field_value", fieldValue.packToAny())
+    }
+    if (childViolations != null) {
+        violationBuilder = violationBuilder.chain("addAllViolation", listOf(childViolations))
     }
     return violationBuilder.chainBuild()
 }

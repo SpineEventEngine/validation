@@ -28,24 +28,30 @@
 
 package io.spine.validation.java
 
+import com.google.common.collect.ImmutableSet
 import com.squareup.javapoet.CodeBlock
+import io.spine.protobuf.AnyPacker.unpack
 import io.spine.protobuf.Messages.isNotDefault
 import io.spine.protodata.Type.KindCase.PRIMITIVE
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.MethodCall
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.ComparisonOperator.NOT_EQUAL
+import io.spine.validation.DistinctCollection
 import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
+import io.spine.validation.RecursiveValidation
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.SIMPLE
+import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 
 /**
  * Java code comparing two objects.
@@ -123,7 +129,7 @@ internal sealed class JavaCodeGenerator {
 /**
  * A generator for code which checks a simple one-field rule.
  */
-private class SimpleRuleGenerator(
+private open class SimpleRuleGenerator(
     private val ctx: GenerationContext
 ) : JavaCodeGenerator() {
 
@@ -156,6 +162,56 @@ private class SimpleRuleGenerator(
 
     override fun createViolation(): CodeBlock =
         error().createViolation(field, fieldValue, ctx.violationsList)
+}
+
+private class CustomRuleGenerator(
+    private val ctx: GenerationContext,
+) : SimpleRuleGenerator(ctx) {
+
+    private val rule = ctx.rule.simple
+    private val field = ctx.fieldFromSimpleRule!!
+    private val feature = unpack(rule.customOperator.feature)
+
+    private val fieldValue: MethodCall by lazy { ctx.msg.field(field).getter }
+
+    override fun condition(): Expression = when (feature) {
+        is DistinctCollection -> equalsOperator(
+            fieldValue.chain("size"),
+            ClassName(ImmutableSet::class)
+                .call("copyOf", listOf(fieldValue))
+                .chain("size")
+        )
+        is RecursiveValidation -> childViolations.chain("isEmpty")
+        else -> Literal(true)
+    }
+
+
+    private fun equalsOperator(left: Expression, right: Expression): Expression {
+        return Literal(left.toCode() + " == " + right.toCode())
+    }
+
+    override fun error(): ErrorMessage {
+        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
+        return ErrorMessage.forRule(
+            rule.errorMessage,
+            actualValue.toCode()
+        )
+    }
+
+    private val childViolations: MethodCall
+        get() = fieldValue.chain("validate")
+
+    override fun createViolation(): CodeBlock {
+        if (feature is RecursiveValidation) {
+            return error().createParentViolation(
+                field,
+                fieldValue,
+                ctx.violationsList,
+                childViolations
+            )
+        }
+        return super.createViolation()
+    }
 }
 
 /**
@@ -207,7 +263,11 @@ private class CompositeRuleGenerator(
  */
 internal fun generatorFor(ctx: GenerationContext): JavaCodeGenerator = with(ctx) {
     when (rule.kindCase) {
-        SIMPLE -> SimpleRuleGenerator(ctx)
+        SIMPLE -> if (rule.simple.operatorKindCase == OPERATOR) {
+            SimpleRuleGenerator(ctx)
+        } else {
+            CustomRuleGenerator(ctx)
+        }
         COMPOSITE -> CompositeRuleGenerator(ctx)
         else -> throw IllegalArgumentException("Empty rule.")
     }
