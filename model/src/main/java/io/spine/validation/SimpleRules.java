@@ -26,34 +26,34 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.plugin.Policy;
-import io.spine.protodata.plugin.ViewRepository;
-import org.jetbrains.annotations.NotNull;
+import com.google.protobuf.Message;
+import io.spine.protodata.FieldName;
 
-/**
- * A ProtoData plugin which attaches validation-related policies and views.
- */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public class ValidationPlugin implements Plugin {
+import static io.spine.protobuf.AnyPacker.pack;
 
-    @NotNull
-    @Override
-    public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(
-                new RequiredRulePolicy(),
-                new RangePolicy(),
-                new MinPolicy(),
-                new MaxPolicy(),
-                new DistinctPolicy(),
-                new ValidatePolicy()
-        );
+final class SimpleRules {
+
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private SimpleRules() {
     }
 
-    @NotNull
-    @Override
-    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(new MessageValidationRepository());
+    static SimpleRule withCustom(FieldName field,
+                                 Message customFeature,
+                                 String description,
+                                 String errorMessage) {
+        CustomOperator operator = CustomOperator
+                .newBuilder()
+                .setDescription(description)
+                .setFeature(pack(customFeature))
+                .build();
+        SimpleRule rule = SimpleRule
+                .newBuilder()
+                .setField(field)
+                .setCustomOperator(operator)
+                .setErrorMessage(errorMessage)
+                .build();
+        return rule;
     }
 }
