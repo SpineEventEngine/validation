@@ -63,7 +63,6 @@ internal abstract class CodeGenerator(
             .beginControlFlow("if (!(\$L))", binaryCondition)
             .add(createViolation())
             .endControlFlow()
-            .add(epilogue())
             .build()
     }
 
@@ -71,12 +70,6 @@ internal abstract class CodeGenerator(
      * Generated code which does preparations before the validation checks can be performed.
      */
     open fun prologue(): CodeBlock =
-        CodeBlock.of("")
-
-    /**
-     * Generated code which does clean up after the validation checks are performed.
-     */
-    open fun epilogue(): CodeBlock =
         CodeBlock.of("")
 
     /**
