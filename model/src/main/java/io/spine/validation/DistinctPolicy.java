@@ -28,14 +28,11 @@ package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
 import io.spine.core.External;
-import io.spine.protobuf.AnyPacker;
-import io.spine.protodata.Ast;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.Option;
-import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
@@ -44,7 +41,6 @@ import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.option.OptionsProto.distinct;
-import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.protodata.Ast.qualifiedName;
@@ -56,7 +52,7 @@ import static io.spine.validation.SourceFiles.findField;
  * A policy which, upon encountering a field with the {@code (distinct)} option, generates
  * a validation rule.
  *
- * <p>The validation rule prohibits duplicate entries in the
+ * <p>The validation rule prohibits duplicate entries in the associated field.
  */
 final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
 
