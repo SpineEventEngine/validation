@@ -147,7 +147,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
             GenerationContext context = new GenerationContext(
                     rule, result, file, typeSystem, typeName, VIOLATIONS, this
             );
-            JavaCodeGenerator generator = JavaCodeGeneration.generatorFor(context);
+            CodeGenerator generator = JavaCodeGeneration.generatorFor(context);
             CodeBlock block = generator.code();
             code.add(block);
         }
