@@ -48,6 +48,16 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.Options.is;
 import static io.spine.validation.SourceFiles.findField;
 
+/**
+ * A policy which, upon encountering a field with the {@code (validate)} option, generates
+ * a validation rule.
+ *
+ * <p>The validation rule enforces recursive validation for the associated message field.
+ *
+ * <p>If the field is a list or a map, all the elements (values, in case of the map) are validated.
+ *
+ * <p>If the message field is invalid, the containing message is invalid as well.
+ */
 final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
