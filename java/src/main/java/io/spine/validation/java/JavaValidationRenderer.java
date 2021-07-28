@@ -35,6 +35,9 @@ import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.Poet;
+import io.spine.protodata.language.CommonLanguages;
+import io.spine.protodata.language.Language;
+import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceSet;
 import io.spine.validate.ConstraintViolation;
@@ -48,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
+import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -121,6 +125,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
         CodeBlock.Builder code = CodeBlock.builder();
         code.addStatement(newAccumulator());
         code.add(generateValidationCode(validation, result));
+        code.add(extraInsertionPoint(validation.getType().getName()));
         code.add(throwValidationException());
         return Poet.lines(code.build());
     }
@@ -147,6 +152,13 @@ public final class JavaValidationRenderer extends JavaRenderer {
             code.add(block);
         }
         return code.build();
+    }
+
+    private static CodeBlock extraInsertionPoint(TypeName name) {
+        InsertionPoint insertionPoint = new ExtraValidation(name);
+        Language java = CommonLanguages.java();
+        String line = java.comment(getCodeLine(insertionPoint)) + System.lineSeparator();
+        return CodeBlock.of(line);
     }
 
     private static CodeBlock throwValidationException() {
