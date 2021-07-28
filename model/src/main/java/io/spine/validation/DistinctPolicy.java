@@ -60,6 +60,7 @@ import static io.spine.validation.SourceFiles.findField;
  */
 final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
 
+    @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
     private static final String ERROR = "Collection must not contain duplicates.";
 
     @Override

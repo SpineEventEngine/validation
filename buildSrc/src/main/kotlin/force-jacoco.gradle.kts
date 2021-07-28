@@ -24,22 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+// TODO:2021-07-05:dmytro.dashenkov: https://github.com/SpineEventEngine/config/issues/214.
 
-// https://github.com/protocolbuffers/protobuf
-@Suppress("MemberVisibilityCanBePrivate") // used directly from outside
-object Protobuf {
-    const val version    = "3.17.3"
-    val libs = listOf(
-        "com.google.protobuf:protobuf-java:${version}",
-        "com.google.protobuf:protobuf-java-util:${version}"
-    )
-    const val compiler = "com.google.protobuf:protoc:${version}"
-
-    // https://github.com/google/protobuf-gradle-plugin/releases
-    object GradlePlugin {
-        const val version = "0.8.17"
-        const val id = "com.google.protobuf"
-        const val lib = "com.google.protobuf:protobuf-gradle-plugin:${version}"
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                if (requested.group == "org.jacoco") {
+                    useVersion("0.8.7")
+                }
+            }
+        }
     }
 }
