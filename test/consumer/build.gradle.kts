@@ -42,6 +42,10 @@ protoData {
     options("spine/options.proto", "spine/validation/test/money_options.proto")
 }
 
+modelCompiler {
+    generateValidation = false
+}
+
 val spineBaseVersion: String by extra
 
 dependencies {

@@ -35,9 +35,21 @@ import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
+import io.spine.validation.ErrorMessage
 import io.spine.validation.RecursiveValidation
 
-private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
+private open class GeneratorWithNoOther(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
+
+    override fun error(): ErrorMessage {
+        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
+        return ErrorMessage.forRule(
+            rule.errorMessage,
+            actualValue.toCode()
+        )
+    }
+}
+
+private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
 
     override fun condition(): Expression {
         return equalsOperator(
@@ -53,7 +65,7 @@ private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
     }
 }
 
-private class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
+private class ValidateGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
 
     private val violationsVariable: Literal
         get() = Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")

@@ -27,32 +27,45 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.MethodSpec;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
+import io.spine.protodata.codegen.java.ClassName;
 import io.spine.protodata.codegen.java.JavaRenderer;
+import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
+import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
+import io.spine.protodata.codegen.java.This;
 import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.language.Language;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceSet;
 import io.spine.validate.ConstraintViolation;
+import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 import io.spine.validation.Rule;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
+import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static java.lang.System.lineSeparator;
+import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
  * A {@link Renderer} for the validation code in Java.
@@ -69,6 +82,13 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  */
 @SuppressWarnings("unused") // Loaded by ProtoData via reflection.
 public final class JavaValidationRenderer extends JavaRenderer {
+
+    private static final Type OPTIONAL_ERROR =
+            new TypeToken<Optional<ValidationError>>() {}.getType();
+
+    private static final String VALIDATE = "validate";
+
+    private static final String RETURN_LITERAL = "return $L";
 
     /**
      * Amount of indents to add before the validation code.
@@ -95,9 +115,13 @@ public final class JavaValidationRenderer extends JavaRenderer {
                     File protoFile = findProtoFile(validation.getType().getFile());
                     Path javaFile = javaFile(validation.getType(), protoFile);
                     sources.file(javaFile)
+                           .at(CLASS_SCOPE.forType(validation.getName()))
+                           .withExtraIndentation(INDENT_LEVEL)
+                           .add(rulesToMethod(validation));
+                    sources.file(javaFile)
                            .at(new Validate(validation.getName()))
                            .withExtraIndentation(INDENT_LEVEL)
-                           .add(rulesToCode(validation));
+                           .add(validateBeforeBuild());
                 });
     }
 
@@ -120,14 +144,32 @@ public final class JavaValidationRenderer extends JavaRenderer {
         return types.build();
     }
 
-    private ImmutableList<String> rulesToCode(MessageValidation validation) {
-        MessageReference result = new MessageReference("result");
+    private ImmutableList<String> rulesToMethod(MessageValidation validation) {
+        MessageReference result = This.INSTANCE.asMessage();
         CodeBlock.Builder code = CodeBlock.builder();
         code.addStatement(newAccumulator());
         code.add(generateValidationCode(validation, result));
         code.add(extraInsertionPoint(validation.getType().getName()));
-        code.add(throwValidationException());
-        return Poet.lines(code.build());
+        code.add(generateValidationError());
+        MethodSpec validate = MethodSpec
+                .methodBuilder(VALIDATE)
+                .returns(OPTIONAL_ERROR)
+                .addModifiers(PUBLIC)
+                .addCode(code.build())
+                .build();
+        return ImmutableList.of(validate.toString());
+    }
+
+    private static ImmutableList<String> validateBeforeBuild() {
+        MessageReference result = new MessageReference("result");
+        CodeBlock code = CodeBlock
+                .builder()
+                .addStatement("$T error = $L", OPTIONAL_ERROR, new MethodCall(result, VALIDATE))
+                .beginControlFlow("if (error.isPresent())")
+                .addStatement("throw new $T(error.get().getConstraintViolationList())", ValidationException.class)
+                .endControlFlow()
+                .build();
+        return Poet.lines(code);
     }
 
     private static CodeBlock newAccumulator() {
@@ -157,14 +199,24 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private static CodeBlock extraInsertionPoint(TypeName name) {
         InsertionPoint insertionPoint = new ExtraValidation(name);
         Language java = CommonLanguages.java();
-        String line = java.comment(getCodeLine(insertionPoint)) + System.lineSeparator();
+        String line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
         return CodeBlock.of(line);
     }
 
-    private static CodeBlock throwValidationException() {
+    private static CodeBlock generateValidationError() {
         CodeBlock.Builder code = CodeBlock.builder();
         code.beginControlFlow("if (!$N.isEmpty())", VIOLATIONS);
-        code.addStatement("throw new $T($N)", ValidationException.class, VIOLATIONS);
+        MethodCall errorBuilder = new ClassName(ValidationError.class)
+                .newBuilder()
+                .chainAddAll("constraint_violation", new Literal(VIOLATIONS))
+                .chainBuild();
+        MethodCall newOptional = new ClassName(Optional.class)
+                .call("of", newArrayList(errorBuilder), newArrayList());
+        code.addStatement(RETURN_LITERAL, newOptional);
+        code.nextControlFlow("else");
+        MethodCall optionalEmpty = new ClassName(Optional.class)
+                .call("empty", newArrayList(), newArrayList());
+        code.addStatement(RETURN_LITERAL, optionalEmpty);
         code.endControlFlow();
         return code.build();
     }
