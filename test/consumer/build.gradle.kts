@@ -50,6 +50,7 @@ val spineBaseVersion: String by extra
 
 dependencies {
     protoData(project(":test-extensions"))
+    implementation(project(":runtime"))
     implementation(project(":test-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
     Protobuf.libs.forEach { implementation(it) }

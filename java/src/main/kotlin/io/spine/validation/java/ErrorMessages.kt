@@ -36,9 +36,13 @@ import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.LiteralString
+import io.spine.protodata.isList
+import io.spine.protodata.isMap
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
+import io.spine.validation.ListOfAnys
+import io.spine.validation.MapOfAnys
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -90,7 +94,13 @@ private fun ErrorMessage.buildViolation(
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }
     if (fieldValue != null) {
-        violationBuilder = violationBuilder.chainSet("field_value", fieldValue.packToAny())
+        checkNotNull(field) { "Field value is set without the field." }
+        val packable = when {
+            field.isList() -> ClassName(ListOfAnys::class).call("from", listOf(fieldValue))
+            field.isMap() -> ClassName(MapOfAnys::class).call("from", listOf(fieldValue))
+            else -> fieldValue
+        }
+        violationBuilder = violationBuilder.chainSet("field_value", packable.packToAny())
     }
     if (childViolations != null) {
         violationBuilder = violationBuilder.chain("addAllViolation", listOf(childViolations))

@@ -33,6 +33,7 @@ import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.isMap
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
 import io.spine.validation.ErrorMessage
@@ -52,10 +53,12 @@ private open class GeneratorWithNoOther(ctx: GenerationContext) : SimpleRuleGene
 private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
 
     override fun condition(): Expression {
+        val map = ctx.fieldFromSimpleRule!!.isMap()
+        val comparisonCollection = if (map) fieldValue.chain("values") else fieldValue
         return equalsOperator(
             fieldValue.chain("size"),
             ClassName(ImmutableSet::class)
-                .call("copyOf", listOf(fieldValue))
+                .call("copyOf", listOf(comparisonCollection))
                 .chain("size")
         )
     }

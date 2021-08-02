@@ -24,16 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+val protoDataVersion: String by extra
 
-include(
-    "java",
-    "model",
-    "runtime",
-    "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
-)
-
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+dependencies {
+    implementation("io.spine.protodata:codegen-java:$protoDataVersion")
+}

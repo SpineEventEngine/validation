@@ -24,16 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+/**
+ * Components for internal code generation for the validation library.
+ */
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.validation.internal;
 
-include(
-    "java",
-    "model",
-    "runtime",
-    "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
-)
+import com.google.errorprone.annotations.CheckReturnValue;
 
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -157,7 +157,8 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .addModifiers(PUBLIC)
                 .addCode(code.build())
                 .build();
-        return ImmutableList.of(validate.toString());
+        String[] methodLines = validate.toString().split(lineSeparator());
+        return ImmutableList.copyOf(methodLines);
     }
 
     private static ImmutableList<String> validateBeforeBuild() {
