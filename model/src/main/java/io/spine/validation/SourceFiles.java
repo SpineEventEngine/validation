@@ -39,7 +39,10 @@ import java.util.Optional;
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
-public final class SourceFiles {
+/**
+ * Utilities for working with {@link ProtobufSourceFile}s.
+ */
+final class SourceFiles {
 
     /**
      * Prevents the utility class instantiation.
@@ -47,7 +50,23 @@ public final class SourceFiles {
     private SourceFiles() {
     }
 
-    public static Field findField(FieldName fieldName, TypeName typeName, FilePath filePath, Querying querying) {
+    /**
+     * Looks up a field by its name, the type name, and the file path.
+     *
+     * @param fieldName
+     *         name of the field
+     * @param typeName
+     *         name of the type which declares the field
+     * @param filePath
+     *         path to the Protobuf file which declares the message which declares the field
+     * @param querying
+     *         the ProtoData component which conducts the seatch
+     * @return the field
+     */
+    static Field findField(FieldName fieldName,
+                           TypeName typeName,
+                           FilePath filePath,
+                           Querying querying) {
         ProtobufSourceFile file = querying
                 .select(ProtobufSourceFile.class)
                 .withId(filePath)

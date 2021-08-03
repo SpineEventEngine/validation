@@ -56,6 +56,10 @@ fun ErrorMessage.createViolation(field: Field,
     return addViolation(violation, violationsList)
 }
 
+/**
+ * Constructs code which creates a [ConstraintViolation] with child violations and adds it
+ * to the given mutable [violationsList].
+ */
 fun ErrorMessage.createParentViolation(field: Field,
                                        fieldValue: Expression,
                                        violationsList: String,

@@ -100,7 +100,7 @@ message CustomOperator {
 
     // A Protobuf message which dictates the expected validation behaviour to a renderer.
     //
-    // Renderers match the type of this message to the types of custom validation featured known to
+    // Renderers match the type of this message to the types of custom validation features known to
     // them. Unknown validation features are ignored.
     //
     // Validation code generation may involve several renderers adding code sequentially. Some

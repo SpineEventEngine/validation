@@ -31,6 +31,9 @@ import io.spine.protodata.FieldName;
 
 import static io.spine.protobuf.AnyPacker.pack;
 
+/**
+ * A factory of {@link SimpleRule}s.
+ */
 final class SimpleRules {
 
     /**
@@ -39,6 +42,19 @@ final class SimpleRules {
     private SimpleRules() {
     }
 
+    /**
+     * Creates a {@link SimpleRule} with a custom operator.
+     *
+     * @param field
+     *         the target field
+     * @param customFeature
+     *         the feature message describing the custom operator
+     * @param description
+     *         the human-readable text description of the feature
+     * @param errorMessage
+     *         the error message for the case of violation
+     * @return a new rule
+     */
     static SimpleRule withCustom(FieldName field,
                                  Message customFeature,
                                  String description,

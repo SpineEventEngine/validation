@@ -39,6 +39,11 @@ import io.spine.validation.DistinctCollection
 import io.spine.validation.ErrorMessage
 import io.spine.validation.RecursiveValidation
 
+/**
+ * A [CodeGenerator] with no `other` value to compare a field to.
+ *
+ * Such a generator renders code for custom validation operators.
+ */
 private open class GeneratorWithNoOther(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
     override fun error(): ErrorMessage {
@@ -50,6 +55,11 @@ private open class GeneratorWithNoOther(ctx: GenerationContext) : SimpleRuleGene
     }
 }
 
+/**
+ * Generates code for the [DistinctCollection] operator.
+ *
+ * A list or the values of a map containing a duplicate is a constraint violation.
+ */
 private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
 
     override fun condition(): Expression {
@@ -68,6 +78,9 @@ private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(c
     }
 }
 
+/**
+ * Generates code for the [RecursiveValidation] operator.
+ */
 private class ValidateGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
 
     private val violationsVariable: Literal
@@ -95,6 +108,11 @@ private class ValidateGenerator(ctx: GenerationContext) : GeneratorWithNoOther(c
         )
 }
 
+/**
+ * A null-value generator which never produces code.
+ *
+ * Use this generator when an unknown custom validation operator is encountered.
+ */
 private class UnsupportedRuleGenerator(
     ctx: GenerationContext,
     private val ruleName: String
@@ -114,6 +132,9 @@ private class UnsupportedRuleGenerator(
     }
 }
 
+/**
+ * Creates a [CodeGenerator] for a custom validation operator for the given context.
+ */
 internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
     @Suppress("MoveVariableDeclarationIntoWhen") // For better readability.
     val feature = unpack(ctx.rule.simple.customOperator.feature)
