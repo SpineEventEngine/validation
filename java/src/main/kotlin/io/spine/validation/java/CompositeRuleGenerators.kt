@@ -93,4 +93,3 @@ internal class CompositeRuleGenerator(
     override fun createViolation(): CodeBlock =
         error().createCompositeViolation(ctx.declaringType, ctx.violationsList)
 }
-
