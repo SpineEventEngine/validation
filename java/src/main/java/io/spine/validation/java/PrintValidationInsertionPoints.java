@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableSet;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
 import io.spine.validation.MessageValidation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -48,7 +47,6 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
         super(java());
     }
 
-    @NotNull
     @Override
     protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
         Set<MessageValidation> types = select(MessageValidation.class).all();

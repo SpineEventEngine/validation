@@ -29,7 +29,6 @@ package io.spine.validation.java;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public final class ExtraValidation implements InsertionPoint {
      * Thus, this method always returns {@code LineNumber.notInFile()}.
      */
     @Override
-    public LineNumber locate(@NonNull List<String> list) {
+    public LineNumber locate(List<String> list) {
         return LineNumber.notInFile();
     }
 }
