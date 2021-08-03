@@ -32,7 +32,9 @@ val protoDataVersion: String by extra
 dependencies {
     api(project(":model"))
     api("io.spine.protodata:codegen-java:$protoDataVersion")
-    implementation(Roaster.api)
-    implementation(Roaster.jdt)
+
+    implementation(project(":runtime"))
     implementation(JavaPoet.lib)
+    implementation(Roaster.api)
+    runtimeOnly(Roaster.jdt)
 }
