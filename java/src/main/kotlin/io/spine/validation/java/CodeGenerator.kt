@@ -62,7 +62,6 @@ internal abstract class CodeGenerator(
             _debug().log("Skipping...")
             return CodeBlock.of("")
         }
-
         val binaryCondition = condition()
         return CodeBlock
             .builder()
