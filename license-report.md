@@ -112,9 +112,9 @@
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -402,9 +402,9 @@
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -658,7 +658,7 @@
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:42:44 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:44:50 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -771,7 +771,7 @@ This report was generated on **Tue Aug 03 13:42:44 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -1054,7 +1054,7 @@ This report was generated on **Tue Aug 03 13:42:44 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -1300,7 +1300,7 @@ This report was generated on **Tue Aug 03 13:42:44 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:42:52 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:44:57 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1631,13 +1631,13 @@ This report was generated on **Tue Aug 03 13:42:52 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** cli **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** cli **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** protoc **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** protoc **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -1883,7 +1883,7 @@ This report was generated on **Tue Aug 03 13:42:52 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:45:25 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2000,9 +2000,9 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -2282,9 +2282,9 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -2530,7 +2530,7 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:45:26 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2647,9 +2647,9 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -2942,13 +2942,13 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** cli **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** cli **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** protoc **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** protoc **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -3202,7 +3202,7 @@ This report was generated on **Tue Aug 03 13:43:02 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:43:10 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:45:34 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3319,9 +3319,9 @@ This report was generated on **Tue Aug 03 13:43:10 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** javax.annotation **Name:** javax.annotation-api **Version:** 1.3.2
      * **Manifest Project URL:** [https://javaee.github.io/glassfish](https://javaee.github.io/glassfish)
@@ -3609,9 +3609,9 @@ This report was generated on **Tue Aug 03 13:43:10 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **POM License: Apache 2.0** - [https://opensource.org/licenses/Apache-2.0](https://opensource.org/licenses/Apache-2.0)
 
-1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** codegen-java **Version:** 0.0.27
 
-1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.26
+1. **Group:** io.spine.protodata **Name:** compiler **Version:** 0.0.27
 
 1. **Group:** jakarta.activation **Name:** jakarta.activation-api **Version:** 1.2.1
      * **Manifest Project URL:** [https://www.eclipse.org](https://www.eclipse.org)
@@ -3865,4 +3865,4 @@ This report was generated on **Tue Aug 03 13:43:10 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Tue Aug 03 13:43:11 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Aug 03 13:45:35 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

@@ -42,6 +42,13 @@ internal abstract class CodeGenerator(
     protected val ctx: GenerationContext
 ) : Logging {
 
+    /**
+     * Whether or not this code generator is capable of generating validation code for
+     * the associated validation rule.
+     *
+     * If the rule has a custom operator, the generator might not support it. Otherwise,
+     * the generator must be able to generate code.
+     */
     open val canGenerate: Boolean = true
 
     /**
