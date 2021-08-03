@@ -27,11 +27,14 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.Type
+import io.spine.protodata.Field
+import io.spine.protodata.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.isRepeated
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
@@ -41,6 +44,7 @@ import io.spine.validation.ComparisonOperator.NOT_EQUAL
 import io.spine.validation.ErrorMessage
 import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
+import io.spine.validation.UnsetValue
 
 /**
  * Java code comparing two objects.
@@ -76,22 +80,42 @@ internal open class SimpleRuleGenerator(
 ) : CodeGenerator(ctx) {
 
     protected val rule = ctx.rule.simple
+    private val ignoreIfNotSet: Boolean = rule.ignoreIfNotSet
     protected val field = ctx.fieldFromSimpleRule!!
 
     protected val fieldValue: MethodCall by lazy { ctx.msg.field(field).getter }
     private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
 
+    override fun code(): CodeBlock {
+        val check = super.code()
+        val defaultValue = UnsetValue.forField(field)
+        if (!ignoreIfNotSet || !defaultValue.isPresent) {
+            return check
+        }
+        val sign = selectSigns()[NOT_EQUAL]!!
+        val defaultValueExpression = ctx.typeSystem.valueToJava(defaultValue.get())
+        val condition = sign(fieldValue.toCode(), defaultValueExpression.toCode())
+        return CodeBlock
+            .builder()
+            .beginControlFlow("if ($condition)")
+            .add(check)
+            .endControlFlow()
+            .build()
+    }
+
     override fun condition(): Expression {
         val type = field.type
-        val signs = if (type.kindCase == Type.KindCase.PRIMITIVE) {
-            PRIMITIVE_COMPARISON_OPS
-        } else {
-            OBJECT_COMPARISON_OPS
-        }
+        val signs = selectSigns()
         val compare = signs[rule.operator] ?: throw IllegalStateException(
             "Unsupported operation `${rule.operator}` for type `$type`."
         )
         return Literal(compare(fieldValue.toCode(), otherValue.toCode()))
+    }
+
+    private fun selectSigns() = if (field.isJavaPrimitive()) {
+        PRIMITIVE_COMPARISON_OPS
+    } else {
+        OBJECT_COMPARISON_OPS
     }
 
     override fun error(): ErrorMessage {
@@ -115,5 +139,18 @@ internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
         else -> throw IllegalStateException(
             "Invalid rule: `$rule`. No operator is set."
         )
+    }
+}
+
+private fun Field.isJavaPrimitive(): Boolean {
+    if (isRepeated()) {
+        return false;
+    }
+    if (!type.hasPrimitive()) {
+        return false;
+    }
+    return when (type.primitive) {
+        TYPE_STRING, TYPE_BYTES -> false
+        else -> true
     }
 }

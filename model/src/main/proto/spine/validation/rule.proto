@@ -68,6 +68,12 @@ message SimpleRule {
     // when the error is constructed.
     //
     string error_message = 5;
+
+    // If `true`, this rule is ignored when the field is not set.
+    //
+    // This does not apply to simple rules which are parts of a `CompositeRule`.
+    //
+    bool ignore_if_not_set = 6;
 }
 
 // A predefined comparison operator.

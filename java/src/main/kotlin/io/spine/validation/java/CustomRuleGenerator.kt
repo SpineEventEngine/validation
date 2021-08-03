@@ -44,7 +44,9 @@ import io.spine.validation.RecursiveValidation
  *
  * Such a generator renders code for custom validation operators.
  */
-private open class GeneratorWithNoOther(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
+private open class GeneratorWithNoOther(
+    ctx: GenerationContext
+) : SimpleRuleGenerator(ctx) {
 
     override fun error(): ErrorMessage {
         val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
@@ -81,7 +83,9 @@ private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(c
 /**
  * Generates code for the [RecursiveValidation] operator.
  */
-private class ValidateGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
+private class ValidateGenerator(
+    ctx: GenerationContext
+) : GeneratorWithNoOther(ctx) {
 
     private val violationsVariable: Literal
         get() = Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")

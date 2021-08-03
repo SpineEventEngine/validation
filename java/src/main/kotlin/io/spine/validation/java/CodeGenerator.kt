@@ -56,7 +56,7 @@ internal abstract class CodeGenerator(
      *
      * Implementations report any found violations.
      */
-    fun code(): CodeBlock {
+    open fun code(): CodeBlock {
         if (!canGenerate) {
             _debug().log("Standard Java renderer cannot generate rule: ${ctx.rule}")
             _debug().log("Skipping...")
