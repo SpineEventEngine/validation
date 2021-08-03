@@ -75,7 +75,6 @@ final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
                 "Message field is validated by its validation rules. " +
                         "If the field is invalid, the container message is invalid as well.",
                 "Message must be valid.");
-
         return EitherOf2.withA(SimpleRuleAdded
                                        .newBuilder()
                                        .setType(event.getType())
