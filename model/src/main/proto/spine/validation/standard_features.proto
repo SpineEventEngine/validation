@@ -47,8 +47,8 @@ import "google/protobuf/any.proto";
 // All validation renderers should generate code for these features in order to comply with
 // the validation protocol.
 
-// The associated collection field, a list or a map, must only contain distinct elements,
-// i.e. repetition is not allowed.
+// The associated collection field, a list or a map, must only contain distinct elements
+// (map values), i.e. repetition is not allowed.
 //
 message DistinctCollection {
 }
