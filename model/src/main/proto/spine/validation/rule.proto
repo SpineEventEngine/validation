@@ -50,10 +50,10 @@ message SimpleRule {
     // The field which is being compared.
     protodata.FieldName field = 1;
 
-    oneof operation {
+    oneof operator_kind {
 
         // A simple comparison sign.
-        ComparisonOperator sign = 2;
+        ComparisonOperator operator = 2;
 
         // A custom comparison method, which cannot be covered by a combination of `Sign`s.
         CustomOperator custom_operator = 3;
@@ -68,6 +68,12 @@ message SimpleRule {
     // when the error is constructed.
     //
     string error_message = 5;
+
+    // If `true`, this rule is ignored when the field is not set.
+    //
+    // This does not apply to simple rules which are parts of a `CompositeRule`.
+    //
+    bool ignored_if_unset = 6;
 }
 
 // A predefined comparison operator.
@@ -89,17 +95,28 @@ enum ComparisonOperator {
     LESS_OR_EQUAL = 5;
 
     GREATER_OR_EQUAL = 6;
-
-    DISTINCT = 7;
 }
 
 // A non-predefined comparison operator.
+//
 message CustomOperator {
 
-    // Describes how the renderer should compare the values.
+    // Describes how the generated code should behave in a human-readable way.
     string description = 1;
+
+    // A Protobuf message which dictates the expected validation behaviour to a renderer.
+    //
+    // Renderers match the type of this message to the types of custom validation features known to
+    // them. Unknown validation features are ignored.
+    //
+    // Validation code generation may involve several renderers adding code sequentially. Some
+    // renderers may only generate code for certain custom validation features and nothing more.
+    //
+    google.protobuf.Any feature = 2;
 }
 
+// A validation rule which is either a simple rule for one field or a composite rule.
+//
 message Rule {
 
     oneof kind {

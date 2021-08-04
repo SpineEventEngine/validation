@@ -81,7 +81,7 @@ class CurrencyValidationPolicy : Policy<TypeExited>() {
             .newBuilder()
             .setErrorMessage(msg)
             .setField(minorUnits.name)
-            .setSign(LESS_THAN)
+            .setOperator(LESS_THAN)
             .setOtherValue(otherValue)
             .build()
     }

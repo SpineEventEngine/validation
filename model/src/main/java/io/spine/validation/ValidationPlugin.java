@@ -45,7 +45,9 @@ public class ValidationPlugin implements Plugin {
                 new RequiredRulePolicy(),
                 new RangePolicy(),
                 new MinPolicy(),
-                new MaxPolicy()
+                new MaxPolicy(),
+                new DistinctPolicy(),
+                new ValidatePolicy()
         );
     }
 

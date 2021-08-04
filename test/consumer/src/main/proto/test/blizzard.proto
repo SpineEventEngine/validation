@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package spine.validation.test;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "BlizzardProto";
+option java_multiple_files = true;
+
+message Snowflake {
+    int32 edges = 1;
+    int32 vertices = 2;
+}
+
+message Blizzard {
+
+    repeated Snowflake snowflake = 1 [(distinct) = true];
+}

@@ -24,16 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+plugins {
+    id("io.spine.proto-data")
+}
 
-include(
-    "java",
-    "model",
-    "runtime",
-    "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
-)
+val spineBaseVersion: String by extra
 
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+dependencies {
+    protoData(project(":runtime-extensions"))
+    implementation("io.spine:spine-base:$spineBaseVersion")
+}
+
+protoData {
+    renderers(
+        "io.spine.validation.internal.DiagsRenderer"
+    )
+}

@@ -28,9 +28,7 @@ package io.spine.validation.java
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.ByteString
-import io.spine.validation.Value
 import io.spine.protodata.EnumType
-import io.spine.protodata.FieldName
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
 import io.spine.protodata.PrimitiveType
@@ -66,6 +64,7 @@ import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.typeUrl
+import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
 import io.spine.validation.Value.KindCase.BYTES_VALUE
 import io.spine.validation.Value.KindCase.DOUBLE_VALUE
@@ -135,11 +134,8 @@ private constructor(
             className.getDefaultInstance()
         } else {
             var builder = className.newBuilder()
-            messageValue.fieldsMap.forEach { k, v ->
-                val name = FieldName.newBuilder()
-                    .setValue(k)
-                    .build()
-                builder = builder.chainSet(name, valueToJava(v))
+            messageValue.fieldsMap.forEach { (k, v) ->
+                builder = builder.chainSet(k, valueToJava(v))
             }
             builder.chainBuild()
         }

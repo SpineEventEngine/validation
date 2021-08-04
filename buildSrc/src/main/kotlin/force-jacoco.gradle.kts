@@ -24,16 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+// TODO:2021-07-05:dmytro.dashenkov: https://github.com/SpineEventEngine/config/issues/214.
 
-include(
-    "java",
-    "model",
-    "runtime",
-    "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
-)
-
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            eachDependency {
+                if (requested.group == "org.jacoco") {
+                    useVersion("0.8.7")
+                }
+            }
+        }
+    }
+}

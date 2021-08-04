@@ -78,7 +78,7 @@ private constructor(
     ) =
         SimpleRule.newBuilder()
             .setField(field)
-            .setSign(if (inclusive) inclusiveOperator else exclusiveOperator)
+            .setOperator(if (inclusive) inclusiveOperator else exclusiveOperator)
             .setOtherValue(threshold)
             .setErrorMessage(compileErrorMessage(adjective, inclusive))
             .build()

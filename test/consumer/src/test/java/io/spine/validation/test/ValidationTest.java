@@ -101,6 +101,38 @@ class ValidationTest {
         }
     }
 
+    @Nested
+    @DisplayName("reflect a `(distinct)` rule and")
+    class DistinctFeature {
+
+        @Test
+        @DisplayName("throw `ValidationException` if a list contains duplicate entries")
+        void duplicateInList() {
+            Snowflake flake = Snowflake.newBuilder()
+                    .setEdges(6)
+                    .setVertices(6)
+                    .build();
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(flake)
+                    .addSnowflake(flake);
+            assertValidationException(builder::build);
+        }
+
+
+        @Test
+        @DisplayName("throw `ValidationException` if a map contains duplicate entries")
+        void duplicateInMap() {
+            Player player = Player
+                    .newBuilder()
+                    .setShirtName("John Doe")
+                    .build();
+            Team.Builder builder = Team.newBuilder()
+                    .putPlayers(7, player)
+                    .putPlayers(10, player);
+            assertValidationException(builder::build);
+        }
+    }
+
     private static void assertValidationException(Executable fun) {
         ValidationException exception = assertThrows(ValidationException.class, fun);
         ValidationError error = exception.asValidationError();

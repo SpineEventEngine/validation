@@ -36,7 +36,6 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -46,7 +45,6 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.Ast.typeUrl;
-import static java.lang.String.format;
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
@@ -67,13 +65,11 @@ final class Validate implements InsertionPoint {
         this.type = checkNotNull(type);
     }
 
-    @NotNull
     @Override
     public String getLabel() {
         return String.format("validate:%s", typeUrl(type));
     }
 
-    @NotNull
     @Override
     public LineNumber locate(List<String> lines) {
         String code = LINE_JOINER.join(lines);

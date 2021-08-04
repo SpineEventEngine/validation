@@ -24,16 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "validation"
+syntax = "proto3";
 
-include(
-    "java",
-    "model",
-    "runtime",
-    "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
-)
+package spine.validation;
 
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "StandardFeaturesProto";
+option java_multiple_files = true;
+
+import "spine/validation/value.proto";
+import "spine/protodata/ast.proto";
+import "google/protobuf/any.proto";
+
+// These are validation features which do not fit into the simple rule formula:
+// ```
+// msg.field <=> other_value
+// ```
+//
+// All validation renderers should generate code for these features in order to comply with
+// the validation protocol.
+
+// The associated collection field, a list or a map, must only contain distinct elements
+// (map values), i.e. repetition is not allowed.
+//
+message DistinctCollection {
+}
+
+// The associated message field must be validated. If violations are found, the containing message
+// itself is invalid.
+//
+// If the field is a list, all the elements must be valid.
+//
+// If the field is a map, all the values of the map must be valid.
+//
+message RecursiveValidation {
+}

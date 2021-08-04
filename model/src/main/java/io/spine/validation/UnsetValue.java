@@ -103,7 +103,7 @@ public final class UnsetValue {
     private static Optional<Value> primitiveValue(Type type) {
         PrimitiveType primitiveType = type.getPrimitive();
         if (primitiveType == PT_UNKNOWN || primitiveType == UNRECOGNIZED) {
-            throw newIllegalArgumentException("Unknown type `%s`.", primitiveType);
+            throw newIllegalArgumentException("Unknown primitive type `%s`.", primitiveType);
         }
         if (primitiveType == TYPE_STRING) {
             return Optional.of(Value.newBuilder()

@@ -39,7 +39,7 @@ import io.spine.protodata.typeUrl
 import io.spine.validation.Rule
 
 /**
- * Context of a [JavaCodeGenerator].
+ * Context of a [CodeGenerator].
  */
 internal data class GenerationContext(
 

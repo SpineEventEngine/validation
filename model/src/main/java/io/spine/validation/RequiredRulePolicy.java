@@ -29,10 +29,8 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.MessageType;
 import io.spine.protodata.Option;
 import io.spine.protodata.PrimitiveType;
-import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -41,9 +39,9 @@ import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protodata.Ast.typeUrl;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static io.spine.validation.Options.is;
+import static io.spine.validation.SourceFiles.findField;
 import static java.lang.String.format;
 
 /**
@@ -62,31 +60,8 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
         if (!is(option, required)) {
             return EitherOf2.withB(nothing());
         }
-        ProtobufSourceFile file = select(ProtobufSourceFile.class)
-                .withId(event.getFile())
-                .orElseThrow(() -> unknownFile(event));
-        MessageType type = file.getTypeMap()
-                               .get(typeUrl(event.getType()));
-        Field field = type.getFieldList()
-                          .stream()
-                          .filter(f -> f.getName()
-                                        .equals(event.getField()))
-                          .findAny()
-                          .orElseThrow(() -> unknownField(event));
+        Field field = findField(event.getField(), event.getType(), event.getFile(), this);
         return EitherOf2.withA(requiredRule(field));
-    }
-
-    private static IllegalArgumentException unknownField(FieldOptionDiscovered event) {
-        return newIllegalArgumentException(
-                "Unknown field `%s`.", event.getField()
-        );
-    }
-
-    private static IllegalArgumentException unknownFile(FieldOptionDiscovered event) {
-        return newIllegalArgumentException(
-                "Unknown file `%s`.", event.getFile()
-                                           .getValue()
-        );
     }
 
     private static SimpleRuleAdded requiredRule(Field field) {
@@ -98,7 +73,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .newBuilder()
                 .setErrorMessage("Field must be set.")
                 .setField(field.getName())
-                .setSign(NOT_EQUAL)
+                .setOperator(NOT_EQUAL)
                 .setOtherValue(unsetValue)
                 .vBuild();
         return SimpleRuleAdded
@@ -109,9 +84,11 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     }
 
     private static IllegalStateException doesNotSupportRequired(Field field) {
-        String fieldName = field.getName().getValue();
+        String fieldName = field.getName()
+                                .getValue();
         String typeUrl = typeUrl(field.getDeclaringType());
-        PrimitiveType type = field.getType().getPrimitive();
+        PrimitiveType type = field.getType()
+                                  .getPrimitive();
         return new IllegalStateException(format(
                 "Field `%s.%s` of type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type

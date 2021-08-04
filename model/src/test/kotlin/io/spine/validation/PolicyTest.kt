@@ -149,7 +149,7 @@ class `Validation policies should` {
 private fun incompleteRuleWith(sign: ComparisonOperator): Rule {
     val simple = SimpleRule
         .newBuilder()
-        .setSign(sign)
+        .setOperator(sign)
     return Rule.newBuilder()
         .setSimple(simple)
         .build()
