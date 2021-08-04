@@ -29,7 +29,9 @@ package io.spine.validation;
 import com.google.protobuf.Message;
 import io.spine.protodata.FieldName;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protobuf.AnyPacker.pack;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * A factory of {@link SimpleRule}s.
@@ -59,6 +61,10 @@ final class SimpleRules {
                                  Message customFeature,
                                  String description,
                                  String errorMessage) {
+        checkNotNull(field);
+        checkNotNull(customFeature);
+        checkNotEmptyOrBlank(description);
+        checkNotEmptyOrBlank(errorMessage);
         CustomOperator operator = CustomOperator
                 .newBuilder()
                 .setDescription(description)
