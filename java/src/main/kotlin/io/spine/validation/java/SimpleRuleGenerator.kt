@@ -80,7 +80,7 @@ internal open class SimpleRuleGenerator(
 ) : CodeGenerator(ctx) {
 
     protected val rule = ctx.rule.simple
-    private val ignoreIfNotSet: Boolean = rule.ignoreIfNotSet
+    private val ignoreIfNotSet: Boolean = rule.ignoredIfUnset
     protected val field = ctx.fieldFromSimpleRule!!
 
     protected val fieldValue: MethodCall by lazy { ctx.msg.field(field).getter }

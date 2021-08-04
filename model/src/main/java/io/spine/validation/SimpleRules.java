@@ -75,7 +75,7 @@ final class SimpleRules {
                 .setField(field)
                 .setCustomOperator(operator)
                 .setErrorMessage(errorMessage)
-                .setIgnoreIfNotSet(true)
+                .setIgnoredIfUnset(true)
                 .build();
         return rule;
     }

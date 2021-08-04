@@ -73,7 +73,7 @@ message SimpleRule {
     //
     // This does not apply to simple rules which are parts of a `CompositeRule`.
     //
-    bool ignore_if_not_set = 6;
+    bool ignored_if_unset = 6;
 }
 
 // A predefined comparison operator.
