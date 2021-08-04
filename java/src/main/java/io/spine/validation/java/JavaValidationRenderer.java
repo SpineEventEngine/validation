@@ -59,7 +59,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
@@ -212,11 +211,11 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .chainAddAll("constraint_violation", new Literal(VIOLATIONS))
                 .chainBuild();
         MethodCall newOptional = new ClassName(Optional.class)
-                .call("of", newArrayList(errorBuilder), newArrayList());
+                .call("of", ImmutableList.of(errorBuilder));
         code.addStatement(RETURN_LITERAL, newOptional);
         code.nextControlFlow("else");
         MethodCall optionalEmpty = new ClassName(Optional.class)
-                .call("empty", newArrayList(), newArrayList());
+                .call("empty");
         code.addStatement(RETURN_LITERAL, optionalEmpty);
         code.endControlFlow();
         return code.build();
