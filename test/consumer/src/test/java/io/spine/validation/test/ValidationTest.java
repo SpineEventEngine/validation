@@ -38,6 +38,7 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.function.Supplier;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Generated validation code should")
@@ -118,7 +119,6 @@ class ValidationTest {
             assertValidationException(builder::build);
         }
 
-
         @Test
         @DisplayName("throw `ValidationException` if a map contains duplicate entries")
         void duplicateInMap() {
@@ -130,6 +130,32 @@ class ValidationTest {
                     .putPlayers(7, player)
                     .putPlayers(10, player);
             assertValidationException(builder::build);
+        }
+    }
+
+    @Nested
+    @DisplayName("reflect the `(pattern)` rule")
+    class PatternRule {
+
+        @Test
+        @DisplayName("and allow valid values")
+        void pass() {
+            Player player = Player.newBuilder()
+                    .setShirtName("Regina Falangee")
+                    .build();
+            assertThat(player)
+                    .isNotNull();
+            assertThat(player.validate())
+                    .isEmpty();
+        }
+
+        @Test
+        @DisplayName("and prohibit invalid values")
+        void fail() {
+            Player.Builder player = Player
+                    .newBuilder()
+                    .setShirtName("R");
+            assertValidationException(player::build);
         }
     }
 
