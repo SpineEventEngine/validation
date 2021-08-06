@@ -64,6 +64,7 @@ import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.typeUrl
+import io.spine.type.KnownTypes
 import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
 import io.spine.validation.Value.KindCase.BYTES_VALUE
@@ -123,13 +124,15 @@ private constructor(
 
     private fun enumValueToJava(value: Value): MethodCall {
         val enumValue = value.enumValue
-        val enumClassName: ClassName = knownTypes.getValue(enumValue.type.typeUrl())
+        val typeUrl = enumValue.type.typeUrl()
+        val enumClassName: ClassName = knownTypes[typeUrl] ?: unknownType(typeUrl)
         return enumClassName.enumValue(enumValue.constNumber)
     }
 
     private fun messageValueToJava(value: Value): Expression {
         val messageValue = value.messageValue
-        val className: ClassName = knownTypes.getValue(messageValue.type.typeUrl())
+        val typeUrl = messageValue.type.typeUrl()
+        val className: ClassName = knownTypes[typeUrl] ?: unknownType(typeUrl)
         return if (messageValue.fieldsMap.isEmpty()) {
             className.getDefaultInstance()
         } else {
@@ -158,17 +161,16 @@ private constructor(
      *
      * @throws IllegalStateException if the type is unknown
      */
-    @JvmOverloads
-    fun toClass(type: Type, label: String = "type"): ClassName = when (type.kindCase) {
-        PRIMITIVE -> type.primitive.toClass(label)
+    private fun toClass(type: Type): ClassName = when (type.kindCase) {
+        PRIMITIVE -> type.primitive.toClass()
         MESSAGE, ENUMERATION -> {
             val typeUrl = type.message.typeUrl()
-            knownTypes[typeUrl] ?: unknownType(label, typeUrl)
+            knownTypes[typeUrl] ?: unknownType(typeUrl)
         }
         else -> throw IllegalArgumentException("Type is empty.")
     }
 
-    private fun PrimitiveType.toClass(label: String): ClassName {
+    private fun PrimitiveType.toClass(): ClassName {
         val klass = when (this) {
             TYPE_DOUBLE -> Double::class
             TYPE_FLOAT -> Float::class
@@ -177,13 +179,13 @@ private constructor(
             TYPE_BOOL -> Boolean::class
             TYPE_STRING -> String::class
             TYPE_BYTES -> ByteString::class
-            UNRECOGNIZED, PT_UNKNOWN -> unknownType(label, this)
+            UNRECOGNIZED, PT_UNKNOWN -> unknownType(this)
         }
         return ClassName(klass.javaObjectType)
     }
 
-    private fun unknownType(label: String, key: Any): Nothing {
-        throw IllegalStateException("Unknown $label: `$key`.")
+    private fun unknownType(key: Any): Nothing {
+        throw IllegalStateException("Unknown type: `$key`.")
     }
 
     companion object {
@@ -198,6 +200,15 @@ private constructor(
     class Builder internal constructor() {
 
         private val knownTypes = mutableMapOf<String, ClassName>()
+
+        init {
+            KnownTypes.instance()
+                .asTypeSet()
+                .allTypes()
+                .forEach {
+                    knownTypes[it.url().value()] = ClassName(it.javaClass())
+                }
+        }
 
         @CanIgnoreReturnValue
         fun put(file: File, messageType: MessageType): Builder {
