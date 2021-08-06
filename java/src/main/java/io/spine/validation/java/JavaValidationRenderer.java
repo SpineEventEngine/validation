@@ -166,7 +166,8 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .builder()
                 .addStatement("$T error = $L", OPTIONAL_ERROR, new MethodCall(result, VALIDATE))
                 .beginControlFlow("if (error.isPresent())")
-                .addStatement("throw new $T(error.get().getConstraintViolationList())", ValidationException.class)
+                .addStatement("throw new $T(error.get().getConstraintViolationList())",
+                              ValidationException.class)
                 .endControlFlow()
                 .build();
         return Poet.lines(code);

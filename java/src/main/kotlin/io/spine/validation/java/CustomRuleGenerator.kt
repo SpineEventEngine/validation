@@ -36,33 +36,14 @@ import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.isMap
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
-import io.spine.validation.ErrorMessage
 import io.spine.validation.RecursiveValidation
-
-/**
- * A [CodeGenerator] with no `other` value to compare a field to.
- *
- * Such a generator renders code for custom validation operators.
- */
-private open class GeneratorWithNoOther(
-    ctx: GenerationContext
-) : SimpleRuleGenerator(ctx) {
-
-    override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
-        return ErrorMessage.forRule(
-            rule.errorMessage,
-            actualValue.toCode()
-        )
-    }
-}
 
 /**
  * Generates code for the [DistinctCollection] operator.
  *
  * A list or the values of a map containing a duplicate is a constraint violation.
  */
-private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
+private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
     override fun condition(): Expression {
         val map = ctx.fieldFromSimpleRule!!.isMap()
@@ -85,7 +66,7 @@ private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(c
  */
 private class ValidateGenerator(
     ctx: GenerationContext
-) : GeneratorWithNoOther(ctx) {
+) : SimpleRuleGenerator(ctx) {
 
     private val violationsVariable: Literal
         get() = Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")

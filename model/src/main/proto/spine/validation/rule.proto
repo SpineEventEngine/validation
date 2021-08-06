@@ -60,6 +60,13 @@ message SimpleRule {
     }
 
     // The value to which the field is compared.
+    //
+    // If the operator is one of the preset `ComparisonOperator`s, this is right hand side of
+    // the comparison expression.
+    //
+    // If the operator is a `CustomOperator`, this is the custom validation feature
+    // encoded as a `MessageValue`.
+    //
     Value other_value = 4;
 
     // A human-readable message explaining the error.
