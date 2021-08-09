@@ -26,6 +26,8 @@
 
 package io.spine.validation;
 
+import com.google.common.escape.Escaper;
+import com.google.common.escape.Escapers;
 import io.spine.core.External;
 import io.spine.option.PatternOption;
 import io.spine.protodata.FieldOptionDiscovered;
@@ -47,6 +49,11 @@ import static java.lang.String.format;
  */
 final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
+    private static final Escaper slashEscaper = Escapers
+            .builder()
+            .addEscape('\\',"\\\\")
+            .build();
+
     @Override
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
@@ -60,7 +67,8 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String error = format("The string must match the regular expression `%s`.", regex);
+        String error = format("The string must match the regular expression `%s`.",
+                              slashEscaper.escape(regex));
         SimpleRule rule = SimpleRules.withCustom(
                 event.getField(),
                 feature,

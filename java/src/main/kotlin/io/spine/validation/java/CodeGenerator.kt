@@ -73,6 +73,14 @@ internal abstract class CodeGenerator(
     }
 
     /**
+     * Code that is inserted into the message class scope.
+     *
+     * Such code may maintain caches for intermediate validation results, etc.
+     */
+    open fun supportingMembers(): CodeBlock =
+        CodeBlock.of("")
+
+    /**
      * Generated code which does preparations before the validation checks can be performed.
      */
     open fun prologue(): CodeBlock =

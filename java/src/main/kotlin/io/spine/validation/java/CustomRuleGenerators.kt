@@ -28,6 +28,8 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import io.spine.option.PatternOption
 import io.spine.protobuf.AnyPacker.unpack
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
@@ -37,6 +39,11 @@ import io.spine.protodata.isMap
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
 import io.spine.validation.RecursiveValidation
+import io.spine.validation.Regex
+import java.util.regex.Pattern
+import javax.lang.model.element.Modifier.FINAL
+import javax.lang.model.element.Modifier.PRIVATE
+import javax.lang.model.element.Modifier.STATIC
 
 /**
  * Generates code for the [DistinctCollection] operator.
@@ -93,6 +100,58 @@ private class ValidateGenerator(
         )
 }
 
+private class PatternGenerator(
+    ctx: GenerationContext,
+    private val feature: Regex
+) : SimpleRuleGenerator(ctx) {
+
+    private val patternConstantName = "${ctx.fieldFromSimpleRule!!.name.value}_PATTERN"
+
+    override fun condition(): Expression {
+        val matcher = MethodCall(Literal(patternConstantName), "matcher", listOf(fieldValue))
+        val matchingMethod = if (feature.modifier.partialMatch) {
+            "find"
+        } else {
+            "matches"
+        }
+        return matcher.chain(matchingMethod)
+    }
+
+    override fun supportingMembers(): CodeBlock {
+        val compileModifiers = feature.hasModifier() && feature.modifier.containsFlags()
+        val field = FieldSpec.builder(
+            Pattern::class.java,
+            patternConstantName,
+            PRIVATE,
+            STATIC,
+            FINAL
+        )
+        if (compileModifiers) {
+            field.initializer(
+                "\$T.compile(\$S, \$L)",
+                Pattern::class.java,
+                feature.pattern,
+                feature.modifier.flagsString()
+            )
+        } else {
+            field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
+        }
+        return CodeBlock.of(field.build().toString())
+    }
+}
+
+private fun PatternOption.Modifier.containsFlags() =
+    dotAll || caseInsensitive || multiline || unicode
+
+private fun PatternOption.Modifier.flagsString(): String {
+    val flags = mutableListOf<String>()
+    if (dotAll) flags.add("DOTALL")
+    if (caseInsensitive) flags.add("CASE_INSENSITIVE")
+    if (multiline) flags.add("MULTILINE")
+    if (unicode) flags.add("UNICODE_CASE")
+    return flags.joinToString { "${Pattern::class.qualifiedName}.$it" }
+}
+
 /**
  * A null-value generator which never produces code.
  *
@@ -126,6 +185,7 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
     return when (feature) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
+        is Regex -> PatternGenerator(ctx, feature)
         else -> UnsupportedRuleGenerator(ctx, feature::class.simpleName!!)
     }
 }
