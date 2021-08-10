@@ -28,6 +28,7 @@ package io.spine.validation.java
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.ByteString
+import com.google.protobuf.Descriptors
 import io.spine.protodata.EnumType
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
@@ -53,6 +54,7 @@ import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
 import io.spine.protodata.Type.KindCase.PRIMITIVE
+import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
@@ -63,6 +65,7 @@ import io.spine.protodata.codegen.java.Null
 import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
+import io.spine.protodata.name
 import io.spine.protodata.typeUrl
 import io.spine.type.KnownTypes
 import io.spine.validation.Value
@@ -84,7 +87,7 @@ import io.spine.validation.Value.KindCase.STRING_VALUE
  */
 internal class TypeSystem
 private constructor(
-    private val knownTypes: Map<String, ClassName>
+    private val knownTypes: Map<TypeName, ClassName>
 ) {
 
     /**
@@ -124,15 +127,15 @@ private constructor(
 
     private fun enumValueToJava(value: Value): MethodCall {
         val enumValue = value.enumValue
-        val typeUrl = enumValue.type.typeUrl()
-        val enumClassName: ClassName = knownTypes[typeUrl] ?: unknownType(typeUrl)
+        val type = enumValue.type
+        val enumClassName: ClassName = knownTypes[type] ?: unknownType(type)
         return enumClassName.enumValue(enumValue.constNumber)
     }
 
     private fun messageValueToJava(value: Value): Expression {
         val messageValue = value.messageValue
-        val typeUrl = messageValue.type.typeUrl()
-        val className: ClassName = knownTypes[typeUrl] ?: unknownType(typeUrl)
+        val type = messageValue.type
+        val className: ClassName = knownTypes[type] ?: unknownType(type)
         return if (messageValue.fieldsMap.isEmpty()) {
             className.getDefaultInstance()
         } else {
@@ -164,8 +167,8 @@ private constructor(
     private fun toClass(type: Type): ClassName = when (type.kindCase) {
         PRIMITIVE -> type.primitive.toClass()
         MESSAGE, ENUMERATION -> {
-            val typeUrl = type.message.typeUrl()
-            knownTypes[typeUrl] ?: unknownType(typeUrl)
+            val typeName = type.message
+            knownTypes[typeName] ?: unknownType(typeName)
         }
         else -> throw IllegalArgumentException("Type is empty.")
     }
@@ -184,8 +187,12 @@ private constructor(
         return ClassName(klass.javaObjectType)
     }
 
-    private fun unknownType(key: Any): Nothing {
-        throw IllegalStateException("Unknown type: `$key`.")
+    private fun unknownType(typeName: TypeName): Nothing {
+        throw IllegalStateException("Unknown type: `${typeName.typeUrl()}`.")
+    }
+
+    private fun unknownType(type: PrimitiveType): Nothing {
+        throw IllegalStateException("Unknown primitive type: `$type`.")
     }
 
     companion object {
@@ -199,28 +206,37 @@ private constructor(
 
     class Builder internal constructor() {
 
-        private val knownTypes = mutableMapOf<String, ClassName>()
+        private val knownTypes = mutableMapOf<TypeName, ClassName>()
 
         init {
             KnownTypes.instance()
                 .asTypeSet()
-                .allTypes()
+                .messagesAndEnums()
                 .forEach {
-                    knownTypes[it.url().value()] = ClassName(it.javaClass())
+                    knownTypes[it.typeName()] = ClassName(it.javaClass())
                 }
+        }
+
+        private fun io.spine.type.Type<*, *>.typeName(): TypeName {
+            val descriptor = descriptor()
+            return when(descriptor) {
+                is Descriptors.Descriptor -> descriptor.name()
+                is Descriptors.EnumDescriptor -> descriptor.name()
+                else -> throw IllegalStateException("Unexpected type: $descriptor")
+            }
         }
 
         @CanIgnoreReturnValue
         fun put(file: File, messageType: MessageType): Builder {
             val javaClassName = messageType.javaClassName(declaredIn = file)
-            knownTypes[messageType.typeUrl()] = javaClassName
+            knownTypes[messageType.name] = javaClassName
             return this
         }
 
         @CanIgnoreReturnValue
         fun put(file: File, enumType: EnumType): Builder {
             val javaClassName = enumType.javaClassName(declaredIn = file)
-            knownTypes[enumType.typeUrl()] = javaClassName
+            knownTypes[enumType.name] = javaClassName
             return this
         }
 
