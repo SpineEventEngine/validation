@@ -24,14 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.gradle
+import io.spine.internal.dependency.Pmd
 
-/**
- * Runs the `build` task via Gradle Wrapper.
- */
-open class RunBuild : RunGradle() {
+plugins {
+    pmd
+}
 
-    init {
-        task("build")
-    }
+pmd {
+    toolVersion = Pmd.version
+    isConsoleOutput = true
+    incrementalAnalysis.set(true)
+
+    // The build is going to fail in case of violations.
+    isIgnoreFailures = false
+
+    // Disable the default rule set to use the custom rules (see below).
+    ruleSets = listOf()
+
+    // Load PMD settings from a file in `buildSrc/resources/`.
+    val classLoader = Pmd.javaClass.classLoader
+    val settingsResource = classLoader.getResource("pmd.xml")!!
+    val pmdSettings: String = settingsResource.readText()
+    val textResource: TextResource = resources.text.fromString(pmdSettings)
+    ruleSetConfig = textResource
+
+    reportsDir = file("build/reports/pmd")
+
+    // Just analyze the main sources; do not analyze tests.
+    val javaExtension: JavaPluginExtension =
+        project.extensions.getByType(JavaPluginExtension::class.java)
+    val mainSourceSet = javaExtension.sourceSets.getByName("main")
+    sourceSets = listOf(mainSourceSet)
 }
