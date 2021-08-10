@@ -99,7 +99,6 @@ subprojects {
         from(Scripts.slowTests(project))
         from(Scripts.testOutput(project))
         from(Scripts.javadocOptions(project))
-        from(Scripts.modelCompiler(project))
     }
 
     dependencies {
