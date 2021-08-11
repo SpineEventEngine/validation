@@ -229,11 +229,21 @@ public final class JavaValidationRenderer extends JavaRenderer {
         return code.build();
     }
 
+    /**
+     * Code generated for a validation constraint.
+     */
     private static class GeneratedCode {
 
         private static final Splitter onNewLine = Splitter.on(lineSeparator());
 
+        /**
+         * The code which performs validation.
+         */
         private final CodeBlock validationCode;
+
+        /**
+         * Class-level declarations used in the validation code.
+         */
         private final ImmutableList<CodeBlock> supportingMembers;
 
         private GeneratedCode(CodeBlock code, ImmutableList<CodeBlock> members) {
@@ -241,6 +251,9 @@ public final class JavaValidationRenderer extends JavaRenderer {
             this.supportingMembers = members;
         }
 
+        /**
+         * Obtains class-level declarations used in the validation code as code lines.
+         */
         private Iterable<String> supportingMembersLines() {
             return () -> supportingMembers
                     .stream()

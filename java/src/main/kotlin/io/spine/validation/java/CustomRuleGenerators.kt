@@ -41,6 +41,10 @@ import io.spine.validation.DistinctCollection
 import io.spine.validation.RecursiveValidation
 import io.spine.validation.Regex
 import java.util.regex.Pattern
+import java.util.regex.Pattern.CASE_INSENSITIVE
+import java.util.regex.Pattern.DOTALL
+import java.util.regex.Pattern.MULTILINE
+import java.util.regex.Pattern.UNICODE_CASE
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.STATIC
@@ -100,6 +104,9 @@ private class ValidateGenerator(
         )
 }
 
+/**
+ * Generates code for the [Regex] operator.
+ */
 private class PatternGenerator(
     ctx: GenerationContext,
     private val feature: Regex
@@ -131,7 +138,7 @@ private class PatternGenerator(
                 "\$T.compile(\$S, \$L)",
                 Pattern::class.java,
                 feature.pattern,
-                feature.modifier.flagsString()
+                feature.modifier.flagsMask()
             )
         } else {
             field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
@@ -140,16 +147,22 @@ private class PatternGenerator(
     }
 }
 
+/**
+ * Checks if this pattern modifier contains flags matching to those in `java.util.regex.Pattern`.
+ */
 private fun PatternOption.Modifier.containsFlags() =
     dotAll || caseInsensitive || multiline || unicode
 
-private fun PatternOption.Modifier.flagsString(): String {
-    val flags = mutableListOf<String>()
-    if (dotAll) flags.add("DOTALL")
-    if (caseInsensitive) flags.add("CASE_INSENSITIVE")
-    if (multiline) flags.add("MULTILINE")
-    if (unicode) flags.add("UNICODE_CASE")
-    return flags.joinToString { "${Pattern::class.qualifiedName}.$it" }
+/**
+ * Converts this modifier into a bitwise mask built from `java.util.regex.Pattern` constants.
+ */
+private fun PatternOption.Modifier.flagsMask(): Expression {
+    var mask = 0
+    if (dotAll) mask = mask or DOTALL
+    if (caseInsensitive) mask = mask or CASE_INSENSITIVE
+    if (multiline) mask = mask or MULTILINE
+    if (unicode) mask = mask or UNICODE_CASE
+    return Literal(mask)
 }
 
 /**
