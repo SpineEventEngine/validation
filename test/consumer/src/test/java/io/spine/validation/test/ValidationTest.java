@@ -157,6 +157,33 @@ class ValidationTest {
                     .setShirtName("R");
             assertValidationException(player::build);
         }
+
+        @Test
+        @DisplayName("and allow partial matches")
+        void partial() {
+            Book.Builder msg = Book
+                    .newBuilder()
+                    .setContent("Something Something Pride Something Something");
+            noException(msg::build);
+        }
+
+        @Test
+        @DisplayName("and allow to ignore case")
+        void caseInsensitive() {
+            Book.Builder msg = Book
+                    .newBuilder()
+                    .setContent("preJudice");
+            noException(msg::build);
+        }
+
+        @Test
+        @DisplayName("and still fail even with loose rules")
+        void failWithLoose() {
+            Book.Builder msg = Book
+                    .newBuilder()
+                    .setContent("something else");
+            assertValidationException(msg::build);
+        }
     }
 
     private static void assertValidationException(Executable fun) {
