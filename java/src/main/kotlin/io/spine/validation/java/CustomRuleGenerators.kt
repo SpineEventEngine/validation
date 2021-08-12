@@ -58,9 +58,9 @@ private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
 
     override fun condition(): Expression {
         val map = ctx.fieldFromSimpleRule!!.isMap()
-        val comparisonCollection = if (map) fieldValue.chain("values") else fieldValue
+        val comparisonCollection = if (map) MethodCall(fieldValue, "values") else fieldValue
         return equalsOperator(
-            fieldValue.chain("size"),
+            MethodCall(fieldValue, "size"),
             ClassName(ImmutableSet::class)
                 .call("copyOf", listOf(comparisonCollection))
                 .chain("size")
@@ -91,7 +91,7 @@ private class ValidateGenerator(
     override fun prologue(): CodeBlock =
         CodeBlock.builder()
             .addStatement(
-                "\$T \$L = ${fieldValue.chain("validate")}",
+                "\$T \$L = ${MethodCall(fieldValue, "validate")}",
                 ValidationError::class.java, violationsVariable
             ).build()
 

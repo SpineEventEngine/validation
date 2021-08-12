@@ -33,7 +33,6 @@ import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.isRepeated
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -83,7 +82,7 @@ internal open class SimpleRuleGenerator(
     private val ignoreIfNotSet: Boolean = rule.ignoredIfUnset
     protected val field = ctx.fieldFromSimpleRule!!
 
-    protected val fieldValue: MethodCall by lazy { ctx.msg.field(field).getter }
+    protected val fieldValue: Expression by lazy { ctx.msg.field(field).getter }
     private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
 
     override fun code(): CodeBlock {
@@ -144,10 +143,10 @@ internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
 
 private fun Field.isJavaPrimitive(): Boolean {
     if (isRepeated()) {
-        return false;
+        return false
     }
     if (!type.hasPrimitive()) {
-        return false;
+        return false
     }
     return when (type.primitive) {
         TYPE_STRING, TYPE_BYTES -> false
