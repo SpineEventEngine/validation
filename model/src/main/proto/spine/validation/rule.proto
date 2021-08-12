@@ -81,6 +81,16 @@ message SimpleRule {
     // This does not apply to simple rules which are parts of a `CompositeRule`.
     //
     bool ignored_if_unset = 6;
+
+    // If the associated field is a list or a map, this value shows whether the rule is applied
+    // to the collection as a whole or to each element individually.
+    //
+    // If `true`, the rule is applied to each element (each value, in case of a map). Otherwise,
+    // to the collection as a whole.
+    //
+    // If the associated field is not a collection, the value is ignored.
+    //
+    bool distribute = 7;
 }
 
 // A predefined comparison operator.
