@@ -26,6 +26,7 @@
 
 package io.spine.validation.java;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
@@ -45,6 +46,7 @@ import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.language.Language;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
+import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceSet;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
@@ -113,10 +115,13 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .forEach(validation -> {
                     File protoFile = findProtoFile(validation.getType().getFile());
                     Path javaFile = javaFile(validation.getType(), protoFile);
-                    sources.file(javaFile)
-                           .at(CLASS_SCOPE.forType(validation.getName()))
-                           .withExtraIndentation(INDENT_LEVEL)
-                           .add(rulesToMethod(validation));
+                    GeneratedCode code = generateValidationCode(validation);
+                    SourceAtPoint atClassScope = sources
+                            .file(javaFile)
+                            .at(CLASS_SCOPE.forType(validation.getName()))
+                            .withExtraIndentation(INDENT_LEVEL);
+                    atClassScope.add(wrapToMethod(code, validation));
+                    atClassScope.add(code.supportingMembersLines());
                     sources.file(javaFile)
                            .at(new Validate(validation.getName()))
                            .withExtraIndentation(INDENT_LEVEL)
@@ -143,11 +148,11 @@ public final class JavaValidationRenderer extends JavaRenderer {
         return types.build();
     }
 
-    private ImmutableList<String> rulesToMethod(MessageValidation validation) {
-        MessageReference result = This.INSTANCE.asMessage();
+    private static ImmutableList<String> wrapToMethod(GeneratedCode generatedCode,
+                                                      MessageValidation validation) {
         CodeBlock.Builder code = CodeBlock.builder();
         code.addStatement(newAccumulator());
-        code.add(generateValidationCode(validation, result));
+        code.add(generatedCode.validationCode);
         code.add(extraInsertionPoint(validation.getType().getName()));
         code.add(generateValidationError());
         MethodSpec validate = MethodSpec
@@ -166,7 +171,8 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .builder()
                 .addStatement("$T error = $L", OPTIONAL_ERROR, new MethodCall(result, VALIDATE))
                 .beginControlFlow("if (error.isPresent())")
-                .addStatement("throw new $T(error.get().getConstraintViolationList())", ValidationException.class)
+                .addStatement("throw new $T(error.get().getConstraintViolationList())",
+                              ValidationException.class)
                 .endControlFlow()
                 .build();
         return Poet.lines(code);
@@ -180,20 +186,22 @@ public final class JavaValidationRenderer extends JavaRenderer {
                             ArrayList.class);
     }
 
-    private CodeBlock generateValidationCode(MessageValidation validation,
-                                             MessageReference result) {
+    private GeneratedCode generateValidationCode(MessageValidation validation) {
+        MessageReference msg = This.INSTANCE.asMessage();
         CodeBlock.Builder code = CodeBlock.builder();
         FilePath file = validation.getType().getFile();
         TypeName typeName = validation.getType().getName();
+        ImmutableList.Builder<CodeBlock> supportingMembers = ImmutableList.builder();
         for (Rule rule : validation.getRuleList()) {
             GenerationContext context = new GenerationContext(
-                    rule, result, file, typeSystem, typeName, VIOLATIONS, this
+                    rule, msg, file, typeSystem, typeName, VIOLATIONS, this
             );
             CodeGenerator generator = JavaCodeGeneration.generatorFor(context);
             CodeBlock block = generator.code();
             code.add(block);
+            supportingMembers.add(generator.supportingMembers());
         }
-        return code.build();
+        return new GeneratedCode(code.build(), supportingMembers.build());
     }
 
     private static CodeBlock extraInsertionPoint(TypeName name) {
@@ -219,5 +227,38 @@ public final class JavaValidationRenderer extends JavaRenderer {
         code.addStatement(RETURN_LITERAL, optionalEmpty);
         code.endControlFlow();
         return code.build();
+    }
+
+    /**
+     * Code generated for a validation constraint.
+     */
+    private static class GeneratedCode {
+
+        private static final Splitter onNewLine = Splitter.on(lineSeparator());
+
+        /**
+         * The code which performs validation.
+         */
+        private final CodeBlock validationCode;
+
+        /**
+         * Class-level declarations used in the validation code.
+         */
+        private final ImmutableList<CodeBlock> supportingMembers;
+
+        private GeneratedCode(CodeBlock code, ImmutableList<CodeBlock> members) {
+            this.validationCode = code;
+            this.supportingMembers = members;
+        }
+
+        /**
+         * Obtains class-level declarations used in the validation code as code lines.
+         */
+        private Iterable<String> supportingMembersLines() {
+            return () -> supportingMembers
+                    .stream()
+                    .flatMap(code -> onNewLine.splitToStream(code.toString()))
+                    .iterator();
+        }
     }
 }

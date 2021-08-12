@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package spine.validation.test;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "BookshelfProto";
+option java_multiple_files = true;
+
+message Book {
+
+    Author author = 1;
+
+    string content = 2 [(pattern) = {
+        regex: "(Pride)|(Prejudice)",
+        modifier: {
+            partial_match: true,
+            case_insensitive: true,
+            unicode: true
+        }
+    }];
+}
+
+message Author {
+
+    string name = 1;
+}

@@ -36,7 +36,7 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 /**
  * A factory of {@link SimpleRule}s.
  */
-final class SimpleRules {
+public final class SimpleRules {
 
     /**
      * Prevents the utility class instantiation.
@@ -57,10 +57,12 @@ final class SimpleRules {
      *         the error message for the case of violation
      * @return a new rule
      */
-    static SimpleRule withCustom(FieldName field,
-                                 Message customFeature,
-                                 String description,
-                                 String errorMessage) {
+    public static SimpleRule withCustom(
+            FieldName field,
+            Message customFeature,
+            String description,
+            String errorMessage
+    ) {
         checkNotNull(field);
         checkNotNull(customFeature);
         checkNotEmptyOrBlank(description);
@@ -70,12 +72,14 @@ final class SimpleRules {
                 .setDescription(description)
                 .setFeature(pack(customFeature))
                 .build();
+        Value other = Values.from(customFeature);
         SimpleRule rule = SimpleRule
                 .newBuilder()
                 .setField(field)
                 .setCustomOperator(operator)
                 .setErrorMessage(errorMessage)
                 .setIgnoredIfUnset(true)
+                .setOtherValue(other)
                 .build();
         return rule;
     }

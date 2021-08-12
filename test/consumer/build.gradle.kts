@@ -43,7 +43,9 @@ protoData {
 }
 
 modelCompiler {
-    generateValidation = false
+    java {
+        validation { skipValidation() }
+    }
 }
 
 val spineBaseVersion: String by extra

@@ -28,6 +28,8 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import io.spine.option.PatternOption
 import io.spine.protobuf.AnyPacker.unpack
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
@@ -36,33 +38,23 @@ import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.isMap
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
-import io.spine.validation.ErrorMessage
 import io.spine.validation.RecursiveValidation
-
-/**
- * A [CodeGenerator] with no `other` value to compare a field to.
- *
- * Such a generator renders code for custom validation operators.
- */
-private open class GeneratorWithNoOther(
-    ctx: GenerationContext
-) : SimpleRuleGenerator(ctx) {
-
-    override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
-        return ErrorMessage.forRule(
-            rule.errorMessage,
-            actualValue.toCode()
-        )
-    }
-}
+import io.spine.validation.Regex
+import java.util.regex.Pattern
+import java.util.regex.Pattern.CASE_INSENSITIVE
+import java.util.regex.Pattern.DOTALL
+import java.util.regex.Pattern.MULTILINE
+import java.util.regex.Pattern.UNICODE_CASE
+import javax.lang.model.element.Modifier.FINAL
+import javax.lang.model.element.Modifier.PRIVATE
+import javax.lang.model.element.Modifier.STATIC
 
 /**
  * Generates code for the [DistinctCollection] operator.
  *
  * A list or the values of a map containing a duplicate is a constraint violation.
  */
-private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(ctx) {
+private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
     override fun condition(): Expression {
         val map = ctx.fieldFromSimpleRule!!.isMap()
@@ -85,7 +77,7 @@ private class DistinctGenerator(ctx: GenerationContext) : GeneratorWithNoOther(c
  */
 private class ValidateGenerator(
     ctx: GenerationContext
-) : GeneratorWithNoOther(ctx) {
+) : SimpleRuleGenerator(ctx) {
 
     private val violationsVariable: Literal
         get() = Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")
@@ -110,6 +102,67 @@ private class ValidateGenerator(
             ctx.violationsList,
             childViolations
         )
+}
+
+/**
+ * Generates code for the [Regex] operator.
+ */
+private class PatternGenerator(
+    ctx: GenerationContext,
+    private val feature: Regex
+) : SimpleRuleGenerator(ctx) {
+
+    private val patternConstantName = "${ctx.fieldFromSimpleRule!!.name.value}_PATTERN"
+
+    override fun condition(): Expression {
+        val matcher = MethodCall(Literal(patternConstantName), "matcher", listOf(fieldValue))
+        val matchingMethod = if (feature.modifier.partialMatch) {
+            "find"
+        } else {
+            "matches"
+        }
+        return matcher.chain(matchingMethod)
+    }
+
+    override fun supportingMembers(): CodeBlock {
+        val compileModifiers = feature.hasModifier() && feature.modifier.containsFlags()
+        val field = FieldSpec.builder(
+            Pattern::class.java,
+            patternConstantName,
+            PRIVATE,
+            STATIC,
+            FINAL
+        )
+        if (compileModifiers) {
+            field.initializer(
+                "\$T.compile(\$S, \$L)",
+                Pattern::class.java,
+                feature.pattern,
+                feature.modifier.flagsMask()
+            )
+        } else {
+            field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
+        }
+        return CodeBlock.of(field.build().toString())
+    }
+}
+
+/**
+ * Checks if this pattern modifier contains flags matching to those in `java.util.regex.Pattern`.
+ */
+private fun PatternOption.Modifier.containsFlags() =
+    dotAll || caseInsensitive || multiline || unicode
+
+/**
+ * Converts this modifier into a bitwise mask built from `java.util.regex.Pattern` constants.
+ */
+private fun PatternOption.Modifier.flagsMask(): Expression {
+    var mask = 0
+    if (dotAll) mask = mask or DOTALL
+    if (caseInsensitive) mask = mask or CASE_INSENSITIVE
+    if (multiline) mask = mask or MULTILINE
+    if (unicode) mask = mask or UNICODE_CASE
+    return Literal(mask)
 }
 
 /**
@@ -145,6 +198,7 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
     return when (feature) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
+        is Regex -> PatternGenerator(ctx, feature)
         else -> UnsupportedRuleGenerator(ctx, feature::class.simpleName!!)
     }
 }

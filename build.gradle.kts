@@ -84,7 +84,7 @@ allprojects {
         plugin("project-report")
     }
 
-    group = "io.spine"
+    group = "io.spine.validation"
     val validationVersion: String by extra
     version = validationVersion
 }
@@ -99,7 +99,6 @@ subprojects {
         from(Scripts.slowTests(project))
         from(Scripts.testOutput(project))
         from(Scripts.javadocOptions(project))
-        from(Scripts.modelCompiler(project))
     }
 
     dependencies {
