@@ -53,12 +53,10 @@ public final class Values {
      * Converts the given message into a value.
      *
      * <p>If the message is equal to the default instance, it will be represented by
-     * a {@code MessageValue} with no fields. Otherwise, all the present fields are converted into
-     * {@code Value}s.
+     * a {@code MessageValue} with no fields. Otherwise, all the present fields are converted
+     * into {@code Value}s.
      */
     public static Value from(Message message) {
-        @SuppressWarnings("KotlinInternalInJava")
-        // To be exposed as `public` in an upcoming release.
         MessageValue.Builder builder = MessageValue.newBuilder()
                 .setType(name(message.getDescriptorForType()));
         if (isNotDefault(message)) {
