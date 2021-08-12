@@ -58,13 +58,13 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>codegen-java</artifactId>
-    <version>0.0.30</version>
+    <version>0.0.31</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>compiler</artifactId>
-    <version>0.0.30</version>
+    <version>0.0.31</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -146,12 +146,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>cli</artifactId>
-    <version>0.0.30</version>
+    <version>0.0.31</version>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protoc</artifactId>
-    <version>0.0.30</version>
+    <version>0.0.31</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
