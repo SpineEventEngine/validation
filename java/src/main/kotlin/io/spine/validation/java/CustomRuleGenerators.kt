@@ -105,7 +105,7 @@ private class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
     }
 
     override fun condition(): Expression =
-        MethodCall(violationsVariable, "isPresent")
+        Literal("!" + MethodCall(violationsVariable, "isPresent"))
 
 
     override fun createViolation(): CodeBlock {

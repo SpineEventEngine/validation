@@ -26,6 +26,10 @@
 
 package io.spine.validation.test;
 
+import com.google.common.truth.Truth;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.protobuf.Message;
+import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.test.money.LocalTime;
@@ -39,10 +43,14 @@ import java.util.function.Supplier;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
+import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Generated validation code should")
 class ValidationTest {
+
+    private static final String ALLOW_VALID = "and allow valid values";
+    private static final String PROHIBIT_INVALID = "and prohibit invalid values";
 
     @Nested
     @DisplayName("reflect a rule with a less (`<`) sign and")
@@ -138,19 +146,19 @@ class ValidationTest {
     class PatternRule {
 
         @Test
-        @DisplayName("and allow valid values")
+        @DisplayName(ALLOW_VALID)
         void pass() {
             Player player = Player.newBuilder()
                     .setShirtName("Regina Falangee")
                     .build();
-            assertThat(player)
-                    .isNotNull();
+            Truth.assertThat(player)
+                 .isNotNull();
             assertThat(player.validate())
                     .isEmpty();
         }
 
         @Test
-        @DisplayName("and prohibit invalid values")
+        @DisplayName(PROHIBIT_INVALID)
         void fail() {
             Player.Builder player = Player
                     .newBuilder()
@@ -186,11 +194,73 @@ class ValidationTest {
         }
     }
 
-    private static void assertValidationException(Executable fun) {
+    @Nested
+    @DisplayName("reflect the (validate) rule")
+    class Validate {
+
+        @Nested
+        @DisplayName("on a singular message")
+        class Singular {
+
+            @Test
+            @DisplayName(ALLOW_VALID)
+            void pass() {
+                MeteoStatistics.Builder builder = MeteoStatistics
+                        .newBuilder()
+                        .setAverageDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
+                noException(builder::build);
+            }
+
+            @Test
+            @DisplayName(PROHIBIT_INVALID)
+            void fail() {
+                MeteoStatistics.Builder builder = MeteoStatistics
+                        .newBuilder()
+                        .setAverageDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
+                checkInvalid(builder);
+            }
+        }
+
+        @Nested
+        @DisplayName("on a repeated message")
+        class Repeated {
+
+            @Test
+            @DisplayName(ALLOW_VALID)
+            void pass() {
+                Rain.Builder builder = Rain
+                        .newBuilder()
+                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
+                noException(builder::build);
+            }
+
+            @Test
+            @DisplayName(PROHIBIT_INVALID)
+            void fail() {
+                Rain.Builder builder = Rain
+                        .newBuilder()
+                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
+                checkInvalid(builder);
+            }
+        }
+
+        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+        private void checkInvalid(Message.Builder builder) {
+            ConstraintViolation violation = assertValidationException(builder::build);
+            assertThat(violation.getMsgFormat())
+                    .contains("must be valid");
+            assertThat(violation.getViolationList())
+                    .hasSize(1);
+        }
+    }
+
+    @CanIgnoreReturnValue
+    private static ConstraintViolation assertValidationException(Executable fun) {
         ValidationException exception = assertThrows(ValidationException.class, fun);
         ValidationError error = exception.asValidationError();
         assertThat(error.getConstraintViolationList())
-                .hasSize(1);
+             .hasSize(1);
+        return error.getConstraintViolation(0);
     }
 
     private static void noException(Supplier<?> fun) {
