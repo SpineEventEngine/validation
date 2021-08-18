@@ -74,7 +74,8 @@ final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
                 RecursiveValidation.getDefaultInstance(),
                 "Message field is validated by its validation rules. " +
                         "If the field is invalid, the container message is invalid as well.",
-                "Message must be valid.");
+                "Message must be valid.",
+                true);
         return EitherOf2.withA(SimpleRuleAdded
                                        .newBuilder()
                                        .setType(event.getType())

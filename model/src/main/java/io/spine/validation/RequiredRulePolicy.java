@@ -75,6 +75,7 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
                 .setOtherValue(unsetValue)
+                .setDistribute(false)
                 .vBuild();
         return SimpleRuleAdded
                 .newBuilder()

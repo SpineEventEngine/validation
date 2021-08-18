@@ -49,7 +49,7 @@ internal abstract class CodeGenerator(
      * If the rule has a custom operator, the generator might not support it. Otherwise,
      * the generator must be able to generate code.
      */
-    open val canGenerate: Boolean = true
+    open fun canGenerate(): Boolean = true
 
     /**
      * Obtains the code checking the rule.
@@ -57,7 +57,7 @@ internal abstract class CodeGenerator(
      * Implementations report any found violations.
      */
     open fun code(): CodeBlock {
-        if (!canGenerate) {
+        if (!canGenerate()) {
             _debug().log("Standard Java renderer cannot generate rule: ${ctx.rule}")
             _debug().log("Skipping...")
             return CodeBlock.of("")
@@ -112,7 +112,7 @@ internal abstract class CodeGenerator(
 internal fun generatorFor(ctx: GenerationContext): CodeGenerator = with(ctx) {
     when (rule.kindCase) {
         SIMPLE -> generatorForSimple(this)
-        COMPOSITE -> CompositeRuleGenerator(ctx)
+        COMPOSITE -> CompositeRuleGenerator(this)
         else -> throw IllegalArgumentException("Empty rule.")
     }
 }

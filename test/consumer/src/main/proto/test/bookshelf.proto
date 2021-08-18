@@ -21,9 +21,19 @@ message Book {
             unicode: true
         }
     }];
+
+    repeated ChapterIndex index = 3 [(validate) = true];
+
+    repeated int32 previously_published_in_year = 4 [(min).value = "1"];
 }
 
 message Author {
 
     string name = 1;
+}
+
+message ChapterIndex {
+
+    string chapter_name = 1;
+    int32 page_number = 2;
 }

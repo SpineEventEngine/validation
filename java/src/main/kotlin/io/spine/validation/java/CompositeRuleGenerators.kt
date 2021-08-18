@@ -52,20 +52,21 @@ private val BOOLEAN_OPS = mapOf(
  *
  * A composite rule may consist of several simple rules applied to one or many fields.
  */
-internal class CompositeRuleGenerator(
-    ctx: GenerationContext,
-) : CodeGenerator(ctx) {
+internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ctx) {
 
-    private val left = generatorFor(ctx.withRule(ctx.rule.composite.left))
-    private val right = generatorFor(ctx.withRule(ctx.rule.composite.right))
+    private fun left(ctx: GenerationContext) = generatorFor(ctx.left())
+    private fun right(ctx: GenerationContext) = generatorFor(ctx.right())
 
-    override val canGenerate: Boolean
-        get() = left.canGenerate && right.canGenerate
+    private fun GenerationContext.left() = copy(rule = rule.composite.left)
+    private fun GenerationContext.right() = copy(rule = rule.composite.right)
+
+    override fun canGenerate(): Boolean =
+        left(ctx).canGenerate() && right(ctx).canGenerate()
 
     override fun condition(): Expression = with(ctx) {
         val composite = rule.composite
-        val left = left.condition()
-        val right = right.condition()
+        val left = left(ctx).condition()
+        val right = right(ctx).condition()
         val binaryOp = BOOLEAN_OPS[composite.operator]!!
         return Literal(binaryOp(left.toCode(), right.toCode()))
     }
@@ -77,14 +78,14 @@ internal class CompositeRuleGenerator(
         val commonField = composite.field
         val fieldAccessor = if (Messages.isNotDefault(commonField)) {
             val found = ctx.lookUpField(commonField)
-            ctx.msg.field(found).getter.toCode()
+            ctx.getterFor(found).toCode()
         } else {
             ""
         }
         return ErrorMessage.forComposite(
             format,
-            left.error(),
-            right.error(),
+            left(ctx).error(),
+            right(ctx).error(),
             operation,
             fieldAccessor
         )
@@ -95,7 +96,7 @@ internal class CompositeRuleGenerator(
 
     override fun supportingMembers(): CodeBlock =
         CodeBlock.builder()
-            .add(left.supportingMembers())
-            .add(right.supportingMembers())
+            .add(left(ctx).supportingMembers())
+            .add(right(ctx).supportingMembers())
             .build()
 }

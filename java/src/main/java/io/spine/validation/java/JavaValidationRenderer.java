@@ -28,11 +28,13 @@ package io.spine.validation.java;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
+import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
@@ -61,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
@@ -108,25 +111,38 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceSet sources) {
         this.typeSystem = bakeTypeSystem();
-        select(MessageValidation.class)
+        ImmutableMap<TypeName, MessageValidation> validations = select(MessageValidation.class)
                 .all()
                 .stream()
-                .filter(validation -> validation.getRuleCount() > 0)
-                .forEach(validation -> {
-                    File protoFile = findProtoFile(validation.getType().getFile());
-                    Path javaFile = javaFile(validation.getType(), protoFile);
-                    GeneratedCode code = generateValidationCode(validation);
-                    SourceAtPoint atClassScope = sources
-                            .file(javaFile)
-                            .at(CLASS_SCOPE.forType(validation.getName()))
-                            .withExtraIndentation(INDENT_LEVEL);
-                    atClassScope.add(wrapToMethod(code, validation));
-                    atClassScope.add(code.supportingMembersLines());
-                    sources.file(javaFile)
-                           .at(new Validate(validation.getName()))
-                           .withExtraIndentation(INDENT_LEVEL)
-                           .add(validateBeforeBuild());
-                });
+                .collect(toImmutableMap(v -> v.getType().getName(), v -> v));
+        select(ProtobufSourceFile.class)
+                .all()
+                .stream()
+                .flatMap(file -> file.getTypeMap().values().stream())
+                .forEach(type -> generateCode(sources, validations, type));
+    }
+
+    private void generateCode(SourceSet sources,
+                              ImmutableMap<TypeName, MessageValidation> validations,
+                              MessageType type) {
+        File protoFile = findProtoFile(type.getFile());
+        Path javaFile = javaFile(type, protoFile);
+        MessageValidation validation = validations.getOrDefault(type.getName(),
+                                                                MessageValidation
+                                                                        .newBuilder()
+                                                                        .setType(type)
+                                                                        .build());
+        GeneratedCode code = generateValidationCode(validation);
+        SourceAtPoint atClassScope = sources
+                .file(javaFile)
+                .at(CLASS_SCOPE.forType(validation.getName()))
+                .withExtraIndentation(INDENT_LEVEL);
+        atClassScope.add(wrapToMethod(code, validation));
+        atClassScope.add(code.supportingMembersLines());
+        sources.file(javaFile)
+               .at(new Validate(validation.getName()))
+               .withExtraIndentation(INDENT_LEVEL)
+               .add(validateBeforeBuild());
     }
 
     private File findProtoFile(FilePath path) {

@@ -74,26 +74,22 @@ private val PRIMITIVE_COMPARISON_OPS = mapOf(
 /**
  * A generator for code which checks a simple one-field rule.
  */
-internal open class SimpleRuleGenerator(
-    ctx: GenerationContext
-) : CodeGenerator(ctx) {
+internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(ctx) {
 
     protected val rule = ctx.rule.simple
-    private val ignoreIfNotSet: Boolean = rule.ignoredIfUnset
+    private val ignoreIfNotSet  = rule.ignoredIfUnset
     protected val field = ctx.fieldFromSimpleRule!!
-
-    protected val fieldValue: Expression by lazy { ctx.msg.field(field).getter }
-    private val otherValue: Expression by lazy { ctx.typeSystem.valueToJava(rule.otherValue) }
+    private val otherValue = ctx.typeSystem.valueToJava(rule.otherValue)
 
     override fun code(): CodeBlock {
         val check = super.code()
-        val defaultValue = UnsetValue.forField(field)
+        val defaultValue = UnsetValue.forField(ctx.fieldFromSimpleRule!!)
         if (!ignoreIfNotSet || !defaultValue.isPresent) {
             return check
         }
         val sign = selectSigns()[NOT_EQUAL]!!
         val defaultValueExpression = ctx.typeSystem.valueToJava(defaultValue.get())
-        val condition = sign(fieldValue.toCode(), defaultValueExpression.toCode())
+        val condition = sign(ctx.fieldOrElement!!.toCode(), defaultValueExpression.toCode())
         return CodeBlock
             .builder()
             .beginControlFlow("if ($condition)")
@@ -108,7 +104,8 @@ internal open class SimpleRuleGenerator(
         val compare = signs[rule.operator] ?: throw IllegalStateException(
             "Unsupported operation `${rule.operator}` for type `$type`."
         )
-        return Literal(compare(fieldValue.toCode(), otherValue.toCode()))
+        checkNotNull(ctx.fieldOrElement) { "There is no field value for rule: $rule" }
+        return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
     private fun selectSigns() = if (field.isJavaPrimitive()) {
@@ -118,7 +115,7 @@ internal open class SimpleRuleGenerator(
     }
 
     override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call("valueOf", listOf(fieldValue))
+        val actualValue = ClassName(String::class).call("valueOf", listOf(ctx.fieldOrElement!!))
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),
@@ -127,10 +124,20 @@ internal open class SimpleRuleGenerator(
     }
 
     override fun createViolation(): CodeBlock =
-        error().createViolation(field, fieldValue, ctx.violationsList)
+        error().createViolation(ctx)
 }
 
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
+    val distribute = ctx.rule.simple.distribute
+    val field = ctx.fieldFromSimpleRule!!
+    return if (distribute && field.isRepeated()) {
+        DistributingGenerator(ctx) { generatorForSingular(it) }
+    } else {
+        generatorForSingular(ctx)
+    }
+}
+
+private fun generatorForSingular(ctx: GenerationContext): CodeGenerator {
     val rule = ctx.rule.simple
     return when (rule.operatorKindCase) {
         OPERATOR -> SimpleRuleGenerator(ctx)
@@ -142,9 +149,6 @@ internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
 }
 
 private fun Field.isJavaPrimitive(): Boolean {
-    if (isRepeated()) {
-        return false
-    }
     if (!type.hasPrimitive()) {
         return false
     }

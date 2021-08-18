@@ -33,6 +33,7 @@ import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.Querying
 import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.select
 import io.spine.protodata.typeUrl
@@ -41,7 +42,9 @@ import io.spine.validation.Rule
 /**
  * Context of a [CodeGenerator].
  */
-internal data class GenerationContext(
+data class GenerationContext
+@JvmOverloads
+internal constructor(
 
     /**
      * The rule for which the code is generated.
@@ -80,7 +83,9 @@ internal data class GenerationContext(
     /**
      * A [Querying] ProtoData component.
      */
-    private val querying: Querying
+    private val querying: Querying,
+
+    private val elementReference: Expression? = null
 ) {
 
     /**
@@ -95,10 +100,24 @@ internal data class GenerationContext(
             null
         }
 
-    /**
-     * Obtains the same context but with the given validation [rule].
-     */
-    fun withRule(rule: Rule): GenerationContext = copy(rule = rule)
+    val fieldOrElement: Expression?
+        get() {
+            if (elementReference != null) {
+                return elementReference
+            }
+            return fieldValue
+        }
+
+    val fieldValue: Expression?
+        get() {
+            val protoField = fieldFromSimpleRule ?: return null
+            return getterFor(protoField)
+        }
+
+    val isElement: Boolean = elementReference != null
+
+    fun getterFor(field: Field): Expression =
+        msg.field(field).getter
 
     /**
      * Finds the field by the given name in the validated type.

@@ -43,7 +43,6 @@ import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.Value.KindCase.DOUBLE_VALUE
 import io.spine.validation.Value.KindCase.INT_VALUE
-import java.lang.IllegalStateException
 
 /**
  * A factory of validation rules for number fields.
@@ -81,6 +80,7 @@ private constructor(
             .setOperator(if (inclusive) inclusiveOperator else exclusiveOperator)
             .setOtherValue(threshold)
             .setErrorMessage(compileErrorMessage(adjective, inclusive))
+            .setDistribute(true)
             .build()
 
     private fun compileErrorMessage(adjective: String, inclusive: Boolean): String {

@@ -48,25 +48,33 @@ import io.spine.validation.MapOfAnys
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the given mutable [violationsList].
  */
-fun ErrorMessage.createViolation(field: Field,
-                                 fieldValue: Expression,
-                                 violationsList: String): CodeBlock {
+fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock {
+    val field = ctx.fieldFromSimpleRule!!
+    val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
-    val violation = buildViolation(type, field, fieldValue)
-    return addViolation(violation, violationsList)
+    val violation = buildViolation(type, field, fieldValue, ignoreCardinality = ctx.isElement)
+    return addViolation(violation, ctx.violationsList)
 }
 
 /**
  * Constructs code which creates a [ConstraintViolation] with child violations and adds it
  * to the given mutable [violationsList].
  */
-fun ErrorMessage.createParentViolation(field: Field,
-                                       fieldValue: Expression,
-                                       violationsList: String,
-                                       childViolations: Expression): CodeBlock {
+fun ErrorMessage.createParentViolation(
+    ctx: GenerationContext,
+    childViolations: Expression
+): CodeBlock {
+    val field = ctx.fieldFromSimpleRule!!
+    val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
-    val violation = buildViolation(type, field, fieldValue, childViolations)
-    return addViolation(violation, violationsList)
+    val violation = buildViolation(
+        type,
+        field,
+        fieldValue,
+        childViolations,
+        ignoreCardinality = ctx.isElement
+    )
+    return addViolation(violation, ctx.violationsList)
 }
 
 /**
@@ -88,7 +96,8 @@ private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression?,
-    childViolations: Expression? = null
+    childViolations: Expression? = null,
+    ignoreCardinality: Boolean = false
 ): Expression {
     var violationBuilder = ClassName(ConstraintViolation::class.java)
         .newBuilder()
@@ -100,6 +109,7 @@ private fun ErrorMessage.buildViolation(
     if (fieldValue != null) {
         checkNotNull(field) { "Field value is set without the field." }
         val packable = when {
+            ignoreCardinality -> fieldValue
             field.isList() -> ClassName(ListOfAnys::class).call("from", listOf(fieldValue))
             field.isMap() -> ClassName(MapOfAnys::class).call("from", listOf(fieldValue))
             else -> fieldValue
