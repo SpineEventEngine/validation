@@ -26,7 +26,6 @@
 
 package io.spine.validation.test;
 
-import com.google.common.truth.Truth;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
 import io.spine.validate.ConstraintViolation;
@@ -42,7 +41,6 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.function.Supplier;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -148,13 +146,9 @@ class ValidationTest {
         @Test
         @DisplayName(ALLOW_VALID)
         void pass() {
-            Player player = Player.newBuilder()
-                    .setShirtName("Regina Falangee")
-                    .build();
-            Truth.assertThat(player)
-                 .isNotNull();
-            assertThat(player.validate())
-                    .isEmpty();
+            Message.Builder player = Player.newBuilder()
+                    .setShirtName("Regina Falangee");
+            noException(player::build);
         }
 
         @Test
