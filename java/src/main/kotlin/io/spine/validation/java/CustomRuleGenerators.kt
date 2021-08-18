@@ -88,7 +88,7 @@ private class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
         val field = ctx.fieldFromSimpleRule!!
         val fieldType = field.type
         check(fieldType.hasMessage()) {
-            "(validate) only supports message types but field " +
+            "(validate) only supports `Message` types but field " +
                     "`${field.declaringType.qualifiedName()}.${field.name.value}` " +
                     "has type `$fieldType`."
         }
