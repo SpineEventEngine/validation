@@ -85,6 +85,12 @@ internal constructor(
      */
     private val querying: Querying,
 
+    /**
+     * A custom reference to an element of a collection field.
+     *
+     * If `null`, the associated field is not a collection or the associated rule does not need
+     * to be distributed to collection elements.
+     */
     private val elementReference: Expression? = null
 ) {
 
@@ -100,6 +106,12 @@ internal constructor(
             null
         }
 
+    /**
+     * If the associated field is a collection and the associated rule needs to be distributed,
+     * this is a reference to one element of the collection. If the field is not a collection or
+     * the rule does not need to be distributed, this is the reference to the field. If there is
+     * no associated field, this is `null`.
+     */
     val fieldOrElement: Expression?
         get() {
             if (elementReference != null) {
@@ -108,14 +120,26 @@ internal constructor(
             return fieldValue
         }
 
+    /**
+     * The reference to the associated field, or `null` if there is no such field.
+     */
     val fieldValue: Expression?
         get() {
             val protoField = fieldFromSimpleRule ?: return null
             return getterFor(protoField)
         }
 
+    /**
+     * `true` if the [fieldOrElement] contains a reference to an element of a collection,
+     * `false` otherwise.
+     */
     val isElement: Boolean = elementReference != null
 
+    /**
+     * Obtains a getter for a given field.
+     *
+     * The [field] should be a field of the message referenced in [msg].
+     */
     fun getterFor(field: Field): Expression =
         msg.field(field).getter
 
