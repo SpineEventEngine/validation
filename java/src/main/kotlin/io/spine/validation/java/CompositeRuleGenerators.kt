@@ -54,19 +54,19 @@ private val BOOLEAN_OPS = mapOf(
  */
 internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ctx) {
 
-    private fun left(ctx: GenerationContext) = generatorFor(ctx.left())
-    private fun right(ctx: GenerationContext) = generatorFor(ctx.right())
+    private val left = generatorFor(ctx.left())
+    private val right = generatorFor(ctx.right())
 
     private fun GenerationContext.left() = copy(rule = rule.composite.left)
     private fun GenerationContext.right() = copy(rule = rule.composite.right)
 
-    override fun canGenerate(): Boolean =
-        left(ctx).canGenerate() && right(ctx).canGenerate()
+    override val canGenerate: Boolean =
+        left.canGenerate && right.canGenerate
 
     override fun condition(): Expression = with(ctx) {
         val composite = rule.composite
-        val left = left(ctx).condition()
-        val right = right(ctx).condition()
+        val left = left.condition()
+        val right = right.condition()
         val binaryOp = BOOLEAN_OPS[composite.operator]!!
         return Literal(binaryOp(left.toCode(), right.toCode()))
     }
@@ -84,8 +84,8 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
         }
         return ErrorMessage.forComposite(
             format,
-            left(ctx).error(),
-            right(ctx).error(),
+            left.error(),
+            right.error(),
             operation,
             fieldAccessor
         )
@@ -96,7 +96,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
 
     override fun supportingMembers(): CodeBlock =
         CodeBlock.builder()
-            .add(left(ctx).supportingMembers())
-            .add(right(ctx).supportingMembers())
+            .add(left.supportingMembers())
+            .add(right.supportingMembers())
             .build()
 }

@@ -127,11 +127,11 @@ public final class JavaValidationRenderer extends JavaRenderer {
                               MessageType type) {
         File protoFile = findProtoFile(type.getFile());
         Path javaFile = javaFile(type, protoFile);
-        MessageValidation validation = validations.getOrDefault(type.getName(),
-                                                                MessageValidation
-                                                                        .newBuilder()
-                                                                        .setType(type)
-                                                                        .build());
+        MessageValidation defaultValidation = MessageValidation
+                .newBuilder()
+                .setType(type)
+                .build();
+        MessageValidation validation = validations.getOrDefault(type.getName(), defaultValidation);
         GeneratedCode code = generateValidationCode(validation);
         SourceAtPoint atClassScope = sources
                 .file(javaFile)

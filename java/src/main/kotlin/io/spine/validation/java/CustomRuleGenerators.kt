@@ -192,7 +192,7 @@ private class UnsupportedRuleGenerator(
     ctx: GenerationContext
 ) : CodeGenerator(ctx) {
 
-    override fun canGenerate(): Boolean = false
+    override val canGenerate: Boolean = false
 
     override fun condition(): Nothing = unsupported()
 
