@@ -73,7 +73,8 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 event.getField(),
                 feature,
                 "String should match regex.",
-                error
+                error,
+                true
         );
         return EitherOf2.withA(
                 SimpleRuleAdded.newBuilder()

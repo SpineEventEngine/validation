@@ -61,7 +61,8 @@ public final class SimpleRules {
             FieldName field,
             Message customFeature,
             String description,
-            String errorMessage
+            String errorMessage,
+            boolean distribute
     ) {
         checkNotNull(field);
         checkNotNull(customFeature);
@@ -80,6 +81,7 @@ public final class SimpleRules {
                 .setErrorMessage(errorMessage)
                 .setIgnoredIfUnset(true)
                 .setOtherValue(other)
+                .setDistribute(distribute)
                 .build();
         return rule;
     }

@@ -69,7 +69,7 @@ final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
         checkCollection(event.getField(), event.getType(), event.getFile());
         FieldName field = event.getField();
         SimpleRule rule = SimpleRules.withCustom(
-                field, DistinctCollection.getDefaultInstance(), ERROR, ERROR
+                field, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
         );
         return EitherOf2.withA(SimpleRuleAdded
                                        .newBuilder()

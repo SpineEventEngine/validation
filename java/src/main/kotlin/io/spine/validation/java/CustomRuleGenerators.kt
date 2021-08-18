@@ -31,15 +31,19 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import io.spine.option.PatternOption
 import io.spine.protobuf.AnyPacker.unpack
+import io.spine.protodata.Field.CardinalityCase.LIST
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.isMap
+import io.spine.protodata.qualifiedName
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
 import io.spine.validation.RecursiveValidation
 import io.spine.validation.Regex
+import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.Pattern.CASE_INSENSITIVE
 import java.util.regex.Pattern.DOTALL
@@ -58,9 +62,10 @@ private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
 
     override fun condition(): Expression {
         val map = ctx.fieldFromSimpleRule!!.isMap()
-        val comparisonCollection = if (map) fieldValue.chain("values") else fieldValue
+        val fieldValue = ctx.fieldOrElement!!
+        val comparisonCollection = if (map) MethodCall(fieldValue, "values") else fieldValue
         return equalsOperator(
-            fieldValue.chain("size"),
+            MethodCall(fieldValue, "size"),
             ClassName(ImmutableSet::class)
                 .call("copyOf", listOf(comparisonCollection))
                 .chain("size")
@@ -71,51 +76,60 @@ private class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ct
         return Literal(left.toCode() + " == " + right.toCode())
     }
 }
-
 /**
  * Generates code for the [RecursiveValidation] operator.
  */
-private class ValidateGenerator(
-    ctx: GenerationContext
-) : SimpleRuleGenerator(ctx) {
+private class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-    private val violationsVariable: Literal
-        get() = Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")
+    private val violationsVariable =
+        Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")
 
-    private val childViolations: MethodCall
-        get() = MethodCall(violationsVariable, "getAllConstraintViolation")
+    init {
+        val field = ctx.fieldFromSimpleRule!!
+        val fieldType = field.type
+        check(fieldType.hasMessage()) {
+            "(validate) only supports `Message` types but field " +
+                    "`${field.declaringType.qualifiedName()}.${field.name.value}` " +
+                    "has type `$fieldType`."
+        }
+    }
+
+    override fun prologue(): CodeBlock {
+        val violations = MethodCall(ctx.fieldOrElement!!, "validate")
+        return CodeBlock
+            .builder()
+            .addStatement(
+                "\$T<\$T> \$L = \$L",
+                Optional::class.java, ValidationError::class.java, violationsVariable, violations
+            ).build()
+    }
 
     override fun condition(): Expression =
-        childViolations.chain("isEmpty")
+        Literal("!" + MethodCall(violationsVariable, "isPresent"))
 
-    override fun prologue(): CodeBlock =
-        CodeBlock.builder()
-            .addStatement(
-                "\$T \$L = ${fieldValue.chain("validate")}",
-                ValidationError::class.java, violationsVariable
-            ).build()
 
-    override fun createViolation(): CodeBlock =
-        error().createParentViolation(
-            field,
-            fieldValue,
-            ctx.violationsList,
-            childViolations
-        )
+    override fun createViolation(): CodeBlock {
+        val validationError = MethodCall(violationsVariable, "get")
+        val violations = MessageReference(validationError.toCode())
+            .field("constraint_violation", LIST)
+            .getter
+        return error().createParentViolation(ctx, violations)
+    }
 }
 
 /**
  * Generates code for the [Regex] operator.
  */
 private class PatternGenerator(
-    ctx: GenerationContext,
-    private val feature: Regex
+    private val feature: Regex,
+    ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
 
-    private val patternConstantName = "${ctx.fieldFromSimpleRule!!.name.value}_PATTERN"
+    private val fieldName = ctx.fieldFromSimpleRule!!.name
+    private val patternConstantName = "${fieldName.value}_PATTERN"
 
     override fun condition(): Expression {
-        val matcher = MethodCall(Literal(patternConstantName), "matcher", listOf(fieldValue))
+        val matcher = MethodCall(Literal(patternConstantName), "matcher", listOf(ctx.fieldOrElement!!))
         val matchingMethod = if (feature.modifier.partialMatch) {
             "find"
         } else {
@@ -143,7 +157,10 @@ private class PatternGenerator(
         } else {
             field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
         }
-        return CodeBlock.of(field.build().toString())
+        return super.supportingMembers()
+            .toBuilder()
+            .add(field.build().toString())
+            .build()
     }
 }
 
@@ -171,12 +188,11 @@ private fun PatternOption.Modifier.flagsMask(): Expression {
  * Use this generator when an unknown custom validation operator is encountered.
  */
 private class UnsupportedRuleGenerator(
-    ctx: GenerationContext,
-    private val ruleName: String
+    private val ruleName: String,
+    ctx: GenerationContext
 ) : CodeGenerator(ctx) {
 
-    override val canGenerate: Boolean
-        get() = false
+    override val canGenerate: Boolean = false
 
     override fun condition(): Nothing = unsupported()
 
@@ -198,7 +214,7 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
     return when (feature) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
-        is Regex -> PatternGenerator(ctx, feature)
-        else -> UnsupportedRuleGenerator(ctx, feature::class.simpleName!!)
+        is Regex -> PatternGenerator(feature, ctx)
+        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
     }
 }

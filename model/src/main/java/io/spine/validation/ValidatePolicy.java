@@ -42,7 +42,6 @@ import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.option.OptionsProto.validate;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.protodata.Ast.qualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.Options.is;
@@ -74,7 +73,8 @@ final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
                 RecursiveValidation.getDefaultInstance(),
                 "Message field is validated by its validation rules. " +
                         "If the field is invalid, the container message is invalid as well.",
-                "Message must be valid.");
+                "Message must be valid.",
+                true);
         return EitherOf2.withA(SimpleRuleAdded
                                        .newBuilder()
                                        .setType(event.getType())
@@ -84,7 +84,7 @@ final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
 
     private void checkMessage(FieldName fieldName, TypeName typeName, FilePath file) {
         Field field = findField(fieldName, typeName, file, this);
-        if (!isRepeated(field)) {
+        if (!field.getType().hasMessage()) {
             throw newIllegalStateException(
                     "Field `%s.%s` is not a message field and " +
                             "therefore should not be marked with `validate`.",

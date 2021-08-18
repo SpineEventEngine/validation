@@ -52,15 +52,16 @@ private val BOOLEAN_OPS = mapOf(
  *
  * A composite rule may consist of several simple rules applied to one or many fields.
  */
-internal class CompositeRuleGenerator(
-    ctx: GenerationContext,
-) : CodeGenerator(ctx) {
+internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ctx) {
 
-    private val left = generatorFor(ctx.withRule(ctx.rule.composite.left))
-    private val right = generatorFor(ctx.withRule(ctx.rule.composite.right))
+    private val left = generatorFor(ctx.left())
+    private val right = generatorFor(ctx.right())
 
-    override val canGenerate: Boolean
-        get() = left.canGenerate && right.canGenerate
+    private fun GenerationContext.left() = copy(rule = rule.composite.left)
+    private fun GenerationContext.right() = copy(rule = rule.composite.right)
+
+    override val canGenerate: Boolean =
+        left.canGenerate && right.canGenerate
 
     override fun condition(): Expression = with(ctx) {
         val composite = rule.composite
@@ -77,7 +78,7 @@ internal class CompositeRuleGenerator(
         val commonField = composite.field
         val fieldAccessor = if (Messages.isNotDefault(commonField)) {
             val found = ctx.lookUpField(commonField)
-            ctx.msg.field(found).getter.toCode()
+            ctx.getterFor(found).toCode()
         } else {
             ""
         }

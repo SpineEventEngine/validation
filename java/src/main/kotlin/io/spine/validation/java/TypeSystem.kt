@@ -79,16 +79,32 @@ import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
+import kotlin.reflect.KClass
 
 /**
  * A type system of an application.
  *
  * Includes all the types known to the app at runtime.
  */
-internal class TypeSystem
+class TypeSystem
 private constructor(
     private val knownTypes: Map<TypeName, ClassName>
 ) {
+
+    /**
+     * Obtains the name of the Java class generated from a Protobuf type with the given name.
+     */
+    fun javaTypeName(type: Type): String {
+        return when {
+            type.hasPrimitive() -> type.primitive.toPrimitiveName()
+            type.hasMessage() -> classNameFor(type.message).canonical
+            type.hasEnumeration() -> classNameFor(type.enumeration).canonical
+            else -> unknownType(type)
+        }
+    }
+
+    private fun classNameFor(type: TypeName) =
+        knownTypes[type] ?: unknownType(type)
 
     /**
      * Converts the given [Value] of a Java expression which creates that value.
@@ -128,14 +144,14 @@ private constructor(
     private fun enumValueToJava(value: Value): MethodCall {
         val enumValue = value.enumValue
         val type = enumValue.type
-        val enumClassName: ClassName = knownTypes[type] ?: unknownType(type)
+        val enumClassName = classNameFor(type)
         return enumClassName.enumValue(enumValue.constNumber)
     }
 
     private fun messageValueToJava(value: Value): Expression {
         val messageValue = value.messageValue
         val type = messageValue.type
-        val className: ClassName = knownTypes[type] ?: unknownType(type)
+        val className = classNameFor(type)
         return if (messageValue.fieldsMap.isEmpty()) {
             className.getDefaultInstance()
         } else {
@@ -166,15 +182,22 @@ private constructor(
      */
     private fun toClass(type: Type): ClassName = when (type.kindCase) {
         PRIMITIVE -> type.primitive.toClass()
-        MESSAGE, ENUMERATION -> {
-            val typeName = type.message
-            knownTypes[typeName] ?: unknownType(typeName)
-        }
+        MESSAGE, ENUMERATION -> classNameFor(type.message)
         else -> throw IllegalArgumentException("Type is empty.")
     }
 
     private fun PrimitiveType.toClass(): ClassName {
-        val klass = when (this) {
+        val klass = primitiveClass()
+        return ClassName(klass.javaObjectType)
+    }
+
+    private fun PrimitiveType.toPrimitiveName(): String {
+        val klass = primitiveClass()
+        return klass.javaPrimitiveType!!.name
+    }
+
+    private fun PrimitiveType.primitiveClass(): KClass<*> =
+        when (this) {
             TYPE_DOUBLE -> Double::class
             TYPE_FLOAT -> Float::class
             TYPE_INT64, TYPE_UINT64, TYPE_SINT64, TYPE_FIXED64, TYPE_SFIXED64 -> Long::class
@@ -184,7 +207,9 @@ private constructor(
             TYPE_BYTES -> ByteString::class
             UNRECOGNIZED, PT_UNKNOWN -> unknownType(this)
         }
-        return ClassName(klass.javaObjectType)
+
+    private fun unknownType(type: Type): Nothing {
+        throw IllegalStateException("Unknown type: `${type}`.")
     }
 
     private fun unknownType(typeName: TypeName): Nothing {

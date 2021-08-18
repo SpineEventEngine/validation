@@ -112,7 +112,7 @@ internal abstract class CodeGenerator(
 internal fun generatorFor(ctx: GenerationContext): CodeGenerator = with(ctx) {
     when (rule.kindCase) {
         SIMPLE -> generatorForSimple(this)
-        COMPOSITE -> CompositeRuleGenerator(ctx)
+        COMPOSITE -> CompositeRuleGenerator(this)
         else -> throw IllegalArgumentException("Empty rule.")
     }
 }
