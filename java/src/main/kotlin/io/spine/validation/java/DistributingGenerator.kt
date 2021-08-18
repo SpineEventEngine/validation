@@ -39,6 +39,15 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 import javax.lang.model.element.Modifier
 
+/**
+ * A code generator that distributes the associated simple validation rule to elements of
+ * a repeated field.
+ *
+ * A rule applied to a repeated fields, i.e. a list or a map, may be applied to the fields as
+ * a whole, or to individual elements of the field. In the first case, no extra modifications to
+ * code generation are required. In the second case, this generator creates code that iterated over
+ * the elements and applies the validation rule to them.
+ */
 internal class DistributingGenerator(
     ctx: GenerationContext,
     delegateCtor: (GenerationContext) -> CodeGenerator
@@ -100,6 +109,5 @@ internal class DistributingGenerator(
             .builder()
             .addStatement(methodCall.toCode())
             .build()
-
     }
 }
