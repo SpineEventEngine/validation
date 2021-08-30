@@ -35,6 +35,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * A repository for {@link RequiredOneofView}.
+ *
+ * <p>Routes the events to the view. When an event is related to a field, it is only rooted if
+ * the field belongs to a {@code oneof} group. Otherwise, event is sieved off.
+ */
 final class RequiredOneofRepository
         extends ViewRepository<OneofId, RequiredOneofView, RequiredOneofGroup> {
 

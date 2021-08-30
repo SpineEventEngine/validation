@@ -11,16 +11,21 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
+// A `oneof` group in which an alternative must be set.
+//
 message RequiredOneofGroup {
     option (entity).kind = PROJECTION;
 
     OneofId id = 1;
 
+    // Alternative fields of the `oneof`.
     repeated spine.protodata.Field field = 2;
 
+    // If `true` the group is required. Otherwise, the group should be ignored.
     bool required = 3;
 }
 
+// Unique ID of a `oneof` group.
 message OneofId {
 
     spine.protodata.FilePath file = 1;

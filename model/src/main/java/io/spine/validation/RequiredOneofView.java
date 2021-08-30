@@ -38,6 +38,12 @@ import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.qualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
+/**
+ * A view on a required {@code oneof} group.
+ *
+ * <p>Such a view exists for all {@code oneof}s, but it is deleted for the ones that
+ * are not required.
+ */
 final class RequiredOneofView
         extends View<OneofId, RequiredOneofGroup, RequiredOneofGroup.Builder> {
 
