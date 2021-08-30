@@ -36,9 +36,6 @@ import io.spine.validation.test.money.Mru;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-
-import java.util.function.Supplier;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
@@ -57,25 +54,22 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is greater than the threshold")
         void throwOnMore() {
-            assertValidationException(() -> Mru.newBuilder()
-                    .setKhoums(6)
-                    .build());
+            assertValidationException(Mru.newBuilder()
+                    .setKhoums(6));
         }
 
         @Test
         @DisplayName("throw `ValidationException` if actual value is equal to the threshold")
         void throwOnEdge() {
-            assertValidationException(() -> Mru.newBuilder()
-                    .setKhoums(5)
-                    .build());
+            assertValidationException(Mru.newBuilder()
+                    .setKhoums(5));
         }
 
         @Test
         @DisplayName("throw no exceptions if actual value is less than the threshold")
         void notThrow() {
-            noException(() -> Mru.newBuilder()
-                    .setKhoums(4)
-                    .build());
+            assertNoException(Mru.newBuilder()
+                    .setKhoums(4));
         }
     }
 
@@ -86,25 +80,22 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is less than the threshold")
         void throwOnMore() {
-            assertValidationException(() -> LocalTime.newBuilder()
-                    .setMinutes(-1)
-                    .build());
+            assertValidationException(LocalTime.newBuilder()
+                    .setMinutes(-1));
         }
 
         @Test
         @DisplayName("throw no exceptions if actual value is equal to the threshold")
         void throwOnEdge() {
-            noException(() -> LocalTime.newBuilder()
-                    .setMinutes(0)
-                    .build());
+            assertNoException(LocalTime.newBuilder()
+                    .setMinutes(0));
         }
 
         @Test
         @DisplayName("throw no exceptions if actual value is greater than the threshold")
         void notThrow() {
-            noException(() -> LocalTime.newBuilder()
-                    .setMinutes(1)
-                    .build());
+            assertNoException(LocalTime.newBuilder()
+                    .setMinutes(1));
         }
     }
 
@@ -122,7 +113,7 @@ class ValidationTest {
             Blizzard.Builder builder = Blizzard.newBuilder()
                     .addSnowflake(flake)
                     .addSnowflake(flake);
-            assertValidationException(builder::build);
+            assertValidationException(builder);
         }
 
         @Test
@@ -135,7 +126,7 @@ class ValidationTest {
             Team.Builder builder = Team.newBuilder()
                     .putPlayers(7, player)
                     .putPlayers(10, player);
-            assertValidationException(builder::build);
+            assertValidationException(builder);
         }
     }
 
@@ -148,7 +139,7 @@ class ValidationTest {
         void pass() {
             Message.Builder player = Player.newBuilder()
                     .setShirtName("Regina Falangee");
-            noException(player::build);
+            assertNoException(player);
         }
 
         @Test
@@ -157,7 +148,7 @@ class ValidationTest {
             Player.Builder player = Player
                     .newBuilder()
                     .setShirtName("R");
-            assertValidationException(player::build);
+            assertValidationException(player);
         }
 
         @Test
@@ -166,7 +157,7 @@ class ValidationTest {
             Book.Builder msg = Book
                     .newBuilder()
                     .setContent("Something Something Pride Something Something");
-            noException(msg::build);
+            assertNoException(msg);
         }
 
         @Test
@@ -175,7 +166,7 @@ class ValidationTest {
             Book.Builder msg = Book
                     .newBuilder()
                     .setContent("preJudice");
-            noException(msg::build);
+            assertNoException(msg);
         }
 
         @Test
@@ -184,7 +175,7 @@ class ValidationTest {
             Book.Builder msg = Book
                     .newBuilder()
                     .setContent("something else");
-            assertValidationException(msg::build);
+            assertValidationException(msg);
         }
     }
 
@@ -202,7 +193,7 @@ class ValidationTest {
                 MeteoStatistics.Builder builder = MeteoStatistics
                         .newBuilder()
                         .setAverageDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
-                noException(builder::build);
+                assertNoException(builder);
             }
 
             @Test
@@ -225,7 +216,7 @@ class ValidationTest {
                 Rain.Builder builder = Rain
                         .newBuilder()
                         .addRainDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
-                noException(builder::build);
+                assertNoException(builder);
             }
 
             @Test
@@ -240,7 +231,7 @@ class ValidationTest {
 
         @SuppressWarnings("MethodOnlyUsedFromInnerClass")
         private void checkInvalid(Message.Builder builder) {
-            ConstraintViolation violation = assertValidationException(builder::build);
+            ConstraintViolation violation = assertValidationException(builder);
             assertThat(violation.getMsgFormat())
                     .contains("must be valid");
             assertThat(violation.getViolationList())
@@ -248,17 +239,37 @@ class ValidationTest {
         }
     }
 
+    @Nested
+    class IsRequired {
+
+        @Test
+        @DisplayName(PROHIBIT_INVALID)
+        void fail() {
+            Lunch.Builder builder = Lunch.newBuilder();
+            assertValidationException(builder);
+        }
+
+        @Test
+        @DisplayName(ALLOW_VALID)
+        void pass() {
+            Lunch.Builder builder = Lunch
+                    .newBuilder()
+                    .setHotSoup("Minestrone");
+            assertNoException(builder);
+        }
+    }
+
     @CanIgnoreReturnValue
-    private static ConstraintViolation assertValidationException(Executable fun) {
-        ValidationException exception = assertThrows(ValidationException.class, fun);
+    private static ConstraintViolation assertValidationException(Message.Builder builder) {
+        ValidationException exception = assertThrows(ValidationException.class, builder::build);
         ValidationError error = exception.asValidationError();
         assertThat(error.getConstraintViolationList())
              .hasSize(1);
         return error.getConstraintViolation(0);
     }
 
-    private static void noException(Supplier<?> fun) {
-        Object result = fun.get();
+    private static void assertNoException(Message.Builder builder) {
+        Object result = builder.build();
         assertThat(result)
                 .isNotNull();
     }

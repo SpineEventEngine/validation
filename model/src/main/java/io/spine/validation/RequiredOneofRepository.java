@@ -27,38 +27,33 @@
 package io.spine.validation;
 
 import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.plugin.Policy;
+import io.spine.protodata.FieldEntered;
+import io.spine.protodata.OneofOptionDiscovered;
 import io.spine.protodata.plugin.ViewRepository;
-import org.jetbrains.annotations.NotNull;
+import io.spine.server.route.EventRouting;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-/**
- * A ProtoData plugin which attaches validation-related policies and views.
- */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public class ValidationPlugin implements Plugin {
+import static io.spine.server.route.EventRoute.withId;
 
-    @NotNull
+final class RequiredOneofRepository
+        extends ViewRepository<OneofId, RequiredOneofView, RequiredOneofGroup> {
+
     @Override
-    public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(
-                new RequiredRulePolicy(),
-                new RangePolicy(),
-                new MinPolicy(),
-                new MaxPolicy(),
-                new DistinctPolicy(),
-                new ValidatePolicy(),
-                new PatternPolicy(),
-                new IsRequiredPolicy()
-        );
-    }
-
-    @NotNull
-    @Override
-    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(
-                new MessageValidationRepository(),
-                new RequiredOneofRepository()
-        );
+    protected void setupEventRouting(@NonNull EventRouting<OneofId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(OneofOptionDiscovered.class, (e, c) -> withId(
+                OneofId.newBuilder()
+                        .setFile(e.getFile())
+                        .setMessage(e.getType())
+                        .setName(e.getGroup())
+                        .build()
+        ));
+        routing.route(FieldEntered.class, (e, c) -> e.getField().hasOneofName() ? withId(
+                OneofId.newBuilder()
+                        .setFile(e.getFile())
+                        .setMessage(e.getType())
+                        .setName(e.getField().getOneofName())
+                        .build()
+        ) : ImmutableSet.of());
     }
 }
