@@ -33,6 +33,9 @@ import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static java.lang.String.format;
 
+/**
+ * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
+ */
 final class RequiredRule {
 
     /**
@@ -41,6 +44,9 @@ final class RequiredRule {
     private RequiredRule() {
     }
 
+    /**
+     * Creates a rule for the given field to be required.
+     */
     static SimpleRule forField(Field field) {
         Value unsetValue = UnsetValue.forField(field)
                                      .orElseThrow(() -> doesNotSupportRequired(field));
