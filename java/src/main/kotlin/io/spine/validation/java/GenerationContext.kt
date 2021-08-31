@@ -69,7 +69,7 @@ internal constructor(
     /**
      * The type of the validated message.
      */
-    val declaringType: TypeName,
+    val validatedType: TypeName,
 
     /**
      * A reference to the mutable violations list, which accumulates all the constraint violations.
@@ -149,7 +149,7 @@ internal constructor(
      * @throws IllegalArgumentException if there is no such field
      */
     fun lookUpField(name: FieldName): Field =
-        querying.lookUpField(protoFile, declaringType, name)
+        querying.lookUpField(protoFile, validatedType, name)
 }
 
 private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {

@@ -27,11 +27,14 @@
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
+import com.google.protobuf.Message
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import io.spine.option.PatternOption
-import io.spine.protobuf.AnyPacker.unpack
+import io.spine.protobuf.unpackGuessingType
 import io.spine.protodata.Field.CardinalityCase.LIST
+import io.spine.protodata.Field.CardinalityCase.SINGLE
+import io.spine.protodata.OneofName
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
@@ -41,8 +44,10 @@ import io.spine.protodata.isMap
 import io.spine.protodata.qualifiedName
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
+import io.spine.validation.ErrorMessage
 import io.spine.validation.RecursiveValidation
 import io.spine.validation.Regex
+import io.spine.validation.RequiredOneof
 import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.Pattern.CASE_INSENSITIVE
@@ -164,6 +169,28 @@ private class PatternGenerator(
     }
 }
 
+private class RequiredOneofGenerator(
+    private val name: OneofName,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
+
+    private val rule = ctx.rule.messageWide
+
+    override fun condition(): Expression {
+        val casePropertyName = "${name.value}_case"
+        val pseudoField = ctx.msg.field(casePropertyName, SINGLE)
+        val getter = pseudoField.getter
+        val numberGetter = getter.chain("getNumber")
+        return Literal("$numberGetter != 0")
+    }
+
+    override fun error() =
+        ErrorMessage.forRule(rule.errorMessage)
+
+    override fun createViolation() =
+        error().createViolation(ctx)
+}
+
 /**
  * Checks if this pattern modifier contains flags matching to those in `java.util.regex.Pattern`.
  */
@@ -210,11 +237,22 @@ private class UnsupportedRuleGenerator(
  */
 internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
     @Suppress("MoveVariableDeclarationIntoWhen") // For better readability.
-    val feature = unpack(ctx.rule.simple.customOperator.feature)
+    val feature = ctx.feature()
     return when (feature) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
         is Regex -> PatternGenerator(feature, ctx)
+        is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
         else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
+    }
+}
+
+private fun GenerationContext.feature(): Message = with(rule) {
+    if (hasSimple()) {
+        simple.customOperator.feature.unpackGuessingType()
+    } else if (hasMessageWide()) {
+        messageWide.operator.feature.unpackGuessingType()
+    } else {
+        throw IllegalStateException("Rule has no custom operator: $rule")
     }
 }

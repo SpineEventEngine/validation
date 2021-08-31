@@ -56,9 +56,6 @@ public class ValidationPlugin implements Plugin {
     @NotNull
     @Override
     public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(
-                new MessageValidationRepository(),
-                new RequiredOneofRepository()
-        );
+        return ImmutableSet.of(new MessageValidationRepository());
     }
 }

@@ -129,8 +129,8 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
-    val field = ctx.fieldFromSimpleRule!!
-    return if (distribute && field.isRepeated()) {
+    val field = ctx.fieldFromSimpleRule
+    return if (distribute && field?.isRepeated() == true) {
         DistributingGenerator(ctx) { generatorForSingular(it) }
     } else {
         generatorForSingular(ctx)

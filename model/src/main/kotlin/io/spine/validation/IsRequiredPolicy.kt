@@ -26,81 +26,52 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.protodata.OneofGroupExited
+import io.spine.core.Where
+import io.spine.protobuf.pack
+import io.spine.protodata.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.select
 import io.spine.server.event.React
 import io.spine.server.model.Nothing
-import io.spine.server.tuple.EitherOf3
-import io.spine.validation.LogicalOperator.OR
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.MessageWideRuleAdded
 
+/**
+ * A policy to add a validation rule with the [RequiredOneof] feature whenever a required
+ * `oneof` group with the `(is_required)` option is encountered.
+ *
+ * Unlike the `(required)` constraint, any field types are allowed, since the `oneof` encodes for
+ * a non-set value as a special case.
+ */
 internal class IsRequiredPolicy :
-    Policy<OneofGroupExited>() {
+    Policy<OneofOptionDiscovered>() {
+
+    private companion object {
+
+        private const val ERROR = "One of the fields must be set."
+    }
 
     @React
-    override fun whenever(@External event: OneofGroupExited):
-            EitherOf3<CompositeRuleAdded, SimpleRuleAdded, Nothing> {
-        val id = OneofId
+    override fun whenever(@External @Where(field = "option.name", equals = "is_required")
+                              event: OneofOptionDiscovered):
+            EitherOf2<MessageWideRuleAdded, Nothing> {
+        val feature = RequiredOneof
             .newBuilder()
-            .setFile(event.file)
-            .setMessage(event.type)
             .setName(event.group)
             .build()
-        val group = select<RequiredOneofGroup>().withId(id)
-        if (!group.isPresent) {
-            return EitherOf3.withC(nothing())
-        }
-        val oneof = group.get()
-        val rules = oneof
-            .fieldList
-            .map { RequiredRule.forField(it).rule() }
-        if (rules.size == 1) {
-            return EitherOf3.withB(SimpleRuleAdded
-                .newBuilder()
-                .setType(event.type)
-                .setRule(rules.first().simple)
-                .build())
-        }
-        val e = CompositeRuleAdded
+        val operator = CustomOperator
             .newBuilder()
-            .setType(event.type)
-            .setRule(composeAllViaOr(rules))
+            .setDescription(ERROR)
+            .setFeature(feature.pack())
             .build()
-        return EitherOf3.withA(e)
+        val rule = MessageWideRule
+            .newBuilder()
+            .setErrorMessage(ERROR)
+            .setOperator(operator)
+            .build()
+        return EitherOf2.withA(MessageWideRuleAdded
+            .newBuilder()
+            .setRule(rule)
+            .setType(event.type)
+            .build())
     }
-
 }
-
-private fun composeAllViaOr(allRules: List<Rule>): CompositeRule {
-    var rules = allRules
-    while (rules.size > 1) {
-        rules = rules
-            .chunked(2)
-            .map { it.compose() }
-    }
-    return rules.first().composite
-}
-
-private fun List<Rule>.compose(): Rule = when (size) {
-    2 -> CompositeRule
-        .newBuilder()
-        .setLeft(component1())
-        .setOperator(OR)
-        .setRight(component2())
-        .build()
-        .rule()
-    1 -> first()
-    else -> throw IllegalStateException("Cannot compose rules `$this`.")
-}
-
-private fun SimpleRule.rule(): Rule = Rule
-    .newBuilder()
-    .setSimple(this)
-    .build()
-
-private fun CompositeRule.rule(): Rule = Rule
-    .newBuilder()
-    .setComposite(this)
-    .build()

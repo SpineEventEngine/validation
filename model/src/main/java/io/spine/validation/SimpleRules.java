@@ -31,6 +31,7 @@ import io.spine.protodata.FieldName;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protobuf.AnyPacker.pack;
+import static io.spine.protobuf.Messages.isNotDefault;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
@@ -74,15 +75,40 @@ public final class SimpleRules {
                 .setFeature(pack(customFeature))
                 .build();
         Value other = Values.from(customFeature);
-        SimpleRule rule = SimpleRule
+        SimpleRule.Builder builder = SimpleRule
                 .newBuilder()
-                .setField(field)
                 .setCustomOperator(operator)
                 .setErrorMessage(errorMessage)
                 .setIgnoredIfUnset(true)
                 .setOtherValue(other)
-                .setDistribute(distribute)
-                .build();
-        return rule;
+                .setDistribute(distribute);
+        if (isNotDefault(field)) {
+            builder.setField(field);
+        }
+        return builder.build();
+    }
+
+    /**
+     * Creates a {@link SimpleRule} with a custom operator without an associated field.
+     *
+     * @param customFeature
+     *         the feature message describing the custom operator
+     * @param description
+     *         the human-readable text description of the feature
+     * @param errorMessage
+     *         the error message for the case of violation
+     * @return a new rule
+     */
+    public static SimpleRule withCustom(
+            Message customFeature,
+            String description,
+            String errorMessage,
+            boolean distribute
+    ) {
+        return withCustom(FieldName.getDefaultInstance(),
+                          customFeature,
+                          description,
+                          errorMessage,
+                          distribute);
     }
 }

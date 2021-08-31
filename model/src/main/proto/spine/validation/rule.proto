@@ -48,6 +48,9 @@ import "google/protobuf/any.proto";
 message SimpleRule {
 
     // The field which is being compared.
+    //
+    // If the operator is a custom one, the field might not be set.
+    //
     protodata.FieldName field = 1;
 
     oneof operator_kind {
@@ -91,6 +94,25 @@ message SimpleRule {
     // If the associated field is not a collection, the value is ignored.
     //
     bool distribute = 7;
+}
+
+// A message-wide validation rule.
+//
+// Typically, a rule only concerns itself with one field of a message. A message-wide rule defines
+// a validation constrains that is not local to one field, but applies to a number of
+// fields in a message.
+//
+message MessageWideRule {
+
+    // A custom operator, applied to the message.
+    CustomOperator operator = 1;
+
+    // A human-readable message explaining the error.
+    //
+    // This message is not format-able. When constructing a rule, the API users must make sure
+    // that the all required info is embedded in this message.
+    //
+    string error_message = 2;
 }
 
 // A predefined comparison operator.
@@ -141,6 +163,8 @@ message Rule {
         SimpleRule simple = 1;
 
         CompositeRule composite = 2;
+
+        MessageWideRule message_wide = 3;
     }
 }
 
