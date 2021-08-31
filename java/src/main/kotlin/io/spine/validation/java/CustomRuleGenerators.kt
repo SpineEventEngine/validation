@@ -169,6 +169,12 @@ private class PatternGenerator(
     }
 }
 
+/**
+ * A code generator for the `(is_required)` constraint.
+ *
+ * The constraint applies to a `oneof` group and enforces an alternative to be set. The generated
+ * code checks that the `oneof`'s case is one of the alternatives, i.e. not not-set.
+ */
 private class RequiredOneofGenerator(
     private val name: OneofName,
     ctx: GenerationContext
