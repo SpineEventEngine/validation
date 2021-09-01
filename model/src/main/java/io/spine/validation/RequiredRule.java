@@ -29,6 +29,7 @@ package io.spine.validation;
 import io.spine.protodata.Field;
 import io.spine.protodata.PrimitiveType;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static java.lang.String.format;
@@ -48,6 +49,7 @@ final class RequiredRule {
      * Creates a rule for the given field to be required.
      */
     static SimpleRule forField(Field field) {
+        checkNotNull(field);
         Value unsetValue = UnsetValue.forField(field)
                                      .orElseThrow(() -> doesNotSupportRequired(field));
         @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
