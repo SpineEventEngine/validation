@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package spine.validation.test;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "CafeProto";
+option java_multiple_files = true;
+
+message Lunch {
+
+    oneof soup {
+        option (is_required) = true;
+
+        string hot_soup = 1;
+        bool ramen = 2;
+    }
+}

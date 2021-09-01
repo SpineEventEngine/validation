@@ -48,12 +48,11 @@ import io.spine.validation.MapOfAnys
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the given mutable [violationsList].
  */
-fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock {
-    val field = ctx.fieldFromSimpleRule!!
-    val fieldValue = ctx.fieldOrElement!!
-    val type = field.declaringType
-    val violation = buildViolation(type, field, fieldValue, ignoreCardinality = ctx.isElement)
-    return addViolation(violation, ctx.violationsList)
+fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
+    val violation = buildViolation(
+        validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
+    )
+    return addViolation(violation, violationsList)
 }
 
 /**
@@ -68,11 +67,7 @@ fun ErrorMessage.createParentViolation(
     val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
     val violation = buildViolation(
-        type,
-        field,
-        fieldValue,
-        childViolations,
-        ignoreCardinality = ctx.isElement
+        type, field, fieldValue, childViolations, ignoreCardinality = ctx.isElement
     )
     return addViolation(violation, ctx.violationsList)
 }

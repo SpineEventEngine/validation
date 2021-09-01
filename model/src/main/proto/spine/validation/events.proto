@@ -53,3 +53,12 @@ message CompositeRuleAdded {
 
     CompositeRule rule = 2;
 }
+
+
+// The event emitted whenever a message-wide validation rule is attached to a type.
+message MessageWideRuleAdded {
+
+    protodata.TypeName type = 1;
+
+    MessageWideRule rule = 3;
+}

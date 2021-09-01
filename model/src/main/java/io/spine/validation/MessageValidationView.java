@@ -33,6 +33,7 @@ import io.spine.protodata.TypeEntered;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.View;
 import io.spine.validation.event.CompositeRuleAdded;
+import io.spine.validation.event.MessageWideRuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
 /**
@@ -54,16 +55,24 @@ final class MessageValidationView
     @Subscribe
     void on(SimpleRuleAdded event) {
         Rule rule = Rule.newBuilder()
-                        .setSimple(event.getRule())
-                        .buildPartial();
+                .setSimple(event.getRule())
+                .buildPartial();
         builder().addRule(rule);
     }
 
     @Subscribe
     void on(CompositeRuleAdded event) {
         Rule rule = Rule.newBuilder()
-                        .setComposite(event.getRule())
-                        .buildPartial();
+                .setComposite(event.getRule())
+                .buildPartial();
+        builder().addRule(rule);
+    }
+
+    @Subscribe
+    void on(MessageWideRuleAdded event) {
+        Rule rule = Rule.newBuilder()
+                .setMessageWide(event.getRule())
+                .buildPartial();
         builder().addRule(rule);
     }
 }

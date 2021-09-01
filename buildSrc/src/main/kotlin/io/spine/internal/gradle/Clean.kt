@@ -24,41 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.internal.gradle
 
-plugins {
-    id("io.spine.proto-data")
-}
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
-
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
-
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options("spine/options.proto", "spine/validation/test/money_options.proto")
-}
-
-modelCompiler {
-    java {
-        validation { skipValidation() }
+/**
+ * Cleans the folder and all of its content.
+ */
+fun cleanFolder(folder: File) {
+    if(!folder.exists()) {
+        return
     }
-}
-
-val spineBaseVersion: String by extra
-
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":runtime"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    Protobuf.libs.forEach { implementation(it) }
+    if(!folder.isDirectory) {
+        throw IllegalArgumentException("A folder to clean " +
+                "must be supplied: `${folder.absolutePath}`.")
+    }
+    Files.walk(folder.toPath())
+        .sorted(Comparator.reverseOrder())
+        .map(Path::toFile)
+        .forEach(File::delete);
 }

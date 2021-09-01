@@ -33,6 +33,7 @@ import io.spine.logging.Logging
 import io.spine.protodata.codegen.java.Expression
 import io.spine.validation.ErrorMessage
 import io.spine.validation.Rule.KindCase.COMPOSITE
+import io.spine.validation.Rule.KindCase.MESSAGE_WIDE
 import io.spine.validation.Rule.KindCase.SIMPLE
 
 /**
@@ -109,10 +110,10 @@ internal abstract class CodeGenerator(
 /**
  * Creates a code generator for a validation rule.
  */
-internal fun generatorFor(ctx: GenerationContext): CodeGenerator = with(ctx) {
-    when (rule.kindCase) {
-        SIMPLE -> generatorForSimple(this)
-        COMPOSITE -> CompositeRuleGenerator(this)
+internal fun generatorFor(ctx: GenerationContext): CodeGenerator =
+    when (ctx.rule.kindCase) {
+        SIMPLE -> generatorForSimple(ctx)
+        COMPOSITE -> CompositeRuleGenerator(ctx)
+        MESSAGE_WIDE -> generatorForCustom(ctx)
         else -> throw IllegalArgumentException("Empty rule.")
     }
-}

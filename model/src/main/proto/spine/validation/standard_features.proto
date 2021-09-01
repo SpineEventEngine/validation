@@ -76,3 +76,13 @@ message Regex {
     // Attributes of the regex.
     PatternOption.Modifier modifier = 2;
 }
+
+// The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
+//
+// Generated code must check the `oneof` case in order to avoid comparisons to default values for
+// types which do not support the `required` constraint, such as numerical types.
+//
+message RequiredOneof {
+
+    protodata.OneofName name = 1;
+}

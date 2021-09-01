@@ -30,7 +30,6 @@ import io.spine.core.External;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
-import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -38,11 +37,8 @@ import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.option.OptionsProto.required;
-import static io.spine.protodata.Ast.typeUrl;
-import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static io.spine.validation.Options.is;
 import static io.spine.validation.SourceFiles.findField;
-import static java.lang.String.format;
 
 /**
  * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
@@ -65,34 +61,11 @@ final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
     }
 
     private static SimpleRuleAdded requiredRule(Field field) {
-        Value unsetValue = UnsetValue.forField(field)
-                                     .orElseThrow(() -> doesNotSupportRequired(field));
-        @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
-            // Duplication in generated code.
-        SimpleRule rule = SimpleRule
-                .newBuilder()
-                .setErrorMessage("Field must be set.")
-                .setField(field.getName())
-                .setOperator(NOT_EQUAL)
-                .setOtherValue(unsetValue)
-                .setDistribute(false)
-                .vBuild();
+        SimpleRule rule = RequiredRule.forField(field);
         return SimpleRuleAdded
                 .newBuilder()
                 .setType(field.getDeclaringType())
                 .setRule(rule)
                 .vBuild();
-    }
-
-    private static IllegalStateException doesNotSupportRequired(Field field) {
-        String fieldName = field.getName()
-                                .getValue();
-        String typeUrl = typeUrl(field.getDeclaringType());
-        PrimitiveType type = field.getType()
-                                  .getPrimitive();
-        return new IllegalStateException(format(
-                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
-                typeUrl, fieldName, type
-        ));
     }
 }

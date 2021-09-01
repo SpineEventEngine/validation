@@ -48,7 +48,8 @@ public class ValidationPlugin implements Plugin {
                 new MaxPolicy(),
                 new DistinctPolicy(),
                 new ValidatePolicy(),
-                new PatternPolicy()
+                new PatternPolicy(),
+                new IsRequiredPolicy()
         );
     }
 
