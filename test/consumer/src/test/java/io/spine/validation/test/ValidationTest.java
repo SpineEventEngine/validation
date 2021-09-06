@@ -135,7 +135,7 @@ class ValidationTest {
         @DisplayName("pass if not required")
         void passIfNotRequired() {
             Book.Builder builder = Book.newBuilder()
-                    .setAuthor(Author.newBuilder().setName("Beck"));
+                    .setAuthor(validAuthor());
             assertNoException(builder);
         }
     }
@@ -197,6 +197,7 @@ class ValidationTest {
         void partial() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("Something Something Pride Something Something");
             assertNoException(msg);
         }
@@ -206,6 +207,7 @@ class ValidationTest {
         void caseInsensitive() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("preJudice");
             assertNoException(msg);
         }
@@ -215,8 +217,11 @@ class ValidationTest {
         void failWithLoose() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("something else");
-            assertValidationException(msg);
+            ConstraintViolation violation = assertValidationException(msg);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("content");
         }
     }
 
@@ -313,5 +318,12 @@ class ValidationTest {
         Object result = builder.build();
         assertThat(result)
                 .isNotNull();
+    }
+
+    private static Author validAuthor() {
+        return Author
+                .newBuilder()
+                .setName("Vernon")
+                .build();
     }
 }
