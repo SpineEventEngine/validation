@@ -30,6 +30,9 @@ import com.google.protobuf.Descriptors.Descriptor;
 
 import static io.spine.option.OptionsProto.defaultMessage;
 
+/**
+ * A factory of validation error messages.
+ */
 final class DefaultErrorMessage {
 
     /**
@@ -38,6 +41,12 @@ final class DefaultErrorMessage {
     private DefaultErrorMessage() {
     }
 
+    /**
+     * Obtains the validation error message from the given option descriptor.
+     *
+     * <p>The descriptor should be marked with the {@code (default_message)} option. If the option
+     * is absent, an empty message is returned.
+     */
     static String from(Descriptor optionDescriptor) {
         return optionDescriptor
                 .getOptions()
