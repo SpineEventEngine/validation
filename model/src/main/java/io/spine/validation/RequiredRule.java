@@ -48,7 +48,7 @@ final class RequiredRule {
     /**
      * Creates a rule for the given field to be required.
      */
-    static SimpleRule forField(Field field) {
+    static SimpleRule forField(Field field, String errorMessage) {
         checkNotNull(field);
         Value unsetValue = UnsetValue.forField(field)
                                      .orElseThrow(() -> doesNotSupportRequired(field));
@@ -56,7 +56,7 @@ final class RequiredRule {
         // Duplication in generated code.
         SimpleRule rule = SimpleRule
                 .newBuilder()
-                .setErrorMessage("Field must be set.")
+                .setErrorMessage(errorMessage)
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
                 .setOtherValue(unsetValue)
