@@ -46,13 +46,15 @@ import static io.spine.validation.SourceFiles.findField;
  * the value is {@code true}, and the field type supports such validation, a validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
-final class RequiredRulePolicy extends Policy<FieldExited> {
+final class RequiredPolicy extends Policy<FieldExited> {
 
     @Override
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
         FieldId id = FieldId
                 .newBuilder()
+                .setName(event.getField())
+                .setType(event.getType())
                 .build();
         Optional<RequiredField> field = select(RequiredField.class)
                 .withId(id);

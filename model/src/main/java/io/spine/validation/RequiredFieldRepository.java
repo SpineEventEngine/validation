@@ -26,41 +26,23 @@
 
 package io.spine.validation;
 
-import com.google.protobuf.BoolValue;
-import io.spine.core.External;
-import io.spine.core.Subscribe;
-import io.spine.core.Where;
-import io.spine.option.IfMissingOption;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.plugin.View;
+import io.spine.protodata.plugin.ViewRepository;
+import io.spine.server.route.EventRouting;
 
-import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.server.route.EventRoute.withId;
 
-/**
- * A view of a field that is marked as {@code required}.
- */
-final class RequiredFieldView extends View<FieldId, RequiredField, RequiredField.Builder> {
+final class RequiredFieldRepository
+        extends ViewRepository<FieldId, RequiredFieldView, RequiredField> {
 
-    private static final String DEFAULT_ERROR_MESSAGE =
-            DefaultErrorMessage.from(IfMissingOption.getDescriptor());
-
-    @Subscribe
-    void onConstraint(
-            @External @Where(field = "option.name", equals = "required") FieldOptionDiscovered e
-    ) {
-        builder().setErrorMessage(DEFAULT_ERROR_MESSAGE);
-        boolean value = unpack(e.getOption().getValue(), BoolValue.class).getValue();
-        if (value) {
-            builder().setRequired(true);
-        }
-    }
-
-    @Subscribe
-    void onErrorMessage(
-            @External @Where(field = "option.name", equals = "if_missing") FieldOptionDiscovered e
-    ) {
-        IfMissingOption value = unpack(e.getOption().getValue(), IfMissingOption.class);
-        String errorMessage = value.getMsgFormat();
-        builder().setErrorMessage(errorMessage);
+    @Override
+    protected void setupEventRouting(EventRouting<FieldId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(FieldOptionDiscovered.class, (e, c) -> withId(
+                FieldId.newBuilder()
+                        .setType(e.getType())
+                        .setName(e.getField())
+                        .build()
+        ));
     }
 }
