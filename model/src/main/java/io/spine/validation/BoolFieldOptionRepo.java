@@ -33,6 +33,9 @@ import io.spine.server.route.EventRouting;
 
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * A repository for a view on a field marked with a boolean validation option.
+ */
 abstract class BoolFieldOptionRepo<
         V extends BoolFieldOptionView<FieldId, S, ?>,
         S extends EntityState<FieldId>>

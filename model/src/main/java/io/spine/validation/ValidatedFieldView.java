@@ -37,7 +37,7 @@ import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
- * A view of a field that is marked as {@code required}.
+ * A view of a field that is marked with {@code validate}.
  */
 final class ValidatedFieldView
         extends BoolFieldOptionView<FieldId, ValidatedField, ValidatedField.Builder> {

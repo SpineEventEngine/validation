@@ -38,6 +38,9 @@ import io.spine.validate.ValidatingBuilder;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 
+/**
+ * A view on a field marked with a boolean validation option.
+ */
 abstract class BoolFieldOptionView<
         I extends FieldId,
         S extends EntityState<I>,
@@ -46,7 +49,7 @@ abstract class BoolFieldOptionView<
 
     private final String defaultMessage;
 
-    protected BoolFieldOptionView(Descriptor optionDescriptor) {
+    BoolFieldOptionView(Descriptor optionDescriptor) {
         this.defaultMessage = DefaultErrorMessage.from(optionDescriptor);
     }
 
@@ -60,8 +63,14 @@ abstract class BoolFieldOptionView<
         }
     }
 
+    /**
+     * Saves the given error message into the view.
+     */
     protected abstract void errorMessage(String errorMessage);
 
+    /**
+     * Enables the validation associated with the option.
+     */
     protected abstract void enableValidation();
 
     @ContractFor(handler = Subscribe.class)
@@ -70,5 +79,11 @@ abstract class BoolFieldOptionView<
         errorMessage(message);
     }
 
+    /**
+     * Attempts to extract a custom error message from the given option.
+     *
+     * @throws io.spine.type.UnexpectedTypeException
+     *         if the option value is of an unexpected type
+     */
     protected abstract String extractErrorMessage(Option option);
 }
