@@ -34,7 +34,7 @@ import io.spine.option.MinOption
 import io.spine.option.OptionsProto.max
 import io.spine.option.OptionsProto.min
 import io.spine.option.OptionsProto.range
-import io.spine.protobuf.AnyPacker
+import io.spine.protobuf.unpack
 import io.spine.protodata.FieldName
 import io.spine.protodata.Option
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -53,8 +53,11 @@ private constructor(
     private val upperBound: Value? = null,
     private val lowerBound: Value? = null,
     private val uppedInclusive: Boolean = false,
-    private val lowerInclusive: Boolean = false
+    private val lowerInclusive: Boolean = false,
+    customErrorMessage: String? = null
 ) {
+
+    private val customErrorMessage: String? = customErrorMessage?.ifEmpty { null }
 
     /**
      * Creates a [SimpleRule] which states that the value must be greater than a threshold.
@@ -84,10 +87,13 @@ private constructor(
             .setDistribute(true)
             .build()
 
-    private fun compileErrorMessage(adjective: String, inclusive: Boolean): String {
-        val orEqual = if (inclusive) "or equal to " else ""
-        return "The number must be $adjective than $orEqual{other}, but was {value}."
-    }
+    private fun compileErrorMessage(adjective: String, inclusive: Boolean): String =
+        if (customErrorMessage != null) {
+            customErrorMessage
+        } else {
+            val orEqual = if (inclusive) "or equal to " else ""
+            "The number must be $adjective than $orEqual{other}, but was {value}."
+        }
 
     /**
      * Creates a [CompositeRule] which states that the value must lie within a range.
@@ -152,7 +158,8 @@ private constructor(
             val threshold = optionValue.value.parseToNumber()
             return NumberRules(
                 upperBound = threshold,
-                uppedInclusive = !optionValue.exclusive
+                uppedInclusive = !optionValue.exclusive,
+                customErrorMessage = optionValue.msgFormat
             )
         }
 
@@ -161,7 +168,8 @@ private constructor(
             val threshold = optionValue.value.parseToNumber()
             return NumberRules(
                 lowerBound = threshold,
-                lowerInclusive = !optionValue.exclusive
+                lowerInclusive = !optionValue.exclusive,
+                customErrorMessage = optionValue.msgFormat
             )
         }
 
@@ -181,5 +189,4 @@ private constructor(
 /**
  * Unpacks the value of this option into a message of the given type `T`.
  */
-private inline fun <reified T : Message> Option.value() =
-    AnyPacker.unpack(value, T::class.java)
+private inline fun <reified T : Message> Option.value() = value.unpack<T>()
