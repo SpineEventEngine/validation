@@ -26,40 +26,7 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.plugin.Policy;
-import io.spine.protodata.plugin.ViewRepository;
-import org.jetbrains.annotations.NotNull;
+final class ValidatedFieldRepository
+        extends BoolFieldOptionRepo<ValidatedFieldView, ValidatedField> {
 
-/**
- * A ProtoData plugin which attaches validation-related policies and views.
- */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public class ValidationPlugin implements Plugin {
-
-    @NotNull
-    @Override
-    public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(
-                new RequiredPolicy(),
-                new RangePolicy(),
-                new MinPolicy(),
-                new MaxPolicy(),
-                new DistinctPolicy(),
-                new ValidatePolicy(),
-                new PatternPolicy(),
-                new IsRequiredPolicy()
-        );
-    }
-
-    @NotNull
-    @Override
-    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(
-                new MessageValidationRepository(),
-                new RequiredFieldRepository(),
-                new ValidatedFieldRepository()
-        );
-    }
 }

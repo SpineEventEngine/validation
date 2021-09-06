@@ -26,56 +26,49 @@
 
 package io.spine.validation;
 
-import io.spine.core.External;
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.Descriptors.Descriptor;
+import io.spine.base.EntityState;
+import io.spine.core.ContractFor;
 import io.spine.core.Subscribe;
-import io.spine.core.Where;
-import io.spine.option.IfMissingOption;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
+import io.spine.protodata.plugin.View;
+import io.spine.validate.ValidatingBuilder;
 
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
-/**
- * A view of a field that is marked as {@code required}.
- */
-final class RequiredFieldView
-        extends BoolFieldOptionView<FieldId, RequiredField, RequiredField.Builder> {
+abstract class BoolFieldOptionView<
+        I extends FieldId,
+        S extends EntityState<I>,
+        B extends ValidatingBuilder<S>>
+        extends View<I, S, B> {
 
-    RequiredFieldView() {
-        super(IfMissingOption.getDescriptor());
+    private final String defaultMessage;
+
+    protected BoolFieldOptionView(Descriptor optionDescriptor) {
+        this.defaultMessage = DefaultErrorMessage.from(optionDescriptor);
     }
 
-    @Override
-    @Subscribe
-    void onConstraint(
-            @External @Where(field = OPTION_NAME, equals = "required") FieldOptionDiscovered e
-    ) {
-        super.onConstraint(e);
+    @ContractFor(handler = Subscribe.class)
+    void onConstraint(FieldOptionDiscovered e) {
+        errorMessage(defaultMessage);
+        boolean value = unpack(e.getOption()
+                                .getValue(), BoolValue.class).getValue();
+        if (value) {
+            enableValidation();
+        }
     }
 
-    @Override
-    protected void errorMessage(String errorMessage) {
-        builder().setErrorMessage(errorMessage);
+    protected abstract void errorMessage(String errorMessage);
+
+    protected abstract void enableValidation();
+
+    @ContractFor(handler = Subscribe.class)
+    void onErrorMessage(FieldOptionDiscovered e) {
+        String message = extractErrorMessage(e.getOption());
+        errorMessage(message);
     }
 
-    @Override
-    protected void enableValidation() {
-        builder().setRequired(true);
-    }
-
-    @Override
-    @Subscribe
-    void onErrorMessage(
-            @External @Where(field = OPTION_NAME, equals = "if_missing") FieldOptionDiscovered e
-    ) {
-        super.onErrorMessage(e);
-    }
-
-    @Override
-    protected String extractErrorMessage(Option option) {
-        IfMissingOption value = unpack(option.getValue(), IfMissingOption.class);
-        String errorMessage = value.getMsgFormat();
-        return errorMessage;
-    }
+    protected abstract String extractErrorMessage(Option option);
 }

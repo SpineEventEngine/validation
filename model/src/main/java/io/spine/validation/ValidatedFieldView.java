@@ -29,7 +29,7 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.core.Subscribe;
 import io.spine.core.Where;
-import io.spine.option.IfMissingOption;
+import io.spine.option.IfInvalidOption;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
 
@@ -39,17 +39,17 @@ import static io.spine.validation.EventFieldNames.OPTION_NAME;
 /**
  * A view of a field that is marked as {@code required}.
  */
-final class RequiredFieldView
-        extends BoolFieldOptionView<FieldId, RequiredField, RequiredField.Builder> {
+final class ValidatedFieldView
+        extends BoolFieldOptionView<FieldId, ValidatedField, ValidatedField.Builder> {
 
-    RequiredFieldView() {
-        super(IfMissingOption.getDescriptor());
+    ValidatedFieldView() {
+        super(IfInvalidOption.getDescriptor());
     }
 
     @Override
     @Subscribe
     void onConstraint(
-            @External @Where(field = OPTION_NAME, equals = "required") FieldOptionDiscovered e
+            @External @Where(field = OPTION_NAME, equals = "validate") FieldOptionDiscovered e
     ) {
         super.onConstraint(e);
     }
@@ -61,20 +61,20 @@ final class RequiredFieldView
 
     @Override
     protected void enableValidation() {
-        builder().setRequired(true);
+        builder().setValidate(true);
     }
 
     @Override
     @Subscribe
     void onErrorMessage(
-            @External @Where(field = OPTION_NAME, equals = "if_missing") FieldOptionDiscovered e
+            @External @Where(field = OPTION_NAME, equals = "if_invalid") FieldOptionDiscovered e
     ) {
         super.onErrorMessage(e);
     }
 
     @Override
     protected String extractErrorMessage(Option option) {
-        IfMissingOption value = unpack(option.getValue(), IfMissingOption.class);
+        IfInvalidOption value = unpack(option.getValue(), IfInvalidOption.class);
         String errorMessage = value.getMsgFormat();
         return errorMessage;
     }

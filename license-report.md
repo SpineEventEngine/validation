@@ -658,12 +658,13 @@
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:29 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:15 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1305,12 +1306,13 @@ This report was generated on **Mon Sep 06 15:09:29 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:37 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:23 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1889,12 +1891,13 @@ This report was generated on **Mon Sep 06 15:09:37 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:43 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:29 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2541,12 +2544,13 @@ This report was generated on **Mon Sep 06 15:09:43 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:44 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:30 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3218,12 +3222,13 @@ This report was generated on **Mon Sep 06 15:09:44 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:54 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:40 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3886,9 +3891,10 @@ This report was generated on **Mon Sep 06 15:09:54 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-    
-        
- The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
+The dependencies distributed under several licenses, are used according their
+commercial-use-friendly license.
 
-
-This report was generated on **Mon Sep 06 15:09:55 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Sep 06 15:52:41 EEST 2021**
+using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
+Naumenko, licensed
+under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

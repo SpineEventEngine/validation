@@ -26,40 +26,26 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.plugin.Policy;
+import io.spine.base.EntityState;
+import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.plugin.ViewRepository;
-import org.jetbrains.annotations.NotNull;
+import io.spine.server.route.EventRouting;
 
-/**
- * A ProtoData plugin which attaches validation-related policies and views.
- */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public class ValidationPlugin implements Plugin {
+import static io.spine.server.route.EventRoute.withId;
 
-    @NotNull
+abstract class BoolFieldOptionRepo<
+        V extends BoolFieldOptionView<FieldId, S, ?>,
+        S extends EntityState<FieldId>>
+        extends ViewRepository<FieldId, V, S> {
+
     @Override
-    public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(
-                new RequiredPolicy(),
-                new RangePolicy(),
-                new MinPolicy(),
-                new MaxPolicy(),
-                new DistinctPolicy(),
-                new ValidatePolicy(),
-                new PatternPolicy(),
-                new IsRequiredPolicy()
-        );
-    }
-
-    @NotNull
-    @Override
-    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(
-                new MessageValidationRepository(),
-                new RequiredFieldRepository(),
-                new ValidatedFieldRepository()
-        );
+    protected void setupEventRouting(EventRouting<FieldId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(FieldOptionDiscovered.class, (e, c) -> withId(
+                FieldId.newBuilder()
+                        .setType(e.getType())
+                        .setName(e.getField())
+                        .build()
+        ));
     }
 }

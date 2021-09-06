@@ -279,7 +279,7 @@ class ValidationTest {
         private void checkInvalid(Message.Builder builder) {
             ConstraintViolation violation = assertValidationException(builder);
             assertThat(violation.getMsgFormat())
-                    .contains("must be valid");
+                    .contains("message must have valid properties");
             assertThat(violation.getViolationList())
                     .hasSize(1);
         }

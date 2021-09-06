@@ -26,23 +26,7 @@
 
 package io.spine.validation;
 
-import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.plugin.ViewRepository;
-import io.spine.server.route.EventRouting;
-
-import static io.spine.server.route.EventRoute.withId;
-
 final class RequiredFieldRepository
-        extends ViewRepository<FieldId, RequiredFieldView, RequiredField> {
+        extends BoolFieldOptionRepo<RequiredFieldView, RequiredField> {
 
-    @Override
-    protected void setupEventRouting(EventRouting<FieldId> routing) {
-        super.setupEventRouting(routing);
-        routing.route(FieldOptionDiscovered.class, (e, c) -> withId(
-                FieldId.newBuilder()
-                        .setType(e.getType())
-                        .setName(e.getField())
-                        .build()
-        ));
-    }
 }
