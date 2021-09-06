@@ -65,8 +65,11 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String error = format("The string must match the regular expression `%s`.",
-                              slashEscaper.escape(regex));
+        String customError = optionValue.getMsgFormat();
+        String error = customError.isEmpty()
+                       ? format("The string must match the regular expression `%s`.",
+                                slashEscaper.escape(regex))
+                       : customError;
         SimpleRule rule = SimpleRules.withCustom(
                 event.getField(),
                 feature,
