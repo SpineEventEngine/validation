@@ -31,5 +31,4 @@ package io.spine.validation;
  */
 final class ValidatedFieldRepository
         extends BoolFieldOptionRepo<ValidatedFieldView, ValidatedField> {
-
 }
