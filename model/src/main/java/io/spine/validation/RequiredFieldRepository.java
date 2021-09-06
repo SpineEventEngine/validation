@@ -26,7 +26,9 @@
 
 package io.spine.validation;
 
+/**
+ * A repository for the {@link RequiredFieldView}s.
+ */
 final class RequiredFieldRepository
         extends BoolFieldOptionRepo<RequiredFieldView, RequiredField> {
-
 }
