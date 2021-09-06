@@ -12,7 +12,11 @@ option java_multiple_files = true;
 // A human-readable time without a time zone.
 message LocalTime {
 
-    int32 hours = 1 [(max).value = "23", (min).value = "0"];
+    int32 hours = 1 [
+        (min).value = "0",
+        (min).msg_format = "Time cannot be negative.",
+        (max).value = "23"
+    ];
 
     int32 minutes = 2 [(range) = "[0..60)"];
 

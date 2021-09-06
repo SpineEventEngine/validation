@@ -26,7 +26,11 @@ message RainDrop {
 
 message Rain {
 
-    repeated RainDrop rain_drop = 1 [(required) = true, (validate) = true];
+    repeated RainDrop rain_drop = 1 [
+        (required) = true,
+        (validate) = true,
+        (if_invalid).msg_format = "Bad rain drop!"
+    ];
 }
 
 message MeteoStatistics {

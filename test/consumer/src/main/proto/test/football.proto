@@ -10,7 +10,10 @@ option java_multiple_files = true;
 
 message Player {
 
-    string shirt_name = 1 [(pattern).regex = "[\\w\\-.\\s]{2,}"];
+    string shirt_name = 1 [(pattern) = {
+        regex: "[\\w\\-.\\s]{2,}"
+        msg_format: "Invalid T-Shirt name."
+    }];
 }
 
 message Team {

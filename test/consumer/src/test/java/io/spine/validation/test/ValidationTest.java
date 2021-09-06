@@ -80,8 +80,12 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is less than the threshold")
         void throwOnMore() {
-            assertValidationException(LocalTime.newBuilder()
-                    .setMinutes(-1));
+            ConstraintViolation violation = assertValidationException(
+                    LocalTime.newBuilder()
+                            .setHours(-1)
+            );
+            assertThat(violation.getMsgFormat())
+                    .contains("cannot be negative");
         }
 
         @Test
@@ -189,7 +193,9 @@ class ValidationTest {
             Player.Builder player = Player
                     .newBuilder()
                     .setShirtName("R");
-            assertValidationException(player);
+            ConstraintViolation violation = assertValidationException(player);
+            assertThat(violation.getMsgFormat())
+                    .contains("Invalid T-Shirt name");
         }
 
         @Test
@@ -247,9 +253,24 @@ class ValidationTest {
             void fail() {
                 MeteoStatistics.Builder builder = MeteoStatistics
                         .newBuilder()
-                        .setAverageDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
+                        .setAverageDrop(RainDrop.newBuilder()
+                                                .setMassInGrams(-1)
+                                                .buildPartial());
                 checkInvalid(builder);
             }
+        }
+
+        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+        private void checkInvalid(Message.Builder builder) {
+            checkInvalid(builder, "message must have valid properties");
+        }
+
+        private void checkInvalid(Message.Builder builder, String errorPart) {
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains(errorPart);
+            assertThat(violation.getViolationList())
+                    .hasSize(1);
         }
 
         @Nested
@@ -271,17 +292,8 @@ class ValidationTest {
                 Rain.Builder builder = Rain
                         .newBuilder()
                         .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
-                checkInvalid(builder);
+                checkInvalid(builder, "Bad rain drop");
             }
-        }
-
-        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-        private void checkInvalid(Message.Builder builder) {
-            ConstraintViolation violation = assertValidationException(builder);
-            assertThat(violation.getMsgFormat())
-                    .contains("message must have valid properties");
-            assertThat(violation.getViolationList())
-                    .hasSize(1);
         }
     }
 
