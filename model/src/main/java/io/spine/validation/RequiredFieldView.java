@@ -35,6 +35,7 @@ import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.plugin.View;
 
 import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
  * A view of a field that is marked as {@code required}.
@@ -46,7 +47,7 @@ final class RequiredFieldView extends View<FieldId, RequiredField, RequiredField
 
     @Subscribe
     void onConstraint(
-            @External @Where(field = "option.name", equals = "required") FieldOptionDiscovered e
+            @External @Where(field = OPTION_NAME, equals = "required") FieldOptionDiscovered e
     ) {
         builder().setErrorMessage(DEFAULT_ERROR_MESSAGE);
         boolean value = unpack(e.getOption().getValue(), BoolValue.class).getValue();
@@ -57,7 +58,7 @@ final class RequiredFieldView extends View<FieldId, RequiredField, RequiredField
 
     @Subscribe
     void onErrorMessage(
-            @External @Where(field = "option.name", equals = "if_missing") FieldOptionDiscovered e
+            @External @Where(field = OPTION_NAME, equals = "if_missing") FieldOptionDiscovered e
     ) {
         IfMissingOption value = unpack(e.getOption().getValue(), IfMissingOption.class);
         String errorMessage = value.getMsgFormat();

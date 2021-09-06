@@ -39,6 +39,7 @@ import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
 import io.spine.server.route.EventRoute.withId
 import io.spine.server.route.EventRouting
+import io.spine.validation.OPTION_NAME
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyType
 
@@ -48,7 +49,7 @@ import io.spine.validation.test.money.CurrencyType
 class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
     @Subscribe
-    internal fun on(@External @Where(field = "option.name", equals = "currency")
+    internal fun on(@External @Where(field = OPTION_NAME, equals = "currency")
                     event: TypeOptionDiscovered) = alter {
         val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
         this.currency = currency

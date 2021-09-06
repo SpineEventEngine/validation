@@ -26,6 +26,7 @@
 
 package io.spine.validation
 
+import com.google.protobuf.GeneratedMessage
 import com.google.protobuf.Message
 import com.google.protobuf.StringValue
 import io.spine.option.MaxOption
@@ -142,6 +143,9 @@ private constructor(
                 )
             }
         }
+
+        private  fun Option.`is`(generated: GeneratedMessage.GeneratedExtension<*, *>) =
+            name == generated.descriptor.name && number == generated.number
 
         private fun forMax(option: Option): NumberRules {
             val optionValue = option.value<MaxOption>()
