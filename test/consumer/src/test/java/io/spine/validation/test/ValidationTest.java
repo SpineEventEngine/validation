@@ -100,6 +100,47 @@ class ValidationTest {
     }
 
     @Nested
+    @DisplayName("reflect a `(required)` rule and")
+    class Required {
+
+        @Test
+        @DisplayName("check string field")
+        void throwForString() {
+            Author.Builder builder = Author.newBuilder();
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains("Author must have a name");
+        }
+
+        @Test
+        @DisplayName("check message field")
+        void throwForMessage() {
+            Book.Builder builder = Book.newBuilder();
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains("value must be set");
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("author");
+        }
+
+        @Test
+        @DisplayName("pass if a value is set")
+        void passIfSet() {
+            Author.Builder builder = Author.newBuilder()
+                    .setName("Evans");
+            assertNoException(builder);
+        }
+
+        @Test
+        @DisplayName("pass if not required")
+        void passIfNotRequired() {
+            Book.Builder builder = Book.newBuilder()
+                    .setAuthor(Author.newBuilder().setName("Beck"));
+            assertNoException(builder);
+        }
+    }
+
+    @Nested
     @DisplayName("reflect a `(distinct)` rule and")
     class DistinctFeature {
 
@@ -161,7 +202,7 @@ class ValidationTest {
         }
 
         @Test
-        @DisplayName("and allow to ignore case")
+        @DisplayName("and allow ignoring case")
         void caseInsensitive() {
             Book.Builder msg = Book
                     .newBuilder()
