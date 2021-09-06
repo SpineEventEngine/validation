@@ -81,11 +81,20 @@ public final class UnsetValue {
                                         .vBuild());
             default:
                 Type type = field.getType();
-                return defaultValue(type);
+                return singular(type);
         }
     }
 
-    private static Optional<Value> defaultValue(Type type) {
+    /**
+     * Obtains the default value for type of the given field.
+     *
+     * <p>Behaves in a similar way to {@link #forField(Field)}, but never returns an empty list or
+     * an empty map.
+     *
+     * @return a {@link Value} with the field's default value or {@code Optional.empty()} if
+     *         the field does not have an easily distinguished not-set value
+     */
+    public static Optional<Value> singular(Type type) {
         KindCase kind = type.getKindCase();
         switch (kind) {
             case MESSAGE:

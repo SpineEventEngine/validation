@@ -83,7 +83,14 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 
     override fun code(): CodeBlock {
         val check = super.code()
-        val defaultValue = UnsetValue.forField(ctx.fieldFromSimpleRule!!)
+        val defaultValue = with(ctx) {
+            val field = fieldFromSimpleRule!!
+            if (isElement) {
+                UnsetValue.singular(field.type)
+            } else {
+                UnsetValue.forField(field)
+            }
+        }
         if (!ignoreIfNotSet || !defaultValue.isPresent) {
             return check
         }
