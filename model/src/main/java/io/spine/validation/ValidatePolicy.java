@@ -59,8 +59,7 @@ final class ValidatePolicy extends Policy<FieldExited> {
     @Override
     @React
     public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
-        FieldId id = FieldId
-                .newBuilder()
+        FieldId id = FieldId.newBuilder()
                 .setName(event.getField())
                 .setType(event.getType())
                 .build();
@@ -79,12 +78,12 @@ final class ValidatePolicy extends Policy<FieldExited> {
                     field.get()
                          .getErrorMessage(),
                     true);
-            return EitherOf2.withA(SimpleRuleAdded
-                                           .newBuilder()
-                                           .setType(event.getType())
-                                           .setRule(rule)
-                                           .build());
-
+            return EitherOf2.withA(
+                    SimpleRuleAdded.newBuilder()
+                            .setType(event.getType())
+                            .setRule(rule)
+                            .build()
+            );
         }
         return EitherOf2.withB(nothing());
     }
@@ -96,7 +95,8 @@ final class ValidatePolicy extends Policy<FieldExited> {
                     "Field `%s.%s` is not a message field and, " +
                             "therefore, should not be marked with `validate`.",
                     qualifiedName(typeName),
-                    fieldName.getValue());
+                    fieldName.getValue()
+            );
         }
     }
 }
