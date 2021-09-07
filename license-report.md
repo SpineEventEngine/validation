@@ -644,46 +644,40 @@
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:06 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
+This report was generated on **Tue Sep 07 14:26:27 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+
+
+    
 # Dependencies of `io.spine.validation:model:2.0.0-SNAPSHOT.6`
 
 ## Runtime
-
-1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license
-   information found**
+1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license information found**
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.12.4
-   * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.12.4
-   * **Project
-     URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1297,44 +1291,39 @@ under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/mas
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:14 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
+This report was generated on **Tue Sep 07 14:26:36 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+
+
+    
 # Dependencies of `io.spine.validation:runtime:2.0.0-SNAPSHOT.6`
 
 ## Runtime
-
 1. **Group:** com.google.code.findbugs **Name:** jsr305 **Version:** 3.0.2
-   * **POM Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.code.gson **Name:** gson **Version:** 2.8.6
-   * **POM License: Apache 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.google.errorprone **Name:** error_prone_annotations **Version:** 2.8.0
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1886,46 +1875,40 @@ under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/mas
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:20 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
+This report was generated on **Tue Sep 07 14:26:42 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+
+
+    
 # Dependencies of `io.spine.validation:runtime-extensions:2.0.0-SNAPSHOT.6`
 
 ## Runtime
-
-1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license
-   information found**
+1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license information found**
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.12.4
-   * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.12.4
-   * **Project
-     URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2544,46 +2527,40 @@ under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/mas
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:21 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
+This report was generated on **Tue Sep 07 14:26:43 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+
+
+    
 # Dependencies of `io.spine.validation:test-consumer:2.0.0-SNAPSHOT.6`
 
 ## Runtime
-
-1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license
-   information found**
+1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license information found**
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.12.4
-   * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.12.4
-   * **Project
-     URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3227,46 +3204,40 @@ under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/mas
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:31 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
+This report was generated on **Tue Sep 07 14:26:55 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+
+
+    
 # Dependencies of `io.spine.validation:test-extensions:2.0.0-SNAPSHOT.6`
 
 ## Runtime
-
-1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license
-   information found**
+1. **Group:** com.fasterxml.jackson **Name:** jackson-bom **Version:** 2.12.4 **No license information found**
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-annotations **Version:** 2.12.4
-   * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Project URL:** [http://github.com/FasterXML/jackson](http://github.com/FasterXML/jackson)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** com.fasterxml.jackson.core **Name:** jackson-core **Version:** 2.12.4
-   * **Project
-     URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
+     * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3901,28 +3872,23 @@ under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/mas
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.ow2.asm **Name:** asm **Version:** 9.1
-   * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
-   * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
-   * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
-   * **POM License: BSD-3-Clause**
-     - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
-   * **POM License: The Apache Software License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **Manifest Project URL:** [http://asm.ow2.org](http://asm.ow2.org)
+     * **Manifest License:** BSD-3-Clause;link=https://asm.ow2.io/LICENSE.txt (Not packaged)
+     * **POM Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **POM License: BSD-3-Clause** - [https://asm.ow2.io/license.html](https://asm.ow2.io/license.html)
+     * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** org.pcollections **Name:** pcollections **Version:** 2.1.2
-   * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
-   * **POM License: The MIT License**
-     - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
+     * **POM Project URL:** [http://pcollections.org](http://pcollections.org)
+     * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 1. **Group:** org.yaml **Name:** snakeyaml **Version:** 1.27
-   * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
-   * **POM License: Apache License, Version 2.0**
-     - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **POM Project URL:** [http://www.snakeyaml.org](http://www.snakeyaml.org)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-The dependencies distributed under several licenses, are used according their
-commercial-use-friendly license.
+    
+        
+ The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Sep 06 16:34:32 EEST 2021**
-using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny
-Naumenko, licensed
-under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+
+This report was generated on **Tue Sep 07 14:26:56 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
