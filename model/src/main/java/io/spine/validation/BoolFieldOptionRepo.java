@@ -31,8 +31,6 @@ import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.plugin.ViewRepository;
 import io.spine.server.route.EventRouting;
 
-import static io.spine.server.route.EventRoute.withId;
-
 /**
  * A repository for a view on a field marked with a boolean validation option.
  */
@@ -44,11 +42,11 @@ abstract class BoolFieldOptionRepo<
     @Override
     protected void setupEventRouting(EventRouting<FieldId> routing) {
         super.setupEventRouting(routing);
-        routing.route(FieldOptionDiscovered.class, (e, c) -> withId(
-                FieldId.newBuilder()
-                        .setType(e.getType())
-                        .setName(e.getField())
-                        .build()
-        ));
+        routing.unicast(FieldOptionDiscovered.class,
+                        (e, c) -> FieldId.newBuilder()
+                                .setType(e.getType())
+                                .setName(e.getField())
+                                .build()
+        );
     }
 }

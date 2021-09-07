@@ -37,7 +37,6 @@ import io.spine.protodata.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
-import io.spine.server.route.EventRoute.withId
 import io.spine.server.route.EventRouting
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.test.money.Currency
@@ -76,9 +75,9 @@ class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
         override fun setupEventRouting(routing: EventRouting<TypeName>) {
             super.setupEventRouting(routing)
-            routing.route(TypeOptionDiscovered::class.java) { e, _ -> withId(e.type) }
-            routing.route(FieldEntered::class.java) { e, _ -> withId(e.type) }
-            routing.route(TypeExited::class.java) { e, _ -> withId(e.type) }
+            routing.unicast(TypeOptionDiscovered::class.java) { e, _ -> e.type }
+            routing.unicast(FieldEntered::class.java) { e, _ -> e.type }
+            routing.unicast(TypeExited::class.java) { e, _ -> e.type }
         }
     }
 }

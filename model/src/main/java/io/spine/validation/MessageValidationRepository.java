@@ -32,8 +32,6 @@ import io.spine.protodata.plugin.ViewRepository;
 import io.spine.server.route.EventRouting;
 import org.jetbrains.annotations.NotNull;
 
-import static io.spine.server.route.EventRoute.withId;
-
 /**
  * A repository for the {@link MessageValidationView}.
  *
@@ -45,7 +43,8 @@ final class MessageValidationRepository
     @Override
     protected void setupEventRouting(@NotNull EventRouting<TypeName> routing) {
         super.setupEventRouting(routing);
-        routing.route(TypeEntered.class,
-                      (message, context) -> withId(message.getType().getName()));
+        routing.unicast(TypeEntered.class,
+                        (message, context) -> message.getType()
+                                                     .getName());
     }
 }
