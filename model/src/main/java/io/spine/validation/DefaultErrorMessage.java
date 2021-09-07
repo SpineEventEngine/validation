@@ -26,36 +26,30 @@
 
 package io.spine.validation;
 
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
-import io.spine.protodata.plugin.Just;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.React;
-import io.spine.validation.event.CompositeRuleAdded;
+import com.google.protobuf.Descriptors.Descriptor;
 
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import static io.spine.option.OptionsProto.defaultMessage;
 
 /**
- * A policy to add validation rules to a type whenever the {@code (range)} field option
- * is discovered.
+ * A factory of validation error messages.
  */
-final class RangePolicy extends Policy<FieldOptionDiscovered> {
+final class DefaultErrorMessage {
 
-    @Override
-    @React
-    public Just<CompositeRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
-    ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
-        return new Just<>(
-                CompositeRuleAdded
-                        .newBuilder()
-                        .setType(event.getType())
-                        .setRule(rules.rangeRule(event.getField()))
-                        .build()
-        );
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private DefaultErrorMessage() {
+    }
+
+    /**
+     * Obtains the validation error message from the given option descriptor.
+     *
+     * <p>The descriptor should be marked with the {@code (default_message)} option. If the option
+     * is absent, an empty message is returned.
+     */
+    static String from(Descriptor optionDescriptor) {
+        return optionDescriptor
+                .getOptions()
+                .getExtension(defaultMessage);
     }
 }

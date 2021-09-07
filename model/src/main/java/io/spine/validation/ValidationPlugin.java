@@ -42,7 +42,7 @@ public class ValidationPlugin implements Plugin {
     @Override
     public ImmutableSet<Policy<?>> policies() {
         return ImmutableSet.of(
-                new RequiredRulePolicy(),
+                new RequiredPolicy(),
                 new RangePolicy(),
                 new MinPolicy(),
                 new MaxPolicy(),
@@ -56,6 +56,10 @@ public class ValidationPlugin implements Plugin {
     @NotNull
     @Override
     public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(new MessageValidationRepository());
+        return ImmutableSet.of(
+                new MessageValidationRepository(),
+                new RequiredFieldRepository(),
+                new ValidatedFieldRepository()
+        );
     }
 }

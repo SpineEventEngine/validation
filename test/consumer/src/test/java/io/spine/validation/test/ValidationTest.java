@@ -80,8 +80,12 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is less than the threshold")
         void throwOnMore() {
-            assertValidationException(LocalTime.newBuilder()
-                    .setMinutes(-1));
+            ConstraintViolation violation = assertValidationException(
+                    LocalTime.newBuilder()
+                            .setHours(-1)
+            );
+            assertThat(violation.getMsgFormat())
+                    .contains("cannot be negative");
         }
 
         @Test
@@ -96,6 +100,47 @@ class ValidationTest {
         void notThrow() {
             assertNoException(LocalTime.newBuilder()
                     .setMinutes(1));
+        }
+    }
+
+    @Nested
+    @DisplayName("reflect a `(required)` rule and")
+    class Required {
+
+        @Test
+        @DisplayName("check string field")
+        void throwForString() {
+            Author.Builder builder = Author.newBuilder();
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains("Author must have a name");
+        }
+
+        @Test
+        @DisplayName("check message field")
+        void throwForMessage() {
+            Book.Builder builder = Book.newBuilder();
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains("value must be set");
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("author");
+        }
+
+        @Test
+        @DisplayName("pass if a value is set")
+        void passIfSet() {
+            Author.Builder builder = Author.newBuilder()
+                    .setName("Evans");
+            assertNoException(builder);
+        }
+
+        @Test
+        @DisplayName("pass if not required")
+        void passIfNotRequired() {
+            Book.Builder builder = Book.newBuilder()
+                    .setAuthor(validAuthor());
+            assertNoException(builder);
         }
     }
 
@@ -148,7 +193,9 @@ class ValidationTest {
             Player.Builder player = Player
                     .newBuilder()
                     .setShirtName("R");
-            assertValidationException(player);
+            ConstraintViolation violation = assertValidationException(player);
+            assertThat(violation.getMsgFormat())
+                    .contains("Invalid T-Shirt name");
         }
 
         @Test
@@ -156,15 +203,17 @@ class ValidationTest {
         void partial() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("Something Something Pride Something Something");
             assertNoException(msg);
         }
 
         @Test
-        @DisplayName("and allow to ignore case")
+        @DisplayName("and allow ignoring case")
         void caseInsensitive() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("preJudice");
             assertNoException(msg);
         }
@@ -174,8 +223,11 @@ class ValidationTest {
         void failWithLoose() {
             Book.Builder msg = Book
                     .newBuilder()
+                    .setAuthor(validAuthor())
                     .setContent("something else");
-            assertValidationException(msg);
+            ConstraintViolation violation = assertValidationException(msg);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("content");
         }
     }
 
@@ -201,9 +253,24 @@ class ValidationTest {
             void fail() {
                 MeteoStatistics.Builder builder = MeteoStatistics
                         .newBuilder()
-                        .setAverageDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
+                        .setAverageDrop(RainDrop.newBuilder()
+                                                .setMassInGrams(-1)
+                                                .buildPartial());
                 checkInvalid(builder);
             }
+        }
+
+        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+        private void checkInvalid(Message.Builder builder) {
+            checkInvalid(builder, "message must have valid properties");
+        }
+
+        private void checkInvalid(Message.Builder builder, String errorPart) {
+            ConstraintViolation violation = assertValidationException(builder);
+            assertThat(violation.getMsgFormat())
+                    .contains(errorPart);
+            assertThat(violation.getViolationList())
+                    .hasSize(1);
         }
 
         @Nested
@@ -225,17 +292,8 @@ class ValidationTest {
                 Rain.Builder builder = Rain
                         .newBuilder()
                         .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
-                checkInvalid(builder);
+                checkInvalid(builder, "Bad rain drop");
             }
-        }
-
-        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-        private void checkInvalid(Message.Builder builder) {
-            ConstraintViolation violation = assertValidationException(builder);
-            assertThat(violation.getMsgFormat())
-                    .contains("must be valid");
-            assertThat(violation.getViolationList())
-                    .hasSize(1);
         }
     }
 
@@ -272,5 +330,12 @@ class ValidationTest {
         Object result = builder.build();
         assertThat(result)
                 .isNotNull();
+    }
+
+    private static Author validAuthor() {
+        return Author
+                .newBuilder()
+                .setName("Vernon")
+                .build();
     }
 }

@@ -26,13 +26,11 @@
 
 package io.spine.validation;
 
-import com.google.protobuf.BoolValue;
 import io.spine.core.External;
 import io.spine.protodata.Field;
+import io.spine.protodata.FieldExited;
 import io.spine.protodata.FieldName;
-import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.FilePath;
-import io.spine.protodata.Option;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
@@ -40,11 +38,10 @@ import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.option.OptionsProto.validate;
-import static io.spine.protobuf.AnyPacker.unpack;
+import java.util.Optional;
+
 import static io.spine.protodata.Ast.qualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.Options.is;
 import static io.spine.validation.SourceFiles.findField;
 
 /**
@@ -57,39 +54,49 @@ import static io.spine.validation.SourceFiles.findField;
  *
  * <p>If the message field is invalid, the containing message is invalid as well.
  */
-final class ValidatePolicy extends Policy<FieldOptionDiscovered> {
+final class ValidatePolicy extends Policy<FieldExited> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
-        Option option = event.getOption();
-        if (!is(option, validate) || !unpack(option.getValue(), BoolValue.class).getValue()) {
-            return EitherOf2.withB(nothing());
+    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+        FieldId id = FieldId.newBuilder()
+                .setName(event.getField())
+                .setType(event.getType())
+                .build();
+        Optional<ValidatedField> field = select(ValidatedField.class)
+                .withId(id);
+        if (field.isPresent()) {
+            checkMessage(event.getField(), event.getType(), event.getFile());
         }
-        checkMessage(event.getField(), event.getType(), event.getFile());
-        FieldName field = event.getField();
-        SimpleRule rule = SimpleRules.withCustom(
-                field,
-                RecursiveValidation.getDefaultInstance(),
-                "Message field is validated by its validation rules. " +
-                        "If the field is invalid, the container message is invalid as well.",
-                "Message must be valid.",
-                true);
-        return EitherOf2.withA(SimpleRuleAdded
-                                       .newBuilder()
-                                       .setType(event.getType())
-                                       .setRule(rule)
-                                       .build());
+        if (field.map(ValidatedField::getValidate)
+                 .orElse(false)) {
+            SimpleRule rule = SimpleRules.withCustom(
+                    event.getField(),
+                    RecursiveValidation.getDefaultInstance(),
+                    "Message field is validated by its validation rules. " +
+                            "If the field is invalid, the container message is invalid as well.",
+                    field.get()
+                         .getErrorMessage(),
+                    true);
+            return EitherOf2.withA(
+                    SimpleRuleAdded.newBuilder()
+                            .setType(event.getType())
+                            .setRule(rule)
+                            .build()
+            );
+        }
+        return EitherOf2.withB(nothing());
     }
 
     private void checkMessage(FieldName fieldName, TypeName typeName, FilePath file) {
         Field field = findField(fieldName, typeName, file, this);
         if (!field.getType().hasMessage()) {
             throw newIllegalStateException(
-                    "Field `%s.%s` is not a message field and " +
-                            "therefore should not be marked with `validate`.",
+                    "Field `%s.%s` is not a message field and, " +
+                            "therefore, should not be marked with `validate`.",
                     qualifiedName(typeName),
-                    fieldName.getValue());
+                    fieldName.getValue()
+            );
         }
     }
 }

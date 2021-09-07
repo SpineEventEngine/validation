@@ -51,9 +51,9 @@ internal class IsRequiredPolicy :
     }
 
     @React
-    override fun whenever(@External @Where(field = "option.name", equals = "is_required")
-                              event: OneofOptionDiscovered):
-            EitherOf2<MessageWideRuleAdded, Nothing> {
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "is_required") event: OneofOptionDiscovered
+    ): EitherOf2<MessageWideRuleAdded, Nothing> {
         val feature = RequiredOneof
             .newBuilder()
             .setName(event.group)

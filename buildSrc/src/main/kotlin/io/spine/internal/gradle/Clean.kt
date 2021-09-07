@@ -44,5 +44,5 @@ fun cleanFolder(folder: File) {
     Files.walk(folder.toPath())
         .sorted(Comparator.reverseOrder())
         .map(Path::toFile)
-        .forEach(File::delete);
+        .forEach(File::delete)
 }

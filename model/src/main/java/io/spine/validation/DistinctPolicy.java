@@ -28,6 +28,7 @@ package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
 import io.spine.core.External;
+import io.spine.core.Where;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FieldOptionDiscovered;
@@ -40,12 +41,11 @@ import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.option.OptionsProto.distinct;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.protodata.Ast.qualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.Options.is;
+import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static io.spine.validation.SourceFiles.findField;
 
 /**
@@ -61,9 +61,11 @@ final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+    public EitherOf2<SimpleRuleAdded, Nothing> whenever(
+            @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
+    ) {
         Option option = event.getOption();
-        if (!is(option, distinct) || !unpack(option.getValue(), BoolValue.class).getValue()) {
+        if (!unpack(option.getValue(), BoolValue.class).getValue()) {
             return EitherOf2.withB(nothing());
         }
         checkCollection(event.getField(), event.getType(), event.getFile());

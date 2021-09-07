@@ -26,36 +26,27 @@
 
 package io.spine.validation;
 
-import io.spine.core.External;
-import io.spine.core.Where;
+import io.spine.base.EntityState;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
-import io.spine.protodata.plugin.Just;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.React;
-import io.spine.validation.event.CompositeRuleAdded;
-
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import io.spine.protodata.plugin.ViewRepository;
+import io.spine.server.route.EventRouting;
 
 /**
- * A policy to add validation rules to a type whenever the {@code (range)} field option
- * is discovered.
+ * A repository for a view on a field marked with a boolean validation option.
  */
-final class RangePolicy extends Policy<FieldOptionDiscovered> {
+abstract class BoolFieldOptionRepo<
+        V extends BoolFieldOptionView<FieldId, S, ?>,
+        S extends EntityState<FieldId>>
+        extends ViewRepository<FieldId, V, S> {
 
     @Override
-    @React
-    public Just<CompositeRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
-    ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
-        return new Just<>(
-                CompositeRuleAdded
-                        .newBuilder()
-                        .setType(event.getType())
-                        .setRule(rules.rangeRule(event.getField()))
-                        .build()
+    protected void setupEventRouting(EventRouting<FieldId> routing) {
+        super.setupEventRouting(routing);
+        routing.unicast(FieldOptionDiscovered.class,
+                        (e, c) -> FieldId.newBuilder()
+                                .setType(e.getType())
+                                .setName(e.getField())
+                                .build()
         );
     }
 }

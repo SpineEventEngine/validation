@@ -27,35 +27,55 @@
 package io.spine.validation;
 
 import io.spine.core.External;
+import io.spine.core.Subscribe;
 import io.spine.core.Where;
+import io.spine.option.IfInvalidOption;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
-import io.spine.protodata.plugin.Just;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.React;
-import io.spine.validation.event.CompositeRuleAdded;
 
+import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
- * A policy to add validation rules to a type whenever the {@code (range)} field option
- * is discovered.
+ * A view of a field that is marked with {@code validate}.
  */
-final class RangePolicy extends Policy<FieldOptionDiscovered> {
+final class ValidatedFieldView
+        extends BoolFieldOptionView<FieldId, ValidatedField, ValidatedField.Builder> {
+
+    ValidatedFieldView() {
+        super(IfInvalidOption.getDescriptor());
+    }
 
     @Override
-    @React
-    public Just<CompositeRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
+    @Subscribe
+    void onConstraint(
+            @External @Where(field = OPTION_NAME, equals = "validate") FieldOptionDiscovered e
     ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
-        return new Just<>(
-                CompositeRuleAdded
-                        .newBuilder()
-                        .setType(event.getType())
-                        .setRule(rules.rangeRule(event.getField()))
-                        .build()
-        );
+        super.onConstraint(e);
+    }
+
+    @Override
+    protected void errorMessage(String errorMessage) {
+        builder().setErrorMessage(errorMessage);
+    }
+
+    @Override
+    protected void enableValidation() {
+        builder().setValidate(true);
+    }
+
+    @Override
+    @Subscribe
+    void onErrorMessage(
+            @External @Where(field = OPTION_NAME, equals = "if_invalid") FieldOptionDiscovered e
+    ) {
+        super.onErrorMessage(e);
+    }
+
+    @Override
+    protected String extractErrorMessage(Option option) {
+        IfInvalidOption value = unpack(option.getValue(), IfInvalidOption.class);
+        String errorMessage = value.getMsgFormat();
+        return errorMessage;
     }
 }

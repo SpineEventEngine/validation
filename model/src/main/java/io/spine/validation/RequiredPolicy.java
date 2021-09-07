@@ -28,16 +28,15 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.protodata.Field;
-import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
+import io.spine.protodata.FieldExited;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.option.OptionsProto.required;
-import static io.spine.validation.Options.is;
+import java.util.Optional;
+
 import static io.spine.validation.SourceFiles.findField;
 
 /**
@@ -47,24 +46,33 @@ import static io.spine.validation.SourceFiles.findField;
  * the value is {@code true}, and the field type supports such validation, a validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
-final class RequiredRulePolicy extends Policy<FieldOptionDiscovered> {
+final class RequiredPolicy extends Policy<FieldExited> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
-        Option option = event.getOption();
-        if (!is(option, required)) {
-            return EitherOf2.withB(nothing());
+    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+        FieldId id = FieldId
+                .newBuilder()
+                .setName(event.getField())
+                .setType(event.getType())
+                .build();
+        Optional<RequiredField> field = select(RequiredField.class)
+                .withId(id);
+        if (field.map(RequiredField::getRequired).orElse(false)) {
+            Field declaration = findField(event.getField(),
+                                          event.getType(),
+                                          event.getFile(),
+                                          this);
+            return EitherOf2.withA(requiredRule(declaration, field.get()));
         }
-        Field field = findField(event.getField(), event.getType(), event.getFile(), this);
-        return EitherOf2.withA(requiredRule(field));
+        return EitherOf2.withB(nothing());
     }
 
-    private static SimpleRuleAdded requiredRule(Field field) {
-        SimpleRule rule = RequiredRule.forField(field);
+    private static SimpleRuleAdded requiredRule(Field declaration, RequiredField field) {
+        SimpleRule rule = RequiredRule.forField(declaration, field.getErrorMessage());
         return SimpleRuleAdded
                 .newBuilder()
-                .setType(field.getDeclaringType())
+                .setType(declaration.getDeclaringType())
                 .setRule(rule)
                 .vBuild();
     }

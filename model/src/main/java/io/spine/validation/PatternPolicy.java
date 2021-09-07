@@ -29,18 +29,17 @@ package io.spine.validation;
 import com.google.common.escape.Escaper;
 import com.google.common.escape.Escapers;
 import io.spine.core.External;
+import io.spine.core.Where;
 import io.spine.option.PatternOption;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
+import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
-import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.option.OptionsProto.pattern;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validation.Options.is;
+import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static java.lang.String.format;
 
 /**
@@ -51,24 +50,26 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
     private static final Escaper slashEscaper = Escapers
             .builder()
-            .addEscape('\\',"\\\\")
+            .addEscape('\\', "\\\\")
             .build();
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+    public Just<SimpleRuleAdded> whenever(
+            @External @Where(field = OPTION_NAME, equals = "pattern") FieldOptionDiscovered event
+    ) {
         Option option = event.getOption();
-        if (!is(option, pattern)) {
-            return EitherOf2.withB(nothing());
-        }
         PatternOption optionValue = unpack(option.getValue(), PatternOption.class);
         String regex = optionValue.getRegex();
         Regex feature = Regex.newBuilder()
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String error = format("The string must match the regular expression `%s`.",
-                              slashEscaper.escape(regex));
+        String customError = optionValue.getMsgFormat();
+        String error = customError.isEmpty()
+                       ? format("The string must match the regular expression `%s`.",
+                                slashEscaper.escape(regex))
+                       : customError;
         SimpleRule rule = SimpleRules.withCustom(
                 event.getField(),
                 feature,
@@ -76,7 +77,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 error,
                 true
         );
-        return EitherOf2.withA(
+        return new Just<>(
                 SimpleRuleAdded.newBuilder()
                         .setType(event.getType())
                         .setRule(rule)

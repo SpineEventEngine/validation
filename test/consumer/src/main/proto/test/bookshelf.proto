@@ -11,7 +11,7 @@ option java_multiple_files = true;
 
 message Book {
 
-    Author author = 1;
+    Author author = 1 [(required) = true];
 
     string content = 2 [(pattern) = {
         regex: "(Pride)|(Prejudice)",
@@ -20,7 +20,7 @@ message Book {
             case_insensitive: true,
             unicode: true
         }
-    }];
+    }, (required) = false];
 
     repeated ChapterIndex index = 3 [(validate) = true];
 
@@ -29,7 +29,7 @@ message Book {
 
 message Author {
 
-    string name = 1;
+    string name = 1 [(required) = true, (if_missing) = { msg_format: "Author must have a name!" }];
 }
 
 message ChapterIndex {

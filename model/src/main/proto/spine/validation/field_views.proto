@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "FieldViewsProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/rule.proto";
+
+// A view on a field that is marked `(required)`.
+message RequiredField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    // Message appearing when this required field is not set.
+    string error_message = 2;
+
+    // `true` if the field is marked with `(required) = true`, `false` otherwise.
+    bool required = 3;
+}
+
+// A view on a field that is marked with `(validate)`.
+message ValidatedField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    // Message appearing when this field is not valid.
+    string error_message = 2;
+
+    // `true` if the field is marked with `(validate) = true`, `false` otherwise.
+    bool validate = 3;
+}
+
+// Uniquely identifies a message field.
+message FieldId {
+
+    // Name of the containing type.
+    protodata.TypeName type = 1;
+
+    // Short name of the field.
+    protodata.FieldName name = 2;
+}

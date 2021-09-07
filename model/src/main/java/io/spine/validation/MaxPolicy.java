@@ -27,16 +27,15 @@
 package io.spine.validation;
 
 import io.spine.core.External;
+import io.spine.core.Where;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
+import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
-import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.option.OptionsProto.max;
-import static io.spine.validation.Options.is;
+import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
  * A policy to add a validation rule to a type whenever the {@code (max)} field option
@@ -46,18 +45,17 @@ final class MaxPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldOptionDiscovered event) {
+    public Just<SimpleRuleAdded> whenever(
+            @External @Where(field = OPTION_NAME, equals = "max") FieldOptionDiscovered event
+    ) {
         Option option = event.getOption();
-        if (!is(option, max)) {
-            return EitherOf2.withB(nothing());
-        }
         NumberRules rules = NumberRules.from(option);
         SimpleRule rule = rules.maxRule(event.getField());
-        return EitherOf2.withA(SimpleRuleAdded
-                                       .newBuilder()
-                                       .setType(event.getType())
-                                       .setRule(rule)
-                                       .build()
+        return new Just<>(SimpleRuleAdded
+                                  .newBuilder()
+                                  .setType(event.getType())
+                                  .setRule(rule)
+                                  .build()
         );
     }
 }
