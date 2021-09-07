@@ -13,7 +13,6 @@ import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
 // A view on a field that is marked `(required)`.
-//
 message RequiredField {
     option (entity).kind = PROJECTION;
 
@@ -27,7 +26,6 @@ message RequiredField {
 }
 
 // A view on a field that is marked with `(validate)`.
-//
 message ValidatedField {
     option (entity).kind = PROJECTION;
 
