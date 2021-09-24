@@ -26,11 +26,15 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.PublishingRepos.gitHub
+import io.spine.internal.gradle.PublishingRepos
 import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.excludeProtobufLite
+import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.spinePublishing
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -61,6 +65,23 @@ plugins {
     id(errorProne.id).version(errorProne.version)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
     id(dokka.pluginId) version(dokka.version)
+    `force-jacoco`
+}
+
+spinePublishing {
+    projectsToPublish.addAll(
+        "model",
+        "java",
+        "runtime"
+    )
+    spinePrefix.set(false)
+    with(PublishingRepos) {
+        targetRepositories.addAll(
+            cloudRepo,
+            gitHub("validation"),
+            cloudArtifactRegistry
+        )
+    }
 }
 
 allprojects {
@@ -68,18 +89,11 @@ allprojects {
 
     repositories {
         applyStandard()
-        val protoDataRepo = gitHub("ProtoData")
-        maven {
-            url = uri(protoDataRepo.releases)
-            credentials {
-                val creds = protoDataRepo.credentials(project)!!
-                username = creds.username
-                password = creds.password
-            }
-        }
+        applyGitHubPackages("ProtoData", project)
     }
 
     apply {
+        plugin("jacoco")
         plugin("idea")
         plugin("project-report")
     }
@@ -91,21 +105,54 @@ allprojects {
 
 subprojects {
     apply {
+        plugin("net.ltgt.errorprone")
+        plugin("java-library")
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
-        from(Scripts.projectLicenseReport(project))
-        from(Scripts.slowTests(project))
-        from(Scripts.testOutput(project))
-        from(Scripts.javadocOptions(project))
+        plugin("pmd")
+        plugin("maven-publish")
+        with(Scripts) {
+            from(javacArgs(project))
+            from(projectLicenseReport(project))
+            from(slowTests(project))
+            from(testOutput(project))
+            from(javadocOptions(project))
+        }
+    }
+
+    // Apply custom Kotlin script plugins.
+    apply {
+        plugin("pmd-settings")
     }
 
     dependencies {
+        ErrorProne.apply {
+            errorprone(core)
+            errorproneJavac(javacPlugin)
+        }
         JUnit.api.forEach { testImplementation(it) }
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
     }
+
+    val spineBaseVersion: String by extra
+    val spineServerVersion: String by extra
+
+    configurations.forceVersions()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-server:$spineServerVersion"
+                )
+            }
+        }
+    }
+    configurations.excludeProtobufLite()
 
     tasks.test {
         useJUnitPlatform {
@@ -132,18 +179,16 @@ subprojects {
     }
 }
 
-spinePublishing {
-    projectsToPublish.addAll(
-        "model",
-        "java",
-        "runtime"
-    )
-    spinePrefix.set(false)
-    // Publish to the ProtoData repository reduce configuration for end users.
-    targetRepositories.add(gitHub("validation"))
-}
-
 apply {
-    from(Scripts.repoLicenseReport(project))
-    from(Scripts.generatePom(project))
+    with(Scripts) {
+        // Aggregated coverage report across all subprojects.
+        from(jacoco(project))
+
+        // Generate a repository-wide report of 3rd-party dependencies and their licenses.
+        from(repoLicenseReport(project))
+
+        // Generate a `pom.xml` file containing first-level dependency of all projects
+        // in the repository.
+        from(generatePom(project))
+    }
 }
