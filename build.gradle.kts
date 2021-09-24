@@ -29,6 +29,7 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.PublishingRepos
 import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
@@ -101,6 +102,7 @@ subprojects {
         plugin("org.jetbrains.dokka")
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
+        plugin(IncrementGuard::class)
         with(Scripts) {
             from(javacArgs(project))
             from(projectLicenseReport(project))
