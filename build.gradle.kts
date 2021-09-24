@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.PublishingRepos.gitHub
@@ -99,6 +100,7 @@ subprojects {
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
         with(Scripts) {
+            from(javacArgs(project))
             from(projectLicenseReport(project))
             from(slowTests(project))
             from(testOutput(project))
@@ -107,6 +109,10 @@ subprojects {
     }
 
     dependencies {
+        ErrorProne.apply {
+            errorprone(core)
+            errorproneJavac(javacPlugin)
+        }
         JUnit.api.forEach { testImplementation(it) }
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
