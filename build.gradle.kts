@@ -86,6 +86,7 @@ allprojects {
     apply {
         plugin("idea")
         plugin("project-report")
+        plugin("jacoco")
     }
 
     group = "io.spine.validation"
