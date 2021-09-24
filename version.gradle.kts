@@ -24,10 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-project.extra.apply {
-    this["spineBaseVersion"] = "2.0.0-SNAPSHOT.40"
-    this["spineServerVersion"] = "2.0.0-SNAPSHOT.41"
-    this["protoDataVersion"] = "0.0.32"
-    this["validationVersion"] = "2.0.0-SNAPSHOT.6"
-}
-
+val spineBaseVersion by extra("2.0.0-SNAPSHOT.62")
+val spineServerVersion by extra("2.0.0-SNAPSHOT.61")
+val protoDataVersion by extra("0.0.32")
+val validationVersion by extra("2.0.0-SNAPSHOT.7")
