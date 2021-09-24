@@ -175,6 +175,16 @@ all modules and does not describe the project structure per-subproject.
     <version>2.0.0-SNAPSHOT.62</version>
   </dependency>
   <dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>org.jacoco.agent</artifactId>
+    <version>0.8.7</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>org.jacoco.ant</artifactId>
+    <version>0.8.7</version>
+  </dependency>
+  <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>all-modules-page-plugin</artifactId>
     <version>1.5.0</version>
