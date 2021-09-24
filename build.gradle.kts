@@ -30,8 +30,8 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.PublishingRepos
-import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
@@ -65,6 +65,23 @@ plugins {
     id(errorProne.id).version(errorProne.version)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
     id(dokka.pluginId) version(dokka.version)
+    `force-jacoco`
+}
+
+spinePublishing {
+    projectsToPublish.addAll(
+        "model",
+        "java",
+        "runtime"
+    )
+    spinePrefix.set(false)
+    with(PublishingRepos) {
+        targetRepositories.addAll(
+            cloudRepo,
+            gitHub("validation"),
+            cloudArtifactRegistry
+        )
+    }
 }
 
 allprojects {
@@ -72,21 +89,13 @@ allprojects {
 
     repositories {
         applyStandard()
-        val protoDataRepo = gitHub("ProtoData")
-        maven {
-            url = uri(protoDataRepo.releases)
-            credentials {
-                val creds = protoDataRepo.credentials(project)!!
-                username = creds.username
-                password = creds.password
-            }
-        }
+        applyGitHubPackages("ProtoData", project)
     }
 
     apply {
+        plugin("jacoco")
         plugin("idea")
         plugin("project-report")
-        plugin("jacoco")
     }
 
     group = "io.spine.validation"
@@ -97,10 +106,13 @@ allprojects {
 subprojects {
     apply {
         plugin("net.ltgt.errorprone")
+        plugin("java-library")
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
+        plugin("pmd")
+        plugin("maven-publish")
         with(Scripts) {
             from(javacArgs(project))
             from(projectLicenseReport(project))
@@ -108,6 +120,11 @@ subprojects {
             from(testOutput(project))
             from(javadocOptions(project))
         }
+    }
+
+    // Apply custom Kotlin script plugins.
+    apply {
+        plugin("pmd-settings")
     }
 
     dependencies {
@@ -159,22 +176,6 @@ subprojects {
         from(dokkaJavadoc.outputDirectory)
         archiveClassifier.set("javadoc")
         dependsOn(dokkaJavadoc)
-    }
-}
-
-spinePublishing {
-    projectsToPublish.addAll(
-        "model",
-        "java",
-        "runtime"
-    )
-    spinePrefix.set(false)
-    with(PublishingRepos) {
-        targetRepositories.addAll(
-            cloudRepo,
-            gitHub("validation"),
-            cloudArtifactRegistry
-        )
     }
 }
 
