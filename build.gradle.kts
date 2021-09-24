@@ -31,6 +31,8 @@ import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.excludeProtobufLite
+import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.spinePublishing
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -91,14 +93,17 @@ allprojects {
 
 subprojects {
     apply {
+        plugin("net.ltgt.errorprone")
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
         plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
-        from(Scripts.projectLicenseReport(project))
-        from(Scripts.slowTests(project))
-        from(Scripts.testOutput(project))
-        from(Scripts.javadocOptions(project))
+        with(Scripts) {
+            from(projectLicenseReport(project))
+            from(slowTests(project))
+            from(testOutput(project))
+            from(javadocOptions(project))
+        }
     }
 
     dependencies {
@@ -106,6 +111,23 @@ subprojects {
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
     }
+
+    val spineBaseVersion: String by extra
+    val spineServerVersion: String by extra
+
+    configurations.forceVersions()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-server:$spineServerVersion"
+                )
+            }
+        }
+    }
+    configurations.excludeProtobufLite()
 
     tasks.test {
         useJUnitPlatform {
