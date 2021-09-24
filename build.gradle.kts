@@ -29,6 +29,7 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.PublishingRepos
 import io.spine.internal.gradle.PublishingRepos.gitHub
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyStandard
@@ -167,8 +168,13 @@ spinePublishing {
         "runtime"
     )
     spinePrefix.set(false)
-    // Publish to the ProtoData repository reduce configuration for end users.
-    targetRepositories.add(gitHub("validation"))
+    with(PublishingRepos) {
+        targetRepositories.addAll(
+            cloudRepo,
+            gitHub("validation"),
+            cloudArtifactRegistry
+        )
+    }
 }
 
 apply {
