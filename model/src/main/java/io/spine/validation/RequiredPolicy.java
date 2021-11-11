@@ -50,7 +50,7 @@ final class RequiredPolicy extends Policy<FieldExited> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
         FieldId id = FieldId
                 .newBuilder()
                 .setName(event.getField())

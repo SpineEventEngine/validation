@@ -55,7 +55,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public Just<SimpleRuleAdded> whenever(
+    protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "pattern") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();
