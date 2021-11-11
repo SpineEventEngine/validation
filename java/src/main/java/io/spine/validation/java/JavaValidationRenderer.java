@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
@@ -270,11 +271,11 @@ public final class JavaValidationRenderer extends JavaRenderer {
         /**
          * Obtains class-level declarations used in the validation code as code lines.
          */
-        private Iterable<String> supportingMembersLines() {
-            return () -> supportingMembers
+        private ImmutableList<String> supportingMembersLines() {
+            return supportingMembers
                     .stream()
                     .flatMap(code -> onNewLine.splitToStream(code.toString()))
-                    .iterator();
+                    .collect(toImmutableList());
         }
     }
 }
