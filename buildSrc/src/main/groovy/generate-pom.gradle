@@ -53,8 +53,7 @@ import static java.util.stream.Collectors.toSet
  *     groupId = 'custom-group-id'
  *     artifactId = 'custom-artifact-id'
  *     version = 'custom-version'
- * }
- * }
+ *}*}
  * </pre>
  *
  * By default, those values are taken from the {@code project} object, which may or may not include
@@ -62,6 +61,8 @@ import static java.util.stream.Collectors.toSet
  * block, the result {@code pom.xml} file is going to contain empty blocks,
  * e.g. {@code <groupId></groupId>}
  */
+
+println("`generate-pom.gradle` script is deprecated. Please use the `PomGenerator` utility instead.")
 
 // In some cases, the `base` plugin, which is by default is added by e.g. `java`, is not yet added.
 // `base` plugin defines the `build` task. This script needs it.
