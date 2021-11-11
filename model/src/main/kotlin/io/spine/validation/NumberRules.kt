@@ -159,7 +159,7 @@ private constructor(
             return NumberRules(
                 upperBound = threshold,
                 uppedInclusive = !optionValue.exclusive,
-                customErrorMessage = optionValue.msgFormat
+                customErrorMessage = optionValue.errorMsg
             )
         }
 
@@ -169,7 +169,7 @@ private constructor(
             return NumberRules(
                 lowerBound = threshold,
                 lowerInclusive = !optionValue.exclusive,
-                customErrorMessage = optionValue.msgFormat
+                customErrorMessage = optionValue.errorMsg
             )
         }
 

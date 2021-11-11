@@ -75,7 +75,7 @@ final class ValidatedFieldView
     @Override
     protected String extractErrorMessage(Option option) {
         IfInvalidOption value = unpack(option.getValue(), IfInvalidOption.class);
-        String errorMessage = value.getMsgFormat();
+        String errorMessage = value.getErrorMsg();
         return errorMessage;
     }
 }

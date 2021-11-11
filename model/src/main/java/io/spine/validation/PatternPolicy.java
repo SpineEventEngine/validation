@@ -65,7 +65,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String customError = optionValue.getMsgFormat();
+        String customError = optionValue.getErrorMsg();
         String error = customError.isEmpty()
                        ? format("The string must match the regular expression `%s`.",
                                 slashEscaper.escape(regex))

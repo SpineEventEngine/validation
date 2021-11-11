@@ -29,13 +29,20 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.PublishingRepos
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
+import io.spine.internal.gradle.javac.configureErrorProne
+import io.spine.internal.gradle.javac.configureJavac
+import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.publish.PublishingRepos
+import io.spine.internal.gradle.report.license.LicenseReporter
+import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.spinePublishing
+import io.spine.internal.gradle.testing.configureLogging
+import io.spine.internal.gradle.testing.registerTestTasks
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -59,10 +66,10 @@ plugins {
 
     val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
-    val dokka = io.spine.internal.dependency.Kotlin.Dokka
+    val dokka = io.spine.internal.dependency.Dokka
 
     id(protobuf.id).version(protobuf.version)
-    id(errorProne.id).version(errorProne.version)
+    id(errorProne.id)
     kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
     id(dokka.pluginId) version(dokka.version)
     `force-jacoco`
@@ -113,13 +120,17 @@ subprojects {
         plugin("com.google.protobuf")
         plugin("pmd")
         plugin("maven-publish")
-        with(Scripts) {
-            from(javacArgs(project))
-            from(projectLicenseReport(project))
-            from(slowTests(project))
-            from(testOutput(project))
-            from(javadocOptions(project))
+    }
+
+    LicenseReporter.generateReportIn(project)
+    JavadocConfig.applyTo(project)
+
+    tasks {
+        withType<JavaCompile> {
+            configureJavac()
+            configureErrorProne()
         }
+        registerTestTasks()
     }
 
     // Apply custom Kotlin script plugins.
@@ -158,6 +169,7 @@ subprojects {
         useJUnitPlatform {
             includeEngines("junit-jupiter")
         }
+        configureLogging()
     }
 
     tasks.withType<KotlinCompile> {
@@ -183,12 +195,8 @@ apply {
     with(Scripts) {
         // Aggregated coverage report across all subprojects.
         from(jacoco(project))
-
-        // Generate a repository-wide report of 3rd-party dependencies and their licenses.
-        from(repoLicenseReport(project))
-
-        // Generate a `pom.xml` file containing first-level dependency of all projects
-        // in the repository.
-        from(generatePom(project))
     }
 }
+
+LicenseReporter.mergeAllReports(project)
+PomGenerator.applyTo(project)

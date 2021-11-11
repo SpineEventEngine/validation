@@ -29,7 +29,7 @@ message Rain {
     repeated RainDrop rain_drop = 1 [
         (required) = true,
         (validate) = true,
-        (if_invalid).msg_format = "Bad rain drop!"
+        (if_invalid).error_msg = "Bad rain drop!"
     ];
 }
 

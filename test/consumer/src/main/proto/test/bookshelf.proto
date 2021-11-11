@@ -29,7 +29,7 @@ message Book {
 
 message Author {
 
-    string name = 1 [(required) = true, (if_missing) = { msg_format: "Author must have a name!" }];
+    string name = 1 [(required) = true, (if_missing) = { error_msg: "Author must have a name!" }];
 }
 
 message ChapterIndex {
