@@ -14,7 +14,7 @@ message LocalTime {
 
     int32 hours = 1 [
         (min).value = "0",
-        (min).msg_format = "Time cannot be negative.",
+        (min).error_msg = "Time cannot be negative.",
         (max).value = "23"
     ];
 

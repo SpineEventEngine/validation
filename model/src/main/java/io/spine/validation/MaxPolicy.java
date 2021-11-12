@@ -45,7 +45,7 @@ final class MaxPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public Just<SimpleRuleAdded> whenever(
+    protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "max") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();

@@ -45,7 +45,7 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public Just<CompositeRuleAdded> whenever(
+    protected Just<CompositeRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();

@@ -61,7 +61,7 @@ final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public EitherOf2<SimpleRuleAdded, Nothing> whenever(
+    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(
             @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();

@@ -49,7 +49,9 @@ protoData {
 
 modelCompiler {
     java {
-        validation { skipValidation() }
+        codegen {
+            validation { skipValidation() }
+        }
     }
 }
 

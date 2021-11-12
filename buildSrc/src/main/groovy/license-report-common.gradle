@@ -28,12 +28,15 @@
  * This script defines the common configuration for license report scripts.
  */
 
+println("`license-report-common.gradle` script is deprecated. " +
+        "Please use the `LicenseReporter` utility instead.")
+
 apply plugin: 'base'
 
 ext.licenseReportConfig = [
         // The output filename
-        outputFilename  : "license-report.md",
+        outputFilename: "license-report.md",
 
         // The path to a directory, to which a per-project report is generated.
-        relativePath    : "/reports/dependency-license/dependency"
+        relativePath  : "/reports/dependency-license/dependency"
 ]

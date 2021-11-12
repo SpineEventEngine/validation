@@ -55,7 +55,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
     @React
-    public Just<SimpleRuleAdded> whenever(
+    protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "pattern") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();
@@ -65,7 +65,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String customError = optionValue.getMsgFormat();
+        String customError = optionValue.getErrorMsg();
         String error = customError.isEmpty()
                        ? format("The string must match the regular expression `%s`.",
                                 slashEscaper.escape(regex))
