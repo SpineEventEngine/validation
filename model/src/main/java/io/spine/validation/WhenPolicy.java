@@ -55,7 +55,8 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
         InTime feature = InTime.newBuilder()
                 .setTime(time)
                 .build();
-        String errorMessage = format("The time must be in %s from now.", time.name().toLowerCase());
+        String errorMessage = format("The time must be in the %s.",
+                                     time.name().toLowerCase());
         SimpleRule rule = withCustom(
                 event.getField(),
                 feature,
