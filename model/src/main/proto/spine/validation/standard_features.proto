@@ -35,9 +35,10 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "StandardFeaturesProto";
 option java_multiple_files = true;
 
-import "spine/validation/value.proto";
-import "spine/protodata/ast.proto";
 import "google/protobuf/any.proto";
+import "spine/protodata/ast.proto";
+import "spine/time_options.proto";
+import "spine/validation/value.proto";
 
 // These are validation features which do not fit into the simple rule formula:
 // ```
@@ -85,4 +86,12 @@ message Regex {
 message RequiredOneof {
 
     protodata.OneofName name = 1;
+}
+
+// The associated temporal message must be either in the past or in the future from
+// the current time.
+//
+message InTime {
+
+    Time time = 1;
 }
