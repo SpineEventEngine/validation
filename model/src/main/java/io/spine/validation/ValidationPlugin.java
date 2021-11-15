@@ -49,7 +49,8 @@ public class ValidationPlugin implements Plugin {
                 new DistinctPolicy(),
                 new ValidatePolicy(),
                 new PatternPolicy(),
-                new IsRequiredPolicy()
+                new IsRequiredPolicy(),
+                new WhenPolicy()
         );
     }
 
