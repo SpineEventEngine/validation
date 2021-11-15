@@ -27,4 +27,4 @@
 val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.75")
 val protoDataVersion by extra("0.1.2")
-val validationVersion by extra("2.0.0-SNAPSHOT.8")
+val validationVersion by extra("2.0.0-SNAPSHOT.9")
