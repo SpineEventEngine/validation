@@ -32,10 +32,10 @@ package io.spine.internal.dependency
 @Suppress("unused")
 object HttpClient {
     // https://github.com/googleapis/google-http-java-client
-    const val version = "1.40.0"
-    const val google = "com.google.http-client:google-http-client:${version}"
+    const val version  = "1.40.0"
+    const val google   = "com.google.http-client:google-http-client:${version}"
     const val jackson2 = "com.google.http-client:google-http-client-jackson2:${version}"
-    const val gson = "com.google.http-client:google-http-client-gson:${version}"
+    const val gson     = "com.google.http-client:google-http-client-gson:${version}"
 
-    const val apache = "com.google.http-client:google-http-client-apache:2.1.2"
+    const val apache   = "com.google.http-client:google-http-client-apache:2.1.2"
 }

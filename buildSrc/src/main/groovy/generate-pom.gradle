@@ -53,7 +53,8 @@ import static java.util.stream.Collectors.toSet
  *     groupId = 'custom-group-id'
  *     artifactId = 'custom-artifact-id'
  *     version = 'custom-version'
- *}*}
+ * }
+ * }
  * </pre>
  *
  * By default, those values are taken from the {@code project} object, which may or may not include

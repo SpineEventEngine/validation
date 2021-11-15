@@ -40,8 +40,7 @@ import org.gradle.kotlin.dsl.withGroovyBuilder
  *
  * Includes group ID, artifact name, and the version.
  */
-@Suppress("MemberVisibilityCanBePrivate")
-/* Property values accessed via `KProperty`. */
+@Suppress("MemberVisibilityCanBePrivate") /* Property values accessed via `KProperty`. */
 internal class ProjectMetadata
 internal constructor(
     internal val project: Project,

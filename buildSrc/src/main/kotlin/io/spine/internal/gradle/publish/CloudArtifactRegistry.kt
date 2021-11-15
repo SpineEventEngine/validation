@@ -68,11 +68,9 @@ internal object CloudArtifactRegistry {
             creds.refreshIfExpired()
             Credentials("oauth2accesstoken", creds.accessToken.tokenValue)
         } catch (e: IOException) {
-            p.logger.info(
-                "Unable to fetch credentials for Google Cloud Artifact Registry." +
-                        " Reason: '${e.message}'." +
-                        " The debug output may contain more details."
-            )
+            p.logger.info("Unable to fetch credentials for Google Cloud Artifact Registry." +
+                    " Reason: '${e.message}'." +
+                    " The debug output may contain more details.")
             null
         }
     }
