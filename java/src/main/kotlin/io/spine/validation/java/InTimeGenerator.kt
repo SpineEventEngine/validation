@@ -34,6 +34,8 @@ import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.typeUrl
 import io.spine.time.validation.Time
+import io.spine.time.validation.Time.FUTURE
+import io.spine.time.validation.Time.PAST
 import io.spine.type.TypeUrl
 import io.spine.validation.InTime
 
@@ -71,15 +73,18 @@ private class TimestampInTimeGenerator(
     }
 }
 
+private val currentTime: Expression =
+    MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
+
+
 private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
     val operation = when(this) {
-        Time.FUTURE -> "> 0"
-        Time.PAST -> "< 0"
+        FUTURE -> "> 0"
+        PAST -> "< 0"
         else -> throw IllegalStateException("Unexpected time: `$this`.")
     }
     return Literal("$compareToCall $operation")
 }
-
 
 /**
  * The [InTime] generator for the `spine.time.*` typed fields.
@@ -90,7 +95,6 @@ private class InSpineTimeGenerator(
     inTime: InTime,
     ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
-
     private val time = inTime.time
     override fun condition(): Expression {
         val compareTo = MethodCall(
@@ -102,10 +106,7 @@ private class InSpineTimeGenerator(
 }
 
 private fun Time.temporalMethod(): String = when(this) {
-        Time.FUTURE -> "isInFuture"
-        Time.PAST -> "isInPast"
+        FUTURE -> "isInFuture"
+        PAST -> "isInPast"
         else -> throw IllegalStateException("Unexpected time: `$this`.")
 }
-
-private val currentTime: Expression =
-    MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
