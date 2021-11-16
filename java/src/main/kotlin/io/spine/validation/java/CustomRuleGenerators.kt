@@ -28,6 +28,8 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
 import com.google.protobuf.Message
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import io.spine.option.PatternOption
@@ -42,9 +44,13 @@ import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.isMap
 import io.spine.protodata.qualifiedName
+import io.spine.protodata.typeUrl
+import io.spine.time.validation.Time
+import io.spine.type.TypeUrl
 import io.spine.validate.ValidationError
 import io.spine.validation.DistinctCollection
 import io.spine.validation.ErrorMessage
+import io.spine.validation.InTime
 import io.spine.validation.RecursiveValidation
 import io.spine.validation.Regex
 import io.spine.validation.RequiredOneof
@@ -215,6 +221,62 @@ private fun PatternOption.Modifier.flagsMask(): Expression {
     return Literal(mask)
 }
 
+private val TIMESTAMP_TYPE = TypeUrl.of(Timestamp::class.java).value()
+
+private fun inTimeGenerator(inTime: InTime, ctx: GenerationContext): CodeGenerator {
+    val fieldType = ctx.fieldFromSimpleRule!!.type
+    return if (fieldType.message.typeUrl() == TIMESTAMP_TYPE) {
+        TimestampInTimeGenerator(inTime, ctx)
+    } else {
+        InSpineTimeGenerator(inTime, ctx)
+    }
+}
+
+private class TimestampInTimeGenerator(
+    inTime: InTime,
+    ctx: GenerationContext
+) : SimpleRuleGenerator(ctx) {
+
+    private val time = inTime.time
+
+    override fun condition(): Expression {
+        val compare = MethodCall(ClassName(Timestamps::class), "compare", arguments = listOf(
+            ctx.fieldOrElement!!,
+            currentTime
+        ))
+        return time.formatJavaComparison(compare)
+    }
+}
+
+private class InSpineTimeGenerator(
+    inTime: InTime,
+    ctx: GenerationContext
+) : SimpleRuleGenerator(ctx) {
+
+    private val time = inTime.time
+
+    override fun condition(): Expression {
+        val compareTo = MethodCall(
+            ctx.fieldOrElement!!,
+            "compareTo",
+            arguments = listOf(currentTime)
+        )
+        return time.formatJavaComparison(compareTo)
+    }
+}
+
+private val currentTime: Expression =
+    MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
+
+private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
+    val operation = when(this) {
+        Time.FUTURE -> "> 0"
+        Time.PAST -> "< 0"
+        else -> throw IllegalStateException("Unexpected time: `$this`.")
+    }
+    return Literal("$compareToCall $operation")
+}
+
 /**
  * A null-value generator which never produces code.
  *
@@ -249,6 +311,7 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
         is RecursiveValidation -> ValidateGenerator(ctx)
         is Regex -> PatternGenerator(feature, ctx)
         is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
+        is InTime -> inTimeGenerator(feature, ctx)
         else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
     }
 }
