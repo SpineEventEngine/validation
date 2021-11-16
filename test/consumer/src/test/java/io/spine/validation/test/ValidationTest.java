@@ -330,7 +330,7 @@ class ValidationTest {
         @Test
         @DisplayName(PROHIBIT_INVALID)
         void fail() {
-            Timestamp when = Timestamps.fromSeconds(59_086_800L); // 15 Nov 1971
+            Timestamp when = Timestamps.fromSeconds(4_792_687_200L); // 15 Nov 2121
             Player.Builder player = Player.newBuilder()
                             .setStartedCareerIn(when);
             assertValidationException(player);
@@ -339,7 +339,7 @@ class ValidationTest {
         @Test
         @DisplayName(ALLOW_VALID)
         void pass() {
-            Timestamp when = Timestamps.fromSeconds(4_792_687_200L); // 15 Nov 2121
+            Timestamp when = Timestamps.fromSeconds(59_086_800L); // 15 Nov 1971
             Player.Builder player = Player.newBuilder()
                     .setStartedCareerIn(when);
             assertNoException(player);
