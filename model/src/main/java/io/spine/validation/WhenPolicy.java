@@ -46,8 +46,8 @@ import static java.lang.String.format;
  * A policy which, upon encountering a field with the {@code (when)} option, generates
  * a validation rule.
  *
- * <p>The validation rule ensures that the associated field is in the future or in the past from
- * the current time (depending on the option definition).
+ * <p>The validation rule ensures that the associated field value is in the future or in the past
+ * from the current time (depending on the option definition).
  */
 final class WhenPolicy extends Policy<FieldOptionDiscovered> {
 
