@@ -28,20 +28,27 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.core.Where;
+import io.spine.protobuf.AnyPacker;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.Option;
 import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
-import io.spine.validation.event.SimpleRuleAdded;
-import io.spine.protobuf.AnyPacker;
-import io.spine.time.validation.TimeOption;
 import io.spine.time.validation.Time;
+import io.spine.time.validation.TimeOption;
+import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static io.spine.validation.SimpleRules.withCustom;
 import static java.lang.String.format;
 
+/**
+ * A policy which, upon encountering a field with the {@code (when)} option, generates
+ * a validation rule.
+ *
+ * <p>The validation rule ensures that the associated field is in the future or in the past from
+ * the current time (depending on the option definition).
+ */
 final class WhenPolicy extends Policy<FieldOptionDiscovered> {
 
     @Override
@@ -71,4 +78,3 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
         );
     }
 }
-
