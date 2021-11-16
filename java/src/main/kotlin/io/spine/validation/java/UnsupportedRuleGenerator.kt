@@ -26,36 +26,25 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
-import io.spine.protobuf.unpackGuessingType
-import io.spine.validation.DistinctCollection
-import io.spine.validation.InTime
-import io.spine.validation.RecursiveValidation
-import io.spine.validation.Regex
-import io.spine.validation.RequiredOneof
-
 /**
- * Creates a [CodeGenerator] for a custom validation operator for the given context.
+ * A null-value generator which never produces code.
+ *
+ * Use this generator when an unknown custom validation operator is encountered.
  */
-internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
-    @Suppress("MoveVariableDeclarationIntoWhen") // For better readability.
-    val feature = ctx.feature()
-    return when (feature) {
-        is DistinctCollection -> DistinctGenerator(ctx)
-        is RecursiveValidation -> ValidateGenerator(ctx)
-        is Regex -> PatternGenerator(feature, ctx)
-        is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
-        is InTime -> inTimeGenerator(feature, ctx)
-        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
-    }
-}
+internal class UnsupportedRuleGenerator(
+    private val ruleName: String,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
 
-private fun GenerationContext.feature(): Message = with(rule) {
-    if (hasSimple()) {
-        simple.customOperator.feature.unpackGuessingType()
-    } else if (hasMessageWide()) {
-        messageWide.operator.feature.unpackGuessingType()
-    } else {
-        throw IllegalStateException("Rule has no custom operator: $rule")
+    override val canGenerate: Boolean = false
+
+    override fun condition(): Nothing = unsupported()
+
+    override fun error(): Nothing = unsupported()
+
+    override fun createViolation(): Nothing = unsupported()
+
+    private fun unsupported(): Nothing {
+        throw UnsupportedOperationException("Rule `$ruleName` is not supported.")
     }
 }

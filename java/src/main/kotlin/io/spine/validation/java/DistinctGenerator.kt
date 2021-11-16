@@ -26,36 +26,33 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
-import io.spine.protobuf.unpackGuessingType
-import io.spine.validation.DistinctCollection
-import io.spine.validation.InTime
-import io.spine.validation.RecursiveValidation
-import io.spine.validation.Regex
-import io.spine.validation.RequiredOneof
+import com.google.common.collect.ImmutableSet
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.isMap
 
 /**
- * Creates a [CodeGenerator] for a custom validation operator for the given context.
+ * Generates code for the [DistinctCollection] operator.
+ *
+ * A list or the values of a map containing a duplicate is a constraint violation.
  */
-internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
-    @Suppress("MoveVariableDeclarationIntoWhen") // For better readability.
-    val feature = ctx.feature()
-    return when (feature) {
-        is DistinctCollection -> DistinctGenerator(ctx)
-        is RecursiveValidation -> ValidateGenerator(ctx)
-        is Regex -> PatternGenerator(feature, ctx)
-        is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
-        is InTime -> inTimeGenerator(feature, ctx)
-        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
-    }
-}
+internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-private fun GenerationContext.feature(): Message = with(rule) {
-    if (hasSimple()) {
-        simple.customOperator.feature.unpackGuessingType()
-    } else if (hasMessageWide()) {
-        messageWide.operator.feature.unpackGuessingType()
-    } else {
-        throw IllegalStateException("Rule has no custom operator: $rule")
+    override fun condition(): Expression {
+        val map = ctx.fieldFromSimpleRule!!.isMap()
+        val fieldValue = ctx.fieldOrElement!!
+        val comparisonCollection = if (map) MethodCall(fieldValue, "values") else fieldValue
+        return equalsOperator(
+            MethodCall(fieldValue, "size"),
+            ClassName(ImmutableSet::class)
+                .call("copyOf", listOf(comparisonCollection))
+                .chain("size")
+        )
+    }
+
+    private fun equalsOperator(left: Expression, right: Expression): Expression {
+        return Literal(left.toCode() + " == " + right.toCode())
     }
 }
