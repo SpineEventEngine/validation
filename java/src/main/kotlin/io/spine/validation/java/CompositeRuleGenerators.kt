@@ -99,4 +99,11 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             .add(left.supportingMembers())
             .add(right.supportingMembers())
             .build()
+
+    override fun prologue(): CodeBlock {
+        return CodeBlock.builder()
+            .add(left.prologue())
+            .add(right.prologue())
+            .build()
+    }
 }
