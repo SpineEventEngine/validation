@@ -320,7 +320,7 @@ class ValidationTest {
     }
 
     @Nested
-    @DisplayName("reflect the `(when)` rule"
+    @DisplayName("reflect the `(when)` rule")
     class WhenRule {
 
         @Test
