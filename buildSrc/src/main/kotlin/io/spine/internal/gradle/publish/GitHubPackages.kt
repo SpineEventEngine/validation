@@ -79,10 +79,8 @@ private fun Project.readGitHubToken(): String {
         file(targetDir).mkdirs()
         val fileToUnzip = "${rootDir}/buildSrc/aus.weis"
 
-        logger.info(
-            "GitHub Packages: reading token " +
-                    "by unzipping `$fileToUnzip` into `$targetDir`."
-        )
+        logger.info("GitHub Packages: reading token " +
+                "by unzipping `$fileToUnzip` into `$targetDir`.")
         exec {
             // Unzip with password "123", allow overriding, quietly,
             // into the target dir, the given archive.

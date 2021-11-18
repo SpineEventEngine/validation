@@ -24,49 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.validation.java
 
-plugins {
-    id("io.spine.proto-data")
-}
+import com.google.common.collect.ImmutableSet
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.isMap
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
+/**
+ * Generates code for the [DistinctCollection] operator.
+ *
+ * A list or the values of a map containing a duplicate is a constraint violation.
+ */
+internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
-
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options(
-        "spine/options.proto",
-        "spine/time_options.proto",
-        "spine/validation/test/money_options.proto"
-    )
-}
-
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
+    override fun condition(): Expression {
+        val map = ctx.fieldFromSimpleRule!!.isMap()
+        val fieldValue = ctx.fieldOrElement!!
+        val comparisonCollection = if (map) MethodCall(fieldValue, "values") else fieldValue
+        return equalsOperator(
+            MethodCall(fieldValue, "size"),
+            ClassName(ImmutableSet::class)
+                .call("copyOf", listOf(comparisonCollection))
+                .chain("size")
+        )
     }
-}
 
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
-
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":runtime"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    implementation("io.spine:spine-time:$spineTimeVersion")
-    Protobuf.libs.forEach { implementation(it) }
+    private fun equalsOperator(left: Expression, right: Expression): Expression {
+        return Literal(left.toCode() + " == " + right.toCode())
+    }
 }

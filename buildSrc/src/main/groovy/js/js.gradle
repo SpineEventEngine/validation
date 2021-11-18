@@ -73,7 +73,7 @@ task deleteCompiled {
 buildJs {
 
     outputs.dir "$projectDir/dist"
-
+    
     doLast {
         npm 'run', 'build'
         npm 'run', 'build-dev'
@@ -125,7 +125,7 @@ prepareJsPublication {
 
     doLast {
         copy {
-            from(projectDir) {
+            from (projectDir) {
                 include 'package.json'
                 include '.npmrc'
             }
@@ -155,7 +155,7 @@ task coverageJs {
     }
 
     dependsOn buildJs
-
+    
     rootProject.check.dependsOn coverageJs
 }
 
@@ -163,7 +163,7 @@ task coverageJs {
  * Generates the report on NPM dependencies and their licenses.
  */
 task npmLicenseReport {
-
+    
     doLast {
         npm 'run', 'license-report'
     }

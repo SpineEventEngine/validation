@@ -24,49 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.validation.java
 
-plugins {
-    id("io.spine.proto-data")
-}
+/**
+ * A null-value generator which never produces code.
+ *
+ * Use this generator when an unknown custom validation operator is encountered.
+ */
+internal class UnsupportedRuleGenerator(
+    private val ruleName: String,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
+    override val canGenerate: Boolean = false
 
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+    override fun condition(): Nothing = unsupported()
 
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options(
-        "spine/options.proto",
-        "spine/time_options.proto",
-        "spine/validation/test/money_options.proto"
-    )
-}
+    override fun error(): Nothing = unsupported()
 
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
+    override fun createViolation(): Nothing = unsupported()
+
+    private fun unsupported(): Nothing {
+        throw UnsupportedOperationException("Rule `$ruleName` is not supported.")
     }
-}
-
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
-
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":runtime"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    implementation("io.spine:spine-time:$spineTimeVersion")
-    Protobuf.libs.forEach { implementation(it) }
 }

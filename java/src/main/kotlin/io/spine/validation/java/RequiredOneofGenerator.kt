@@ -24,49 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.validation.java
 
-plugins {
-    id("io.spine.proto-data")
-}
+import io.spine.protodata.Field
+import io.spine.protodata.OneofName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.validation.ErrorMessage
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
+/**
+ * A code generator for the `(is_required)` constraint.
+ *
+ * The constraint applies to a `oneof` group and enforces an alternative to be set. The generated
+ * code checks that the `oneof`'s case is one of the alternatives, i.e. not not-set.
+ */
+internal class RequiredOneofGenerator(
+    private val name: OneofName,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
 
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+    private val rule = ctx.rule.messageWide
 
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-    options(
-        "spine/options.proto",
-        "spine/time_options.proto",
-        "spine/validation/test/money_options.proto"
-    )
-}
-
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
+    override fun condition(): Expression {
+        val casePropertyName = "${name.value}_case"
+        val pseudoField = ctx.msg.field(casePropertyName, Field.CardinalityCase.SINGLE)
+        val getter = pseudoField.getter
+        val numberGetter = getter.chain("getNumber")
+        return Literal("$numberGetter != 0")
     }
-}
 
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
+    override fun error() =
+        ErrorMessage.forRule(rule.errorMessage)
 
-dependencies {
-    protoData(project(":test-extensions"))
-    implementation(project(":runtime"))
-    implementation(project(":test-extensions"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    implementation("io.spine:spine-time:$spineTimeVersion")
-    Protobuf.libs.forEach { implementation(it) }
+    override fun createViolation() =
+        error().createViolation(ctx)
 }

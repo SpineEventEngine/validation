@@ -43,7 +43,7 @@ class AuthorEmail(val value: String) {
         /**
          * Obtains the author from the system [environment variable][environmentVariable].
          */
-        fun fromVar(): AuthorEmail {
+        fun fromVar() : AuthorEmail {
             val envValue = System.getenv(environmentVariable)
             if (envValue.isNullOrEmpty()) {
                 throw IllegalStateException(

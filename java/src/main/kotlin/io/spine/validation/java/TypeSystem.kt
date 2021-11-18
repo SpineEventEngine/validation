@@ -103,6 +103,9 @@ private constructor(
         }
     }
 
+    /**
+     * Obtains the name of the class from a given name of a Protobuf type.
+     */
     private fun classNameFor(type: TypeName) =
         knownTypes[type] ?: unknownType(type)
 

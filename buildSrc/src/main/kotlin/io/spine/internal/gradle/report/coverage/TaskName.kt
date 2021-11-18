@@ -29,8 +29,7 @@ package io.spine.internal.gradle.report.coverage
 /**
  * The names of Gradle tasks involved into the JaCoCo reporting.
  */
-@Suppress("EnumEntryName", "EnumNaming")
-/* Dubbing the actual values in Gradle. */
+@Suppress("EnumEntryName", "EnumNaming") /* Dubbing the actual values in Gradle. */
 internal enum class TaskName {
     jacocoRootReport,
     copyReports,

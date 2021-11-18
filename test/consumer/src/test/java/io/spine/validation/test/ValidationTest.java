@@ -28,6 +28,8 @@ package io.spine.validation.test;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.util.Timestamps;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
@@ -146,7 +148,7 @@ class ValidationTest {
 
     @Nested
     @DisplayName("reflect a `(distinct)` rule and")
-    class DistinctFeature {
+    class DistinctRule {
 
         @Test
         @DisplayName("throw `ValidationException` if a list contains duplicate entries")
@@ -314,6 +316,29 @@ class ValidationTest {
                     .newBuilder()
                     .setHotSoup("Minestrone");
             assertNoException(builder);
+        }
+    }
+
+    @Nested
+    @DisplayName("reflect the `(when)` rule")
+    class WhenRule {
+
+        @Test
+        @DisplayName(PROHIBIT_INVALID)
+        void fail() {
+            Timestamp when = Timestamps.fromSeconds(4_792_687_200L); // 15 Nov 2121
+            Player.Builder player = Player.newBuilder()
+                            .setStartedCareerIn(when);
+            assertValidationException(player);
+        }
+
+        @Test
+        @DisplayName(ALLOW_VALID)
+        void pass() {
+            Timestamp when = Timestamps.fromSeconds(59_086_800L); // 15 Nov 1971
+            Player.Builder player = Player.newBuilder()
+                    .setStartedCareerIn(when);
+            assertNoException(player);
         }
     }
 

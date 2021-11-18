@@ -38,10 +38,8 @@ import org.gradle.kotlin.dsl.property
  * Configures the `updateGitHubPages` extension.
  */
 @Suppress("unused")
-fun Project.updateGitHubPages(
-    excludeInternalDocletVersion: String,
-    action: UpdateGitHubPagesExtension.() -> Unit
-) {
+fun Project.updateGitHubPages(excludeInternalDocletVersion: String,
+                              action: UpdateGitHubPagesExtension.() -> Unit) {
     apply<UpdateGitHubPages>()
 
     val extension = extensions.getByType(UpdateGitHubPagesExtension::class)

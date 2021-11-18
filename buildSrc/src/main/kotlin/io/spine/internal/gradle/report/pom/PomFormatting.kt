@@ -65,14 +65,14 @@ internal object PomFormatting {
      */
     private fun describingComment(): String {
         val description = NL +
-                "This file was generated using the Gradle `generatePom` task. " +
-                NL +
-                "This file is not suitable for `maven` build tasks. It only describes the " +
-                "first-level dependencies of " +
-                NL +
-                "all modules and does not describe the project " +
-                "structure per-subproject." +
-                NL
+                    "This file was generated using the Gradle `generatePom` task. " +
+                    NL +
+                    "This file is not suitable for `maven` build tasks. It only describes the " +
+                    "first-level dependencies of " +
+                    NL +
+                    "all modules and does not describe the project " +
+                    "structure per-subproject." +
+                    NL
         return String.format(
             "<!-- %s %s %s -->",
             NL, description, NL

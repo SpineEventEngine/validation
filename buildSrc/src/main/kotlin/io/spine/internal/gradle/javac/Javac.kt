@@ -56,11 +56,10 @@ import org.gradle.process.CommandLineArgumentProvider
 fun JavaCompile.configureJavac() {
 
     if (JavaVersion.current() != JavacConfig.EXPECTED_JAVA_VERSION) {
-        throw GradleException(
-            "Spine Event Engine can be built with JDK 8 only." +
-                    " Supporting JDK 11 and above at build-time is planned in 2.0 release." +
-                    " Please use the pre-built binaries available in the Spine Maven repository." +
-                    " See https://github.com/SpineEventEngine/base/issues/457."
+        throw GradleException("Spine Event Engine can be built with JDK 8 only." +
+                " Supporting JDK 11 and above at build-time is planned in 2.0 release." +
+                " Please use the pre-built binaries available in the Spine Maven repository." +
+                " See https://github.com/SpineEventEngine/base/issues/457."
         )
     }
 
