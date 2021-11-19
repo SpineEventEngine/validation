@@ -35,6 +35,7 @@ import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.codegen.java.This
+import io.spine.protodata.isMap
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 import javax.lang.model.element.Modifier
@@ -64,6 +65,12 @@ internal class DistributingGenerator(
 
     override fun supportingMembers(): CodeBlock {
         val typeName = ctx.typeSystem.javaTypeName(field.type)
+        val fieldAccessor = ctx.fieldOrElement!!
+        val collection = if (field.isMap()) {
+            MethodCall(fieldAccessor, "values")
+        } else {
+            fieldAccessor
+        }
         val body = CodeBlock
             .builder()
             .addStatement(
@@ -72,20 +79,22 @@ internal class DistributingGenerator(
                 ConstraintViolation::class.java,
                 ctx.violationsList,
                 ImmutableList::class.java
-            ).beginControlFlow("for (\$L \$L : \$L)", typeName, element, ctx.fieldOrElement)
+            ).beginControlFlow("for (\$L \$L : \$L)", typeName, element, collection)
             .add(delegate.code())
             .endControlFlow()
             .addStatement("return \$N.build()", elementContext.violationsList)
             .build()
-        return CodeBlock.of(
-            MethodSpec
-                .methodBuilder(methodName)
-                .addModifiers(Modifier.PRIVATE)
-                .returns(violationsType)
-                .addCode(body)
-                .build()
-                .toString()
-        )
+        val otherMembers = delegate.supportingMembers()
+        val groupingMethod = MethodSpec.methodBuilder(methodName)
+            .addModifiers(Modifier.PRIVATE)
+            .returns(violationsType)
+            .addCode(body)
+            .build()
+            .toString()
+        return otherMembers
+            .toBuilder()
+            .add(groupingMethod)
+            .build()
     }
 
     override fun prologue(): CodeBlock {

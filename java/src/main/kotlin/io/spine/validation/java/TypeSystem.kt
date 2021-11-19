@@ -196,7 +196,8 @@ private constructor(
 
     private fun PrimitiveType.toPrimitiveName(): String {
         val klass = primitiveClass()
-        return klass.javaPrimitiveType!!.name
+        val primitiveClass = klass.javaPrimitiveType ?: klass.java
+        return primitiveClass.name
     }
 
     private fun PrimitiveType.primitiveClass(): KClass<*> =
