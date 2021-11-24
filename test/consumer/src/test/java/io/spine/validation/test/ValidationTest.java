@@ -231,6 +231,14 @@ class ValidationTest {
             assertThat(violation.getFieldPath().getFieldName(0))
                     .isEqualTo("content");
         }
+
+        @Test
+        @DisplayName("and handle special characters in the pattern properly")
+        void allowDollarSigns() {
+            Team.Builder msg = Team.newBuilder()
+                    .setName("Sch 04");
+            assertNoException(msg);
+        }
     }
 
     @Nested

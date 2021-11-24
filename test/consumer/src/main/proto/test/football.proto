@@ -24,4 +24,6 @@ message Player {
 message Team {
 
     map<uint32, Player> players = 1 [(distinct) = true];
+
+    string name = 2 [(required) = false, (pattern).regex = "^[\\w\\d\\s]+$"];
 }
