@@ -115,10 +115,13 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
-    private fun selectSigns() = if (field.isJavaPrimitive()) {
-        PRIMITIVE_COMPARISON_OPS
-    } else {
+    private fun fieldIssJavaObject(): Boolean =
+        !field.isJavaPrimitive() || (field.isRepeated() && !ctx.isElement)
+
+    private fun selectSigns() = if (fieldIssJavaObject()) {
         OBJECT_COMPARISON_OPS
+    } else {
+        PRIMITIVE_COMPARISON_OPS
     }
 
     override fun error(): ErrorMessage {
