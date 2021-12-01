@@ -38,7 +38,8 @@ import java.nio.file.Paths
  * The messages are `ListOfAnys` and `MapOfAnys`. This renderer allows their users to construct
  * instances of the messages by simply calling a static method.
  */
-public class DiagsRenderer : JavaRenderer() {
+@Suppress("unused") // Accessed via reflection.
+class DiagsRenderer : JavaRenderer() {
 
     override fun render(sources: SourceSet) {
         sources.file(Paths.get("io/spine/validation/ListOfAnys.java"))

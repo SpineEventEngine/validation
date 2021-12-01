@@ -38,6 +38,7 @@ import java.util.Optional;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Utilities for working with {@link ProtobufSourceFile}s.
@@ -67,16 +68,7 @@ final class SourceFiles {
                            TypeName typeName,
                            FilePath filePath,
                            Querying querying) {
-        ProtobufSourceFile file = querying
-                .select(ProtobufSourceFile.class)
-                .withId(filePath)
-                .orElseThrow(() -> unknownFile(filePath));
-        MessageType type = file
-                .getTypeMap()
-                .get(typeUrl(typeName));
-        if (type == null) {
-            throw unknownType(typeName);
-        }
+        MessageType type = findType(typeName, filePath, querying);
         Optional<Field> field = type
                 .getFieldList()
                 .stream()
@@ -90,6 +82,31 @@ final class SourceFiles {
                 .findFirst()
                 .orElseThrow(() -> unknownField(fieldName)));
         return foundField;
+    }
+
+    static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
+        MessageType type = findType(typeName, filePath, querying);
+        if (type.getFieldCount() == 0) {
+            String url = typeUrl(typeName);
+            throw newIllegalStateException("Type `%s` must have at least one field.", url);
+        }
+        Field field = type.getField(0);
+        return field;
+    }
+
+    static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
+        ProtobufSourceFile file = querying
+                .select(ProtobufSourceFile.class)
+                .withId(filePath)
+                .orElseThrow(() -> unknownFile(filePath));
+        String typeUrl = typeUrl(typeName);
+        MessageType type = file
+                .getTypeMap()
+                .get(typeUrl);
+        if (type == null) {
+            throw unknownType(typeName);
+        }
+        return type;
     }
 
     private static IllegalArgumentException unknownField(FieldName name) {

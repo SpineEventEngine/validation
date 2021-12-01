@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused") // Loaded by ProtoData via reflection.
 public class ValidationPlugin implements Plugin {
 
-    @NotNull
+    @SuppressWarnings("OverlyCoupledMethod") // Registers a lot of policies and does nothing else.
     @Override
     public ImmutableSet<Policy<?>> policies() {
         return ImmutableSet.of(
@@ -50,7 +50,9 @@ public class ValidationPlugin implements Plugin {
                 new ValidatePolicy(),
                 new PatternPolicy(),
                 new IsRequiredPolicy(),
-                new WhenPolicy()
+                new WhenPolicy(),
+                new RequiredIdPolicy(),
+                new RequiredEntityIdPolicy()
         );
     }
 

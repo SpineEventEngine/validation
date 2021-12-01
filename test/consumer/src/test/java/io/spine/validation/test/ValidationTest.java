@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.base.Identifier.newUuid;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Generated validation code should")
@@ -347,6 +348,62 @@ class ValidationTest {
             Player.Builder player = Player.newBuilder()
                     .setStartedCareerIn(when);
             assertNoException(player);
+        }
+    }
+
+    @Nested
+    @DisplayName("make the entity and signal IDs required")
+    class RequiredIdRule {
+
+        @Test
+        @DisplayName("allow valid entities")
+        void passEntity() {
+            Fancy.Builder entity = Fancy.newBuilder()
+                    .setId(FancyId.newBuilder().setUuid(newUuid()));
+            assertNoException(entity);
+        }
+
+        @Test
+        @DisplayName("not allow invalid entities")
+        void failEntity() {
+            Fancy.Builder entity = Fancy.newBuilder();
+            ConstraintViolation violation = assertValidationException(entity);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
+        }
+
+        @Test
+        @DisplayName("allow valid events")
+        void passEvent() {
+            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder()
+                    .setId("qwerty");
+            assertNoException(event);
+        }
+
+        @Test
+        @DisplayName("not allow invalid events")
+        void failEvent() {
+            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder();
+            ConstraintViolation violation = assertValidationException(event);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
+        }
+
+        @Test
+        @DisplayName("allow valid commands")
+        void passCommand() {
+            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder()
+                    .setId("42");
+            assertNoException(cmd);
+        }
+
+        @Test
+        @DisplayName("not allow invalid commands")
+        void failCommand() {
+            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder();
+            ConstraintViolation violation = assertValidationException(cmd);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
         }
     }
 

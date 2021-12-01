@@ -29,6 +29,7 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldExited;
+import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -37,7 +38,9 @@ import io.spine.validation.event.SimpleRuleAdded;
 
 import java.util.Optional;
 
+import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.validation.SourceFiles.findField;
+import static java.lang.String.format;
 
 /**
  * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
@@ -69,11 +72,24 @@ final class RequiredPolicy extends Policy<FieldExited> {
     }
 
     private static SimpleRuleAdded requiredRule(Field declaration, RequiredField field) {
-        SimpleRule rule = RequiredRule.forField(declaration, field.getErrorMessage());
+        SimpleRule rule = RequiredRule.forField(declaration, field.getErrorMessage())
+                .orElseThrow(() -> doesNotSupportRequired(declaration));
         return SimpleRuleAdded
                 .newBuilder()
                 .setType(declaration.getDeclaringType())
                 .setRule(rule)
                 .vBuild();
+    }
+
+    private static IllegalStateException doesNotSupportRequired(Field field) {
+        String fieldName = field.getName()
+                                .getValue();
+        String typeUrl = typeUrl(field.getDeclaringType());
+        PrimitiveType type = field.getType()
+                                  .getPrimitive();
+        return new IllegalStateException(format(
+                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
+                typeUrl, fieldName, type
+        ));
     }
 }

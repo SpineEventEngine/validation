@@ -1,0 +1,7 @@
+{
+  "message_markers": {
+    "entity_option_name": ["fancy_view"],
+    "event_pattern": [{ "prefix": "test/events" }],
+    "command_pattern": [{ "suffix": "_cmd.proto" }]
+  }
+}

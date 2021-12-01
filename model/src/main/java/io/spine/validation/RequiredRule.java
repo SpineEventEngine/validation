@@ -27,12 +27,11 @@
 package io.spine.validation;
 
 import io.spine.protodata.Field;
-import io.spine.protodata.PrimitiveType;
+
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
-import static java.lang.String.format;
 
 /**
  * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
@@ -48,32 +47,18 @@ final class RequiredRule {
     /**
      * Creates a rule for the given field to be required.
      */
-    static SimpleRule forField(Field field, String errorMessage) {
-        checkNotNull(field);
-        Value unsetValue = UnsetValue.forField(field)
-                                     .orElseThrow(() -> doesNotSupportRequired(field));
-        @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
+    @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
         // Duplication in generated code.
-        SimpleRule rule = SimpleRule
+    static Optional<SimpleRule> forField(Field field, String errorMessage) {
+        checkNotNull(field);
+        Optional<Value> unsetValue = UnsetValue.forField(field);
+        return unsetValue.map(v -> SimpleRule
                 .newBuilder()
                 .setErrorMessage(errorMessage)
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
-                .setOtherValue(unsetValue)
+                .setOtherValue(v)
                 .setDistribute(false)
-                .vBuild();
-        return rule;
-    }
-
-    private static IllegalStateException doesNotSupportRequired(Field field) {
-        String fieldName = field.getName()
-                                .getValue();
-        String typeUrl = typeUrl(field.getDeclaringType());
-        PrimitiveType type = field.getType()
-                                  .getPrimitive();
-        return new IllegalStateException(format(
-                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
-                typeUrl, fieldName, type
-        ));
+                .vBuild());
     }
 }
