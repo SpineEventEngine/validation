@@ -48,7 +48,7 @@ import static java.lang.String.format;
  * the value is {@code true}, and the field type supports such validation, a validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
-final class RequiredPolicy extends Policy<FieldExited> {
+final class RequiredPolicy extends ValidationPolicy<FieldExited> {
 
     @Override
     @React
@@ -67,7 +67,7 @@ final class RequiredPolicy extends Policy<FieldExited> {
                                           this);
             return EitherOf2.withA(requiredRule(declaration, field.get()));
         }
-        return EitherOf2.withB(nothing());
+        return withNothing();
     }
 
     private static RuleAdded requiredRule(Field declaration, RequiredField field) {

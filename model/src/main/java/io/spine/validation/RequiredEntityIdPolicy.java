@@ -33,7 +33,6 @@ import io.spine.protodata.MessageType;
 import io.spine.protodata.Option;
 import io.spine.protodata.TypeExited;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -47,18 +46,18 @@ import static io.spine.validation.Rules.toEvent;
 import static io.spine.validation.SourceFiles.findType;
 import static java.lang.String.format;
 
-final class RequiredEntityIdPolicy extends Policy<TypeExited> {
+final class RequiredEntityIdPolicy extends ValidationPolicy<TypeExited> {
 
     @Override
     @React
     @SuppressWarnings("OptionalIsPresent") // For better readability.
     protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
         if (!configIsPresent()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         Set<String> options = options();
         if (options.isEmpty()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         TypeName typeName = event.getType();
         MessageType type = findType(typeName, event.getFile(), this);
@@ -67,7 +66,7 @@ final class RequiredEntityIdPolicy extends Policy<TypeExited> {
                                     .map(Option::getName)
                                     .anyMatch(options::contains);
         if (!optionMatches) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         if (type.getFieldCount() == 0) {
             throw newIllegalStateException(
@@ -79,7 +78,7 @@ final class RequiredEntityIdPolicy extends Policy<TypeExited> {
                                                                                .getValue());
         Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
         if (!rule.isPresent()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         return EitherOf2.withA(toEvent(rule.get(), typeName));
     }

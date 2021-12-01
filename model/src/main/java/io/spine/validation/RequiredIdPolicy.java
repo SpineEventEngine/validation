@@ -32,7 +32,6 @@ import io.spine.protodata.Field;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeExited;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -44,14 +43,14 @@ import static io.spine.validation.Rules.toEvent;
 import static io.spine.validation.SourceFiles.findFirstField;
 import static java.lang.String.format;
 
-final class RequiredIdPolicy extends Policy<TypeExited> {
+final class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
 
     @Override
     @React
     @SuppressWarnings("OptionalIsPresent") // For better readability.
     protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
         if (!configIsPresent()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         ValidationConfig config = configAs(ValidationConfig.class);
         MessageMakers markers = config.getMessageMarkers();
@@ -60,7 +59,7 @@ final class RequiredIdPolicy extends Policy<TypeExited> {
         boolean match = filePatterns.stream()
                                     .anyMatch(pattern -> matches(file, pattern));
         if (!match) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         TypeName type = event.getType();
         Field field = findFirstField(type, file, this);
@@ -68,7 +67,7 @@ final class RequiredIdPolicy extends Policy<TypeExited> {
                                                                         .getValue());
         Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
         if (!rule.isPresent()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         return EitherOf2.withA(toEvent(rule.get(), type));
     }

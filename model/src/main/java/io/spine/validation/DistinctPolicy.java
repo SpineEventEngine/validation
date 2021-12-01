@@ -35,7 +35,6 @@ import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.Option;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -54,19 +53,19 @@ import static io.spine.validation.SourceFiles.findField;
  *
  * <p>The validation rule prohibits duplicate entries in the associated field.
  */
-final class DistinctPolicy extends Policy<FieldOptionDiscovered> {
+final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
     private static final String ERROR = "Collection must not contain duplicates.";
 
     @Override
     @React
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(
+    protected EitherOf2<RuleAdded, Nothing> whenever(
             @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
     ) {
         Option option = event.getOption();
         if (!unpack(option.getValue(), BoolValue.class).getValue()) {
-            return EitherOf2.withB(nothing());
+            return withNothing();
         }
         checkCollection(event.getField(), event.getType(), event.getFile());
         FieldName field = event.getField();
