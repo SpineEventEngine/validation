@@ -33,6 +33,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
+import static io.spine.validation.LogicalOperator.AND;
 
 /**
  * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
@@ -56,14 +57,9 @@ final class RequiredRule {
         if (!unsetValue.isPresent()) {
             return Optional.empty();
         }
-        SimpleRule integratedRule = SimpleRule
-                .newBuilder()
-                .setErrorMessage(errorMessage)
-                .setField(field.getName())
-                .setOperator(NOT_EQUAL)
-                .setOtherValue(unsetValue.get())
-                .setDistribute(true)
-                .vBuild();
+        SimpleRule integratedRule = rule(
+                field, unsetValue.get(), errorMessage, "Field must be set."
+        );
         if (!isRepeated(field)) {
             return Optional.of(wrap(integratedRule));
         }
@@ -71,20 +67,30 @@ final class RequiredRule {
         if (!singularUnsetValue.isPresent()) {
             return Optional.of(wrap(integratedRule));
         }
-        SimpleRule differentialRule = SimpleRule
-                .newBuilder()
-                .setErrorMessage(errorMessage)
-                .setField(field.getName())
-                .setOperator(NOT_EQUAL)
-                .setOtherValue(singularUnsetValue.get())
-                .setDistribute(true)
-                .vBuild();
+        SimpleRule differentialRule = rule(
+                field, singularUnsetValue.get(), errorMessage,
+                "Collection must not contain empty values."
+        );
         CompositeRule composite = CompositeRule.newBuilder()
                 .setLeft(wrap(integratedRule))
-                .setOperator(LogicalOperator.AND)
+                .setOperator(AND)
                 .setRight(wrap(differentialRule))
                 .build();
         return Optional.of(wrap(composite));
+    }
+
+    private static SimpleRule rule(Field field,
+                                   Value value,
+                                   String errorMessage, String defaultErrorMessage) {
+        String msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
+        return SimpleRule
+                .newBuilder()
+                .setErrorMessage(msg)
+                .setField(field.getName())
+                .setOperator(NOT_EQUAL)
+                .setOtherValue(value)
+                .setDistribute(true)
+                .vBuild();
     }
 
     private static Rule wrap(SimpleRule r) {

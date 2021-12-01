@@ -16,7 +16,7 @@ message Snowflake {
 
 message Blizzard {
 
-    repeated Snowflake snowflake = 1 [(distinct) = true];
+    repeated Snowflake snowflake = 1 [(distinct) = true, (required) = true];
 }
 
 message RainDrop {

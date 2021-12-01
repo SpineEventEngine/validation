@@ -43,6 +43,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.base.Identifier.newUuid;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Generated validation code should")
 class ValidationTest {
@@ -144,6 +145,35 @@ class ValidationTest {
             Book.Builder builder = Book.newBuilder()
                     .setAuthor(validAuthor());
             assertNoException(builder);
+        }
+
+        @Test
+        @DisplayName("throw `ValidationException` if a list contains only default values")
+        void empty() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.getDefaultInstance());
+            assertValidationException(builder);
+        }
+
+        @Test
+        @DisplayName("pass if a list contains all non-default values")
+        void nonDefaultList() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.newBuilder()
+                                          .setEdges(3)
+                                          .setVertices(3));
+            assertNoException(builder);
+        }
+
+        @Test
+        @DisplayName("throw `ValidationException` if a list contains at least one default value")
+        void withDefault() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.newBuilder()
+                                          .setEdges(3)
+                                          .setVertices(3))
+                    .addSnowflake(Snowflake.getDefaultInstance());
+            assertValidationException(builder);
         }
     }
 
@@ -417,9 +447,13 @@ class ValidationTest {
     }
 
     private static void assertNoException(Message.Builder builder) {
-        Object result = builder.build();
-        assertThat(result)
-                .isNotNull();
+        try {
+            Object result = builder.build();
+            assertThat(result)
+                    .isNotNull();
+        } catch (ValidationException e) {
+            fail("Unexpected constraint violation: " + e.getConstraintViolations(), e);
+        }
     }
 
     private static Author validAuthor() {
