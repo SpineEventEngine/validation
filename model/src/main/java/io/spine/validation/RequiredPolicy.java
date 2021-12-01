@@ -34,7 +34,6 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.SimpleRuleAdded;
 
 import java.util.Optional;
 
@@ -53,7 +52,7 @@ final class RequiredPolicy extends Policy<FieldExited> {
 
     @Override
     @React
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+    protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
         FieldId id = FieldId
                 .newBuilder()
                 .setName(event.getField())
@@ -71,14 +70,10 @@ final class RequiredPolicy extends Policy<FieldExited> {
         return EitherOf2.withB(nothing());
     }
 
-    private static SimpleRuleAdded requiredRule(Field declaration, RequiredField field) {
-        SimpleRule rule = RequiredRule.forField(declaration, field.getErrorMessage())
+    private static RuleAdded requiredRule(Field declaration, RequiredField field) {
+        Rule rule = RequiredRule.forField(declaration, field.getErrorMessage())
                 .orElseThrow(() -> doesNotSupportRequired(declaration));
-        return SimpleRuleAdded
-                .newBuilder()
-                .setType(declaration.getDeclaringType())
-                .setRule(rule)
-                .vBuild();
+        return Rules.toEvent(rule, declaration.getDeclaringType());
     }
 
     private static IllegalStateException doesNotSupportRequired(Field field) {

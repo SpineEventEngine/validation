@@ -24,43 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation;
 
-package spine.validation;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.base.EventMessage;
 
-import "spine/options.proto";
-
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.event";
-option java_outer_classname = "EventsProto";
-option java_multiple_files = true;
-
-option (every_is).java_type = "io.spine.validation.RuleAdded";
-
-import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
-
-// The event emitted whenever a simple validation rule is attached to a message type.
-message SimpleRuleAdded {
-
-    protodata.TypeName type = 1;
-
-    SimpleRule rule = 2;
-}
-
-// The event emitted whenever a composite validation rule is attached to a message type.
-message CompositeRuleAdded {
-
-    protodata.TypeName type = 1;
-
-    CompositeRule rule = 2;
-}
-
-
-// The event emitted whenever a message-wide validation rule is attached to a type.
-message MessageWideRuleAdded {
-
-    protodata.TypeName type = 1;
-
-    MessageWideRule rule = 3;
-}
+@Immutable
+public interface RuleAdded extends EventMessage {}

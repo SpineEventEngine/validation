@@ -37,10 +37,10 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.tools.mc.java.codegen.FilePattern;
-import io.spine.validation.event.SimpleRuleAdded;
 
 import java.util.Optional;
 
+import static io.spine.validation.Rules.toEvent;
 import static io.spine.validation.SourceFiles.findFirstField;
 import static java.lang.String.format;
 
@@ -49,7 +49,7 @@ final class RequiredIdPolicy extends Policy<TypeExited> {
     @Override
     @React
     @SuppressWarnings("OptionalIsPresent") // For better readability.
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External TypeExited event) {
+    protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
         if (!configIsPresent()) {
             return EitherOf2.withB(nothing());
         }
@@ -66,14 +66,11 @@ final class RequiredIdPolicy extends Policy<TypeExited> {
         Field field = findFirstField(type, file, this);
         String errorMessage = format("ID field `%s` must be set.", field.getName()
                                                                         .getValue());
-        Optional<SimpleRule> rule = RequiredRule.forField(field, errorMessage);
+        Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
         if (!rule.isPresent()) {
             return EitherOf2.withB(nothing());
         }
-        return EitherOf2.withA(SimpleRuleAdded.newBuilder()
-                                       .setType(type)
-                                       .setRule(rule.get())
-                                       .build());
+        return EitherOf2.withA(toEvent(rule.get(), type));
     }
 
     private static ImmutableList<FilePattern> allPatterns(MessageMakers markers) {

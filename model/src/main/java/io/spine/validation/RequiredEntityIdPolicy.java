@@ -37,13 +37,13 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.SimpleRuleAdded;
 
 import java.util.Optional;
 import java.util.Set;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.validation.Rules.toEvent;
 import static io.spine.validation.SourceFiles.findType;
 import static java.lang.String.format;
 
@@ -52,7 +52,7 @@ final class RequiredEntityIdPolicy extends Policy<TypeExited> {
     @Override
     @React
     @SuppressWarnings("OptionalIsPresent") // For better readability.
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External TypeExited event) {
+    protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
         if (!configIsPresent()) {
             return EitherOf2.withB(nothing());
         }
@@ -77,14 +77,11 @@ final class RequiredEntityIdPolicy extends Policy<TypeExited> {
         Field field = type.getField(0);
         String errorMessage = format("Entity ID field `%s` must be set.", field.getName()
                                                                                .getValue());
-        Optional<SimpleRule> rule = RequiredRule.forField(field, errorMessage);
+        Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
         if (!rule.isPresent()) {
             return EitherOf2.withB(nothing());
         }
-        return EitherOf2.withA(SimpleRuleAdded.newBuilder()
-                                       .setType(typeName)
-                                       .setRule(rule.get())
-                                       .build());
+        return EitherOf2.withA(toEvent(rule.get(), typeName));
     }
 
     private Set<String> options() {

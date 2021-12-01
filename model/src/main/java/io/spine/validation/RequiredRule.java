@@ -31,6 +31,7 @@ import io.spine.protodata.Field;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 
 /**
@@ -49,16 +50,52 @@ final class RequiredRule {
      */
     @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
         // Duplication in generated code.
-    static Optional<SimpleRule> forField(Field field, String errorMessage) {
+    static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
         Optional<Value> unsetValue = UnsetValue.forField(field);
-        return unsetValue.map(v -> SimpleRule
+        if (!unsetValue.isPresent()) {
+            return Optional.empty();
+        }
+        SimpleRule integratedRule = SimpleRule
                 .newBuilder()
                 .setErrorMessage(errorMessage)
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
-                .setOtherValue(v)
-                .setDistribute(false)
-                .vBuild());
+                .setOtherValue(unsetValue.get())
+                .setDistribute(true)
+                .vBuild();
+        if (!isRepeated(field)) {
+            return Optional.of(wrap(integratedRule));
+        }
+        Optional<Value> singularUnsetValue = UnsetValue.singular(field.getType());
+        if (!singularUnsetValue.isPresent()) {
+            return Optional.of(wrap(integratedRule));
+        }
+        SimpleRule differentialRule = SimpleRule
+                .newBuilder()
+                .setErrorMessage(errorMessage)
+                .setField(field.getName())
+                .setOperator(NOT_EQUAL)
+                .setOtherValue(singularUnsetValue.get())
+                .setDistribute(true)
+                .vBuild();
+        CompositeRule composite = CompositeRule.newBuilder()
+                .setLeft(wrap(integratedRule))
+                .setOperator(LogicalOperator.AND)
+                .setRight(wrap(differentialRule))
+                .build();
+        return Optional.of(wrap(composite));
+    }
+
+    private static Rule wrap(SimpleRule r) {
+        return Rule.newBuilder()
+                .setSimple(r)
+                .build();
+    }
+
+    private static Rule wrap(CompositeRule r) {
+        return Rule.newBuilder()
+                .setComposite(r)
+                .build();
     }
 }
