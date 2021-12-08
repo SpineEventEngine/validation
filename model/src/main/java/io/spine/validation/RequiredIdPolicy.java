@@ -26,43 +26,25 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableList;
-import io.spine.core.External;
 import io.spine.protodata.Field;
-import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeExited;
 import io.spine.protodata.TypeName;
-import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.tools.mc.java.codegen.FilePattern;
 
 import java.util.Optional;
 
+import static io.spine.validation.RequiredRule.isRequired;
 import static io.spine.validation.Rules.toEvent;
-import static io.spine.validation.SourceFiles.findFirstField;
 import static java.lang.String.format;
 
-final class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
+abstract class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
 
-    @Override
-    @React
     @SuppressWarnings("OptionalIsPresent") // For better readability.
-    protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
-        if (!configIsPresent()) {
+    final EitherOf2<RuleAdded, Nothing> withField(TypeName type, Field field) {
+        if (!isRequired(field, true)) {
             return withNothing();
         }
-        ValidationConfig config = configAs(ValidationConfig.class);
-        MessageMakers markers = config.getMessageMarkers();
-        ImmutableList<FilePattern> filePatterns = allPatterns(markers);
-        FilePath file = event.getFile();
-        boolean match = filePatterns.stream()
-                                    .anyMatch(pattern -> matches(file, pattern));
-        if (!match) {
-            return withNothing();
-        }
-        TypeName type = event.getType();
-        Field field = findFirstField(type, file, this);
         String errorMessage = format("ID field `%s` must be set.", field.getName()
                                                                         .getValue());
         Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
@@ -70,29 +52,5 @@ final class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
             return withNothing();
         }
         return EitherOf2.withA(toEvent(rule.get(), type));
-    }
-
-    private static ImmutableList<FilePattern> allPatterns(MessageMakers markers) {
-        return ImmutableList.<FilePattern>builder()
-                .addAll(markers.getEntityPatternList())
-                .addAll(markers.getEventPatternList())
-                .addAll(markers.getCommandPatternList())
-                .addAll(markers.getRejectionPatternList())
-                .build();
-    }
-
-    private static boolean matches(FilePath path, FilePattern pattern) {
-        String filePath = path.getValue();
-        switch (pattern.getValueCase()) {
-            case SUFFIX:
-                return filePath.endsWith(pattern.getSuffix());
-            case PREFIX:
-                return filePath.startsWith(pattern.getPrefix());
-            case REGEX:
-                return filePath.matches(pattern.getRegex());
-            case VALUE_NOT_SET:
-            default:
-                return false;
-        }
     }
 }

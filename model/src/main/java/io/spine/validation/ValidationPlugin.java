@@ -51,8 +51,8 @@ public class ValidationPlugin implements Plugin {
                 new PatternPolicy(),
                 new IsRequiredPolicy(),
                 new WhenPolicy(),
-                new RequiredIdPolicy(),
-                new RequiredEntityIdPolicy()
+                new RequiredIdPatternPolicy(),
+                new RequiredIdOptionPolicy()
         );
     }
 

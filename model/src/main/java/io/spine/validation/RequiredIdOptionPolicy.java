@@ -37,20 +37,16 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 
-import java.util.Optional;
 import java.util.Set;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.Rules.toEvent;
 import static io.spine.validation.SourceFiles.findType;
-import static java.lang.String.format;
 
-final class RequiredEntityIdPolicy extends ValidationPolicy<TypeExited> {
+final class RequiredIdOptionPolicy extends RequiredIdPolicy {
 
     @Override
     @React
-    @SuppressWarnings("OptionalIsPresent") // For better readability.
     protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
         if (!configIsPresent()) {
             return withNothing();
@@ -74,13 +70,7 @@ final class RequiredEntityIdPolicy extends ValidationPolicy<TypeExited> {
             );
         }
         Field field = type.getField(0);
-        String errorMessage = format("Entity ID field `%s` must be set.", field.getName()
-                                                                               .getValue());
-        Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
-        if (!rule.isPresent()) {
-            return withNothing();
-        }
-        return EitherOf2.withA(toEvent(rule.get(), typeName));
+        return withField(typeName, field);
     }
 
     private Set<String> options() {

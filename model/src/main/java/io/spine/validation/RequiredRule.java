@@ -26,14 +26,18 @@
 
 package io.spine.validation;
 
+import com.google.protobuf.BoolValue;
 import io.spine.protodata.Field;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.option.OptionsProto.required;
+import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static io.spine.validation.LogicalOperator.AND;
+import static io.spine.validation.Options.is;
 
 /**
  * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
@@ -106,5 +110,14 @@ final class RequiredRule {
         return Rule.newBuilder()
                 .setComposite(r)
                 .build();
+    }
+
+    static boolean isRequired(Field field, boolean byDefault) {
+        return field.getOptionList()
+                    .stream()
+                    .filter(opt -> is(opt, required))
+                    .findAny()
+                    .map(opt -> unpack(opt.getValue(), BoolValue.class).getValue())
+                    .orElse(byDefault);
     }
 }
