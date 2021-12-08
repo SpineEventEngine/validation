@@ -43,6 +43,13 @@ import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findType;
 
+/**
+ * A policy that marks ID fields in entity state messages as required.
+ *
+ * <p>The entity state messages are discovered via the options, specified
+ * in {@link ValidationConfig}. If ProtoData runs with no config, this policy never produces any
+ * validation rules.
+ */
 final class RequiredIdOptionPolicy extends RequiredIdPolicy {
 
     @Override
@@ -70,7 +77,7 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
             );
         }
         Field field = type.getField(0);
-        return withField(typeName, field);
+        return withField(field);
     }
 
     private Set<String> options() {

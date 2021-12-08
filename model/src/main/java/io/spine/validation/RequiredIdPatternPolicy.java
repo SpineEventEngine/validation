@@ -39,6 +39,12 @@ import io.spine.tools.mc.java.codegen.FilePattern;
 
 import static io.spine.validation.SourceFiles.findFirstField;
 
+/**
+ * A policy that marks ID fields in entity state messages and signal messages as required.
+ *
+ * <p>The messages are discovered via the file patterns, specified in {@link ValidationConfig}.
+ * If ProtoData runs with no config, this policy never produces any validation rules.
+ */
 final class RequiredIdPatternPolicy extends RequiredIdPolicy {
 
     @Override
@@ -58,7 +64,7 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         }
         TypeName type = event.getType();
         Field field = findFirstField(type, file, this);
-        return withField(type, field);
+        return withField(field);
     }
 
     private static ImmutableList<FilePattern> allPatterns(MessageMakers markers) {

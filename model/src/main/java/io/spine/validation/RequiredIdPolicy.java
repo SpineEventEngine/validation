@@ -28,7 +28,6 @@ package io.spine.validation;
 
 import io.spine.protodata.Field;
 import io.spine.protodata.TypeExited;
-import io.spine.protodata.TypeName;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 
@@ -38,10 +37,27 @@ import static io.spine.validation.RequiredRule.isRequired;
 import static io.spine.validation.Rules.toEvent;
 import static java.lang.String.format;
 
+/**
+ * A policy which defines validation rules for ID fields.
+ *
+ * <p>An ID field of a signal message or an entity is always required unless the used explicitly
+ * specifies otherwise.
+ *
+ * <p>Implementations define the ways of discovering signal and entity state messages.
+ */
 abstract class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
 
+    /**
+     * Given an ID field, generates the required rule event.
+     *
+     * <p>If the field is marked with {@code (required) = false}, no rule is generated.
+     *
+     * @param field
+     *         the ID field
+     * @return a required rule event or {@code Nothing} if the ID field is not required
+     */
     @SuppressWarnings("OptionalIsPresent") // For better readability.
-    final EitherOf2<RuleAdded, Nothing> withField(TypeName type, Field field) {
+    final EitherOf2<RuleAdded, Nothing> withField(Field field) {
         if (!isRequired(field, true)) {
             return withNothing();
         }
@@ -51,6 +67,6 @@ abstract class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
         if (!rule.isPresent()) {
             return withNothing();
         }
-        return EitherOf2.withA(toEvent(rule.get(), type));
+        return EitherOf2.withA(toEvent(rule.get(), field.getDeclaringType()));
     }
 }
