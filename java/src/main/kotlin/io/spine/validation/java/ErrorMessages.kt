@@ -76,8 +76,11 @@ fun ErrorMessage.createParentViolation(
  * Constructs code which creates a [ConstraintViolation] of a composite validation rule and adds
  * it to the given mutable [violationsList].
  */
-fun ErrorMessage.createCompositeViolation(type: TypeName, violationsList: String): CodeBlock {
-    val violation = buildViolation(type, null, null)
+fun ErrorMessage.createCompositeViolation(type: TypeName,
+                                          violationsList: String,
+                                          field: Field?,
+                                          fieldValue: Expression?): CodeBlock {
+    val violation = buildViolation(type, field, fieldValue)
     return addViolation(violation, violationsList)
 }
 

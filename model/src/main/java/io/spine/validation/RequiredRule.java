@@ -80,6 +80,8 @@ final class RequiredRule {
                 .setLeft(wrap(integratedRule))
                 .setOperator(AND)
                 .setRight(wrap(differentialRule))
+                .setErrorMessage("Collection must not be empty and cannot contain default values.")
+                .setField(field.getName())
                 .build();
         return Optional.of(wrap(composite));
     }
