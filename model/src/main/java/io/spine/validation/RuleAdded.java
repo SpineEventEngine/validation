@@ -29,5 +29,8 @@ package io.spine.validation;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.base.EventMessage;
 
+/**
+ * An event signifying that a validation rule has been created.
+ */
 @Immutable
 public interface RuleAdded extends EventMessage {}

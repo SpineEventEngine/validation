@@ -33,6 +33,14 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 
+/**
+ * A policy that reacts to an event with a {@link RuleAdded} event.
+ *
+ * <p>May ignore an event and return {@code Nothing} if necessary.
+ *
+ * @param <E>
+ *         the type of the event to react to
+ */
 public abstract class ValidationPolicy<E extends EventMessage>
         extends Policy<E> {
 
@@ -40,6 +48,21 @@ public abstract class ValidationPolicy<E extends EventMessage>
     @ContractFor(handler = React.class)
     protected abstract EitherOf2<RuleAdded, Nothing> whenever(E event);
 
+    /**
+     * Creates an {@link EitherOf2} with {@code Nothing} in the {@code B} option.
+     *
+     * <p>Usage example:
+     * <pre>
+     *  {@literal class MyPolicy extends ValidationPolicy<TypeEntered>} {
+     *      {@literal @Override @React}
+     *      {@literal protected EitherOf2<RuleAdded, Nothing> whenever}(TypeEntered event) {
+     *           if (!isRelevant(event)) {
+     *               return withNothing();
+     *           }
+     *           return myCustomRule(event);
+     *       }
+     * </pre>
+     */
     protected final EitherOf2<RuleAdded, Nothing> withNothing() {
         return EitherOf2.withB(nothing());
     }

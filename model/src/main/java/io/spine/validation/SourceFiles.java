@@ -61,7 +61,7 @@ final class SourceFiles {
      * @param filePath
      *         path to the Protobuf file which declares the message which declares the field
      * @param querying
-     *         the ProtoData component which conducts the seatch
+     *         the ProtoData component which conducts the search
      * @return the field
      */
     static Field findField(FieldName fieldName,
@@ -84,6 +84,19 @@ final class SourceFiles {
         return foundField;
     }
 
+    /**
+     * Looks up the first field in a type.
+     *
+     * <p>The order of declaration is used to look for the fields, not the field numbers.
+     *
+     *  @param typeName
+     *         name of the type which declares the field
+     * @param filePath
+     *         path to the Protobuf file which declares the message which declares the field
+     * @param querying
+     *         the ProtoData component which conducts the search
+     * @return the first field of the type
+     */
     static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
         MessageType type = findType(typeName, filePath, querying);
         if (type.getFieldCount() == 0) {
@@ -94,6 +107,17 @@ final class SourceFiles {
         return field;
     }
 
+    /**
+     * Looks up a message type by its name.
+     *
+     *  @param typeName
+     *         name of the type
+     * @param filePath
+     *         path to the Protobuf file which declares the message
+     * @param querying
+     *         the ProtoData component which conducts the search
+     * @return the type
+     */
     static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
         ProtobufSourceFile file = querying
                 .select(ProtobufSourceFile.class)

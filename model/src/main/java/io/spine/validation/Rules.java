@@ -30,6 +30,9 @@ import io.spine.protodata.TypeName;
 import io.spine.validation.event.CompositeRuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
+/**
+ * A factory of {@link RuleAdded} events.
+ */
 final class Rules {
 
     /**
@@ -38,6 +41,9 @@ final class Rules {
     private Rules() {
     }
 
+    /**
+     * Converts the given {@code rule} to an event.
+     */
     static RuleAdded toEvent(Rule rule, TypeName type) {
         if (rule.hasComposite()) {
             return CompositeRuleAdded.newBuilder()
