@@ -54,7 +54,7 @@ final class RequiredRule {
      * Creates a rule for the given field to be required.
      */
     @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
-        // Duplication in generated code.
+    // Duplication in generated code.
     static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
         Optional<Value> unsetValue = UnsetValue.forField(field);
@@ -72,10 +72,16 @@ final class RequiredRule {
             return Optional.of(wrap(integratedRule));
         }
         SimpleRule differentialRule = rule(
-                field, singularUnsetValue.get(), errorMessage,
-                "Collection must not contain empty values.",
-                true
+                field, singularUnsetValue.get(), errorMessage, "", true
         );
+        CompositeRule composite = collectionRule(field, integratedRule, differentialRule);
+        return Optional.of(wrap(composite));
+    }
+
+    private static CompositeRule collectionRule(Field field,
+                                                SimpleRule integratedRule,
+                                                SimpleRule differentialRule) {
+        @SuppressWarnings("DuplicateStringLiteralInspection")
         CompositeRule composite = CompositeRule.newBuilder()
                 .setLeft(wrap(integratedRule))
                 .setOperator(AND)
@@ -83,7 +89,7 @@ final class RequiredRule {
                 .setErrorMessage("Collection must not be empty and cannot contain default values.")
                 .setField(field.getName())
                 .build();
-        return Optional.of(wrap(composite));
+        return composite;
     }
 
     private static SimpleRule rule(Field field,
@@ -114,6 +120,16 @@ final class RequiredRule {
                 .build();
     }
 
+    /**
+     * Checks if the given field is requried.
+     *
+     * @param field
+     *         the field
+     * @param byDefault
+     *         the default value
+     * @return {@code true} if the field is marked with {@code (required) = true} or if
+     *         the {@code byDefault} is {@code true}, {@code false} otherwise
+     */
     static boolean isRequired(Field field, boolean byDefault) {
         return field.getOptionList()
                     .stream()
