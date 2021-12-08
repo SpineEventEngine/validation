@@ -58,7 +58,7 @@ final class RequiredRule {
             return Optional.empty();
         }
         SimpleRule integratedRule = rule(
-                field, unsetValue.get(), errorMessage, "Field must be set."
+                field, unsetValue.get(), errorMessage, "Field must be set.", false
         );
         if (!isRepeated(field)) {
             return Optional.of(wrap(integratedRule));
@@ -69,7 +69,8 @@ final class RequiredRule {
         }
         SimpleRule differentialRule = rule(
                 field, singularUnsetValue.get(), errorMessage,
-                "Collection must not contain empty values."
+                "Collection must not contain empty values.",
+                true
         );
         CompositeRule composite = CompositeRule.newBuilder()
                 .setLeft(wrap(integratedRule))
@@ -81,7 +82,9 @@ final class RequiredRule {
 
     private static SimpleRule rule(Field field,
                                    Value value,
-                                   String errorMessage, String defaultErrorMessage) {
+                                   String errorMessage,
+                                   String defaultErrorMessage,
+                                   boolean distibute) {
         String msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
         return SimpleRule
                 .newBuilder()
@@ -89,7 +92,7 @@ final class RequiredRule {
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
                 .setOtherValue(value)
-                .setDistribute(true)
+                .setDistribute(distibute)
                 .vBuild();
     }
 
