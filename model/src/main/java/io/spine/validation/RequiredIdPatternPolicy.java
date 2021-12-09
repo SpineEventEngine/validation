@@ -44,6 +44,12 @@ import static io.spine.validation.SourceFiles.findFirstField;
  *
  * <p>The messages are discovered via the file patterns, specified in {@link ValidationConfig}.
  * If ProtoData runs with no config, this policy never produces any validation rules.
+ *
+ * <p>This policy has a sister—{@link RequiredIdOptionPolicy}. They both implement the required ID
+ * constraint. However, this policy finds the ID fields by the names of files that declare
+ * the messages with ID fields, and the other—by a list of message options.
+ *
+ * @see RequiredIdOptionPolicy
  */
 final class RequiredIdPatternPolicy extends RequiredIdPolicy {
 

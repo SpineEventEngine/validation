@@ -49,6 +49,12 @@ import static io.spine.validation.SourceFiles.findType;
  * <p>The entity state messages are discovered via the options, specified
  * in {@link ValidationConfig}. If ProtoData runs with no config, this policy never produces any
  * validation rules.
+ *
+ * <p>This policy has a sister—{@link RequiredIdPatternPolicy}. They both implement the required ID
+ * constraint. However, this policy finds the ID fields by a list of message options, and the other—
+ * by the names of files that declare the messages with ID fields.
+ *
+ * @see RequiredIdPatternPolicy
  */
 final class RequiredIdOptionPolicy extends RequiredIdPolicy {
 
