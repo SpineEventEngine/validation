@@ -38,6 +38,7 @@ import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static io.spine.validation.LogicalOperator.AND;
 import static io.spine.validation.Options.is;
+import static io.spine.validation.Rules.wrap;
 
 /**
  * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
@@ -105,18 +106,6 @@ final class RequiredRule {
                 .setOtherValue(value)
                 .setDistribute(distibute)
                 .vBuild();
-    }
-
-    private static Rule wrap(SimpleRule r) {
-        return Rule.newBuilder()
-                .setSimple(r)
-                .build();
-    }
-
-    private static Rule wrap(CompositeRule r) {
-        return Rule.newBuilder()
-                .setComposite(r)
-                .build();
     }
 
     /**

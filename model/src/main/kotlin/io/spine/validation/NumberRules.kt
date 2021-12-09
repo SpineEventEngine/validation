@@ -124,11 +124,6 @@ private constructor(
         else -> throw IllegalStateException("Unexpected Value: `$this`.")
     }
 
-    private fun SimpleRule.wrap(): Rule =
-        Rule.newBuilder()
-            .setSimple(this)
-            .build()
-
     companion object {
 
         /**

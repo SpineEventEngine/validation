@@ -50,3 +50,13 @@ internal fun Rule.toEvent(type: TypeName): RuleAdded {
             .build()
     }
 }
+
+internal fun SimpleRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setSimple(this)
+        .build()
+
+internal fun CompositeRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setComposite(this)
+        .build()
