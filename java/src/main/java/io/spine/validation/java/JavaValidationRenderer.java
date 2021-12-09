@@ -201,7 +201,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
     }
 
     private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $N = new $T<>()",
+        return CodeBlock.of("$T<$T> $L = new $T<>()",
                             ArrayList.class,
                             ConstraintViolation.class,
                             VIOLATIONS,
@@ -235,10 +235,10 @@ public final class JavaValidationRenderer extends JavaRenderer {
 
     private static CodeBlock generateValidationError() {
         CodeBlock.Builder code = CodeBlock.builder();
-        code.beginControlFlow("if (!$N.isEmpty())", VIOLATIONS);
+        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
         MethodCall errorBuilder = new ClassName(ValidationError.class)
                 .newBuilder()
-                .chainAddAll("constraint_violation", new Literal(VIOLATIONS))
+                .chainAddAll("constraint_violation", VIOLATIONS)
                 .chainBuild();
         MethodCall newOptional = new ClassName(Optional.class)
                 .call("of", ImmutableList.of(errorBuilder));

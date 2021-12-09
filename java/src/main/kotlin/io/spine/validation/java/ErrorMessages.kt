@@ -99,7 +99,7 @@ fun ErrorMessage.createCompositeViolation(type: TypeName,
 private fun addViolation(violation: Expression, violationsList: Expression): CodeBlock =
     CodeBlock
         .builder()
-        .addStatement("\$N.add(\$L)", violationsList, violation)
+        .addStatement("\$L.add(\$L)", violationsList, violation)
         .build()
 
 private fun ErrorMessage.buildViolation(
