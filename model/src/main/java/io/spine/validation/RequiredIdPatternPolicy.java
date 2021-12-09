@@ -46,8 +46,8 @@ import static io.spine.validation.SourceFiles.findFirstField;
  * If ProtoData runs with no config, this policy never produces any validation rules.
  *
  * <p>This policy has a sister—{@link RequiredIdOptionPolicy}. They both implement the required ID
- * constraint. However, this policy finds the ID fields by the names of files that declare
- * the messages with ID fields, and the other—by a list of message options.
+ * constraint. However, this policy looks for the ID fields in messages that are defined in files
+ * matching certain path patterns, and the other—in messages marked with certain options.
  *
  * @see RequiredIdOptionPolicy
  */

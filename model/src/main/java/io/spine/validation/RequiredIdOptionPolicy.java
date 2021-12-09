@@ -51,8 +51,8 @@ import static io.spine.validation.SourceFiles.findType;
  * validation rules.
  *
  * <p>This policy has a sister—{@link RequiredIdPatternPolicy}. They both implement the required ID
- * constraint. However, this policy finds the ID fields by a list of message options, and the other—
- * by the names of files that declare the messages with ID fields.
+ * constraint. However, this policy looks for the ID fields in messages with certain options,
+ * and the other—in the messages declared in files that match certain path patterns.
  *
  * @see RequiredIdPatternPolicy
  */
