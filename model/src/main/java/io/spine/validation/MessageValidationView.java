@@ -36,6 +36,8 @@ import io.spine.validation.event.CompositeRuleAdded;
 import io.spine.validation.event.MessageWideRuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
+import static io.spine.validation.Rules.wrap;
+
 /**
  * A view which accumulates validation data for a message type.
  *
@@ -54,25 +56,19 @@ final class MessageValidationView
 
     @Subscribe
     void on(SimpleRuleAdded event) {
-        Rule rule = Rule.newBuilder()
-                .setSimple(event.getRule())
-                .buildPartial();
+        Rule rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 
     @Subscribe
     void on(CompositeRuleAdded event) {
-        Rule rule = Rule.newBuilder()
-                .setComposite(event.getRule())
-                .buildPartial();
+        Rule rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 
     @Subscribe
     void on(MessageWideRuleAdded event) {
-        Rule rule = Rule.newBuilder()
-                .setMessageWide(event.getRule())
-                .buildPartial();
+        Rule rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 }

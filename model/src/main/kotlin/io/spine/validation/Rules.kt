@@ -51,12 +51,26 @@ internal fun Rule.toEvent(type: TypeName): RuleAdded {
     }
 }
 
+/**
+ * Creates a [Rule] from this simple rule.
+ */
 internal fun SimpleRule.wrap(): Rule =
     Rule.newBuilder()
         .setSimple(this)
         .build()
 
+/**
+ * Creates a [Rule] from this composite rule.
+ */
 internal fun CompositeRule.wrap(): Rule =
     Rule.newBuilder()
         .setComposite(this)
+        .build()
+
+/**
+ * Creates a [Rule] from this message-wide rule.
+ */
+internal fun MessageWideRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setMessageWide(this)
         .build()
