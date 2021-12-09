@@ -78,7 +78,7 @@ internal constructor(
      * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
      * the generated code should add it to this list.
      */
-    val violationsList: String,
+    val violationsList: Expression,
 
     /**
      * A [Querying] ProtoData component.

@@ -75,16 +75,28 @@ fun ErrorMessage.createParentViolation(
 /**
  * Constructs code which creates a [ConstraintViolation] of a composite validation rule and adds
  * it to the given mutable [violationsList].
+ *
+ * @param type
+ *      name of the type of the validated message
+ * @param violationsList
+ *      a code reference to a list of violations
+ * @param field
+ *      field that is common to all the simple rules that constitute the associated composite rule,
+ *      or `null` if no such field exists. If this param is `null`, `fieldValue` must
+ *      also be `null`.
+ * @param fieldValue
+ *      the expression to obtain the value of the common field, or `null` if there is no common
+ *      field. If this param is `null`, `field` must also be `null`.
  */
 fun ErrorMessage.createCompositeViolation(type: TypeName,
-                                          violationsList: String,
+                                          violationsList: Expression,
                                           field: Field?,
                                           fieldValue: Expression?): CodeBlock {
     val violation = buildViolation(type, field, fieldValue)
     return addViolation(violation, violationsList)
 }
 
-private fun addViolation(violation: Expression, violationsList: String): CodeBlock =
+private fun addViolation(violation: Expression, violationsList: Expression): CodeBlock =
     CodeBlock
         .builder()
         .addStatement("\$N.add(\$L)", violationsList, violation)
