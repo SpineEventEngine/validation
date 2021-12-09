@@ -24,6 +24,7 @@ message ValidationConfig {
 
 // The markers that define special kinds of messages.
 message MessageMarkers {
+    option (is).java_type = "MessageMarkersMixin";
 
     // Names of options used to mark entity state messages.
     //

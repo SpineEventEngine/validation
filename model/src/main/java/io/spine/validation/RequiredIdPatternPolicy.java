@@ -61,7 +61,7 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         }
         ValidationConfig config = configAs(ValidationConfig.class);
         MessageMarkers markers = config.getMessageMarkers();
-        ImmutableList<FilePattern> filePatterns = allPatterns(markers);
+        ImmutableList<FilePattern> filePatterns = markers.allPatterns();
         FilePath file = event.getFile();
         boolean match = filePatterns.stream()
                                     .anyMatch(pattern -> matches(file, pattern));
@@ -71,15 +71,6 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         TypeName type = event.getType();
         Field field = findFirstField(type, file, this);
         return withField(field);
-    }
-
-    private static ImmutableList<FilePattern> allPatterns(MessageMarkers markers) {
-        return ImmutableList.<FilePattern>builder()
-                .addAll(markers.getEntityPatternList())
-                .addAll(markers.getEventPatternList())
-                .addAll(markers.getCommandPatternList())
-                .addAll(markers.getRejectionPatternList())
-                .build();
     }
 
     private static boolean matches(FilePath path, FilePattern pattern) {
