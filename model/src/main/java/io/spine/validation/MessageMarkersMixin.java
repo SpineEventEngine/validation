@@ -30,9 +30,15 @@ import com.google.common.collect.ImmutableList;
 import io.spine.annotation.GeneratedMixin;
 import io.spine.tools.mc.java.codegen.FilePattern;
 
+/**
+ * A mixin for the generated {@code MessageMarkers} type.
+ */
 @GeneratedMixin
 interface MessageMarkersMixin extends MessageMarkersOrBuilder {
 
+    /**
+     * Obtains all the file patterns that mark different types of Protobuf files.
+     */
     default ImmutableList<FilePattern> allPatterns() {
         return ImmutableList.<FilePattern>builder()
                 .addAll(getEntityPatternList())
