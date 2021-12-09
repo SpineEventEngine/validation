@@ -14,7 +14,7 @@ import "spine/tools/mc/java/config.proto";
 // The container type for the validation config.
 //
 // ProtoData supports multiple configurations merges into a single object. In order for
-// the Validation library to be satisfied with the config, it mast always have
+// the Validation library to be satisfied with the config, it must always have
 // the `message_markers` field of type `spine.validation.MessageMakers`.
 //
 message ValidationConfig {
