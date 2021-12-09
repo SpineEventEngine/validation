@@ -38,8 +38,8 @@ import io.spine.server.tuple.EitherOf2;
 import java.util.Optional;
 
 import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
-import static java.lang.String.format;
 
 /**
  * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
@@ -72,7 +72,7 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
 
     private static RuleAdded requiredRule(Field declaration, RequiredField field) {
         Rule rule = RequiredRule.forField(declaration, field.getErrorMessage())
-                .orElseThrow(() -> doesNotSupportRequired(declaration));
+                                .orElseThrow(() -> doesNotSupportRequired(declaration));
         return Rules.toEvent(rule, declaration.getDeclaringType());
     }
 
@@ -82,9 +82,9 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
         String typeUrl = typeUrl(field.getDeclaringType());
         PrimitiveType type = field.getType()
                                   .getPrimitive();
-        return new IllegalStateException(format(
+        return newIllegalStateException(
                 "Field `%s.%s` of type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type
-        ));
+        );
     }
 }

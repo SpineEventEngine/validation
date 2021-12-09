@@ -98,8 +98,7 @@ final class RequiredRule {
                                    String defaultErrorMessage,
                                    boolean distibute) {
         String msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
-        return SimpleRule
-                .newBuilder()
+        return SimpleRule.newBuilder()
                 .setErrorMessage(msg)
                 .setField(field.getName())
                 .setOperator(NOT_EQUAL)
