@@ -24,37 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+@file:JvmName("Rules")
 
-import io.spine.protodata.TypeName;
-import io.spine.validation.event.CompositeRuleAdded;
-import io.spine.validation.event.SimpleRuleAdded;
+package io.spine.validation
+
+import io.spine.protodata.TypeName
+import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.SimpleRuleAdded
 
 /**
- * A factory of {@link RuleAdded} events.
+ * Converts this `rule` to an event.
+ *
+ * @param type the type name of the validated message
  */
-final class Rules {
-
-    /**
-     * Prevents the utility class instantiation.
-     */
-    private Rules() {
-    }
-
-    /**
-     * Converts the given {@code rule} to an event.
-     */
-    static RuleAdded toEvent(Rule rule, TypeName type) {
-        if (rule.hasComposite()) {
-            return CompositeRuleAdded.newBuilder()
-                    .setType(type)
-                    .setRule(rule.getComposite())
-                    .build();
-        } else {
-            return SimpleRuleAdded.newBuilder()
-                    .setType(type)
-                    .setRule(rule.getSimple())
-                    .build();
-        }
+internal fun Rule.toEvent(type: TypeName): RuleAdded {
+    return if (hasComposite()) {
+        CompositeRuleAdded.newBuilder()
+            .setType(type)
+            .setRule(composite)
+            .build()
+    } else {
+        SimpleRuleAdded.newBuilder()
+            .setType(type)
+            .setRule(simple)
+            .build()
     }
 }

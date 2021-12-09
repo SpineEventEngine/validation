@@ -41,8 +41,7 @@ import io.spine.server.tuple.EitherOf2;
  * @param <E>
  *         the type of the event to react to
  */
-public abstract class ValidationPolicy<E extends EventMessage>
-        extends Policy<E> {
+public abstract class ValidationPolicy<E extends EventMessage> extends Policy<E> {
 
     @Override
     @ContractFor(handler = React.class)
