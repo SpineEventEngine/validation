@@ -88,7 +88,7 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
 
     private Set<String> options() {
         ValidationConfig config = configAs(ValidationConfig.class);
-        MessageMakers markers = config.getMessageMarkers();
+        MessageMarkers markers = config.getMessageMarkers();
         Set<String> options = ImmutableSet.copyOf(markers.getEntityOptionNameList());
         return options;
     }
