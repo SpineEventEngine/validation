@@ -26,13 +26,19 @@
 
 package io.spine.validation;
 
+import com.google.protobuf.BoolValue;
 import io.spine.protodata.Field;
-import io.spine.protodata.PrimitiveType;
+
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.option.OptionsProto.required;
+import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.protodata.Ast.isRepeated;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
-import static java.lang.String.format;
+import static io.spine.validation.LogicalOperator.AND;
+import static io.spine.validation.Options.is;
+import static io.spine.validation.Rules.wrap;
 
 /**
  * A factory of {@link SimpleRule}s which represent the {@code (required)} constraint.
@@ -48,32 +54,76 @@ final class RequiredRule {
     /**
      * Creates a rule for the given field to be required.
      */
-    static SimpleRule forField(Field field, String errorMessage) {
+    @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
+    // Duplication in generated code.
+    static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
-        Value unsetValue = UnsetValue.forField(field)
-                                     .orElseThrow(() -> doesNotSupportRequired(field));
-        @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
-        // Duplication in generated code.
-        SimpleRule rule = SimpleRule
-                .newBuilder()
-                .setErrorMessage(errorMessage)
-                .setField(field.getName())
-                .setOperator(NOT_EQUAL)
-                .setOtherValue(unsetValue)
-                .setDistribute(false)
-                .vBuild();
-        return rule;
+        Optional<Value> unsetValue = UnsetValue.forField(field);
+        if (!unsetValue.isPresent()) {
+            return Optional.empty();
+        }
+        SimpleRule integratedRule = rule(
+                field, unsetValue.get(), errorMessage, "Field must be set.", false
+        );
+        if (!isRepeated(field)) {
+            return Optional.of(wrap(integratedRule));
+        }
+        Optional<Value> singularUnsetValue = UnsetValue.singular(field.getType());
+        if (!singularUnsetValue.isPresent()) {
+            return Optional.of(wrap(integratedRule));
+        }
+        SimpleRule differentialRule = rule(
+                field, singularUnsetValue.get(), errorMessage, "", true
+        );
+        CompositeRule composite = collectionRule(field, integratedRule, differentialRule);
+        return Optional.of(wrap(composite));
     }
 
-    private static IllegalStateException doesNotSupportRequired(Field field) {
-        String fieldName = field.getName()
-                                .getValue();
-        String typeUrl = typeUrl(field.getDeclaringType());
-        PrimitiveType type = field.getType()
-                                  .getPrimitive();
-        return new IllegalStateException(format(
-                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
-                typeUrl, fieldName, type
-        ));
+    private static CompositeRule collectionRule(Field field,
+                                                SimpleRule integratedRule,
+                                                SimpleRule differentialRule) {
+        @SuppressWarnings("DuplicateStringLiteralInspection")
+        CompositeRule composite = CompositeRule.newBuilder()
+                .setLeft(wrap(integratedRule))
+                .setOperator(AND)
+                .setRight(wrap(differentialRule))
+                .setErrorMessage("Collection must not be empty and cannot contain default values.")
+                .setField(field.getName())
+                .build();
+        return composite;
+    }
+
+    private static SimpleRule rule(Field field,
+                                   Value value,
+                                   String errorMessage,
+                                   String defaultErrorMessage,
+                                   boolean distibute) {
+        String msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
+        return SimpleRule.newBuilder()
+                .setErrorMessage(msg)
+                .setField(field.getName())
+                .setOperator(NOT_EQUAL)
+                .setOtherValue(value)
+                .setDistribute(distibute)
+                .vBuild();
+    }
+
+    /**
+     * Checks if the given field is requried.
+     *
+     * @param field
+     *         the field
+     * @param byDefault
+     *         the default value
+     * @return {@code true} if the field is marked with {@code (required) = true} or if
+     *         the {@code byDefault} is {@code true}, {@code false} otherwise
+     */
+    static boolean isRequired(Field field, boolean byDefault) {
+        return field.getOptionList()
+                    .stream()
+                    .filter(opt -> is(opt, required))
+                    .findAny()
+                    .map(opt -> unpack(opt.getValue(), BoolValue.class).getValue())
+                    .orElse(byDefault);
     }
 }

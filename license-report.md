@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.validation:java:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:java:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.12.4.**No license information found**
@@ -54,6 +54,10 @@
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/google/osdetector-gradle-plugin](https://github.com/google/osdetector-gradle-plugin)
+     * **License:** [Apache License 2.0](http://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -69,6 +73,10 @@
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.protobuf. **Name** : protobuf-gradle-plugin. **Version** : 0.8.17.
+     * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
+     * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
+
 1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.18.0.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
@@ -80,6 +88,10 @@
 1.  **Group** : com.squareup. **Name** : javapoet. **Version** : 1.13.0.
      * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : commons-lang. **Name** : commons-lang. **Version** : 2.6.
+     * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : io.grpc. **Name** : grpc-api. **Version** : 1.38.0.
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
@@ -111,6 +123,14 @@
 
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
+1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
+     * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
+     * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
+
+1.  **Group** : kr.motd.maven. **Name** : os-maven-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.5.
      * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
      * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
@@ -644,12 +664,12 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:41 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:model:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:model:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.12.4.**No license information found**
@@ -703,6 +723,10 @@ This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/google/osdetector-gradle-plugin](https://github.com/google/osdetector-gradle-plugin)
+     * **License:** [Apache License 2.0](http://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -718,6 +742,10 @@ This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.protobuf. **Name** : protobuf-gradle-plugin. **Version** : 0.8.17.
+     * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
+     * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
+
 1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.18.0.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
@@ -725,6 +753,14 @@ This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-Lice
 1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.18.0.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : com.squareup. **Name** : javapoet. **Version** : 1.13.0.
+     * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
+     * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : commons-lang. **Name** : commons-lang. **Version** : 2.6.
+     * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : io.grpc. **Name** : grpc-api. **Version** : 1.38.0.
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
@@ -755,6 +791,14 @@ This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-Lice
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
+1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
+     * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
+     * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
+
+1.  **Group** : kr.motd.maven. **Name** : os-maven-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.5.
      * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
      * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
@@ -1274,12 +1318,12 @@ This report was generated on **Thu Nov 18 16:21:34 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:35 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:42 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:runtime:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:runtime:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -1839,12 +1883,12 @@ This report was generated on **Thu Nov 18 16:21:35 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:35 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:43 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:runtime-extensions:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:runtime-extensions:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.12.4.**No license information found**
@@ -2472,12 +2516,12 @@ This report was generated on **Thu Nov 18 16:21:35 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:43 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:test-consumer:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:test-consumer:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.12.4.**No license information found**
@@ -2531,6 +2575,10 @@ This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/google/osdetector-gradle-plugin](https://github.com/google/osdetector-gradle-plugin)
+     * **License:** [Apache License 2.0](http://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2546,6 +2594,10 @@ This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.protobuf. **Name** : protobuf-gradle-plugin. **Version** : 0.8.17.
+     * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
+     * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
+
 1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.18.0.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
@@ -2557,6 +2609,10 @@ This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-Lice
 1.  **Group** : com.squareup. **Name** : javapoet. **Version** : 1.13.0.
      * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : commons-lang. **Name** : commons-lang. **Version** : 2.6.
+     * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : io.grpc. **Name** : grpc-api. **Version** : 1.38.0.
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
@@ -2588,6 +2644,14 @@ This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-Lice
 
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
+1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
+     * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
+     * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
+
+1.  **Group** : kr.motd.maven. **Name** : os-maven-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.5.
      * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
      * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
@@ -3128,12 +3192,12 @@ This report was generated on **Thu Nov 18 16:21:36 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:44 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:test-extensions:2.0.0-SNAPSHOT.10`
+# Dependencies of `io.spine.validation:test-extensions:2.0.0-SNAPSHOT.11`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.12.4.**No license information found**
@@ -3187,6 +3251,10 @@ This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/google/osdetector-gradle-plugin](https://github.com/google/osdetector-gradle-plugin)
+     * **License:** [Apache License 2.0](http://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3202,6 +3270,10 @@ This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.google.protobuf. **Name** : protobuf-gradle-plugin. **Version** : 0.8.17.
+     * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
+     * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
+
 1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.18.0.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
@@ -3213,6 +3285,10 @@ This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-Lice
 1.  **Group** : com.squareup. **Name** : javapoet. **Version** : 1.13.0.
      * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : commons-lang. **Name** : commons-lang. **Version** : 2.6.
+     * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : io.grpc. **Name** : grpc-api. **Version** : 1.38.0.
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
@@ -3244,6 +3320,14 @@ This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-Lice
 
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
+1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
+     * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
+     * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
+
+1.  **Group** : kr.motd.maven. **Name** : os-maven-plugin. **Version** : 1.7.0.
+     * **Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
 1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.5.
      * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
      * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
@@ -3777,4 +3861,4 @@ This report was generated on **Thu Nov 18 16:21:37 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:21:38 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Dec 09 14:48:45 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

@@ -24,9 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.81")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.75")
-val spineServerVersion by extra("2.0.0-SNAPSHOT.75")
-val protoDataVersion by extra("0.1.2")
-val validationVersion by extra("2.0.0-SNAPSHOT.11")
+package io.spine.validation;
+
+import com.google.errorprone.annotations.Immutable;
+import io.spine.base.EventMessage;
+
+/**
+ * An event signifying that a validation rule has been created.
+ */
+@Immutable
+public interface RuleAdded extends EventMessage {}

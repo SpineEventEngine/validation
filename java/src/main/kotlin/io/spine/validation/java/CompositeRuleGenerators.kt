@@ -27,7 +27,8 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protobuf.Messages
+import io.spine.protobuf.Messages.isNotDefault
+import io.spine.protodata.Field
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.validation.ErrorMessage
@@ -76,7 +77,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
         val format = composite.errorMessage
         val operation = composite.operator
         val commonField = composite.field
-        val fieldAccessor = if (Messages.isNotDefault(commonField)) {
+        val fieldAccessor = if (isNotDefault(commonField)) {
             val found = ctx.lookUpField(commonField)
             ctx.getterFor(found).toCode()
         } else {
@@ -91,8 +92,21 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
         )
     }
 
-    override fun createViolation(): CodeBlock =
-        error().createCompositeViolation(ctx.validatedType, ctx.violationsList)
+    override fun createViolation(): CodeBlock {
+        val rule = ctx.rule.composite
+        val accessor: Expression?
+        val field: Field?
+        if (rule.hasField()) {
+            field = ctx.lookUpField(rule.field)
+            accessor = ctx.getterFor(field)
+        } else {
+            field = null
+            accessor = null
+        }
+        return error().createCompositeViolation(
+            ctx.validatedType, ctx.violationsList, field, accessor
+        )
+    }
 
     override fun supportingMembers(): CodeBlock =
         CodeBlock.builder()

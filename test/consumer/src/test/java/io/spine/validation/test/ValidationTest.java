@@ -41,7 +41,9 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.base.Identifier.newUuid;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Generated validation code should")
 class ValidationTest {
@@ -144,6 +146,35 @@ class ValidationTest {
                     .setAuthor(validAuthor());
             assertNoException(builder);
         }
+
+        @Test
+        @DisplayName("throw `ValidationException` if a list contains only default values")
+        void empty() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.getDefaultInstance());
+            assertValidationException(builder);
+        }
+
+        @Test
+        @DisplayName("pass if a list contains all non-default values")
+        void nonDefaultList() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.newBuilder()
+                                          .setEdges(3)
+                                          .setVertices(3));
+            assertNoException(builder);
+        }
+
+        @Test
+        @DisplayName("throw `ValidationException` if a list contains at least one default value")
+        void withDefault() {
+            Blizzard.Builder builder = Blizzard.newBuilder()
+                    .addSnowflake(Snowflake.newBuilder()
+                                          .setEdges(3)
+                                          .setVertices(3))
+                    .addSnowflake(Snowflake.getDefaultInstance());
+            assertValidationException(builder);
+        }
     }
 
     @Nested
@@ -230,6 +261,14 @@ class ValidationTest {
             ConstraintViolation violation = assertValidationException(msg);
             assertThat(violation.getFieldPath().getFieldName(0))
                     .isEqualTo("content");
+        }
+
+        @Test
+        @DisplayName("and handle special characters in the pattern properly")
+        void allowDollarSigns() {
+            Team.Builder msg = Team.newBuilder()
+                    .setName("Sch 04");
+            assertNoException(msg);
         }
     }
 
@@ -342,6 +381,62 @@ class ValidationTest {
         }
     }
 
+    @Nested
+    @DisplayName("make the entity and signal IDs required")
+    class RequiredIdRule {
+
+        @Test
+        @DisplayName("allow valid entities")
+        void passEntity() {
+            Fancy.Builder entity = Fancy.newBuilder()
+                    .setId(FancyId.newBuilder().setUuid(newUuid()));
+            assertNoException(entity);
+        }
+
+        @Test
+        @DisplayName("not allow invalid entities")
+        void failEntity() {
+            Fancy.Builder entity = Fancy.newBuilder();
+            ConstraintViolation violation = assertValidationException(entity);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
+        }
+
+        @Test
+        @DisplayName("allow valid events")
+        void passEvent() {
+            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder()
+                    .setId("qwerty");
+            assertNoException(event);
+        }
+
+        @Test
+        @DisplayName("not allow invalid events")
+        void failEvent() {
+            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder();
+            ConstraintViolation violation = assertValidationException(event);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
+        }
+
+        @Test
+        @DisplayName("allow valid commands")
+        void passCommand() {
+            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder()
+                    .setId("42");
+            assertNoException(cmd);
+        }
+
+        @Test
+        @DisplayName("not allow invalid commands")
+        void failCommand() {
+            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder();
+            ConstraintViolation violation = assertValidationException(cmd);
+            assertThat(violation.getFieldPath().getFieldName(0))
+                    .isEqualTo("id");
+        }
+    }
+
     @CanIgnoreReturnValue
     private static ConstraintViolation assertValidationException(Message.Builder builder) {
         ValidationException exception = assertThrows(ValidationException.class, builder::build);
@@ -352,9 +447,13 @@ class ValidationTest {
     }
 
     private static void assertNoException(Message.Builder builder) {
-        Object result = builder.build();
-        assertThat(result)
-                .isNotNull();
+        try {
+            Object result = builder.build();
+            assertThat(result)
+                    .isNotNull();
+        } catch (ValidationException e) {
+            fail("Unexpected constraint violation: " + e.getConstraintViolations(), e);
+        }
     }
 
     private static Author validAuthor() {

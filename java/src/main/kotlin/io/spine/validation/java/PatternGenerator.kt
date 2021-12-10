@@ -79,7 +79,7 @@ internal class PatternGenerator(
         }
         return super.supportingMembers()
             .toBuilder()
-            .add(field.build().toString())
+            .add("\$L", field.build())
             .build()
     }
 }

@@ -26,43 +26,43 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
+import io.spine.base.EventMessage;
+import io.spine.core.ContractFor;
 import io.spine.protodata.plugin.Policy;
-import io.spine.protodata.plugin.ViewRepository;
-import org.jetbrains.annotations.NotNull;
+import io.spine.server.event.React;
+import io.spine.server.model.Nothing;
+import io.spine.server.tuple.EitherOf2;
 
 /**
- * A ProtoData plugin which attaches validation-related policies and views.
+ * A policy that reacts to an event with a {@link RuleAdded} event.
+ *
+ * <p>May ignore an event and return {@code Nothing} if necessary.
+ *
+ * @param <E>
+ *         the type of the event to react to
  */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
-public class ValidationPlugin implements Plugin {
+public abstract class ValidationPolicy<E extends EventMessage> extends Policy<E> {
 
-    @SuppressWarnings("OverlyCoupledMethod") // Registers a lot of policies and does nothing else.
     @Override
-    public ImmutableSet<Policy<?>> policies() {
-        return ImmutableSet.of(
-                new RequiredPolicy(),
-                new RangePolicy(),
-                new MinPolicy(),
-                new MaxPolicy(),
-                new DistinctPolicy(),
-                new ValidatePolicy(),
-                new PatternPolicy(),
-                new IsRequiredPolicy(),
-                new WhenPolicy(),
-                new RequiredIdPatternPolicy(),
-                new RequiredIdOptionPolicy()
-        );
-    }
+    @ContractFor(handler = React.class)
+    protected abstract EitherOf2<RuleAdded, Nothing> whenever(E event);
 
-    @NotNull
-    @Override
-    public ImmutableSet<ViewRepository<?, ?, ?>> viewRepositories() {
-        return ImmutableSet.of(
-                new MessageValidationRepository(),
-                new RequiredFieldRepository(),
-                new ValidatedFieldRepository()
-        );
+    /**
+     * Creates an {@link EitherOf2} with {@code Nothing} in the {@code B} option.
+     *
+     * <p>Usage example:
+     * <pre>
+     *  {@literal class MyPolicy extends ValidationPolicy<TypeEntered>} {
+     *      {@literal @Override @React}
+     *      {@literal protected EitherOf2<RuleAdded, Nothing> whenever}(TypeEntered event) {
+     *           if (!isRelevant(event)) {
+     *               return withNothing();
+     *           }
+     *           return myCustomRule(event);
+     *       }
+     * </pre>
+     */
+    protected final EitherOf2<RuleAdded, Nothing> withNothing() {
+        return EitherOf2.withB(nothing());
     }
 }

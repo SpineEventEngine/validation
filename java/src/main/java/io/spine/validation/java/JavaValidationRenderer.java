@@ -38,6 +38,7 @@ import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
+import io.spine.protodata.codegen.java.Expression;
 import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
@@ -85,12 +86,16 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  *
  * <p>If the validation rules are broken, throws a {@link io.spine.validate.ValidationException}.
  */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
+@SuppressWarnings({
+        "unused",  // Loaded by ProtoData via reflection.
+        "OverlyCoupledClass" // Entry point for the validation gen.
+})
 public final class JavaValidationRenderer extends JavaRenderer {
 
     private static final Type OPTIONAL_ERROR =
             new TypeToken<Optional<ValidationError>>() {}.getType();
 
+    @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
     private static final String VALIDATE = "validate";
 
     private static final String RETURN_LITERAL = "return $L";
@@ -105,7 +110,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
      * for generated code just to have eight spaces of indentation.
      */
     private static final int INDENT_LEVEL = 2;
-    private static final String VIOLATIONS = "violations";
+    private static final Expression VIOLATIONS = new Literal("violations");
 
     private @MonotonicNonNull TypeSystem typeSystem;
 
@@ -196,7 +201,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
     }
 
     private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $N = new $T<>()",
+        return CodeBlock.of("$T<$T> $L = new $T<>()",
                             ArrayList.class,
                             ConstraintViolation.class,
                             VIOLATIONS,
@@ -230,10 +235,10 @@ public final class JavaValidationRenderer extends JavaRenderer {
 
     private static CodeBlock generateValidationError() {
         CodeBlock.Builder code = CodeBlock.builder();
-        code.beginControlFlow("if (!$N.isEmpty())", VIOLATIONS);
+        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
         MethodCall errorBuilder = new ClassName(ValidationError.class)
                 .newBuilder()
-                .chainAddAll("constraint_violation", new Literal(VIOLATIONS))
+                .chainAddAll("constraint_violation", VIOLATIONS)
                 .chainBuild();
         MethodCall newOptional = new ClassName(Optional.class)
                 .call("of", ImmutableList.of(errorBuilder));

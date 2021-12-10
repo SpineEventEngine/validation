@@ -28,7 +28,6 @@ package io.spine.validation.java;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.protobuf.Message;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
@@ -128,10 +127,6 @@ final class Validate implements InsertionPoint {
         JavaClassSource source = topLevelClass;
         for (String name : names) {
             if (!source.hasNestedType(name)) {
-                return Optional.empty();
-            }
-            String superType = source.resolveType(source.getSuperType());
-            if (!superType.equals(Message.class.getName())) {
                 return Optional.empty();
             }
             JavaSource<?> nestedType = source.getNestedType(name);

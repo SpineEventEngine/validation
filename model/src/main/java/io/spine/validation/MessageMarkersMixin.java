@@ -24,9 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.81")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.75")
-val spineServerVersion by extra("2.0.0-SNAPSHOT.75")
-val protoDataVersion by extra("0.1.2")
-val validationVersion by extra("2.0.0-SNAPSHOT.11")
+package io.spine.validation;
+
+import com.google.common.collect.ImmutableList;
+import io.spine.annotation.GeneratedMixin;
+import io.spine.tools.mc.java.codegen.FilePattern;
+
+/**
+ * A mixin for the generated {@code MessageMarkers} type.
+ */
+@GeneratedMixin
+interface MessageMarkersMixin extends MessageMarkersOrBuilder {
+
+    /**
+     * Obtains all the file patterns that mark different types of Protobuf files.
+     */
+    default ImmutableList<FilePattern> allPatterns() {
+        return ImmutableList.<FilePattern>builder()
+                .addAll(getEntityPatternList())
+                .addAll(getEventPatternList())
+                .addAll(getCommandPatternList())
+                .addAll(getRejectionPatternList())
+                .build();
+    }
+}

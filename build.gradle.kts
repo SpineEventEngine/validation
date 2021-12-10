@@ -29,7 +29,6 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.excludeProtobufLite
@@ -38,6 +37,7 @@ import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.PublishingRepos
+import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.spinePublishing
@@ -51,11 +51,11 @@ buildscript {
 
     apply(from = "$rootDir/version.gradle.kts")
 
-    val spineBaseVersion: String by extra
+    val mcJavaVersion: String by extra
     val protoDataVersion: String by extra
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:$spineBaseVersion")
+        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
         classpath("io.spine:proto-data:$protoDataVersion")
     }
 }
@@ -116,8 +116,8 @@ subprojects {
         plugin("java-library")
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
-        plugin("io.spine.mc-java")
         plugin("com.google.protobuf")
+        plugin("io.spine.mc-java")
         plugin("pmd")
         plugin("maven-publish")
     }
@@ -191,12 +191,6 @@ subprojects {
     }
 }
 
-apply {
-    with(Scripts) {
-        // Aggregated coverage report across all subprojects.
-        from(jacoco(project))
-    }
-}
-
+JacocoConfig.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)

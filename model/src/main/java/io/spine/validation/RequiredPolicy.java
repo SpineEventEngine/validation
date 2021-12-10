@@ -29,14 +29,16 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldExited;
+import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.SimpleRuleAdded;
 
 import java.util.Optional;
 
+import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 
 /**
@@ -46,11 +48,11 @@ import static io.spine.validation.SourceFiles.findField;
  * the value is {@code true}, and the field type supports such validation, a validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
-final class RequiredPolicy extends Policy<FieldExited> {
+final class RequiredPolicy extends ValidationPolicy<FieldExited> {
 
     @Override
     @React
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+    protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
         FieldId id = FieldId
                 .newBuilder()
                 .setName(event.getField())
@@ -65,15 +67,24 @@ final class RequiredPolicy extends Policy<FieldExited> {
                                           this);
             return EitherOf2.withA(requiredRule(declaration, field.get()));
         }
-        return EitherOf2.withB(nothing());
+        return withNothing();
     }
 
-    private static SimpleRuleAdded requiredRule(Field declaration, RequiredField field) {
-        SimpleRule rule = RequiredRule.forField(declaration, field.getErrorMessage());
-        return SimpleRuleAdded
-                .newBuilder()
-                .setType(declaration.getDeclaringType())
-                .setRule(rule)
-                .vBuild();
+    private static RuleAdded requiredRule(Field declaration, RequiredField field) {
+        Rule rule = RequiredRule.forField(declaration, field.getErrorMessage())
+                                .orElseThrow(() -> doesNotSupportRequired(declaration));
+        return Rules.toEvent(rule, declaration.getDeclaringType());
+    }
+
+    private static IllegalStateException doesNotSupportRequired(Field field) {
+        String fieldName = field.getName()
+                                .getValue();
+        String typeUrl = typeUrl(field.getDeclaringType());
+        PrimitiveType type = field.getType()
+                                  .getPrimitive();
+        return newIllegalStateException(
+                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
+                typeUrl, fieldName, type
+        );
     }
 }

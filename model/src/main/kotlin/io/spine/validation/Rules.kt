@@ -24,9 +24,53 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.81")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.75")
-val spineServerVersion by extra("2.0.0-SNAPSHOT.75")
-val protoDataVersion by extra("0.1.2")
-val validationVersion by extra("2.0.0-SNAPSHOT.11")
+@file:JvmName("Rules")
+
+package io.spine.validation
+
+import io.spine.protodata.TypeName
+import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.SimpleRuleAdded
+
+/**
+ * Converts this `rule` to an event.
+ *
+ * @param type the type name of the validated message
+ */
+internal fun Rule.toEvent(type: TypeName): RuleAdded {
+    return if (hasComposite()) {
+        CompositeRuleAdded.newBuilder()
+            .setType(type)
+            .setRule(composite)
+            .build()
+    } else {
+        SimpleRuleAdded.newBuilder()
+            .setType(type)
+            .setRule(simple)
+            .build()
+    }
+}
+
+/**
+ * Creates a [Rule] from this simple rule.
+ */
+internal fun SimpleRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setSimple(this)
+        .build()
+
+/**
+ * Creates a [Rule] from this composite rule.
+ */
+internal fun CompositeRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setComposite(this)
+        .build()
+
+/**
+ * Creates a [Rule] from this message-wide rule.
+ */
+internal fun MessageWideRule.wrap(): Rule =
+    Rule.newBuilder()
+        .setMessageWide(this)
+        .build()

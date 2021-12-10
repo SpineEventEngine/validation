@@ -88,14 +88,14 @@ private constructor(private val expression: String) {
             left: ErrorMessage,
             right: ErrorMessage,
             operation: LogicalOperator = LO_UNKNOWN,
-            value: String = ""
+            accessor: String = ""
         ): ErrorMessage {
             val msg = Template(format).apply {
                 formatStatic(OPERATOR, operation.printableString())
                 formatDynamic(LEFT, left.expression)
                 formatDynamic(RIGHT, right.expression)
-                if (value.isNotBlank()) {
-                    formatDynamic(VALUE, value)
+                if (accessor.isNotBlank()) {
+                    formatDynamic(VALUE, accessor)
                 }
             }
             return ErrorMessage(msg.joinExpression())

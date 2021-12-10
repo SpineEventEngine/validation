@@ -32,7 +32,6 @@ import io.spine.protodata.FieldExited;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -54,11 +53,11 @@ import static io.spine.validation.SourceFiles.findField;
  *
  * <p>If the message field is invalid, the containing message is invalid as well.
  */
-final class ValidatePolicy extends Policy<FieldExited> {
+final class ValidatePolicy extends ValidationPolicy<FieldExited> {
 
     @Override
     @React
-    protected EitherOf2<SimpleRuleAdded, Nothing> whenever(@External FieldExited event) {
+    protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
         FieldId id = FieldId.newBuilder()
                 .setName(event.getField())
                 .setType(event.getType())
@@ -68,24 +67,23 @@ final class ValidatePolicy extends Policy<FieldExited> {
         if (field.isPresent()) {
             checkMessage(event.getField(), event.getType(), event.getFile());
         }
-        if (field.map(ValidatedField::getValidate)
-                 .orElse(false)) {
-            SimpleRule rule = SimpleRules.withCustom(
-                    event.getField(),
-                    RecursiveValidation.getDefaultInstance(),
-                    "Message field is validated by its validation rules. " +
-                            "If the field is invalid, the container message is invalid as well.",
-                    field.get()
-                         .getErrorMessage(),
-                    true);
-            return EitherOf2.withA(
-                    SimpleRuleAdded.newBuilder()
-                            .setType(event.getType())
-                            .setRule(rule)
-                            .build()
-            );
+        boolean shouldValidate = field.map(ValidatedField::getValidate).orElse(false);
+        if (!shouldValidate) {
+            return withNothing();
         }
-        return EitherOf2.withB(nothing());
+        SimpleRule rule = SimpleRules.withCustom(
+                event.getField(),
+                RecursiveValidation.getDefaultInstance(),
+                "Message field is validated by its validation rules. " +
+                        "If the field is invalid, the container message is invalid as well.",
+                field.get().getErrorMessage(),
+                true);
+        return EitherOf2.withA(
+                SimpleRuleAdded.newBuilder()
+                        .setType(event.getType())
+                        .setRule(rule)
+                        .build()
+        );
     }
 
     private void checkMessage(FieldName fieldName, TypeName typeName, FilePath file) {

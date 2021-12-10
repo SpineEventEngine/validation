@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "ConfigProto";
+option java_multiple_files = true;
+
+import "spine/tools/mc/java/config.proto";
+
+// The container type for the validation config.
+//
+// ProtoData supports multiple configurations merges into a single object. In order for
+// the Validation library to be satisfied with the config, it must always have
+// the `message_markers` field of type `spine.validation.MessageMarkers`.
+//
+message ValidationConfig {
+
+    MessageMarkers message_markers = 1;
+}
+
+// The markers that define special kinds of messages.
+message MessageMarkers {
+    option (is).java_type = "MessageMarkersMixin";
+
+    // Names of options used to mark entity state messages.
+    //
+    // For example, `["entity", "view"]`.
+    //
+    repeated string entity_option_name = 1;
+
+    // File patterns of files where entity state messages are defined.
+    repeated tools.mc.java.FilePattern entity_pattern = 2;
+
+    // File patterns of files where event messages are defined.
+    repeated tools.mc.java.FilePattern event_pattern = 3;
+
+    // File patterns of files where command messages are defined.
+    repeated tools.mc.java.FilePattern command_pattern = 4;
+
+    // File patterns of files where rejection messages are defined.
+    repeated tools.mc.java.FilePattern rejection_pattern = 5;
+}
