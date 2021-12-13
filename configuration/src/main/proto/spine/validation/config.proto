@@ -2,14 +2,9 @@ syntax = "proto3";
 
 package spine.validation;
 
-import "spine/options.proto";
-
-option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
 option java_outer_classname = "ConfigProto";
 option java_multiple_files = true;
-
-import "spine/tools/mc/java/config.proto";
 
 // The container type for the validation config.
 //
@@ -24,7 +19,6 @@ message ValidationConfig {
 
 // The markers that define special kinds of messages.
 message MessageMarkers {
-    option (is).java_type = "MessageMarkersMixin";
 
     // Names of options used to mark entity state messages.
     //
@@ -33,14 +27,30 @@ message MessageMarkers {
     repeated string entity_option_name = 1;
 
     // File patterns of files where entity state messages are defined.
-    repeated tools.mc.java.FilePattern entity_pattern = 2;
+    repeated FilePattern entity_pattern = 2;
 
     // File patterns of files where event messages are defined.
-    repeated tools.mc.java.FilePattern event_pattern = 3;
+    repeated FilePattern event_pattern = 3;
 
     // File patterns of files where command messages are defined.
-    repeated tools.mc.java.FilePattern command_pattern = 4;
+    repeated FilePattern command_pattern = 4;
 
     // File patterns of files where rejection messages are defined.
-    repeated tools.mc.java.FilePattern rejection_pattern = 5;
+    repeated FilePattern rejection_pattern = 5;
+}
+
+// A pattern matching file paths.
+message FilePattern {
+
+    oneof kind {
+
+        // The path must end with this string.
+        string suffix = 1;
+
+        // The path must start with this string.
+        string prefix = 2;
+
+        // The path must match this regular expression.
+        string regex = 3;
+    }
 }

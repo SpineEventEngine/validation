@@ -77,8 +77,9 @@ plugins {
 
 spinePublishing {
     projectsToPublish.addAll(
-        "model",
+        "configuration",
         "java",
+        "model",
         "runtime"
     )
     spinePrefix.set(false)

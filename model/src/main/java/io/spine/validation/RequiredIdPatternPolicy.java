@@ -35,8 +35,8 @@ import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-import io.spine.tools.mc.java.codegen.FilePattern;
 
+import static io.spine.validation.Markers.allPatterns;
 import static io.spine.validation.SourceFiles.findFirstField;
 
 /**
@@ -61,7 +61,7 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         }
         ValidationConfig config = configAs(ValidationConfig.class);
         MessageMarkers markers = config.getMessageMarkers();
-        ImmutableList<FilePattern> filePatterns = markers.allPatterns();
+        ImmutableList<FilePattern> filePatterns = allPatterns(markers);
         FilePath file = event.getFile();
         boolean match = filePatterns.stream()
                                     .anyMatch(pattern -> matches(file, pattern));
@@ -75,14 +75,14 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
 
     private static boolean matches(FilePath path, FilePattern pattern) {
         String filePath = path.getValue();
-        switch (pattern.getValueCase()) {
+        switch (pattern.getKindCase()) {
             case SUFFIX:
                 return filePath.endsWith(pattern.getSuffix());
             case PREFIX:
                 return filePath.startsWith(pattern.getPrefix());
             case REGEX:
                 return filePath.matches(pattern.getRegex());
-            case VALUE_NOT_SET:
+            case KIND_NOT_SET:
             default:
                 return false;
         }

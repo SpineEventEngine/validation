@@ -24,19 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val mcJavaVersion: String by extra
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
+import io.spine.internal.dependency.Protobuf
 
 dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:compiler:$protoDataVersion")
-    implementation(project(":configuration"))
-    implementation("io.spine.tools:spine-mc-java-base:$mcJavaVersion")
-
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
+    Protobuf.libs.forEach { implementation(it) }
 }
 
-kotlin {
-    explicitApi()
+modelCompiler {
+    java {
+        codegen { validation {
+            skipValidation()
+            skipBuilders()
+        }}
+    }
 }

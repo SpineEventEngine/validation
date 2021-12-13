@@ -24,27 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+@file:JvmName("Markers")
 
-import com.google.common.collect.ImmutableList;
-import io.spine.annotation.GeneratedMixin;
-import io.spine.tools.mc.java.codegen.FilePattern;
+package io.spine.validation
+
+import com.google.common.collect.ImmutableList
 
 /**
- * A mixin for the generated {@code MessageMarkers} type.
+ * Obtains all the file patterns that mark different types of Protobuf files.
  */
-@GeneratedMixin
-interface MessageMarkersMixin extends MessageMarkersOrBuilder {
-
-    /**
-     * Obtains all the file patterns that mark different types of Protobuf files.
-     */
-    default ImmutableList<FilePattern> allPatterns() {
-        return ImmutableList.<FilePattern>builder()
-                .addAll(getEntityPatternList())
-                .addAll(getEventPatternList())
-                .addAll(getCommandPatternList())
-                .addAll(getRejectionPatternList())
-                .build();
-    }
+internal fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
+    return ImmutableList.builder<FilePattern>()
+        .addAll(entityPatternList)
+        .addAll(eventPatternList)
+        .addAll(commandPatternList)
+        .addAll(rejectionPatternList)
+        .build()
 }
+
