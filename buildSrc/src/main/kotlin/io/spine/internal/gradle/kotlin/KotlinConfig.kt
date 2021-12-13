@@ -24,27 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.internal.gradle.kotlin
 
-import com.google.common.collect.ImmutableList;
-import io.spine.annotation.GeneratedMixin;
-import io.spine.tools.mc.java.codegen.FilePattern;
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaToolchainSpec
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
- * A mixin for the generated {@code MessageMarkers} type.
+ * Sets [Java toolchain](https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support)
+ * to the specified version (e.g. 11 or 8).
  */
-@GeneratedMixin
-interface MessageMarkersMixin extends MessageMarkersOrBuilder {
+fun KotlinJvmProjectExtension.applyJvmToolchain(version: Int) {
+    jvmToolchain {
+        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(version))
+    }
+}
 
-    /**
-     * Obtains all the file patterns that mark different types of Protobuf files.
-     */
-    default ImmutableList<FilePattern> allPatterns() {
-        return ImmutableList.<FilePattern>builder()
-                .addAll(getEntityPatternList())
-                .addAll(getEventPatternList())
-                .addAll(getCommandPatternList())
-                .addAll(getRejectionPatternList())
-                .build();
+/**
+ * Sets [Java toolchain](https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support)
+ * to the specified version (e.g. "11" or "8").
+ */
+@Suppress("unused")
+fun KotlinJvmProjectExtension.applyJvmToolchain(version: String) =
+    applyJvmToolchain(version.toInt())
+
+/**
+ * Opts-in to experimental features that we use in our codebase.
+ */
+fun KotlinCompile.setFreeCompilerArgs() {
+    kotlinOptions {
+        freeCompilerArgs = listOf(
+            "-Xskip-prerelease-check",
+            "-Xjvm-default=all",
+            "-Xopt-in=kotlin.contracts.ExperimentalContracts",
+            "-Xopt-in=kotlin.ExperimentalStdlibApi"
+        )
     }
 }

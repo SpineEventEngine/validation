@@ -68,17 +68,18 @@ plugins {
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
     val dokka = io.spine.internal.dependency.Dokka
 
-    id(protobuf.id).version(protobuf.version)
+    id(protobuf.id)
     id(errorProne.id)
-    kotlin("jvm") version(io.spine.internal.dependency.Kotlin.version)
+    kotlin("jvm")
     id(dokka.pluginId) version(dokka.version)
     `force-jacoco`
 }
 
 spinePublishing {
     projectsToPublish.addAll(
-        "model",
+        "configuration",
         "java",
+        "model",
         "runtime"
     )
     spinePrefix.set(false)
@@ -129,6 +130,8 @@ subprojects {
         withType<JavaCompile> {
             configureJavac()
             configureErrorProne()
+            sourceCompatibility = "1.8"
+            targetCompatibility = "1.8"
         }
         registerTestTasks()
     }

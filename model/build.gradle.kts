@@ -31,6 +31,7 @@ val spineServerVersion: String by extra
 dependencies {
     api("io.spine:spine-server:$spineServerVersion")
     api("io.spine.protodata:compiler:$protoDataVersion")
+    implementation(project(":configuration"))
     implementation("io.spine.tools:spine-mc-java-base:$mcJavaVersion")
 
     testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")

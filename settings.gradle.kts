@@ -27,6 +27,7 @@
 rootProject.name = "validation"
 
 include(
+    "configuration",
     "java",
     "model",
     "runtime",
