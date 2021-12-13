@@ -26,8 +26,8 @@
 
 package io.spine.internal.gradle.javascript.task
 
-import io.spine.internal.gradle.javascript.JsContext
 import io.spine.internal.gradle.javascript.JsEnvironment
+import io.spine.internal.gradle.javascript.JsContext
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskContainer
 

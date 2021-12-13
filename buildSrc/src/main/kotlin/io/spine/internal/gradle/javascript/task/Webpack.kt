@@ -26,9 +26,9 @@
 
 package io.spine.internal.gradle.javascript.task
 
-import io.spine.internal.gradle.TaskName
 import io.spine.internal.gradle.named
 import io.spine.internal.gradle.register
+import io.spine.internal.gradle.TaskName
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider

@@ -26,8 +26,8 @@
 
 package io.spine.internal.gradle.dart
 
-import io.spine.internal.gradle.dart.plugin.DartPlugins
 import io.spine.internal.gradle.dart.task.DartTasks
+import io.spine.internal.gradle.dart.plugin.DartPlugins
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType

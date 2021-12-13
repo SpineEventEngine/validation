@@ -28,6 +28,7 @@ package io.spine.internal.gradle.dart.plugin
 
 import com.google.protobuf.gradle.builtins
 import com.google.protobuf.gradle.id
+import com.google.protobuf.gradle.plugins
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.remove
 import io.spine.internal.dependency.Protobuf
