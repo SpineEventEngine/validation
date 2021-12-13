@@ -41,4 +41,3 @@ internal fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
         .addAll(rejectionPatternList)
         .build()
 }
-
