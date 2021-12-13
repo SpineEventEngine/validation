@@ -36,6 +36,7 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.validation.Markers.allPatterns;
 import static io.spine.validation.SourceFiles.findFirstField;
 
@@ -75,7 +76,9 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
 
     private static boolean matches(FilePath path, FilePattern pattern) {
         String filePath = path.getValue();
-        switch (pattern.getKindCase()) {
+        FilePattern.KindCase kind = pattern.getKindCase();
+        checkNotNull(kind, "File pattern has unknown kind: %s.", pattern);
+        switch (kind) {
             case SUFFIX:
                 return filePath.endsWith(pattern.getSuffix());
             case PREFIX:
