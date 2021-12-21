@@ -42,7 +42,7 @@ import io.spine.validation.Rule
 /**
  * Context of a [CodeGenerator].
  */
-data class GenerationContext
+public data class GenerationContext
 @JvmOverloads
 internal constructor(
 
@@ -140,7 +140,7 @@ internal constructor(
      *
      * The [field] should be a field of the message referenced in [msg].
      */
-    fun getterFor(field: Field): Expression =
+    public fun getterFor(field: Field): Expression =
         msg.field(field).getter
 
     /**
@@ -148,7 +148,7 @@ internal constructor(
      *
      * @throws IllegalArgumentException if there is no such field
      */
-    fun lookUpField(name: FieldName): Field =
+    public fun lookUpField(name: FieldName): Field =
         querying.lookUpField(protoFile, validatedType, name)
 }
 

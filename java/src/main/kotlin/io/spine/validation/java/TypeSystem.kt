@@ -86,7 +86,7 @@ import kotlin.reflect.KClass
  *
  * Includes all the types known to the app at runtime.
  */
-class TypeSystem
+public class TypeSystem
 private constructor(
     private val knownTypes: Map<TypeName, ClassName>
 ) {
@@ -94,7 +94,7 @@ private constructor(
     /**
      * Obtains the name of the Java class generated from a Protobuf type with the given name.
      */
-    fun javaTypeName(type: Type): String {
+    public fun javaTypeName(type: Type): String {
         return when {
             type.hasPrimitive() -> type.primitive.toPrimitiveName()
             type.hasMessage() -> classNameFor(type.message).canonical
@@ -119,7 +119,7 @@ private constructor(
      *  - for an enum, a call of the `forNumber` static method;
      *  - for lists and maps, construction of a Guava `ImmutableList` or `ImmutableMap`.
      */
-    fun valueToJava(value: Value): Expression {
+    public fun valueToJava(value: Value): Expression {
         return when (value.kindCase) {
             NULL_VALUE -> Null
             BOOL_VALUE -> Literal(value.boolValue)
@@ -224,16 +224,16 @@ private constructor(
         throw IllegalStateException("Unknown primitive type: `$type`.")
     }
 
-    companion object {
+    public companion object {
 
         /**
          * Creates a new `TypeSystem` builder.
          */
         @JvmStatic
-        fun newBuilder() = Builder()
+        public fun newBuilder(): Builder = Builder()
     }
 
-    class Builder internal constructor() {
+    public class Builder internal constructor() {
 
         private val knownTypes = mutableMapOf<TypeName, ClassName>()
 
@@ -248,7 +248,7 @@ private constructor(
 
         private fun io.spine.type.Type<*, *>.typeName(): TypeName {
             val descriptor = descriptor()
-            return when(descriptor) {
+            return when (descriptor) {
                 is Descriptors.Descriptor -> descriptor.name()
                 is Descriptors.EnumDescriptor -> descriptor.name()
                 else -> throw IllegalStateException("Unexpected type: $descriptor")
@@ -256,14 +256,14 @@ private constructor(
         }
 
         @CanIgnoreReturnValue
-        fun put(file: File, messageType: MessageType): Builder {
+        public fun put(file: File, messageType: MessageType): Builder {
             val javaClassName = messageType.javaClassName(declaredIn = file)
             knownTypes[messageType.name] = javaClassName
             return this
         }
 
         @CanIgnoreReturnValue
-        fun put(file: File, enumType: EnumType): Builder {
+        public fun put(file: File, enumType: EnumType): Builder {
             val javaClassName = enumType.javaClassName(declaredIn = file)
             knownTypes[enumType.name] = javaClassName
             return this
@@ -272,6 +272,6 @@ private constructor(
         /**
          * Builds an instance of `TypeSystem`.
          */
-        fun build() = TypeSystem(knownTypes)
+        public fun build(): TypeSystem = TypeSystem(knownTypes)
     }
 }

@@ -46,7 +46,7 @@ import io.spine.validation.test.money.CurrencyType
  * We do not have enough data on `TypeOptionDiscovered`, thus we collect info in the `CurrencyType`
  * view and only then decide if we want to emit the validation event.
  */
-class CurrencyValidationPolicy : Policy<TypeExited>() {
+public class CurrencyValidationPolicy : Policy<TypeExited>() {
 
     @React
     override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {

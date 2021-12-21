@@ -48,7 +48,7 @@ import io.spine.validation.MapOfAnys
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the given mutable [violationsList].
  */
-fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
+public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
     val violation = buildViolation(
         validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
     )
@@ -59,7 +59,7 @@ fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) 
  * Constructs code which creates a [ConstraintViolation] with child violations and adds it
  * to the given mutable [violationsList].
  */
-fun ErrorMessage.createParentViolation(
+public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
     childViolations: Expression
 ): CodeBlock {
@@ -88,7 +88,7 @@ fun ErrorMessage.createParentViolation(
  *      the expression to obtain the value of the common field, or `null` if there is no common
  *      field. If this param is `null`, `field` must also be `null`.
  */
-fun ErrorMessage.createCompositeViolation(type: TypeName,
+public fun ErrorMessage.createCompositeViolation(type: TypeName,
                                           violationsList: Expression,
                                           field: Field?,
                                           fieldValue: Expression?): CodeBlock {

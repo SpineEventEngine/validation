@@ -39,7 +39,7 @@ import java.nio.file.Paths
  * instances of the messages by simply calling a static method.
  */
 @Suppress("unused") // Accessed via reflection.
-class DiagsRenderer : JavaRenderer() {
+public class DiagsRenderer : JavaRenderer() {
 
     override fun render(sources: SourceSet) {
         sources.file(Paths.get("io/spine/validation/ListOfAnys.java"))

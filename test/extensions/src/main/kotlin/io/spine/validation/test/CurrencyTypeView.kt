@@ -45,7 +45,7 @@ import io.spine.validation.test.money.CurrencyType
 /**
  * A view on a message type which stores an amount of money is a certain currency.
  */
-class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
+public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
     @Subscribe
     internal fun on(@External @Where(field = OPTION_NAME, equals = "currency")
