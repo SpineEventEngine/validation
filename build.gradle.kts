@@ -27,6 +27,7 @@
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
 import io.spine.internal.dependency.ErrorProne
+import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyGitHubPackages
@@ -56,7 +57,7 @@ buildscript {
 
     dependencies {
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
-        classpath("io.spine:proto-data:$protoDataVersion")
+        classpath("io.spine.protodata:gradle-plugin:$protoDataVersion")
     }
 }
 
@@ -123,22 +124,29 @@ subprojects {
         plugin("maven-publish")
     }
 
+    // Apply custom Kotlin script plugins.
+    apply {
+        plugin("pmd-settings")
+    }
+
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
+
+    val javaVersion = JavaVersion.VERSION_11.toString()
+
+    kotlin {
+        explicitApi()
+        jvmToolchain {
+            (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(javaVersion))
+        }
+    }
 
     tasks {
         withType<JavaCompile> {
             configureJavac()
             configureErrorProne()
-            sourceCompatibility = "1.8"
-            targetCompatibility = "1.8"
         }
         registerTestTasks()
-    }
-
-    // Apply custom Kotlin script plugins.
-    apply {
-        plugin("pmd-settings")
     }
 
     dependencies {
@@ -159,9 +167,11 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
+                    Flogger.lib,
+                    Flogger.Runtime.systemBackend,
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
-                    "io.spine:spine-server:$spineServerVersion"
+                    "io.spine:spine-server:$spineServerVersion",
                 )
             }
         }
@@ -169,15 +179,13 @@ subprojects {
     configurations.excludeProtobufLite()
 
     tasks.test {
-        useJUnitPlatform {
-            includeEngines("junit-jupiter")
-        }
+        useJUnitPlatform()
         configureLogging()
     }
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = javaVersion
             freeCompilerArgs = freeCompilerArgs + listOf(
                 "-Xinline-classes",
                 "-Xjvm-default=all"
