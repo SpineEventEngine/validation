@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,4 +29,4 @@ val mcJavaVersion by extra("2.0.0-SNAPSHOT.81")
 val spineTimeVersion by extra("2.0.0-SNAPSHOT.75")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.75")
 val protoDataVersion by extra("0.1.2")
-val validationVersion by extra("2.0.0-SNAPSHOT.12")
+val validationVersion by extra("2.0.0-SNAPSHOT.13")
