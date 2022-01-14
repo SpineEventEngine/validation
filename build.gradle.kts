@@ -49,6 +49,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
+    io.spine.internal.gradle.doApplyGitHubPackages(repositories, "ProtoData", rootProject)
 
     apply(from = "$rootDir/version.gradle.kts")
 
