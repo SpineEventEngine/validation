@@ -31,7 +31,7 @@ import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.ViewRepository
 
 @Suppress("unused") // Accessed reflectively by ProtoData.
-class MoneyValidationPlugin : Plugin {
+public class MoneyValidationPlugin : Plugin {
 
     override fun viewRepositories(): Set<ViewRepository<*, *, *>> =
         setOf(CurrencyTypeView.Repo())

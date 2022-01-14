@@ -28,28 +28,11 @@ package io.spine.validation.java
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.ByteString
-import com.google.protobuf.Descriptors
+import com.google.protobuf.Descriptors.Descriptor
+import com.google.protobuf.Descriptors.EnumDescriptor
 import io.spine.protodata.EnumType
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
-import io.spine.protodata.PrimitiveType
-import io.spine.protodata.PrimitiveType.PT_UNKNOWN
-import io.spine.protodata.PrimitiveType.TYPE_BOOL
-import io.spine.protodata.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.PrimitiveType.TYPE_INT32
-import io.spine.protodata.PrimitiveType.TYPE_INT64
-import io.spine.protodata.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.PrimitiveType.TYPE_STRING
-import io.spine.protodata.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.PrimitiveType.UNRECOGNIZED
 import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
@@ -79,22 +62,30 @@ import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
-import kotlin.reflect.KClass
 
 /**
  * A type system of an application.
  *
  * Includes all the types known to the app at runtime.
  */
-class TypeSystem
+public class TypeSystem
 private constructor(
     private val knownTypes: Map<TypeName, ClassName>
 ) {
 
+    public companion object {
+
+        /**
+         * Creates a new `TypeSystem` builder.
+         */
+        @JvmStatic
+        public fun newBuilder(): Builder = Builder()
+    }
+
     /**
      * Obtains the name of the Java class generated from a Protobuf type with the given name.
      */
-    fun javaTypeName(type: Type): String {
+    public fun javaTypeName(type: Type): String {
         return when {
             type.hasPrimitive() -> type.primitive.toPrimitiveName()
             type.hasMessage() -> classNameFor(type.message).canonical
@@ -119,7 +110,7 @@ private constructor(
      *  - for an enum, a call of the `forNumber` static method;
      *  - for lists and maps, construction of a Guava `ImmutableList` or `ImmutableMap`.
      */
-    fun valueToJava(value: Value): Expression {
+    public fun valueToJava(value: Value): Expression {
         return when (value.kindCase) {
             NULL_VALUE -> Null
             BOOL_VALUE -> Literal(value.boolValue)
@@ -189,29 +180,6 @@ private constructor(
         else -> throw IllegalArgumentException("Type is empty.")
     }
 
-    private fun PrimitiveType.toClass(): ClassName {
-        val klass = primitiveClass()
-        return ClassName(klass.javaObjectType)
-    }
-
-    private fun PrimitiveType.toPrimitiveName(): String {
-        val klass = primitiveClass()
-        val primitiveClass = klass.javaPrimitiveType ?: klass.java
-        return primitiveClass.name
-    }
-
-    private fun PrimitiveType.primitiveClass(): KClass<*> =
-        when (this) {
-            TYPE_DOUBLE -> Double::class
-            TYPE_FLOAT -> Float::class
-            TYPE_INT64, TYPE_UINT64, TYPE_SINT64, TYPE_FIXED64, TYPE_SFIXED64 -> Long::class
-            TYPE_INT32, TYPE_UINT32, TYPE_SINT32, TYPE_FIXED32, TYPE_SFIXED32 -> Int::class
-            TYPE_BOOL -> Boolean::class
-            TYPE_STRING -> String::class
-            TYPE_BYTES -> ByteString::class
-            UNRECOGNIZED, PT_UNKNOWN -> unknownType(this)
-        }
-
     private fun unknownType(type: Type): Nothing {
         throw IllegalStateException("Unknown type: `${type}`.")
     }
@@ -220,20 +188,10 @@ private constructor(
         throw IllegalStateException("Unknown type: `${typeName.typeUrl()}`.")
     }
 
-    private fun unknownType(type: PrimitiveType): Nothing {
-        throw IllegalStateException("Unknown primitive type: `$type`.")
-    }
-
-    companion object {
-
-        /**
-         * Creates a new `TypeSystem` builder.
-         */
-        @JvmStatic
-        fun newBuilder() = Builder()
-    }
-
-    class Builder internal constructor() {
+    /**
+     * The builder of a new `TypeSystem` of an application.
+     */
+    public class Builder internal constructor() {
 
         private val knownTypes = mutableMapOf<TypeName, ClassName>()
 
@@ -248,22 +206,22 @@ private constructor(
 
         private fun io.spine.type.Type<*, *>.typeName(): TypeName {
             val descriptor = descriptor()
-            return when(descriptor) {
-                is Descriptors.Descriptor -> descriptor.name()
-                is Descriptors.EnumDescriptor -> descriptor.name()
+            return when (descriptor) {
+                is Descriptor -> descriptor.name()
+                is EnumDescriptor -> descriptor.name()
                 else -> throw IllegalStateException("Unexpected type: $descriptor")
             }
         }
 
         @CanIgnoreReturnValue
-        fun put(file: File, messageType: MessageType): Builder {
+        public fun put(file: File, messageType: MessageType): Builder {
             val javaClassName = messageType.javaClassName(declaredIn = file)
             knownTypes[messageType.name] = javaClassName
             return this
         }
 
         @CanIgnoreReturnValue
-        fun put(file: File, enumType: EnumType): Builder {
+        public fun put(file: File, enumType: EnumType): Builder {
             val javaClassName = enumType.javaClassName(declaredIn = file)
             knownTypes[enumType.name] = javaClassName
             return this
@@ -272,6 +230,6 @@ private constructor(
         /**
          * Builds an instance of `TypeSystem`.
          */
-        fun build() = TypeSystem(knownTypes)
+        public fun build(): TypeSystem = TypeSystem(knownTypes)
     }
 }

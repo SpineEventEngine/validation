@@ -45,12 +45,6 @@ protoData {
         "io.spine.validation.ValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )
-    options(
-        "spine/options.proto",
-        "spine/time_options.proto",
-        "spine/validation/test/money_options.proto",
-        "spine/validation/test/fancy_options.proto"
-    )
 }
 
 tasks.withType<LaunchProtoData> {
