@@ -49,8 +49,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
-    io.spine.internal.gradle.doApplyGitHubPackages(repositories, "ProtoData", rootProject)
-
     apply(from = "$rootDir/version.gradle.kts")
 
     val mcJavaVersion: String by extra
@@ -58,7 +56,8 @@ buildscript {
 
     dependencies {
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
-        classpath("io.spine.protodata:gradle-plugin:$protoDataVersion")
+        // The below dependency is obtained from https://plugins.gradle.org/m2/.
+        classpath("io.spine:proto-data:$protoDataVersion")
     }
 }
 
