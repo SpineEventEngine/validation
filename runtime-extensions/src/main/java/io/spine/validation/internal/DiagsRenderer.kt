@@ -29,7 +29,7 @@ import io.spine.protobuf.TypeConverter
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.JavaRenderer
 import io.spine.protodata.codegen.java.TypedInsertionPoint
-import io.spine.protodata.renderer.SourceSet
+import io.spine.protodata.renderer.SourceFileSet
 import java.nio.file.Paths
 
 /**
@@ -41,7 +41,7 @@ import java.nio.file.Paths
 @Suppress("unused") // Accessed via reflection.
 public class DiagsRenderer : JavaRenderer() {
 
-    override fun render(sources: SourceSet) {
+    override fun render(sources: SourceFileSet) {
         sources.file(Paths.get("io/spine/validation/ListOfAnys.java"))
             .at(TypedInsertionPoint.CLASS_SCOPE.forType(LIST_TYPE))
             .withExtraIndentation(1)

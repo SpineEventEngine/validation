@@ -50,7 +50,7 @@ import io.spine.protodata.language.Language;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceAtPoint;
-import io.spine.protodata.renderer.SourceSet;
+import io.spine.protodata.renderer.SourceFileSet;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
@@ -115,7 +115,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private @MonotonicNonNull TypeSystem typeSystem;
 
     @Override
-    protected void render(SourceSet sources) {
+    protected void render(SourceFileSet sources) {
         this.typeSystem = bakeTypeSystem();
         ImmutableMap<TypeName, MessageValidation> validations = select(MessageValidation.class)
                 .all()
@@ -128,7 +128,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .forEach(type -> generateCode(sources, validations, type));
     }
 
-    private void generateCode(SourceSet sources,
+    private void generateCode(SourceFileSet sources,
                               ImmutableMap<TypeName, MessageValidation> validations,
                               MessageType type) {
         File protoFile = findProtoFile(type.getFile());
