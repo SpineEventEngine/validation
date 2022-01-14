@@ -161,6 +161,7 @@ subprojects {
 
     val spineBaseVersion: String by extra
     val spineServerVersion: String by extra
+    val spineTimeVersion: String by extra
 
     configurations.forceVersions()
     configurations {
@@ -170,6 +171,7 @@ subprojects {
                     Flogger.lib,
                     Flogger.Runtime.systemBackend,
                     "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine:spine-time:$spineTimeVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
                     "io.spine:spine-server:$spineServerVersion",
                 )
