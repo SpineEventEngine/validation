@@ -55,7 +55,7 @@ abstract class PublishExtension @Inject constructor() {
         const val name = "spinePublishing"
 
         /** The prefix to be used before the project name if [spinePrefix] is set to `true`. */
-        const val artifactPrefix = "spine-"
+        const val standardPrefix = "spine-"
 
         /**
          * Creates a new instance of the extension and adds it to the given project.
@@ -75,7 +75,7 @@ abstract class PublishExtension @Inject constructor() {
      * If the `customPrefix` property is set to a non-empty string, it will be used before
      * the published project name. Otherwise, the [spinePrefix] property is taken into account.
      *
-     * If the `spinePrefix` property is set to `true`, [artifactPrefix] will
+     * If the `spinePrefix` property is set to `true`, [standardPrefix] will
      * be used before the project name. Otherwise, just the name of the project will be
      * used as the artifact ID.
      */
@@ -84,7 +84,7 @@ abstract class PublishExtension @Inject constructor() {
         return if (customPrefix.isNotEmpty()) {
             "$customPrefix${project.name}"
         } else if (spinePrefix.get()) {
-            "$artifactPrefix${project.name}"
+            "$standardPrefix${project.name}"
         } else {
             project.name
         }
