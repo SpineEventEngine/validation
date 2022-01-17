@@ -38,10 +38,10 @@ import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.PublishingRepos
+import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
-import io.spine.internal.gradle.spinePublishing
 import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
 import org.jetbrains.dokka.gradle.DokkaTask
@@ -83,7 +83,7 @@ spinePublishing {
         "model",
         "runtime"
     )
-    spinePrefix.set(false)
+    customPrefix.set("spine-validation-")
     with(PublishingRepos) {
         targetRepositories.addAll(
             cloudRepo,
