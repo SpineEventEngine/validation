@@ -30,11 +30,9 @@ import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protobuf.AnyPacker;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
 import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
-import io.spine.time.validation.Time;
 import io.spine.time.validation.TimeOption;
 import io.spine.validation.event.SimpleRuleAdded;
 
@@ -56,25 +54,24 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
     protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "when") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
-        TimeOption timeOption = AnyPacker.unpack(option.getValue(), TimeOption.class);
-        Time time = timeOption.getIn();
-        InTime feature = InTime.newBuilder()
+        var option = event.getOption();
+        var timeOption = AnyPacker.unpack(option.getValue(), TimeOption.class);
+        var time = timeOption.getIn();
+        var feature = InTime.newBuilder()
                 .setTime(time)
                 .build();
-        String errorMessage = format("The time must be in the %s.",
-                                     time.name().toLowerCase());
-        SimpleRule rule = withCustom(
+        var errorMessage = format("The time must be in the %s.", time.name().toLowerCase());
+        var rule = withCustom(
                 event.getField(),
                 feature,
                 errorMessage,
                 errorMessage,
                 true);
-        return new Just<>(SimpleRuleAdded
-                                  .newBuilder()
-                                  .setType(event.getType())
-                                  .setRule(rule)
-                                  .build()
+        return new Just<>(
+                SimpleRuleAdded.newBuilder()
+                        .setType(event.getType())
+                        .setRule(rule)
+                        .build()
         );
     }
 }

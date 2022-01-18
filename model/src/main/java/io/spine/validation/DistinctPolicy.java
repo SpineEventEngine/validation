@@ -29,11 +29,9 @@ package io.spine.validation;
 import com.google.protobuf.BoolValue;
 import io.spine.core.External;
 import io.spine.core.Where;
-import io.spine.protodata.Field;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FieldOptionDiscovered;
 import io.spine.protodata.FilePath;
-import io.spine.protodata.Option;
 import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -63,24 +61,25 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
     protected EitherOf2<RuleAdded, Nothing> whenever(
             @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
+        var option = event.getOption();
         if (!unpack(option.getValue(), BoolValue.class).getValue()) {
             return withNothing();
         }
         checkCollection(event.getField(), event.getType(), event.getFile());
-        FieldName field = event.getField();
-        SimpleRule rule = SimpleRules.withCustom(
+        var field = event.getField();
+        var rule = SimpleRules.withCustom(
                 field, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
         );
-        return EitherOf2.withA(SimpleRuleAdded
-                                       .newBuilder()
-                                       .setType(event.getType())
-                                       .setRule(rule)
-                                       .build());
+        return EitherOf2.withA(
+                SimpleRuleAdded.newBuilder()
+                        .setType(event.getType())
+                        .setRule(rule)
+                        .build()
+        );
     }
 
     private void checkCollection(FieldName fieldName, TypeName typeName, FilePath file) {
-        Field field = findField(fieldName, typeName, file, this);
+        var field = findField(fieldName, typeName, file, this);
         if (!isRepeated(field)) {
             throw newIllegalStateException(
                     "Field `%s.%s` is neither a `repeated` nor a `map` and " +

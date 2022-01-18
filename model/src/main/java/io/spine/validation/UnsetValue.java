@@ -28,10 +28,7 @@ package io.spine.validation;
 
 import com.google.protobuf.ByteString;
 import io.spine.protodata.Field;
-import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.Type;
-import io.spine.protodata.Type.KindCase;
-import io.spine.protodata.TypeName;
 
 import java.util.Optional;
 
@@ -80,7 +77,7 @@ public final class UnsetValue {
                                         .setMapValue(MapValue.getDefaultInstance())
                                         .vBuild());
             default:
-                Type type = field.getType();
+                var type = field.getType();
                 return singular(type);
         }
     }
@@ -95,7 +92,7 @@ public final class UnsetValue {
      *         the field does not have an easily distinguished not-set value
      */
     public static Optional<Value> singular(Type type) {
-        KindCase kind = type.getKindCase();
+        var kind = type.getKindCase();
         switch (kind) {
             case MESSAGE:
                 return Optional.of(messageValue(type));
@@ -110,7 +107,7 @@ public final class UnsetValue {
     }
 
     private static Optional<Value> primitiveValue(Type type) {
-        PrimitiveType primitiveType = type.getPrimitive();
+        var primitiveType = type.getPrimitive();
         if (primitiveType == PT_UNKNOWN || primitiveType == UNRECOGNIZED) {
             throw newIllegalArgumentException("Unknown primitive type `%s`.", primitiveType);
         }
@@ -128,7 +125,7 @@ public final class UnsetValue {
     }
 
     private static Value messageValue(Type type) {
-        TypeName msgName = type.getMessage();
+        var msgName = type.getMessage();
         return Value.newBuilder()
                     .setMessageValue(MessageValue.newBuilder()
                                                  .setType(msgName)
@@ -137,7 +134,7 @@ public final class UnsetValue {
     }
 
     private static Value enumValue(Type type) {
-        TypeName enumName = type.getEnumeration();
+        var enumName = type.getEnumeration();
         return Value.newBuilder()
                     .setEnumValue(EnumValue.newBuilder()
                                            .setType(enumName)

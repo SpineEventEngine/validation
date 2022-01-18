@@ -48,11 +48,10 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
     protected Just<CompositeRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
+        var option = event.getOption();
+        var rules = NumberRules.from(option);
         return new Just<>(
-                CompositeRuleAdded
-                        .newBuilder()
+                CompositeRuleAdded.newBuilder()
                         .setType(event.getType())
                         .setRule(rules.rangeRule(event.getField()))
                         .build()

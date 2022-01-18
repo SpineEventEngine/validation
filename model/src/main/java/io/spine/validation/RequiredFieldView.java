@@ -74,8 +74,8 @@ final class RequiredFieldView
 
     @Override
     protected String extractErrorMessage(Option option) {
-        IfMissingOption value = unpack(option.getValue(), IfMissingOption.class);
-        String errorMessage = value.getErrorMsg();
+        var value = unpack(option.getValue(), IfMissingOption.class);
+        var errorMessage = value.getErrorMsg();
         return errorMessage;
     }
 }

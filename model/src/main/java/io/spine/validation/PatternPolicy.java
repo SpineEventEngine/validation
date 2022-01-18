@@ -32,7 +32,6 @@ import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.option.PatternOption;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
 import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
@@ -48,8 +47,7 @@ import static java.lang.String.format;
  */
 final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
-    private static final Escaper slashEscaper = Escapers
-            .builder()
+    private static final Escaper slashEscaper = Escapers.builder()
             .addEscape('\\', "\\\\")
             .build();
 
@@ -58,19 +56,19 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
     protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "pattern") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
-        PatternOption optionValue = unpack(option.getValue(), PatternOption.class);
-        String regex = optionValue.getRegex();
-        Regex feature = Regex.newBuilder()
+        var option = event.getOption();
+        var optionValue = unpack(option.getValue(), PatternOption.class);
+        var regex = optionValue.getRegex();
+        var feature = Regex.newBuilder()
                 .setPattern(regex)
                 .setModifier(optionValue.getModifier())
                 .build();
-        String customError = optionValue.getErrorMsg();
-        String error = customError.isEmpty()
+        var customError = optionValue.getErrorMsg();
+        var error = customError.isEmpty()
                        ? format("The string must match the regular expression `%s`.",
                                 slashEscaper.escape(regex))
                        : customError;
-        SimpleRule rule = SimpleRules.withCustom(
+        var rule = SimpleRules.withCustom(
                 event.getField(),
                 feature,
                 "String should match regex.",

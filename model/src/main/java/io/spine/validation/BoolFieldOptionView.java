@@ -57,8 +57,7 @@ abstract class BoolFieldOptionView<
     @ContractFor(handler = Subscribe.class)
     void onConstraint(FieldOptionDiscovered e) {
         errorMessage(defaultMessage);
-        boolean value = unpack(e.getOption()
-                                .getValue(), BoolValue.class).getValue();
+        var value = unpack(e.getOption() .getValue(), BoolValue.class).getValue();
         if (value) {
             enableValidation();
         }
@@ -76,7 +75,7 @@ abstract class BoolFieldOptionView<
 
     @ContractFor(handler = Subscribe.class)
     void onErrorMessage(FieldOptionDiscovered e) {
-        String message = extractErrorMessage(e.getOption());
+        var message = extractErrorMessage(e.getOption());
         errorMessage(message);
     }
 

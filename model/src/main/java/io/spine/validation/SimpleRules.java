@@ -69,14 +69,12 @@ public final class SimpleRules {
         checkNotNull(customFeature);
         checkNotEmptyOrBlank(description);
         checkNotEmptyOrBlank(errorMessage);
-        CustomOperator operator = CustomOperator
-                .newBuilder()
+        var operator = CustomOperator.newBuilder()
                 .setDescription(description)
                 .setFeature(pack(customFeature))
                 .build();
-        Value other = Values.from(customFeature);
-        SimpleRule.Builder builder = SimpleRule
-                .newBuilder()
+        var other = Values.from(customFeature);
+        var builder = SimpleRule.newBuilder()
                 .setCustomOperator(operator)
                 .setErrorMessage(errorMessage)
                 .setIgnoredIfUnset(true)

@@ -57,7 +57,7 @@ public final class Values {
      * into {@code Value}s.
      */
     public static Value from(Message message) {
-        MessageValue.Builder builder = MessageValue.newBuilder()
+        var builder = MessageValue.newBuilder()
                 .setType(name(message.getDescriptorForType()));
         if (isNotDefault(message)) {
             populate(builder, message);
@@ -102,9 +102,8 @@ public final class Values {
                         .setBytesValue(((ByteString) value))
                         .build();
             case ENUM:
-                EnumValueDescriptor enumDescriptor = (EnumValueDescriptor) value;
-                @SuppressWarnings("KotlinInternalInJava")
-                EnumValue enumValue = EnumValue.newBuilder()
+                var enumDescriptor = (EnumValueDescriptor) value;
+                var enumValue = EnumValue.newBuilder()
                         .setType(name(field.getEnumType()))
                         .setConstNumber(enumDescriptor.getNumber())
                         .build();
@@ -121,20 +120,20 @@ public final class Values {
     }
 
     private static Value fromMap(FieldDescriptor field, Object value) {
-        List<FieldDescriptor> syntheticEntry = field.getMessageType()
-                                            .getFields();
-        FieldDescriptor keyType = syntheticEntry.get(0);
-        FieldDescriptor valueType = syntheticEntry.get(1);
-        Map<?, ?> map = (Map<?, ?>) value;
-        MapValue.Builder mapBuilder = MapValue.newBuilder();
+        var syntheticEntry = field.getMessageType()
+                                  .getFields();
+        var keyType = syntheticEntry.get(0);
+        var valueType = syntheticEntry.get(1);
+        var map = (Map<?, ?>) value;
+        var mapBuilder = MapValue.newBuilder();
         map.forEach((k, v) -> {
-            Value key = fromField(keyType, k);
-            Value val = fromField(valueType, v);
-            mapBuilder.addValue(MapValue.Entry
-                                        .newBuilder()
-                                        .setKey(key)
-                                        .setValue(val)
-                                        .build());
+            var key = fromField(keyType, k);
+            var val = fromField(valueType, v);
+            var entry = MapValue.Entry.newBuilder()
+                    .setKey(key)
+                    .setValue(val)
+                    .build();
+            mapBuilder.addValue(entry);
         });
         return Value.newBuilder()
                 .setMapValue(mapBuilder)
@@ -142,8 +141,8 @@ public final class Values {
     }
 
     private static Value fromList(FieldDescriptor field, Object value) {
-        List<?> values = (List<?>) value;
-        ListValue.Builder listBuilder = values
+        var values = (List<?>) value;
+        var listBuilder = values
                 .stream()
                 .map(entry -> fromField(field, entry))
                 .collect(ListValue::newBuilder,

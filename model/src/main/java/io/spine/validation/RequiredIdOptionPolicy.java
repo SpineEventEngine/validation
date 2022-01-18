@@ -28,11 +28,8 @@ package io.spine.validation;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.core.External;
-import io.spine.protodata.Field;
-import io.spine.protodata.MessageType;
 import io.spine.protodata.Option;
 import io.spine.protodata.TypeExited;
-import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -64,16 +61,16 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
         if (!configIsPresent()) {
             return withNothing();
         }
-        Set<String> options = options();
+        var options = options();
         if (options.isEmpty()) {
             return withNothing();
         }
-        TypeName typeName = event.getType();
-        MessageType type = findType(typeName, event.getFile(), this);
-        boolean optionMatches = type.getOptionList()
-                                    .stream()
-                                    .map(Option::getName)
-                                    .anyMatch(options::contains);
+        var typeName = event.getType();
+        var type = findType(typeName, event.getFile(), this);
+        var optionMatches = type.getOptionList()
+                .stream()
+                .map(Option::getName)
+                .anyMatch(options::contains);
         if (!optionMatches) {
             return withNothing();
         }
@@ -82,13 +79,13 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
                     "Entity type `%s` must have at least one field.", typeUrl(typeName)
             );
         }
-        Field field = type.getField(0);
+        var field = type.getField(0);
         return withField(field);
     }
 
     private Set<String> options() {
-        ValidationConfig config = configAs(ValidationConfig.class);
-        MessageMarkers markers = config.getMessageMarkers();
+        var config = configAs(ValidationConfig.class);
+        var markers = config.getMessageMarkers();
         Set<String> options = ImmutableSet.copyOf(markers.getEntityOptionNameList());
         return options;
     }

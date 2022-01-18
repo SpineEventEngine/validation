@@ -26,12 +26,9 @@
 
 package io.spine.validation;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.core.External;
-import io.spine.protodata.Field;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeExited;
-import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
@@ -60,23 +57,23 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         if (!configIsPresent()) {
             return withNothing();
         }
-        ValidationConfig config = configAs(ValidationConfig.class);
-        MessageMarkers markers = config.getMessageMarkers();
-        ImmutableList<FilePattern> filePatterns = allPatterns(markers);
-        FilePath file = event.getFile();
-        boolean match = filePatterns.stream()
-                                    .anyMatch(pattern -> matches(file, pattern));
+        var config = configAs(ValidationConfig.class);
+        var markers = config.getMessageMarkers();
+        var filePatterns = allPatterns(markers);
+        var file = event.getFile();
+        var match = filePatterns.stream()
+                .anyMatch(pattern -> matches(file, pattern));
         if (!match) {
             return withNothing();
         }
-        TypeName type = event.getType();
-        Field field = findFirstField(type, file, this);
+        var type = event.getType();
+        var field = findFirstField(type, file, this);
         return withField(field);
     }
 
     private static boolean matches(FilePath path, FilePattern pattern) {
-        String filePath = path.getValue();
-        FilePattern.KindCase kind = pattern.getKindCase();
+        var filePath = path.getValue();
+        var kind = pattern.getKindCase();
         checkNotNull(kind, "File pattern has unknown kind: %s.", pattern);
         switch (kind) {
             case SUFFIX:

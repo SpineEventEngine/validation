@@ -48,14 +48,14 @@ final class MaxPolicy extends Policy<FieldOptionDiscovered> {
     protected Just<SimpleRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "max") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
-        SimpleRule rule = rules.maxRule(event.getField());
-        return new Just<>(SimpleRuleAdded
-                                  .newBuilder()
-                                  .setType(event.getType())
-                                  .setRule(rule)
-                                  .build()
+        var option = event.getOption();
+        var rules = NumberRules.from(option);
+        var rule = rules.maxRule(event.getField());
+        return new Just<>(
+                SimpleRuleAdded.newBuilder()
+                        .setType(event.getType())
+                        .setRule(rule)
+                        .build()
         );
     }
 }
