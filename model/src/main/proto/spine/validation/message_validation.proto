@@ -39,7 +39,6 @@ import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
 // All the validation rules of a single message type.
-//
 message MessageValidation {
     option (entity).kind = PROJECTION;
 
