@@ -39,7 +39,7 @@ import io.spine.validation.event.SimpleRuleAdded;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static io.spine.validation.SimpleRules.withCustom;
 import static java.lang.String.format;
-
+import static io.spine.protodata.plugin.Just.just;
 /**
  * A policy which, upon encountering a field with the {@code (when)} option, generates
  * a validation rule.
@@ -67,7 +67,7 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
                 errorMessage,
                 errorMessage,
                 true);
-        return new Just<>(
+        return just(
                 SimpleRuleAdded.newBuilder()
                         .setType(event.getType())
                         .setRule(rule)

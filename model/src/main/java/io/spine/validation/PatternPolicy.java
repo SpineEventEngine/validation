@@ -38,6 +38,7 @@ import io.spine.server.event.React;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.protodata.plugin.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static java.lang.String.format;
 
@@ -75,7 +76,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 error,
                 true
         );
-        return new Just<>(
+        return just(
                 SimpleRuleAdded.newBuilder()
                         .setType(event.getType())
                         .setRule(rule)
