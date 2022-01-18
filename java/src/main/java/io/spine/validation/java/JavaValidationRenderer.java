@@ -58,6 +58,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
@@ -112,15 +113,24 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceFileSet sources) {
         this.typeSystem = bakeTypeSystem();
-        var validations = select(MessageValidation.class)
+        var validations = createValidations();
+        var messageTypes = queryMessageTypes();
+        messageTypes.forEach(type -> generateCode(sources, validations, type));
+    }
+
+    private ImmutableMap<TypeName, MessageValidation> createValidations() {
+        return select(MessageValidation.class)
                 .all()
                 .stream()
                 .collect(toImmutableMap(v -> v.getType().getName(), v -> v));
-        select(ProtobufSourceFile.class)
+    }
+
+    @NonNull
+    private Stream<MessageType> queryMessageTypes() {
+        return select(ProtobufSourceFile.class)
                 .all()
                 .stream()
-                .flatMap(file -> file.getTypeMap().values().stream())
-                .forEach(type -> generateCode(sources, validations, type));
+                .flatMap(file -> file.getTypeMap().values().stream());
     }
 
     private void generateCode(SourceFileSet sources,
