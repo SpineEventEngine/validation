@@ -42,12 +42,14 @@ import "spine/validation/rule.proto";
 message MessageValidation {
     option (entity).kind = PROJECTION;
 
+    // The name of the message type for which validation rules are specified.
     protodata.TypeName name = 1;
 
     // Partial information about the type.
     //
-    // May contain only the type's own data, such as docs, declaring file, etc. Does not contain
-    // information about nested elements, such as fields and options.
+    // May contain only the type's own data, such as docs, declaring file, etc.
+    //
+    // Does not contain information about nested elements, such as fields and options.
     //
     protodata.MessageType type = 2;
 
