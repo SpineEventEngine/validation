@@ -31,8 +31,6 @@ import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
 import io.spine.validation.MessageValidation;
 
-import java.util.Set;
-
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protodata.language.CommonLanguages.java;
 
@@ -49,7 +47,7 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
 
     @Override
     protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        Set<MessageValidation> types = select(MessageValidation.class).all();
+        var types = select(MessageValidation.class).all();
         return types.stream()
                     .map(validation -> new Validate(validation.getName()))
                     .collect(toImmutableSet());

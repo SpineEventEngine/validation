@@ -27,7 +27,6 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -53,20 +52,17 @@ import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static java.lang.System.lineSeparator;
-import static java.util.Objects.requireNonNull;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
@@ -113,19 +109,16 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceFileSet sources) {
         this.typeSystem = bakeTypeSystem();
-        var validations = createValidations();
+        var validations = findValidations();
         var messageTypes = queryMessageTypes();
         messageTypes.forEach(type -> generateCode(sources, validations, type));
     }
 
-    private ImmutableMap<TypeName, MessageValidation> createValidations() {
-        return select(MessageValidation.class)
-                .all()
-                .stream()
-                .collect(toImmutableMap(v -> v.getType().getName(), v -> v));
+    private Validations findValidations() {
+        var client = select(MessageValidation.class);
+        return new Validations(client);
     }
 
-    @NonNull
     private Stream<MessageType> queryMessageTypes() {
         return select(ProtobufSourceFile.class)
                 .all()
@@ -133,12 +126,10 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .flatMap(file -> file.getTypeMap().values().stream());
     }
 
-    private void generateCode(SourceFileSet sources,
-                              ImmutableMap<TypeName, MessageValidation> validations,
-                              MessageType type) {
+    private void generateCode(SourceFileSet sources, Validations validations, MessageType type) {
         var protoFile = findProtoFile(type.getFile());
         var javaFile = javaFile(type, protoFile);
-        var validation = validationForType(validations, type);
+        var validation = validations.get(type);
         var code = generateValidationCode(validation);
         var atClassScope = sources.file(javaFile)
                 .at(CLASS_SCOPE.forType(validation.getName()))
@@ -149,17 +140,6 @@ public final class JavaValidationRenderer extends JavaRenderer {
                .at(new Validate(validation.getName()))
                .withExtraIndentation(INDENT_LEVEL)
                .add(validateBeforeBuild());
-    }
-
-    @NonNull
-    private static MessageValidation validationForType(
-            ImmutableMap<TypeName, MessageValidation> validations,
-            MessageType type) {
-        var defaultValidation = MessageValidation.newBuilder()
-                .setType(type)
-                .build();
-        var validation = validations.getOrDefault(type.getName(), defaultValidation);
-        return requireNonNull(validation);
     }
 
     private File findProtoFile(FilePath path) {
