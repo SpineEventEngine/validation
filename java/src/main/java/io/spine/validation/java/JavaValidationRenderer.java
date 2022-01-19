@@ -26,9 +26,7 @@
 
 package io.spine.validation.java;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -46,26 +44,20 @@ import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.codegen.java.This;
 import io.spine.protodata.language.CommonLanguages;
-import io.spine.protodata.language.Language;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
-import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFileSet;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
-import io.spine.validation.Rule;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
@@ -117,30 +109,29 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceFileSet sources) {
         this.typeSystem = bakeTypeSystem();
-        ImmutableMap<TypeName, MessageValidation> validations = select(MessageValidation.class)
-                .all()
-                .stream()
-                .collect(toImmutableMap(v -> v.getType().getName(), v -> v));
-        select(ProtobufSourceFile.class)
-                .all()
-                .stream()
-                .flatMap(file -> file.getTypeMap().values().stream())
-                .forEach(type -> generateCode(sources, validations, type));
+        var validations = findValidations();
+        var messageTypes = queryMessageTypes();
+        messageTypes.forEach(type -> generateCode(sources, validations, type));
     }
 
-    private void generateCode(SourceFileSet sources,
-                              ImmutableMap<TypeName, MessageValidation> validations,
-                              MessageType type) {
-        File protoFile = findProtoFile(type.getFile());
-        Path javaFile = javaFile(type, protoFile);
-        MessageValidation defaultValidation = MessageValidation
-                .newBuilder()
-                .setType(type)
-                .build();
-        MessageValidation validation = validations.getOrDefault(type.getName(), defaultValidation);
-        GeneratedCode code = generateValidationCode(validation);
-        SourceAtPoint atClassScope = sources
-                .file(javaFile)
+    private Validations findValidations() {
+        var client = select(MessageValidation.class);
+        return new Validations(client);
+    }
+
+    private Stream<MessageType> queryMessageTypes() {
+        return select(ProtobufSourceFile.class)
+                .all()
+                .stream()
+                .flatMap(file -> file.getTypeMap().values().stream());
+    }
+
+    private void generateCode(SourceFileSet sources, Validations validations, MessageType type) {
+        var protoFile = findProtoFile(type.getFile());
+        var javaFile = javaFile(type, protoFile);
+        var validation = validations.get(type);
+        var code = generateValidationCode(validation);
+        var atClassScope = sources.file(javaFile)
                 .at(CLASS_SCOPE.forType(validation.getName()))
                 .withExtraIndentation(INDENT_LEVEL);
         atClassScope.add(wrapToMethod(code, validation));
@@ -161,36 +152,34 @@ public final class JavaValidationRenderer extends JavaRenderer {
     }
 
     private TypeSystem bakeTypeSystem() {
-        Set<ProtobufSourceFile> files = select(ProtobufSourceFile.class).all();
-        TypeSystem.Builder types = TypeSystem.newBuilder();
-        for (ProtobufSourceFile file : files) {
+        var files = select(ProtobufSourceFile.class).all();
+        var types = TypeSystem.newBuilder();
+        for (var file : files) {
             file.getTypeMap().values().forEach(type -> types.put(file.getFile(), type));
             file.getEnumTypeMap().values().forEach(type -> types.put(file.getFile(), type));
         }
         return types.build();
     }
 
-    private static ImmutableList<String> wrapToMethod(GeneratedCode generatedCode,
+    private static ImmutableList<String> wrapToMethod(ValidationConstraintCode generated,
                                                       MessageValidation validation) {
-        CodeBlock.Builder code = CodeBlock.builder();
+        var code = CodeBlock.builder();
         code.addStatement(newAccumulator());
-        code.add(generatedCode.validationCode);
+        code.add(generated.codeBlock());
         code.add(extraInsertionPoint(validation.getType().getName()));
         code.add(generateValidationError());
-        MethodSpec validate = MethodSpec
-                .methodBuilder(VALIDATE)
+        var validate = MethodSpec.methodBuilder(VALIDATE)
                 .returns(OPTIONAL_ERROR)
                 .addModifiers(PUBLIC)
                 .addCode(code.build())
                 .build();
-        String[] methodLines = validate.toString().split(lineSeparator());
+        var methodLines = validate.toString().split(lineSeparator());
         return ImmutableList.copyOf(methodLines);
     }
 
     private static ImmutableList<String> validateBeforeBuild() {
-        MessageReference result = new MessageReference("result");
-        CodeBlock code = CodeBlock
-                .builder()
+        var result = new MessageReference("result");
+        var code = CodeBlock.builder()
                 .addStatement("$T error = $L", OPTIONAL_ERROR, new MethodCall(result, VALIDATE))
                 .beginControlFlow("if (error.isPresent())")
                 .addStatement("throw new $T(error.get().getConstraintViolationList())",
@@ -208,79 +197,45 @@ public final class JavaValidationRenderer extends JavaRenderer {
                             ArrayList.class);
     }
 
-    private GeneratedCode generateValidationCode(MessageValidation validation) {
-        MessageReference msg = This.INSTANCE.asMessage();
-        CodeBlock.Builder code = CodeBlock.builder();
-        FilePath file = validation.getType().getFile();
-        TypeName typeName = validation.getType().getName();
+    private ValidationConstraintCode generateValidationCode(MessageValidation validation) {
+        var msg = This.INSTANCE.asMessage();
+        var code = CodeBlock.builder();
+        var file = validation.getType().getFile();
+        var typeName = validation.getType().getName();
         ImmutableList.Builder<CodeBlock> supportingMembers = ImmutableList.builder();
-        for (Rule rule : validation.getRuleList()) {
-            GenerationContext context = new GenerationContext(
+        for (var rule : validation.getRuleList()) {
+            var context = new GenerationContext(
                     rule, msg, file, typeSystem, typeName, VIOLATIONS, this
             );
-            CodeGenerator generator = JavaCodeGeneration.generatorFor(context);
-            CodeBlock block = generator.code();
+            var generator = JavaCodeGeneration.generatorFor(context);
+            var block = generator.code();
             code.add(block);
             supportingMembers.add(generator.supportingMembers());
         }
-        return new GeneratedCode(code.build(), supportingMembers.build());
+        return new ValidationConstraintCode(code.build(), supportingMembers.build());
     }
 
     private static CodeBlock extraInsertionPoint(TypeName name) {
         InsertionPoint insertionPoint = new ExtraValidation(name);
-        Language java = CommonLanguages.java();
-        String line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
+        var java = CommonLanguages.java();
+        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
         return CodeBlock.of(line);
     }
 
     private static CodeBlock generateValidationError() {
-        CodeBlock.Builder code = CodeBlock.builder();
+        var code = CodeBlock.builder();
         code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        MethodCall errorBuilder = new ClassName(ValidationError.class)
-                .newBuilder()
+        var errorBuilder = new ClassName(ValidationError.class).newBuilder()
                 .chainAddAll("constraint_violation", VIOLATIONS)
                 .chainBuild();
-        MethodCall newOptional = new ClassName(Optional.class)
+        var newOptional = new ClassName(Optional.class)
                 .call("of", ImmutableList.of(errorBuilder));
         code.addStatement(RETURN_LITERAL, newOptional);
         code.nextControlFlow("else");
-        MethodCall optionalEmpty = new ClassName(Optional.class)
+        var optionalEmpty = new ClassName(Optional.class)
                 .call("empty");
         code.addStatement(RETURN_LITERAL, optionalEmpty);
         code.endControlFlow();
         return code.build();
-    }
-
-    /**
-     * Code generated for a validation constraint.
-     */
-    private static class GeneratedCode {
-
-        private static final Splitter onNewLine = Splitter.on(lineSeparator());
-
-        /**
-         * The code which performs validation.
-         */
-        private final CodeBlock validationCode;
-
-        /**
-         * Class-level declarations used in the validation code.
-         */
-        private final ImmutableList<CodeBlock> supportingMembers;
-
-        private GeneratedCode(CodeBlock code, ImmutableList<CodeBlock> members) {
-            this.validationCode = code;
-            this.supportingMembers = members;
-        }
-
-        /**
-         * Obtains class-level declarations used in the validation code as code lines.
-         */
-        private ImmutableList<String> supportingMembersLines() {
-            return supportingMembers
-                    .stream()
-                    .flatMap(code -> onNewLine.splitToStream(code.toString()))
-                    .collect(toImmutableList());
-        }
     }
 }

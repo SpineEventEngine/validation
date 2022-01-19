@@ -58,24 +58,24 @@ final class RequiredRule {
     // Duplication in generated code.
     static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
-        Optional<Value> unsetValue = UnsetValue.forField(field);
-        if (!unsetValue.isPresent()) {
+        var unsetValue = UnsetValue.forField(field);
+        if (unsetValue.isEmpty()) {
             return Optional.empty();
         }
-        SimpleRule integratedRule = rule(
+        var integratedRule = rule(
                 field, unsetValue.get(), errorMessage, "Field must be set.", false
         );
         if (!isRepeated(field)) {
             return Optional.of(wrap(integratedRule));
         }
-        Optional<Value> singularUnsetValue = UnsetValue.singular(field.getType());
-        if (!singularUnsetValue.isPresent()) {
+        var singularUnsetValue = UnsetValue.singular(field.getType());
+        if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }
-        SimpleRule differentialRule = rule(
+        var differentialRule = rule(
                 field, singularUnsetValue.get(), errorMessage, "", true
         );
-        CompositeRule composite = collectionRule(field, integratedRule, differentialRule);
+        var composite = collectionRule(field, integratedRule, differentialRule);
         return Optional.of(wrap(composite));
     }
 
@@ -83,7 +83,7 @@ final class RequiredRule {
                                                 SimpleRule integratedRule,
                                                 SimpleRule differentialRule) {
         @SuppressWarnings("DuplicateStringLiteralInspection")
-        CompositeRule composite = CompositeRule.newBuilder()
+        var composite = CompositeRule.newBuilder()
                 .setLeft(wrap(integratedRule))
                 .setOperator(AND)
                 .setRight(wrap(differentialRule))
@@ -98,7 +98,7 @@ final class RequiredRule {
                                    String errorMessage,
                                    String defaultErrorMessage,
                                    boolean distibute) {
-        String msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
+        var msg = errorMessage.isEmpty() ? defaultErrorMessage : errorMessage;
         return SimpleRule.newBuilder()
                 .setErrorMessage(msg)
                 .setField(field.getName())
@@ -109,7 +109,7 @@ final class RequiredRule {
     }
 
     /**
-     * Checks if the given field is requried.
+     * Checks if the given field is required.
      *
      * @param field
      *         the field
@@ -120,10 +120,10 @@ final class RequiredRule {
      */
     static boolean isRequired(Field field, boolean byDefault) {
         return field.getOptionList()
-                    .stream()
-                    .filter(opt -> is(opt, required))
-                    .findAny()
-                    .map(opt -> unpack(opt.getValue(), BoolValue.class).getValue())
-                    .orElse(byDefault);
+                .stream()
+                .filter(opt -> is(opt, required))
+                .findAny()
+                .map(opt -> unpack(opt.getValue(), BoolValue.class).getValue())
+                .orElse(byDefault);
     }
 }

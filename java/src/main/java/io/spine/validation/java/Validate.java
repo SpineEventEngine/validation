@@ -31,15 +31,14 @@ import com.google.common.base.Splitter;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -71,48 +70,46 @@ final class Validate implements InsertionPoint {
 
     @Override
     public LineNumber locate(List<String> lines) {
-        String code = LINE_JOINER.join(lines);
-        Optional<JavaClassSource> builder = findBuilder(code);
-        if (!builder.isPresent()) {
+        var code = LINE_JOINER.join(lines);
+        var builderClass = findBuilder(code);
+        if (builderClass == null) {
             return LineNumber.notInFile();
         }
-        JavaClassSource builderClass = builder.get();
-        MethodSource<JavaClassSource> method = builderClass.getMethod(BUILD_METHOD);
+        var method = builderClass.getMethod(BUILD_METHOD);
         if (method == null) {
             return LineNumber.notInFile();
         }
-        int methodDeclarationLine = method.getLineNumber();
-        int startPosition = method.getStartPosition();
-        int endPosition = method.getEndPosition();
-        String methodSource = code.substring(startPosition, endPosition);
-        int returnIndex = returnLineIndex(methodSource);
-        int returnLineNumber = methodDeclarationLine + returnIndex;
+        var methodDeclarationLine = method.getLineNumber();
+        var startPosition = method.getStartPosition();
+        var endPosition = method.getEndPosition();
+        var methodSource = code.substring(startPosition, endPosition);
+        var returnIndex = returnLineIndex(methodSource);
+        var returnLineNumber = methodDeclarationLine + returnIndex;
         return LineNumber.at(returnLineNumber - 1);
     }
 
-    private Optional<JavaClassSource> findBuilder(String code) {
-        Optional<JavaClassSource> classSource = findClass(code);
-        if (!classSource.isPresent()) {
-            return Optional.empty();
+    private @Nullable JavaClassSource findBuilder(String code) {
+        var classSource = findClass(code);
+        if (classSource == null) {
+            return null;
         }
-        JavaClassSource source = classSource.get();
-        if (!source.hasNestedType(BUILDER_CLASS)) {
-            return Optional.empty();
+        if (!classSource.hasNestedType(BUILDER_CLASS)) {
+            return null;
         }
-        JavaSource<?> builder = source.getNestedType(BUILDER_CLASS);
+        var builder = classSource.getNestedType(BUILDER_CLASS);
         if (!builder.isClass()) {
-            return Optional.empty();
+            return null;
         }
-        JavaClassSource builderClass = (JavaClassSource) builder;
-        return Optional.of(builderClass);
+        var builderClass = (JavaClassSource) builder;
+        return builderClass;
     }
 
-    private Optional<JavaClassSource> findClass(String code) {
+    private @Nullable JavaClassSource findClass(String code) {
         JavaSource<?> javaSource = Roaster.parse(JavaSource.class, code);
         if (!javaSource.isClass()) {
-            return Optional.empty();
+            return null;
         }
-        JavaClassSource source = (JavaClassSource) javaSource;
+        var source = (JavaClassSource) javaSource;
         Deque<String> names = new ArrayDeque<>(type.getNestingTypeNameList());
         names.addLast(type.getSimpleName());
 
@@ -122,26 +119,26 @@ final class Validate implements InsertionPoint {
         return findSubClass(source, names);
     }
 
-    private static Optional<JavaClassSource> findSubClass(JavaClassSource topLevelClass,
-                                                          Iterable<String> names) {
-        JavaClassSource source = topLevelClass;
-        for (String name : names) {
+    private static
+    @Nullable JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
+        var source = topLevelClass;
+        for (var name : names) {
             if (!source.hasNestedType(name)) {
-                return Optional.empty();
+                return null;
             }
-            JavaSource<?> nestedType = source.getNestedType(name);
+            var nestedType = source.getNestedType(name);
             if (!nestedType.isClass()) {
-                return Optional.empty();
+                return null;
             }
             source = (JavaClassSource) nestedType;
         }
-        return Optional.of(source);
+        return source;
     }
 
     private static int returnLineIndex(String code) {
-        List<String> methodLines = LINE_SPLITTER.splitToList(code);
-        int returnIndex = 0;
-        for (String line : methodLines) {
+        var methodLines = LINE_SPLITTER.splitToList(code);
+        var returnIndex = 0;
+        for (var line : methodLines) {
             if (RETURN_LINE.matcher(line).matches()) {
                 return returnIndex;
             }

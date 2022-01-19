@@ -29,12 +29,12 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.Option;
 import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.validation.event.CompositeRuleAdded;
 
+import static io.spine.protodata.plugin.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
@@ -48,11 +48,10 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
     protected Just<CompositeRuleAdded> whenever(
             @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
     ) {
-        Option option = event.getOption();
-        NumberRules rules = NumberRules.from(option);
-        return new Just<>(
-                CompositeRuleAdded
-                        .newBuilder()
+        var option = event.getOption();
+        var rules = NumberRules.from(option);
+        return just(
+                CompositeRuleAdded.newBuilder()
                         .setType(event.getType())
                         .setRule(rules.rangeRule(event.getField()))
                         .build()

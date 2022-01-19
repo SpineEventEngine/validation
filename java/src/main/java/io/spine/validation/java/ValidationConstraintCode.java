@@ -26,30 +26,46 @@
 
 package io.spine.validation.java;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.InsertionPointPrinter;
-import io.spine.validation.MessageValidation;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.squareup.javapoet.CodeBlock;
 
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static io.spine.protodata.language.CommonLanguages.java;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.lang.System.lineSeparator;
 
 /**
- * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types
- * which have an associated {@link MessageValidation} view.
+ * Code generated for a validation constraint.
  */
-@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
-public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
+final class ValidationConstraintCode {
 
-    public PrintValidationInsertionPoints() {
-        super(java());
+    private static final Splitter onNewLine = Splitter.on(lineSeparator());
+
+    /**
+     * The code which performs validation.
+     */
+    private final CodeBlock code;
+
+    /**
+     * Class-level declarations used in the validation code.
+     */
+    private final ImmutableList<CodeBlock> supportingMembers;
+
+    ValidationConstraintCode(CodeBlock code, ImmutableList<CodeBlock> members) {
+        this.code = checkNotNull(code);
+        this.supportingMembers = checkNotNull(members);
     }
 
-    @Override
-    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        var types = select(MessageValidation.class).all();
-        return types.stream()
-                    .map(validation -> new Validate(validation.getName()))
-                    .collect(toImmutableSet());
+    CodeBlock codeBlock() {
+        return code;
+    }
+
+    /**
+     * Obtains class-level declarations used in the validation code as code lines.
+     */
+    ImmutableList<String> supportingMembersLines() {
+        return supportingMembers.stream()
+                .flatMap(code -> onNewLine.splitToStream(code.toString()))
+                .collect(toImmutableList());
     }
 }

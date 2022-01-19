@@ -31,8 +31,6 @@ import io.spine.protodata.TypeExited;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 
-import java.util.Optional;
-
 import static io.spine.validation.RequiredRule.isRequired;
 import static io.spine.validation.Rules.toEvent;
 import static java.lang.String.format;
@@ -56,15 +54,14 @@ abstract class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
      *         the ID field
      * @return a required rule event or {@code Nothing} if the ID field is not required
      */
-    @SuppressWarnings("OptionalIsPresent") // For better readability.
     final EitherOf2<RuleAdded, Nothing> withField(Field field) {
         if (!isRequired(field, true)) {
             return withNothing();
         }
-        String errorMessage = format("ID field `%s` must be set.", field.getName()
-                                                                        .getValue());
-        Optional<Rule> rule = RequiredRule.forField(field, errorMessage);
-        if (!rule.isPresent()) {
+        var errorMessage = format("ID field `%s` must be set.", field.getName()
+                                                                     .getValue());
+        var rule = RequiredRule.forField(field, errorMessage);
+        if (rule.isEmpty()) {
             return withNothing();
         }
         return EitherOf2.withA(toEvent(rule.get(), field.getDeclaringType()));

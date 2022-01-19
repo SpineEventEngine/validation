@@ -28,7 +28,6 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.core.Subscribe;
-import io.spine.protodata.MessageType;
 import io.spine.protodata.TypeEntered;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.plugin.View;
@@ -49,26 +48,26 @@ final class MessageValidationView
 
     @Subscribe
     void on(@External TypeEntered event) {
-        MessageType type = event.getType();
+        var type = event.getType();
         builder().setName(type.getName())
                  .setType(type);
     }
 
     @Subscribe
     void on(SimpleRuleAdded event) {
-        Rule rule = wrap(event.getRule());
+        var rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 
     @Subscribe
     void on(CompositeRuleAdded event) {
-        Rule rule = wrap(event.getRule());
+        var rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 
     @Subscribe
     void on(MessageWideRuleAdded event) {
-        Rule rule = wrap(event.getRule());
+        var rule = wrap(event.getRule());
         builder().addRule(rule);
     }
 }

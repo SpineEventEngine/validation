@@ -29,13 +29,10 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldExited;
-import io.spine.protodata.PrimitiveType;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
-
-import java.util.Optional;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -53,35 +50,30 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
     @Override
     @React
     protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
-        FieldId id = FieldId
-                .newBuilder()
+        var id = FieldId.newBuilder()
                 .setName(event.getField())
                 .setType(event.getType())
                 .build();
-        Optional<RequiredField> field = select(RequiredField.class)
-                .withId(id);
+        var field = select(RequiredField.class).withId(id);
         if (field.map(RequiredField::getRequired).orElse(false)) {
-            Field declaration = findField(event.getField(),
-                                          event.getType(),
-                                          event.getFile(),
-                                          this);
+            var declaration = findField(event.getField(), event.getType(), event.getFile(), this);
             return EitherOf2.withA(requiredRule(declaration, field.get()));
         }
         return withNothing();
     }
 
     private static RuleAdded requiredRule(Field declaration, RequiredField field) {
-        Rule rule = RequiredRule.forField(declaration, field.getErrorMessage())
-                                .orElseThrow(() -> doesNotSupportRequired(declaration));
+        var rule = RequiredRule.forField(declaration, field.getErrorMessage())
+                               .orElseThrow(() -> doesNotSupportRequired(declaration));
         return Rules.toEvent(rule, declaration.getDeclaringType());
     }
 
     private static IllegalStateException doesNotSupportRequired(Field field) {
-        String fieldName = field.getName()
-                                .getValue();
-        String typeUrl = typeUrl(field.getDeclaringType());
-        PrimitiveType type = field.getType()
-                                  .getPrimitive();
+        var fieldName = field.getName()
+                             .getValue();
+        var typeUrl = typeUrl(field.getDeclaringType());
+        var type = field.getType()
+                        .getPrimitive();
         return newIllegalStateException(
                 "Field `%s.%s` of type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type

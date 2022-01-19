@@ -34,8 +34,6 @@ import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.Querying;
 import io.spine.protodata.TypeName;
 
-import java.util.Optional;
-
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -68,17 +66,13 @@ final class SourceFiles {
                            TypeName typeName,
                            FilePath filePath,
                            Querying querying) {
-        MessageType type = findType(typeName, filePath, querying);
-        Optional<Field> field = type
-                .getFieldList()
-                .stream()
-                .filter(f -> f.getName().equals(fieldName))
+        var type = findType(typeName, filePath, querying);
+        var field = type.getFieldList().stream()
+                .filter(f -> fieldName.equals(f.getName()))
                 .findFirst();
-        Field foundField = field.orElseGet(() -> type
-                .getOneofGroupList()
-                .stream()
+        var foundField = field.orElseGet(() -> type.getOneofGroupList().stream()
                 .flatMap(g -> g.getFieldList().stream())
-                .filter(f -> f.getName().equals(fieldName))
+                .filter(f -> fieldName.equals(f.getName()))
                 .findFirst()
                 .orElseThrow(() -> unknownField(fieldName)));
         return foundField;
@@ -98,12 +92,12 @@ final class SourceFiles {
      * @return the first field of the type
      */
     static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
-        MessageType type = findType(typeName, filePath, querying);
+        var type = findType(typeName, filePath, querying);
         if (type.getFieldCount() == 0) {
-            String url = typeUrl(typeName);
+            var url = typeUrl(typeName);
             throw newIllegalStateException("Type `%s` must have at least one field.", url);
         }
-        Field field = type.getField(0);
+        var field = type.getField(0);
         return field;
     }
 
@@ -119,14 +113,12 @@ final class SourceFiles {
      * @return the type
      */
     static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
-        ProtobufSourceFile file = querying
-                .select(ProtobufSourceFile.class)
-                .withId(filePath)
-                .orElseThrow(() -> unknownFile(filePath));
-        String typeUrl = typeUrl(typeName);
-        MessageType type = file
-                .getTypeMap()
-                .get(typeUrl);
+        var file = querying.select(ProtobufSourceFile.class)
+                           .withId(filePath)
+                           .orElseThrow(() -> unknownFile(filePath));
+        var typeUrl = typeUrl(typeName);
+        var type = file.getTypeMap()
+                       .get(typeUrl);
         if (type == null) {
             throw unknownType(typeName);
         }

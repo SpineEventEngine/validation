@@ -47,6 +47,9 @@ public final class ExtraValidation implements InsertionPoint {
 
     private final TypeName name;
 
+    /**
+     * Creates a new instance for the given type.
+     */
     public ExtraValidation(TypeName name) {
         this.name = checkNotNull(name);
     }

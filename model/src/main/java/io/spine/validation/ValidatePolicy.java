@@ -27,7 +27,6 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.protodata.Field;
 import io.spine.protodata.FieldExited;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FilePath;
@@ -36,8 +35,6 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.SimpleRuleAdded;
-
-import java.util.Optional;
 
 import static io.spine.protodata.Ast.qualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -58,12 +55,11 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
     @Override
     @React
     protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
-        FieldId id = FieldId.newBuilder()
+        var id = FieldId.newBuilder()
                 .setName(event.getField())
                 .setType(event.getType())
                 .build();
-        Optional<ValidatedField> field = select(ValidatedField.class)
-                .withId(id);
+        var field = select(ValidatedField.class).withId(id);
         if (field.isPresent()) {
             checkMessage(event.getField(), event.getType(), event.getFile());
         }
@@ -71,7 +67,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         if (!shouldValidate) {
             return withNothing();
         }
-        SimpleRule rule = SimpleRules.withCustom(
+        var rule = SimpleRules.withCustom(
                 event.getField(),
                 RecursiveValidation.getDefaultInstance(),
                 "Message field is validated by its validation rules. " +
@@ -87,7 +83,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
     }
 
     private void checkMessage(FieldName fieldName, TypeName typeName, FilePath file) {
-        Field field = findField(fieldName, typeName, file, this);
+        var field = findField(fieldName, typeName, file, this);
         if (!field.getType().hasMessage()) {
             throw newIllegalStateException(
                     "Field `%s.%s` is not a message field and, " +
