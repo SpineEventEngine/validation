@@ -39,7 +39,6 @@ import org.jboss.forge.roaster.model.source.JavaSource;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
