@@ -119,6 +119,8 @@ public final class Values {
         }
     }
 
+    @SuppressWarnings("CheckReturnValue"
+            /* Calling a method of a builder instance of which is used later. */)
     private static Value fromMap(FieldDescriptor field, Object value) {
         var syntheticEntry = field.getMessageType()
                                   .getFields();
