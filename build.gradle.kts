@@ -44,6 +44,8 @@ import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
+import io.spine.internal.gradle.kotlin.applyJvmToolchain
+import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -108,8 +110,7 @@ allprojects {
     }
 
     group = "io.spine.validation"
-    val validationVersion: String by extra
-    version = validationVersion
+    version = extra["validationVersion"]!!
 }
 
 subprojects {
@@ -129,26 +130,6 @@ subprojects {
         plugin("pmd-settings")
     }
 
-    LicenseReporter.generateReportIn(project)
-    JavadocConfig.applyTo(project)
-
-    val javaVersion = JavaVersion.VERSION_11.toString()
-
-    kotlin {
-        explicitApi()
-        jvmToolchain {
-            (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(javaVersion))
-        }
-    }
-
-    tasks {
-        withType<JavaCompile> {
-            configureJavac()
-            configureErrorProne()
-        }
-        registerTestTasks()
-    }
-
     dependencies {
         ErrorProne.apply {
             errorprone(core)
@@ -159,12 +140,14 @@ subprojects {
         testRuntimeOnly(JUnit.runner)
     }
 
-    val spineBaseVersion: String by extra
-    val spineServerVersion: String by extra
-    val spineTimeVersion: String by extra
-
-    configurations.forceVersions()
     configurations {
+        forceVersions()
+        excludeProtobufLite()
+
+        val spineBaseVersion: String by extra
+        val spineServerVersion: String by extra
+        val spineTimeVersion: String by extra
+
         all {
             resolutionStrategy {
                 force(
@@ -178,30 +161,43 @@ subprojects {
             }
         }
     }
-    configurations.excludeProtobufLite()
 
-    tasks.test {
-        useJUnitPlatform()
-        configureLogging()
-    }
+    val javaVersion = JavaVersion.VERSION_11.toString()
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = javaVersion
-            freeCompilerArgs = freeCompilerArgs + listOf(
-                "-Xinline-classes",
-                "-Xjvm-default=all"
-            )
+    kotlin {
+        explicitApi()
+        applyJvmToolchain(javaVersion)
+
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions.jvmTarget = javaVersion
+            setFreeCompilerArgs()
         }
     }
 
-    val dokkaJavadoc by tasks.getting(DokkaTask::class)
-
-    tasks.register("javadocJar", Jar::class) {
-        from(dokkaJavadoc.outputDirectory)
-        archiveClassifier.set("javadoc")
-        dependsOn(dokkaJavadoc)
+    java {
+        tasks.withType<JavaCompile>().configureEach {
+            configureJavac()
+            configureErrorProne()
+        }
     }
+
+    tasks {
+        registerTestTasks()
+        test {
+            useJUnitPlatform()
+            configureLogging()
+        }
+
+        val dokkaJavadoc by getting(DokkaTask::class)
+        register("javadocJar", Jar::class) {
+            from(dokkaJavadoc.outputDirectory)
+            archiveClassifier.set("javadoc")
+            dependsOn(dokkaJavadoc)
+        }
+    }
+
+    LicenseReporter.generateReportIn(project)
+    JavadocConfig.applyTo(project)
 }
 
 JacocoConfig.applyTo(project)
