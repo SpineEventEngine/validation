@@ -77,20 +77,20 @@ plugins {
 }
 
 spinePublishing {
-    projectsToPublish.addAll(
+    modules = setOf(
         "configuration",
         "java",
         "model",
         "runtime"
     )
-    customPrefix.set("spine-validation-")
-    with(PublishingRepos) {
-        targetRepositories.addAll(
+    destinations = with(PublishingRepos) {
+        setOf(
             cloudRepo,
             gitHub("validation"),
             cloudArtifactRegistry
         )
     }
+    artifactPrefix = "spine-validation-"
 }
 
 allprojects {
