@@ -32,9 +32,11 @@ dependencies {
 
 modelCompiler {
     java {
-        codegen { validation {
-            skipValidation()
-            skipBuilders()
-        }}
+        codegen {
+            validation {
+                skipValidation()
+                skipBuilders()
+            }
+        }
     }
 }
