@@ -36,7 +36,3 @@ dependencies {
 
     testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
 }
-
-kotlin {
-    explicitApi()
-}
