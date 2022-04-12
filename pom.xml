@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.validation</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.17</version>
+<version>2.0.0-SNAPSHOT.18</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -26,19 +26,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java</artifactId>
-    <version>3.19.3</version>
+    <version>3.19.4</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java-util</artifactId>
-    <version>3.19.3</version>
+    <version>3.19.4</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-kotlin</artifactId>
-    <version>3.19.3</version>
+    <version>3.19.4</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -86,7 +86,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jboss.forge.roaster</groupId>
     <artifactId>roaster-api</artifactId>
-    <version>2.23.2.Final</version>
+    <version>2.24.0.Final</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -98,7 +98,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jboss.forge.roaster</groupId>
     <artifactId>roaster-jdt</artifactId>
-    <version>2.23.2.Final</version>
+    <version>2.24.0.Final</version>
     <scope>runtime</scope>
   </dependency>
   <dependency>
@@ -193,7 +193,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
     <artifactId>pmd-java</artifactId>
-    <version>6.41.0</version>
+    <version>6.44.0</version>
   </dependency>
   <dependency>
     <groupId>org.jacoco</groupId>
@@ -208,32 +208,32 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>all-modules-page-plugin</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-base</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-core</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>gfm-template-processing-plugin</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>javadoc-plugin</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>jekyll-template-processing-plugin</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
