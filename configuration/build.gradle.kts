@@ -40,3 +40,9 @@ modelCompiler {
         }
     }
 }
+
+sourceSets {
+    val generatedRootDir = "$projectDir/generated"
+    main { java.srcDirs("$generatedRootDir/main/java") }
+    test { java.srcDirs("$generatedRootDir/main/java") }
+}
