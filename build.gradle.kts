@@ -196,6 +196,25 @@ subprojects {
         }
     }
 
+    sourceSets {
+        val generatedRootDir = "$projectDir/generated"
+        val generatedMainDir = "$generatedRootDir/main"
+        val generatedTestDir = "$generatedRootDir/test"
+
+        main {
+            java.srcDirs(
+                "$generatedMainDir/spine",
+                "$generatedMainDir/java"
+            )
+        }
+        test {
+            java.srcDirs(
+                "$generatedTestDir/spine",
+                "$generatedTestDir/java"
+            )
+        }
+    }
+
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
 }
