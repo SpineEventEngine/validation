@@ -32,9 +32,17 @@ dependencies {
 
 modelCompiler {
     java {
-        codegen { validation {
-            skipValidation()
-            skipBuilders()
-        }}
+        codegen {
+            validation {
+                skipValidation()
+                skipBuilders()
+            }
+        }
     }
+}
+
+sourceSets {
+    val generatedRootDir = "$projectDir/generated"
+    main { java.srcDirs("$generatedRootDir/main/java") }
+    test { java.srcDirs("$generatedRootDir/main/java") }
 }

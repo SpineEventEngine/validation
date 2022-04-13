@@ -47,7 +47,7 @@ protoData {
     )
 }
 
-tasks.withType<LaunchProtoData> {
+tasks.withType<LaunchProtoData>().configureEach {
     configuration.set(file("protodata.pb.json"))
 }
 
