@@ -129,7 +129,7 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *
      * ```
      *     Optional<ValidationError> [validationErrorVar] =
-     *         Optional.of(ValidationError.newBuilder()
+     *         Optional.ofNullable([violationListVar].isEmpty() ? null : ValidationError.newBuilder()
      *                              .addAllConstraintViolation([violationListVar])
      *                              .build());
      * ```
@@ -137,11 +137,14 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
     private fun wrapIntoError(): CodeBlock {
         return CodeBlock.builder()
             .addStatement(
-                "\$T<\$T> \$L = \$T.of(\$T.newBuilder().addAllConstraintViolation(\$L).build())",
+                "\$T<\$T> \$L = \$T.ofNullable(" +
+                        "\$L.isEmpty() ? null " +
+                        ": \$T.newBuilder().addAllConstraintViolation(\$L).build())",
                 Optional::class.java,
                 ValidationError::class.java,
                 validationErrorVar,
                 Optional::class.java,
+                violationListVar,
                 ValidationError::class.java,
                 violationListVar
             )
