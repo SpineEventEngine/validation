@@ -28,8 +28,8 @@ package io.spine.validation.test;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
-import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.Timestamps;
+import io.spine.protobuf.AnyPacker;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
@@ -58,22 +58,19 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is greater than the threshold")
         void throwOnMore() {
-            assertValidationException(Mru.newBuilder()
-                    .setKhoums(6));
+            assertValidationException(Mru.newBuilder().setKhoums(6));
         }
 
         @Test
         @DisplayName("throw `ValidationException` if actual value is equal to the threshold")
         void throwOnEdge() {
-            assertValidationException(Mru.newBuilder()
-                    .setKhoums(5));
+            assertValidationException(Mru.newBuilder().setKhoums(5));
         }
 
         @Test
         @DisplayName("throw no exceptions if actual value is less than the threshold")
         void notThrow() {
-            assertNoException(Mru.newBuilder()
-                    .setKhoums(4));
+            assertNoException(Mru.newBuilder().setKhoums(4));
         }
     }
 
@@ -84,7 +81,7 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if actual value is less than the threshold")
         void throwOnMore() {
-            ConstraintViolation violation = assertValidationException(
+            var violation = assertValidationException(
                     LocalTime.newBuilder()
                             .setHours(-1)
             );
@@ -95,15 +92,13 @@ class ValidationTest {
         @Test
         @DisplayName("throw no exceptions if actual value is equal to the threshold")
         void throwOnEdge() {
-            assertNoException(LocalTime.newBuilder()
-                    .setMinutes(0));
+            assertNoException(LocalTime.newBuilder().setMinutes(0));
         }
 
         @Test
         @DisplayName("throw no exceptions if actual value is greater than the threshold")
         void notThrow() {
-            assertNoException(LocalTime.newBuilder()
-                    .setMinutes(1));
+            assertNoException(LocalTime.newBuilder().setMinutes(1));
         }
     }
 
@@ -114,8 +109,8 @@ class ValidationTest {
         @Test
         @DisplayName("check string field")
         void throwForString() {
-            Author.Builder builder = Author.newBuilder();
-            ConstraintViolation violation = assertValidationException(builder);
+            var builder = Author.newBuilder();
+            var violation = assertValidationException(builder);
             assertThat(violation.getMsgFormat())
                     .contains("Author must have a name");
         }
@@ -123,34 +118,33 @@ class ValidationTest {
         @Test
         @DisplayName("check message field")
         void throwForMessage() {
-            Book.Builder builder = Book.newBuilder();
-            ConstraintViolation violation = assertValidationException(builder);
+            var builder = Book.newBuilder();
+            var violation = assertValidationException(builder);
             assertThat(violation.getMsgFormat())
                     .contains("value must be set");
-            assertThat(violation.getFieldPath().getFieldName(0))
+            assertThat(violation.getFieldPath()
+                                .getFieldName(0))
                     .isEqualTo("author");
         }
 
         @Test
         @DisplayName("pass if a value is set")
         void passIfSet() {
-            Author.Builder builder = Author.newBuilder()
-                    .setName("Evans");
+            var builder = Author.newBuilder().setName("Evans");
             assertNoException(builder);
         }
 
         @Test
         @DisplayName("pass if not required")
         void passIfNotRequired() {
-            Book.Builder builder = Book.newBuilder()
-                    .setAuthor(validAuthor());
+            var builder = Book.newBuilder().setAuthor(validAuthor());
             assertNoException(builder);
         }
 
         @Test
         @DisplayName("throw `ValidationException` if a list contains only default values")
         void empty() {
-            Blizzard.Builder builder = Blizzard.newBuilder()
+            var builder = Blizzard.newBuilder()
                     .addSnowflake(Snowflake.getDefaultInstance());
             assertValidationException(builder);
         }
@@ -158,7 +152,7 @@ class ValidationTest {
         @Test
         @DisplayName("pass if a list contains all non-default values")
         void nonDefaultList() {
-            Blizzard.Builder builder = Blizzard.newBuilder()
+            var builder = Blizzard.newBuilder()
                     .addSnowflake(Snowflake.newBuilder()
                                           .setEdges(3)
                                           .setVertices(3));
@@ -168,7 +162,7 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if a list contains at least one default value")
         void withDefault() {
-            Blizzard.Builder builder = Blizzard.newBuilder()
+            var builder = Blizzard.newBuilder()
                     .addSnowflake(Snowflake.newBuilder()
                                           .setEdges(3)
                                           .setVertices(3))
@@ -184,11 +178,11 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if a list contains duplicate entries")
         void duplicateInList() {
-            Snowflake flake = Snowflake.newBuilder()
+            var flake = Snowflake.newBuilder()
                     .setEdges(6)
                     .setVertices(6)
                     .build();
-            Blizzard.Builder builder = Blizzard.newBuilder()
+            var builder = Blizzard.newBuilder()
                     .addSnowflake(flake)
                     .addSnowflake(flake);
             assertValidationException(builder);
@@ -197,11 +191,10 @@ class ValidationTest {
         @Test
         @DisplayName("throw `ValidationException` if a map contains duplicate entries")
         void duplicateInMap() {
-            Player player = Player
-                    .newBuilder()
+            var player = Player.newBuilder()
                     .setShirtName("John Doe")
                     .build();
-            Team.Builder builder = Team.newBuilder()
+            var builder = Team.newBuilder()
                     .putPlayers(7, player)
                     .putPlayers(10, player);
             assertValidationException(builder);
@@ -223,10 +216,9 @@ class ValidationTest {
         @Test
         @DisplayName(PROHIBIT_INVALID)
         void fail() {
-            Player.Builder player = Player
-                    .newBuilder()
+            var player = Player.newBuilder()
                     .setShirtName("R");
-            ConstraintViolation violation = assertValidationException(player);
+            var violation = assertValidationException(player);
             assertThat(violation.getMsgFormat())
                     .contains("Invalid T-Shirt name");
         }
@@ -234,8 +226,7 @@ class ValidationTest {
         @Test
         @DisplayName("and allow partial matches")
         void partial() {
-            Book.Builder msg = Book
-                    .newBuilder()
+            var msg = Book.newBuilder()
                     .setAuthor(validAuthor())
                     .setContent("Something Something Pride Something Something");
             assertNoException(msg);
@@ -244,8 +235,7 @@ class ValidationTest {
         @Test
         @DisplayName("and allow ignoring case")
         void caseInsensitive() {
-            Book.Builder msg = Book
-                    .newBuilder()
+            var msg = Book.newBuilder()
                     .setAuthor(validAuthor())
                     .setContent("preJudice");
             assertNoException(msg);
@@ -254,20 +244,19 @@ class ValidationTest {
         @Test
         @DisplayName("and still fail even with loose rules")
         void failWithLoose() {
-            Book.Builder msg = Book
-                    .newBuilder()
+            var msg = Book.newBuilder()
                     .setAuthor(validAuthor())
                     .setContent("something else");
-            ConstraintViolation violation = assertValidationException(msg);
-            assertThat(violation.getFieldPath().getFieldName(0))
+            var violation = assertValidationException(msg);
+            assertThat(violation.getFieldPath()
+                                .getFieldName(0))
                     .isEqualTo("content");
         }
 
         @Test
         @DisplayName("and handle special characters in the pattern properly")
         void allowDollarSigns() {
-            Team.Builder msg = Team.newBuilder()
-                    .setName("Sch 04");
+            var msg = Team.newBuilder().setName("Sch 04");
             assertNoException(msg);
         }
     }
@@ -283,31 +272,61 @@ class ValidationTest {
             @Test
             @DisplayName(ALLOW_VALID)
             void pass() {
-                MeteoStatistics.Builder builder = MeteoStatistics
-                        .newBuilder()
-                        .setAverageDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(validRainDrop());
                 assertNoException(builder);
             }
 
             @Test
             @DisplayName(PROHIBIT_INVALID)
             void fail() {
-                MeteoStatistics.Builder builder = MeteoStatistics
-                        .newBuilder()
-                        .setAverageDrop(RainDrop.newBuilder()
-                                                .setMassInGrams(-1)
-                                                .buildPartial());
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(invalidRainDrop());
                 checkInvalid(builder);
             }
         }
 
-        @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+        @Nested
+        @DisplayName("on a singular `Any` message")
+        class Any {
+
+            @Test
+            @DisplayName(ALLOW_VALID)
+            void pass() {
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(validRainDrop())
+                        .setLastEvent(AnyPacker.pack(validRainDrop()));
+                assertNoException(builder);
+            }
+
+            @Test
+            @DisplayName(PROHIBIT_INVALID)
+            void fail() {
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(validRainDrop())
+                        .setLastEvent(AnyPacker.pack(invalidRainDrop()));
+                checkInvalid(builder);
+            }
+        }
+
+        private RainDrop invalidRainDrop() {
+            return RainDrop.newBuilder()
+                    .setMassInGrams(-1)
+                    .buildPartial();
+        }
+
+        private RainDrop validRainDrop() {
+            return RainDrop.newBuilder()
+                    .setMassInGrams(1)
+                    .buildPartial();
+        }
+
         private void checkInvalid(Message.Builder builder) {
             checkInvalid(builder, "message must have valid properties");
         }
 
         private void checkInvalid(Message.Builder builder, String errorPart) {
-            ConstraintViolation violation = assertValidationException(builder);
+            var violation = assertValidationException(builder);
             assertThat(violation.getMsgFormat())
                     .contains(errorPart);
             assertThat(violation.getViolationList())
@@ -321,18 +340,17 @@ class ValidationTest {
             @Test
             @DisplayName(ALLOW_VALID)
             void pass() {
-                Rain.Builder builder = Rain
-                        .newBuilder()
-                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(1).buildPartial());
+                var builder = Rain.newBuilder()
+                        .addRainDrop(validRainDrop());
                 assertNoException(builder);
             }
 
             @Test
             @DisplayName(PROHIBIT_INVALID)
             void fail() {
-                Rain.Builder builder = Rain
-                        .newBuilder()
-                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1).buildPartial());
+                var builder = Rain.newBuilder()
+                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1)
+                                                          .buildPartial());
                 checkInvalid(builder, "Bad rain drop");
             }
         }
@@ -344,15 +362,14 @@ class ValidationTest {
         @Test
         @DisplayName(PROHIBIT_INVALID)
         void fail() {
-            Lunch.Builder builder = Lunch.newBuilder();
+            var builder = Lunch.newBuilder();
             assertValidationException(builder);
         }
 
         @Test
         @DisplayName(ALLOW_VALID)
         void pass() {
-            Lunch.Builder builder = Lunch
-                    .newBuilder()
+            var builder = Lunch.newBuilder()
                     .setHotSoup("Minestrone");
             assertNoException(builder);
         }
@@ -365,17 +382,17 @@ class ValidationTest {
         @Test
         @DisplayName(PROHIBIT_INVALID)
         void fail() {
-            Timestamp when = Timestamps.fromSeconds(4_792_687_200L); // 15 Nov 2121
-            Player.Builder player = Player.newBuilder()
-                            .setStartedCareerIn(when);
+            var when = Timestamps.fromSeconds(4_792_687_200L); // 15 Nov 2121
+            var player = Player.newBuilder()
+                    .setStartedCareerIn(when);
             assertValidationException(player);
         }
 
         @Test
         @DisplayName(ALLOW_VALID)
         void pass() {
-            Timestamp when = Timestamps.fromSeconds(59_086_800L); // 15 Nov 1971
-            Player.Builder player = Player.newBuilder()
+            var when = Timestamps.fromSeconds(59_086_800L); // 15 Nov 1971
+            var player = Player.newBuilder()
                     .setStartedCareerIn(when);
             assertNoException(player);
         }
@@ -388,7 +405,7 @@ class ValidationTest {
         @Test
         @DisplayName("allow valid entities")
         void passEntity() {
-            Fancy.Builder entity = Fancy.newBuilder()
+            var entity = Fancy.newBuilder()
                     .setId(FancyId.newBuilder().setUuid(newUuid()));
             assertNoException(entity);
         }
@@ -396,16 +413,17 @@ class ValidationTest {
         @Test
         @DisplayName("not allow invalid entities")
         void failEntity() {
-            Fancy.Builder entity = Fancy.newBuilder();
-            ConstraintViolation violation = assertValidationException(entity);
-            assertThat(violation.getFieldPath().getFieldName(0))
+            var entity = Fancy.newBuilder();
+            var violation = assertValidationException(entity);
+            assertThat(violation.getFieldPath()
+                                .getFieldName(0))
                     .isEqualTo("id");
         }
 
         @Test
         @DisplayName("allow valid events")
         void passEvent() {
-            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder()
+            var event = PrefixEventRecognized.newBuilder()
                     .setId("qwerty");
             assertNoException(event);
         }
@@ -413,36 +431,37 @@ class ValidationTest {
         @Test
         @DisplayName("not allow invalid events")
         void failEvent() {
-            PrefixEventRecognized.Builder event = PrefixEventRecognized.newBuilder();
-            ConstraintViolation violation = assertValidationException(event);
-            assertThat(violation.getFieldPath().getFieldName(0))
+            var event = PrefixEventRecognized.newBuilder();
+            var violation = assertValidationException(event);
+            assertThat(violation.getFieldPath()
+                                .getFieldName(0))
                     .isEqualTo("id");
         }
 
         @Test
         @DisplayName("allow valid commands")
         void passCommand() {
-            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder()
-                    .setId("42");
+            var cmd = RecognizeSuffixCommand.newBuilder().setId("42");
             assertNoException(cmd);
         }
 
         @Test
         @DisplayName("not allow invalid commands")
         void failCommand() {
-            RecognizeSuffixCommand.Builder cmd = RecognizeSuffixCommand.newBuilder();
-            ConstraintViolation violation = assertValidationException(cmd);
-            assertThat(violation.getFieldPath().getFieldName(0))
+            var cmd = RecognizeSuffixCommand.newBuilder();
+            var violation = assertValidationException(cmd);
+            assertThat(violation.getFieldPath()
+                                .getFieldName(0))
                     .isEqualTo("id");
         }
     }
 
     @CanIgnoreReturnValue
     private static ConstraintViolation assertValidationException(Message.Builder builder) {
-        ValidationException exception = assertThrows(ValidationException.class, builder::build);
-        ValidationError error = exception.asValidationError();
+        var exception = assertThrows(ValidationException.class, builder::build);
+        var error = exception.asValidationError();
         assertThat(error.getConstraintViolationList())
-             .hasSize(1);
+                .hasSize(1);
         return error.getConstraintViolation(0);
     }
 
@@ -457,8 +476,7 @@ class ValidationTest {
     }
 
     private static Author validAuthor() {
-        return Author
-                .newBuilder()
+        return Author.newBuilder()
                 .setName("Vernon")
                 .build();
     }
