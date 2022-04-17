@@ -266,7 +266,7 @@ class ValidationTest {
     class Validate {
 
         @Nested
-        @DisplayName("on a singular message")
+        @DisplayName("on a singular field")
         class Singular {
 
             @Test
@@ -287,8 +287,8 @@ class ValidationTest {
         }
 
         @Nested
-        @DisplayName("on a singular `Any` message")
-        class Any {
+        @DisplayName("on a singular `Any` field")
+        class SingularAny {
 
             @Test
             @DisplayName(ALLOW_VALID)
@@ -305,6 +305,55 @@ class ValidationTest {
                 var builder = MeteoStatistics.newBuilder()
                         .setAverageDrop(validRainDrop())
                         .setLastEvent(AnyPacker.pack(invalidRainDrop()));
+                checkInvalid(builder);
+            }
+        }
+
+        @Nested
+        @DisplayName("on a repeated field")
+        class Repeated {
+
+            @Test
+            @DisplayName(ALLOW_VALID)
+            void pass() {
+                var builder = Rain.newBuilder()
+                        .addRainDrop(validRainDrop());
+                assertNoException(builder);
+            }
+
+            @Test
+            @DisplayName(PROHIBIT_INVALID)
+            void fail() {
+                var builder = Rain.newBuilder()
+                        .addRainDrop(invalidRainDrop());
+                checkInvalid(builder, "Bad rain drop");
+            }
+        }
+
+        @Nested
+        @DisplayName("on a repeated `Any` field")
+        class RepeatedAny {
+
+            @Test
+            @DisplayName(ALLOW_VALID)
+            void pass() {
+                var packedValid = AnyPacker.pack(validRainDrop());
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(validRainDrop())
+                        .addPredictedEvent(packedValid)
+                        .addPredictedEvent(packedValid);
+                assertNoException(builder);
+            }
+
+            @Test
+            @DisplayName(PROHIBIT_INVALID)
+            void fail() {
+                var packedValid = AnyPacker.pack(validRainDrop());
+                var packedInvalid = AnyPacker.pack(invalidRainDrop());
+                var builder = MeteoStatistics.newBuilder()
+                        .setAverageDrop(validRainDrop())
+                        .addPredictedEvent(packedValid)
+                        .addPredictedEvent(packedInvalid);
                 checkInvalid(builder);
             }
         }
@@ -331,28 +380,6 @@ class ValidationTest {
                     .contains(errorPart);
             assertThat(violation.getViolationList())
                     .hasSize(1);
-        }
-
-        @Nested
-        @DisplayName("on a repeated message")
-        class Repeated {
-
-            @Test
-            @DisplayName(ALLOW_VALID)
-            void pass() {
-                var builder = Rain.newBuilder()
-                        .addRainDrop(validRainDrop());
-                assertNoException(builder);
-            }
-
-            @Test
-            @DisplayName(PROHIBIT_INVALID)
-            void fail() {
-                var builder = Rain.newBuilder()
-                        .addRainDrop(RainDrop.newBuilder().setMassInGrams(-1)
-                                                          .buildPartial());
-                checkInvalid(builder, "Bad rain drop");
-            }
         }
     }
 

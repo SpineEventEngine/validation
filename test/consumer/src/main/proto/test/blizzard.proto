@@ -40,4 +40,6 @@ message MeteoStatistics {
     RainDrop average_drop = 1 [(validate) = true];
 
     google.protobuf.Any last_event = 2 [(validate) = true];
+
+    repeated google.protobuf.Any predicted_event = 3 [(validate) = true];
 }
