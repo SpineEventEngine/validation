@@ -36,6 +36,7 @@ import io.spine.protodata.typeUrl
 import io.spine.time.validation.Time
 import io.spine.time.validation.Time.FUTURE
 import io.spine.time.validation.Time.PAST
+import io.spine.time.validation.Time.TIME_UNDEFINED
 import io.spine.type.TypeUrl
 import io.spine.validation.InTime
 
@@ -76,11 +77,17 @@ private class TimestampInTimeGenerator(
 private val currentTime: Expression =
     MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
 
-
+/**
+ * Formats the comparison expression for the time value.
+ *
+ * If the current time is being compared to the special [TIME_UNDEFINED] value,
+ * the returned result for the formatted expression is always `true`.
+ */
 private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
     val operation = when(this) {
         FUTURE -> "> 0"
         PAST -> "< 0"
+        TIME_UNDEFINED -> " < 32768"
         else -> throw IllegalStateException("Unexpected time: `$this`.")
     }
     return Literal("$compareToCall $operation")

@@ -3,11 +3,14 @@ syntax = "proto3";
 package spine.validation.test.money;
 
 import "spine/options.proto";
+import "spine/time_options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.test.money";
 option java_outer_classname = "TimeProto";
 option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
 
 // A human-readable time without a time zone.
 message LocalTime {
@@ -21,4 +24,22 @@ message LocalTime {
     int32 minutes = 2 [(range) = "[0..60)"];
 
     float seconds = 3 [(min).value = "0.0", (max).value = "59.999"];
+}
+
+// The messages declared below are designed to test that the validation code generated
+// makes sense from the Java compiler standpoint.
+//
+// The actual behavioral testing is done in scope of `spine-time` library.
+//
+
+message TimeInFutureFieldValue {
+    google.protobuf.Timestamp value = 1 [(when).in = FUTURE];
+}
+
+message TimeInPastFieldValue {
+    google.protobuf.Timestamp value = 1 [(when).in = PAST];
+}
+
+message AlwaysValidTime {
+    google.protobuf.Timestamp value = 1 [(when).in = TIME_UNDEFINED];
 }
