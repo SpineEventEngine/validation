@@ -26,9 +26,6 @@
 
 package io.spine.validation.test;
 
-import com.google.common.truth.StringSubject;
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.test.money.Usd;
 import org.junit.jupiter.api.DisplayName;
@@ -43,15 +40,15 @@ class ErrorMessageTest {
     @Test
     @DisplayName("include expected and actual values")
     void values() {
-        ValidationException exception = assertThrows(
+        var exception = assertThrows(
                 ValidationException.class, () -> Usd.newBuilder()
                         .setCents(101)
                         .build());
-        ValidationError error = exception.asValidationError();
+        var error = exception.asValidationError();
         assertThat(error.getConstraintViolationList())
              .hasSize(1);
-        ConstraintViolation violation = error.getConstraintViolation(0);
-        StringSubject assertMessage = assertThat(violation.getMsgFormat());
+        var violation = error.getConstraintViolation(0);
+        var assertMessage = assertThat(violation.getMsgFormat());
         assertMessage
                 .isEqualTo("Expected less than 100 Cents per one Dollars, but got 101.");
     }
