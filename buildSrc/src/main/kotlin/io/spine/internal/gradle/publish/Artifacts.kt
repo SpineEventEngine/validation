@@ -28,6 +28,7 @@ package io.spine.internal.gradle.publish
 
 import io.spine.internal.gradle.sourceSets
 import org.gradle.api.Project
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.file.FileTreeElement
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
@@ -75,6 +76,7 @@ internal fun Project.sourcesJar() = tasks.getOrCreate("sourcesJar") {
     archiveClassifier.set("sources")
     from(sourceSets["main"].allSource) // Puts Java and Kotlin sources.
     from(protoSources()) // Puts Proto sources.
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 /**
