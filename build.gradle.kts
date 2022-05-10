@@ -54,11 +54,9 @@ buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
     apply(from = "$rootDir/version.gradle.kts")
 
-    val mcJavaVersion: String by extra
     val protoDataVersion: String by extra
 
     dependencies {
-//        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         classpath("io.spine:protodata:$protoDataVersion")
     }
@@ -82,6 +80,7 @@ plugins {
 spinePublishing {
     modules = setOf(
         ":proto:configuration",
+        ":proto:context",
         "java",
         "model",
         "runtime"
