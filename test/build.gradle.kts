@@ -24,53 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Rules")
+buildscript {
+    io.spine.internal.gradle.doApplyStandard(repositories)
+    apply(from = "$rootDir/version.gradle.kts")
 
-package io.spine.validation
+    val mcJavaVersion: String by extra
 
-import io.spine.protodata.TypeName
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.SimpleRuleAdded
-
-/**
- * Converts this `rule` to an event.
- *
- * @param type the type name of the validated message
- */
-internal fun Rule.toEvent(type: TypeName): io.spine.validation.event.RuleAdded {
-    return if (hasComposite()) {
-        CompositeRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(composite)
-            .build()
-    } else {
-        SimpleRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(simple)
-            .build()
+    dependencies {
+        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion") {
+            exclude(group = "io.spine.validation", module = "spine-validation-java")
+        }
     }
 }
 
-/**
- * Creates a [Rule] from this simple rule.
- */
-internal fun SimpleRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setSimple(this)
-        .build()
-
-/**
- * Creates a [Rule] from this composite rule.
- */
-internal fun CompositeRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setComposite(this)
-        .build()
-
-/**
- * Creates a [Rule] from this message-wide rule.
- */
-internal fun MessageWideRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setMessageWide(this)
-        .build()
+subprojects {
+    apply {
+        plugin("io.spine.mc-java")
+    }
+}

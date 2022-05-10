@@ -27,7 +27,7 @@
 import io.spine.internal.gradle.publish.IncrementGuard
 
 plugins {
-    id("io.spine.proto-data")
+    id("io.spine.protodata")
 }
 
 apply<IncrementGuard>()

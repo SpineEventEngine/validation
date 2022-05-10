@@ -34,6 +34,7 @@ import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protodata.Ast.qualifiedName;

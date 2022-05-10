@@ -25,10 +25,10 @@
  */
 
 import io.spine.internal.dependency.Protobuf
-import io.spine.protodata.gradle.LaunchProtoData
+import io.spine.protodata.gradle.plugin.LaunchProtoData
 
 plugins {
-    id("io.spine.proto-data")
+    id("io.spine.protodata")
 }
 
 protoData {
@@ -63,9 +63,9 @@ val spineBaseVersion: String by extra
 val spineTimeVersion: String by extra
 
 dependencies {
-    protoData(project(":test-extensions"))
+    protoData(project(":test:extensions"))
     implementation(project(":runtime"))
-    implementation(project(":test-extensions"))
+    implementation(project(":test:extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
     implementation("io.spine:spine-time:$spineTimeVersion")
     Protobuf.libs.forEach { implementation(it) }

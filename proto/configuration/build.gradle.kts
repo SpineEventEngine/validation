@@ -24,53 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Rules")
-
-package io.spine.validation
-
-import io.spine.protodata.TypeName
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.SimpleRuleAdded
-
-/**
- * Converts this `rule` to an event.
- *
- * @param type the type name of the validated message
- */
-internal fun Rule.toEvent(type: TypeName): io.spine.validation.event.RuleAdded {
-    return if (hasComposite()) {
-        CompositeRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(composite)
-            .build()
-    } else {
-        SimpleRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(simple)
-            .build()
-    }
+val spineBaseVersion: String by extra
+dependencies {
+    implementation("io.spine:spine-base:$spineBaseVersion")
 }
 
-/**
- * Creates a [Rule] from this simple rule.
- */
-internal fun SimpleRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setSimple(this)
-        .build()
-
-/**
- * Creates a [Rule] from this composite rule.
- */
-internal fun CompositeRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setComposite(this)
-        .build()
-
-/**
- * Creates a [Rule] from this message-wide rule.
- */
-internal fun MessageWideRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setMessageWide(this)
-        .build()
+modelCompiler {
+    java {
+        codegen {
+            validation {
+                skipValidation()
+            }
+        }
+    }
+}

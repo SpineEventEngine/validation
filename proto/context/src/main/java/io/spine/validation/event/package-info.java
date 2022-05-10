@@ -24,53 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Rules")
-
-package io.spine.validation
-
-import io.spine.protodata.TypeName
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.SimpleRuleAdded
-
 /**
- * Converts this `rule` to an event.
- *
- * @param type the type name of the validated message
+ * Defines the domain events for the validation context.
  */
-internal fun Rule.toEvent(type: TypeName): io.spine.validation.event.RuleAdded {
-    return if (hasComposite()) {
-        CompositeRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(composite)
-            .build()
-    } else {
-        SimpleRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(simple)
-            .build()
-    }
-}
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.validation.event;
 
-/**
- * Creates a [Rule] from this simple rule.
- */
-internal fun SimpleRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setSimple(this)
-        .build()
+import com.google.errorprone.annotations.CheckReturnValue;
 
-/**
- * Creates a [Rule] from this composite rule.
- */
-internal fun CompositeRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setComposite(this)
-        .build()
-
-/**
- * Creates a [Rule] from this message-wide rule.
- */
-internal fun MessageWideRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setMessageWide(this)
-        .build()
+import javax.annotation.ParametersAreNonnullByDefault;

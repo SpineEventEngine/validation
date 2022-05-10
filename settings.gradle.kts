@@ -34,14 +34,14 @@ pluginManagement {
 rootProject.name = "validation"
 
 include(
-    "configuration",
+    "proto",
+    ":proto:configuration",
+    ":proto:context",
     "java",
     "model",
     "runtime",
     "runtime-extensions",
-    "test-extensions",
-    "test-consumer"
+    "test",
+    ":test:extensions",
+    ":test:consumer"
 )
-
-project(":test-extensions").projectDir = file("$rootDir/test/extensions")
-project(":test-consumer").projectDir = file("$rootDir/test/consumer")

@@ -24,25 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.validation.event;
 
-dependencies {
-    Protobuf.libs.forEach { implementation(it) }
-}
+import com.google.errorprone.annotations.Immutable;
+import io.spine.base.EventMessage;
 
-modelCompiler {
-    java {
-        codegen {
-            validation {
-                skipValidation()
-                skipBuilders()
-            }
-        }
-    }
-}
-
-sourceSets {
-    val generatedRootDir = "$projectDir/generated"
-    main { java.srcDirs("$generatedRootDir/main/java") }
-    test { java.srcDirs("$generatedRootDir/main/java") }
-}
+/**
+ * An event signifying that a validation rule has been created.
+ */
+@Immutable
+public interface RuleAdded extends EventMessage {}

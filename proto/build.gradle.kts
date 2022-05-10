@@ -24,53 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Rules")
+import io.spine.internal.dependency.Protobuf
 
-package io.spine.validation
+buildscript {
+    io.spine.internal.gradle.doApplyStandard(repositories)
+    apply(from = "$rootDir/version.gradle.kts")
 
-import io.spine.protodata.TypeName
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.SimpleRuleAdded
+    val mcJavaVersion: String by extra
+    val protoDataVersion: String by extra
 
-/**
- * Converts this `rule` to an event.
- *
- * @param type the type name of the validated message
- */
-internal fun Rule.toEvent(type: TypeName): io.spine.validation.event.RuleAdded {
-    return if (hasComposite()) {
-        CompositeRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(composite)
-            .build()
-    } else {
-        SimpleRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(simple)
-            .build()
+    dependencies {
+        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
+        // The below dependency is obtained from https://plugins.gradle.org/m2/.
+        classpath("io.spine:protodata:$protoDataVersion")
     }
 }
 
-/**
- * Creates a [Rule] from this simple rule.
- */
-internal fun SimpleRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setSimple(this)
-        .build()
+subprojects {
+    apply {
+        plugin("io.spine.mc-java")
+    }
 
-/**
- * Creates a [Rule] from this composite rule.
- */
-internal fun CompositeRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setComposite(this)
-        .build()
+    dependencies {
+        Protobuf.libs.forEach { implementation(it) }
+    }
 
-/**
- * Creates a [Rule] from this message-wide rule.
- */
-internal fun MessageWideRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setMessageWide(this)
-        .build()
+    sourceSets {
+        val generatedRootDir = "$projectDir/generated"
+        main { java.srcDirs("$generatedRootDir/main/java") }
+        test { java.srcDirs("$generatedRootDir/main/java") }
+    }
+}

@@ -29,10 +29,11 @@ package io.spine.validation.java;
 import com.google.common.collect.ImmutableSet;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
+import io.spine.tools.code.CommonLanguages;
 import io.spine.validation.MessageValidation;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static io.spine.protodata.language.CommonLanguages.java;
+import static io.spine.tools.code.CommonLanguages.java;
 
 /**
  * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types

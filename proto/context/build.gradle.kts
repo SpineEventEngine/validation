@@ -24,13 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+val protoDataVersion: String by extra
+val spineBaseVersion: String by extra
+dependencies {
+    api("io.spine.protodata:protodata-compiler:$protoDataVersion")
+    implementation("io.spine:spine-base:$spineBaseVersion")
+}
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.base.EventMessage;
+modelCompiler {
+    java {
+        codegen {
+            validation {
+                skipValidation()
+            }
+        }
+    }
+}
 
-/**
- * An event signifying that a validation rule has been created.
- */
-@Immutable
-public interface RuleAdded extends EventMessage {}

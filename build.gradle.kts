@@ -29,6 +29,7 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
@@ -57,9 +58,9 @@ buildscript {
     val protoDataVersion: String by extra
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
+//        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
-        classpath("io.spine:proto-data:$protoDataVersion")
+        classpath("io.spine:protodata:$protoDataVersion")
     }
 }
 
@@ -80,7 +81,7 @@ plugins {
 
 spinePublishing {
     modules = setOf(
-        "configuration",
+        ":proto:configuration",
         "java",
         "model",
         "runtime"
@@ -120,7 +121,7 @@ subprojects {
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
         plugin("com.google.protobuf")
-        plugin("io.spine.mc-java")
+//        plugin("io.spine.mc-java")
         plugin("pmd")
         plugin("maven-publish")
     }
@@ -147,6 +148,7 @@ subprojects {
         val spineBaseVersion: String by extra
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
+        val validationVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -156,7 +158,20 @@ subprojects {
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine:spine-time:$spineTimeVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:2.0.0-SNAPSHOT.90",
                     "io.spine:spine-server:$spineServerVersion",
+                    "io.spine.validation:spine-validation-runtime:$validationVersion",
+                    "io.spine.validation:spine-validation-configuration:$validationVersion",
+                    "io.spine.validation:spine-validation-java:$validationVersion",
+                    "io.spine.validation:java:2.0.0-SNAPSHOT.12",
+                    "io.spine.validation:runtime:2.0.0-SNAPSHOT.12",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    "com.fasterxml.jackson:jackson-bom:2.13.2",
+                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
+                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2",
+                    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.2"
                 )
             }
         }
