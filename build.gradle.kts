@@ -120,7 +120,6 @@ subprojects {
         plugin("kotlin")
         plugin("org.jetbrains.dokka")
         plugin("com.google.protobuf")
-//        plugin("io.spine.mc-java")
         plugin("pmd")
         plugin("maven-publish")
     }
@@ -147,7 +146,9 @@ subprojects {
         val spineBaseVersion: String by extra
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
+        val spineToolBaseVersion: String by extra
         val validationVersion: String by extra
+        val oldValidationVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -157,20 +158,20 @@ subprojects {
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine:spine-time:$spineTimeVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
-                    "io.spine.tools:spine-tool-base:2.0.0-SNAPSHOT.90",
+                    "io.spine.tools:spine-tool-base:$spineToolBaseVersion",
                     "io.spine:spine-server:$spineServerVersion",
                     "io.spine.validation:spine-validation-runtime:$validationVersion",
                     "io.spine.validation:spine-validation-configuration:$validationVersion",
                     "io.spine.validation:spine-validation-java:$validationVersion",
-                    "io.spine.validation:java:2.0.0-SNAPSHOT.12",
-                    "io.spine.validation:runtime:2.0.0-SNAPSHOT.12",
+                    "io.spine.validation:java:$oldValidationVersion",
+                    "io.spine.validation:runtime:$oldValidationVersion",
                     Jackson.core,
                     Jackson.moduleKotlin,
                     Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.2"
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml,
+                    Jackson.dataformatXml
                 )
             }
         }
