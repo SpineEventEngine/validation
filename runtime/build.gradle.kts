@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.publish.IncrementGuard
 
 //plugins {
@@ -37,6 +38,14 @@ val spineBaseVersion: String by extra
 dependencies {
 //    protoData(project(":runtime-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
+
+    Protobuf.libs.forEach { implementation(it) }
+}
+
+sourceSets {
+    val generatedRootDir = "$projectDir/generated"
+    main { java.srcDirs("$generatedRootDir/main/java") }
+    test { java.srcDirs("$generatedRootDir/main/java") }
 }
 
 //protoData {
