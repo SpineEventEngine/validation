@@ -18,7 +18,7 @@ jobs:
 
       - name: Build project and run tests
         shell: bash
-        run: ./gradlew build --stacktrace
+        run: ./gradlew build --info --stacktrace
 
       # See: https://github.com/marketplace/actions/junit-report-action
       - name: Publish Test Report
