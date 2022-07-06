@@ -16,6 +16,7 @@ jobs:
         with:
           java-version: 11
           distribution: zulu
+          cache: gradle
 
       - name: Decrypt CloudRepo credentials
         run: ./config/scripts/decrypt.sh "$CLOUDREPO_CREDENTIALS_KEY" ./.github/keys/cloudrepo.properties.gpg ./cloudrepo.properties
