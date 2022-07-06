@@ -30,6 +30,7 @@ package io.spine.validation
 
 import io.spine.protodata.TypeName
 import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.RuleAdded
 import io.spine.validation.event.SimpleRuleAdded
 
 /**
@@ -37,7 +38,7 @@ import io.spine.validation.event.SimpleRuleAdded
  *
  * @param type the type name of the validated message
  */
-internal fun Rule.toEvent(type: TypeName): io.spine.validation.event.RuleAdded {
+internal fun Rule.toEvent(type: TypeName): RuleAdded {
     return if (hasComposite()) {
         CompositeRuleAdded.newBuilder()
             .setType(type)
