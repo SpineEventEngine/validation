@@ -28,15 +28,6 @@ val spineBaseVersion by extra("2.0.0-SNAPSHOT.91")
 val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
 val spineTimeVersion by extra("2.0.0-SNAPSHOT.77")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.91")
-
-// The last `validation` version before the artifact renaming.
-// New artifacts are now named with `spine-validation-` prefix.
-//
-// However, we still need to force the version for the "old" artifacts to avoid conflicts
-// when applying `modelCompiler`, as long as it brings its own "old" validation artifacts.
-//
-val oldValidationVersion by extra("2.0.0-SNAPSHOT.12")
-
 val protoDataVersion by extra("0.2.5")
 val mcJavaVersion by extra("2.0.0-SNAPSHOT.92")
 

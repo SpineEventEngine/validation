@@ -147,8 +147,6 @@ subprojects {
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
         val spineToolBaseVersion: String by extra
-        val validationVersion: String by extra
-        val oldValidationVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -160,11 +158,6 @@ subprojects {
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
                     "io.spine.tools:spine-tool-base:$spineToolBaseVersion",
                     "io.spine:spine-server:$spineServerVersion",
-                    "io.spine.validation:spine-validation-runtime:$validationVersion",
-                    "io.spine.validation:spine-validation-configuration:$validationVersion",
-                    "io.spine.validation:spine-validation-java:$validationVersion",
-                    "io.spine.validation:java:$oldValidationVersion",
-                    "io.spine.validation:runtime:$oldValidationVersion",
                     Jackson.core,
                     Jackson.moduleKotlin,
                     Jackson.databind,
