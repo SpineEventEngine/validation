@@ -24,32 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.publish.IncrementGuard
 
-//plugins {
-//    id("io.spine.protodata")
-//}
+plugins {
+    id("io.spine.protodata")
+}
 
 apply<IncrementGuard>()
 
 val spineBaseVersion: String by extra
 
 dependencies {
-//    protoData(project(":runtime-extensions"))
+    protoData(project(":runtime-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
 
     Protobuf.libs.forEach { implementation(it) }
 }
 
-sourceSets {
-    val generatedRootDir = "$projectDir/generated"
-    main { java.srcDirs("$generatedRootDir/main/java") }
-    test { java.srcDirs("$generatedRootDir/main/java") }
+protobuf {
+    protoc {
+        artifact = Protobuf.compiler
+    }
 }
 
-//protoData {
-//    renderers(
-//        "io.spine.validation.internal.DiagsRenderer"
-//    )
-//}
+protoData {
+    renderers(
+        "io.spine.validation.internal.DiagsRenderer"
+    )
+}

@@ -2,43 +2,38 @@ syntax = "proto3";
 
 package spine.validation;
 
-//import "spine/options.proto";
+import "spine/options.proto";
 
-//option (type_url_prefix) = "type.spine.io";
+option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
 option java_outer_classname = "DiagProto";
 option java_multiple_files = true;
 
-//import "google/protobuf/any.proto";
+import "google/protobuf/any.proto";
 
-message Sample {
+// A list of values packed into `google.protobuf.Any`.
+//
+// Unlike any other list in any target language, this message can itself be packed into `Any`.
+//
+message ListOfAnys {
 
-    string value = 1;
+    repeated google.protobuf.Any value = 1;
 }
 
-//// A list of values packed into `google.protobuf.Any`.
-////
-//// Unlike any other list in any target language, this message can itself be packed into `Any`.
-////
-//message ListOfAnys {
+// A map of values packed into `google.protobuf.Any`.
 //
-//    repeated google.protobuf.Any value = 1;
-//}
+// Unlike any other map/dictionary/structure in any target language, this message can itself be
+// packed into `Any`.
 //
-//// A map of values packed into `google.protobuf.Any`.
-////
-//// Unlike any other map/dictionary/structure in any target language, this message can itself be
-//// packed into `Any`.
-////
-//message MapOfAnys {
-//
-//    // An entry in a map of `Any`s.
-//    message Entry {
-//
-//        google.protobuf.Any key = 1;
-//
-//        google.protobuf.Any value = 2;
-//    }
-//
-//    repeated Entry entry = 2;
-//}
+message MapOfAnys {
+
+    // An entry in a map of `Any`s.
+    message Entry {
+
+        google.protobuf.Any key = 1;
+
+        google.protobuf.Any value = 2;
+    }
+
+    repeated Entry entry = 2;
+}

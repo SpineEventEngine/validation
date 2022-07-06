@@ -159,6 +159,11 @@ all modules and does not describe the project structure per-subproject.
     <version>3.19.2</version>
   </dependency>
   <dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protoc</artifactId>
+    <version>3.19.4</version>
+  </dependency>
+  <dependency>
     <groupId>io.grpc</groupId>
     <artifactId>protoc-gen-grpc-java</artifactId>
     <version>1.45.0</version>
