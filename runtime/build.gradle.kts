@@ -26,21 +26,21 @@
 
 import io.spine.internal.gradle.publish.IncrementGuard
 
-plugins {
-    id("io.spine.protodata")
-}
+//plugins {
+//    id("io.spine.protodata")
+//}
 
 apply<IncrementGuard>()
 
 val spineBaseVersion: String by extra
 
 dependencies {
-    protoData(project(":runtime-extensions"))
+//    protoData(project(":runtime-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
 }
 
-protoData {
-    renderers(
-        "io.spine.validation.internal.DiagsRenderer"
-    )
-}
+//protoData {
+//    renderers(
+//        "io.spine.validation.internal.DiagsRenderer"
+//    )
+//}
