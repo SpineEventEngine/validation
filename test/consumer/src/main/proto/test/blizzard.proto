@@ -9,6 +9,8 @@ option java_package = "io.spine.validation.test";
 option java_outer_classname = "BlizzardProto";
 option java_multiple_files = true;
 
+import "google/protobuf/any.proto";
+
 message Snowflake {
     int32 edges = 1;
     int32 vertices = 2;
@@ -36,4 +38,8 @@ message Rain {
 message MeteoStatistics {
 
     RainDrop average_drop = 1 [(validate) = true];
+
+    google.protobuf.Any last_event = 2 [(validate) = true];
+
+    repeated google.protobuf.Any predicted_event = 3 [(validate) = true];
 }

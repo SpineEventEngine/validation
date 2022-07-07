@@ -24,13 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
-
-import com.google.errorprone.annotations.Immutable;
-import io.spine.base.EventMessage;
+package io.spine.internal.gradle.publish
 
 /**
- * An event signifying that a validation rule has been created.
+ * A DSL element of [SpinePublishing] extension which configures publishing of [dokkaJar] artifact.
+ *
+ * This artifact contains Dokka-generated documentation. By default, it is not published.
+ *
+ * Take a look at the [SpinePublishing.dokkaJar] for a usage example.
+ *
+ * @see [registerArtifacts]
  */
-@Immutable
-public interface RuleAdded extends EventMessage {}
+class DokkaJar {
+    /**
+     * Enables publishing `JAR`s with Dokka-generated documentation for all published modules.
+     */
+    var enabled = false
+}

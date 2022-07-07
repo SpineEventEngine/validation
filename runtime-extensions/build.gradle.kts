@@ -27,5 +27,5 @@
 val protoDataVersion: String by extra
 
 dependencies {
-    implementation("io.spine.protodata:codegen-java:$protoDataVersion")
+    implementation("io.spine.protodata:protodata-codegen-java:$protoDataVersion")
 }

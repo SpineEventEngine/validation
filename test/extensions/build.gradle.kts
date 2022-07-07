@@ -30,3 +30,11 @@ dependencies {
     implementation(project(":java"))
     implementation("io.spine:spine-base:$spineBaseVersion")
 }
+
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
+    }
+}

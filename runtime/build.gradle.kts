@@ -24,10 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.publish.IncrementGuard
 
 plugins {
-    id("io.spine.proto-data")
+    id("io.spine.protodata")
 }
 
 apply<IncrementGuard>()
@@ -37,6 +40,14 @@ val spineBaseVersion: String by extra
 dependencies {
     protoData(project(":runtime-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
+
+    Protobuf.libs.forEach { implementation(it) }
+}
+
+protobuf {
+    protoc {
+        artifact = Protobuf.compiler
+    }
 }
 
 protoData {

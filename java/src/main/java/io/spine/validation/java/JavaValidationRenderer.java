@@ -43,10 +43,10 @@ import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.codegen.java.This;
-import io.spine.protodata.language.CommonLanguages;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceFileSet;
+import io.spine.tools.code.CommonLanguages;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
@@ -73,7 +73,7 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  * <p>The generated code assumes there is a variable called {@code result}. Its type is the type of
  * the validated message. The variable holds the value of the message to validate.
  *
- * <p>The generated code is a number of code lines. It does not contain declarations (clsses,
+ * <p>The generated code is a number of code lines. It does not contain declarations (classes,
  * methods, etc.).
  *
  * <p>If the validation rules are broken, throws a {@link io.spine.validate.ValidationException}.

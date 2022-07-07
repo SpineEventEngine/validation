@@ -24,25 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Protobuf
+package io.spine.internal.gradle.dokka
 
-dependencies {
-    Protobuf.libs.forEach { implementation(it) }
-}
+import org.gradle.api.tasks.TaskContainer
+import org.jetbrains.dokka.gradle.DokkaTask
 
-modelCompiler {
-    java {
-        codegen {
-            validation {
-                skipValidation()
-                skipBuilders()
-            }
-        }
-    }
-}
-
-sourceSets {
-    val generatedRootDir = "$projectDir/generated"
-    main { java.srcDirs("$generatedRootDir/main/java") }
-    test { java.srcDirs("$generatedRootDir/main/java") }
-}
+/**
+ * Finds the `dokkaHtml` Gradle task.
+ */
+fun TaskContainer.dokkaHtmlTask() = this.getByName("dokkaHtml") as DokkaTask

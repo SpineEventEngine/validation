@@ -32,6 +32,7 @@ import io.spine.protodata.TypeExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.RuleAdded;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.validation.Markers.allPatterns;

@@ -32,6 +32,7 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.RuleAdded;
 
 /**
  * A policy that reacts to an event with a {@link RuleAdded} event.

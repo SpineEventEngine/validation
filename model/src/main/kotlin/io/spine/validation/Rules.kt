@@ -30,6 +30,7 @@ package io.spine.validation
 
 import io.spine.protodata.TypeName
 import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.RuleAdded
 import io.spine.validation.event.SimpleRuleAdded
 
 /**

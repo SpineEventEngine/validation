@@ -32,6 +32,7 @@ import io.spine.protodata.Option;
 import io.spine.protodata.TypeExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
+import io.spine.validation.event.RuleAdded;
 import io.spine.server.tuple.EitherOf2;
 
 import java.util.Set;

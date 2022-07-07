@@ -29,6 +29,7 @@
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
@@ -44,22 +45,17 @@ import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
-import io.spine.internal.gradle.kotlin.applyJvmToolchain
-import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
     apply(from = "$rootDir/version.gradle.kts")
 
-    val mcJavaVersion: String by extra
     val protoDataVersion: String by extra
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
-        classpath("io.spine:proto-data:$protoDataVersion")
+        classpath("io.spine:protodata:$protoDataVersion")
     }
 }
 
@@ -69,18 +65,17 @@ plugins {
 
     val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
     val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
-    val dokka = io.spine.internal.dependency.Dokka
 
     id(protobuf.id)
     id(errorProne.id)
     kotlin("jvm")
-    id(dokka.pluginId) version(dokka.version)
     `force-jacoco`
 }
 
 spinePublishing {
     modules = setOf(
-        "configuration",
+        ":proto:configuration",
+        ":proto:context",
         "java",
         "model",
         "runtime"
@@ -93,6 +88,10 @@ spinePublishing {
         )
     }
     artifactPrefix = "spine-validation-"
+
+    dokkaJar {
+        enabled = true
+    }
 }
 
 allprojects {
@@ -118,11 +117,10 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("java-library")
         plugin("kotlin")
-        plugin("org.jetbrains.dokka")
         plugin("com.google.protobuf")
-        plugin("io.spine.mc-java")
         plugin("pmd")
         plugin("maven-publish")
+        plugin("dokka-for-java")
     }
 
     // Apply custom Kotlin script plugins.
@@ -147,6 +145,7 @@ subprojects {
         val spineBaseVersion: String by extra
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
+        val spineToolBaseVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -156,43 +155,56 @@ subprojects {
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine:spine-time:$spineTimeVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$spineToolBaseVersion",
                     "io.spine:spine-server:$spineServerVersion",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml,
+                    Jackson.dataformatXml
                 )
             }
         }
     }
 
-    val javaVersion = JavaVersion.VERSION_11.toString()
+    val javaVersion = JavaVersion.VERSION_11
 
-    kotlin {
-        explicitApi()
-        applyJvmToolchain(javaVersion)
+    java {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
 
-        tasks.withType<KotlinCompile>().configureEach {
-            kotlinOptions.jvmTarget = javaVersion
-            setFreeCompilerArgs()
+        tasks {
+            withType<JavaCompile>().configureEach {
+                configureJavac()
+                configureErrorProne()
+            }
+            withType<org.gradle.jvm.tasks.Jar>().configureEach {
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
         }
     }
 
-    java {
-        tasks.withType<JavaCompile>().configureEach {
-            configureJavac()
-            configureErrorProne()
+    kotlin {
+        explicitApi()
+
+        tasks {
+            withType<KotlinCompile>().configureEach {
+                kotlinOptions {
+                    jvmTarget = javaVersion.toString()
+                }
+            }
         }
     }
 
     tasks {
         registerTestTasks()
         test {
-            useJUnitPlatform()
+            useJUnitPlatform {
+                includeEngines("junit-jupiter")
+            }
             configureLogging()
-        }
-
-        val dokkaJavadoc by getting(DokkaTask::class)
-        register("javadocJar", Jar::class) {
-            from(dokkaJavadoc.outputDirectory)
-            archiveClassifier.set("javadoc")
-            dependsOn(dokkaJavadoc)
         }
     }
 
