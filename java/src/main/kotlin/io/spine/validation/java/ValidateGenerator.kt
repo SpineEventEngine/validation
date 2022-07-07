@@ -41,7 +41,7 @@ import io.spine.validate.ValidationError
 import java.util.*
 
 /**
- * Generates code for the [RecursiveValidation] operator.
+ * Generates code for the [RecursiveValidation][io.spine.validation.RecursiveValidation] operator.
  */
 internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
