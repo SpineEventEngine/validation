@@ -24,24 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.publish
 
-@Suppress("unused")
-object Jackson {
-    const val version = "2.13.2"
-    const val databindVersion = "2.13.2.2"
-    // https://github.com/FasterXML/jackson-core
-    const val core = "com.fasterxml.jackson.core:jackson-core:${version}"
-    // https://github.com/FasterXML/jackson-databind
-    const val databind = "com.fasterxml.jackson.core:jackson-databind:${databindVersion}"
-    // https://github.com/FasterXML/jackson-dataformat-xml/releases
-    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
-    // https://github.com/FasterXML/jackson-dataformats-text/releases
-    const val dataformatYaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${version}"
-    // https://github.com/FasterXML/jackson-module-kotlin/releases
-    const val moduleKotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${version}"
-    // https://github.com/FasterXML/jackson-bom
-    const val bom = "com.fasterxml.jackson:jackson-bom:${version}"
-    // https://github.com/FasterXML/jackson-annotations
-    const val annotations = "com.fasterxml.jackson.core:jackson-annotations:${version}"
+/**
+ * A DSL element of [SpinePublishing] extension which configures publishing of [dokkaJar] artifact.
+ *
+ * This artifact contains Dokka-generated documentation. By default, it is not published.
+ *
+ * Take a look at the [SpinePublishing.dokkaJar] for a usage example.
+ *
+ * @see [registerArtifacts]
+ */
+class DokkaJar {
+    /**
+     * Enables publishing `JAR`s with Dokka-generated documentation for all published modules.
+     */
+    var enabled = false
 }

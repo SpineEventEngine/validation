@@ -28,7 +28,6 @@ package io.spine.internal.gradle.publish
 
 import io.spine.internal.gradle.sourceSets
 import org.gradle.api.Project
-import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.file.FileTreeElement
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
@@ -76,7 +75,6 @@ internal fun Project.sourcesJar() = tasks.getOrCreate("sourcesJar") {
     archiveClassifier.set("sources")
     from(sourceSets["main"].allSource) // Puts Java and Kotlin sources.
     from(protoSources()) // Puts Proto sources.
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 /**
@@ -112,6 +110,19 @@ internal fun Project.javadocJar() = tasks.getOrCreate("javadocJar") {
     archiveClassifier.set("javadoc")
     from(files("$buildDir/docs/javadoc"))
     dependsOn("javadoc")
+}
+
+/**
+ * Locates or creates `dokkaJar` task in this [Project].
+ *
+ * The output of this task is a `jar` archive. The archive contains the Dokka output, generated upon
+ * Java sources from `main` source set. Requires Dokka to be configured in the target project by
+ * applying `dokka-for-java` plugin.
+ */
+internal fun Project.dokkaJar() = tasks.getOrCreate("dokkaJar") {
+    archiveClassifier.set("dokka")
+    from(files("$buildDir/docs/dokka"))
+    dependsOn("dokkaHtml")
 }
 
 private fun TaskContainer.getOrCreate(name: String, init: Jar.() -> Unit): TaskProvider<Jar> =
