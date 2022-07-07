@@ -167,6 +167,6 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
 /**
  * Tells if the Proto field type is `google.protobuf.Any`.
  */
-private fun Type.isAny() = (this.hasMessage()
-        && this.message.packageName.equals("google.protobuf"))
-        && this.message.simpleName.equals("Any")
+private fun Type.isAny() = (hasMessage()
+        && message.packageName.equals("google.protobuf"))
+        && message.simpleName.equals("Any")
