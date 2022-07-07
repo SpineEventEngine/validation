@@ -26,19 +26,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java</artifactId>
-    <version>3.19.4</version>
+    <version>3.20.1</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java-util</artifactId>
-    <version>3.19.4</version>
+    <version>3.20.1</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-kotlin</artifactId>
-    <version>3.19.4</version>
+    <version>3.20.1</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -86,7 +86,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-stdlib-jdk8</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -156,12 +156,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protoc</artifactId>
-    <version>3.19.2</version>
-  </dependency>
-  <dependency>
-    <groupId>com.google.protobuf</groupId>
-    <artifactId>protoc</artifactId>
-    <version>3.19.4</version>
+    <version>3.20.1</version>
   </dependency>
   <dependency>
     <groupId>io.grpc</groupId>
@@ -177,6 +172,11 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-protoc</artifactId>
     <version>0.2.5</version>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.tools</groupId>
+    <artifactId>spine-dokka-extensions</artifactId>
+    <version>2.0.0-SNAPSHOT.4</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
@@ -207,47 +207,47 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>all-modules-page-plugin</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-base</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-core</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>gfm-template-processing-plugin</artifactId>
-    <version>1.6.10</version>
-  </dependency>
-  <dependency>
-    <groupId>org.jetbrains.dokka</groupId>
-    <artifactId>javadoc-plugin</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>jekyll-template-processing-plugin</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jetbrains.dokka</groupId>
+    <artifactId>kotlin-as-java-plugin</artifactId>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-compiler-embeddable</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-klib-commonizer-embeddable</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-scripting-compiler-embeddable</artifactId>
-    <version>1.6.10</version>
+    <version>1.6.21</version>
   </dependency>
 </dependencies>
 
