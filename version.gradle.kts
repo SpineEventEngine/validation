@@ -26,9 +26,9 @@
 
 val spineBaseVersion by extra("2.0.0-SNAPSHOT.91")
 val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.77")
+val spineTimeVersion by extra("2.0.0-SNAPSHOT.93")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.91")
-val protoDataVersion by extra("0.2.5")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.92")
+val protoDataVersion by extra("0.2.6")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.95")
 
-val validationVersion by extra("2.0.0-SNAPSHOT.19")
+val validationVersion by extra("2.0.0-SNAPSHOT.20")
