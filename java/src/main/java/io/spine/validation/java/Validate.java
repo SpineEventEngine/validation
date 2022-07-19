@@ -28,6 +28,9 @@ package io.spine.validation.java;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
@@ -56,6 +59,23 @@ final class Validate implements InsertionPoint {
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
     private static final String BUILDER_CLASS = "Builder";
     private static final String BUILD_METHOD = "build";
+
+    /**
+     * Cached results of parsing the Java source code.
+     *
+     * <p>Without caching, this operation may be executed for too many times
+     * for the same input.
+     */
+    private static final LoadingCache<String, JavaSource<?>> parsedSources =
+            CacheBuilder.newBuilder()
+                    .maximumSize(300)
+                    .build(new CacheLoader<>() {
+                        @Override
+                        public JavaSource<?> load(String code) {
+                            var result = Roaster.parse(JavaSource.class, code);
+                            return result;
+                        }
+                    });
 
     private final TypeName type;
 
@@ -105,7 +125,7 @@ final class Validate implements InsertionPoint {
     }
 
     private @Nullable JavaClassSource findClass(String code) {
-        JavaSource<?> javaSource = Roaster.parse(JavaSource.class, code);
+        var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return null;
         }
@@ -117,6 +137,10 @@ final class Validate implements InsertionPoint {
             names.poll();
         }
         return findSubClass(source, names);
+    }
+
+    private static JavaSource<?> parseSource(String code) {
+        return parsedSources.getUnchecked(code);
     }
 
     private static
