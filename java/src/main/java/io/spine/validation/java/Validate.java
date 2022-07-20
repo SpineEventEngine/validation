@@ -91,6 +91,9 @@ final class Validate implements InsertionPoint {
     @Override
     public LineNumber locate(List<String> lines) {
         var code = LINE_JOINER.join(lines);
+        if (!code.contains(type.getSimpleName())) {
+            return LineNumber.notInFile();
+        }
         var builderClass = findBuilder(code);
         if (builderClass == null) {
             return LineNumber.notInFile();
