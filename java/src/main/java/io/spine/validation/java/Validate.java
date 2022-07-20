@@ -90,10 +90,11 @@ final class Validate implements InsertionPoint {
 
     @Override
     public LineNumber locate(List<String> lines) {
-        var code = LINE_JOINER.join(lines);
-        if (!code.contains(type.getSimpleName())) {
+        var typeNameNotFound = !isTypeNameIn(lines);
+        if (typeNameNotFound) {
             return LineNumber.notInFile();
         }
+        var code = LINE_JOINER.join(lines);
         var builderClass = findBuilder(code);
         if (builderClass == null) {
             return LineNumber.notInFile();
@@ -109,6 +110,16 @@ final class Validate implements InsertionPoint {
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
         return LineNumber.at(returnLineNumber - 1);
+    }
+
+    private boolean isTypeNameIn(List<String> lines) {
+        var simpleName = type.getSimpleName();
+        for (var line : lines) {
+            if (line.contains(simpleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private @Nullable JavaClassSource findBuilder(String code) {
