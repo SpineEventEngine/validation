@@ -28,14 +28,10 @@ package io.spine.validation.java;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
@@ -66,16 +62,7 @@ final class Validate implements InsertionPoint {
      * <p>Without caching, this operation may be executed for too many times
      * for the same input.
      */
-    private static final LoadingCache<String, JavaSource<?>> parsedSources =
-            CacheBuilder.newBuilder()
-                    .maximumSize(300)
-                    .build(new CacheLoader<>() {
-                        @Override
-                        public JavaSource<?> load(String code) {
-                            var result = Roaster.parse(JavaSource.class, code);
-                            return result;
-                        }
-                    });
+    private static final ParsedSources parsedSources = new ParsedSources();
 
     private final TypeName type;
 
@@ -154,7 +141,7 @@ final class Validate implements InsertionPoint {
     }
 
     private static JavaSource<?> parseSource(String code) {
-        return parsedSources.getUnchecked(code);
+        return parsedSources.get(code);
     }
 
     private static
