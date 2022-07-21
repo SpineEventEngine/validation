@@ -27,17 +27,16 @@
 package io.spine.internal.gradle.git
 
 /**
- * Branch names.
+ * Contains information about a Git user.
+ *
+ * Determines the author and committer fields of a commit.
+ *
+ * @constructor throws an [IllegalArgumentException] if the name or the email
+ *              is an empty string.
  */
-object Branch {
-
-    /**
-     * The default branch.
-     */
-    const val master = "master"
-
-    /**
-     * The branch used for publishing documentation to GitHub Pages.
-     */
-    const val documentation = "gh-pages"
+data class UserInfo(val name: String, val email: String) {
+    init {
+        require(name.isNotBlank()) { "Name cannot be an empty string." }
+        require(email.isNotBlank()) { "Email cannot be an empty string." }
+    }
 }

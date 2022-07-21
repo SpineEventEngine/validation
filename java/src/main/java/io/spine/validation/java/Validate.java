@@ -32,7 +32,6 @@ import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
@@ -57,6 +56,14 @@ final class Validate implements InsertionPoint {
     private static final String BUILDER_CLASS = "Builder";
     private static final String BUILD_METHOD = "build";
 
+    /**
+     * Cached results of parsing the Java source code.
+     *
+     * <p>Without caching, this operation may be executed for too many times
+     * for the same input.
+     */
+    private static final ParsedSources parsedSources = new ParsedSources();
+
     private final TypeName type;
 
     Validate(TypeName type) {
@@ -70,6 +77,10 @@ final class Validate implements InsertionPoint {
 
     @Override
     public LineNumber locate(List<String> lines) {
+        var typeNameNotFound = !isTypeNameIn(lines);
+        if (typeNameNotFound) {
+            return LineNumber.notInFile();
+        }
         var code = LINE_JOINER.join(lines);
         var builderClass = findBuilder(code);
         if (builderClass == null) {
@@ -86,6 +97,16 @@ final class Validate implements InsertionPoint {
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
         return LineNumber.at(returnLineNumber - 1);
+    }
+
+    private boolean isTypeNameIn(List<String> lines) {
+        var simpleName = type.getSimpleName();
+        for (var line : lines) {
+            if (line.contains(simpleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private @Nullable JavaClassSource findBuilder(String code) {
@@ -105,7 +126,7 @@ final class Validate implements InsertionPoint {
     }
 
     private @Nullable JavaClassSource findClass(String code) {
-        JavaSource<?> javaSource = Roaster.parse(JavaSource.class, code);
+        var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return null;
         }
@@ -117,6 +138,10 @@ final class Validate implements InsertionPoint {
             names.poll();
         }
         return findSubClass(source, names);
+    }
+
+    private static JavaSource<?> parseSource(String code) {
+        return parsedSources.get(code);
     }
 
     private static
