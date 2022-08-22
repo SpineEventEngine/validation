@@ -29,6 +29,16 @@ import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.publish.IncrementGuard
 
+/**
+ * This module is no longer supported. The equivalent features are now
+ * available in `spine-base`.
+ *
+ * It is currently kept alive to provide a valid dependency substition
+ * when used in scope of the integration tests.
+ *
+ * In the future, this module will be dropped.
+ */
+
 plugins {
     id("io.spine.protodata")
 }
@@ -38,7 +48,6 @@ apply<IncrementGuard>()
 val spineBaseVersion: String by extra
 
 dependencies {
-    protoData(project(":runtime-extensions"))
     implementation("io.spine:spine-base:$spineBaseVersion")
 
     Protobuf.libs.forEach { implementation(it) }
@@ -50,8 +59,3 @@ protobuf {
     }
 }
 
-protoData {
-    renderers(
-        "io.spine.validation.internal.DiagsRenderer"
-    )
-}

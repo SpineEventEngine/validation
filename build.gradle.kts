@@ -77,8 +77,7 @@ spinePublishing {
         ":proto:configuration",
         ":proto:context",
         "java",
-        "model",
-        "runtime"
+        "model"
     )
     destinations = with(PublishingRepos) {
         setOf(
