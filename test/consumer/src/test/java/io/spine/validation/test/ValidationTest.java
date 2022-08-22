@@ -31,7 +31,6 @@ import com.google.protobuf.Message;
 import com.google.protobuf.util.Timestamps;
 import io.spine.protobuf.AnyPacker;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.test.money.LocalTime;
 import io.spine.validation.test.money.Mru;
@@ -273,7 +272,7 @@ class ValidationTest {
             @Test
             @DisplayName(ALLOW_VALID)
             void pass() {
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop());
                 assertNoException(builder);
             }
@@ -281,7 +280,7 @@ class ValidationTest {
             @Test
             @DisplayName(PROHIBIT_INVALID)
             void fail() {
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(invalidRainDrop());
                 checkInvalid(builder);
             }
@@ -294,7 +293,7 @@ class ValidationTest {
             @Test
             @DisplayName(ALLOW_VALID)
             void pass() {
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
                         .setLastEvent(AnyPacker.pack(validRainDrop()));
                 assertNoException(builder);
@@ -303,7 +302,7 @@ class ValidationTest {
             @Test
             @DisplayName(PROHIBIT_INVALID)
             void fail() {
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
                         .setLastEvent(AnyPacker.pack(invalidRainDrop()));
                 checkInvalid(builder);
@@ -339,7 +338,7 @@ class ValidationTest {
             @DisplayName(ALLOW_VALID)
             void pass() {
                 var packedValid = AnyPacker.pack(validRainDrop());
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
                         .addPredictedEvent(packedValid)
                         .addPredictedEvent(packedValid);
@@ -351,12 +350,17 @@ class ValidationTest {
             void fail() {
                 var packedValid = AnyPacker.pack(validRainDrop());
                 var packedInvalid = AnyPacker.pack(invalidRainDrop());
-                var builder = MeteoStatistics.newBuilder()
+                var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
                         .addPredictedEvent(packedValid)
                         .addPredictedEvent(packedInvalid);
                 checkInvalid(builder);
             }
+        }
+
+        private MeteoStatistics.Builder meteoStatsInEurope() {
+            return MeteoStatistics.newBuilder()
+                    .putIncludedRegions("EU", someRegion());
         }
 
         private RainDrop invalidRainDrop() {
@@ -369,6 +373,12 @@ class ValidationTest {
             return RainDrop.newBuilder()
                     .setMassInGrams(1)
                     .buildPartial();
+        }
+
+        private Region someRegion() {
+            return Region.newBuilder()
+                    .setName("Europe")
+                    .build();
         }
 
         private void checkInvalid(Message.Builder builder) {
