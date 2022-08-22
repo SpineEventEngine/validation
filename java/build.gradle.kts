@@ -34,7 +34,6 @@ dependencies {
     api(project(":proto:context"))
     api("io.spine.protodata:protodata-codegen-java:$protoDataVersion")
 
-    implementation(project(":runtime"))
     implementation(JavaPoet.lib)
     implementation(Roaster.api)
     runtimeOnly(Roaster.jdt)
