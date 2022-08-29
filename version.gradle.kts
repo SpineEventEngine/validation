@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.93")
+val spineBaseVersion by extra("2.0.0-SNAPSHOT.95")
 val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
 val spineTimeVersion by extra("2.0.0-SNAPSHOT.92")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.100")
