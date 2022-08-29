@@ -24,6 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * This module is no longer supported. The equivalent features are now available in `spine-base`.
+ *
+ * In the future, this module will be dropped.
+ */
+
 val protoDataVersion: String by extra
 
 dependencies {

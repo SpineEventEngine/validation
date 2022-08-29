@@ -35,6 +35,11 @@ message Rain {
     ];
 }
 
+message Region {
+
+    string name = 1;
+}
+
 message MeteoStatistics {
 
     RainDrop average_drop = 1 [(validate) = true];
@@ -42,4 +47,6 @@ message MeteoStatistics {
     google.protobuf.Any last_event = 2 [(validate) = true];
 
     repeated google.protobuf.Any predicted_event = 3 [(validate) = true];
+
+    map<string, Region> included_regions = 4 [(required) = true];
 }

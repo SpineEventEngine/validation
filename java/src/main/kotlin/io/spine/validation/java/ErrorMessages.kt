@@ -30,6 +30,7 @@ package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
+import io.spine.protobuf.CollectionsConverter
 import io.spine.protodata.Field
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.ClassName
@@ -41,12 +42,10 @@ import io.spine.protodata.isMap
 import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
-import io.spine.validation.ListOfAnys
-import io.spine.validation.MapOfAnys
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
- * to the given mutable [violationsList].
+ * to the mutable list of violations from the given [ctx].
  */
 public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
     val violation = buildViolation(
@@ -57,7 +56,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
 
 /**
  * Constructs code which creates a [ConstraintViolation] with child violations and adds it
- * to the given mutable [violationsList].
+ * to the mutable list of violations from the passed [ctx].
  */
 public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
@@ -118,13 +117,13 @@ private fun ErrorMessage.buildViolation(
     }
     if (fieldValue != null) {
         checkNotNull(field) { "Field value is set without the field." }
-        val packable = when {
-            ignoreCardinality -> fieldValue
-            field.isList() -> ClassName(ListOfAnys::class).call("from", listOf(fieldValue))
-            field.isMap() -> ClassName(MapOfAnys::class).call("from", listOf(fieldValue))
-            else -> fieldValue
+        val packingExpression = when {
+            ignoreCardinality -> fieldValue.packToAny()
+            field.isList() || field.isMap()  ->
+                ClassName(CollectionsConverter::class).call("toAny", listOf(fieldValue))
+            else -> fieldValue.packToAny()
         }
-        violationBuilder = violationBuilder.chainSet("field_value", packable.packToAny())
+        violationBuilder = violationBuilder.chainSet("field_value", packingExpression)
     }
     if (childViolations != null) {
         violationBuilder = violationBuilder.chain("addAllViolation", listOf(childViolations))
