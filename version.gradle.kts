@@ -36,6 +36,6 @@ val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
  * in case the project dependencies reference `io.spine.validation:runtime:2.0.0-SNAPSHOT.12`
  * being the last artifact before renaming.
  */
-val publishedValidationVersion by extra("2.0.0-SNAPSHOT.22")
+val publishedValidationVersion by extra("2.0.0-SNAPSHOT.21")
 
 val validationVersion by extra("2.0.0-SNAPSHOT.23")
