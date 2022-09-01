@@ -28,7 +28,7 @@ val spineBaseVersion by extra("2.0.0-SNAPSHOT.95")
 val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
 val spineTimeVersion by extra("2.0.0-SNAPSHOT.92")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.100")
-val protoDataVersion by extra("0.2.7")
+val protoDataVersion by extra("0.2.8")
 val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
 
 /**
@@ -36,6 +36,6 @@ val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
  * in case the project dependencies reference `io.spine.validation:runtime:2.0.0-SNAPSHOT.12`
  * being the last artifact before renaming.
  */
-val publishedValidationVersion by extra("2.0.0-SNAPSHOT.21")
+val publishedValidationVersion by extra("2.0.0-SNAPSHOT.22")
 
-val validationVersion by extra("2.0.0-SNAPSHOT.22")
+val validationVersion by extra("2.0.0-SNAPSHOT.23")
