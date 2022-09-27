@@ -41,6 +41,7 @@ include(
     "model",
     "runtime",
     "runtime-extensions",
+    "java-bundle",
     "test",
     ":test:extensions",
     ":test:consumer"
