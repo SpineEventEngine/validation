@@ -129,17 +129,18 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private void generateCode(SourceFileSet sources, Validations validations, MessageType type) {
         var protoFile = findProtoFile(type.getFile());
         var javaFile = javaFile(type, protoFile);
-        var validation = validations.get(type);
-        var code = generateValidationCode(validation);
-        var atClassScope = sources.file(javaFile)
-                .at(CLASS_SCOPE.forType(validation.getName()))
-                .withExtraIndentation(INDENT_LEVEL);
-        atClassScope.add(wrapToMethod(code, validation));
-        atClassScope.add(code.supportingMembersLines());
-        sources.file(javaFile)
-               .at(new Validate(validation.getName()))
-               .withExtraIndentation(INDENT_LEVEL)
-               .add(validateBeforeBuild());
+        sources.findFile(javaFile).ifPresent(sourceFile -> {
+            var validation = validations.get(type);
+            var code = generateValidationCode(validation);
+            var atClassScope = sourceFile
+                    .at(CLASS_SCOPE.forType(validation.getName()))
+                    .withExtraIndentation(INDENT_LEVEL);
+            atClassScope.add(wrapToMethod(code, validation));
+            atClassScope.add(code.supportingMembersLines());
+            sourceFile.at(new Validate(validation.getName()))
+                      .withExtraIndentation(INDENT_LEVEL)
+                      .add(validateBeforeBuild());
+        });
     }
 
     private File findProtoFile(FilePath path) {
