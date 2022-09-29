@@ -77,6 +77,7 @@ spinePublishing {
         ":proto:configuration",
         ":proto:context",
         "java",
+        "java-bundle",
         "model"
     )
     destinations = with(PublishingRepos) {
