@@ -38,7 +38,7 @@ val spinePublishing = rootProject.the<SpinePublishing>()
 /**
  * The ID of the far JAR artifact.
  */
-val pArtifact = spinePublishing.artifactPrefix + "java-bundle"
+val pArtifact = spinePublishing.artifactPrefix + "java-extensions"
 
 val protoDataVersion: String by extra
 
