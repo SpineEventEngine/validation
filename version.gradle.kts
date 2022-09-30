@@ -24,10 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.95")
-val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.92")
-val spineServerVersion by extra("2.0.0-SNAPSHOT.100")
+val spineBaseVersion by extra("2.0.0-SNAPSHOT.102")
+val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.95")
+val spineTimeVersion by extra("2.0.0-SNAPSHOT.96")
+val spineServerVersion by extra("2.0.0-SNAPSHOT.107")
 val protoDataVersion by extra("0.2.12")
 val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
 
