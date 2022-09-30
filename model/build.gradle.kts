@@ -33,6 +33,7 @@ dependencies {
     api("io.spine.protodata:protodata-compiler:$protoDataVersion")
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
+    implementation(project(":java-runtime-bundle"))
 
     testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
 }

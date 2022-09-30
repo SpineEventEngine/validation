@@ -26,8 +26,10 @@
 
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Protobuf
+import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.protobuf.setup
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
@@ -44,6 +46,11 @@ dependencies {
 val generatedDir by extra("$projectDir/generated")
 
 protobuf {
+    configurations.excludeProtobufLite()
+    generatedFilesBaseDir = generatedDir
+    protoc {
+        artifact = Protobuf.compiler
+    }
     generateProtoTasks {
         for (task in all()) {
             task.setup(generatedDir)
