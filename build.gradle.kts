@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
@@ -164,7 +165,8 @@ subprojects {
                     Jackson.bom,
                     Jackson.annotations,
                     Jackson.dataformatYaml,
-                    Jackson.dataformatXml
+                    Jackson.dataformatXml,
+                    Dokka.BasePlugin.lib
                 )
 
                 // Some direct project dependencies still have
