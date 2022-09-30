@@ -29,6 +29,7 @@ val spineBaseVersion: String by extra
 dependencies {
     implementation(project(":java"))
     implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(project(":java-runtime-bundle"))
 }
 
 modelCompiler {
