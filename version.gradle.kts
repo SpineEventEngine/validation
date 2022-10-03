@@ -24,18 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.95")
-val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.93")
-val spineTimeVersion by extra("2.0.0-SNAPSHOT.92")
-val spineServerVersion by extra("2.0.0-SNAPSHOT.100")
+val spineBaseVersion by extra("2.0.0-SNAPSHOT.102")
+val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.95")
+val spineTimeVersion by extra("2.0.0-SNAPSHOT.96")
+val spineServerVersion by extra("2.0.0-SNAPSHOT.107")
 val protoDataVersion by extra("0.2.12")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.99")
 
-/**
- * Using the last published `validation` version for the dependency substutition
- * in case the project dependencies reference `io.spine.validation:runtime:2.0.0-SNAPSHOT.12`
- * being the last artifact before renaming.
- */
-val publishedValidationVersion by extra("2.0.0-SNAPSHOT.21")
-
-val validationVersion by extra("2.0.0-SNAPSHOT.27")
+val validationVersion by extra("2.0.0-SNAPSHOT.28")

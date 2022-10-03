@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
@@ -38,6 +39,7 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
@@ -146,7 +148,6 @@ subprojects {
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
         val spineToolBaseVersion: String by extra
-        val publishedValidationVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -164,18 +165,9 @@ subprojects {
                     Jackson.bom,
                     Jackson.annotations,
                     Jackson.dataformatYaml,
-                    Jackson.dataformatXml
+                    Jackson.dataformatXml,
+                    Dokka.BasePlugin.lib
                 )
-
-                // Some direct project dependencies still have
-                // an "old" `io.spine.validation:runtime:2.0.0-SNAPSHOT.12`
-                // as their transient dependency. That's why we need to substitute it
-                // with the last published version of current `spine-validation-runtime` artifact.
-                dependencySubstitution {
-                    substitute(module("io.spine.validation:runtime:2.0.0-SNAPSHOT.12"))
-                        .using(module("io.spine.validation:" +
-                                "spine-validation-runtime:$publishedValidationVersion"))
-                }
             }
         }
     }
@@ -219,6 +211,7 @@ subprojects {
         }
     }
 
+    apply<IncrementGuard>()
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
 }

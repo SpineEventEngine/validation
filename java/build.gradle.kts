@@ -33,6 +33,7 @@ dependencies {
     api(project(":model"))
     api(project(":proto:context"))
     api("io.spine.protodata:protodata-codegen-java:$protoDataVersion")
+    implementation(project(":java-runtime-bundle"))
 
     implementation(JavaPoet.lib)
     implementation(Roaster.api)
