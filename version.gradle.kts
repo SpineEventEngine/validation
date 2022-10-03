@@ -29,7 +29,7 @@ val spineToolBaseVersion by extra("2.0.0-SNAPSHOT.95")
 val spineTimeVersion by extra("2.0.0-SNAPSHOT.96")
 val spineServerVersion by extra("2.0.0-SNAPSHOT.107")
 val protoDataVersion by extra("0.2.12")
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.96")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.99")
 
 /**
  * Using the last published `validation` version for the dependency substutition
