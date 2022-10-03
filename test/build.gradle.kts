@@ -31,9 +31,7 @@ buildscript {
     val mcJavaVersion: String by extra
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion") {
-            exclude(group = "io.spine.validation", module = "spine-validation-java")
-        }
+        classpath("io.spine.tools:spine-mc-java-plugins:${mcJavaVersion}:all")
     }
 }
 

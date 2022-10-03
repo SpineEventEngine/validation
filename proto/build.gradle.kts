@@ -34,7 +34,7 @@ buildscript {
     val protoDataVersion: String by extra
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
+        classpath("io.spine.tools:spine-mc-java-plugins:${mcJavaVersion}:all")
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         classpath("io.spine:protodata:$protoDataVersion")
     }
