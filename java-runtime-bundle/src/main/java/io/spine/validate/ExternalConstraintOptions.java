@@ -83,7 +83,7 @@ public final class ExternalConstraintOptions implements Serializable {
             var fieldOptions = requireNonNull(options.get(context));
             if (fieldContext.hasSameTargetAndParent(context) && fieldOptions.hasExtension(option)) {
                 var optionValue = fieldOptions.getExtension(option);
-                // A option is set explicitly if it was found in external constraints.
+                // An option is set explicitly if it was found in external constraints.
                 return Optional.of(optionValue);
             }
         }
