@@ -42,6 +42,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Provides option value for a field mentioned in an {@link ExternalMessageConstraint}.
@@ -79,7 +80,7 @@ public final class ExternalConstraintOptions implements Serializable {
     getOptionValue(FieldContext fieldContext, GeneratedExtension<FieldOptions, T> option) {
         var options = Holder.instance.options;
         for (var context : options.keySet()) {
-            var fieldOptions = options.get(context);
+            var fieldOptions = requireNonNull(options.get(context));
             if (fieldContext.hasSameTargetAndParent(context) && fieldOptions.hasExtension(option)) {
                 var optionValue = fieldOptions.getExtension(option);
                 // A option is set explicitly if it was found in external constraints.
