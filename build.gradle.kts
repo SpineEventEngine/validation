@@ -39,6 +39,7 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
@@ -210,6 +211,7 @@ subprojects {
         }
     }
 
+    apply<IncrementGuard>()
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
 }
