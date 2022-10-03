@@ -147,7 +147,6 @@ subprojects {
         val spineServerVersion: String by extra
         val spineTimeVersion: String by extra
         val spineToolBaseVersion: String by extra
-        val publishedValidationVersion: String by extra
 
         all {
             resolutionStrategy {
@@ -168,16 +167,6 @@ subprojects {
                     Jackson.dataformatXml,
                     Dokka.BasePlugin.lib
                 )
-
-                // Some direct project dependencies still have
-                // an "old" `io.spine.validation:runtime:2.0.0-SNAPSHOT.12`
-                // as their transient dependency. That's why we need to substitute it
-                // with the last published version of current `spine-validation-runtime` artifact.
-                dependencySubstitution {
-                    substitute(module("io.spine.validation:runtime:2.0.0-SNAPSHOT.12"))
-                        .using(module("io.spine.validation:" +
-                                "spine-validation-runtime:$publishedValidationVersion"))
-                }
             }
         }
     }
