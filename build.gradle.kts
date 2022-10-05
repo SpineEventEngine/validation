@@ -170,6 +170,9 @@ subprojects {
                     Dokka.BasePlugin.lib
                 )
             }
+
+            // Exclude all transitive dependencies onto the recently moved artifact.
+            exclude("io.spine", "spine-validate")
         }
     }
 
