@@ -80,6 +80,7 @@ spinePublishing {
         ":proto:context",
         "java",
         "java-bundle",
+        "java-runtime-bundle",
         "model"
     )
     destinations = with(PublishingRepos) {
