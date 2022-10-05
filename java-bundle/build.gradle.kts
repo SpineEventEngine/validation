@@ -40,8 +40,6 @@ val spinePublishing = rootProject.the<SpinePublishing>()
  */
 val pArtifact = spinePublishing.artifactPrefix + "java-extensions"
 
-val protoDataVersion: String by extra
-
 dependencies {
     implementation(project(":java"))
 }
@@ -93,6 +91,7 @@ tasks.shadowJar {
         "META-INF/gradle-plugins/org**")
 
     setZip64(true)  /* The archive has way too many items. So using the Zip64 mode. */
-    archiveClassifier.set("all")    /** To prevent Gradle setting something like `osx-x86_64`. */
+    archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
+    mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
 }
