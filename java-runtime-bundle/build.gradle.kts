@@ -31,9 +31,16 @@ import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.protobuf.setup
+import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 val spineBaseVersion: String by extra
+
+plugins {
+    `maven-publish`
+    id("com.github.johnrengelman.shadow").version("7.1.2")
+    java
+}
 
 dependencies {
     Protobuf.libs.forEach { api(it) }
@@ -79,4 +86,54 @@ protobuf {
 
 tasks {
     excludeGoogleProtoFromArtifacts()
+}
+
+/** The publishing settings from the root project. */
+val spinePublishing = rootProject.the<SpinePublishing>()
+
+/**
+ * The ID of the far JAR artifact.
+ */
+val pArtifact = spinePublishing.artifactPrefix + "java-runtime"
+
+publishing {
+    val pGroup = project.group.toString()
+    val pVersion = project.version.toString()
+
+    publications {
+        create("fat-jar", MavenPublication::class) {
+            groupId = pGroup
+            artifactId = pArtifact
+            version = pVersion
+            artifact(tasks.shadowJar)
+        }
+    }
+}
+
+tasks.publish {
+    dependsOn(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    exclude(
+        /**
+         * Exclude Gradle types to reduce the size of the resulting JAR.
+         *
+         * Those required for the plugins are available at runtime anyway.
+         */
+        "org/gradle/**",
+
+        /**
+         * Remove all third-party plugin declarations as well.
+         *
+         * They should be loaded from their respective dependencies.
+         */
+        "META-INF/gradle-plugins/com**",
+        "META-INF/gradle-plugins/net**",
+        "META-INF/gradle-plugins/org**")
+
+    setZip64(true)  /* The archive has way too many items. So using the Zip64 mode. */
+    archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
+    mergeServiceFiles("desc.ref")
+    mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
 }

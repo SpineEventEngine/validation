@@ -80,6 +80,7 @@ spinePublishing {
         ":proto:context",
         "java",
         "java-bundle",
+        "java-runtime-bundle",
         "model"
     )
     destinations = with(PublishingRepos) {
@@ -169,6 +170,9 @@ subprojects {
                     Dokka.BasePlugin.lib
                 )
             }
+
+            // Exclude all transitive dependencies onto the recently moved artifact.
+            exclude("io.spine", "spine-validate")
         }
     }
 
