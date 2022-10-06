@@ -76,8 +76,6 @@ public interface ValidatingBuilder<M extends Message> extends Message.Builder {
      */
     @Deprecated
     default @Validated M vBuild() throws ValidationException {
-        var message = build();
-        Validate.check(message);
-        return message;
+        return build();
     }
 }
