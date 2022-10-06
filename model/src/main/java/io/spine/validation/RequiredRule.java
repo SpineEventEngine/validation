@@ -105,7 +105,7 @@ final class RequiredRule {
                 .setOperator(NOT_EQUAL)
                 .setOtherValue(value)
                 .setDistribute(distibute)
-                .vBuild();
+                .build();
     }
 
     /**

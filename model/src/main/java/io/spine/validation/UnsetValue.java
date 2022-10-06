@@ -71,11 +71,11 @@ public final class UnsetValue {
             case LIST:
                 return Optional.of(Value.newBuilder()
                                         .setListValue(ListValue.getDefaultInstance())
-                                        .vBuild());
+                                        .build());
             case MAP:
                 return Optional.of(Value.newBuilder()
                                         .setMapValue(MapValue.getDefaultInstance())
-                                        .vBuild());
+                                        .build());
             default:
                 var type = field.getType();
                 return singular(type);
@@ -114,12 +114,12 @@ public final class UnsetValue {
         if (primitiveType == TYPE_STRING) {
             return Optional.of(Value.newBuilder()
                                     .setStringValue("")
-                                    .vBuild());
+                                    .build());
         }
         if (primitiveType == TYPE_BYTES) {
             return Optional.of(Value.newBuilder()
                                     .setBytesValue(ByteString.EMPTY)
-                                    .vBuild());
+                                    .build());
         }
         return Optional.empty();
     }
@@ -130,7 +130,7 @@ public final class UnsetValue {
                     .setMessageValue(MessageValue.newBuilder()
                                                  .setType(msgName)
                                                  .buildPartial())
-                    .vBuild();
+                    .build();
     }
 
     private static Value enumValue(Type type) {
@@ -139,6 +139,6 @@ public final class UnsetValue {
                     .setEnumValue(EnumValue.newBuilder()
                                            .setType(enumName)
                                            .buildPartial())
-                    .vBuild();
+                    .build();
     }
 }
