@@ -62,7 +62,7 @@ final class ValidateMethod {
         this.messageType = checkNotNull(messageType);
     }
 
-    ImmutableList<String> generate() {
+    MethodSpec generate() {
         var code = CodeBlock.builder();
         code.addStatement(newAccumulator());
         code.add(constraintsCode);
@@ -73,9 +73,7 @@ final class ValidateMethod {
                 .addModifiers(PUBLIC)
                 .addCode(code.build())
                 .build();
-        var methodLines = validate.toString()
-                                  .split(lineSeparator());
-        return ImmutableList.copyOf(methodLines);
+        return validate;
     }
 
     private static CodeBlock newAccumulator() {

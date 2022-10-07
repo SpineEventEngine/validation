@@ -26,8 +26,6 @@
 
 package io.spine.validation.java;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
 
@@ -43,8 +41,6 @@ import static io.spine.protodata.Ast.typeUrl;
  */
 final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
-    private static final Splitter LINE_SPLITTER = Splitter.on(System.lineSeparator());
-    private static final Joiner LINE_JOINER = Joiner.on(System.lineSeparator());
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
     private static final String BUILD_METHOD = "build";
 
@@ -63,7 +59,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
         if (typeNameNotFound) {
             return LineNumber.notInFile();
         }
-        var code = LINE_JOINER.join(lines);
+        var code = Lines.join(lines);
         var builderClass = findBuilder(code);
         if (builderClass == null) {
             return LineNumber.notInFile();
@@ -92,7 +88,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     }
 
     private static int returnLineIndex(String code) {
-        var methodLines = LINE_SPLITTER.splitToList(code);
+        var methodLines = Lines.split(code);
         var returnIndex = 0;
         for (var line : methodLines) {
             if (RETURN_LINE.matcher(line).matches()) {
