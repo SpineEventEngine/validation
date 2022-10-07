@@ -49,6 +49,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
+import static java.lang.System.lineSeparator;
 
 /**
  * Generates validation code for a given message type specified via
@@ -115,8 +116,11 @@ final class ValidationCode {
 
     private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
         var validateMethod = new ValidateMethod(messageType, constraintsCode);
-        var lines = validateMethod.generate();
-        return lines;
+        var methodSpec = validateMethod.generate();
+        var lines = ImmutableList.<String>builder();
+        lines.addAll(Lines.split(methodSpec.toString()))
+             .add(lineSeparator());
+        return lines.build();
     }
 
     private void insertBeforeBuild() {
