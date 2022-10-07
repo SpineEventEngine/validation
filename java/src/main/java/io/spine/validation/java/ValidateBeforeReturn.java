@@ -41,14 +41,14 @@ import static io.spine.protodata.Ast.typeUrl;
  *
  * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
  */
-final class Validate extends BuilderInsertionPoint {
+final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     private static final Splitter LINE_SPLITTER = Splitter.on(System.lineSeparator());
     private static final Joiner LINE_JOINER = Joiner.on(System.lineSeparator());
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
     private static final String BUILD_METHOD = "build";
 
-    Validate(TypeName type) {
+    ValidateBeforeReturn(TypeName type) {
         super(type);
     }
 

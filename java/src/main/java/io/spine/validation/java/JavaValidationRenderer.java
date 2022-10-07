@@ -46,7 +46,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 /**
  * A {@link Renderer} for the validation code in Java.
  *
- * <p>Inserts code into the {@link Validate} insertion point.
+ * <p>Inserts code into the {@link ValidateBeforeReturn} insertion point.
  *
  * <p>The generated code assumes there is a variable called {@code result}. Its type is the type of
  * the validated message. The variable holds the value of the message to validate.

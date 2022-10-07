@@ -35,7 +35,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.tools.code.CommonLanguages.java;
 
 /**
- * An {@link InsertionPointPrinter} which adds the {@link Validate} point to all the message types
+ * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point to all the message types
  * which have an associated {@link MessageValidation} view.
  */
 @SuppressWarnings("unused") // Accessed via reflection by ProtoData.
@@ -49,7 +49,7 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
     protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
         var types = select(MessageValidation.class).all();
         return types.stream()
-                    .map(validation -> new Validate(validation.getName()))
+                    .map(validation -> new ValidateBeforeReturn(validation.getName()))
                     .collect(toImmutableSet());
     }
 }

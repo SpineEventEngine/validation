@@ -125,7 +125,7 @@ final class ValidationCode {
     }
 
     private void insertBeforeBuild() {
-        sourceFile.at(new Validate(typeName))
+        sourceFile.at(new ValidateBeforeReturn(typeName))
                   .add(validateBeforeBuild());
     }
 }
