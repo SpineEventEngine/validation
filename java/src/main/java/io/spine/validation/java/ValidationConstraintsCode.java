@@ -41,9 +41,9 @@ import static io.spine.validation.java.ValidationCode.VIOLATIONS;
 import static java.lang.System.lineSeparator;
 
 /**
- * Code generated for a validation constraint.
+ * Code generated for validations constraints specified in a message type.
  */
-final class ValidationConstraintCode {
+final class ValidationConstraintsCode {
 
     private static final Splitter onNewLine = Splitter.on(lineSeparator());
 
@@ -82,7 +82,7 @@ final class ValidationConstraintCode {
      */
     private final ImmutableList.Builder<CodeBlock> supportingMembers;
 
-    private ValidationConstraintCode(JavaValidationRenderer r, MessageValidation v) {
+    private ValidationConstraintsCode(JavaValidationRenderer r, MessageValidation v) {
         this.renderer = r;
         this.validation = v;
         this.typeName = v.getName();
@@ -95,8 +95,8 @@ final class ValidationConstraintCode {
     /**
      * Creates a new instance with the generated validation constraints code.
      */
-    static ValidationConstraintCode generate(JavaValidationRenderer r, MessageValidation v) {
-        var result = new ValidationConstraintCode(r, v);
+    static ValidationConstraintsCode generate(JavaValidationRenderer r, MessageValidation v) {
+        var result = new ValidationConstraintsCode(r, v);
         result.generate();
         return result;
     }

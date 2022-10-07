@@ -29,7 +29,6 @@ package io.spine.validation.java;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
 import io.spine.protodata.codegen.java.Expression;
@@ -37,25 +36,18 @@ import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.tools.code.CommonLanguages;
-import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
-import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
-import static java.lang.System.lineSeparator;
-import static javax.lang.model.element.Modifier.PUBLIC;
 
 /**
  * Generates validation code for a given message type specified via
@@ -63,20 +55,18 @@ import static javax.lang.model.element.Modifier.PUBLIC;
  *
  * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
  */
-@SuppressWarnings("OverlyCoupledClass")
 final class ValidationCode {
 
-    static final Expression VIOLATIONS = new Literal("violations");
-    private static final Type OPTIONAL_ERROR =
-            new TypeToken<Optional<ValidationError>>() {}.getType();
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
-    private static final String VALIDATE = "validate";
-    private static final String RETURN_LITERAL = "return $L";
+    static final String VALIDATE = "validate";
+    static final Type OPTIONAL_ERROR =
+            new TypeToken<Optional<ValidationError>>() {}.getType();
+    static final Expression VIOLATIONS = new Literal("violations");
 
     private final JavaValidationRenderer renderer;
     private final SourceFile sourceFile;
-    private final TypeName typeName;
     private final MessageValidation validation;
+    private final TypeName typeName;
     private final SourceAtPoint atClassScope;
 
     /**
@@ -90,7 +80,8 @@ final class ValidationCode {
      *         the file to be extended with the validation code
      */
     ValidationCode(JavaValidationRenderer renderer,
-                   MessageValidation validation, SourceFile file) {
+                   MessageValidation validation,
+                   SourceFile file) {
         this.renderer = renderer;
         this.sourceFile = file;
         this.typeName = validation.getName();
@@ -103,9 +94,9 @@ final class ValidationCode {
      */
     void generate() {
         implementValidatableMessage();
-        var constraintCode = ValidationConstraintCode.generate(renderer, validation);
-        atClassScope.add(validateMethod(constraintCode));
-        atClassScope.add(constraintCode.supportingMembersLines());
+        var constraintsCode = ValidationConstraintsCode.generate(renderer, validation);
+        atClassScope.add(validateMethod(constraintsCode.codeBlock()));
+        atClassScope.add(constraintsCode.supportingMembersLines());
         insertBeforeBuild();
     }
 
@@ -114,51 +105,10 @@ final class ValidationCode {
         atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
     }
 
-    private ImmutableList<String> validateMethod(ValidationConstraintCode constraintCode) {
-        var code = CodeBlock.builder();
-        code.addStatement(newAccumulator());
-        code.add(constraintCode.codeBlock());
-        code.add(extraInsertionPoint());
-        code.add(generateValidationError());
-        var validate = MethodSpec.methodBuilder(VALIDATE)
-                .returns(OPTIONAL_ERROR)
-                .addModifiers(PUBLIC)
-                .addCode(code.build())
-                .build();
-        var methodLines = validate.toString()
-                                  .split(lineSeparator());
-        return ImmutableList.copyOf(methodLines);
-    }
-
-    private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $L = new $T<>()",
-                            ArrayList.class,
-                            ConstraintViolation.class,
-                            VIOLATIONS,
-                            ArrayList.class);
-    }
-
-    private static CodeBlock generateValidationError() {
-        var code = CodeBlock.builder();
-        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        var errorBuilder = new ClassName(ValidationError.class).newBuilder()
-                .chainAddAll("constraint_violation", VIOLATIONS)
-                .chainBuild();
-        var optional = new ClassName(Optional.class);
-        var optionalOf = optional.call("of", ImmutableList.of(errorBuilder));
-        code.addStatement(RETURN_LITERAL, optionalOf);
-        code.nextControlFlow("else");
-        var optionalEmpty = optional.call("empty");
-        code.addStatement(RETURN_LITERAL, optionalEmpty);
-        code.endControlFlow();
-        return code.build();
-    }
-
-    private CodeBlock extraInsertionPoint() {
-        InsertionPoint insertionPoint = new ExtraValidation(typeName);
-        var java = CommonLanguages.java();
-        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
-        return CodeBlock.of(line);
+    private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
+        var validateMethod = new ValidateMethod(typeName, constraintsCode);
+        var lines = validateMethod.generate();
+        return lines;
     }
 
     private static ImmutableList<String> validateBeforeBuild() {
@@ -173,6 +123,7 @@ final class ValidationCode {
                 .build();
         return Poet.lines(code);
     }
+
     private void insertBeforeBuild() {
         sourceFile.at(new Validate(typeName))
                   .add(validateBeforeBuild());
