@@ -36,6 +36,7 @@ import io.spine.protodata.codegen.java.This;
 import io.spine.validation.MessageValidation;
 import io.spine.validation.Rule;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.validation.java.ValidationCode.VIOLATIONS;
 import static java.lang.System.lineSeparator;
@@ -60,7 +61,7 @@ final class ValidationConstraintsCode {
     /**
      * The name of the message type for which to generate the code.
      */
-    private final TypeName typeName;
+    private final TypeName messageType;
 
     /**
      * The file which declares the message type.
@@ -85,7 +86,7 @@ final class ValidationConstraintsCode {
     private ValidationConstraintsCode(JavaValidationRenderer r, MessageValidation v) {
         this.renderer = r;
         this.validation = v;
-        this.typeName = v.getName();
+        this.messageType = v.getName();
         this.declaringFile = validation.getType().getFile();
 
         this.code = CodeBlock.builder();
@@ -96,6 +97,8 @@ final class ValidationConstraintsCode {
      * Creates a new instance with the generated validation constraints code.
      */
     static ValidationConstraintsCode generate(JavaValidationRenderer r, MessageValidation v) {
+        checkNotNull(r);
+        checkNotNull(v);
         var result = new ValidationConstraintsCode(r, v);
         result.generate();
         return result;
@@ -135,7 +138,7 @@ final class ValidationConstraintsCode {
     private GenerationContext newContext(Rule rule) {
         var typeSystem = renderer.typeSystem();
         return new GenerationContext(
-                rule, messageReference, declaringFile, typeSystem, typeName, VIOLATIONS, renderer
+                rule, messageReference, declaringFile, typeSystem, messageType, VIOLATIONS, renderer
         );
     }
 }
