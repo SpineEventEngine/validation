@@ -55,11 +55,11 @@ final class ValidateMethod {
     private static final String RETURN_LITERAL = "return $L";
 
     private final CodeBlock constraintsCode;
-    private final TypeName typeName;
+    private final TypeName messageType;
 
-    ValidateMethod(TypeName typeName, CodeBlock constraintsCode) {
+    ValidateMethod(TypeName messageType, CodeBlock constraintsCode) {
         this.constraintsCode = checkNotNull(constraintsCode);
-        this.typeName = checkNotNull(typeName);
+        this.messageType = checkNotNull(messageType);
     }
 
     ImmutableList<String> generate() {
@@ -87,7 +87,7 @@ final class ValidateMethod {
     }
 
     private CodeBlock extraInsertionPoint() {
-        InsertionPoint insertionPoint = new ExtraValidation(typeName);
+        InsertionPoint insertionPoint = new ExtraValidation(messageType);
         var java = CommonLanguages.java();
         var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
         return CodeBlock.of(line);
