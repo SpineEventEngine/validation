@@ -133,12 +133,10 @@ public final class JavaValidationRenderer extends JavaRenderer {
             var validation = validations.get(type);
             var code = generateValidationCode(validation);
             var atClassScope = sourceFile
-                    .at(CLASS_SCOPE.forType(validation.getName()))
-                    .withExtraIndentation(INDENT_LEVEL);
+                    .at(CLASS_SCOPE.forType(validation.getName()));
             atClassScope.add(wrapToMethod(code, validation));
             atClassScope.add(code.supportingMembersLines());
             sourceFile.at(new Validate(validation.getName()))
-                      .withExtraIndentation(INDENT_LEVEL)
                       .add(validateBeforeBuild());
         });
     }
