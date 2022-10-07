@@ -45,9 +45,11 @@ import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.codegen.java.This;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.Renderer;
+import io.spine.protodata.renderer.SourceFile;
 import io.spine.protodata.renderer.SourceFileSet;
 import io.spine.tools.code.CommonLanguages;
 import io.spine.validate.ConstraintViolation;
+import io.spine.validate.MessageWithConstraints;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
@@ -60,6 +62,7 @@ import java.util.stream.Stream;
 
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
+import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static java.lang.System.lineSeparator;
@@ -130,14 +133,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
         var protoFile = findProtoFile(type.getFile());
         var javaFile = javaFile(type, protoFile);
         sources.findFile(javaFile).ifPresent(sourceFile -> {
-            var validation = validations.get(type);
-            var code = generateValidationCode(validation);
-            var atClassScope = sourceFile
-                    .at(CLASS_SCOPE.forType(validation.getName()));
-            atClassScope.add(wrapToMethod(code, validation));
-            atClassScope.add(code.supportingMembersLines());
-            sourceFile.at(new Validate(validation.getName()))
-                      .add(validateBeforeBuild());
+            addValidationCode(sourceFile, type, validations);
         });
     }
 
@@ -148,6 +144,19 @@ public final class JavaValidationRenderer extends JavaRenderer {
                         "No such Protobuf file: `%s`.",
                         path.getValue()
                 )).getFile();
+    }
+
+    private void addValidationCode(SourceFile sourceFile, MessageType type, Validations validations) {
+        var validation = validations.get(type);
+        var typeName = validation.getName();
+        var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(typeName));
+        atMessageImplements.add(new ClassName(MessageWithConstraints.class) + ",");
+        var code = generateValidationCode(validation);
+        var atClassScope = sourceFile.at(CLASS_SCOPE.forType(typeName));
+        atClassScope.add(wrapToMethod(code, validation));
+        atClassScope.add(code.supportingMembersLines());
+        sourceFile.at(new Validate(typeName))
+                  .add(validateBeforeBuild());
     }
 
     private TypeSystem bakeTypeSystem() {
@@ -211,7 +220,8 @@ public final class JavaValidationRenderer extends JavaRenderer {
             code.add(block);
             supportingMembers.add(generator.supportingMembers());
         }
-        return new ValidationConstraintCode(code.build(), supportingMembers.build());
+        var result = new ValidationConstraintCode(code.build(), supportingMembers.build());
+        return result;
     }
 
     private static CodeBlock extraInsertionPoint(TypeName name) {
