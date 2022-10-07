@@ -29,18 +29,11 @@ package io.spine.validation.java;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaSource;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.Ast.typeUrl;
 
 /**
@@ -48,31 +41,20 @@ import static io.spine.protodata.Ast.typeUrl;
  *
  * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
  */
-final class Validate implements InsertionPoint {
+final class Validate extends BuilderInsertionPoint {
 
     private static final Splitter LINE_SPLITTER = Splitter.on(System.lineSeparator());
     private static final Joiner LINE_JOINER = Joiner.on(System.lineSeparator());
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
-    private static final String BUILDER_CLASS = "Builder";
     private static final String BUILD_METHOD = "build";
 
-    /**
-     * Cached results of parsing the Java source code.
-     *
-     * <p>Without caching, this operation may be executed for too many times
-     * for the same input.
-     */
-    private static final ParsedSources parsedSources = new ParsedSources();
-
-    private final TypeName type;
-
     Validate(TypeName type) {
-        this.type = checkNotNull(type);
+        super(type);
     }
 
     @Override
     public String getLabel() {
-        return String.format("validate:%s", typeUrl(type));
+        return String.format("validate:%s", typeUrl(type()));
     }
 
     @Override
@@ -100,64 +82,13 @@ final class Validate implements InsertionPoint {
     }
 
     private boolean isTypeNameIn(List<String> lines) {
-        var simpleName = type.getSimpleName();
+        var simpleName = type().getSimpleName();
         for (var line : lines) {
             if (line.contains(simpleName)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private @Nullable JavaClassSource findBuilder(String code) {
-        var classSource = findClass(code);
-        if (classSource == null) {
-            return null;
-        }
-        if (!classSource.hasNestedType(BUILDER_CLASS)) {
-            return null;
-        }
-        var builder = classSource.getNestedType(BUILDER_CLASS);
-        if (!builder.isClass()) {
-            return null;
-        }
-        var builderClass = (JavaClassSource) builder;
-        return builderClass;
-    }
-
-    private @Nullable JavaClassSource findClass(String code) {
-        var javaSource = parseSource(code);
-        if (!javaSource.isClass()) {
-            return null;
-        }
-        var source = (JavaClassSource) javaSource;
-        Deque<String> names = new ArrayDeque<>(type.getNestingTypeNameList());
-        names.addLast(type.getSimpleName());
-
-        if (source.getName().equals(names.peek())) {
-            names.poll();
-        }
-        return findSubClass(source, names);
-    }
-
-    private static JavaSource<?> parseSource(String code) {
-        return parsedSources.get(code);
-    }
-
-    private static
-    @Nullable JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
-        var source = topLevelClass;
-        for (var name : names) {
-            if (!source.hasNestedType(name)) {
-                return null;
-            }
-            var nestedType = source.getNestedType(name);
-            if (!nestedType.isClass()) {
-                return null;
-            }
-            source = (JavaClassSource) nestedType;
-        }
-        return source;
     }
 
     private static int returnLineIndex(String code) {
