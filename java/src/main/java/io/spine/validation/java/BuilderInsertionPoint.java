@@ -59,10 +59,20 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         this.messageType = checkNotNull(messageType);
     }
 
+    /**
+     * Obtains the name of the message type for which we find insertion point.
+     */
     protected final TypeName messageType() {
         return messageType;
     }
 
+    /**
+     * Obtains the Java class source for the builder in the given code.
+     *
+     * @param code
+     *         the Java code to parse
+     * @return the found binder code or {@code null} if no builder class found
+     */
     protected final @Nullable JavaClassSource findBuilder(String code) {
         var classSource = findClass(code);
         if (classSource == null) {
