@@ -41,9 +41,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Abstract base for insertion points for generated code implementing
  * {@link io.spine.validate.ValidatingBuilder ValidatingBuilder} interface.
  */
-abstract class BuilderInsertionPoint implements InsertionPoint {
+public abstract class BuilderInsertionPoint implements InsertionPoint {
 
     private static final String BUILDER_CLASS = "Builder";
+
     /**
      * Cached results of parsing the Java source code.
      *
@@ -52,14 +53,14 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
      */
     private static final ParsedSources parsedSources = new ParsedSources();
 
-    private final TypeName type;
+    private final TypeName messageType;
 
-    BuilderInsertionPoint(TypeName type) {
-        this.type = checkNotNull(type);
+    BuilderInsertionPoint(TypeName messageType) {
+        this.messageType = checkNotNull(messageType);
     }
 
-    protected final TypeName type() {
-        return type;
+    protected final TypeName messageType() {
+        return messageType;
     }
 
     protected final @Nullable JavaClassSource findBuilder(String code) {
@@ -84,8 +85,8 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
             return null;
         }
         var source = (JavaClassSource) javaSource;
-        Deque<String> names = new ArrayDeque<>(type.getNestingTypeNameList());
-        names.addLast(type.getSimpleName());
+        Deque<String> names = new ArrayDeque<>(messageType.getNestingTypeNameList());
+        names.addLast(messageType.getSimpleName());
 
         if (source.getName().equals(names.peek())) {
             names.poll();

@@ -54,7 +54,7 @@ final class Validate extends BuilderInsertionPoint {
 
     @Override
     public String getLabel() {
-        return String.format("validate:%s", typeUrl(type()));
+        return String.format("validate:%s", typeUrl(messageType()));
     }
 
     @Override
@@ -82,7 +82,7 @@ final class Validate extends BuilderInsertionPoint {
     }
 
     private boolean isTypeNameIn(List<String> lines) {
-        var simpleName = type().getSimpleName();
+        var simpleName = messageType().getSimpleName();
         for (var line : lines) {
             if (line.contains(simpleName)) {
                 return true;
