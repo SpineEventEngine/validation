@@ -29,9 +29,15 @@ package io.spine.validation.java;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
+import io.spine.protodata.FilePath;
+import io.spine.protodata.TypeName;
+import io.spine.protodata.codegen.java.MessageReference;
+import io.spine.protodata.codegen.java.This;
+import io.spine.validation.MessageValidation;
+import io.spine.validation.Rule;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static io.spine.validation.java.ValidationCode.VIOLATIONS;
 import static java.lang.System.lineSeparator;
 
 /**
@@ -42,30 +48,94 @@ final class ValidationConstraintCode {
     private static final Splitter onNewLine = Splitter.on(lineSeparator());
 
     /**
+     * The parent renderer which this method object serves.
+     */
+    private final JavaValidationRenderer renderer;
+
+    /**
+     * The validation rule for which to generate the code.
+     */
+    private final MessageValidation validation;
+
+    /**
+     * The name of the message type for which to generate the code.
+     */
+    private final TypeName typeName;
+
+    /**
+     * The file which declares the message type.
+     */
+    private final FilePath declaringFile;
+
+    /**
+     * The expression for referencing the message in the code.
+     */
+    private final MessageReference messageReference = This.INSTANCE.asMessage();
+
+    /**
      * The code which performs validation.
      */
-    private final CodeBlock code;
+    private final CodeBlock.Builder code;
 
     /**
      * Class-level declarations used in the validation code.
      */
-    private final ImmutableList<CodeBlock> supportingMembers;
+    private final ImmutableList.Builder<CodeBlock> supportingMembers;
 
-    ValidationConstraintCode(CodeBlock code, ImmutableList<CodeBlock> members) {
-        this.code = checkNotNull(code);
-        this.supportingMembers = checkNotNull(members);
+    private ValidationConstraintCode(JavaValidationRenderer r, MessageValidation v) {
+        this.renderer = r;
+        this.validation = v;
+        this.typeName = v.getName();
+        this.declaringFile = validation.getType().getFile();
+
+        this.code = CodeBlock.builder();
+        this.supportingMembers = ImmutableList.builder();
     }
 
+    /**
+     * Creates a new instance with the generated validation constraints code.
+     */
+    static ValidationConstraintCode generate(JavaValidationRenderer r, MessageValidation v) {
+        var result = new ValidationConstraintCode(r, v);
+        result.generate();
+        return result;
+    }
+
+    /**
+     * Obtains the generated code block.
+     */
     CodeBlock codeBlock() {
-        return code;
+        return code.build();
     }
 
     /**
      * Obtains class-level declarations used in the validation code as code lines.
      */
     ImmutableList<String> supportingMembersLines() {
-        return supportingMembers.stream()
+        return supportingMembers.build()
+                .stream()
                 .flatMap(code -> onNewLine.splitToStream(code.toString()))
                 .collect(toImmutableList());
+    }
+
+    private void generate() {
+        for (var rule : validation.getRuleList()) {
+            addRule(rule);
+        }
+    }
+
+    private void addRule(Rule rule) {
+        var context = newContext(rule);
+        var generator = JavaCodeGeneration.generatorFor(context);
+        var block = generator.code();
+        code.add(block);
+        supportingMembers.add(generator.supportingMembers());
+    }
+
+    private GenerationContext newContext(Rule rule) {
+        var typeSystem = renderer.typeSystem();
+        return new GenerationContext(
+                rule, messageReference, declaringFile, typeSystem, typeName, VIOLATIONS, renderer
+        );
     }
 }

@@ -37,8 +37,8 @@ import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.codegen.java.This;
 import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.tools.code.CommonLanguages;
 import io.spine.validate.ConstraintViolation;
@@ -57,48 +57,68 @@ import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static java.lang.System.lineSeparator;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
+/**
+ * Generates validation code for a given message type specified via
+ * {@link MessageValidation} instance.
+ *
+ * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
+ */
 @SuppressWarnings("OverlyCoupledClass")
 final class ValidationCode {
 
+    static final Expression VIOLATIONS = new Literal("violations");
     private static final Type OPTIONAL_ERROR =
             new TypeToken<Optional<ValidationError>>() {}.getType();
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
     private static final String VALIDATE = "validate";
     private static final String RETURN_LITERAL = "return $L";
-    private static final Expression VIOLATIONS = new Literal("violations");
 
     private final JavaValidationRenderer renderer;
     private final SourceFile sourceFile;
     private final TypeName typeName;
     private final MessageValidation validation;
+    private final SourceAtPoint atClassScope;
 
+    /**
+     * Creates a new instance for generating message validation code.
+     *
+     * @param renderer
+     *         the parent renderer
+     * @param validation
+     *         the validation rule for which to generate the code
+     * @param file
+     *         the file to be extended with the validation code
+     */
     ValidationCode(JavaValidationRenderer renderer,
-                   SourceFile file,
-                   TypeName name,
-                   MessageValidation validation) {
+                   MessageValidation validation, SourceFile file) {
         this.renderer = renderer;
         this.sourceFile = file;
-        this.typeName = name;
+        this.typeName = validation.getName();
         this.validation = validation;
+        this.atClassScope = sourceFile.at(CLASS_SCOPE.forType(this.typeName));
     }
 
+    /**
+     * Generates the code in the linked source file.
+     */
     void generate() {
+        implementValidatableMessage();
+        var constraintCode = ValidationConstraintCode.generate(renderer, validation);
+        atClassScope.add(validateMethod(constraintCode));
+        atClassScope.add(constraintCode.supportingMembersLines());
+        insertBeforeBuild();
+    }
+
+    private void implementValidatableMessage() {
         var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(typeName));
         atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
-        var code = generateValidationCode(validation);
-        var atClassScope = sourceFile.at(CLASS_SCOPE.forType(typeName));
-        atClassScope.add(wrapToMethod(code));
-        atClassScope.add(code.supportingMembersLines());
-        sourceFile.at(new Validate(typeName))
-                  .add(validateBeforeBuild());
     }
 
-    private ImmutableList<String> wrapToMethod(ValidationConstraintCode generated) {
+    private ImmutableList<String> validateMethod(ValidationConstraintCode constraintCode) {
         var code = CodeBlock.builder();
         code.addStatement(newAccumulator());
-        code.add(generated.codeBlock());
-        code.add(extraInsertionPoint(/*validation.getType()
-                                               .getName()*/typeName));
+        code.add(constraintCode.codeBlock());
+        code.add(extraInsertionPoint());
         code.add(generateValidationError());
         var validate = MethodSpec.methodBuilder(VALIDATE)
                 .returns(OPTIONAL_ERROR)
@@ -108,6 +128,37 @@ final class ValidationCode {
         var methodLines = validate.toString()
                                   .split(lineSeparator());
         return ImmutableList.copyOf(methodLines);
+    }
+
+    private static CodeBlock newAccumulator() {
+        return CodeBlock.of("$T<$T> $L = new $T<>()",
+                            ArrayList.class,
+                            ConstraintViolation.class,
+                            VIOLATIONS,
+                            ArrayList.class);
+    }
+
+    private static CodeBlock generateValidationError() {
+        var code = CodeBlock.builder();
+        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
+        var errorBuilder = new ClassName(ValidationError.class).newBuilder()
+                .chainAddAll("constraint_violation", VIOLATIONS)
+                .chainBuild();
+        var optional = new ClassName(Optional.class);
+        var optionalOf = optional.call("of", ImmutableList.of(errorBuilder));
+        code.addStatement(RETURN_LITERAL, optionalOf);
+        code.nextControlFlow("else");
+        var optionalEmpty = optional.call("empty");
+        code.addStatement(RETURN_LITERAL, optionalEmpty);
+        code.endControlFlow();
+        return code.build();
+    }
+
+    private CodeBlock extraInsertionPoint() {
+        InsertionPoint insertionPoint = new ExtraValidation(typeName);
+        var java = CommonLanguages.java();
+        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
+        return CodeBlock.of(line);
     }
 
     private static ImmutableList<String> validateBeforeBuild() {
@@ -122,57 +173,8 @@ final class ValidationCode {
                 .build();
         return Poet.lines(code);
     }
-
-    private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $L = new $T<>()",
-                            ArrayList.class,
-                            ConstraintViolation.class,
-                            VIOLATIONS,
-                            ArrayList.class);
-    }
-
-    private ValidationConstraintCode generateValidationCode(MessageValidation validation) {
-        var msg = This.INSTANCE.asMessage();
-        var code = CodeBlock.builder();
-        var file = validation.getType()
-                             .getFile();
-        var typeName = validation.getType()
-                                 .getName();
-        ImmutableList.Builder<CodeBlock> supportingMembers = ImmutableList.builder();
-        for (var rule : validation.getRuleList()) {
-            var context = new GenerationContext(
-                    rule, msg, file, renderer.typeSystem(), typeName, VIOLATIONS, renderer
-            );
-            var generator = JavaCodeGeneration.generatorFor(context);
-            var block = generator.code();
-            code.add(block);
-            supportingMembers.add(generator.supportingMembers());
-        }
-        var result = new ValidationConstraintCode(code.build(), supportingMembers.build());
-        return result;
-    }
-
-    private static CodeBlock extraInsertionPoint(TypeName name) {
-        InsertionPoint insertionPoint = new ExtraValidation(name);
-        var java = CommonLanguages.java();
-        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
-        return CodeBlock.of(line);
-    }
-
-    private static CodeBlock generateValidationError() {
-        var code = CodeBlock.builder();
-        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        var errorBuilder = new ClassName(ValidationError.class).newBuilder()
-                .chainAddAll("constraint_violation", VIOLATIONS)
-                .chainBuild();
-        var newOptional = new ClassName(Optional.class)
-                .call("of", ImmutableList.of(errorBuilder));
-        code.addStatement(RETURN_LITERAL, newOptional);
-        code.nextControlFlow("else");
-        var optionalEmpty = new ClassName(Optional.class)
-                .call("empty");
-        code.addStatement(RETURN_LITERAL, optionalEmpty);
-        code.endControlFlow();
-        return code.build();
+    private void insertBeforeBuild() {
+        sourceFile.at(new Validate(typeName))
+                  .add(validateBeforeBuild());
     }
 }

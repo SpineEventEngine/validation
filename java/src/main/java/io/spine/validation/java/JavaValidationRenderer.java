@@ -119,7 +119,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
         var validation = validations.get(type);
         var typeName = validation.getName();
 
-        var validationCode = new ValidationCode(this, sourceFile, typeName, validation);
+        var validationCode = new ValidationCode(this, validation, sourceFile);
         validationCode.generate();
     }
 }
