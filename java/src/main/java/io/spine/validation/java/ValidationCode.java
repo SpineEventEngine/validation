@@ -46,6 +46,7 @@ import io.spine.validation.MessageValidation;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
 
@@ -66,8 +67,7 @@ final class ValidationCode {
     private final JavaValidationRenderer renderer;
     private final SourceFile sourceFile;
     private final MessageValidation validation;
-    private final TypeName typeName;
-    private final SourceAtPoint atClassScope;
+    private final TypeName messageType;
 
     /**
      * Creates a new instance for generating message validation code.
@@ -82,11 +82,10 @@ final class ValidationCode {
     ValidationCode(JavaValidationRenderer renderer,
                    MessageValidation validation,
                    SourceFile file) {
-        this.renderer = renderer;
-        this.sourceFile = file;
-        this.typeName = validation.getName();
-        this.validation = validation;
-        this.atClassScope = sourceFile.at(CLASS_SCOPE.forType(this.typeName));
+        this.renderer = checkNotNull(renderer);
+        this.sourceFile = checkNotNull(file);
+        this.validation = checkNotNull(validation);
+        this.messageType = validation.getName();
     }
 
     /**
@@ -94,21 +93,35 @@ final class ValidationCode {
      */
     void generate() {
         implementValidatableMessage();
-        var constraintsCode = ValidationConstraintsCode.generate(renderer, validation);
-        atClassScope.add(validateMethod(constraintsCode.codeBlock()));
-        atClassScope.add(constraintsCode.supportingMembersLines());
+        handleConstraints();
         insertBeforeBuild();
     }
 
     private void implementValidatableMessage() {
-        var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(typeName));
+        var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(messageType));
         atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
     }
 
+    private void handleConstraints() {
+        var atClassScope = classScope();
+        var constraints = ValidationConstraintsCode.generate(renderer, validation);
+        atClassScope.add(validateMethod(constraints.codeBlock()));
+        atClassScope.add(constraints.supportingMembersLines());
+    }
+
+    private SourceAtPoint classScope() {
+        return sourceFile.at(CLASS_SCOPE.forType(this.messageType));
+    }
+
     private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
-        var validateMethod = new ValidateMethod(typeName, constraintsCode);
+        var validateMethod = new ValidateMethod(messageType, constraintsCode);
         var lines = validateMethod.generate();
         return lines;
+    }
+
+    private void insertBeforeBuild() {
+        sourceFile.at(new ValidateBeforeReturn(messageType))
+                  .add(validateBeforeBuild());
     }
 
     private static ImmutableList<String> validateBeforeBuild() {
@@ -122,10 +135,5 @@ final class ValidationCode {
                 .endControlFlow()
                 .build();
         return Poet.lines(code);
-    }
-
-    private void insertBeforeBuild() {
-        sourceFile.at(new ValidateBeforeReturn(typeName))
-                  .add(validateBeforeBuild());
     }
 }
