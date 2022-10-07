@@ -32,7 +32,7 @@ import com.google.protobuf.Message
  * Creates a copy of this message by copies of its properties and then applying
  * values of properties defined in the given block.
  */
-public fun <M: MessageWithConstraints, B: ValidatingBuilder<M>> M.copy(block: B.() -> Unit): M {
+public fun <M: ValidatableMessage, B: ValidatingBuilder<M>> M.copy(block: B.() -> Unit): M {
     @Suppress("UNCHECKED_CAST") // ensured by the generated code
     val builder = this.toBuilder() as B
     builder.block()

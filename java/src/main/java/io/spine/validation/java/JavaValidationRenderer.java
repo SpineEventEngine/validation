@@ -49,7 +49,7 @@ import io.spine.protodata.renderer.SourceFile;
 import io.spine.protodata.renderer.SourceFileSet;
 import io.spine.tools.code.CommonLanguages;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.MessageWithConstraints;
+import io.spine.validate.ValidatableMessage;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
@@ -107,14 +107,27 @@ public final class JavaValidationRenderer extends JavaRenderer {
     private static final int INDENT_LEVEL = 2;
     private static final Expression VIOLATIONS = new Literal("violations");
 
+    private @MonotonicNonNull SourceFileSet sources;
     private @MonotonicNonNull TypeSystem typeSystem;
+    private @MonotonicNonNull Validations validations;
 
     @Override
     protected void render(SourceFileSet sources) {
+        this.sources = sources;
         this.typeSystem = bakeTypeSystem();
-        var validations = findValidations();
+        this.validations = findValidations();
         var messageTypes = queryMessageTypes();
-        messageTypes.forEach(type -> generateCode(sources, validations, type));
+        messageTypes.forEach(this::generateCode);
+    }
+
+    private TypeSystem bakeTypeSystem() {
+        var files = select(ProtobufSourceFile.class).all();
+        var types = TypeSystem.newBuilder();
+        for (var file : files) {
+            file.getTypeMap().values().forEach(type -> types.put(file.getFile(), type));
+            file.getEnumTypeMap().values().forEach(type -> types.put(file.getFile(), type));
+        }
+        return types.build();
     }
 
     private Validations findValidations() {
@@ -129,11 +142,11 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 .flatMap(file -> file.getTypeMap().values().stream());
     }
 
-    private void generateCode(SourceFileSet sources, Validations validations, MessageType type) {
+    private void generateCode(MessageType type) {
         var protoFile = findProtoFile(type.getFile());
         var javaFile = javaFile(type, protoFile);
         sources.findFile(javaFile).ifPresent(sourceFile -> {
-            addValidationCode(sourceFile, type, validations);
+            addValidationCode(sourceFile, type);
         });
     }
 
@@ -146,27 +159,17 @@ public final class JavaValidationRenderer extends JavaRenderer {
                 )).getFile();
     }
 
-    private void addValidationCode(SourceFile sourceFile, MessageType type, Validations validations) {
+    private void addValidationCode(SourceFile sourceFile, MessageType type) {
         var validation = validations.get(type);
         var typeName = validation.getName();
         var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(typeName));
-        atMessageImplements.add(new ClassName(MessageWithConstraints.class) + ",");
+        atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
         var code = generateValidationCode(validation);
         var atClassScope = sourceFile.at(CLASS_SCOPE.forType(typeName));
         atClassScope.add(wrapToMethod(code, validation));
         atClassScope.add(code.supportingMembersLines());
         sourceFile.at(new Validate(typeName))
                   .add(validateBeforeBuild());
-    }
-
-    private TypeSystem bakeTypeSystem() {
-        var files = select(ProtobufSourceFile.class).all();
-        var types = TypeSystem.newBuilder();
-        for (var file : files) {
-            file.getTypeMap().values().forEach(type -> types.put(file.getFile(), type));
-            file.getEnumTypeMap().values().forEach(type -> types.put(file.getFile(), type));
-        }
-        return types.build();
     }
 
     private static ImmutableList<String> wrapToMethod(ValidationConstraintCode generated,

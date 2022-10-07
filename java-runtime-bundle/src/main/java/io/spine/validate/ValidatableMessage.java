@@ -26,24 +26,23 @@
 
 package io.spine.validate;
 
-import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Message;
-import io.spine.annotation.Beta;
+
+import java.util.Optional;
 
 /**
  * A message with validation constraints.
  *
  * <p>Please see {@code spine/options.proto} for the definitions of validation options.
  */
-@Beta
 @Immutable
-public interface MessageWithConstraints extends Message {
+public interface ValidatableMessage extends Message {
 
     /**
      * Validates this message according to the rules in the Protobuf definition.
      *
-     * @return a list of {@code ConstraintViolation}s or an empty list if the message is valid
+     * @return an error or {@link Optional#empty()} if no violations found
      */
-    ImmutableList<ConstraintViolation> validate();
+    Optional<ValidationError> validate();
 }
