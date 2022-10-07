@@ -32,9 +32,10 @@ import io.spine.annotation.GeneratedMixin;
 /**
  * Implementation base for generated message builders.
  *
- * <p>This interface defines a default method {@link #vBuild()} which validates the built message
- * before returning it to the user. In most cases, the users should use {@code vBuild()} and not
- * the {@code build()}. If a user specifically needs to skip validation, they should use
+ * <p>This interface defines a method {@link #build()} which validates the built message
+ * before returning it to the user.
+ *
+ * <p>If a user specifically needs to skip validation, they should use
  * {@link #buildPartial()} to make the intent explicit.
  *
  * @param <M>
@@ -44,19 +45,20 @@ import io.spine.annotation.GeneratedMixin;
 public interface ValidatingBuilder<M extends Message> extends Message.Builder {
 
     /**
-     * Constructs the message with the given fields.
+     * Constructs the message and validates it according to the constraints
+     * declared in Protobuf.
      *
-     * <p>Users should not call this method directly. Instead, call {@link #vBuild()} for
-     * a validated message or {@link #buildPartial()} to skip message validation.
+     * @return the built message
+     * @throws ValidationException
+     *         if the message is invalid
      */
     @Override
-    @NonValidated M build();
+    @Validated M build() throws ValidationException;
 
     /**
      * Constructs the message with the given fields without validation.
      *
-     * <p>Users should prefer {@link #vBuild()} over this method. However, in cases, when validation
-     * is not required, call this method instead of {@link #build()}.
+     * <p>Users should prefer {@link #build()} over this method.
      *
      * @return the build message, potentially invalid
      */
@@ -70,10 +72,10 @@ public interface ValidatingBuilder<M extends Message> extends Message.Builder {
      * @return the built message
      * @throws ValidationException
      *         if the message is invalid
+     * @deprecated please use {@link #build()}
      */
+    @Deprecated
     default @Validated M vBuild() throws ValidationException {
-        var message = build();
-        Validate.check(message);
-        return message;
+        return build();
     }
 }

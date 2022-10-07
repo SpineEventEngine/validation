@@ -36,7 +36,7 @@ public fun <M: MessageWithConstraints, B: ValidatingBuilder<M>> M.copy(block: B.
     @Suppress("UNCHECKED_CAST") // ensured by the generated code
     val builder = this.toBuilder() as B
     builder.block()
-    return builder.vBuild()
+    return builder.build()
 }
 
 /**

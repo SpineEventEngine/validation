@@ -44,7 +44,7 @@ class ErrorMessageTest {
                 ValidationException.class, () -> Usd.newBuilder()
                         .setCents(101)
                         .build());
-        var error = exception.asValidationError();
+        var error = exception.asMessage();
         assertThat(error.getConstraintViolationList())
              .hasSize(1);
         var violation = error.getConstraintViolation(0);

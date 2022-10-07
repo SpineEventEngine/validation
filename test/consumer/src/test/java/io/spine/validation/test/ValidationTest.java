@@ -511,7 +511,7 @@ class ValidationTest {
     @CanIgnoreReturnValue
     private static ConstraintViolation assertValidationException(Message.Builder builder) {
         var exception = assertThrows(ValidationException.class, builder::build);
-        var error = exception.asValidationError();
+        var error = exception.asMessage();
         assertThat(error.getConstraintViolationList())
                 .hasSize(1);
         return error.getConstraintViolation(0);

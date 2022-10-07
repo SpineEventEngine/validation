@@ -29,7 +29,6 @@ package io.spine.validation.java;
 import com.google.common.collect.ImmutableSet;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
-import io.spine.tools.code.CommonLanguages;
 import io.spine.validation.MessageValidation;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
