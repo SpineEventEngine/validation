@@ -132,6 +132,7 @@ final class ValidationCode {
 
     private void insertBeforeBuild() {
         sourceFile.at(new ValidateBeforeReturn(messageType))
+                  .withExtraIndentation(2)
                   .add(validateBeforeBuild());
     }
 
