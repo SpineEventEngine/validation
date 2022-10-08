@@ -116,7 +116,7 @@ final class ValidationCode {
     }
 
     private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
-        var validateMethod = new ValidateMethod(messageType, constraintsCode);
+        var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
         lines.addAll(Text.split(methodSpec.toString()))

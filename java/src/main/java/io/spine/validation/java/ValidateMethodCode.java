@@ -50,14 +50,14 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 /**
  * Wraps the passed constraints code into a method.
  */
-final class ValidateMethod {
+final class ValidateMethodCode {
 
     private static final String RETURN_LITERAL = "return $L";
 
     private final CodeBlock constraintsCode;
     private final TypeName messageType;
 
-    ValidateMethod(TypeName messageType, CodeBlock constraintsCode) {
+    ValidateMethodCode(TypeName messageType, CodeBlock constraintsCode) {
         this.constraintsCode = checkNotNull(constraintsCode);
         this.messageType = checkNotNull(messageType);
     }
