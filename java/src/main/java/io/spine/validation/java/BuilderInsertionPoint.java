@@ -77,7 +77,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
      * @return the found binder code or {@code null} if no builder class found
      */
     protected final @Nullable JavaClassSource findBuilder(Text code) {
-        var classSource = findClass(code);
+        var classSource = findMessageClass(code);
         if (classSource == null) {
             return null;
         }
@@ -92,7 +92,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         return builderClass;
     }
 
-    private @Nullable JavaClassSource findClass(Text code) {
+    private @Nullable JavaClassSource findMessageClass(Text code) {
         var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return null;
@@ -113,7 +113,8 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
     }
 
     private static
-    @Nullable JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
+    @Nullable
+    JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
         var source = topLevelClass;
         for (var name : names) {
             if (!source.hasNestedType(name)) {
