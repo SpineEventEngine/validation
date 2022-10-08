@@ -38,6 +38,7 @@ import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFile;
+import io.spine.util.Lines;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;

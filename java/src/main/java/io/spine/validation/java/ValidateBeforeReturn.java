@@ -26,6 +26,7 @@
 
 package io.spine.validation.java;
 
+import io.spine.util.Lines;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
 
