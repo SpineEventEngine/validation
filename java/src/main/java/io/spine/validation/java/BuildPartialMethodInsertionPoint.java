@@ -30,7 +30,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
 import io.spine.util.Text;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 
