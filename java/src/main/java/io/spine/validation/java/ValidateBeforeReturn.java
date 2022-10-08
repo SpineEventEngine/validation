@@ -26,7 +26,7 @@
 
 package io.spine.validation.java;
 
-import io.spine.util.Lines;
+import io.spine.util.Text;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
 
@@ -60,7 +60,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
         if (typeNameNotFound) {
             return LineNumber.notInFile();
         }
-        var code = Lines.join(lines);
+        var code = Text.join(lines);
         var builderClass = findBuilder(code);
         if (builderClass == null) {
             return LineNumber.notInFile();
@@ -89,7 +89,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     }
 
     private static int returnLineIndex(String code) {
-        var methodLines = Lines.split(code);
+        var methodLines = Text.split(code);
         var returnIndex = 0;
         for (var line : methodLines) {
             if (RETURN_LINE.matcher(line).matches()) {
