@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.protodata.renderer.LineNumber.notInFile;
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
@@ -58,16 +59,16 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     public LineNumber locate(List<String> lines) {
         var typeNameNotFound = !isTypeNameIn(lines);
         if (typeNameNotFound) {
-            return LineNumber.notInFile();
+            return notInFile();
         }
         var code = Text.join(lines);
         var builderClass = findBuilder(code);
         if (builderClass == null) {
-            return LineNumber.notInFile();
+            return notInFile();
         }
         var method = builderClass.getMethod(BUILD_METHOD);
         if (method == null) {
-            return LineNumber.notInFile();
+            return notInFile();
         }
         var methodDeclarationLine = method.getLineNumber();
         var startPosition = method.getStartPosition();

@@ -38,7 +38,7 @@ import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.util.Lines;
+import io.spine.util.Text;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
@@ -119,7 +119,7 @@ final class ValidationCode {
         var validateMethod = new ValidateMethod(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
-        lines.addAll(Lines.split(methodSpec.toString()))
+        lines.addAll(Text.split(methodSpec.toString()))
              .add(lineSeparator());
         return lines.build();
     }
