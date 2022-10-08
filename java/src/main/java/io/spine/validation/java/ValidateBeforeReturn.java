@@ -26,9 +26,9 @@
 
 package io.spine.validation.java;
 
-import io.spine.util.Text;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
+import io.spine.util.Text;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -44,7 +44,6 @@ import static io.spine.protodata.renderer.LineNumber.notInFile;
 final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
-    private static final String BUILD_METHOD = "build";
 
     ValidateBeforeReturn(TypeName type) {
         super(type);
@@ -57,36 +56,22 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     @Override
     public LineNumber locate(List<String> lines) {
-        var typeNameNotFound = !isTypeNameIn(lines);
-        if (typeNameNotFound) {
+        var text = new Text(lines);
+        if (!containsMessageType(text)) {
             return notInFile();
         }
-        var code = Text.join(lines);
-        var builderClass = findBuilder(code);
-        if (builderClass == null) {
-            return notInFile();
-        }
-        var method = builderClass.getMethod(BUILD_METHOD);
+        var method = findBuildMethod(text);
         if (method == null) {
             return notInFile();
         }
         var methodDeclarationLine = method.getLineNumber();
         var startPosition = method.getStartPosition();
         var endPosition = method.getEndPosition();
+        var code = text.toString();
         var methodSource = code.substring(startPosition, endPosition);
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
         return LineNumber.at(returnLineNumber - 1);
-    }
-
-    private boolean isTypeNameIn(List<String> lines) {
-        var simpleName = messageType().getSimpleName();
-        for (var line : lines) {
-            if (line.contains(simpleName)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static int returnLineIndex(String code) {

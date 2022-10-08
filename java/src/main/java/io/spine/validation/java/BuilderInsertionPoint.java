@@ -28,9 +28,11 @@ package io.spine.validation.java;
 
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.util.Text;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -52,6 +54,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
      * for the same input.
      */
     private static final ParsedSources parsedSources = new ParsedSources();
+    private static final String BUILD_METHOD = "build";
 
     private final TypeName messageType;
 
@@ -73,7 +76,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
      *         the Java code to parse
      * @return the found binder code or {@code null} if no builder class found
      */
-    protected final @Nullable JavaClassSource findBuilder(String code) {
+    protected final @Nullable JavaClassSource findBuilder(Text code) {
         var classSource = findClass(code);
         if (classSource == null) {
             return null;
@@ -89,7 +92,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         return builderClass;
     }
 
-    private @Nullable JavaClassSource findClass(String code) {
+    private @Nullable JavaClassSource findClass(Text code) {
         var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return null;
@@ -105,7 +108,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         return result;
     }
 
-    private static JavaSource<?> parseSource(String code) {
+    private static JavaSource<?> parseSource(Text code) {
         return parsedSources.get(code);
     }
 
@@ -123,5 +126,24 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
             source = (JavaClassSource) nestedType;
         }
         return source;
+    }
+
+    protected final boolean containsMessageType(Text text) {
+        var simpleName = messageType().getSimpleName();
+        for (var line : text.lines()) {
+            if (line.contains(simpleName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    protected final MethodSource<JavaClassSource> findBuildMethod(Text code) {
+        var builderClass = findBuilder(code);
+        var method = builderClass != null
+                ? builderClass.getMethod(BUILD_METHOD)
+                : null;
+        return method;
     }
 }

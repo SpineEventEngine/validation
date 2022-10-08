@@ -29,6 +29,7 @@ package io.spine.validation.java;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import io.spine.util.Text;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
@@ -40,16 +41,16 @@ final class ParsedSources {
     /**
      * Cached results of parsing the Java source code.
      */
-    private final LoadingCache<String, JavaSource<?>> cache =
+    private final LoadingCache<Text, JavaSource<?>> cache =
             CacheBuilder.newBuilder()
                     .maximumSize(300)
                     .build(loader());
 
-    private static CacheLoader<String, JavaSource<?>> loader() {
+    private static CacheLoader<Text, JavaSource<?>> loader() {
         return new CacheLoader<>() {
             @Override
-            public JavaSource<?> load(String code) {
-                var result = Roaster.parse(JavaSource.class, code);
+            public JavaSource<?> load(Text code) {
+                var result = Roaster.parse(JavaSource.class, code.toString());
                 return result;
             }
         };
@@ -62,7 +63,7 @@ final class ParsedSources {
      * <p>If the code was parsed previously, most likely the cached result
      * is returned right away, as the cache stores 300 items max.
      */
-    JavaSource<?> get(String code) {
+    JavaSource<?> get(Text code) {
         var result = cache.getUnchecked(code);
         return result;
     }
