@@ -54,7 +54,7 @@ final class BuildPartialMethodInsertionPoint extends BuilderInsertionPoint {
     }
 
     @Override
-    public LineNumber locate(@NonNull List<String> lines) {
+    public LineNumber locate(List<String> lines) {
         var text = new Text(lines);
         var method = findMethod(text, BUILD_PARTIAL_METHOD);
         if (method == null) {
