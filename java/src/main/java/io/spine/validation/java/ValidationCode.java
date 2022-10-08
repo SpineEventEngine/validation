@@ -39,11 +39,14 @@ import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtPoint;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.util.Text;
+import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
+import io.spine.validate.Validated;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
@@ -58,6 +61,7 @@ import static java.lang.System.lineSeparator;
  *
  * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
  */
+@SuppressWarnings("OverlyCoupledClass")
 final class ValidationCode {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
@@ -97,6 +101,8 @@ final class ValidationCode {
         implementValidatableMessage();
         handleConstraints();
         insertBeforeBuild();
+        annotateBuildMethod();
+        annotateBuildPartialMethod();
     }
 
     private void implementValidatableMessage() {
@@ -140,5 +146,21 @@ final class ValidationCode {
                 .endControlFlow()
                 .build();
         return Poet.lines(code);
+    }
+
+    private void annotateBuildMethod() {
+        var buildMethod = new BuildMethodInsertionPoint(messageType);
+        sourceFile.at(buildMethod)
+                  .add(annotation(Validated.class));
+    }
+
+    private void annotateBuildPartialMethod() {
+        var buildPartialMethod = new BuildPartialMethodInsertionPoint(messageType);
+        sourceFile.at(buildPartialMethod)
+                  .add(annotation(NonValidated.class));
+    }
+
+    private static String annotation(Class<? extends Annotation> annotationClass) {
+        return '@' + annotationClass.getName();
     }
 }

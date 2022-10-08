@@ -26,6 +26,7 @@
 
 package io.spine.validation.java;
 
+import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.util.Text;
@@ -43,7 +44,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Abstract base for insertion points for generated code implementing
  * {@link io.spine.validate.ValidatingBuilder ValidatingBuilder} interface.
  */
-public abstract class BuilderInsertionPoint implements InsertionPoint {
+@Immutable
+abstract class BuilderInsertionPoint implements InsertionPoint {
 
     private static final String BUILDER_CLASS = "Builder";
 
@@ -54,7 +56,9 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
      * for the same input.
      */
     private static final ParsedSources parsedSources = new ParsedSources();
-    private static final String BUILD_METHOD = "build";
+
+    static final String BUILD_METHOD = "build";
+    static final String BUILD_PARTIAL_METHOD = "buildPartial";
 
     private final TypeName messageType;
 
@@ -104,7 +108,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         if (source.getName().equals(names.peek())) {
             names.poll();
         }
-        var result = findSubClass(source, names);
+        var result = findNestedClass(source, names);
         return result;
     }
 
@@ -113,8 +117,8 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
     }
 
     private static
-    @Nullable
-    JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
+    @Nullable JavaClassSource findNestedClass(JavaClassSource topLevelClass,
+                                              Iterable<String> names) {
         var source = topLevelClass;
         for (var name : names) {
             if (!source.hasNestedType(name)) {
@@ -129,7 +133,7 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
         return source;
     }
 
-    protected final boolean containsMessageType(Text text) {
+    final boolean containsMessageType(Text text) {
         var simpleName = messageType().getSimpleName();
         for (var line : text.lines()) {
             if (line.contains(simpleName)) {
@@ -140,11 +144,11 @@ public abstract class BuilderInsertionPoint implements InsertionPoint {
     }
 
     @Nullable
-    protected final MethodSource<JavaClassSource> findBuildMethod(Text code) {
+    final MethodSource<JavaClassSource> findMethod(Text code, String methodName) {
         var builderClass = findBuilder(code);
         var method = builderClass != null
-                ? builderClass.getMethod(BUILD_METHOD)
-                : null;
+                     ? builderClass.getMethod(methodName)
+                     : null;
         return method;
     }
 }

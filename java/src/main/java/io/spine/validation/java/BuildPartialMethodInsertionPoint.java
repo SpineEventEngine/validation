@@ -30,61 +30,37 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
 import io.spine.util.Text;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.protodata.renderer.LineNumber.notInFile;
+import static java.lang.String.format;
 
 /**
- * An insertion point at the place where Java validation code should be inserted.
- *
- * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
+ * Locates the placement of the {@code Builder.buildPartial()} method.
  */
 @Immutable
-final class ValidateBeforeReturn extends BuilderInsertionPoint {
+final class BuildPartialMethodInsertionPoint extends BuilderInsertionPoint {
 
-    private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
-
-    ValidateBeforeReturn(TypeName type) {
-        super(type);
+    BuildPartialMethodInsertionPoint(TypeName messageType) {
+        super(messageType);
     }
 
     @Override
     public String getLabel() {
-        return String.format("validate:%s", typeUrl(messageType()));
+        return format("buildPartial:%s", typeUrl(messageType()));
     }
 
     @Override
-    public LineNumber locate(List<String> lines) {
+    public LineNumber locate(@NonNull List<String> lines) {
         var text = new Text(lines);
-        if (!containsMessageType(text)) {
-            return notInFile();
-        }
-        var method = findMethod(text, BUILD_METHOD);
+        var method = findMethod(text, BUILD_PARTIAL_METHOD);
         if (method == null) {
             return notInFile();
         }
         var methodDeclarationLine = method.getLineNumber();
-        var startPosition = method.getStartPosition();
-        var endPosition = method.getEndPosition();
-        var code = text.toString();
-        var methodSource = code.substring(startPosition, endPosition);
-        var returnIndex = returnLineIndex(methodSource);
-        var returnLineNumber = methodDeclarationLine + returnIndex;
-        return LineNumber.at(returnLineNumber - 1);
-    }
-
-    private static int returnLineIndex(String code) {
-        var methodLines = Text.split(code);
-        var returnIndex = 0;
-        for (var line : methodLines) {
-            if (RETURN_LINE.matcher(line).matches()) {
-                return returnIndex;
-            }
-            returnIndex++;
-        }
-        throw new IllegalArgumentException("No return line.");
+        return LineNumber.at(methodDeclarationLine);
     }
 }
