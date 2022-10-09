@@ -161,9 +161,13 @@ final class ValidationCode {
                   .add(annotation(NonValidated.class));
     }
 
+    /**
+     * Creates a string to be used in the code when using the given annotation class.
+     *
+     * @implNote Adds space before `@` so that when the type is fully qualified, the
+     *         annotation is: 1) visible better 2) two or more annotations are separated.
+     */
     private static String annotation(Class<? extends Annotation> annotationClass) {
-        // Add space before `@` so that when the type is fully qualified, the annotation
-        // is: 1) visible better 2) two or more annotations are separated.
         return " @" + annotationClass.getName();
     }
 }
