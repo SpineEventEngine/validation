@@ -150,18 +150,20 @@ final class ValidationCode {
     }
 
     private void annotateBuildMethod() {
-        var buildMethod = new BuildMethodInsertionPoint(messageType);
+        var buildMethod = new BuildMethodReturnTypeAnnotation(messageType);
         sourceFile.at(buildMethod)
                   .add(annotation(Validated.class));
     }
 
     private void annotateBuildPartialMethod() {
-        var buildPartialMethod = new BuildPartialMethodInsertionPoint(messageType);
+        var buildPartialMethod = new BuildPartialReturnTypeAnnotation(messageType);
         sourceFile.at(buildPartialMethod)
                   .add(annotation(NonValidated.class));
     }
 
     private static String annotation(Class<? extends Annotation> annotationClass) {
-        return '@' + annotationClass.getName();
+        // Add space before `@` so that when the type is fully qualified, the annotation
+        // is: 1) visible better 2) two or more annotations are separated.
+        return " @" + annotationClass.getName();
     }
 }

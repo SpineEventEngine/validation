@@ -38,12 +38,12 @@ import static io.spine.protodata.renderer.LineNumber.notInFile;
 import static java.lang.String.format;
 
 /**
- * Locates the placement of the {@code Builder.build()} method.
+ * Locates the placement for annotating the type returned by the {@code Builder.build()} method.
  */
 @Immutable
-final class BuildMethodInsertionPoint extends BuilderInsertionPoint {
+final class BuildMethodReturnTypeAnnotation extends BuilderInsertionPoint {
 
-    BuildMethodInsertionPoint(TypeName messageType) {
+    BuildMethodReturnTypeAnnotation(TypeName messageType) {
         super(messageType);
     }
 
@@ -60,6 +60,9 @@ final class BuildMethodInsertionPoint extends BuilderInsertionPoint {
             return notInFile();
         }
         var methodDeclarationLine = method.getLineNumber();
-        return LineNumber.at(methodDeclarationLine);
+        //TODO:2022-10-09:alexander.yevsyukov: We should return a placement inside the line
+        // after the package name and before the type name.
+        // See https://github.com/SpineEventEngine/ProtoData/issues/84
+        return LineNumber.at(methodDeclarationLine - 2);
     }
 }
