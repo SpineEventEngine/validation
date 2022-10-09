@@ -26,35 +26,28 @@
 
 package io.spine.validation.java;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
+import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.LineNumber;
+import io.spine.util.Text;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.Ast.typeUrl;
 
 /**
- * An insertion point at the place where Java validation code should be inserted.
- *
- * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
+ * Abstract base for insertion points for generated code implementing
+ * {@link io.spine.validate.ValidatingBuilder ValidatingBuilder} interface.
  */
-final class Validate implements InsertionPoint {
+@Immutable
+abstract class BuilderInsertionPoint implements InsertionPoint {
 
-    private static final Splitter LINE_SPLITTER = Splitter.on(System.lineSeparator());
-    private static final Joiner LINE_JOINER = Joiner.on(System.lineSeparator());
-    private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
     private static final String BUILDER_CLASS = "Builder";
-    private static final String BUILD_METHOD = "build";
 
     /**
      * Cached results of parsing the Java source code.
@@ -64,53 +57,31 @@ final class Validate implements InsertionPoint {
      */
     private static final ParsedSources parsedSources = new ParsedSources();
 
-    private final TypeName type;
+    static final String BUILD_METHOD = "build";
+    static final String BUILD_PARTIAL_METHOD = "buildPartial";
 
-    Validate(TypeName type) {
-        this.type = checkNotNull(type);
+    private final TypeName messageType;
+
+    BuilderInsertionPoint(TypeName messageType) {
+        this.messageType = checkNotNull(messageType);
     }
 
-    @Override
-    public String getLabel() {
-        return String.format("validate:%s", typeUrl(type));
+    /**
+     * Obtains the name of the message type for which we find insertion point.
+     */
+    protected final TypeName messageType() {
+        return messageType;
     }
 
-    @Override
-    public LineNumber locate(List<String> lines) {
-        var typeNameNotFound = !isTypeNameIn(lines);
-        if (typeNameNotFound) {
-            return LineNumber.notInFile();
-        }
-        var code = LINE_JOINER.join(lines);
-        var builderClass = findBuilder(code);
-        if (builderClass == null) {
-            return LineNumber.notInFile();
-        }
-        var method = builderClass.getMethod(BUILD_METHOD);
-        if (method == null) {
-            return LineNumber.notInFile();
-        }
-        var methodDeclarationLine = method.getLineNumber();
-        var startPosition = method.getStartPosition();
-        var endPosition = method.getEndPosition();
-        var methodSource = code.substring(startPosition, endPosition);
-        var returnIndex = returnLineIndex(methodSource);
-        var returnLineNumber = methodDeclarationLine + returnIndex;
-        return LineNumber.at(returnLineNumber - 1);
-    }
-
-    private boolean isTypeNameIn(List<String> lines) {
-        var simpleName = type.getSimpleName();
-        for (var line : lines) {
-            if (line.contains(simpleName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private @Nullable JavaClassSource findBuilder(String code) {
-        var classSource = findClass(code);
+    /**
+     * Obtains the Java class source for the builder in the given code.
+     *
+     * @param code
+     *         the Java code to parse
+     * @return the found binder code or {@code null} if no builder class found
+     */
+    protected final @Nullable JavaClassSource findBuilder(Text code) {
+        var classSource = findMessageClass(code);
         if (classSource == null) {
             return null;
         }
@@ -125,27 +96,29 @@ final class Validate implements InsertionPoint {
         return builderClass;
     }
 
-    private @Nullable JavaClassSource findClass(String code) {
+    private @Nullable JavaClassSource findMessageClass(Text code) {
         var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return null;
         }
         var source = (JavaClassSource) javaSource;
-        Deque<String> names = new ArrayDeque<>(type.getNestingTypeNameList());
-        names.addLast(type.getSimpleName());
+        Deque<String> names = new ArrayDeque<>(messageType.getNestingTypeNameList());
+        names.addLast(messageType.getSimpleName());
 
         if (source.getName().equals(names.peek())) {
             names.poll();
         }
-        return findSubClass(source, names);
+        var result = findNestedClass(source, names);
+        return result;
     }
 
-    private static JavaSource<?> parseSource(String code) {
+    private static JavaSource<?> parseSource(Text code) {
         return parsedSources.get(code);
     }
 
     private static
-    @Nullable JavaClassSource findSubClass(JavaClassSource topLevelClass, Iterable<String> names) {
+    @Nullable JavaClassSource findNestedClass(JavaClassSource topLevelClass,
+                                              Iterable<String> names) {
         var source = topLevelClass;
         for (var name : names) {
             if (!source.hasNestedType(name)) {
@@ -160,15 +133,22 @@ final class Validate implements InsertionPoint {
         return source;
     }
 
-    private static int returnLineIndex(String code) {
-        var methodLines = LINE_SPLITTER.splitToList(code);
-        var returnIndex = 0;
-        for (var line : methodLines) {
-            if (RETURN_LINE.matcher(line).matches()) {
-                return returnIndex;
+    final boolean containsMessageType(Text text) {
+        var simpleName = messageType().getSimpleName();
+        for (var line : text.lines()) {
+            if (line.contains(simpleName)) {
+                return true;
             }
-            returnIndex++;
         }
-        throw new IllegalArgumentException("No return line.");
+        return false;
+    }
+
+    @Nullable
+    final MethodSource<JavaClassSource> findMethod(Text code, String methodName) {
+        var builderClass = findBuilder(code);
+        var method = builderClass != null
+                     ? builderClass.getMethod(methodName)
+                     : null;
+        return method;
     }
 }

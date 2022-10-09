@@ -26,46 +26,44 @@
 
 package io.spine.validation.java;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.squareup.javapoet.CodeBlock;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.protodata.TypeName;
+import io.spine.protodata.renderer.LineNumber;
+import io.spine.util.Text;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableList.toImmutableList;
-import static java.lang.System.lineSeparator;
+import java.util.List;
+
+import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.protodata.renderer.LineNumber.notInFile;
+import static java.lang.String.format;
 
 /**
- * Code generated for a validation constraint.
+ * Locates the placement for annotating the type returned by
+ * the {@code Builder.buildPartial()} method.
  */
-final class ValidationConstraintCode {
+@Immutable
+final class BuildPartialReturnTypeAnnotation extends BuilderInsertionPoint {
 
-    private static final Splitter onNewLine = Splitter.on(lineSeparator());
-
-    /**
-     * The code which performs validation.
-     */
-    private final CodeBlock code;
-
-    /**
-     * Class-level declarations used in the validation code.
-     */
-    private final ImmutableList<CodeBlock> supportingMembers;
-
-    ValidationConstraintCode(CodeBlock code, ImmutableList<CodeBlock> members) {
-        this.code = checkNotNull(code);
-        this.supportingMembers = checkNotNull(members);
+    BuildPartialReturnTypeAnnotation(TypeName messageType) {
+        super(messageType);
     }
 
-    CodeBlock codeBlock() {
-        return code;
+    @Override
+    public String getLabel() {
+        return format("buildPartial:%s", typeUrl(messageType()));
     }
 
-    /**
-     * Obtains class-level declarations used in the validation code as code lines.
-     */
-    ImmutableList<String> supportingMembersLines() {
-        return supportingMembers.stream()
-                .flatMap(code -> onNewLine.splitToStream(code.toString()))
-                .collect(toImmutableList());
+    @Override
+    public LineNumber locate(List<String> lines) {
+        var text = new Text(lines);
+        var method = findMethod(text, BUILD_PARTIAL_METHOD);
+        if (method == null) {
+            return notInFile();
+        }
+        var methodDeclarationLine = method.getLineNumber();
+        //TODO:2022-10-09:alexander.yevsyukov: We should return a placement inside the line
+        // after the package name and before the type name.
+        // See https://github.com/SpineEventEngine/ProtoData/issues/84
+        return LineNumber.at(methodDeclarationLine);
     }
 }

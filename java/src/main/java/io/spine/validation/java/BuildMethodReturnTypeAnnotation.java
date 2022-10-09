@@ -26,45 +26,43 @@
 
 package io.spine.validation.java;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.protodata.TypeName;
+import io.spine.protodata.renderer.LineNumber;
 import io.spine.util.Text;
-import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.JavaSource;
+
+import java.util.List;
+
+import static io.spine.protodata.Ast.typeUrl;
+import static io.spine.protodata.renderer.LineNumber.notInFile;
+import static java.lang.String.format;
 
 /**
- * Parses the source code via {@code Roaster} and caches the results for further use.
+ * Locates the placement for annotating the type returned by the {@code Builder.build()} method.
  */
-final class ParsedSources {
+@Immutable
+final class BuildMethodReturnTypeAnnotation extends BuilderInsertionPoint {
 
-    /**
-     * Cached results of parsing the Java source code.
-     */
-    private final LoadingCache<Text, JavaSource<?>> cache =
-            CacheBuilder.newBuilder()
-                    .maximumSize(300)
-                    .build(loader());
-
-    private static CacheLoader<Text, JavaSource<?>> loader() {
-        return new CacheLoader<>() {
-            @Override
-            public JavaSource<?> load(Text code) {
-                var result = Roaster.parse(JavaSource.class, code.toString());
-                return result;
-            }
-        };
+    BuildMethodReturnTypeAnnotation(TypeName messageType) {
+        super(messageType);
     }
 
-    /**
-     * Parses the Java code and returns it as the parsed {@code JavaSource},
-     * caching it for future use.
-     *
-     * <p>If the code was parsed previously, most likely the cached result
-     * is returned right away, as the cache stores 300 items max.
-     */
-    JavaSource<?> get(Text code) {
-        var result = cache.getUnchecked(code);
-        return result;
+    @Override
+    public String getLabel() {
+        return format("build:%s", typeUrl(messageType()));
+    }
+
+    @Override
+    public LineNumber locate(List<String> lines) {
+        var text = new Text(lines);
+        var method = findMethod(text, BUILD_METHOD);
+        if (method == null) {
+            return notInFile();
+        }
+        var methodDeclarationLine = method.getLineNumber();
+        //TODO:2022-10-09:alexander.yevsyukov: We should return a placement inside the line
+        // after the package name and before the type name.
+        // See https://github.com/SpineEventEngine/ProtoData/issues/84
+        return LineNumber.at(methodDeclarationLine - 2);
     }
 }

@@ -94,9 +94,12 @@ public final class Validate {
      * @return violations of the validation rules or an empty list if the message is valid
      */
     public static List<ConstraintViolation> violationsOf(Message message) {
-        return message instanceof MessageWithConstraints
-               ? ((MessageWithConstraints) message).validate()
-               : validateAtRuntime(message);
+        if (message instanceof ValidatableMessage) {
+            var error = ((ValidatableMessage) message).validate();
+            return error.map(ValidationError::getConstraintViolationList)
+                        .orElse(ImmutableList.of());
+        }
+        return validateAtRuntime(message);
     }
 
     private static List<ConstraintViolation> validateAtRuntime(Message message) {
