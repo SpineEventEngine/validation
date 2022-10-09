@@ -31,7 +31,6 @@ import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.protobuf.setup
-import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
@@ -42,8 +41,6 @@ plugins {
     id("com.github.johnrengelman.shadow").version("7.1.2")
     java
 }
-
-apply<IncrementGuard>()
 
 dependencies {
     Protobuf.libs.forEach { api(it) }
