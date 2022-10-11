@@ -57,4 +57,5 @@ dependencies {
     protoData(project(":java"))
     implementation("io.spine:spine-base:$spineBaseVersion")
     implementation(project(":java-runtime-bundle"))
+    testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
 }
