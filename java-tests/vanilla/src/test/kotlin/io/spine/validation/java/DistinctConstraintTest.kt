@@ -75,7 +75,7 @@ internal class DistinctConstraintTest {
     }
 }
 
-private fun protoSet(): ProtoSet = ProtoSet.newBuilder().build()
+private fun protoSet(): @Validated ProtoSet = ProtoSet.newBuilder().build()
 
 private fun <T> protoSet(vararg element: T): @Validated ProtoSet {
     val result = ProtoSet.newBuilder()
