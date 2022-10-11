@@ -106,7 +106,9 @@ final class ValidationCode {
     }
 
     private void implementValidatableMessage() {
-        var atMessageImplements = sourceFile.at(MESSAGE_IMPLEMENTS.forType(messageType));
+        var atMessageImplements =
+                sourceFile.at(MESSAGE_IMPLEMENTS.forType(messageType))
+                          .withExtraIndentation(1);
         atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
     }
 
