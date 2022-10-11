@@ -23,27 +23,50 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-println("`slow-tests.gradle` script is deprecated. " +
-        "Please use `TaskContainer.registerTestTasks()` instead.")
+package spine.validation.given;
 
-final def slowTag = 'slow' // See io.spine.testing.SlowTest
+import "spine/options.proto";
 
-task fastTest(type: Test) {
-    description = 'Executes all JUnit tests but the ones tagged as "slow".'
-    group = 'Verification'
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.java.given";
+option java_outer_classname = "IsRequiredProto";
+option java_multiple_files = true;
 
-    useJUnitPlatform {
-        excludeTags slowTag
+// A data type with one `oneof` required and one optional.
+message Meal {
+
+    // This `oneof` must contain a selected choice.
+    oneof choice {
+        option (is_required) = true;
+
+        Fish fish = 1;
+        Meat meat = 2;
+        Vegetables veggies = 3;
+    }
+
+    // This `oneof` may be empty.
+    oneof sauce {
+        option (is_required) = false;
+
+        Sauce ketchup = 4;
+        Sauce cheese = 5;
     }
 }
 
-task slowTest(type: Test) {
-    description = 'Executes JUnit tests tagged as "slow".'
-    group = 'Verification'
+message Fish {
+    string description = 1;
+}
 
-    useJUnitPlatform {
-        includeTags slowTag
-    }
-    shouldRunAfter fastTest
+message Meat {
+    string description = 1;
+}
+
+message Vegetables {
+    string description = 1;
+}
+
+message Sauce {
+    string description = 1;
 }

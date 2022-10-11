@@ -24,22 +24,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Apply this script if it is needed to use test classes of the current project in other projects.
-// The dependency looks like this:
-//
-// testCompile project(path: ":projectWithTests", configuration: 'testArtifacts')
-//
+import io.spine.internal.dependency.Protobuf
+import io.spine.protodata.gradle.plugin.LaunchProtoData
 
-println("`test-artifacts.gradle` script is deprecated. " +
-        "Please use the `Project.exposeTestArtifacts()` utility instead.")
+plugins {
+    id("io.spine.protodata")
+}
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
+protoData {
+    renderers(
+        "io.spine.validation.java.PrintValidationInsertionPoints",
+        "io.spine.validation.java.JavaValidationRenderer",
+
+        // Suppress warnings in the generated code.
+        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
+        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+    )
+    plugins(
+        "io.spine.validation.ValidationPlugin"
+    )
 }
-task testJar(type: Jar) {
-    classifier "test"
-    from sourceSets.test.output
+
+// Skip validation code generation provided by `mc-java` because we generate our own.
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
+    }
 }
-artifacts {
-    testArtifacts testJar
+
+val spineBaseVersion: String by extra
+
+dependencies {
+    protoData(project(":java"))
+    implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(project(":java-runtime-bundle"))
 }
