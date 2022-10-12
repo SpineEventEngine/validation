@@ -46,6 +46,10 @@ internal class GoesConstraintTest {
         const val UNTIL = "Until code rendering for (goes_with) is migrated from `mc-java`"
     }
 
+    private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()
+
+    private fun generate(): ArchiveId = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
+
     @Test
     @Disabled(UNTIL)
     fun `if associated field is not set and the target field is set 'a violation is produced'`() {
@@ -97,6 +101,3 @@ internal class GoesConstraintTest {
     }
 }
 
-private fun assertValid(paper: Paper) = assertThat(paper.validate()).isEmpty()
-
-fun generate(): ArchiveId = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
