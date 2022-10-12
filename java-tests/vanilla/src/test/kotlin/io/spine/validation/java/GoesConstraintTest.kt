@@ -32,6 +32,7 @@ import io.spine.base.FieldPath
 import io.spine.base.Identifier
 import io.spine.base.Time
 import io.spine.type.TypeName
+import io.spine.validate.ValidatableMessage
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.java.given.ArchiveId
 import io.spine.validation.java.given.Paper
