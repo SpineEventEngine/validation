@@ -25,9 +25,9 @@
  */
 package io.spine.validation.java
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth8.assertThat
-import com.google.common.truth.extensions.proto.ProtoTruth
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.FieldPath
 import io.spine.base.Identifier
 import io.spine.base.Time
@@ -57,9 +57,9 @@ internal class GoesConstraintTest {
         assertThat(error).isPresent()
 
         val violations = error.get().getConstraintViolationList()
-        Truth.assertThat(violations)
+        assertThat(violations)
             .hasSize(1)
-        ProtoTruth.assertThat(violations.get(0))
+        assertThat(violations.get(0))
             .comparingExpectedFieldsOnly()
             .isEqualTo(
                 ConstraintViolation.newBuilder()
