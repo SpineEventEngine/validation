@@ -23,30 +23,39 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
+package spine.validation.given;
 
-/*
- * This script configures Gradle PMD plugin.
- */
-pmd {
-    toolVersion = "${io.spine.internal.dependency.Pmd.version}"
-    consoleOutput = true
-    incrementalAnalysis = true
+import "spine/options.proto";
 
-    // The build is going to fail in case of violations.
-    ignoreFailures = false
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.java.given";
+option java_outer_classname = "GoesProto";
+option java_multiple_files = true;
 
-    // Disable the default rule set to use the custom rules (see below).
-    ruleSets = []
+import "google/protobuf/timestamp.proto";
 
-    // A set of custom rules.
-    ruleSetFiles = files("$rootDir/config/quality/pmd.xml")
+// A paper document, which can be put into an archive.
+//
+// See `GoesConstraintTest`.
+//
+message Paper {
 
-    reportsDir = file("build/reports/pmd")
+    // The reference to archive.
+    // The paper was not archived if this field is in the default value.
+    // If this field is set, the time of the archiving _may_ be stored in the [when_archived] field,
+    // but there are cases when archiving time is not known.
+    ArchiveId archive = 1;
 
-    // Just analyze the main sources; do not analyze tests.
-    sourceSets = [sourceSets.main]
+    // When the document was archived.
+    // This field make sense only if the paper is in [archive].
+    google.protobuf.Timestamp when_archived = 2 [(goes).with = "archive"];
+
+    // Other fields that would normally go into such a data type are omitted for simplicity.
 }
 
-// Workaround for https://github.com/pmd/pmd/issues/1705.
-pmdMain.classpath += sourceSets.main.runtimeClasspath
+// An ID of an archive which stores papers.
+message ArchiveId {
+    string uuid = 1;
+}

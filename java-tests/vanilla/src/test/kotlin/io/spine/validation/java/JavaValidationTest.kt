@@ -24,22 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Apply this script if it is needed to use test classes of the current project in other projects.
-// The dependency looks like this:
-//
-// testCompile project(path: ":projectWithTests", configuration: 'testArtifacts')
-//
+package io.spine.validation.java
 
-println("`test-artifacts.gradle` script is deprecated. " +
-        "Please use the `Project.exposeTestArtifacts()` utility instead.")
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-configurations {
-    testArtifacts.extendsFrom testRuntime
-}
-task testJar(type: Jar) {
-    classifier "test"
-    from sourceSets.test.output
-}
-artifacts {
-    testArtifacts testJar
+import com.google.common.truth.Truth.assertThat
+import io.spine.validate.ValidatableMessage
+
+import io.spine.validation.java.given.Meal
+
+@DisplayName("Validation code for Java should")
+internal class JavaValidationTest {
+
+    @Test
+    fun `implement 'ValidatableMessage'`() {
+        assertThat(Meal.getDefaultInstance()).isInstanceOf(ValidatableMessage::class.java)
+    }
 }

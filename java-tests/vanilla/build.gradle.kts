@@ -24,33 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-configurations {
-    excludeInternalDoclet
+plugins {
+    id("io.spine.protodata")
 }
+
+protoData {
+    renderers(
+        "io.spine.validation.java.PrintValidationInsertionPoints",
+        "io.spine.validation.java.JavaValidationRenderer",
+
+        // Suppress warnings in the generated code.
+        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
+        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+    )
+    plugins(
+        "io.spine.validation.ValidationPlugin"
+    )
+}
+
+// Skip validation code generation provided by `mc-java` because we generate our own.
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
+    }
+}
+
+val spineBaseVersion: String by extra
 
 dependencies {
-    /*
-       The variable spineBaseVersion must be defined in the `ext` section of the `version.gradle`
-       file of the project which imports `config` as a sub-module.
-      */
-    excludeInternalDoclet "io.spine.tools:spine-javadoc-filter:$spineBaseVersion"
-}
-
-// This task uses constants defined in `javadoc-options.gradle`.
-task noInternalJavadoc(type: Javadoc) {
-    source = sourceSets.main.allJava.filter {
-        !it.absolutePath.contains('generated')
-    }
-    classpath = javadoc.getClasspath()
-
-    options {
-        tags = javadocOptions.tags
-        encoding = javadocOptions.encoding
-
-        // Doclet fully qualified name.
-        doclet = 'io.spine.tools.javadoc.ExcludeInternalDoclet'
-
-        // Path to the JAR containing the doclet.
-        docletpath = configurations.excludeInternalDoclet.files.asType(List)
-    }
+    protoData(project(":java"))
+    implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(project(":java-runtime-bundle"))
+    testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
 }

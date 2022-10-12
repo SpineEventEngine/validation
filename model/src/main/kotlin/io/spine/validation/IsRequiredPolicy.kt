@@ -25,6 +25,7 @@
  */
 package io.spine.validation
 
+import com.google.protobuf.BoolValue
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.protobuf.pack
@@ -36,40 +37,36 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.MessageWideRuleAdded
 
 /**
- * A policy to add a validation rule with the [RequiredOneof] feature whenever a required
- * `oneof` group with the `(is_required)` option is encountered.
+ * A policy to add a validation rule with the [RequiredOneof] feature whenever
+ * a required `oneof` group with the `(is_required)` option is encountered.
  *
- * Unlike the `(required)` constraint, any field types are allowed, since the `oneof` encodes for
- * a non-set value as a special case.
+ * Unlike the `(required)` constraint, any field types are allowed,
+ * since the `oneof` encodes for a non-set value as a special case.
  */
-internal class IsRequiredPolicy :
-    Policy<OneofOptionDiscovered>() {
-
-    private companion object {
-
-        private const val ERROR = "One of the fields must be set."
-    }
+internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = "is_required") event: OneofOptionDiscovered
     ): EitherOf2<MessageWideRuleAdded, Nothing> {
-        val feature = RequiredOneof
-            .newBuilder()
+        // We have the option defined in the type. But is it set to `true`?
+        val option = event.option.value.unpack(BoolValue::class.java)
+        if (!option.value) {
+            return EitherOf2.withB(nothing())
+        }
+
+        val feature = RequiredOneof.newBuilder()
             .setName(event.group)
             .build()
-        val operator = CustomOperator
-            .newBuilder()
-            .setDescription(ERROR)
+        val operator = CustomOperator.newBuilder()
+            .setDescription("One of the fields must be set.")
             .setFeature(feature.pack())
             .build()
-        val rule = MessageWideRule
-            .newBuilder()
-            .setErrorMessage(ERROR)
+        val rule = MessageWideRule.newBuilder()
+            .setErrorMessage("One of the fields in the `${event.group.value}` group must be set.")
             .setOperator(operator)
             .build()
-        return EitherOf2.withA(MessageWideRuleAdded
-            .newBuilder()
+        return EitherOf2.withA(MessageWideRuleAdded.newBuilder()
             .setRule(rule)
             .setType(event.type)
             .build())

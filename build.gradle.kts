@@ -215,6 +215,9 @@ subprojects {
         }
     }
 
+    project.configureTaskDependencies()
+    project.dependTestOnJavaRuntime()
+
     apply<IncrementGuard>()
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
@@ -223,3 +226,34 @@ subprojects {
 JacocoConfig.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)
+
+/**
+ * Sets dependencies on `:java-runtime-bundle:shadowJar` for Java-related modules,
+ * unless it's ":java-runtime-bundle" itself.
+ *
+ * The dependencies are set for the tasks:
+ *   1. `test`
+ *   2. `launchProtoDataMain`
+ *   3. `launchProtoDataTest`
+ *   4. `pmdMain`.
+ */
+fun Project.dependTestOnJavaRuntime() {
+    val javaBundleModule = ":java-runtime-bundle"
+    if (!name.startsWith(":java") || name == javaBundleModule) {
+        return
+    }
+
+    afterEvaluate {
+        val test: Task by tasks.getting
+        val javaBundleJar = project(javaBundleModule).tasks.findByName("shadowJar")
+
+        fun String.dependOn(task: Task) = tasks.findByName(this)?.dependsOn(task)
+
+        javaBundleJar?.let {
+            test.dependsOn(it)
+            "launchProtoDataMain".dependOn(it)
+            "launchProtoDataTest".dependOn(it)
+            "pmdMain".dependOn(it)
+        }
+    }
+}

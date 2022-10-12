@@ -23,46 +23,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-import org.apache.tools.ant.taskdefs.condition.Os
+package spine.validation.given;
 
-println("`build-tasks.gradle` script is deprecated. " +
-        "Please use `DartTasks.build()` extension instead.")
+import "spine/options.proto";
 
-final def GROUP = 'Dart'
-final def packageIndex = "$projectDir/.packages" as File
-final def extension = Os.isFamily(Os.FAMILY_WINDOWS) ? '.bat' : ''
-final def PUB_EXECUTABLE = 'pub' + extension
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.java.given";
+option java_outer_classname = "DistinctProto";
+option java_multiple_files = true;
 
-task resolveDependencies(type: Exec) {
-    group = GROUP
-    description = 'Fetches the dependencies declared via `pubspec.yaml`.'
+import "google/protobuf/any.proto";
 
-    inputs.file "$projectDir/pubspec.yaml"
-    outputs.file packageIndex
-
-    commandLine PUB_EXECUTABLE, 'get'
-
-    mustRunAfter 'cleanPackageIndex'
+// Message type which requires that its elements are not equal between themselves.
+// This way it resembles a `Set` data type.
+//
+// See `DistinctConstraintTest`.
+//
+message ProtoSet {
+    repeated google.protobuf.Any element = 1 [(distinct) = true];
 }
-
-tasks['assemble'].dependsOn 'resolveDependencies'
-
-task cleanPackageIndex(type: Delete) {
-    group = GROUP
-    description = 'Deletes the `.packages` file on this Dart module.'
-    delete = [packageIndex]
-}
-
-tasks['clean'].dependsOn 'cleanPackageIndex'
-
-task testDart(type: Exec) {
-    group = GROUP
-    description = 'Runs Dart tests declared in the `./test` directory. See `https://pub.dev/packages/test#running-tests`.'
-
-    commandLine PUB_EXECUTABLE, 'run', 'test'
-
-    dependsOn 'resolveDependencies'
-}
-
-tasks['check'].dependsOn 'testDart'
