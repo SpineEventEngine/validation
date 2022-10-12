@@ -215,6 +215,8 @@ subprojects {
         }
     }
 
+    project.configureTaskDependencies()
+
     apply<IncrementGuard>()
     LicenseReporter.generateReportIn(project)
     JavadocConfig.applyTo(project)
