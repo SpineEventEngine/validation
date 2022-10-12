@@ -37,7 +37,9 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("`(is_required)` constraint should be compiled so that")
 internal class IsRequiredTest {
-    
+
+    private fun assertValid(message: Message) = assertThat(violationsOf(message)).isEmpty()
+
     @Test
     fun `throw if required field group is not set`() {
         val message = Meal.newBuilder()
@@ -71,12 +73,5 @@ internal class IsRequiredTest {
             .setFish(fish)
             .buildPartial()
         assertValid(message)
-    }
-
-    companion object {
-        private fun assertValid(message: Message) {
-            assertThat(violationsOf(message))
-                .isEmpty()
-        }
     }
 }
