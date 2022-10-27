@@ -26,16 +26,16 @@
 
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Roaster
-
-val protoDataVersion: String by extra
+import io.spine.internal.dependency.Spine.ProtoData
 
 dependencies {
     api(project(":model"))
     api(project(":proto:context"))
-    api("io.spine.protodata:protodata-codegen-java:$protoDataVersion")
-    implementation(project(":java-runtime-bundle"))
+    api(ProtoData.codegenJava)
 
+    implementation(project(":java-runtime-bundle"))
     implementation(JavaPoet.lib)
     implementation(Roaster.api)
+
     runtimeOnly(Roaster.jdt)
 }

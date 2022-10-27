@@ -1,3 +1,6 @@
+import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.Spine.ProtoData
+
 /*
  * Copyright 2022, TeamDev. All rights reserved.
  *
@@ -24,18 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val mcJavaVersion: String by extra
-val protoDataVersion: String by extra
-val spineServerVersion: String by extra
-
 dependencies {
-    api("io.spine:spine-server:$spineServerVersion")
-    api("io.spine.protodata:protodata-compiler:$protoDataVersion")
+    val spine = Spine(project)
+    api(spine.server)
+    api(ProtoData.compiler)
+
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
     implementation(project(":java-runtime-bundle"))
 
-    testImplementation("io.spine.tools:spine-testutil-server:$spineServerVersion")
+    testImplementation(spine.coreJava.testUtilServer)
 }
 
 sourceSets {

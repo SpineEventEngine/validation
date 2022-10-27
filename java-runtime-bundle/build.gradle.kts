@@ -34,8 +34,6 @@ import io.spine.internal.gradle.protobuf.setup
 import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
-val spineBaseVersion: String by extra
-
 plugins {
     `maven-publish`
     id("com.github.johnrengelman.shadow").version("7.1.2")
@@ -46,8 +44,10 @@ dependencies {
     Protobuf.libs.forEach { api(it) }
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
+
+    val spine = io.spine.internal.dependency.Spine(project)
+    implementation(spine.base)
+    testImplementation(spine.testlib)
 }
 
 val generatedDir by extra("$projectDir/generated")

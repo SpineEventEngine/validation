@@ -58,13 +58,12 @@ modelCompiler {
     }
 }
 
-val spineBaseVersion: String by extra
-val spineTimeVersion: String by extra
-
 dependencies {
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-runtime-bundle"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
-    implementation("io.spine:spine-time:$spineTimeVersion")
+
+    val spine = io.spine.internal.dependency.Spine(project)
+    implementation(spine.base)
+    implementation(spine.time)
 }
