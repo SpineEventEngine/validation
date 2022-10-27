@@ -52,9 +52,11 @@ import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.event.CompositeRuleAdded
 import io.spine.validation.event.SimpleRuleAdded
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class `Validation policies should` {
+@DisplayName("Validation policies should")
+class PolicySpec {
 
     private lateinit var blackBox: BlackBox
     private val filePath = FilePath.newBuilder()
