@@ -216,6 +216,8 @@ class Spine(p: ExtensionAware) {
         const val version = protoDataVersion
         const val compiler = "$group:protodata-compiler:$version"
 
+        const val codegenJava = "io.spine.protodata:protodata-codegen-java:$version"
+
         const val pluginId = "io.spine.protodata"
         const val pluginLib = "${Spine.group}:protodata:$version"
     }
