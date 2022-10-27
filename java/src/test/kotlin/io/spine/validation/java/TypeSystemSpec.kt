@@ -48,7 +48,6 @@ import io.spine.protodata.TypeName
 import io.spine.validation.EnumValue
 import io.spine.validation.MessageValue
 import io.spine.validation.Value
-import io.spine.validation.value
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
