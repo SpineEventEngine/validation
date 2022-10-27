@@ -30,25 +30,24 @@ import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.BoolValue
 import com.google.protobuf.ByteString
 import com.google.protobuf.DescriptorProtos.FileOptions.JAVA_MULTIPLE_FILES_FIELD_NUMBER
-import com.google.protobuf.empty
-import io.spine.protobuf.pack
+import com.google.protobuf.Empty
+import io.spine.protobuf.AnyPacker
+import io.spine.protodata.ConstantName
+import io.spine.protodata.EnumConstant
+import io.spine.protodata.EnumType
+import io.spine.protodata.Field
+import io.spine.protodata.FieldName
+import io.spine.protodata.File
+import io.spine.protodata.FilePath
+import io.spine.protodata.MessageType
 import io.spine.protodata.Option
 import io.spine.protodata.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.PrimitiveType.TYPE_STRING
-import io.spine.protodata.constantName
-import io.spine.protodata.enumConstant
-import io.spine.protodata.enumType
-import io.spine.protodata.field
-import io.spine.protodata.fieldName
-import io.spine.protodata.file
-import io.spine.protodata.filePath
-import io.spine.protodata.messageType
-import io.spine.protodata.option
-import io.spine.protodata.type
-import io.spine.protodata.typeName
+import io.spine.protodata.Type
+import io.spine.protodata.TypeName
+import io.spine.validation.EnumValue
+import io.spine.validation.MessageValue
 import io.spine.validation.Value
-import io.spine.validation.enumValue
-import io.spine.validation.messageValue
 import io.spine.validation.value
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -57,66 +56,53 @@ import org.junit.jupiter.api.Test
 @DisplayName("`TypeSystem` should")
 class TypeSystemSpec {
 
-    private val filePath = filePath { 
-        value = "acme/example/foo.proto" 
-    }
-    
-    private val multipleFilesOption: Option = option {
-        name = "java_multiple_files"
-        number = JAVA_MULTIPLE_FILES_FIELD_NUMBER
-        type = type { primitive = TYPE_BOOL }
-        value = BoolValue.of(true).pack()
-    } 
-
-    private val file = file {
-        path = filePath
-        packageName = "acme.example"
-        option.add(multipleFilesOption)
-    } 
-
-    private val messageTypeName = typeName { 
-        packageName = file.packageName
-        simpleName = "Foo"
-        typeUrlPrefix = "type.spine.io"
-    } 
-        
-    private val field = field { 
-        type = type { primitive = TYPE_STRING }
-        name = fieldName { value = "bar" }
-        single = empty { }
-    } 
-        
-    private val messageType = messageType { 
-        file = filePath
-        name = messageTypeName
-        field.add(this@TypeSystemSpec.field) 
-    } 
-        
-    private val enumTypeName = typeName { 
-        packageName = file.packageName
-        typeUrlPrefix = messageTypeName.typeUrlPrefix
-        simpleName = "Kind"
-    } 
-        
-    private val undefinedConstant = enumConstant {
-        name = constantName { value = "UNDEFINED" }
-        number = 0
-    } 
-        
-    private val enumConstant = enumConstant { 
-        name = constantName { value = "INSTANCE" }
-        number = 1
-    } 
-        
-    private val enumType = enumType { 
-        file = filePath
-        name = enumTypeName
-        constant.apply {
-            add(undefinedConstant)
-            add(enumConstant)
-        }
-    } 
-
+    private val filePath = FilePath.newBuilder()
+        .setValue("acme/example/foo.proto")
+        .build()
+    val multipleFilesOption = Option.newBuilder().setName("java_multiple_files")
+        .setNumber(JAVA_MULTIPLE_FILES_FIELD_NUMBER)
+        .setType(Type.newBuilder().setPrimitive(TYPE_BOOL))
+        .setValue(AnyPacker.pack(BoolValue.of(true)))
+        .build()
+    private val file = File.newBuilder()
+        .setPath(filePath)
+        .setPackageName("acme.example")
+        .addOption(multipleFilesOption)
+        .build()
+    private val messageTypeName = TypeName.newBuilder()
+        .setPackageName(file.packageName)
+        .setSimpleName("Foo")
+        .setTypeUrlPrefix("type.spine.io")
+        .build()
+    private val field = Field.newBuilder()
+        .setType(Type.newBuilder().setPrimitive(TYPE_STRING))
+        .setName(FieldName.newBuilder().setValue("bar"))
+        .setSingle(Empty.getDefaultInstance())
+        .build()
+    private val messageType = MessageType.newBuilder()
+        .setFile(filePath)
+        .setName(messageTypeName)
+        .addField(field)
+        .build()
+    private val enumTypeName = TypeName.newBuilder()
+        .setPackageName(file.packageName)
+        .setTypeUrlPrefix(messageTypeName.typeUrlPrefix)
+        .setSimpleName("Kind")
+        .build()
+    private val undefinedConstant = EnumConstant.newBuilder()
+        .setName(ConstantName.newBuilder().setValue("UNDEFINED"))
+        .setNumber(0)
+        .build()
+    private val enumConstant = EnumConstant.newBuilder()
+        .setName(ConstantName.newBuilder().setValue("INSTANCE"))
+        .setNumber(1)
+        .build()
+    private val enumType = EnumType.newBuilder()
+        .setFile(filePath)
+        .setName(enumTypeName)
+        .addConstant(undefinedConstant)
+        .addConstant(enumConstant)
+        .build()
     private val typeSystem: TypeSystem = TypeSystem.newBuilder()
         .put(file, messageType)
         .put(file, enumType)
@@ -127,62 +113,78 @@ class TypeSystemSpec {
 
         @Test
         fun ints() {
-            val value = value { intValue = 42 } 
+            val value = Value.newBuilder()
+                .setIntValue(42)
+                .build()
             checkCode(value, "42")
         }
 
         @Test
         fun floats() {
-            val value = value { doubleValue = .1 } 
+            val value = Value.newBuilder()
+                .setDoubleValue(.1)
+                .build()
             checkCode(value, "0.1")
         }
 
         @Test
         fun bool() {
-            val value = value { boolValue = true } 
+            val value = Value.newBuilder()
+                .setBoolValue(true)
+                .build()
             checkCode(value, "true")
         }
 
         @Test
         fun string() {
-            val value = value { stringValue = "hello" } 
+            val value = Value.newBuilder()
+                .setStringValue("hello")
+                .build()
             checkCode(value, "\"hello\"")
         }
 
         @Test
         fun bytes() {
-            val value = value {
-                bytesValue = ByteString.copyFrom(ByteArray(3) { index -> index.toByte() }) 
-            } 
+            val value = Value.newBuilder()
+                .setBytesValue(ByteString.copyFrom(ByteArray(3) { index -> index.toByte() }))
+                .build()
             checkCode(value, "${ByteString::class.qualifiedName}.copyFrom(new byte[]{0, 1, 2})")
         }
 
         @Test
         fun `empty message`() {
-            val emptyMessage = messageValue {
-                type = messageTypeName
-            } 
-            val value = value { messageValue = emptyMessage } 
+            val emptyMessage = MessageValue.newBuilder()
+                .setType(messageTypeName)
+                .build()
+            val value = Value.newBuilder()
+                .setMessageValue(emptyMessage)
+                .build()
             checkCode(value, "acme.example.Foo.getDefaultInstance()")
         }
 
         @Test
         fun `message with a field`() {
-            val message = messageValue {
-                type = messageTypeName
-                fields["bar"] = value { stringValue = "hello there" }
-            } 
-            val value = value { messageValue = message } 
+            val message = MessageValue.newBuilder()
+                .setType(messageTypeName)
+                .putFields("bar", Value.newBuilder()
+                    .setStringValue("hello there")
+                    .build())
+                .build()
+            val value = Value.newBuilder()
+                .setMessageValue(message)
+                .build()
             checkCode(value, "acme.example.Foo.newBuilder().setBar(\"hello there\").build()")
         }
 
         @Test
         fun `enum value`() {
-            val enumVal = enumValue { 
-                type = enumTypeName
-                constNumber = 1
-            } 
-            val value = value { enumValue = enumVal } 
+            val enumValue = EnumValue.newBuilder()
+                .setType(enumTypeName)
+                .setConstNumber(1)
+                .build()
+            val value = Value.newBuilder()
+                .setEnumValue(enumValue)
+                .build()
             checkCode(value, "acme.example.Kind.forNumber(1)")
         }
 
