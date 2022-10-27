@@ -117,6 +117,8 @@ subprojects {
     addDependencies()
     forceConfigurations()
 
+    applyGeneratedDirectories("$projectDir/generated")
+
     val javaVersion = JavaVersion.VERSION_11
     configureJava(javaVersion)
     configureKotlin(javaVersion)
@@ -124,8 +126,6 @@ subprojects {
     configureTests()
     configureTaskDependencies()
     dependTestOnJavaRuntime()
-
-    applyGeneratedDirectories("$projectDir/generated")
 }
 
 JacocoConfig.applyTo(project)
