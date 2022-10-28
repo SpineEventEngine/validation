@@ -1,6 +1,3 @@
-import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Spine.ProtoData
-
 /*
  * Copyright 2022, TeamDev. All rights reserved.
  *
@@ -26,6 +23,9 @@ import io.spine.internal.dependency.Spine.ProtoData
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.Spine.ProtoData
 
 dependencies {
     api(ProtoData.compiler)
