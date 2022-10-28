@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Spine
+
 plugins {
     id("io.spine.protodata")
 }
@@ -51,11 +53,10 @@ modelCompiler {
     }
 }
 
-val spineBaseVersion: String by extra
-
 dependencies {
     protoData(project(":java"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
     implementation(project(":java-runtime-bundle"))
-    testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
+    val spine = Spine(project)
+    implementation(spine.base)
+    testImplementation(spine.testlib)
 }

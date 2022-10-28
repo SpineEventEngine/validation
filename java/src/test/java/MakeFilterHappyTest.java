@@ -24,46 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.protodata.gradle.plugin.LaunchProtoData
+import org.junit.jupiter.api.Test;
 
-plugins {
-    id("io.spine.protodata")
-}
+import static com.google.common.truth.Truth.assertThat;
 
-protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
+/**
+ * This stub test suite just satisfies absence of Java-based tests for
+ * the `test` task filter.
+ */
+class MakeFilterHappyTest {
 
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
-
-    )
-    plugins(
-        "io.spine.validation.ValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
-}
-
-tasks.withType<LaunchProtoData>().configureEach {
-    configuration.set(file("protodata.pb.json"))
-}
-
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
+    @Test
+    void doWork() {
+        assertThat(true).isTrue();
     }
-}
-
-dependencies {
-    protoData(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extensions"))
-    implementation(project(":java-runtime-bundle"))
-
-    val spine = io.spine.internal.dependency.Spine(project)
-    implementation(spine.base)
-    implementation(spine.time)
 }

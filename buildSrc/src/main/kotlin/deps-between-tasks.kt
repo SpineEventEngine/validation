@@ -62,10 +62,10 @@ fun Project.configureTaskDependencies() {
         "sourcesJar".dependOn("generateProto")
         "sourcesJar".dependOn("launchProtoDataMain")
         "sourcesJar".dependOn("createVersionFile")
+        "sourcesJar".dependOn("prepareProtocConfigVersions")
         "dokkaHtml".dependOn("generateProto")
         "dokkaHtml".dependOn("launchProtoDataMain")
         "dokkaJavadoc".dependOn("launchProtoDataMain")
-        "test".dependOn("shadowJar")
         "publishPluginJar".dependOn("createVersionFile")
     }
 }

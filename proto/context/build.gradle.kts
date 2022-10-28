@@ -24,11 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val protoDataVersion: String by extra
-val spineBaseVersion: String by extra
+import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.Spine.ProtoData
+
 dependencies {
-    api("io.spine.protodata:protodata-compiler:$protoDataVersion")
-    implementation("io.spine:spine-base:$spineBaseVersion")
+    api(ProtoData.compiler)
+    implementation(Spine(project).base)
     implementation(project(":java-runtime-bundle"))
 }
 

@@ -1,3 +1,5 @@
+import io.spine.internal.dependency.Spine
+
 /*
  * Copyright 2022, TeamDev. All rights reserved.
  *
@@ -24,9 +26,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion: String by extra
 dependencies {
-    implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(Spine(project).base)
     implementation(project(":java-runtime-bundle"))
 }
 

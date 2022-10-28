@@ -48,13 +48,14 @@ import io.spine.protodata.TypeName
 import io.spine.validation.EnumValue
 import io.spine.validation.MessageValue
 import io.spine.validation.Value
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class `'TypeSystem' should` {
+@DisplayName("`TypeSystem` should")
+class TypeSystemSpec {
 
-    private val filePath = FilePath
-        .newBuilder()
+    private val filePath = FilePath.newBuilder()
         .setValue("acme/example/foo.proto")
         .build()
     val multipleFilesOption = Option.newBuilder().setName("java_multiple_files")
@@ -62,55 +63,46 @@ class `'TypeSystem' should` {
         .setType(Type.newBuilder().setPrimitive(TYPE_BOOL))
         .setValue(AnyPacker.pack(BoolValue.of(true)))
         .build()
-    private val file = File
-        .newBuilder()
+    private val file = File.newBuilder()
         .setPath(filePath)
         .setPackageName("acme.example")
         .addOption(multipleFilesOption)
         .build()
-    private val messageTypeName = TypeName
-        .newBuilder()
+    private val messageTypeName = TypeName.newBuilder()
         .setPackageName(file.packageName)
         .setSimpleName("Foo")
         .setTypeUrlPrefix("type.spine.io")
         .build()
-    private val field = Field
-        .newBuilder()
+    private val field = Field.newBuilder()
         .setType(Type.newBuilder().setPrimitive(TYPE_STRING))
         .setName(FieldName.newBuilder().setValue("bar"))
         .setSingle(Empty.getDefaultInstance())
         .build()
-    private val messageType = MessageType
-        .newBuilder()
+    private val messageType = MessageType.newBuilder()
         .setFile(filePath)
         .setName(messageTypeName)
         .addField(field)
         .build()
-    private val enumTypeName = TypeName
-        .newBuilder()
+    private val enumTypeName = TypeName.newBuilder()
         .setPackageName(file.packageName)
         .setTypeUrlPrefix(messageTypeName.typeUrlPrefix)
         .setSimpleName("Kind")
         .build()
-    private val undefinedConstant = EnumConstant
-        .newBuilder()
+    private val undefinedConstant = EnumConstant.newBuilder()
         .setName(ConstantName.newBuilder().setValue("UNDEFINED"))
         .setNumber(0)
         .build()
-    private val enumConstant = EnumConstant
-        .newBuilder()
+    private val enumConstant = EnumConstant.newBuilder()
         .setName(ConstantName.newBuilder().setValue("INSTANCE"))
         .setNumber(1)
         .build()
-    private val enumType = EnumType
-        .newBuilder()
+    private val enumType = EnumType.newBuilder()
         .setFile(filePath)
         .setName(enumTypeName)
         .addConstant(undefinedConstant)
         .addConstant(enumConstant)
         .build()
-    private val typeSystem: TypeSystem = TypeSystem
-        .newBuilder()
+    private val typeSystem: TypeSystem = TypeSystem.newBuilder()
         .put(file, messageType)
         .put(file, enumType)
         .build()
@@ -185,8 +177,7 @@ class `'TypeSystem' should` {
 
         @Test
         fun `enum value`() {
-            val enumValue = EnumValue
-                .newBuilder()
+            val enumValue = EnumValue.newBuilder()
                 .setType(enumTypeName)
                 .setConstNumber(1)
                 .build()

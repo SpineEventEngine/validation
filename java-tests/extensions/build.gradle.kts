@@ -24,11 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion: String by extra
+import io.spine.internal.dependency.Spine
 
 dependencies {
     implementation(project(":java"))
-    implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(Spine(project).base)
     implementation(project(":java-runtime-bundle"))
 }
 
