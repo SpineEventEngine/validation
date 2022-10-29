@@ -61,12 +61,8 @@ buildscript {
 plugins {
     `java-library`
     idea
-
-    val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
-    val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
-
-    id(protobuf.id)
-    id(errorProne.id)
+    id("com.google.protobuf")
+    id("net.ltgt.errorprone")
     kotlin("jvm")
     `force-jacoco`
 }
@@ -227,6 +223,7 @@ fun Subproject.forceConfigurations() {
                     spine.testlib,
                     spine.toolBase,
                     spine.server,
+                    "io.spine.validation:spine-validation-java-runtime:${Spine.DefaultVersion.validation}",
 
                     Jackson.core,
                     Jackson.moduleKotlin,
