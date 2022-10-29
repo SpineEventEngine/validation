@@ -31,12 +31,12 @@ import io.spine.protodata.FieldName
 import io.spine.protodata.FilePath
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
-import io.spine.protodata.Querying
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.MessageReference
-import io.spine.protodata.select
 import io.spine.protodata.typeUrl
+import io.spine.server.query.Querying
+import io.spine.server.query.select
 import io.spine.validation.Rule
 
 /**
