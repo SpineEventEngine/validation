@@ -32,13 +32,13 @@ import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.option.PatternOption;
 import io.spine.protodata.FieldOptionDiscovered;
-import io.spine.protodata.plugin.Just;
 import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.plugin.Just.just;
+import static io.spine.server.event.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static java.lang.String.format;
 

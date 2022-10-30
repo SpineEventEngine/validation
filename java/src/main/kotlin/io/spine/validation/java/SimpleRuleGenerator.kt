@@ -108,7 +108,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     override fun condition(): Expression {
         val type = field.type
         val signs = selectSigns()
-        val compare = signs[rule.operator] ?: throw IllegalStateException(
+        val compare = signs[rule.operator] ?: error(
             "Unsupported operation `${rule.operator}` for type `$type`."
         )
         checkNotNull(ctx.fieldOrElement) { "There is no field value for rule: $rule" }
@@ -152,9 +152,7 @@ private fun generatorForSingular(ctx: GenerationContext): CodeGenerator {
     return when (rule.operatorKindCase) {
         OPERATOR -> SimpleRuleGenerator(ctx)
         CUSTOM_OPERATOR -> generatorForCustom(ctx)
-        else -> throw IllegalStateException(
-            "Invalid rule: `$rule`. No operator is set."
-        )
+        else -> error("Invalid rule: `$rule`. No operator is set.")
     }
 }
 

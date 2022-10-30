@@ -78,5 +78,5 @@ private fun PrimitiveType.primitiveClass(): KClass<*> =
     }
 
 private fun unknownType(type: PrimitiveType): Nothing {
-    throw IllegalStateException("Unknown primitive type: `$type`.")
+    error("Unknown primitive type: `$type`.")
 }

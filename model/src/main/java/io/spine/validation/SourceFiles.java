@@ -31,8 +31,8 @@ import io.spine.protodata.FieldName;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufSourceFile;
-import io.spine.protodata.Querying;
 import io.spine.protodata.TypeName;
+import io.spine.server.query.Querying;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;

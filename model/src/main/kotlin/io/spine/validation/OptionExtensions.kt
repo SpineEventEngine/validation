@@ -36,6 +36,7 @@ import io.spine.protodata.Option
  *
  * @return `true` if both option name and number are the same, `false` otherwise
  */
+@Suppress("FunctionNaming") // backticked name is necessary here.
 public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
     return name == generated.descriptor.name
             && number == generated.number

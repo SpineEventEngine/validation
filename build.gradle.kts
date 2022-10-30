@@ -31,6 +31,7 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyGitHubPackages
@@ -61,12 +62,8 @@ buildscript {
 plugins {
     `java-library`
     idea
-
-    val protobuf = io.spine.internal.dependency.Protobuf.GradlePlugin
-    val errorProne = io.spine.internal.dependency.ErrorProne.GradlePlugin
-
-    id(protobuf.id)
-    id(errorProne.id)
+    id(protobufPlugin)
+    id(errorPronePlugin)
     kotlin("jvm")
     `force-jacoco`
 }
@@ -142,13 +139,14 @@ typealias Subproject = Project
  */
 fun Subproject.applyPlugins() {
     apply {
-        plugin("net.ltgt.errorprone")
+        plugin(ErrorProne.GradlePlugin.id)
         plugin("java-library")
         plugin("kotlin")
-        plugin("com.google.protobuf")
+        plugin(Protobuf.GradlePlugin.id)
         plugin("pmd")
         plugin("maven-publish")
         plugin("dokka-for-java")
+        plugin("detekt-code-analysis")
     }
 
     // Apply custom Kotlin script plugins.
@@ -227,6 +225,7 @@ fun Subproject.forceConfigurations() {
                     spine.testlib,
                     spine.toolBase,
                     spine.server,
+                    "io.spine.validation:spine-validation-java-runtime:${Spine.DefaultVersion.validation}",
 
                     Jackson.core,
                     Jackson.moduleKotlin,

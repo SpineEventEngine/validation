@@ -71,6 +71,7 @@ private constructor(
     fun maxRule(field: FieldName): SimpleRule =
         simpleRule(field, upperBound!!, uppedInclusive, LESS_OR_EQUAL, LESS_THAN, "less")
 
+    @Suppress("LongParameterList")
     private fun simpleRule(
         field: FieldName,
         threshold: Value,
@@ -121,7 +122,7 @@ private constructor(
     private fun Value.toNumberString(): String = when(kindCase) {
         DOUBLE_VALUE -> doubleValue.toString()
         INT_VALUE -> intValue.toString()
-        else -> throw IllegalStateException("Unexpected Value: `$this`.")
+        else -> error("Unexpected Value: `$this`.")
     }
 
     companion object {
@@ -145,6 +146,7 @@ private constructor(
             }
         }
 
+        @Suppress("FunctionNaming") // backticked name is necessary here.
         private  fun Option.`is`(generated: GeneratedMessage.GeneratedExtension<*, *>) =
             name == generated.descriptor.name && number == generated.number
 

@@ -30,9 +30,9 @@ import io.spine.core.External
 import io.spine.protodata.Field
 import io.spine.protodata.TypeExited
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.select
 import io.spine.server.event.React
 import io.spine.server.model.Nothing
+import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.SimpleRule

@@ -56,6 +56,6 @@ private fun GenerationContext.feature(): Message = with(rule) {
     } else if (hasMessageWide()) {
         messageWide.operator.feature.unpackGuessingType()
     } else {
-        throw IllegalStateException("Rule has no custom operator: $rule")
+        error("Rule has no custom operator: $rule")
     }
 }
