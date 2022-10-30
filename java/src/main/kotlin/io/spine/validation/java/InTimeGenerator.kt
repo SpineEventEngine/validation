@@ -88,7 +88,7 @@ private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
         FUTURE -> "> 0"
         PAST -> "< 0"
         TIME_UNDEFINED -> " < 32768"
-        else -> throw IllegalStateException("Unexpected time: `$this`.")
+        else -> error("Unexpected time: `$this`.")
     }
     return Literal("$compareToCall $operation")
 }
@@ -115,5 +115,5 @@ private class InSpineTimeGenerator(
 private fun Time.temporalMethod(): String = when(this) {
         FUTURE -> "isInFuture"
         PAST -> "isInPast"
-        else -> throw IllegalStateException("Unexpected time: `$this`.")
+        else -> error("Unexpected time: `$this`.")
 }

@@ -93,10 +93,11 @@ private constructor(
         /**
          * Parses a range expression from the given notation.
          */
+        @Suppress("MagicNumber") // refer to groups in regexp.
         fun parse(rawNotation: String): RangeNotation {
             val rangeMatcher = NUMBER_RANGE.matcher(rawNotation.trim { it <= ' ' })
             if (!rangeMatcher.find()) {
-                throw IllegalStateException("Invalid range ${rangeMatcher}.")
+                error("Invalid range ${rangeMatcher}.")
             }
             val minInclusive = ("[" == rangeMatcher.group(1))
             val min = rangeMatcher.group(2).parseToNumber()

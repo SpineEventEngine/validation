@@ -97,7 +97,7 @@ private constructor(
     /**
      * Obtains the name of the class from a given name of a Protobuf type.
      */
-    private fun classNameFor(type: TypeName) =
+    internal fun classNameFor(type: TypeName) =
         knownTypes[type] ?: unknownType(type)
 
     /**
@@ -126,68 +126,6 @@ private constructor(
         }
     }
 
-    private fun mapValueToJava(value: Value): MethodCall {
-        val firstEntry = value.mapValue.valueList.firstOrNull()
-        val firstKey = firstEntry?.key
-        val keyClass = firstKey?.type?.let(this::toClass)
-        val firstValue = firstEntry?.value
-        val valueClass = firstValue?.type?.let(this::toClass)
-        return mapExpression(mapValuesToJava(value), keyClass, valueClass)
-    }
-
-    private fun enumValueToJava(value: Value): MethodCall {
-        val enumValue = value.enumValue
-        val type = enumValue.type
-        val enumClassName = classNameFor(type)
-        return enumClassName.enumValue(enumValue.constNumber)
-    }
-
-    private fun messageValueToJava(value: Value): Expression {
-        val messageValue = value.messageValue
-        val type = messageValue.type
-        val className = classNameFor(type)
-        return if (messageValue.fieldsMap.isEmpty()) {
-            className.getDefaultInstance()
-        } else {
-            var builder = className.newBuilder()
-            messageValue.fieldsMap.forEach { (k, v) ->
-                builder = builder.chainSet(k, valueToJava(v))
-            }
-            builder.chainBuild()
-        }
-    }
-
-    private fun listValuesToJava(value: Value): List<Expression> =
-        value.listValue
-            .valuesList
-            .map {
-                valueToJava(it)
-            }
-
-    private fun mapValuesToJava(value: Value): Map<Expression, Expression> =
-        value.mapValue.valueList.associate { valueToJava(it.key) to valueToJava(it.value) }
-
-    /**
-     * Obtains the canonical name of the class representing the given [type] in Java.
-     *
-     * For Java primitive types, obtains wrapper classes.
-     *
-     * @throws IllegalStateException if the type is unknown
-     */
-    private fun toClass(type: Type): ClassName = when (type.kindCase) {
-        PRIMITIVE -> type.primitive.toClass()
-        MESSAGE, ENUMERATION -> classNameFor(type.message)
-        else -> throw IllegalArgumentException("Type is empty.")
-    }
-
-    private fun unknownType(type: Type): Nothing {
-        throw IllegalStateException("Unknown type: `${type}`.")
-    }
-
-    private fun unknownType(typeName: TypeName): Nothing {
-        throw IllegalStateException("Unknown type: `${typeName.typeUrl()}`.")
-    }
-
     /**
      * The builder of a new `TypeSystem` of an application.
      */
@@ -209,7 +147,7 @@ private constructor(
             return when (descriptor) {
                 is Descriptor -> descriptor.name()
                 is EnumDescriptor -> descriptor.name()
-                else -> throw IllegalStateException("Unexpected type: $descriptor")
+                else -> error("Unexpected type: `$descriptor`.")
             }
         }
 
@@ -233,3 +171,65 @@ private constructor(
         public fun build(): TypeSystem = TypeSystem(knownTypes)
     }
 }
+
+private fun TypeSystem.mapValueToJava(value: Value): MethodCall {
+    val firstEntry = value.mapValue.valueList.firstOrNull()
+    val firstKey = firstEntry?.key
+    val keyClass = firstKey?.type?.let(this::toClass)
+    val firstValue = firstEntry?.value
+    val valueClass = firstValue?.type?.let(this::toClass)
+    return mapExpression(mapValuesToJava(value), keyClass, valueClass)
+}
+
+private fun TypeSystem.enumValueToJava(value: Value): MethodCall {
+    val enumValue = value.enumValue
+    val type = enumValue.type
+    val enumClassName = classNameFor(type)
+    return enumClassName.enumValue(enumValue.constNumber)
+}
+
+private fun TypeSystem.messageValueToJava(value: Value): Expression {
+    val messageValue = value.messageValue
+    val type = messageValue.type
+    val className = classNameFor(type)
+    return if (messageValue.fieldsMap.isEmpty()) {
+        className.getDefaultInstance()
+    } else {
+        var builder = className.newBuilder()
+        messageValue.fieldsMap.forEach { (k, v) ->
+            builder = builder.chainSet(k, valueToJava(v))
+        }
+        builder.chainBuild()
+    }
+}
+
+private fun TypeSystem.listValuesToJava(value: Value): List<Expression> =
+    value.listValue
+        .valuesList
+        .map {
+            valueToJava(it)
+        }
+
+private fun TypeSystem.mapValuesToJava(value: Value): Map<Expression, Expression> =
+    value.mapValue.valueList.associate { valueToJava(it.key) to valueToJava(it.value) }
+
+/**
+ * Obtains the canonical name of the class representing the given [type] in Java.
+ *
+ * For Java primitive types, obtains wrapper classes.
+ *
+ * @throws IllegalStateException if the type is unknown
+ */
+private fun TypeSystem.toClass(type: Type): ClassName = when (type.kindCase) {
+    PRIMITIVE -> type.primitive.toClass()
+    MESSAGE, ENUMERATION -> classNameFor(type.message)
+    else -> throw IllegalArgumentException("Type is empty.")
+}
+
+private fun unknownType(type: Type): Nothing =
+    error("Unknown type: `${type}`.")
+
+private fun unknownType(typeName: TypeName): Nothing =
+    error("Unknown type: `${typeName.typeUrl()}`.")
+
+
