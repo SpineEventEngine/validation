@@ -145,6 +145,7 @@ fun Subproject.applyPlugins() {
         plugin("pmd")
         plugin("maven-publish")
         plugin("dokka-for-java")
+        plugin("detekt-code-analysis")
     }
 
     // Apply custom Kotlin script plugins.
