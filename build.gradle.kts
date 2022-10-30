@@ -62,8 +62,8 @@ buildscript {
 plugins {
     `java-library`
     idea
-    id("com.google.protobuf")
-    id("net.ltgt.errorprone")
+    id(protobufPlugin)
+    id(errorPronePlugin)
     kotlin("jvm")
     `force-jacoco`
 }
