@@ -31,6 +31,7 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyGitHubPackages
@@ -138,10 +139,10 @@ typealias Subproject = Project
  */
 fun Subproject.applyPlugins() {
     apply {
-        plugin("net.ltgt.errorprone")
+        plugin(ErrorProne.GradlePlugin.id)
         plugin("java-library")
         plugin("kotlin")
-        plugin("com.google.protobuf")
+        plugin(Protobuf.GradlePlugin.id)
         plugin("pmd")
         plugin("maven-publish")
         plugin("dokka-for-java")
