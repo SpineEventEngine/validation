@@ -66,6 +66,7 @@ plugins {
     id(errorPronePlugin)
     kotlin("jvm")
     `force-jacoco`
+    `detekt-code-analysis`
     id("com.osacky.doctor") version "0.8.1"
 }
 
