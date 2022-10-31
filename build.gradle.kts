@@ -66,6 +66,7 @@ plugins {
     id(errorPronePlugin)
     kotlin("jvm")
     `force-jacoco`
+    id("com.osacky.doctor") version "0.8.1"
 }
 
 spinePublishing {
