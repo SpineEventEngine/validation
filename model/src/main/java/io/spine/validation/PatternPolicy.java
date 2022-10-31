@@ -89,10 +89,10 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .build();
 
         @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
-        private static final String ERR_FMT = "The string must match the regular expression `%s`.";
-
         private static String notMatching(String regex) {
-            return format(ERR_FMT, slashEscaper.escape(regex));
+            return format(
+                    "The string must match the regular expression `%s`.",
+                    slashEscaper.escape(regex));
         }
     }
 }
