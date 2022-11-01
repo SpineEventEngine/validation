@@ -34,7 +34,7 @@ dependencies {
 
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
-    implementation(project(":java-runtime-bundle"))
+    implementation(project(":java-runtime"))
 
     testImplementation(spine.coreJava.testUtilServer)
 }

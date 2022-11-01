@@ -61,7 +61,7 @@ modelCompiler {
 dependencies {
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
-    implementation(project(":java-runtime-bundle"))
+    implementation(project(":java-runtime"))
 
     val spine = io.spine.internal.dependency.Spine(project)
     implementation(spine.base)

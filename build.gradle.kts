@@ -189,7 +189,7 @@ fun Subproject.addDependencies() {
  *   4. `pmdMain`.
  */
 fun Subproject.dependTestOnJavaRuntime() {
-    val javaBundleModule = ":java-runtime-bundle"
+    val javaBundleModule = ":java-runtime"
     if (!name.startsWith(":java") || name == javaBundleModule) {
         return
     }
@@ -220,6 +220,9 @@ fun Subproject.forceConfigurations() {
         all {
             resolutionStrategy {
                 val spine = Spine(project)
+                /* Use default version of Validation, not those coming with Spine because
+                   it would use `validationVersion` extension property of the project. */
+                val validationVersion = Spine.DefaultVersion.validation
                 force(
                     Flogger.lib,
                     Flogger.Runtime.systemBackend,
@@ -229,7 +232,7 @@ fun Subproject.forceConfigurations() {
                     spine.testlib,
                     spine.toolBase,
                     spine.server,
-                    "io.spine.validation:spine-validation-java-runtime:${Spine.DefaultVersion.validation}",
+                    "io.spine.validation:spine-validation-java-runtime:$validationVersion",
 
                     Jackson.core,
                     Jackson.moduleKotlin,

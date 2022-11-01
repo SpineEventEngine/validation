@@ -30,7 +30,7 @@ import io.spine.internal.dependency.Spine.ProtoData
 dependencies {
     api(ProtoData.compiler)
     implementation(Spine(project).base)
-    implementation(project(":java-runtime-bundle"))
+    implementation(project(":java-runtime"))
 }
 
 modelCompiler {

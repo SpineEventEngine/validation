@@ -28,7 +28,7 @@ import io.spine.internal.dependency.Spine
 
 dependencies {
     implementation(Spine(project).base)
-    implementation(project(":java-runtime-bundle"))
+    implementation(project(":java-runtime"))
 }
 
 modelCompiler {
