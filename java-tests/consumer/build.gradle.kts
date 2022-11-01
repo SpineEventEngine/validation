@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Spine
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 
 plugins {
@@ -61,9 +62,5 @@ modelCompiler {
 dependencies {
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
-    implementation(project(":java-runtime"))
-
-    val spine = io.spine.internal.dependency.Spine(project)
-    implementation(spine.base)
-    implementation(spine.time)
+    implementation(Spine(project).time)
 }
