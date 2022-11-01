@@ -35,7 +35,7 @@ import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.ComparableNumber;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.BoundType.*;
+import static com.google.common.collect.BoundType.CLOSED;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
