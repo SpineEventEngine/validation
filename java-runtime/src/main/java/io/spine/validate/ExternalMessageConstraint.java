@@ -93,8 +93,8 @@ final class ExternalMessageConstraint {
         return targets.stream().anyMatch(field -> isSame(field, containingType, fieldName));
     }
 
-    private static boolean isSame(FieldDescriptor field, Descriptor containerType,
-                                  String fieldName) {
+    private static
+    boolean isSame(FieldDescriptor field, Descriptor containerType, String fieldName) {
         return field.getContainingType()
                     .getFullName()
                     .equals(containerType.getFullName()) && field.getName().equals(fieldName);
