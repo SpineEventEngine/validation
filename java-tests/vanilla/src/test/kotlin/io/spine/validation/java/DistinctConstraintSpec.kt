@@ -26,7 +26,7 @@
 package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
-import com.google.common.truth.extensions.proto.ProtoTruth
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.validate.NonValidated
@@ -39,7 +39,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`(distinct)` option should be compiled, so that")
-internal class DistinctConstraintTest {
+internal class DistinctConstraintSpec {
 
     @Test
     fun `duplicates result is a violation`() {
@@ -48,12 +48,15 @@ internal class DistinctConstraintTest {
         val error: Optional<ValidationError> = msg.validate()
         assertThat(error)
             .isPresent()
-        val violations = error.get().getConstraintViolationList()
-        ProtoTruth.assertThat(violations)
+
+        val expected = constraintViolation {
+            fieldPath { fieldName.add("element") }
+        }
+
+        val violations = error.get().constraintViolationList
+        assertThat(violations)
             .comparingExpectedFieldsOnly()
-            .containsExactly( constraintViolation {
-                fieldPath { fieldName.add("element") }
-            })
+            .containsExactly(expected)
     }
 
     @Test
