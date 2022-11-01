@@ -24,16 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.gradle.excludeProtobufLite
-import io.spine.internal.gradle.javac.configureErrorProne
-import io.spine.internal.gradle.javac.configureJavac
-import io.spine.internal.gradle.protobuf.setup
-import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 plugins {
