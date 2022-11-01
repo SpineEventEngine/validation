@@ -36,19 +36,20 @@ import io.spine.internal.gradle.protobuf.setup
 import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
-buildscript {
-    io.spine.internal.gradle.doApplyStandard(repositories)
-    dependencies {
-        classpath(io.spine.internal.dependency.Spine(project).mcJavaPlugin)
+plugins {
+    `build-proto-model`
+}
+
+// Turn off codegen of Validation 1.0.
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
     }
 }
 
-apply {
-    plugin(io.spine.internal.dependency.Spine.McJava.pluginId)
-}
-
 dependencies {
-    Protobuf.libs.forEach { api(it) }
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
@@ -77,19 +78,6 @@ sourceSets {
         )
     }
 }
-
-//protobuf {
-//    configurations.excludeProtobufLite()
-//    generatedFilesBaseDir = generatedDir
-//    protoc {
-//        artifact = Protobuf.compiler
-//    }
-//    generateProtoTasks {
-//        for (task in all()) {
-//            task.setup(generatedDir)
-//        }
-//    }
-//}
 
 tasks {
     excludeGoogleProtoFromArtifacts()
