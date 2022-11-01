@@ -94,9 +94,8 @@ final class ConstraintCache {
         var key = new Key(type, context);
         try {
             return constraints.get(key);
-        } catch (@SuppressWarnings("OverlyBroadCatchBlock")
-        // `get(..)` Can throw checked and unchecked Exceptions and Errors.
-        Throwable e) {
+        } catch (@SuppressWarnings("OverlyBroadCatchBlock") /* `get(..)` Can throw checked
+            and unchecked Exceptions and Errors. */ Throwable e) {
             throw illegalStateWithCauseOf(e);
         }
     }
