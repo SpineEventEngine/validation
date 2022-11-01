@@ -151,7 +151,16 @@ class Spine(p: ExtensionAware) {
     val pluginTestlib = "$toolsGroup:spine-plugin-testlib:${p.toolBaseVersion}"
     val modelCompiler = "$toolsGroup:spine-model-compiler:${p.mcVersion}"
 
+    /**
+     * Coordinates of the McJava plugin bundle which uses version of the bundle
+     * from [ExtensionAware.mcJavaVersion] property.
+     *
+     * This property and [ExtensionAware.mcJavaVersion] are deprecated because
+     * we discourage using versions of Spine components outside of this dependency
+     * object class.
+     */
     @Deprecated(message = "Please use `McJava.pluginLib` instead")
+    @Suppress("DEPRECATION")
     val mcJavaPlugin = "$toolsGroup:spine-mc-java-plugins:${p.mcJavaVersion}:all"
 
     object McJava {
