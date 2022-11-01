@@ -42,7 +42,7 @@ val spinePublishing = rootProject.the<SpinePublishing>()
 /**
  * The ID of the far JAR artifact.
  */
-val pArtifact = spinePublishing.artifactPrefix + "java-runtime"
+val pArtifact = spinePublishing.artifactPrefix + "java-runtime-bundle"
 
 publishing {
     val pGroup = project.group.toString()
