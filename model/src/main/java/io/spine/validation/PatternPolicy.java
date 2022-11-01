@@ -48,10 +48,6 @@ import static java.lang.String.format;
  */
 final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
-    private static final Escaper slashEscaper = Escapers.builder()
-            .addEscape('\\', "\\\\")
-            .build();
-
     @Override
     @React
     protected Just<SimpleRuleAdded> whenever(
@@ -66,8 +62,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .build();
         var customError = optionValue.getErrorMsg();
         var error = customError.isEmpty()
-                       ? format("The string must match the regular expression `%s`.",
-                                slashEscaper.escape(regex))
+                       ? ErrorMessage.notMatching(regex)
                        : customError;
         var rule = SimpleRules.withCustom(
                 event.getField(),
@@ -82,5 +77,22 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                         .setRule(rule)
                         .build()
         );
+    }
+
+    /**
+     * Creates an error message for a value not matching a given regex.
+     */
+    private static final class ErrorMessage {
+
+        private static final Escaper slashEscaper = Escapers.builder()
+                .addEscape('\\', "\\\\")
+                .build();
+
+        @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
+        private static String notMatching(String regex) {
+            return format(
+                    "The string must match the regular expression `%s`.",
+                    slashEscaper.escape(regex));
+        }
     }
 }

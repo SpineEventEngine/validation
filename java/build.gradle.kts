@@ -33,7 +33,7 @@ dependencies {
     api(project(":proto:context"))
     api(ProtoData.codegenJava)
 
-    implementation(project(":java-runtime-bundle"))
+    implementation(project(":java-runtime"))
     implementation(JavaPoet.lib)
     implementation(Roaster.api)
 
