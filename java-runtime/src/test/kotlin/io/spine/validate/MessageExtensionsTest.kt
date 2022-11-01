@@ -24,21 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
-
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+package io.spine.validate
 
 import com.google.common.truth.Truth.assertThat
-import io.spine.validate.ValidatableMessage
+import io.spine.test.validate.Meal
+import io.spine.test.validate.Meat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
-import io.spine.validation.java.given.Meal
+@DisplayName("Validation `Message` extensions should")
+internal class MessageExtensionsTest {
 
-@DisplayName("Validation code for Java should")
-internal class JavaValidationTest {
+    @Nested
+    inner class `Check if the message is valid` {
 
-    @Test
-    fun `implement 'ValidatableMessage'`() {
-        assertThat(Meal.getDefaultInstance()).isInstanceOf(io.spine.validate.ValidatableMessage::class.java)
+        @Test
+        fun `returning 'this' if so`() {
+            val meal = Meal.newBuilder().setMeat(Meat.getDefaultInstance()).build()
+
+            assertThat(meal.checkValid()).isSameInstanceAs(meal)
+        }
+
+        @Test
+        fun `throwing 'ValidationException' if not`() {
+            assertThrows<io.spine.validate.ValidationException> {
+                Meal.getDefaultInstance().checkValid()
+            }
+        }
     }
 }

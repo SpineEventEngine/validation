@@ -150,7 +150,15 @@ class Spine(p: ExtensionAware) {
     val pluginBase = "$toolsGroup:spine-plugin-base:${p.toolBaseVersion}"
     val pluginTestlib = "$toolsGroup:spine-plugin-testlib:${p.toolBaseVersion}"
     val modelCompiler = "$toolsGroup:spine-model-compiler:${p.mcVersion}"
+
+    @Deprecated(message = "Please use `McJava.pluginLib` instead")
     val mcJavaPlugin = "$toolsGroup:spine-mc-java-plugins:${p.mcJavaVersion}:all"
+
+    object McJava {
+        const val version = DefaultVersion.mcJava
+        const val pluginId = "io.spine.mc-java"
+        const val pluginLib = "$toolsGroup:spine-mc-java-plugins:${version}:all"
+    }
 
     /**
      *  Does not allow re-definition via a project property.
@@ -182,6 +190,7 @@ class Spine(p: ExtensionAware) {
     private val ExtensionAware.mcVersion: String
         get() = "mcVersion".asExtra(this, DefaultVersion.mc)
 
+    @Deprecated(message = "Please use `Spine.McJava` dependency object instead.")
     private val ExtensionAware.mcJavaVersion: String
         get() = "mcJavaVersion".asExtra(this, DefaultVersion.mcJava)
 

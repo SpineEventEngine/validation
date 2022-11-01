@@ -24,21 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validate.option;
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import com.google.errorprone.annotations.Immutable;
+import io.spine.code.proto.FieldContext;
+import io.spine.code.proto.FieldDeclaration;
+import io.spine.validate.ConstraintTranslator;
 
-import com.google.common.truth.Truth.assertThat
-import io.spine.validate.ValidatableMessage
+import static java.lang.String.format;
 
-import io.spine.validation.java.given.Meal
+/**
+ * A repeated field constraint that requires values to be distinct.
+ */
+@Immutable
+public final class DistinctConstraint extends FieldConstraint<Boolean> {
 
-@DisplayName("Validation code for Java should")
-internal class JavaValidationTest {
+    DistinctConstraint(Boolean optionValue, FieldDeclaration field) {
+        super(optionValue, field);
+    }
 
-    @Test
-    fun `implement 'ValidatableMessage'`() {
-        assertThat(Meal.getDefaultInstance()).isInstanceOf(io.spine.validate.ValidatableMessage::class.java)
+    @Override
+    public String errorMessage(FieldContext field) {
+        return String.format("`%s` must not contain duplicates.", field.targetDeclaration());
+    }
+
+    @Override
+    public void accept(ConstraintTranslator<?> visitor) {
+        visitor.visitDistinct(this);
     }
 }

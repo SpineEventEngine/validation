@@ -75,15 +75,15 @@ internal class DistinctConstraintTest {
     }
 }
 
-private fun protoSet(): @Validated ProtoSet = ProtoSet.newBuilder().build()
+private fun protoSet(): @io.spine.validate.Validated ProtoSet = ProtoSet.newBuilder().build()
 
-private fun <T> protoSet(vararg element: T): @Validated ProtoSet {
+private fun <T> protoSet(vararg element: T): @io.spine.validate.Validated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.build()
 }
 
-private fun <T> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
+private fun <T> protoSetPartial(vararg element: T): @io.spine.validate.NonValidated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.buildPartial()

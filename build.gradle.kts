@@ -67,7 +67,7 @@ plugins {
     kotlin("jvm")
     `force-jacoco`
     `detekt-code-analysis`
-    id("com.osacky.doctor") version "0.8.1"
+    id(gradleDoctor.pluginId) version gradleDoctor.version
 }
 
 spinePublishing {
@@ -76,6 +76,7 @@ spinePublishing {
         ":proto:context",
         "java",
         "java-bundle",
+        "java-runtime",
         "java-runtime-bundle",
         "model"
     )

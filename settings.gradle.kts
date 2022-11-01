@@ -39,6 +39,7 @@ include(
     ":proto:context",
     "java",
     "model",
+    "java-runtime",
     "java-runtime-bundle",
     "java-bundle",
     ":java-tests:vanilla",

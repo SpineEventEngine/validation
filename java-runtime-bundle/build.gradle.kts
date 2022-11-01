@@ -24,15 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.gradle.excludeProtobufLite
-import io.spine.internal.gradle.protobuf.setup
 import io.spine.internal.gradle.publish.SpinePublishing
-import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 plugins {
     `maven-publish`
@@ -41,51 +33,7 @@ plugins {
 }
 
 dependencies {
-    Protobuf.libs.forEach { api(it) }
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    val spine = io.spine.internal.dependency.Spine(project)
-    implementation(spine.base)
-    testImplementation(spine.testlib)
-}
-
-val generatedDir by extra("$projectDir/generated")
-val generatedJavaDir by extra("$generatedDir/main/java")
-val generatedTestJavaDir by extra("$generatedDir/test/java")
-
-sourceSets {
-    main {
-        java.srcDir(generatedJavaDir)
-        resources.srcDirs(
-            "$generatedDir/main/resources",
-            "$buildDir/descriptors/main"
-        )
-    }
-    test {
-        java.srcDir(generatedTestJavaDir)
-        resources.srcDirs(
-            "$generatedDir/test/resources",
-            "$buildDir/descriptors/test"
-        )
-    }
-}
-
-protobuf {
-    configurations.excludeProtobufLite()
-    generatedFilesBaseDir = generatedDir
-    protoc {
-        artifact = Protobuf.compiler
-    }
-    generateProtoTasks {
-        for (task in all()) {
-            task.setup(generatedDir)
-        }
-    }
-}
-
-tasks {
-    excludeGoogleProtoFromArtifacts()
+    api(project(":java-runtime"))
 }
 
 /** The publishing settings from the root project. */

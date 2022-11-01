@@ -24,21 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.internal.dependency
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-
-import com.google.common.truth.Truth.assertThat
-import io.spine.validate.ValidatableMessage
-
-import io.spine.validation.java.given.Meal
-
-@DisplayName("Validation code for Java should")
-internal class JavaValidationTest {
-
-    @Test
-    fun `implement 'ValidatableMessage'`() {
-        assertThat(Meal.getDefaultInstance()).isInstanceOf(io.spine.validate.ValidatableMessage::class.java)
-    }
+/**
+ * Helps optimize Gradle Builds by ensuring recommendations at build time.
+ *
+ * See [plugin site](https://runningcode.github.io/gradle-doctor) for features and usage.
+ */
+object GradleDoctor {
+    const val version = "0.8.1"
+    const val pluginId = "com.osacky.doctor"
 }
