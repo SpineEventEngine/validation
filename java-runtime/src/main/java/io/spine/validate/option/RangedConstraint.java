@@ -35,6 +35,7 @@ import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.ComparableNumber;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.BoundType.*;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -97,6 +98,6 @@ public abstract class RangedConstraint<@ImmutableTypeParameter T> extends FieldC
     protected abstract String compileErrorMessage(Range<ComparableNumber> range);
 
     static String orEqualTo(BoundType type) {
-        return type == BoundType.CLOSED ? OR_EQUAL_TO : "";
+        return type == CLOSED ? OR_EQUAL_TO : "";
     }
 }

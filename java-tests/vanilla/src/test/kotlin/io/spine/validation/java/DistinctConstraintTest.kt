@@ -27,12 +27,12 @@ package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth
-import io.spine.base.FieldPath
+import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
-import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
+import io.spine.validate.constraintViolation
 import io.spine.validation.java.given.ProtoSet
 import java.util.*
 import org.junit.jupiter.api.DisplayName
@@ -51,14 +51,9 @@ internal class DistinctConstraintTest {
         val violations = error.get().getConstraintViolationList()
         ProtoTruth.assertThat(violations)
             .comparingExpectedFieldsOnly()
-            .containsExactly(
-                ConstraintViolation.newBuilder()
-                    .setFieldPath(
-                        FieldPath.newBuilder()
-                            .addFieldName("element")
-                    )
-                    .build()
-            )
+            .containsExactly( constraintViolation {
+                fieldPath { fieldName.add("element") }
+            })
     }
 
     @Test
@@ -75,15 +70,15 @@ internal class DistinctConstraintTest {
     }
 }
 
-private fun protoSet(): @io.spine.validate.Validated ProtoSet = ProtoSet.newBuilder().build()
+private fun protoSet(): @Validated ProtoSet = ProtoSet.newBuilder().build()
 
-private fun <T> protoSet(vararg element: T): @io.spine.validate.Validated ProtoSet {
+private fun <T> protoSet(vararg element: T): @Validated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.build()
 }
 
-private fun <T> protoSetPartial(vararg element: T): @io.spine.validate.NonValidated ProtoSet {
+private fun <T> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.buildPartial()

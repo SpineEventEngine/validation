@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("Validation `Message` extensions should")
+@DisplayName("Validation extensions for `Message` should")
 internal class MessageExtensionsTest {
 
     @Nested
@@ -49,7 +49,7 @@ internal class MessageExtensionsTest {
 
         @Test
         fun `throwing 'ValidationException' if not`() {
-            assertThrows<io.spine.validate.ValidationException> {
+            assertThrows<ValidationException> {
                 Meal.getDefaultInstance().checkValid()
             }
         }

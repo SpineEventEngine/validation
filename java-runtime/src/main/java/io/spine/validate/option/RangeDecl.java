@@ -94,11 +94,11 @@ final class RangeDecl {
     private RangeDecl(String rangeOptionValue, FieldDeclaration field) {
         var rangeMatcher = NUMBER_RANGE.matcher(rangeOptionValue.trim());
         checkState(rangeMatcher.matches(),
-                                 "Malformed range `%s` on the field `%s`. " +
+                   "Malformed range `%s` on the field `%s`. " +
                            "Must have a form of `[a..b]` " +
                            "where `a` and `b` are valid literals of the type `%s`. " +
                            "Please see the documentation of the `(range)` option for more details.",
-                                 rangeOptionValue, field, field.javaTypeName());
+                   rangeOptionValue, field, field.javaTypeName());
         this.minInclusive = "[".equals(rangeMatcher.group(1));
         this.min = new NumberText(rangeMatcher.group(2)).toNumber();
         this.max = new NumberText(rangeMatcher.group(3)).toNumber();

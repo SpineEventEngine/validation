@@ -194,8 +194,7 @@ public final class Validate {
         checkNotNull(current);
 
         var diff = Diff.between(previous, current);
-        var violations = current.getDescriptorForType()
-                                .getFields()
+        var violations = current.getDescriptorForType().getFields()
                 .stream()
                 .map(FieldDeclaration::new)
                 .filter(Validate::isNonOverridable)
@@ -255,19 +254,15 @@ public final class Validate {
     }
 
     private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {
-        var declaringTypeName = declaration.declaringType()
-                                           .name();
-        var fieldName = declaration.name();
+        var declaringTypeName = declaration.declaringType().name().value();
+        var fieldName = declaration.name().value();
         var violation = ConstraintViolation.newBuilder()
                 .setMsgFormat("Attempted to change the value of the field `%s.%s` which has " +
                                       "`(set_once) = true` and is already set.")
-                .addParam(declaringTypeName.value())
-                .addParam(fieldName.value())
-                .setFieldPath(declaration.name()
-                                         .asPath())
-                .setTypeName(declaration.declaringType()
-                                        .name()
-                                        .value())
+                .addParam(declaringTypeName)
+                .addParam(fieldName)
+                .setFieldPath(declaration.name().asPath())
+                .setTypeName(declaration.declaringType().name().value())
                 .build();
         return violation;
     }

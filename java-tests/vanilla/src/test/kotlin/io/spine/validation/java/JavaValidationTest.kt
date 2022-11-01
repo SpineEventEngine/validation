@@ -39,6 +39,6 @@ internal class JavaValidationTest {
 
     @Test
     fun `implement 'ValidatableMessage'`() {
-        assertThat(Meal.getDefaultInstance()).isInstanceOf(io.spine.validate.ValidatableMessage::class.java)
+        assertThat(Meal.getDefaultInstance()).isInstanceOf(ValidatableMessage::class.java)
     }
 }

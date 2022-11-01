@@ -88,7 +88,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .addEscape('\\', "\\\\")
                 .build();
 
-        //@SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
+        @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
         private static String notMatching(String regex) {
             return format(
                     "The string must match the regular expression `%s`.",

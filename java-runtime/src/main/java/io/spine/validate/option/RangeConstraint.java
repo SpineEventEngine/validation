@@ -57,9 +57,9 @@ public final class RangeConstraint extends RangedConstraint<String> {
     @Override
     protected String compileErrorMessage(Range<ComparableNumber> range) {
         return format("The value of the field `%s` is out of range. Must be %s%s and %s%s.",
-                             field(),
-                             forLowerBound(range), range.lowerEndpoint(),
-                             forUpperBound(range), range.upperEndpoint());
+                      field(),
+                      forLowerBound(range), range.lowerEndpoint(),
+                      forUpperBound(range), range.upperEndpoint());
     }
 
     private static String forLowerBound(Range<?> range) {
