@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static com.google.common.collect.Sets.union;
 import static io.spine.testing.Assertions.assertIllegalArgument;
 import static io.spine.validate.option.RangeConstraint.rangeFromOption;
 import static org.junit.jupiter.api.Assertions.assertEquals;

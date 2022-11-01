@@ -34,6 +34,8 @@ import io.spine.type.MessageType;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintTranslator;
 
+import static java.lang.String.format;
+
 /**
  * A {@code oneof} group constraint which signifies that one of the fields must be set.
  */
@@ -53,7 +55,7 @@ public final class IsRequiredConstraint implements Constraint {
 
     @Override
     public String errorMessage(FieldContext field) {
-        return String.format("One of fields in group `%s` must be set.", declaration.name());
+        return format("One of fields in group `%s` must be set.", declaration.name());
     }
 
     @Override

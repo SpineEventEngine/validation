@@ -45,7 +45,7 @@ public final class DistinctConstraint extends FieldConstraint<Boolean> {
 
     @Override
     public String errorMessage(FieldContext field) {
-        return String.format("`%s` must not contain duplicates.", field.targetDeclaration());
+        return format("`%s` must not contain duplicates.", field.targetDeclaration());
     }
 
     @Override

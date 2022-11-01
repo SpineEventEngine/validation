@@ -137,7 +137,7 @@ public final class ExternalConstraints implements Serializable {
                 .stream()
                 .filter(new HasExternalConstraint())
                 .map(ExternalConstraints::toConstraint)
-                .collect(ImmutableSet.toImmutableSet());
+                .collect(toImmutableSet());
     }
 
     /**

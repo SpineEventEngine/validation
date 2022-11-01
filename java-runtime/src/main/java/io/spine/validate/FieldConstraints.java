@@ -52,7 +52,7 @@ final class FieldConstraints {
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =
             allFactories.stream()
                         .filter(factory -> !(factory instanceof StandardOptionFactory))
-                        .collect(ImmutableSet.toImmutableSet());
+                        .collect(toImmutableSet());
 
     /**
      * Prevents the utility class instantiation.

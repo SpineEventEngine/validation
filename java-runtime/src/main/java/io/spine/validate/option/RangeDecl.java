@@ -108,12 +108,12 @@ final class RangeDecl {
     private Range<ComparableNumber> toRange() {
         if (minInclusive) {
             return maxInclusive
-                   ? Range.closed(min, max)
-                   : Range.closedOpen(min, max);
+                   ? closed(min, max)
+                   : closedOpen(min, max);
         } else {
             return maxInclusive
-                   ? Range.openClosed(min, max)
-                   : Range.open(min, max);
+                   ? openClosed(min, max)
+                   : open(min, max);
         }
     }
 }

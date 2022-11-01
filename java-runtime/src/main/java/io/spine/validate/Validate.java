@@ -205,7 +205,7 @@ public final class Validate {
                     return !field.isDefault(fieldValue);
                 })
                 .map(Validate::violatedSetOnce)
-                .collect(ImmutableSet.toImmutableSet());
+                .collect(toImmutableSet());
         return violations;
     }
 

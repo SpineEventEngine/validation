@@ -91,7 +91,7 @@ public final class Alternative {
     private static Alternative ofCombination(Collection<String> fieldNames, MessageType type) {
         var fields = fieldNames.stream()
                 .map(type::field)
-                .collect(ImmutableSet.toImmutableSet());
+                .collect(toImmutableSet());
         return new Alternative(fields);
     }
 

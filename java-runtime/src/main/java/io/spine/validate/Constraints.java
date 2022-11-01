@@ -132,7 +132,7 @@ public final class Constraints {
                       .stream()
                       .map(field -> context.forChild(field.descriptor()))
                       .flatMap(FieldConstraints::customConstraintsFor)
-                      .collect(ImmutableList.toImmutableList())
+                      .collect(toImmutableList())
                 : ImmutableList.of();
         return new Constraints(constraints);
     }

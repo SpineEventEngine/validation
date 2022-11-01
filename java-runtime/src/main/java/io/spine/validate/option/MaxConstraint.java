@@ -60,7 +60,7 @@ public final class MaxConstraint extends RangedConstraint<MaxOption> {
     protected String compileErrorMessage(Range<ComparableNumber> range) {
         var max = optionValue();
         var template = ViolationText.errorMessage(max, max.getMsgFormat());
-        return String.format(template, orEqualTo(range.upperBoundType()), range.upperEndpoint());
+        return format(template, orEqualTo(range.upperBoundType()), range.upperEndpoint());
     }
 
     @Override

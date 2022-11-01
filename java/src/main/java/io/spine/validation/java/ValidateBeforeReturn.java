@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.protodata.renderer.LineNumber.notInFile;
+import static java.lang.String.format;
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
@@ -53,7 +54,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     @Override
     public String getLabel() {
-        return String.format("validate:%s", typeUrl(messageType()));
+        return format("validate:%s", typeUrl(messageType()));
     }
 
     @Override
