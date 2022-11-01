@@ -51,8 +51,8 @@ final class FieldConstraints {
             ValidatingOptionsLoader.INSTANCE.implementations();
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =
             allFactories.stream()
-                        .filter(factory -> !(factory instanceof StandardOptionFactory))
-                        .collect(toImmutableSet());
+                    .filter(factory -> !(factory instanceof StandardOptionFactory))
+                    .collect(toImmutableSet());
 
     /**
      * Prevents the utility class instantiation.
@@ -116,9 +116,9 @@ final class FieldConstraints {
                     Function<ValidatingOptionFactory, Set<FieldValidatingOption<?>>> selector,
                     FieldContext field) {
         return factories.stream()
-                        .map(selector)
-                        .flatMap(Set::stream)
-                        .filter(option -> option.shouldValidate(field))
-                        .map(option -> option.constraintFor(field));
+                .map(selector)
+                .flatMap(Set::stream)
+                .filter(option -> option.shouldValidate(field))
+                .map(option -> option.constraintFor(field));
     }
 }

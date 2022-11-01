@@ -57,8 +57,9 @@ public interface Constraint {
     /**
      * Accepts the given {@link ConstraintTranslator}.
      *
-     * @implNote {@code Constraint} and {@code ConstraintTranslator} implement the visitor pattern.
-     *         Implementations should call the appropriate method of {@code ConstraintTranslator}.
+     * @implNote {@code Constraint} and {@code ConstraintTranslator} implement the visitor
+     *         pattern. Implementations should call the appropriate method
+     *         of {@code ConstraintTranslator}.
      */
     void accept(ConstraintTranslator<?> visitor);
 }

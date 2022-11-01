@@ -91,7 +91,7 @@ final class ExternalMessageConstraint {
      */
     boolean hasTarget(Descriptor containingType, String fieldName) {
         return targets.stream()
-                      .anyMatch(field -> isSame(field, containingType, fieldName));
+                .anyMatch(field -> isSame(field, containingType, fieldName));
     }
 
     private static boolean isSame(FieldDescriptor field, Descriptor containerType,
@@ -134,7 +134,7 @@ final class ExternalMessageConstraint {
         var field = message.findFieldByName(fieldName);
         if (field == null) {
             throw newIllegalStateException("The field '%s' is not found in the '%s' message.",
-                                                      fieldName, message.getName());
+                                           fieldName, message.getName());
         }
         return checkTargetType(field);
     }
@@ -166,14 +166,14 @@ final class ExternalMessageConstraint {
                 var msg = "The external constraint '%s' declares the field `%s`, " +
                         "which was not found in the `%s` message.";
                 throw newIllegalStateException(msg, constraint.getFullName(),
-                                                          fieldName, targetType.getName());
+                                               fieldName, targetType.getName());
             }
 
             var isCorrectType = constraintField.getJavaType() == targetField.getJavaType();
             if (!isCorrectType) {
                 var errMsg = "`%s` must be of type `%s`.";
                 throw newIllegalStateException(errMsg, constraintField.getFullName(),
-                                                          targetField.getJavaType());
+                                               targetField.getJavaType());
             }
         }
     }

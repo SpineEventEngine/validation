@@ -123,8 +123,8 @@ public final class ExternalConstraints implements Serializable {
      */
     private static ImmutableSet<ExternalMessageConstraint> constraintsFor(KnownTypes knownTypes) {
         var types = checkNotNull(knownTypes)
-                                 .asTypeSet()
-                                 .messageTypes();
+                .asTypeSet()
+                .messageTypes();
         return constraintsFor(types);
     }
 
@@ -148,7 +148,8 @@ public final class ExternalConstraints implements Serializable {
         var constraintFor = new ConstraintFor();
         var constraintTargets = constraintFor
                 .valueFrom(type.toProto())
-                .orElseThrow(() -> newIllegalArgumentException(type.name().value()));
+                .orElseThrow(() -> newIllegalArgumentException(type.name()
+                                                                   .value()));
         Collection<String> parsedPaths = optionSplitter.splitToList(constraintTargets);
         return new ExternalMessageConstraint(type.descriptor(), parsedPaths);
     }

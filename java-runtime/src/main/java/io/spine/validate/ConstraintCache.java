@@ -40,9 +40,9 @@ import static io.spine.util.Exceptions.illegalStateWithCauseOf;
  * Cache of constraints per {@link MessageType} in a {@link FieldContext}.
  *
  * @implNote The cache consists of a {@code 1000} entries, which is, most likely, not all
- * the combinations of {@link MessageType}s and {@link FieldContext}s. However, as any kind of
- * caching is a tradeoff between speed and the allocated memory, it's assumed that {@code 1000}
- * entries is just enough.
+ *         the combinations of {@link MessageType}s and {@link FieldContext}s.
+ *         However, as any kind of caching is a tradeoff between speed and the allocated memory,
+ *         it's assumed that {@code 1000} entries is just enough.
  */
 final class ConstraintCache {
 
@@ -95,8 +95,8 @@ final class ConstraintCache {
         try {
             return constraints.get(key);
         } catch (@SuppressWarnings("OverlyBroadCatchBlock")
-                // `get(..)` Can throw checked and unchecked Exceptions and Errors.
-                Throwable e) {
+        // `get(..)` Can throw checked and unchecked Exceptions and Errors.
+        Throwable e) {
             throw illegalStateWithCauseOf(e);
         }
     }

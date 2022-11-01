@@ -97,8 +97,8 @@ public final class FieldValue {
         checkNotNull(rawValue);
         checkNotNull(context);
         var value = rawValue instanceof ProtocolMessageEnum
-                  ? ((ProtocolMessageEnum) rawValue).getValueDescriptor()
-                  : rawValue;
+                    ? ((ProtocolMessageEnum) rawValue).getValueDescriptor()
+                    : rawValue;
         var fieldDescriptor = context.target();
         var declaration = new FieldDeclaration(fieldDescriptor);
 
@@ -116,8 +116,8 @@ public final class FieldValue {
      * @return a properly typed {@code FieldValue} instance.
      */
     @SuppressWarnings("ChainOfInstanceofChecks")
-    private static
-    FieldValue resolveType(FieldDeclaration field, FieldContext context, Object value) {
+    private static FieldValue resolveType(FieldDeclaration field, FieldContext context,
+                                          Object value) {
         if (value instanceof List) {
             var values = (List<?>) value;
             return new FieldValue(values, context, field);
@@ -194,8 +194,8 @@ public final class FieldValue {
      */
     public Object singleValue() {
         checkState(!values.isEmpty(),
-                                 "Unable to get the first element of an empty collection for the field `%s`.",
-                                 declaration());
+                   "Unable to get the first element of an empty collection for the field `%s`.",
+                   declaration());
         return values.get(0);
     }
 
@@ -206,7 +206,7 @@ public final class FieldValue {
 
     private boolean allDefault() {
         return values.stream()
-                     .allMatch(FieldValue::isDefault);
+                .allMatch(FieldValue::isDefault);
     }
 
     private static boolean isDefault(Object singleValue) {

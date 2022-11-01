@@ -45,9 +45,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A value of a {@link Message} to validate.
  *
- * @implNote For the performance reasons the values of the passed {@code Message} fields are
- *         read either via {@linkplain Message#getField(com.google.protobuf.Descriptors.FieldDescriptor)
- *         reflection} or {@linkplain FieldAwareMessage#readValue(com.google.protobuf.Descriptors.FieldDescriptor)
+ * @implNote For the performance reasons the values of the passed {@code Message} fields
+ *         are read either via
+ *         {@linkplain Message#getField(com.google.protobuf.Descriptors.FieldDescriptor) reflection}
+ *         or
+ *         {@linkplain FieldAwareMessage#readValue(com.google.protobuf.Descriptors.FieldDescriptor)
  *         directly} if an instance of {@link FieldAwareMessage} is passed.
  *         Also, for the same reason the contents of non-{@code oneof} fields are cached once read.
  */
@@ -137,8 +139,8 @@ public final class MessageValue {
      *
      * @param fieldDescriptor
      *         the field descriptor of the field to obtain
-     * @return a value of the field or {@code Optional.empty()} if the message doesn't contain
-     * the field
+     * @return a value of the field or {@code Optional.empty()} if
+     *         the message doesn't contain the field
      */
     public Optional<FieldValue> valueOf(FieldDescriptor fieldDescriptor) {
         return valueOfNullable(fieldDescriptor);

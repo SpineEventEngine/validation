@@ -195,7 +195,7 @@ public final class Validate {
 
         var diff = Diff.between(previous, current);
         var violations = current.getDescriptorForType()
-                .getFields()
+                                .getFields()
                 .stream()
                 .map(FieldDeclaration::new)
                 .filter(Validate::isNonOverridable)
@@ -255,7 +255,8 @@ public final class Validate {
     }
 
     private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {
-        var declaringTypeName = declaration.declaringType().name();
+        var declaringTypeName = declaration.declaringType()
+                                           .name();
         var fieldName = declaration.name();
         var violation = ConstraintViolation.newBuilder()
                 .setMsgFormat("Attempted to change the value of the field `%s.%s` which has " +
