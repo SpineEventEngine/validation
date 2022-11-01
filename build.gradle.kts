@@ -56,6 +56,7 @@ buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
     dependencies {
         classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
     }
 }
 
