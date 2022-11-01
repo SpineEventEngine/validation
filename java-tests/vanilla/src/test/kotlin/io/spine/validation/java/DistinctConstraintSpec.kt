@@ -42,6 +42,7 @@ import org.junit.jupiter.api.Test
 internal class DistinctConstraintSpec {
 
     @Test
+    @SuppressWarnings("ForbiddenComment")
     fun `duplicates result is a violation`() {
         val same = "123"
         val msg = protoSetPartial(same, "321", same)
