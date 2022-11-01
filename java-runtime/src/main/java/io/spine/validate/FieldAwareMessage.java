@@ -78,9 +78,10 @@ public interface FieldAwareMessage extends Message {
             var value = getField(field);
             var actual = readValue(field);
             var equals = Objects.equals(actual, value);
-            checkArgument(equals, "" +
-                    "`readValue(field)` is implemented incorrectly for the `%s` field in `%s`",
-                                        field, getClass());
+            checkArgument(
+                    equals,
+                    "`readValue(field)` is implemented incorrectly for the `%s` field in `%s`.",
+                    field, getClass());
         }
         return true;
     }
