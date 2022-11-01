@@ -57,6 +57,7 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.protobuf.Messages.ensureMessage;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validate.MessageValue.atTopLevel;
@@ -156,7 +157,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         violations.addAll(
                 duplicates.stream()
                         .map(duplicate -> violation(constraint, fieldValue, duplicate))
-                        .collect(ImmutableList.toImmutableList())
+                        .collect(toImmutableList())
         );
     }
 
@@ -176,8 +177,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         var withField = declaration.get();
         if (!value.isDefault() && fieldValueNotSet(withField)) {
             var withFieldNotSet = violation(constraint, value).toBuilder()
-                    .addParam(field.name()
-                                   .value())
+                    .addParam(field.name().value())
                     .addParam(withFieldName)
                     .build();
             violations.add(withFieldNotSet);
@@ -208,9 +208,10 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
     @Override
     public void visitRequiredField(RequiredFieldConstraint constraint) {
         checkNotNull(constraint);
-        var check = new RequiredFieldCheck(constraint.optionValue(),
-                                           constraint.alternatives(),
-                                           message);
+        var check = new RequiredFieldCheck(
+                constraint.optionValue(),
+                constraint.alternatives(),
+                message);
         var violation = check.perform();
         violation.ifPresent(violations::add);
     }
@@ -227,8 +228,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
             var violation = ConstraintViolation.newBuilder()
                     .setMsgFormat(constraint.errorMessage(message.context()))
                     .setFieldPath(oneofField.path())
-                    .setTypeName(targetType.name()
-                                           .value())
+                    .setTypeName(targetType.name().value())
                     .build();
             violations.add(violation);
         }
@@ -271,10 +271,8 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
 
     private static void checkTypeConsistency(Range<ComparableNumber> range, FieldValue value) {
         if (range.hasLowerBound() && range.hasUpperBound()) {
-            var upper = range.upperEndpoint()
-                             .toText();
-            var lower = range.lowerEndpoint()
-                             .toText();
+            var upper = range.upperEndpoint().toText();
+            var lower = range.lowerEndpoint().toText();
             if (!upper.isOfSameType(lower)) {
                 throw newIllegalStateException(
                         "Boundaries have inconsistent types: lower is `%s`, upper is `%s`.",
@@ -289,10 +287,8 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
 
     private static void checkSingleBoundary(Range<ComparableNumber> range, FieldValue value) {
         var singleBoundary = range.hasLowerBound()
-                             ? range.lowerEndpoint()
-                                    .toText()
-                             : range.upperEndpoint()
-                                    .toText();
+                             ? range.lowerEndpoint().toText()
+                             : range.upperEndpoint().toText();
         checkBoundaryAndValue(singleBoundary, value);
     }
 
@@ -331,10 +327,8 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
 
     private static Optional<FieldDeclaration>
     withField(MessageValue messageValue, GoesConstraint constraint) {
-        var withField = FieldName.of(constraint.optionValue()
-                                               .getWith());
-        for (var field : messageValue.declaration()
-                                     .fields()) {
+        var withField = FieldName.of(constraint.optionValue().getWith());
+        for (var field : messageValue.declaration().fields()) {
             if (withField.equals(field.name())) {
                 return Optional.of(field);
             }
@@ -351,8 +345,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
                                                  @Nullable Object violatingValue) {
         var context = value.context();
         var fieldPath = context.fieldPath();
-        var typeName = constraint.targetType()
-                                 .name();
+        var typeName = constraint.targetType().name();
         var violation = ConstraintViolation.newBuilder()
                 .setMsgFormat(constraint.errorMessage(context))
                 .setFieldPath(fieldPath)
