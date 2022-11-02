@@ -29,7 +29,7 @@ import io.spine.internal.dependency.Protobuf
 buildscript {
     io.spine.internal.gradle.doApplyStandard(repositories)
     dependencies {
-        classpath(io.spine.internal.dependency.Spine(project).mcJavaPlugin)
+        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
     }

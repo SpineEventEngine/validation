@@ -78,7 +78,6 @@ spinePublishing {
         "java",
         "java-bundle",
         "java-runtime",
-        "java-runtime-bundle",
         "model"
     )
     destinations = with(PublishingRepos) {
