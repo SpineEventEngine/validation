@@ -38,7 +38,7 @@ val spinePublishing = rootProject.the<SpinePublishing>()
 /**
  * The ID of the far JAR artifact.
  */
-val pArtifact = spinePublishing.artifactPrefix + "java-extensions"
+val pArtifact = spinePublishing.artifactPrefix + "java-bundle"
 
 dependencies {
     implementation(project(":java"))
@@ -49,7 +49,7 @@ publishing {
     val pVersion = project.version.toString()
 
     publications {
-        create("fat-jar", MavenPublication::class) {
+        create("fatJar", MavenPublication::class) {
             groupId = pGroup
             artifactId = pArtifact
             version = pVersion
@@ -94,4 +94,12 @@ tasks.shadowJar {
     archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
     mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
+}
+
+/**
+ * Declare dependency explicitly to address the Gradle warning.
+ */
+val publishFatJarPublicationToMavenLocal: Task by tasks.getting {
+    dependsOn(tasks.jar)
+    println("Task `${this.name}` now depends on `${tasks.jar.name}`.")
 }
