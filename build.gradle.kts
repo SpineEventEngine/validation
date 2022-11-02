@@ -73,12 +73,13 @@ plugins {
 
 spinePublishing {
     modules = setOf(
+        "model",
         ":proto:configuration",
         ":proto:context",
         "java",
         "java-bundle",
         "java-runtime",
-        "model"
+        "java-runtime-bundle",
     )
     destinations = with(PublishingRepos) {
         setOf(
@@ -116,7 +117,6 @@ subprojects {
     applyPlugins()
     addDependencies()
     forceConfigurations()
-
     applyGeneratedDirectories("$projectDir/generated")
 
     val javaVersion = JavaVersion.VERSION_11
