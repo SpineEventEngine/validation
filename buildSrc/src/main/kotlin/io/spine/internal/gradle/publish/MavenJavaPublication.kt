@@ -30,13 +30,71 @@ import io.spine.internal.gradle.Repository
 import io.spine.internal.gradle.isSnapshot
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.getByType
+
+/**
+ * Abstract base for handlers of publications in a project
+ * with [spinePublishing] settings declared.
+ */
+internal sealed class PublicationHandler(
+    private val artifactId: String,
+    private val destinations: Set<Repository>
+) {
+
+    /**
+     * Registers this publication in the given project.
+     *
+     * The only prerequisite for the project is to have `maven-publish` plugin applied.
+     */
+    fun registerIn(project: Project) {
+        handlePublications(project)
+        registerDestinations(project)
+    }
+
+    /**
+     * Either handles publications already declared in the given project,
+     * or creates new ones.
+     */
+    abstract fun handlePublications(project: Project)
+
+    protected fun MavenPublication.specifyMavenCoordinates(project: Project) {
+        groupId = project.group.toString()
+        artifactId = this@PublicationHandler.artifactId
+        version = project.version.toString()
+    }
+
+    /**
+     * Goes through the [destinations] and registers each as a repository for publishing
+     * in the given Gradle project.
+     */
+    private fun registerDestinations(project: Project) {
+        val isSnapshot = project.version.toString().isSnapshot()
+        val gradleRepositories = project.publishingExtension.repositories
+        destinations.forEach { destination ->
+            gradleRepositories.register(destination, isSnapshot, project)
+        }
+    }
+
+    private fun RepositoryHandler.register(
+        repository: Repository,
+        isSnapshot: Boolean,
+        project: Project
+    ) {
+        val target = if (isSnapshot) repository.snapshots else repository.releases
+        val credentials = repository.credentials(project.rootProject)
+        maven {
+            url = project.uri(target)
+            credentials {
+                username = credentials?.username
+                password = credentials?.password
+            }
+        }
+    }
+}
 
 /**
  * A publication for a typical Java project.
@@ -55,42 +113,27 @@ import org.gradle.kotlin.dsl.getByType
  *
  * See: [Maven Publish Plugin | Publications](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:publications)
  *
- *  @param artifactId a name that a project is known by.
- *  @param jars list of artifacts to be published along with the compilation output.
- *  @param destinations Maven repositories to which the produced artifacts will be sent.
+ *  @param artifactId
+ *          a name that a project is known by.
+ *  @param jars
+ *          list of artifacts to be published along with the compilation output.
+ *  @param destinations
+ *          Maven repositories to which the produced artifacts will be sent.
  */
 internal class MavenJavaPublication(
-    private val artifactId: String,
+    artifactId: String,
     private val jars: Set<TaskProvider<Jar>>,
-    private val destinations: Set<Repository>,
-) {
-
-    /**
-     * Registers this publication in the given project.
-     *
-     * The only prerequisite for the project is to have `maven-publish` plugin applied.
-     */
-    fun registerIn(project: Project) {
-        createPublication(project)
-        registerDestinations(project)
-    }
+    destinations: Set<Repository>,
+) : PublicationHandler(artifactId, destinations) {
 
     /**
      * Creates a new "mavenJava" [MavenPublication] in the given project.
      */
-    private fun createPublication(project: Project) {
-        val gradlePublishing = project.extensions.getByType<PublishingExtension>()
-        val gradlePublications = gradlePublishing.publications
-        gradlePublications.create<MavenPublication>("mavenJava") {
+    override fun handlePublications(project: Project) {
+        project.publications.create<MavenPublication>("mavenJava") {
             specifyMavenCoordinates(project)
             specifyArtifacts(project)
         }
-    }
-
-    private fun MavenPublication.specifyMavenCoordinates(project: Project) {
-        groupId = project.group.toString()
-        artifactId = this@MavenJavaPublication.artifactId
-        version = project.version.toString()
     }
 
     /**
@@ -121,35 +164,6 @@ internal class MavenJavaPublication(
         // metadata in comparison with `Component` (such as dependencies notation).
         jars.forEach {
             artifact(it)
-        }
-    }
-
-    /**
-     * Goes through the [destinations] and registers each as a repository for publishing
-     * in the given Gradle project.
-     */
-    private fun registerDestinations(project: Project) {
-        val gradlePublishing = project.extensions.getByType<PublishingExtension>()
-        val isSnapshot = project.version.toString().isSnapshot()
-        val gradleRepositories = gradlePublishing.repositories
-        destinations.forEach { destination ->
-            gradleRepositories.register(destination, isSnapshot, project)
-        }
-    }
-
-    private fun RepositoryHandler.register(
-        repository: Repository,
-        isSnapshot: Boolean,
-        project: Project
-    ) {
-        val target = if (isSnapshot) repository.snapshots else repository.releases
-        val credentials = repository.credentials(project.rootProject)
-        maven {
-            url = project.uri(target)
-            credentials {
-                username = credentials?.username
-                password = credentials?.password
-            }
         }
     }
 }

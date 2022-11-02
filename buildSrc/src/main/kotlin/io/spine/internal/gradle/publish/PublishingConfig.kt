@@ -46,7 +46,8 @@ internal class PublishingConfig(
     val destinations: Set<Repository>,
     val includeProtoJar: Boolean = true,
     val includeTestJar: Boolean = false,
-    val includeDokkaJar: Boolean = false
+    val includeDokkaJar: Boolean = false,
+    val customPublishing: Boolean = false
 )
 
 /**
@@ -67,6 +68,20 @@ internal fun PublishingConfig.apply(project: Project) = with(project) {
 }
 
 private fun PublishingConfig.createPublication(project: Project) {
+    if (customPublishing) {
+        handleCustomPublications(project)
+    } else {
+        createStandardPublication(project)
+    }
+}
+
+private fun handleCustomPublications(project: Project) {
+    project.logger.info(
+        "The project `${project.name}` is set to provide custom publishing."
+    )
+}
+
+private fun PublishingConfig.createStandardPublication(project: Project) {
     val artifacts = project.registerArtifacts(includeProtoJar, includeTestJar, includeDokkaJar)
     val publication = MavenJavaPublication(
         artifactId = artifactId,
