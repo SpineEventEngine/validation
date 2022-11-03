@@ -189,7 +189,7 @@ private fun MavenPublication.specifyArtifacts(project: Project, jars: Set<TaskPr
  * If a module with [publications] declared locally is not specified as one with custom publishing,
  * it may cause a name clash between an artifact produced by the [standard][MavenPublication]
  * publication, and custom ones. In order to have both standard and custom publications,
- * please specify custom artifact IDs or classifiers for custom ones.
+ * please specify custom artifact IDs or classifiers for each custom publication.
  */
 internal class CustomPublications(artifactId: String, destinations: Set<Repository>) :
     PublicationHandler(artifactId, destinations) {
