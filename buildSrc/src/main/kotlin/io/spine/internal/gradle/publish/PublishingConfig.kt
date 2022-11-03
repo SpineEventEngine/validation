@@ -49,15 +49,26 @@ import org.gradle.kotlin.dsl.apply
  *         tells whether subproject declares own publishing and standard one
  *         should not be applied.
  */
-internal class PublishingConfig(
+internal class PublishingConfig private constructor(
     val artifactId: String,
     val destinations: Set<Repository>,
-    val includeProtoJar: Boolean = true,
-    val includeTestJar: Boolean = false,
-    val includeDokkaJar: Boolean = false,
-    val customPublishing: Boolean = false
-)
+    val customPublishing: Boolean,
+    val includeTestJar: Boolean,
+    val includeDokkaJar: Boolean,
+    val includeProtoJar: Boolean
+) {
+    constructor(
+        artifactId: String,
+        destinations: Set<Repository>,
+        includeProtoJar: Boolean = true,
+        includeTestJar: Boolean = false,
+        includeDokkaJar: Boolean = false
+    ) : this(artifactId, destinations, false, includeTestJar, includeDokkaJar, includeProtoJar)
 
+    constructor(artifactId: String, destinations: Set<Repository>) :
+            this(artifactId, destinations, customPublishing = true,
+                includeTestJar = false, includeDokkaJar = false, includeProtoJar = false)
+}
 /**
  * Applies this configuration to the given project.
  *
