@@ -49,22 +49,42 @@ import org.gradle.kotlin.dsl.apply
  *         tells whether subproject declares own publishing and standard one
  *         should not be applied.
  */
-internal class PublishingConfig(
+internal class PublishingConfig private constructor(
     val artifactId: String,
     val destinations: Set<Repository>,
-    val includeProtoJar: Boolean = true,
-    val includeTestJar: Boolean = false,
-    val includeDokkaJar: Boolean = false,
-    val customPublishing: Boolean = false
-)
+    val customPublishing: Boolean,
+    val includeTestJar: Boolean,
+    val includeDokkaJar: Boolean,
+    val includeProtoJar: Boolean
+) {
+    /**
+     * Creates an instance for standard publishing of a project module,
+     * specified under [SpinePublishing.modules].
+     */
+    constructor(
+        artifactId: String,
+        destinations: Set<Repository>,
+        includeProtoJar: Boolean = true,
+        includeTestJar: Boolean = false,
+        includeDokkaJar: Boolean = false
+    ) : this(artifactId, destinations, false, includeTestJar, includeDokkaJar, includeProtoJar)
 
+    /**
+     * Creates an instance for publishing a module specified
+     * under [SpinePublishing.modulesWithCustomPublishing].
+     */
+    constructor(artifactId: String, destinations: Set<Repository>) :
+            this(artifactId, destinations, customPublishing = true,
+                includeTestJar = false, includeDokkaJar = false, includeProtoJar = false)
+}
 /**
  * Applies this configuration to the given project.
  *
  * This method does the following:
  *
  *  1. Applies `maven-publish` plugin to the project.
- *  2. Registers [MavenJavaPublication] in Gradle's [PublicationContainer][org.gradle.api.publish.PublicationContainer].
+ *  2. Registers [MavenJavaPublication] in Gradle's
+ *     [PublicationContainer][org.gradle.api.publish.PublicationContainer].
  *  4. Configures "publish" task.
  *
  *  The actual list of resulted artifacts is determined by [registerArtifacts].

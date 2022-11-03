@@ -313,7 +313,8 @@ open class SpinePublishing(private val project: Project) {
      *
      * @see modules
      */
-    private fun publishedProjects() = modules.map { name -> project.project(name) }
+    private fun publishedProjects() = modules.union(modulesWithCustomPublishing)
+        .map { name -> project.project(name) }
         .ifEmpty { setOf(project) }
 
     /**
@@ -345,13 +346,15 @@ open class SpinePublishing(private val project: Project) {
         includeDokkaJar: Boolean
     ) {
         val artifactId = artifactId(project)
-        val publishingConfig = PublishingConfig(
-            artifactId,
-            destinations,
-            includeProtoJar,
-            includeTestJar,
-            includeDokkaJar
-        )
+        val customPublishing = modulesWithCustomPublishing.contains(project.name)
+        val publishingConfig = if (customPublishing) {
+            PublishingConfig(artifactId, destinations)
+        } else {
+            PublishingConfig(
+                artifactId, destinations,
+                includeProtoJar, includeTestJar, includeDokkaJar
+            )
+        }
         project.afterEvaluate {
             publishingConfig.apply(project)
         }
