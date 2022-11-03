@@ -180,8 +180,8 @@ private fun MavenPublication.specifyArtifacts(project: Project, jars: Set<TaskPr
  * of a module.
  *
  * Such publications should be treated differently than [MavenJavaPublication],
- * which is created for a module. Instead, since they are already declared, this class
- * only [assigns maven coordinates][assignMavenCoordinates].
+ * which <em>creates</em> for a module. Instead, since the publications are already declared,
+ * this class only [assigns maven coordinates][assignMavenCoordinates].
  *
  * A module which declares custom publications must be specified in
  * the [SpinePublishing.modulesWithCustomPublishing] property.
