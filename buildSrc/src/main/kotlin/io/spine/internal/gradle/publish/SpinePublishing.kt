@@ -313,7 +313,8 @@ open class SpinePublishing(private val project: Project) {
      *
      * @see modules
      */
-    private fun publishedProjects() = modules.map { name -> project.project(name) }
+    private fun publishedProjects() = modules.union(modulesWithCustomPublishing)
+        .map { name -> project.project(name) }
         .ifEmpty { setOf(project) }
 
     /**
