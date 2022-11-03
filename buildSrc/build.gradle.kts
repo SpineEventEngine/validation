@@ -156,4 +156,7 @@ dependencies {
 
     // https://github.com/srikanth-lingala/zip4j
     implementation("net.lingala.zip4j:zip4j:2.10.0")
+
+    // https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
 }

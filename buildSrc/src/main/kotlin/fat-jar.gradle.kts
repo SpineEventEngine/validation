@@ -25,15 +25,19 @@
  */
 
 import io.spine.internal.gradle.publish.SpinePublishing
+import org.gradle.api.Task
+import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.getting
+import org.gradle.kotlin.dsl.java
+import org.gradle.kotlin.dsl.`maven-publish`
+import org.gradle.kotlin.dsl.project
+import org.gradle.kotlin.dsl.the
 
 plugins {
     `maven-publish`
     id("com.github.johnrengelman.shadow")
     java
-}
-
-dependencies {
-    api(project(":java-runtime"))
 }
 
 /**
@@ -43,7 +47,7 @@ dependencies {
  * This publication works in combination with exclusion of standard publishing for this
  * module specified in the root project under [SpinePublishing.modulesWithCustomPublishing].
  */
-publishing {
+project.publishing {
     publications {
         // The publishing settings from the root project.
         val spinePublishing = rootProject.the<SpinePublishing>()
@@ -62,6 +66,16 @@ tasks.publish {
 
 tasks.shadowJar {
     exclude(
+        /**
+         * Excluding this type to avoid it being located in the fat JAR.
+         *
+         * Locating this type in its own `io:spine:protodata` artifact is crucial
+         * for obtaining proper version values from the manifest file.
+         * This file is only present in `io:spine:protodata` artifact.
+         */
+        "io/spine/protodata/gradle/plugin/Plugin.class",
+        "META-INF/gradle-plugins/io.spine.protodata.properties",
+
         /**
          * Exclude Gradle types to reduce the size of the resulting JAR.
          *
