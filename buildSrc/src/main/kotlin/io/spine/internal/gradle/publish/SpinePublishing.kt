@@ -363,7 +363,7 @@ open class SpinePublishing(private val project: Project) {
      * It consists of a project's name and [prefix][artifactPrefix]:
      * `<artifactPrefix><project.name>`.
      */
-    internal fun artifactId(project: Project): String = "$artifactPrefix${project.name}"
+    fun artifactId(project: Project): String = "$artifactPrefix${project.name}"
 
     /**
      * Ensures that all modules, marked as excluded from [protoJar] publishing,

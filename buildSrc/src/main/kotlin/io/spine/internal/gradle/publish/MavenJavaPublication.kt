@@ -167,3 +167,14 @@ internal class MavenJavaPublication(
         }
     }
 }
+
+internal class CustomPublications(artifactId: String, destinations: Set<Repository>) :
+    PublicationHandler(artifactId, destinations) {
+
+    override fun handlePublications(project: Project) {
+        project.publications.forEach {
+            val publication = it as MavenPublication
+            publication.specifyMavenCoordinates(project)
+        }
+    }
+}

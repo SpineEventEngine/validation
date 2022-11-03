@@ -35,11 +35,19 @@ import org.gradle.kotlin.dsl.apply
 /**
  * Information, required to set up publishing of a project using `maven-publish` plugin.
  *
- * @param artifactId a name that a project is known by.
- * @param destinations set of repositories, to which the resulting artifacts will be sent.
- * @param includeProtoJar tells whether [protoJar] artifact should be published.
- * @param includeTestJar tells whether [testJar] artifact should be published.
- * @param includeDokkaJar tells whether [dokkaJar] artifact should be published.
+ * @param artifactId
+ *         a name that a project is known by.
+ * @param destinations
+ *         set of repositories, to which the resulting artifacts will be sent.
+ * @param includeProtoJar
+ *         tells whether [protoJar] artifact should be published.
+ * @param includeTestJar
+ *         tells whether [testJar] artifact should be published.
+ * @param includeDokkaJar
+ *         tells whether [dokkaJar] artifact should be published.
+ * @param customPublishing
+ *         tells whether subproject declares own publishing and standard one
+ *         should not be applied.
  */
 internal class PublishingConfig(
     val artifactId: String,
@@ -63,11 +71,11 @@ internal class PublishingConfig(
  */
 internal fun PublishingConfig.apply(project: Project) = with(project) {
     apply(plugin = "maven-publish")
-    createPublication(project)
+    handlePublication(project)
     configurePublishTask(destinations)
 }
 
-private fun PublishingConfig.createPublication(project: Project) {
+private fun PublishingConfig.handlePublication(project: Project) {
     if (customPublishing) {
         handleCustomPublications(project)
     } else {
@@ -75,10 +83,13 @@ private fun PublishingConfig.createPublication(project: Project) {
     }
 }
 
-private fun handleCustomPublications(project: Project) {
-    project.logger.info(
-        "The project `${project.name}` is set to provide custom publishing."
+private fun PublishingConfig.handleCustomPublications(project: Project) {
+    project.logger.info("The project `${project.name}` is set to provide custom publishing.")
+    val publications = CustomPublications(
+        artifactId = artifactId,
+        destinations = destinations
     )
+    publications.registerIn(project)
 }
 
 private fun PublishingConfig.createStandardPublication(project: Project) {

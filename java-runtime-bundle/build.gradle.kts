@@ -36,23 +36,21 @@ dependencies {
     api(project(":java-runtime"))
 }
 
-/** The publishing settings from the root project. */
-val spinePublishing = rootProject.the<SpinePublishing>()
-
 /**
- * The ID of the far JAR artifact.
+ * Creates a custom publication called `fatJar`, taking the output of `tasks.shadowJar`
+ * as the sole publication artifact.
+ *
+ * This publication works in combination with exclusion of standard publishing for this
+ * module specified in the root project under [SpinePublishing.modulesWithCustomPublishing].
  */
-val pArtifact = spinePublishing.artifactPrefix + "java-runtime-bundle"
-
 publishing {
-    val pGroup = project.group.toString()
-    val pVersion = project.version.toString()
-
     publications {
+        // The publishing settings from the root project.
+        val spinePublishing = rootProject.the<SpinePublishing>()
         create("fatJar", MavenPublication::class) {
-            groupId = pGroup
-            artifactId = pArtifact
-            version = pVersion
+            groupId = project.group.toString()
+            artifactId = spinePublishing.artifactId(project)
+            version = project.version.toString()
             artifact(tasks.shadowJar)
         }
     }
@@ -80,7 +78,7 @@ tasks.shadowJar {
         "META-INF/gradle-plugins/net**",
         "META-INF/gradle-plugins/org**")
 
-    setZip64(true)  /* The archive has way too many items. So using the Zip64 mode. */
+    isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
     archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
     mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
