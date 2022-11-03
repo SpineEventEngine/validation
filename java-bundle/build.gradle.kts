@@ -1,5 +1,3 @@
-import io.spine.internal.gradle.publish.SpinePublishing
-
 /*
  * Copyright 2022, TeamDev. All rights reserved.
  *
@@ -27,71 +25,9 @@ import io.spine.internal.gradle.publish.SpinePublishing
  */
 
 plugins {
-    `maven-publish`
-    id("com.github.johnrengelman.shadow").version("7.1.2")
-    java
+    `fat-jar`
 }
-
-/** The publishing settings from the root project. */
-val spinePublishing = rootProject.the<SpinePublishing>()
-
-/**
- * The ID of the far JAR artifact.
- */
-val pArtifact = spinePublishing.artifactPrefix + "java-extensions"
 
 dependencies {
     implementation(project(":java"))
-}
-
-publishing {
-    val pGroup = project.group.toString()
-    val pVersion = project.version.toString()
-
-    publications {
-        create("fat-jar", MavenPublication::class) {
-            groupId = pGroup
-            artifactId = pArtifact
-            version = pVersion
-            artifact(tasks.shadowJar)
-        }
-    }
-}
-
-tasks.publish {
-    dependsOn(tasks.shadowJar)
-}
-
-tasks.shadowJar {
-    exclude(
-        /**
-         * Excluding this type to avoid it being located in the fat JAR.
-         *
-         * Locating this type in its own `io:spine:protodata` artifact is crucial
-         * for obtaining proper version values from the manifest file.
-         * This file is only present in `io:spine:protodata` artifact.
-         */
-        "io/spine/protodata/gradle/plugin/Plugin.class",
-        "META-INF/gradle-plugins/io.spine.protodata.properties",
-
-        /**
-         * Exclude Gradle types to reduce the size of the resulting JAR.
-         *
-         * Those required for the plugins are available at runtime anyway.
-         */
-        "org/gradle/**",
-
-        /**
-         * Remove all third-party plugin declarations as well.
-         *
-         * They should be loaded from their respective dependencies.
-         */
-        "META-INF/gradle-plugins/com**",
-        "META-INF/gradle-plugins/net**",
-        "META-INF/gradle-plugins/org**")
-
-    setZip64(true)  /* The archive has way too many items. So using the Zip64 mode. */
-    archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
-    mergeServiceFiles("desc.ref")
-    mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
 }
