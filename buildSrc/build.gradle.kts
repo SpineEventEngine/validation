@@ -109,6 +109,13 @@ val dokkaVersion = "1.7.20"
  */
 val detektVersion = "1.21.0"
 
+/**
+ * The version of Gradle Shadow plugin.
+ *
+ * @see <a href="https://github.com/johnrengelman/shadow">Gradle Shadow</a>
+ */
+val gradleShadowVersion = "7.1.2"
+
 configurations.all {
     resolutionStrategy {
         force(
@@ -137,7 +144,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
-    implementation("com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion") {
+    implementation(
+        "com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion") {
         exclude(group = "com.google.guava")
     }
     implementation("com.google.guava:guava:$guavaVersion")
@@ -153,10 +161,8 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:$protobufPluginVersion")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
     implementation("org.jetbrains.dokka:dokka-base:${dokkaVersion}")
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:$gradleShadowVersion")
 
     // https://github.com/srikanth-lingala/zip4j
     implementation("net.lingala.zip4j:zip4j:2.10.0")
-
-    // https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
-    implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
 }
