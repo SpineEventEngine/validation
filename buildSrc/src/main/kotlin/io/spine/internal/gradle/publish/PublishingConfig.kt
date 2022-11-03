@@ -57,6 +57,10 @@ internal class PublishingConfig private constructor(
     val includeDokkaJar: Boolean,
     val includeProtoJar: Boolean
 ) {
+    /**
+     * Creates an instance for standard publishing of a project module,
+     * specified under [SpinePublishing.modules].
+     */
     constructor(
         artifactId: String,
         destinations: Set<Repository>,
@@ -65,6 +69,10 @@ internal class PublishingConfig private constructor(
         includeDokkaJar: Boolean = false
     ) : this(artifactId, destinations, false, includeTestJar, includeDokkaJar, includeProtoJar)
 
+    /**
+     * Creates an instance for publishing a module specified
+     * under [SpinePublishing.modulesWithCustomPublishing].
+     */
     constructor(artifactId: String, destinations: Set<Repository>) :
             this(artifactId, destinations, customPublishing = true,
                 includeTestJar = false, includeDokkaJar = false, includeProtoJar = false)
@@ -75,7 +83,8 @@ internal class PublishingConfig private constructor(
  * This method does the following:
  *
  *  1. Applies `maven-publish` plugin to the project.
- *  2. Registers [MavenJavaPublication] in Gradle's [PublicationContainer][org.gradle.api.publish.PublicationContainer].
+ *  2. Registers [MavenJavaPublication] in Gradle's
+ *     [PublicationContainer][org.gradle.api.publish.PublicationContainer].
  *  4. Configures "publish" task.
  *
  *  The actual list of resulted artifacts is determined by [registerArtifacts].
