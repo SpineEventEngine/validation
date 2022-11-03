@@ -25,14 +25,6 @@
  */
 
 import io.spine.internal.gradle.publish.SpinePublishing
-import org.gradle.api.Task
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.java
-import org.gradle.kotlin.dsl.`maven-publish`
-import org.gradle.kotlin.dsl.project
-import org.gradle.kotlin.dsl.the
 
 plugins {
     `maven-publish`
@@ -44,10 +36,10 @@ plugins {
  * Creates a custom publication called `fatJar`, taking the output of `tasks.shadowJar`
  * as the sole publication artifact.
  *
- * This publication works in combination with exclusion of standard publishing for this
+ * This kind of publishing works in combination with exclusion of standard publishing for this
  * module specified in the root project under [SpinePublishing.modulesWithCustomPublishing].
  */
-project.publishing {
+publishing {
     publications {
         // The publishing settings from the root project.
         val spinePublishing = rootProject.the<SpinePublishing>()

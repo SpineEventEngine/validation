@@ -24,70 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.gradle.publish.SpinePublishing
-
 plugins {
-    `maven-publish`
-    id("com.github.johnrengelman.shadow")
-    java
+    `fat-jar`
 }
 
 dependencies {
     api(project(":java-runtime"))
-}
-
-/**
- * Creates a custom publication called `fatJar`, taking the output of `tasks.shadowJar`
- * as the sole publication artifact.
- *
- * This publication works in combination with exclusion of standard publishing for this
- * module specified in the root project under [SpinePublishing.modulesWithCustomPublishing].
- */
-publishing {
-    publications {
-        // The publishing settings from the root project.
-        val spinePublishing = rootProject.the<SpinePublishing>()
-        create("fatJar", MavenPublication::class) {
-            groupId = project.group.toString()
-            artifactId = spinePublishing.artifactId(project)
-            version = project.version.toString()
-            artifact(tasks.shadowJar)
-        }
-    }
-}
-
-tasks.publish {
-    dependsOn(tasks.shadowJar)
-}
-
-tasks.shadowJar {
-    exclude(
-        /**
-         * Exclude Gradle types to reduce the size of the resulting JAR.
-         *
-         * Those required for the plugins are available at runtime anyway.
-         */
-        "org/gradle/**",
-
-        /**
-         * Remove all third-party plugin declarations as well.
-         *
-         * They should be loaded from their respective dependencies.
-         */
-        "META-INF/gradle-plugins/com**",
-        "META-INF/gradle-plugins/net**",
-        "META-INF/gradle-plugins/org**")
-
-    isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
-    archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
-    mergeServiceFiles("desc.ref")
-    mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
-}
-
-/**
- * Declare dependency explicitly to address the Gradle warning.
- */
-val publishFatJarPublicationToMavenLocal: Task by tasks.getting {
-    dependsOn(tasks.jar)
-    println("Task `${this.name}` now depends on `${tasks.jar.name}`.")
 }
