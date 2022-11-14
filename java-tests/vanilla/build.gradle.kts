@@ -53,6 +53,13 @@ modelCompiler {
     }
 }
 
+// Workaround for https://github.com/SpineEventEngine/validation/issues/69.
+val launchProtoDataTest: Task by tasks.getting {
+    doLast {
+        delete("$buildDir/generated-proto/test")
+    }
+}
+
 dependencies {
     protoData(project(":java"))
 
