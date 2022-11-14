@@ -29,7 +29,7 @@ import com.google.protobuf.BoolValue
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.protobuf.pack
-import io.spine.protodata.OneofOptionDiscovered
+import io.spine.protodata.event.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.React
 import io.spine.server.model.Nothing

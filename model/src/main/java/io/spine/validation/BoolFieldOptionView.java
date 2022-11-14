@@ -31,7 +31,7 @@ import com.google.protobuf.Descriptors.Descriptor;
 import io.spine.base.EntityState;
 import io.spine.core.ContractFor;
 import io.spine.core.Subscribe;
-import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.Option;
 import io.spine.protodata.plugin.View;
 import io.spine.validate.ValidatingBuilder;

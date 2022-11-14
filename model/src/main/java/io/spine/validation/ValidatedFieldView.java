@@ -30,7 +30,7 @@ import io.spine.core.External;
 import io.spine.core.Subscribe;
 import io.spine.core.Where;
 import io.spine.option.IfInvalidOption;
-import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.Option;
 
 import static io.spine.protobuf.AnyPacker.unpack;

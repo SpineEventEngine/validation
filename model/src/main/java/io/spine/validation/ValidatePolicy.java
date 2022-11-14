@@ -27,7 +27,7 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.protodata.FieldExited;
+import io.spine.protodata.event.FieldExited;
 import io.spine.protodata.FieldName;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeName;

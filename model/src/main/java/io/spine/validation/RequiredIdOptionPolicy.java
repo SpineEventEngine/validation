@@ -29,11 +29,11 @@ package io.spine.validation;
 import com.google.common.collect.ImmutableSet;
 import io.spine.core.External;
 import io.spine.protodata.Option;
-import io.spine.protodata.TypeExited;
+import io.spine.protodata.event.TypeExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
-import io.spine.validation.event.RuleAdded;
 import io.spine.server.tuple.EitherOf2;
+import io.spine.validation.event.RuleAdded;
 
 import java.util.Set;
 

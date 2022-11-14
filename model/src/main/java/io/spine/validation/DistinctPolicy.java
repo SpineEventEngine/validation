@@ -30,7 +30,7 @@ import com.google.protobuf.BoolValue;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.FieldName;
-import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeName;
 import io.spine.server.event.React;

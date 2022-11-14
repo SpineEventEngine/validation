@@ -47,7 +47,7 @@ internal class GoesConstraintTest {
         const val UNTIL = "Until code rendering for (goes_with) is migrated from `mc-java`"
     }
 
-    private fun assertValid(m: io.spine.validate.ValidatableMessage) = assertThat(m.validate()).isEmpty()
+    private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()
 
     private fun generate(): ArchiveId = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
 

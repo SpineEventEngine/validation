@@ -27,7 +27,7 @@
 package io.spine.validation;
 
 import io.spine.protodata.Field;
-import io.spine.protodata.TypeExited;
+import io.spine.protodata.event.TypeExited;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
