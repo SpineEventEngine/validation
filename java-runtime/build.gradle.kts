@@ -49,27 +49,6 @@ dependencies {
     testImplementation(spine.testlib)
 }
 
-val generatedDir by extra("$projectDir/generated")
-val generatedJavaDir by extra("$generatedDir/main/java")
-val generatedTestJavaDir by extra("$generatedDir/test/java")
-
-sourceSets {
-    main {
-        java.srcDir(generatedJavaDir)
-        resources.srcDirs(
-            "$generatedDir/main/resources",
-            "$buildDir/descriptors/main"
-        )
-    }
-    test {
-        java.srcDir(generatedTestJavaDir)
-        resources.srcDirs(
-            "$generatedDir/test/resources",
-            "$buildDir/descriptors/test"
-        )
-    }
-}
-
 tasks {
     excludeGoogleProtoFromArtifacts()
 }

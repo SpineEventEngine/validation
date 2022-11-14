@@ -59,14 +59,14 @@ modelCompiler {
  */
 val launchProtoDataTest: Task by tasks.getting {
     doLast {
-//        delete("$buildDir/generated-proto/test")
+        delete("$buildDir/generated-proto/test")
     }
 }
 
 dependencies {
     protoData(project(":java"))
+    implementation(project(":java-runtime"))
 
-    testImplementation(project(":java-runtime"))
     val spine = Spine(project)
     testImplementation(spine.base)
     testImplementation(spine.testlib)
