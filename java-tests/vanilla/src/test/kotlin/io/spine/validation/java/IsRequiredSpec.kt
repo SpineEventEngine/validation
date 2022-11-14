@@ -28,23 +28,25 @@ package io.spine.validation.java
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
 import io.spine.testing.TestValues.randomString
+import io.spine.validate.NonValidated
 import io.spine.validate.Validate.violationsOf
 import io.spine.validation.java.given.Fish
 import io.spine.validation.java.given.Meal
 import io.spine.validation.java.given.Sauce
+import io.spine.validation.java.given.fish
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`(is_required)` constraint should be compiled so that")
-internal class IsRequiredTest {
+internal class IsRequiredSpec {
 
     private fun assertValid(message: Message) = assertThat(violationsOf(message)).isEmpty()
 
     @Test
     fun `throw if required field group is not set`() {
-        val message = Meal.newBuilder()
-            .setCheese(Sauce.getDefaultInstance())
-            .buildPartial()
+        val message = mealPartial {
+            cheese = Sauce.getDefaultInstance()
+        }
         val violations = violationsOf(message)
         assertThat(violations)
             .hasSize(1)
@@ -54,24 +56,26 @@ internal class IsRequiredTest {
 
     @Test
     fun `not throw if required field group is set`() {
-        val fish = Fish.newBuilder()
-            .setDescription(randomString())
-            .build()
-        val message = Meal.newBuilder()
-            .setCheese(Sauce.getDefaultInstance())
-            .setFish(fish)
-            .buildPartial()
+        val anyFish = fish { description = randomString() }
+        val message = mealPartial {
+            cheese = Sauce.getDefaultInstance()
+            fish = anyFish
+        }
         assertValid(message)
     }
 
     @Test
     fun `ignore non-required field groups`() {
-        val fish = Fish.newBuilder()
-            .setDescription(randomString())
-            .build()
-        val message = Meal.newBuilder()
-            .setFish(fish)
-            .buildPartial()
+        val anyFish = fish { description = randomString() }
+        val message = mealPartial {
+            fish = anyFish
+        }
         assertValid(message)
     }
+}
+
+private fun mealPartial(block: Meal.Builder.() -> Unit): @NonValidated Meal {
+    val result = Meal.newBuilder()
+    block(result)
+    return result.buildPartial()
 }

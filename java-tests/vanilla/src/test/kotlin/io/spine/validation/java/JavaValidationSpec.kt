@@ -35,7 +35,7 @@ import io.spine.validate.ValidatableMessage
 import io.spine.validation.java.given.Meal
 
 @DisplayName("Validation code for Java should")
-internal class JavaValidationTest {
+internal class JavaValidationSpec {
 
     @Test
     fun `implement 'ValidatableMessage'`() {
