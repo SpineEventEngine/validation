@@ -50,7 +50,7 @@ internal class DistinctConstraintSpec {
         assertThat(error)
             .isPresent()
 
-        val expected =  ConstraintViolation.newBuilder()
+        val expected = ConstraintViolation.newBuilder()
             .setFieldPath(FieldPath.newBuilder().addFieldName("element"))
             .build()
         /* TODO: Uncomment this when https://github.com/SpineEventEngine/validation/issues/69
