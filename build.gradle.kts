@@ -351,9 +351,13 @@ fun Subproject.applyGeneratedDirectories(generatedDir: String) {
         module {
             generatedSourceDirs.addAll(files(
                 generatedJava,
+                generatedTestJava,
                 generatedKotlin,
+                generatedTestKotlin,
                 generatedGrpc,
+                generatedTestGrpc,
                 generatedSpine,
+                generatedTestSpine,
             ))
             testSources.from(
                 generatedTestJava,
