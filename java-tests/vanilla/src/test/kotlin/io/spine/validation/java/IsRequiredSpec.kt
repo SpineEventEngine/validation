@@ -56,23 +56,28 @@ internal class IsRequiredSpec {
 
     @Test
     fun `not throw if required field group is set`() {
-        val anyFish = fish { description = randomString() }
-        val message = mealPartial {
-            cheese = Sauce.getDefaultInstance()
-            fish = anyFish
-        }
+        val fish = randomFish()
+        val message = Meal.newBuilder()
+            .setCheese(Sauce.getDefaultInstance())
+            .setFish(fish)
+            .buildPartial()
         assertValid(message)
     }
 
     @Test
     fun `ignore non-required field groups`() {
-        val anyFish = fish { description = randomString() }
+        val anyFish = randomFish()
         val message = mealPartial {
             fish = anyFish
         }
         assertValid(message)
     }
+
 }
+
+private fun randomFish(): Fish = Fish.newBuilder()
+    .setDescription(randomString())
+    .build()
 
 private fun mealPartial(block: Meal.Builder.() -> Unit): @NonValidated Meal {
     val result = Meal.newBuilder()

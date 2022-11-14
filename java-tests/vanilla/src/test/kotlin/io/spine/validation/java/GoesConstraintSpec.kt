@@ -27,12 +27,16 @@ package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.spine.base.FieldPath
 import io.spine.base.Identifier
+import io.spine.base.Time
 import io.spine.base.Time.currentTime
 import io.spine.base.fieldPath
 import io.spine.type.TypeName
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.constraintViolation
+import io.spine.validation.java.given.ArchiveId
 import io.spine.validation.java.given.Paper
 import io.spine.validation.java.given.archiveId
 import io.spine.validation.java.given.paper
@@ -49,9 +53,7 @@ internal class GoesConstraintSpec {
 
     private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()
 
-    private fun generate() = archiveId {
-        uuid = Identifier.newUuid()
-    }
+    private fun generate() = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
 
     @Test
     @Disabled(UNTIL)
@@ -69,34 +71,37 @@ internal class GoesConstraintSpec {
         assertThat(violations.get(0))
             .comparingExpectedFieldsOnly()
             .isEqualTo(
-                constraintViolation {
-                    typeName = TypeName.of(paper).value()
-                    fieldPath = fieldPath { fieldName.add("when_archived") }
-                }
+                ConstraintViolation.newBuilder()
+                    .setTypeName(TypeName.of(paper).value())
+                    .setFieldPath(
+                        FieldPath.newBuilder()
+                            .addFieldName("when_archived")
+                    )
+                    .build()
             )
     }
 
     @Test
     fun `if both fields are set, no violation`() {
-        val paper = paper {
-            archive = generate()
-            whenArchived = currentTime()
-        }
+        val paper = Paper.newBuilder()
+            .setArchive(generate())
+            .setWhenArchived(currentTime())
+            .build()
         assertValid(paper)
     }
 
     @Test
     fun `if neither field is set, no violation`() {
-        val paper = paper {  }
+        val paper = Paper.newBuilder().build()
         assertValid(paper)
     }
 
     @Test
     @Disabled(UNTIL)
     fun `if the associated field is set and target is not set, no violation`() {
-        val paper = paper {
-            archive = generate()
-        }
+        val paper = Paper.newBuilder()
+            .setArchive(generate())
+            .build()
         assertValid(paper)
     }
 }
