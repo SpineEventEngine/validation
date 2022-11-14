@@ -29,7 +29,7 @@
 import io.spine.internal.dependency.Spine
 
 buildscript {
-    io.spine.internal.gradle.doApplyStandard(repositories)
+    standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
     }
