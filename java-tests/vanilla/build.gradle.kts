@@ -53,7 +53,10 @@ modelCompiler {
     }
 }
 
-// Workaround for https://github.com/SpineEventEngine/validation/issues/69.
+/**
+ * Workaround related to https://github.com/SpineEventEngine/validation/issues/69 to ease
+ * the issue with IDEA not being able to locate Kotlin DSL.
+ */
 val launchProtoDataTest: Task by tasks.getting {
     doLast {
         delete("$buildDir/generated-proto/test")
