@@ -28,13 +28,11 @@ package io.spine.validation.java
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.FieldPath
-import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
-import io.spine.validate.constraintViolation
 import io.spine.validation.java.given.ProtoSet
 import java.util.*
 import org.junit.jupiter.api.DisplayName
@@ -52,9 +50,15 @@ internal class DistinctConstraintSpec {
         assertThat(error)
             .isPresent()
 
-        val expected = constraintViolation {
+        val expected =  ConstraintViolation.newBuilder()
+            .setFieldPath(FieldPath.newBuilder().addFieldName("element"))
+            .build()
+        /* TODO: Uncomment this when https://github.com/SpineEventEngine/validation/issues/69
+           is resolved.
+        constraintViolation {
             fieldPath { fieldName.add("element") }
         }
+        */
 
         val violations = error.get().constraintViolationList
         assertThat(violations)
