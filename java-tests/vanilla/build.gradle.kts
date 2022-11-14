@@ -59,7 +59,7 @@ modelCompiler {
  */
 val launchProtoDataTest: Task by tasks.getting {
     doLast {
-        delete("$buildDir/generated-proto/test")
+//        delete("$buildDir/generated-proto/test")
     }
 }
 

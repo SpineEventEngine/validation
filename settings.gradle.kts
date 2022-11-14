@@ -42,6 +42,7 @@ include(
     "java-runtime",
     "java-runtime-bundle",
     "java-bundle",
+    ":java-tests",
     ":java-tests:vanilla",
     ":java-tests:extensions",
     ":java-tests:consumer"
