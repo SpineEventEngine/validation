@@ -29,17 +29,12 @@ import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.FieldPath
 import io.spine.base.Identifier
-import io.spine.base.Time
 import io.spine.base.Time.currentTime
-import io.spine.base.fieldPath
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
-import io.spine.validate.constraintViolation
 import io.spine.validation.java.given.ArchiveId
 import io.spine.validation.java.given.Paper
-import io.spine.validation.java.given.archiveId
-import io.spine.validation.java.given.paper
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

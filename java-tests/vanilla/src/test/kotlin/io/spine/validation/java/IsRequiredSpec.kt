@@ -33,7 +33,6 @@ import io.spine.validate.Validate.violationsOf
 import io.spine.validation.java.given.Fish
 import io.spine.validation.java.given.Meal
 import io.spine.validation.java.given.Sauce
-import io.spine.validation.java.given.fish
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
