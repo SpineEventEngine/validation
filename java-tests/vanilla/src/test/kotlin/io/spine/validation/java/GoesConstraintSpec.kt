@@ -25,15 +25,14 @@
  */
 package io.spine.validation.java
 
-import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.FieldPath
 import io.spine.base.Identifier
-import io.spine.base.Time
+import io.spine.base.Time.currentTime
 import io.spine.type.TypeName
-import io.spine.validate.ValidatableMessage
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.ValidatableMessage
 import io.spine.validation.java.given.ArchiveId
 import io.spine.validation.java.given.Paper
 import org.junit.jupiter.api.Disabled
@@ -41,27 +40,27 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`(goes)` option should be compiled so that")
-internal class GoesConstraintTest {
+internal class GoesConstraintSpec {
 
     companion object {
         const val UNTIL = "Until code rendering for (goes_with) is migrated from `mc-java`"
     }
 
-    private fun assertValid(m: io.spine.validate.ValidatableMessage) = assertThat(m.validate()).isEmpty()
+    private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()
 
-    private fun generate(): ArchiveId = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
+    private fun generate() = ArchiveId.newBuilder().setUuid(Identifier.newUuid()).build()
 
     @Test
     @Disabled(UNTIL)
     fun `if associated field is not set and the target field is set 'a violation is produced'`() {
         val paper = Paper.newBuilder()
-            .setWhenArchived(Time.currentTime())
+            .setWhenArchived(currentTime())
             .buildPartial()
 
         val error = paper.validate()
         assertThat(error).isPresent()
 
-        val violations = error.get().getConstraintViolationList()
+        val violations = error.get().constraintViolationList
         assertThat(violations)
             .hasSize(1)
         assertThat(violations.get(0))
@@ -81,7 +80,7 @@ internal class GoesConstraintTest {
     fun `if both fields are set, no violation`() {
         val paper = Paper.newBuilder()
             .setArchive(generate())
-            .setWhenArchived(Time.currentTime())
+            .setWhenArchived(currentTime())
             .build()
         assertValid(paper)
     }

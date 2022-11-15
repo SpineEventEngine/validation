@@ -27,7 +27,7 @@
 import io.spine.internal.dependency.Protobuf
 
 buildscript {
-    io.spine.internal.gradle.doApplyStandard(repositories)
+    standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
@@ -42,11 +42,5 @@ subprojects {
 
     dependencies {
         Protobuf.libs.forEach { implementation(it) }
-    }
-
-    sourceSets {
-        val generatedRootDir = "$projectDir/generated"
-        main { java.srcDirs("$generatedRootDir/main/java") }
-        test { java.srcDirs("$generatedRootDir/main/java") }
     }
 }

@@ -28,7 +28,7 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.protodata.Field;
-import io.spine.protodata.FieldExited;
+import io.spine.protodata.event.FieldExited;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;

@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import Build_gradle.Subproject
 import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
@@ -34,8 +35,6 @@ import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.applyGitHubPackages
-import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
@@ -47,13 +46,14 @@ import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
+import io.spine.internal.gradle.standardToSpineSdk
 import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-    io.spine.internal.gradle.doApplyStandard(repositories)
+    standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
@@ -63,12 +63,10 @@ buildscript {
 plugins {
     `java-library`
     idea
-    id(protobufPlugin)
-    id(errorPronePlugin)
+    protobuf
+    errorprone
     kotlin("jvm")
-    `force-jacoco`
-    `detekt-code-analysis`
-    id(gradleDoctor.pluginId) version gradleDoctor.version
+    `gradle-doctor`
 }
 
 spinePublishing {
@@ -101,11 +99,7 @@ spinePublishing {
 
 allprojects {
     apply(from = "$rootDir/version.gradle.kts")
-
-    repositories {
-        applyStandard()
-        applyGitHubPackages("ProtoData", project)
-    }
+    repositories.standardToSpineSdk()
 
     apply {
         plugin("jacoco")
@@ -229,6 +223,7 @@ fun Subproject.forceConfigurations() {
                 force(
                     Flogger.lib,
                     Flogger.Runtime.systemBackend,
+                    JUnit.runner,
 
                     spine.base,
                     spine.time,
@@ -354,9 +349,13 @@ fun Subproject.applyGeneratedDirectories(generatedDir: String) {
         module {
             generatedSourceDirs.addAll(files(
                 generatedJava,
+                generatedTestJava,
                 generatedKotlin,
+                generatedTestKotlin,
                 generatedGrpc,
+                generatedTestGrpc,
                 generatedSpine,
+                generatedTestSpine,
             ))
             testSources.from(
                 generatedTestJava,

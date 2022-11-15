@@ -28,7 +28,7 @@ package io.spine.validation.test
 
 import io.spine.core.External
 import io.spine.protodata.Field
-import io.spine.protodata.TypeExited
+import io.spine.protodata.event.TypeExited
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.React
 import io.spine.server.model.Nothing

@@ -47,8 +47,6 @@ internal sealed class PublicationHandler(
 
     /**
      * Registers this publication in the given project.
-     *
-     * The only prerequisite for the project is to have `maven-publish` plugin applied.
      */
     fun registerIn(project: Project) {
         handlePublications(project)
@@ -176,11 +174,11 @@ private fun MavenPublication.specifyArtifacts(project: Project, jars: Set<TaskPr
 }
 
 /**
- * A handler for custom publications, which is declared under the [publications] section
- * of a module.
+ * A handler for custom publications, which are declared under the [publications]
+ * section of a module.
  *
  * Such publications should be treated differently than [MavenJavaPublication],
- * which <em>creates</em> for a module. Instead, since the publications are already declared,
+ * which is <em>created</em> for a module. Instead, since the publications are already declared,
  * this class only [assigns maven coordinates][assignMavenCoordinates].
  *
  * A module which declares custom publications must be specified in

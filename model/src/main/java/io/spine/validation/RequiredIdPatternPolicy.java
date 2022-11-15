@@ -28,7 +28,7 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.protodata.FilePath;
-import io.spine.protodata.TypeExited;
+import io.spine.protodata.event.TypeExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;

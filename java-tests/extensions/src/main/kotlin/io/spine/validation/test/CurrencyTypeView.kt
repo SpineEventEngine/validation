@@ -30,10 +30,10 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protobuf.AnyPacker
-import io.spine.protodata.FieldEntered
-import io.spine.protodata.TypeExited
+import io.spine.protodata.event.FieldEntered
+import io.spine.protodata.event.TypeExited
 import io.spine.protodata.TypeName
-import io.spine.protodata.TypeOptionDiscovered
+import io.spine.protodata.event.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter

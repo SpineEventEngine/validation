@@ -31,14 +31,15 @@ import org.junit.jupiter.api.Test
 
 import com.google.common.truth.Truth.assertThat
 import io.spine.validate.ValidatableMessage
+import io.spine.testing.isInstanceOf
 
 import io.spine.validation.java.given.Meal
 
 @DisplayName("Validation code for Java should")
-internal class JavaValidationTest {
+internal class JavaValidationSpec {
 
     @Test
     fun `implement 'ValidatableMessage'`() {
-        assertThat(Meal.getDefaultInstance()).isInstanceOf(ValidatableMessage::class.java)
+        assertThat(Meal.getDefaultInstance()).isInstanceOf<ValidatableMessage>()
     }
 }

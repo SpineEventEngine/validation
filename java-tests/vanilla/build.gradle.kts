@@ -53,10 +53,20 @@ modelCompiler {
     }
 }
 
+/**
+ * Workaround related to https://github.com/SpineEventEngine/validation/issues/69 to ease
+ * the issue with IDEA not being able to locate Kotlin DSL.
+ */
+val launchProtoDataTest: Task by tasks.getting {
+    doLast {
+        delete("$buildDir/generated-proto/test")
+    }
+}
+
 dependencies {
     protoData(project(":java"))
+    implementation(project(":java-runtime"))
 
-    testImplementation(project(":java-runtime"))
     val spine = Spine(project)
     testImplementation(spine.base)
     testImplementation(spine.testlib)

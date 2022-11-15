@@ -54,7 +54,7 @@ val jacksonVersion = "2.13.4"
 
 val googleAuthToolVersion = "2.1.2"
 val licenseReportVersion = "2.1"
-val grGitVersion = "3.1.1"
+val grGitVersion = "4.1.1"
 
 /**
  * The version of the Kotlin Gradle plugin.
@@ -144,8 +144,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
-    implementation(
-        "com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion") {
+    implementation("com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion") {
         exclude(group = "com.google.guava")
     }
     implementation("com.google.guava:guava:$guavaVersion")

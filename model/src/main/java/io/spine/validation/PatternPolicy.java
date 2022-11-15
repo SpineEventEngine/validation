@@ -31,7 +31,7 @@ import com.google.common.escape.Escapers;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.option.PatternOption;
-import io.spine.protodata.FieldOptionDiscovered;
+import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;

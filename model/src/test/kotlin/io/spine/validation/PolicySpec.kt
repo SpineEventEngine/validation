@@ -31,12 +31,9 @@ import io.spine.option.OptionsProto
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.CodeGenerationContext
 import io.spine.protodata.Field
-import io.spine.protodata.FieldEntered
 import io.spine.protodata.FieldName
-import io.spine.protodata.FieldOptionDiscovered
 import io.spine.protodata.File
 import io.spine.protodata.File.SyntaxVersion.PROTO3
-import io.spine.protodata.FileEntered
 import io.spine.protodata.FilePath
 import io.spine.protodata.MessageType
 import io.spine.protodata.Option
@@ -44,8 +41,11 @@ import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.Type
-import io.spine.protodata.TypeEntered
+import io.spine.protodata.event.TypeEntered
 import io.spine.protodata.TypeName
+import io.spine.protodata.event.FieldEntered
+import io.spine.protodata.event.FieldOptionDiscovered
+import io.spine.protodata.event.FileEntered
 import io.spine.testing.server.blackbox.BlackBox
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
