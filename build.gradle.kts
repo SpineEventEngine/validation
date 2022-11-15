@@ -357,12 +357,12 @@ fun Subproject.applyGeneratedDirectories(generatedDir: String) {
                 generatedSpine,
                 generatedTestSpine,
             ))
-//            testSources.from(
-//                generatedTestJava,
-//                generatedTestKotlin,
-//                generatedTestGrpc,
-//                generatedTestSpine,
-//            )
+            testSources.from(
+                generatedTestJava,
+                generatedTestKotlin,
+                generatedTestGrpc,
+                generatedTestSpine,
+            )
             isDownloadJavadoc = true
             isDownloadSources = true
         }
