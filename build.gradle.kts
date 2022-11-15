@@ -66,7 +66,6 @@ plugins {
     protobuf
     errorprone
     kotlin("jvm")
-    `detekt-code-analysis`
     `gradle-doctor`
 }
 
