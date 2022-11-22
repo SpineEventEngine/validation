@@ -28,7 +28,6 @@ import io.spine.internal.dependency.AutoService
 
 plugins {
     `build-proto-model`
-    protobuf
 }
 
 dependencies {
