@@ -25,19 +25,9 @@
  */
 
 import io.spine.internal.dependency.AutoService
-import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 plugins {
     `build-proto-model`
-}
-
-// Turn off codegen of Validation 1.0.
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
 }
 
 dependencies {
@@ -49,12 +39,14 @@ dependencies {
     testImplementation(spine.testlib)
 }
 
-tasks {
-    excludeGoogleProtoFromArtifacts()
-}
-
-tasks {
-    withType<ProcessResources>().configureEach {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+/**
+ * Turn off codegen of Validation 1.0.
+ */
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
     }
 }
+

@@ -24,13 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.protobuf.gradle.generateProtoTasks
+import com.google.protobuf.gradle.protobuf
 import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 apply {
     plugin(Protobuf.GradlePlugin.id)
-    plugin("io.spine.mc-java")
+    plugin(Spine.McJava.pluginId)
 }
 
 dependencies {
     Protobuf.libs.forEach { "api"(it) }
+}
+
+tasks {
+    excludeGoogleProtoFromArtifacts()
+
+    withType<ProcessResources>().configureEach {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
+
+/**
+ * Force `generated` directory and Kotlin code generation.
+ */
+protobuf {
+    generatedFilesBaseDir = "$projectDir/generated"
+    generateProtoTasks {
+        for (task in all()) {
+            task.builtins.maybeCreate("kotlin")
+        }
+    }
 }

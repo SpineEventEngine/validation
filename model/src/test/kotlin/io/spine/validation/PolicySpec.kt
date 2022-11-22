@@ -28,29 +28,31 @@ package io.spine.validation
 
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
-import io.spine.protobuf.AnyPacker
-import io.spine.protodata.CodeGenerationContext
-import io.spine.protodata.Field
-import io.spine.protodata.FieldName
-import io.spine.protodata.File
+import io.spine.protobuf.pack
 import io.spine.protodata.File.SyntaxVersion.PROTO3
-import io.spine.protodata.FilePath
-import io.spine.protodata.MessageType
-import io.spine.protodata.Option
 import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.Type
-import io.spine.protodata.event.TypeEntered
-import io.spine.protodata.TypeName
-import io.spine.protodata.event.FieldEntered
-import io.spine.protodata.event.FieldOptionDiscovered
-import io.spine.protodata.event.FileEntered
+import io.spine.protodata.backend.CodeGenerationContext
+import io.spine.protodata.event.fieldEntered
+import io.spine.protodata.event.fieldOptionDiscovered
+import io.spine.protodata.event.fileEntered
+import io.spine.protodata.event.typeEntered
+import io.spine.protodata.field
+import io.spine.protodata.fieldName
+import io.spine.protodata.file
+import io.spine.protodata.filePath
+import io.spine.protodata.messageType
+import io.spine.protodata.option
+import io.spine.protodata.type
+import io.spine.protodata.typeName
 import io.spine.testing.server.blackbox.BlackBox
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.event.CompositeRuleAdded
 import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.compositeRuleAdded
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -59,17 +61,17 @@ import org.junit.jupiter.api.Test
 class PolicySpec {
 
     private lateinit var blackBox: BlackBox
-    private val filePath = FilePath.newBuilder()
-        .setValue("example/bar.proto")
-        .build()
-    private val typeName = TypeName.newBuilder()
-        .setTypeUrlPrefix("type.example.org")
-        .setPackageName("example.test")
-        .setSimpleName("Bar")
-        .build()
-    private val fieldName = FieldName.newBuilder()
-        .setValue("foo")
-        .build()
+    private val filePath = filePath {
+        value = "example/bar.proto"
+    }
+    private val typeName = typeName {
+        typeUrlPrefix = "type.example.org"
+        packageName = "example.test"
+        simpleName = "Bar"
+    }
+    private val fieldName = fieldName {
+        value = "foo"
+    }
 
     @BeforeEach
     fun prepareBlackBox() {
@@ -77,70 +79,55 @@ class PolicySpec {
         ValidationPlugin().policies().forEach { ctx.addEventDispatcher(it) }
         blackBox = BlackBox.from(ctx)
 
-        val file = File
-            .newBuilder()
-            .setPath(filePath)
-            .setPackageName(typeName.packageName)
-            .setSyntax(PROTO3)
-            .build()
-        val type = MessageType
-            .newBuilder()
-            .setName(typeName)
-            .setFile(filePath)
-            .build()
-        val field = Field
-            .newBuilder()
-            .setDeclaringType(typeName)
-            .setName(fieldName)
-            .setType(primitive(TYPE_INT32))
-            .build()
+        val protoFile = file {
+            path = filePath
+            packageName = typeName.packageName
+            syntax = PROTO3
+        }
+        val messageType = messageType {
+            name = typeName
+            this@messageType.file = filePath
+        }
+        val int32Field = field {
+            declaringType = typeName
+            name = fieldName
+            type = primitive(TYPE_INT32)
+        }
+
         blackBox.receivesExternalEvents(
-            FileEntered
-                .newBuilder()
-                .setPath(filePath)
-                .setFile(file)
-                .build(),
-            TypeEntered
-                .newBuilder()
-                .setFile(filePath)
-                .setType(type)
-                .build(),
-            FieldEntered
-                .newBuilder()
-                .setField(field)
-                .setFile(filePath)
-                .setType(typeName)
-                .build()
+            fileEntered { path = filePath; file = protoFile },
+            typeEntered { file = filePath; type = messageType },
+            fieldEntered { field = int32Field; file = filePath; type = typeName }
         )
     }
 
     @Test
     fun `produce simple composite rules for (range)`() {
-        val option = Option
-            .newBuilder()
-            .setName("range")
-            .setNumber(OptionsProto.range.number)
-            .setValue(AnyPacker.pack(StringValue.of("[0..100]")))
-            .setType(primitive(TYPE_STRING))
-            .build()
+        val rangeOption = option {
+            name = "range"
+            number = OptionsProto.range.number
+            value = StringValue.of("[0..100]").pack()
+            type = primitive(TYPE_STRING)
+        }
+
         blackBox.receivesExternalEvent(
-            FieldOptionDiscovered
-                .newBuilder()
-                .setField(fieldName)
-                .setType(typeName)
-                .setFile(filePath)
-                .setOption(option)
-                .build()
+            fieldOptionDiscovered {
+                field = fieldName
+                type = typeName
+                file = filePath
+                option = rangeOption
+            }
         )
         blackBox.assertEvent(CompositeRuleAdded::class.java)
             .comparingExpectedFieldsOnly()
             .isEqualTo(
-                CompositeRuleAdded.newBuilder()
-                    .setType(typeName)
-                    .setRule(CompositeRule.newBuilder()
-                        .setLeft(incompleteRuleWith(GREATER_OR_EQUAL))
-                        .setRight(incompleteRuleWith(LESS_OR_EQUAL)))
-                    .build()
+                compositeRuleAdded {
+                    type = typeName
+                    rule = compositeRule {
+                        left = incompleteRuleWith(GREATER_OR_EQUAL)
+                        right = incompleteRuleWith(LESS_OR_EQUAL)
+                    }
+                }
             )
         blackBox.assertEvents()
             .withType(SimpleRuleAdded::class.java)
@@ -148,17 +135,12 @@ class PolicySpec {
     }
 }
 
-private fun incompleteRuleWith(sign: ComparisonOperator): Rule {
-    val simple = SimpleRule
-        .newBuilder()
-        .setOperator(sign)
-    return Rule.newBuilder()
-        .setSimple(simple)
-        .build()
-}
+private fun incompleteRuleWith(sign: ComparisonOperator): Rule =
+    rule {
+        simple = simpleRule { operator = sign }
+    }
 
-private fun primitive(type: PrimitiveType): Type {
-    return Type.newBuilder()
-        .setPrimitive(type)
-        .build()
-}
+private fun primitive(type: PrimitiveType): Type =
+    type {
+        primitive = type
+    }

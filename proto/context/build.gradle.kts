@@ -27,6 +27,10 @@
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Spine.ProtoData
 
+plugins {
+    `build-proto-model`
+}
+
 dependencies {
     api(ProtoData.compiler)
     implementation(Spine(project).base)
