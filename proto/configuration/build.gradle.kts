@@ -26,6 +26,10 @@ import io.spine.internal.dependency.Spine
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+plugins {
+    `build-proto-model`
+}
+
 dependencies {
     implementation(Spine(project).base)
     implementation(project(":java-runtime"))

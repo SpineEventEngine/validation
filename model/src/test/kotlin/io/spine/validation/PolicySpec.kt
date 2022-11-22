@@ -29,13 +29,12 @@ package io.spine.validation
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
-import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.File.SyntaxVersion.PROTO3
 import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.Type
-import io.spine.protodata.event.FieldOptionDiscovered
+import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.event.fieldEntered
 import io.spine.protodata.event.fieldOptionDiscovered
 import io.spine.protodata.event.fileEntered
