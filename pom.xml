@@ -84,6 +84,12 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
+    <groupId>io.spine.validation</groupId>
+    <artifactId>spine-validation-java-runtime</artifactId>
+    <version>2.0.0-SNAPSHOT.70</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
     <groupId>org.jboss.forge.roaster</groupId>
     <artifactId>roaster-api</artifactId>
     <version>2.24.0.Final</version>
@@ -217,6 +223,11 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-mc-java-plugins</artifactId>
     <version>2.0.0-SNAPSHOT.120</version>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.validation</groupId>
+    <artifactId>spine-validation-java-bundle</artifactId>
+    <version>2.0.0-SNAPSHOT.70</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
