@@ -29,7 +29,7 @@ package io.spine.validation
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.AnyPacker
-import io.spine.protodata.CodeGenerationContext
+import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.Field
 import io.spine.protodata.FieldName
 import io.spine.protodata.File
@@ -77,8 +77,7 @@ class PolicySpec {
         ValidationPlugin().policies().forEach { ctx.addEventDispatcher(it) }
         blackBox = BlackBox.from(ctx)
 
-        val file = File
-            .newBuilder()
+        val file = File.newBuilder()
             .setPath(filePath)
             .setPackageName(typeName.packageName)
             .setSyntax(PROTO3)

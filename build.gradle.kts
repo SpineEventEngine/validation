@@ -55,7 +55,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
     standardSpineSdkRepositories()
     dependencies {
-        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
     }
 }

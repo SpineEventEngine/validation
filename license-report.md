@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -113,8 +113,9 @@
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -449,8 +450,9 @@
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -733,12 +735,12 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:45 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -851,8 +853,9 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -1187,8 +1190,9 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -1471,12 +1475,12 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:45 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -1733,6 +1737,9 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : io.github.java-diff-utils. **Name** : java-diff-utils. **Version** : 4.12.
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : io.gitlab.arturbosch.detekt. **Name** : detekt-api. **Version** : 1.21.0.
      * **Project URL:** [https://detekt.dev](https://detekt.dev)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1829,8 +1836,28 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-common. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-common-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -2032,9 +2059,23 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.17.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.4.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.6.4.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2122,12 +2163,12 @@ This report was generated on **Tue Nov 15 13:48:24 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:46 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-runtime-bundle:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-java-runtime-bundle:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -2706,12 +2747,12 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:46 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -2824,8 +2865,9 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -3064,6 +3106,9 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : io.github.java-diff-utils. **Name** : java-diff-utils. **Version** : 4.12.
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : io.gitlab.arturbosch.detekt. **Name** : detekt-api. **Version** : 1.21.0.
      * **Project URL:** [https://detekt.dev](https://detekt.dev)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3184,14 +3229,35 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-common. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-common-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : io.perfmark. **Name** : perfmark-api. **Version** : 0.25.0.
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -3429,9 +3495,23 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.17.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.4.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.6.4.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3523,12 +3603,12 @@ This report was generated on **Tue Nov 15 13:48:25 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:47 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -3641,7 +3721,8 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -3851,6 +3932,9 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : io.github.java-diff-utils. **Name** : java-diff-utils. **Version** : 4.12.
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : io.gitlab.arturbosch.detekt. **Name** : detekt-api. **Version** : 1.21.0.
      * **Project URL:** [https://detekt.dev](https://detekt.dev)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3967,11 +4051,32 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-common. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-common-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : io.perfmark. **Name** : perfmark-api. **Version** : 0.25.0.
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -4168,9 +4273,23 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.17.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.4.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.6.4.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4262,12 +4381,12 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:47 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -4380,7 +4499,8 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -4732,9 +4852,10 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -5042,12 +5163,12 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:48 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -5160,8 +5281,9 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -5521,10 +5643,11 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -5816,12 +5939,12 @@ This report was generated on **Tue Nov 15 13:48:26 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:48 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -5934,8 +6057,9 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -6295,10 +6419,11 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -6590,12 +6715,12 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:48 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -6702,6 +6827,11 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
 
 1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.13.4.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.13.4.
+     * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -6856,6 +6986,9 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : io.github.java-diff-utils. **Name** : java-diff-utils. **Version** : 4.12.
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : io.gitlab.arturbosch.detekt. **Name** : detekt-api. **Version** : 1.21.0.
      * **Project URL:** [https://detekt.dev](https://detekt.dev)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6976,13 +7109,34 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-api-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-core-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-assertions-shared-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.kotest. **Name** : kotest-common. **Version** : 5.5.4.**No license information found**
+1.  **Group** : io.kotest. **Name** : kotest-common-jvm. **Version** : 5.5.4.
+     * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
+     * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : io.perfmark. **Name** : perfmark-api. **Version** : 0.25.0.
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -7196,9 +7350,23 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.17.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.4.**No license information found**
 1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.4.
+     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.6.4.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -7283,15 +7451,19 @@ This report was generated on **Tue Nov 15 13:48:27 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://bitbucket.org/snakeyaml/snakeyaml](https://bitbucket.org/snakeyaml/snakeyaml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.yaml. **Name** : snakeyaml. **Version** : 1.31.
+     * **Project URL:** [https://bitbucket.org/snakeyaml/snakeyaml](https://bitbucket.org/snakeyaml/snakeyaml)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:49 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -7637,8 +7809,8 @@ This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -7914,12 +8086,12 @@ This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:49 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.70`
+# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.71`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.13.4.**No license information found**
@@ -8032,7 +8204,8 @@ This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -8384,9 +8557,10 @@ This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.4.3.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.4.3.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-api. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.5.0.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-fat-cli. **Version** : 0.5.1.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.5.1.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -8670,4 +8844,4 @@ This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Nov 15 13:48:28 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Nov 22 14:56:49 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
