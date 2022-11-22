@@ -26,25 +26,26 @@
 
 package io.spine.validate
 
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.spine.test.validate.Meal
 import io.spine.test.validate.Meat
+import io.spine.test.validate.meal
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName("Validation extensions for `Message` should")
-internal class MessageExtensionsTest {
+internal class MessageExtensionsSpec {
 
     @Nested
     inner class `Check if the message is valid` {
 
         @Test
         fun `returning 'this' if so`() {
-            val meal = Meal.newBuilder().setMeat(Meat.getDefaultInstance()).build()
+            val meal = meal { meat = Meat.getDefaultInstance() }
 
-            assertThat(meal.checkValid()).isSameInstanceAs(meal)
+            meal.checkValid() shouldBeSameInstanceAs meal
         }
 
         @Test

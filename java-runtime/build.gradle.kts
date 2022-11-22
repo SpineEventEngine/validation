@@ -24,20 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.generateProtoTasks
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 plugins {
     `build-proto-model`
-}
-
-// Turn off codegen of Validation 1.0.
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
+    protobuf
 }
 
 dependencies {
@@ -56,5 +50,28 @@ tasks {
 tasks {
     withType<ProcessResources>().configureEach {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
+
+/**
+ * Turn off codegen of Validation 1.0.
+ */
+modelCompiler {
+    java {
+        codegen {
+            validation { skipValidation() }
+        }
+    }
+}
+
+/**
+ * Force `generated` directory and Kotlin code generation.
+ */
+protobuf {
+    generatedFilesBaseDir = "$projectDir/generated"
+    generateProtoTasks {
+        for (task in all()) {
+            task.builtins.maybeCreate("kotlin")
+        }
     }
 }
