@@ -88,26 +88,16 @@ class PolicySpec {
             name = typeName
             this@messageType.file = filePath
         }
-        val field = field {
+        val int32Field = field {
             declaringType = typeName
             name = fieldName
-            this@field.type = primitive(TYPE_INT32)
+            type = primitive(TYPE_INT32)
         }
 
         blackBox.receivesExternalEvents(
-            fileEntered {
-                path = filePath
-                file = protoFile
-            },
-            typeEntered {
-                file = filePath
-                type = messageType
-            },
-            fieldEntered {
-                this@fieldEntered.field = field
-                file = filePath
-                type = typeName
-            }
+            fileEntered { path = filePath; file = protoFile },
+            typeEntered { file = filePath; type = messageType },
+            fieldEntered { field = int32Field; file = filePath; type = typeName }
         )
     }
 
