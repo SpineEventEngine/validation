@@ -41,9 +41,7 @@ dependencies {
 
 tasks {
     excludeGoogleProtoFromArtifacts()
-}
 
-tasks {
     withType<ProcessResources>().configureEach {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
