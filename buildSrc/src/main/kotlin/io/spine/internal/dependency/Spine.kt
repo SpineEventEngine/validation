@@ -61,13 +61,13 @@ class Spine(p: ExtensionAware) {
          *
          * @see [ProtoData]
          */
-        const val protoData = "0.5.0"
+        const val protoData = "0.6.1"
 
         /**
          * The default version of `base` to use.
          * @see [Spine.base]
          */
-        const val base = "2.0.0-SNAPSHOT.140"
+        const val base = "2.0.0-SNAPSHOT.144"
 
         /**
          * The default version of `core-java` to use.
@@ -80,12 +80,12 @@ class Spine(p: ExtensionAware) {
          * The version of `model-compiler` to use.
          * @see [Spine.modelCompiler]
          */
-        const val mc = "2.0.0-SNAPSHOT.121"
+        const val mc = "2.0.0-SNAPSHOT.90"
 
         /**
          * The version of `mc-java` to use.
          */
-        const val mcJava = "2.0.0-SNAPSHOT.120"
+        const val mcJava = "2.0.0-SNAPSHOT.130"
 
         /**
          * The version of `base-types` to use.
@@ -116,13 +116,13 @@ class Spine(p: ExtensionAware) {
          * The version of `tool-base` to use.
          * @see [Spine.toolBase]
          */
-        const val toolBase = "2.0.0-SNAPSHOT.131"
+        const val toolBase = "2.0.0-SNAPSHOT.155"
 
         /**
          * The version of `validation` to use.
          * @see [Spine.validation]
          */
-        const val validation = "2.0.0-SNAPSHOT.70"
+        const val validation = "2.0.0-SNAPSHOT.71"
 
         /**
          * The version of Javadoc Tools to use.
@@ -243,7 +243,6 @@ class Spine(p: ExtensionAware) {
     object ProtoData {
         const val group = "io.spine.protodata"
         const val version = protoDataVersion
-        const val api = "$group:protodata-api:$version"
         const val compiler = "$group:protodata-compiler:$version"
 
         const val codegenJava = "io.spine.protodata:protodata-codegen-java:$version"

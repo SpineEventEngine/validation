@@ -24,8 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.ProtobufExtension
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
@@ -50,11 +49,10 @@ tasks {
 /**
  * Force `generated` directory and Kotlin code generation.
  */
-protobuf {
+val protobuf = project.extensions.getByName("protobuf") as ProtobufExtension
+protobuf.apply {
     generatedFilesBaseDir = "$projectDir/generated"
-    generateProtoTasks {
-        for (task in all()) {
-            task.builtins.maybeCreate("kotlin")
-        }
+    generateProtoTasks.all().configureEach {
+        builtins.maybeCreate("kotlin")
     }
 }

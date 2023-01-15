@@ -30,7 +30,7 @@ import io.spine.internal.dependency.Spine.ProtoData
 dependencies {
     val spine = Spine(project)
     api(spine.server)
-    api(ProtoData.api)
+    api(ProtoData.codegenJava)
     implementation(ProtoData.compiler)
 
     implementation(project(":proto:configuration"))

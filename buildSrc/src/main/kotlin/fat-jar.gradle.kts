@@ -29,7 +29,7 @@ import io.spine.internal.gradle.publish.SpinePublishing
 plugins {
     java
     `maven-publish`
-    com.github.johnrengelman.shadow
+    id("com.github.johnrengelman.shadow")
 }
 
 /**
