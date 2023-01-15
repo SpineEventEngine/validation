@@ -48,7 +48,7 @@ protoData {
 }
 
 tasks.withType<LaunchProtoData>().configureEach {
-    configuration.set(file("protodata.pb.json"))
+    configurationFile.set(file("protodata.pb.json"))
 }
 
 modelCompiler {
