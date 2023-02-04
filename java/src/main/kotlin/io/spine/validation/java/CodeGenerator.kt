@@ -44,7 +44,7 @@ internal abstract class CodeGenerator(
 ) : Logging {
 
     /**
-     * Whether or not this code generator is capable of generating validation code for
+     * Tells whether this code generator is capable of generating validation code for
      * the associated validation rule.
      *
      * If the rule has a custom operator, the generator might not support it. Otherwise,
@@ -59,8 +59,11 @@ internal abstract class CodeGenerator(
      */
     open fun code(): CodeBlock {
         if (!canGenerate) {
-            _debug().log("Standard Java renderer cannot generate rule: ${ctx.rule}")
-            _debug().log("Skipping...")
+            _debug().log("%s", lazy {
+                "Standard Java renderer cannot generate rule: ${ctx.rule}." +
+                        System.lineSeparator() +
+                        "Skipping..."
+            })
             return CodeBlock.of("")
         }
         val binaryCondition = condition()
@@ -78,14 +81,12 @@ internal abstract class CodeGenerator(
      *
      * Such code may maintain caches for intermediate validation results, etc.
      */
-    open fun supportingMembers(): CodeBlock =
-        CodeBlock.of("")
+    open fun supportingMembers(): CodeBlock = CodeBlock.of("")
 
     /**
      * Generated code which does preparations before the validation checks can be performed.
      */
-    open fun prologue(): CodeBlock =
-        CodeBlock.of("")
+    open fun prologue(): CodeBlock = CodeBlock.of("")
 
     /**
      * Obtains an expression checking if the rule is violated.
