@@ -67,8 +67,7 @@ internal abstract class CodeGenerator(
             return CodeBlock.of("")
         }
         val binaryCondition = condition()
-        return CodeBlock
-            .builder()
+        return CodeBlock.builder()
             .add(prologue())
             .beginControlFlow("if (!(\$L))", binaryCondition)
             .add(createViolation())
