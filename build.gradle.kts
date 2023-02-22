@@ -40,6 +40,8 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.kotlin.applyJvmToolchain
+import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
@@ -110,19 +112,26 @@ allprojects {
     version = extra["validationVersion"]!!
 }
 
+object BuildSettings {
+    private const val JAVA_VERSION = 11
+
+    val javaVersion = JavaLanguageVersion.of(JAVA_VERSION)
+}
+
 subprojects {
     applyPlugins()
     addDependencies()
     forceConfigurations()
     applyGeneratedDirectories("$projectDir/generated")
 
-    val javaVersion = JavaVersion.VERSION_11
+    val javaVersion = BuildSettings.javaVersion
     configureJava(javaVersion)
     configureKotlin(javaVersion)
 
     configureTests()
     configureTaskDependencies()
     dependTestOnJavaRuntime()
+    configureTaskDependencies()
 }
 
 JacocoConfig.applyTo(project)
@@ -198,8 +207,8 @@ fun Subproject.dependTestOnJavaRuntime() {
 
         javaBundleJar?.let {
             test.dependsOn(it)
-            "launchProtoDataMain".dependOn(it)
-            "launchProtoDataTest".dependOn(it)
+            "launchProtoData".dependOn(it)
+            "launchTestProtoData".dependOn(it)
             "pmdMain".dependOn(it)
         }
     }
@@ -252,19 +261,19 @@ fun Subproject.forceConfigurations() {
 /**
  * Configures Java in this subproject.
  */
-fun Subproject.configureJava(javaVersion: JavaVersion) {
+fun Subproject.configureJava(javaVersion: JavaLanguageVersion) {
     java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
-
-        tasks {
-            withType<JavaCompile>().configureEach {
-                configureJavac()
-                configureErrorProne()
-            }
-            withType<Jar>().configureEach {
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
-            }
+        toolchain.languageVersion.set(javaVersion)
+    }
+    tasks {
+        withType<JavaCompile>().configureEach {
+            configureJavac()
+            configureErrorProne()
+            // https://stackoverflow.com/questions/38298695/gradle-disable-all-incremental-compilation-and-parallel-builds
+            options.isIncremental = false
+        }
+        withType<Jar>().configureEach {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
     }
 }
@@ -272,17 +281,18 @@ fun Subproject.configureJava(javaVersion: JavaVersion) {
 /**
  * Configures Kotlin in this subproject.
  */
-fun Subproject.configureKotlin(javaVersion: JavaVersion) {
+fun Subproject.configureKotlin(javaVersion: JavaLanguageVersion) {
     kotlin {
         explicitApi()
+        applyJvmToolchain(javaVersion.asInt())
+    }
 
-        tasks {
-            withType<KotlinCompile>().configureEach {
-                kotlinOptions {
-                    jvmTarget = javaVersion.toString()
-                }
-            }
-        }
+    tasks.withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = javaVersion.toString()
+
+        setFreeCompilerArgs()
+        // https://stackoverflow.com/questions/38298695/gradle-disable-all-incremental-compilation-and-parallel-builds
+        incremental = false
     }
 }
 
