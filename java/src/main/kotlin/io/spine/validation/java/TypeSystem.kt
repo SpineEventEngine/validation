@@ -143,8 +143,7 @@ private constructor(
         }
 
         private fun io.spine.type.Type<*, *>.typeName(): TypeName {
-            val descriptor = descriptor()
-            return when (descriptor) {
+            return when (val descriptor = descriptor()) {
                 is Descriptor -> descriptor.name()
                 is EnumDescriptor -> descriptor.name()
                 else -> error("Unexpected type: `$descriptor`.")
