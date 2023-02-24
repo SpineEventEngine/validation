@@ -27,7 +27,7 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protobuf.Messages.isNotDefault
+import io.spine.protobuf.isNotDefault
 import io.spine.protodata.Field
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
@@ -77,7 +77,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
         val format = composite.errorMessage
         val operation = composite.operator
         val commonField = composite.field
-        val fieldAccessor = if (isNotDefault(commonField)) {
+        val fieldAccessor = if (commonField.isNotDefault()) {
             val found = ctx.lookUpField(commonField)
             ctx.getterFor(found).toCode()
         } else {

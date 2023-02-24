@@ -26,31 +26,12 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import Build_gradle.Subproject
-import io.spine.internal.dependency.Dokka
-import io.spine.internal.dependency.ErrorProne
-import io.spine.internal.dependency.Flogger
-import io.spine.internal.dependency.JUnit
-import io.spine.internal.dependency.Jackson
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.excludeProtobufLite
-import io.spine.internal.gradle.forceVersions
-import io.spine.internal.gradle.javac.configureErrorProne
-import io.spine.internal.gradle.javac.configureJavac
-import io.spine.internal.gradle.javadoc.JavadocConfig
-import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.standardToSpineSdk
-import io.spine.internal.gradle.testing.configureLogging
-import io.spine.internal.gradle.testing.registerTestTasks
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     standardSpineSdkRepositories()
@@ -60,12 +41,10 @@ buildscript {
 }
 
 plugins {
-    `java-library`
     idea
-    protobuf
-    errorprone
-    kotlin("jvm")
+    jacoco
     `gradle-doctor`
+    id("project-report")
 }
 
 spinePublishing {
@@ -99,271 +78,16 @@ spinePublishing {
 allprojects {
     apply(from = "$rootDir/version.gradle.kts")
     repositories.standardToSpineSdk()
-
-    apply {
-        plugin("jacoco")
-        plugin("idea")
-        plugin("project-report")
-    }
-
     group = "io.spine.validation"
     version = extra["validationVersion"]!!
 }
 
 subprojects {
-    applyPlugins()
-    addDependencies()
-    forceConfigurations()
-    applyGeneratedDirectories("$projectDir/generated")
-
-    val javaVersion = JavaVersion.VERSION_11
-    configureJava(javaVersion)
-    configureKotlin(javaVersion)
-
-    configureTests()
-    configureTaskDependencies()
-    dependTestOnJavaRuntime()
+    apply {
+        plugin("module")
+    }
 }
 
 JacocoConfig.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)
-
-/**
- * A subproject of Validation.
- */
-typealias Subproject = Project
-
-/**
- * Applies plugins to a subproject
- */
-fun Subproject.applyPlugins() {
-    apply {
-        plugin(ErrorProne.GradlePlugin.id)
-        plugin("java-library")
-        plugin("kotlin")
-        plugin(Protobuf.GradlePlugin.id)
-        plugin("pmd")
-        plugin("maven-publish")
-        plugin("dokka-for-java")
-        plugin("detekt-code-analysis")
-    }
-
-    // Apply custom Kotlin script plugins.
-    apply {
-        plugin("pmd-settings")
-    }
-
-    apply<IncrementGuard>()
-    LicenseReporter.generateReportIn(project)
-    JavadocConfig.applyTo(project)
-}
-
-/**
- * Adds dependencies common to all subprojects.
- */
-fun Subproject.addDependencies() {
-    dependencies {
-        ErrorProne.apply {
-            errorprone(core)
-            errorproneJavac(javacPlugin)
-        }
-        JUnit.api.forEach { testImplementation(it) }
-        Truth.libs.forEach { testImplementation(it) }
-        testRuntimeOnly(JUnit.runner)
-    }
-}
-
-/**
- * Sets dependencies on `:java-runtime-bundle:shadowJar` for Java-related modules,
- * unless it's ":java-runtime-bundle" itself.
- *
- * The dependencies are set for the tasks:
- *   1. `test`
- *   2. `launchProtoDataMain`
- *   3. `launchProtoDataTest`
- *   4. `pmdMain`.
- */
-fun Subproject.dependTestOnJavaRuntime() {
-    val javaBundleModule = ":java-runtime"
-    if (!name.startsWith(":java") || name == javaBundleModule) {
-        return
-    }
-
-    afterEvaluate {
-        val test: Task by tasks.getting
-        val javaBundleJar = project(javaBundleModule).tasks.findByName("shadowJar")
-
-        fun String.dependOn(task: Task) = tasks.findByName(this)?.dependsOn(task)
-
-        javaBundleJar?.let {
-            test.dependsOn(it)
-            "launchProtoDataMain".dependOn(it)
-            "launchProtoDataTest".dependOn(it)
-            "pmdMain".dependOn(it)
-        }
-    }
-}
-
-/**
- * Forces versions of dependencies and excludes Protobuf Light.
- */
-fun Subproject.forceConfigurations() {
-    configurations {
-        forceVersions()
-        excludeProtobufLite()
-
-        all {
-            resolutionStrategy {
-                val spine = Spine(project)
-                /* Use default version of Validation, not those coming with Spine because
-                   it would use `validationVersion` extension property of the project. */
-                val validationVersion = Spine.DefaultVersion.validation
-                force(
-                    Flogger.lib,
-                    Flogger.Runtime.systemBackend,
-                    JUnit.runner,
-
-                    spine.base,
-                    spine.time,
-                    spine.testlib,
-                    spine.toolBase,
-                    spine.server,
-                    "io.spine.validation:spine-validation-java-runtime:$validationVersion",
-
-                    Jackson.core,
-                    Jackson.moduleKotlin,
-                    Jackson.databind,
-                    Jackson.bom,
-                    Jackson.annotations,
-                    Jackson.dataformatYaml,
-                    Jackson.dataformatXml,
-
-                    Dokka.BasePlugin.lib
-                )
-            }
-
-            // Exclude all transitive dependencies onto the recently moved artifact.
-            exclude("io.spine", "spine-validate")
-        }
-    }
-}
-
-/**
- * Configures Java in this subproject.
- */
-fun Subproject.configureJava(javaVersion: JavaVersion) {
-    java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
-
-        tasks {
-            withType<JavaCompile>().configureEach {
-                configureJavac()
-                configureErrorProne()
-            }
-            withType<Jar>().configureEach {
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
-            }
-        }
-    }
-}
-
-/**
- * Configures Kotlin in this subproject.
- */
-fun Subproject.configureKotlin(javaVersion: JavaVersion) {
-    kotlin {
-        explicitApi()
-
-        tasks {
-            withType<KotlinCompile>().configureEach {
-                kotlinOptions {
-                    jvmTarget = javaVersion.toString()
-                }
-            }
-        }
-    }
-}
-
-/**
- * Configures test tasks.
- */
-fun Project.configureTests() {
-    tasks {
-        registerTestTasks()
-        test {
-            useJUnitPlatform {
-                includeEngines("junit-jupiter")
-            }
-            configureLogging()
-        }
-    }
-}
-
-/**
- * Adds directories with the generated source code to source sets of the project and
- * to IntelliJ IDEA module settings.
- *
- * @param generatedDir
- *          the name of the root directory with the generated code
- */
-fun Subproject.applyGeneratedDirectories(generatedDir: String) {
-    val generatedMain = "$generatedDir/main"
-    val generatedJava = "$generatedMain/java"
-    val generatedKotlin = "$generatedMain/kotlin"
-    val generatedGrpc = "$generatedMain/grpc"
-    val generatedSpine = "$generatedMain/spine"
-
-    val generatedTest = "$generatedDir/test"
-    val generatedTestJava = "$generatedTest/java"
-    val generatedTestKotlin = "$generatedTest/kotlin"
-    val generatedTestGrpc = "$generatedTest/grpc"
-    val generatedTestSpine = "$generatedTest/spine"
-
-    sourceSets {
-        main {
-            java.srcDirs(
-                generatedJava,
-                generatedGrpc,
-                generatedSpine,
-            )
-            kotlin.srcDirs(
-                generatedKotlin,
-            )
-        }
-        test {
-            java.srcDirs(
-                generatedTestJava,
-                generatedTestGrpc,
-                generatedTestSpine,
-            )
-            kotlin.srcDirs(
-                generatedTestKotlin,
-            )
-        }
-    }
-
-    idea {
-        module {
-            generatedSourceDirs.addAll(files(
-                generatedJava,
-                generatedTestJava,
-                generatedKotlin,
-                generatedTestKotlin,
-                generatedGrpc,
-                generatedTestGrpc,
-                generatedSpine,
-                generatedTestSpine,
-            ))
-            testSources.from(
-                generatedTestJava,
-                generatedTestKotlin,
-                generatedTestGrpc,
-                generatedTestSpine,
-            )
-            isDownloadJavadoc = true
-            isDownloadSources = true
-        }
-    }
-}
