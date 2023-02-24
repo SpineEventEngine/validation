@@ -48,4 +48,6 @@ subprojects {
         implementation(Spine(project).base)
         implementation(project(":java-runtime"))
     }
+
+    configureTaskDependencies()
 }
