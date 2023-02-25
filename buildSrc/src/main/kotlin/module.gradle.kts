@@ -24,13 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
-import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.excludeProtobufLite
@@ -42,29 +40,18 @@ import io.spine.internal.gradle.kotlin.applyJvmToolchain
 import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.report.license.LicenseReporter
+import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
-import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.file.DuplicatesStrategy
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.tasks.Jar
-import org.gradle.jvm.toolchain.JavaLanguageVersion
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.exclude
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.idea
 import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.`maven-publish`
-import org.gradle.kotlin.dsl.pmd
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
     `java-library`
     kotlin("jvm")
+    id("com.google.protobuf")
     id("net.ltgt.errorprone")
     id("detekt-code-analysis")
     pmd
@@ -73,12 +60,7 @@ plugins {
     jacoco
     idea
     id("project-report")
-}
-
-apply {
-    plugin(ErrorProne.GradlePlugin.id)
-    plugin(Protobuf.GradlePlugin.id)
-    plugin("pmd-settings")
+    id("pmd-settings")
 }
 
 apply<IncrementGuard>()
@@ -132,8 +114,8 @@ fun Module.addDependencies() {
  *
  * The dependencies are set for the tasks:
  *   1. `test`
- *   2. `launchProtoDataMain`
- *   3. `launchProtoDataTest`
+ *   2. `launchProtoData`
+ *   3. `launchTestProtoData`
  *   4. `pmdMain`.
  */
 fun Module.dependTestOnJavaRuntime() {
