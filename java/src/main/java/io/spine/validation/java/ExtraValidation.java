@@ -33,7 +33,6 @@ import io.spine.protodata.renderer.LineNumber;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.Ast.typeUrl;
 import static java.lang.String.format;
 
 /**
@@ -56,7 +55,7 @@ public final class ExtraValidation implements InsertionPoint {
 
     @Override
     public String getLabel() {
-        return format("extra_validation:%s", typeUrl(name));
+        return format("extra_validation:%s", name.getTypeUrl());
     }
 
     /**

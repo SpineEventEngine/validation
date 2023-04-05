@@ -34,7 +34,6 @@ import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
 import io.spine.server.query.Querying;
 
-import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
@@ -94,7 +93,7 @@ final class SourceFiles {
     static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
         var type = findType(typeName, filePath, querying);
         if (type.getFieldCount() == 0) {
-            var url = typeUrl(typeName);
+            var url = typeName.getTypeUrl();
             throw newIllegalStateException("Type `%s` must have at least one field.", url);
         }
         var field = type.getField(0);
@@ -116,7 +115,7 @@ final class SourceFiles {
         var file = querying.select(ProtobufSourceFile.class)
                            .withId(filePath)
                            .orElseThrow(() -> unknownFile(filePath));
-        var typeUrl = typeUrl(typeName);
+        var typeUrl = typeName.getTypeUrl();
         var type = file.getTypeMap()
                        .get(typeUrl);
         if (type == null) {
@@ -133,7 +132,7 @@ final class SourceFiles {
 
     private static IllegalArgumentException unknownType(TypeName name) {
         return newIllegalArgumentException(
-                "Unknown type `%s`.", typeUrl(name)
+                "Unknown type `%s`.", name.getTypeUrl()
         );
     }
 

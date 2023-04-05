@@ -49,7 +49,6 @@ import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.name
-import io.spine.protodata.typeUrl
 import io.spine.type.KnownTypes
 import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
@@ -229,6 +228,6 @@ private fun unknownType(type: Type): Nothing =
     error("Unknown type: `${type}`.")
 
 private fun unknownType(typeName: TypeName): Nothing =
-    error("Unknown type: `${typeName.typeUrl()}`.")
+    error("Unknown type: `${typeName.typeUrl}`.")
 
 

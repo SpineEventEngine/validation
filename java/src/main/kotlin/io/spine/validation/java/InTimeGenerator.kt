@@ -32,7 +32,6 @@ import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
-import io.spine.protodata.typeUrl
 import io.spine.time.validation.Time
 import io.spine.time.validation.Time.FUTURE
 import io.spine.time.validation.Time.PAST
@@ -45,7 +44,7 @@ import io.spine.validation.InTime
  */
 internal fun inTimeGenerator(inTime: InTime, ctx: GenerationContext): CodeGenerator {
     val fieldType = ctx.fieldFromSimpleRule!!.type
-    return if (fieldType.message.typeUrl() == TIMESTAMP_TYPE) {
+    return if (fieldType.message.typeUrl == TIMESTAMP_TYPE) {
         TimestampInTimeGenerator(inTime, ctx)
     } else {
         InSpineTimeGenerator(inTime, ctx)
