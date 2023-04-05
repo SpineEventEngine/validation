@@ -61,7 +61,7 @@ class Spine(p: ExtensionAware) {
          *
          * @see [ProtoData]
          */
-        const val protoData = "0.7.5"
+        const val protoData = "0.7.8"
 
         /**
          * The default version of `base` to use.
