@@ -38,6 +38,12 @@ buildscript {
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
     }
+
+    configurations.forEach {
+        it.resolutionStrategy {
+            force(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+        }
+    }
 }
 
 plugins {

@@ -44,15 +44,6 @@ protoData {
     )
 }
 
-// Skip validation code generation provided by `mc-java` because we generate our own.
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
-}
-
 protobuf {
     generatedFilesBaseDir = "$projectDir/generated"
 }

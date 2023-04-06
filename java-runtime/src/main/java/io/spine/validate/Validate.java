@@ -31,18 +31,22 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.FluentLogger;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
+import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.protobuf.Diff;
+import io.spine.type.KnownTypes;
 import io.spine.type.MessageType;
+import io.spine.type.TypeUrl;
 import io.spine.validate.option.SetOnce;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static io.spine.protobuf.AnyPacker.unpack;
 
 /**
  * This class provides general validation routines.
@@ -93,9 +97,22 @@ public final class Validate {
      *
      * @return violations of the validation rules or an empty list if the message is valid
      */
+    @SuppressWarnings("ChainOfInstanceofChecks") // A necessity for covering more cases.
     public static List<ConstraintViolation> violationsOf(Message message) {
-        if (message instanceof ValidatableMessage) {
-            var error = ((ValidatableMessage) message).validate();
+        var msg = message;
+        if (message instanceof Any) {
+            var packed = (Any) message;
+            if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
+                msg = unpack(packed);
+            } else {
+                logger.atWarning().log(
+                    "Could not validate packed message of an unknown type `%s`.",
+                    packed.getTypeUrl()
+                );
+            }
+        }
+        if (msg instanceof ValidatableMessage) {
+            var error = ((ValidatableMessage) msg).validate();
             return error.map(ValidationError::getConstraintViolationList)
                         .orElse(ImmutableList.of());
         }

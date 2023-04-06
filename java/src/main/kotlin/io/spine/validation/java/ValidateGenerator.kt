@@ -111,12 +111,11 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
     private fun unpackAndValidate(): CodeBlock {
         return CodeBlock.builder()
             .addStatement(
-                "\$T<\$T> \$L = \$T.violationsOf(\$T.unpack(\$L))",
+                "\$T<\$T> \$L = \$T.violationsOf(\$L)",
                 List::class.java,
                 ConstraintViolation::class.java,
                 violationListVar,
                 Validate::class.java,
-                AnyPacker::class.java,
                 ctx.fieldOrElement!!
             ).build()
     }

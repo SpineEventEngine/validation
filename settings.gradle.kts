@@ -43,7 +43,8 @@ include(
     "java-runtime-bundle",
     "java-bundle",
     ":java-tests",
-    ":java-tests:vanilla",
+    ":java-tests:consumer",
     ":java-tests:extensions",
-    ":java-tests:consumer"
+    ":java-tests:extra-definitions",
+    ":java-tests:vanilla"
 )

@@ -32,6 +32,7 @@ buildscript {
     standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
+        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
     }
 }
 
@@ -39,9 +40,13 @@ plugins {
     java
 }
 
+val forMcJava = setOf("extensions", "extra-definitions")
+
 subprojects {
-    apply {
-        plugin(Spine.McJava.pluginId)
+    if (project.name in forMcJava) {
+        apply(plugin = Spine.McJava.pluginId)
+    } else {
+        apply(plugin = Spine.ProtoData.pluginId)
     }
 
     dependencies {
