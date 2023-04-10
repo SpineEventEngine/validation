@@ -25,6 +25,7 @@
  */
 
 import io.spine.internal.dependency.AutoService
+import io.spine.protodata.gradle.plugin.LaunchProtoData
 
 plugins {
     `build-proto-model`
@@ -50,3 +51,6 @@ modelCompiler {
     }
 }
 
+tasks.withType<LaunchProtoData> {
+    enabled = false
+}
