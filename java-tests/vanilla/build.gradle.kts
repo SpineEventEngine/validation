@@ -48,3 +48,13 @@ dependencies {
     testImplementation(spine.base)
     testImplementation(spine.testlib)
 }
+
+sourceSets {
+    all {
+        java.setSrcDirs(java.filter { it.absolutePath.startsWith(buildDir.absolutePath) })
+    }
+
+    main {
+        java.srcDir("$projectDir/generated")
+    }
+}
