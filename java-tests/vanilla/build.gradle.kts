@@ -26,10 +26,6 @@
 
 import io.spine.internal.dependency.Spine
 
-plugins {
-    id("io.spine.protodata")
-}
-
 protoData {
     renderers(
         "io.spine.validation.java.PrintValidationInsertionPoints",
@@ -42,10 +38,6 @@ protoData {
     plugins(
         "io.spine.validation.ValidationPlugin"
     )
-}
-
-protobuf {
-    generatedFilesBaseDir = "$projectDir/generated"
 }
 
 dependencies {
