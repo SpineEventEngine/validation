@@ -27,10 +27,6 @@
 import io.spine.internal.dependency.Spine
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 
-plugins {
-    id("io.spine.protodata")
-}
-
 protoData {
     renderers(
         "io.spine.validation.java.PrintValidationInsertionPoints",

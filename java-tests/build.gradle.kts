@@ -27,6 +27,7 @@
 @file:Suppress("RemoveRedundantQualifierName")
 
 import io.spine.internal.dependency.Spine
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Disabled
 
 buildscript {
     standardSpineSdkRepositories()
@@ -40,6 +41,10 @@ buildscript {
             force(io.spine.internal.dependency.Protobuf.GradlePlugin.lib)
         }
     }
+}
+
+kotlin {
+    explicitApi = Disabled
 }
 
 plugins {

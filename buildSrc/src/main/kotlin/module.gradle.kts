@@ -210,7 +210,7 @@ fun Module.configureJava(javaVersion: JavaLanguageVersion) {
  */
 fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
     kotlin {
-//        explicitApi()
+        explicitApi()
         applyJvmToolchain(javaVersion.asInt())
     }
 
