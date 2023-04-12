@@ -34,10 +34,17 @@ buildscript {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
         classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force(io.spine.internal.dependency.Protobuf.GradlePlugin.lib)
+        }
+    }
 }
 
 plugins {
     java
+    com.google.protobuf
 }
 
 val forMcJava = setOf("extensions", "extra-definitions")
@@ -55,4 +62,7 @@ subprojects {
     }
 
     configureTaskDependencies()
+
+
+    protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
 }

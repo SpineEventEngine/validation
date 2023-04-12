@@ -43,4 +43,5 @@ subprojects {
     dependencies {
         Protobuf.libs.forEach { implementation(it) }
     }
+    protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
 }

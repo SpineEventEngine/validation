@@ -51,7 +51,6 @@ tasks {
  */
 val protobuf = project.extensions.getByName("protobuf") as ProtobufExtension
 protobuf.apply {
-    generatedFilesBaseDir = "$projectDir/generated"
     generateProtoTasks.all().configureEach {
         builtins.maybeCreate("kotlin")
     }

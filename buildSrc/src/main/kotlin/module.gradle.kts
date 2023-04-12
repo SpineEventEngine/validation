@@ -86,6 +86,8 @@ project.run {
     configureTaskDependencies()
     dependTestOnJavaRuntime()
     configureTaskDependencies()
+
+    protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
 }
 
 /**
@@ -208,7 +210,7 @@ fun Module.configureJava(javaVersion: JavaLanguageVersion) {
  */
 fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
     kotlin {
-        explicitApi()
+//        explicitApi()
         applyJvmToolchain(javaVersion.asInt())
     }
 
