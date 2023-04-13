@@ -25,7 +25,7 @@
  */
 
 import io.spine.internal.dependency.AutoService
-import io.spine.protodata.gradle.plugin.LaunchProtoData
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `build-proto-model`
@@ -51,6 +51,49 @@ modelCompiler {
     }
 }
 
-tasks.withType<LaunchProtoData> {
-    enabled = false
+tasks.withType<KotlinCompile> {
+    exclude {
+        it.file.absolutePath.startsWith("${buildDir.absolutePath}/generated/source/proto")
+    }
+//
+//    doFirst {
+//        println(sources)
+//    }
 }
+
+tasks.withType<JavaCompile> {
+    exclude {
+        it.file.absolutePath.startsWith("${buildDir.absolutePath}/generated/source/proto")
+    }
+}
+
+//tasks.withType<LaunchProtoData> {
+//    enabled = false
+//}
+    sourceSets {
+//        all {
+//            allJava.exclude {
+//                it.file.absolutePath.startsWith("${buildDir.absolutePath}/generated/source/proto")
+//            }
+//            allSource.exclude {
+//                it.file.absolutePath.startsWith("${buildDir.absolutePath}/generated/source/proto")
+//            }
+//            kotlin.exclude {
+//                it.file.absolutePath.startsWith("${buildDir.absolutePath}/generated/source/proto")
+//            }
+//        }
+
+        main {
+            java.srcDir("$projectDir/generated/main/java")
+            java.srcDir("$projectDir/src/main/java")
+            kotlin.srcDir("$projectDir/generated/main/kotlin")
+            kotlin.srcDir("$projectDir/src/main/kotlin")
+        }
+
+        test {
+            java.srcDir("$projectDir/generated/test/java")
+            java.srcDir("$projectDir/src/test/java")
+            kotlin.srcDir("$projectDir/generated/test/kotlin")
+            kotlin.srcDir("$projectDir/src/test/kotlin")
+        }
+    }
