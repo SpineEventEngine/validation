@@ -51,7 +51,7 @@ dependencies {
 
 sourceSets {
     all {
-        java.setSrcDirs(java.filter { it.absolutePath.startsWith(buildDir.absolutePath) })
+        java.setSrcDirs(java.filter { !it.absolutePath.startsWith("${buildDir.absolutePath}/generated") })
     }
 
     main {
