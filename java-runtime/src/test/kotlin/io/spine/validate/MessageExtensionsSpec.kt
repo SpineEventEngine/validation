@@ -29,7 +29,6 @@ package io.spine.validate
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.spine.test.validate.Meal
 import io.spine.test.validate.Meat
-import io.spine.test.validate.meal
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -43,7 +42,9 @@ internal class MessageExtensionsSpec {
 
         @Test
         fun `returning 'this' if so`() {
-            val meal = meal { meat = Meat.getDefaultInstance() }
+            val meal = Meal.newBuilder()
+                .setMeat(Meat.getDefaultInstance())
+                .buildPartial()
 
             meal.checkValid() shouldBeSameInstanceAs meal
         }
