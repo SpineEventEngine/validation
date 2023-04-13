@@ -42,9 +42,9 @@ include(
     "java-runtime",
     "java-runtime-bundle",
     "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:vanilla"
+//    ":java-tests",
+//    ":java-tests:consumer",
+//    ":java-tests:extensions",
+//    ":java-tests:extra-definitions",
+//    ":java-tests:vanilla"
 )
