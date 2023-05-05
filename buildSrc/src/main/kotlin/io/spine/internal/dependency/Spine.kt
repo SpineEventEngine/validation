@@ -85,7 +85,7 @@ class Spine(p: ExtensionAware) {
         /**
          * The version of `mc-java` to use.
          */
-        const val mcJava = "2.0.0-SNAPSHOT.145"
+        const val mcJava = "2.0.0-SNAPSHOT.146"
 
         /**
          * The version of `base-types` to use.
