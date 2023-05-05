@@ -31,7 +31,6 @@ import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 apply {
     plugin(Protobuf.GradlePlugin.id)
-    plugin(Spine.McJava.pluginId)
 }
 
 dependencies {
