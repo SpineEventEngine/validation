@@ -60,6 +60,12 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-time</artifactId>
+    <version>2.0.0-SNAPSHOT.121</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-codegen-java</artifactId>
     <version>0.8.1</version>
@@ -69,6 +75,12 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-compiler</artifactId>
     <version>0.8.1</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.validation</groupId>
+    <artifactId>spine-validation-java-runtime</artifactId>
+    <version>2.0.0-SNAPSHOT.90</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -205,6 +217,11 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-mc-java-plugins</artifactId>
     <version>2.0.0-SNAPSHOT.146</version>
+  </dependency>
+  <dependency>
+    <groupId>io.spine.validation</groupId>
+    <artifactId>spine-validation-java-bundle</artifactId>
+    <version>2.0.0-SNAPSHOT.90</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
