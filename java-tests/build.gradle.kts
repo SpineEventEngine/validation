@@ -26,7 +26,6 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
-import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 
 buildscript {
@@ -57,5 +56,5 @@ subprojects {
 
     configureTaskDependencies()
 
-    protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
+//    protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
 }
