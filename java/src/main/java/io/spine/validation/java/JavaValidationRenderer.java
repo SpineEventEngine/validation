@@ -29,6 +29,7 @@ package io.spine.validation.java;
 import io.spine.protodata.File;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.MessageType;
+import io.spine.protodata.ProtobufDependency;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.renderer.Renderer;
@@ -73,13 +74,24 @@ public final class JavaValidationRenderer extends JavaRenderer {
     }
 
     private TypeSystem bakeTypeSystem() {
-        var files = select(ProtobufSourceFile.class).all();
         var types = TypeSystem.newBuilder();
-        for (var file : files) {
-            file.getTypeMap().values().forEach(type -> types.put(file.getFile(), type));
-            file.getEnumTypeMap().values().forEach(type -> types.put(file.getFile(), type));
-        }
+        addSourceFiles(types);
+        addDependencies(types);
         return types.build();
+    }
+
+    private void addDependencies(TypeSystem.Builder types) {
+        var dependencies = select(ProtobufDependency.class).all();
+        for (var d : dependencies) {
+            types.addFrom(d.getFile());
+        }
+    }
+
+    private void addSourceFiles(TypeSystem.Builder types) {
+        var files = select(ProtobufSourceFile.class).all();
+        for (var file : files) {
+            types.addFrom(file);
+        }
     }
 
     TypeSystem typeSystem() {

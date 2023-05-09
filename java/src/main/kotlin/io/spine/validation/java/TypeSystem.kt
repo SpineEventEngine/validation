@@ -33,6 +33,7 @@ import com.google.protobuf.Descriptors.EnumDescriptor
 import io.spine.protodata.EnumType
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
+import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
@@ -61,6 +62,7 @@ import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
+import java.util.function.Consumer
 
 /**
  * A type system of an application.
@@ -160,6 +162,20 @@ private constructor(
         public fun put(file: File, enumType: EnumType): Builder {
             val javaClassName = enumType.javaClassName(declaredIn = file)
             knownTypes[enumType.name] = javaClassName
+            return this
+        }
+
+        /**
+         * Adds all the definitions from the given `file` to the type system.
+         */
+        @CanIgnoreReturnValue
+        public fun addFrom(file: ProtobufSourceFile): Builder {
+            file.typeMap.values.forEach {
+                put(file.file, it)
+            }
+            file.enumTypeMap.values.forEach {
+                put(file.file, it)
+            }
             return this
         }
 
