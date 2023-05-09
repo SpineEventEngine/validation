@@ -26,7 +26,6 @@
 
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Spine
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `build-proto-model`
