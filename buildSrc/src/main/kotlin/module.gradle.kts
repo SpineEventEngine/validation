@@ -86,8 +86,6 @@ project.run {
     configureTaskDependencies()
     dependTestOnJavaRuntime()
     configureTaskDependencies()
-
-    // protobuf.generatedFilesBaseDir = "$buildDir/generated/source/proto"
 }
 
 /**
