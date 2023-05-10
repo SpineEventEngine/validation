@@ -37,7 +37,6 @@ import io.spine.validation.event.RuleAdded;
 
 import java.util.Set;
 
-import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findType;
 
@@ -77,7 +76,7 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
         }
         if (type.getFieldCount() == 0) {
             throw newIllegalStateException(
-                    "Entity type `%s` must have at least one field.", typeUrl(typeName)
+                    "Entity type `%s` must have at least one field.", typeName.getTypeUrl()
             );
         }
         var field = type.getField(0);

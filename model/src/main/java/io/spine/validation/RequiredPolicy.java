@@ -35,7 +35,6 @@ import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 
-import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 
@@ -72,7 +71,7 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
     private static IllegalStateException doesNotSupportRequired(Field field) {
         var fieldName = field.getName()
                              .getValue();
-        var typeUrl = typeUrl(field.getDeclaringType());
+        var typeUrl = field.getDeclaringType().getTypeUrl();
         var type = field.getType()
                         .getPrimitive();
         return newIllegalStateException(

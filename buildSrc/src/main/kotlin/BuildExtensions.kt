@@ -153,8 +153,7 @@ fun Project.configureTaskDependencies() {
         val generateProto = "generateProto"
         val createVersionFile = "createVersionFile"
         "compileKotlin".dependOn(launchProtoData)
-        val compileTestKotlin = "compileTestKotlin"
-        compileTestKotlin.dependOn(launchTestProtoData)
+        "compileTestKotlin".dependOn(launchTestProtoData)
         val sourcesJar = "sourcesJar"
         sourcesJar.dependOn(generateProto)
         sourcesJar.dependOn(launchProtoData)

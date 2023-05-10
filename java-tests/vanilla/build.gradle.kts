@@ -26,10 +26,6 @@
 
 import io.spine.internal.dependency.Spine
 
-plugins {
-    id("io.spine.protodata")
-}
-
 protoData {
     renderers(
         "io.spine.validation.java.PrintValidationInsertionPoints",
@@ -44,19 +40,6 @@ protoData {
     )
 }
 
-// Skip validation code generation provided by `mc-java` because we generate our own.
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
-}
-
-protobuf {
-    generatedFilesBaseDir = "$projectDir/generated"
-}
-
 dependencies {
     protoData(project(":java"))
     implementation(project(":java-runtime"))
@@ -64,4 +47,18 @@ dependencies {
     val spine = Spine(project)
     testImplementation(spine.base)
     testImplementation(spine.testlib)
+}
+
+/*
+ * Filter out duplicate generated code.
+ *
+ * We have to do this manually in `vanilla` because of a bug in ProtoData.
+ * See https://github.com/SpineEventEngine/ProtoData/issues/133 for more info.
+ */
+sourceSets {
+    all {
+        java.setSrcDirs(java.filter {
+            !it.absolutePath.startsWith("${buildDir.absolutePath}/generated")
+        })
+    }
 }

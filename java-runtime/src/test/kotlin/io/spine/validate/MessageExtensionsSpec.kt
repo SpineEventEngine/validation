@@ -44,7 +44,6 @@ internal class MessageExtensionsSpec {
         @Test
         fun `returning 'this' if so`() {
             val meal = meal { meat = Meat.getDefaultInstance() }
-
             meal.checkValid() shouldBeSameInstanceAs meal
         }
 

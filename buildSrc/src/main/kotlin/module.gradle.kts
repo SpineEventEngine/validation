@@ -256,29 +256,6 @@ fun Module.applyGeneratedDirectories(generatedDir: String) {
     val generatedTestGrpc = "$generatedTest/grpc"
     val generatedTestSpine = "$generatedTest/spine"
 
-    sourceSets {
-        main {
-            java.srcDirs(
-                generatedJava,
-                generatedGrpc,
-                generatedSpine,
-            )
-            kotlin.srcDirs(
-                generatedKotlin,
-            )
-        }
-        test {
-            java.srcDirs(
-                generatedTestJava,
-                generatedTestGrpc,
-                generatedTestSpine,
-            )
-            kotlin.srcDirs(
-                generatedTestKotlin,
-            )
-        }
-    }
-
     idea {
         module {
             generatedSourceDirs.addAll(files(

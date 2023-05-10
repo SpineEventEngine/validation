@@ -10,6 +10,7 @@ option java_outer_classname = "BlizzardProto";
 option java_multiple_files = true;
 
 import "google/protobuf/any.proto";
+import "spine/validation/test/weather.proto";
 
 message Snowflake {
     int32 edges = 1;
@@ -49,4 +50,6 @@ message MeteoStatistics {
     repeated google.protobuf.Any predicted_event = 3 [(validate) = true];
 
     map<string, Region> included_regions = 4 [(required) = true];
+
+    repeated Cloud cloud = 5 [(validate) = true];
 }

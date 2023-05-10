@@ -34,7 +34,6 @@ import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.MessageReference
-import io.spine.protodata.typeUrl
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.Rule
@@ -156,10 +155,10 @@ private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldNam
     val protoFile = select<ProtobufSourceFile>().withId(file).orElseThrow {
         IllegalArgumentException("Unknown file: `${file.value}`.")
     }
-    val messageType = protoFile.typeMap[type.typeUrl()]
-        ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl()}`.")
+    val messageType = protoFile.typeMap[type.typeUrl]
+        ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl}`.")
     return messageType.lookUpField(field)
-        ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl()}.${field.value}`.")
+        ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl}.${field.value}`.")
 }
 
 private fun MessageType.lookUpField(name: FieldName): Field? {

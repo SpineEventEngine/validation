@@ -27,10 +27,6 @@
 import io.spine.internal.dependency.Spine
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 
-plugins {
-    id("io.spine.protodata")
-}
-
 protoData {
     renderers(
         "io.spine.validation.java.PrintValidationInsertionPoints",
@@ -51,16 +47,10 @@ tasks.withType<LaunchProtoData>().configureEach {
     configurationFile.set(file("protodata.pb.json"))
 }
 
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
-}
-
 dependencies {
     protoData(project(":java-tests:extensions"))
+    protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
+    implementation(project(":java-tests:extra-definitions"))
     implementation(Spine(project).time)
 }

@@ -25,16 +25,19 @@
  */
 
 import io.spine.internal.dependency.AutoService
+import io.spine.internal.dependency.Spine
 
 plugins {
     `build-proto-model`
+    module
+    id("io.spine.mc-java")
 }
 
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
-    val spine = io.spine.internal.dependency.Spine(project)
+    val spine = Spine(project)
     implementation(spine.base)
     testImplementation(spine.testlib)
 }
@@ -49,4 +52,3 @@ modelCompiler {
         }
     }
 }
-

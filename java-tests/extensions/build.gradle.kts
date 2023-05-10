@@ -27,11 +27,3 @@
 dependencies {
     implementation(project(":java"))
 }
-
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
-}

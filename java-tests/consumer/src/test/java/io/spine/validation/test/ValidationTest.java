@@ -50,6 +50,8 @@ class ValidationTest {
 
     private static final String ALLOW_VALID = "and allow valid values";
     private static final String PROHIBIT_INVALID = "and prohibit invalid values";
+    private static final String IGNORE_UNKNOWN_INVALID =
+            "and ignore invalid packed values if type is unknown";
 
     @Nested
     @DisplayName("reflect a rule with a less (`<`) sign and")
@@ -304,8 +306,17 @@ class ValidationTest {
             void fail() {
                 var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
-                        .setLastEvent(AnyPacker.pack(invalidRainDrop()));
+                        .setLastEvent(AnyPacker.pack(invalidCloud()));
                 checkInvalid(builder);
+            }
+
+            @Test
+            @DisplayName(IGNORE_UNKNOWN_INVALID)
+            void unknownType() {
+                var builder = meteoStatsInEurope()
+                        .setAverageDrop(validRainDrop())
+                        .setLastEvent(AnyPacker.pack(invalidRainDrop()));
+                assertNoException(builder);
             }
         }
 
@@ -348,13 +359,25 @@ class ValidationTest {
             @Test
             @DisplayName(PROHIBIT_INVALID)
             void fail() {
-                var packedValid = AnyPacker.pack(validRainDrop());
-                var packedInvalid = AnyPacker.pack(invalidRainDrop());
+                var packedValid = AnyPacker.pack(validCloud());
+                var packedInvalid = AnyPacker.pack(invalidCloud());
                 var builder = meteoStatsInEurope()
                         .setAverageDrop(validRainDrop())
                         .addPredictedEvent(packedValid)
                         .addPredictedEvent(packedInvalid);
                 checkInvalid(builder);
+            }
+
+            @Test
+            @DisplayName(IGNORE_UNKNOWN_INVALID)
+            void unknownValue() {
+                var packedValid = AnyPacker.pack(validCloud());
+                var packedInvalid = AnyPacker.pack(invalidRainDrop());
+                var builder = meteoStatsInEurope()
+                        .setAverageDrop(validRainDrop())
+                        .addPredictedEvent(packedValid)
+                        .addPredictedEvent(packedInvalid);
+                assertNoException(builder);
             }
         }
 
@@ -372,6 +395,18 @@ class ValidationTest {
         private RainDrop validRainDrop() {
             return RainDrop.newBuilder()
                     .setMassInGrams(1)
+                    .buildPartial();
+        }
+
+        private Cloud validCloud() {
+            return Cloud.newBuilder()
+                    .setCubicMeters(2)
+                    .build();
+        }
+
+        private Cloud invalidCloud() {
+            return Cloud.newBuilder()
+                    .setCubicMeters(-2)
                     .buildPartial();
         }
 

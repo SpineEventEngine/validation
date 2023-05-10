@@ -33,7 +33,6 @@ import io.spine.util.Text;
 
 import java.util.List;
 
-import static io.spine.protodata.Ast.typeUrl;
 import static io.spine.protodata.renderer.LineNumber.notInFile;
 import static java.lang.String.format;
 
@@ -49,7 +48,7 @@ final class BuildMethodReturnTypeAnnotation extends BuilderInsertionPoint {
 
     @Override
     public String getLabel() {
-        return format("build:%s", typeUrl(messageType()));
+        return format("build:%s", messageType().getTypeUrl());
     }
 
     @Override

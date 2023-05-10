@@ -33,6 +33,7 @@ import com.google.protobuf.Descriptors.EnumDescriptor
 import io.spine.protodata.EnumType
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
+import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
 import io.spine.protodata.Type.KindCase.MESSAGE
@@ -49,7 +50,6 @@ import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.name
-import io.spine.protodata.typeUrl
 import io.spine.type.KnownTypes
 import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
@@ -62,6 +62,7 @@ import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
+import java.util.function.Consumer
 
 /**
  * A type system of an application.
@@ -165,6 +166,20 @@ private constructor(
         }
 
         /**
+         * Adds all the definitions from the given `file` to the type system.
+         */
+        @CanIgnoreReturnValue
+        public fun addFrom(file: ProtobufSourceFile): Builder {
+            file.typeMap.values.forEach {
+                put(file.file, it)
+            }
+            file.enumTypeMap.values.forEach {
+                put(file.file, it)
+            }
+            return this
+        }
+
+        /**
          * Builds an instance of `TypeSystem`.
          */
         public fun build(): TypeSystem = TypeSystem(knownTypes)
@@ -229,6 +244,6 @@ private fun unknownType(type: Type): Nothing =
     error("Unknown type: `${type}`.")
 
 private fun unknownType(typeName: TypeName): Nothing =
-    error("Unknown type: `${typeName.typeUrl()}`.")
+    error("Unknown type: `${typeName.typeUrl}`.")
 
 

@@ -39,7 +39,6 @@ import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.LiteralString
 import io.spine.protodata.isList
 import io.spine.protodata.isMap
-import io.spine.protodata.typeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 
@@ -111,7 +110,7 @@ private fun ErrorMessage.buildViolation(
     var violationBuilder = ClassName(ConstraintViolation::class.java)
         .newBuilder()
         .chainSet("msg_format", Literal(this))
-        .chainSet("type_name", LiteralString(type.typeUrl()))
+        .chainSet("type_name", LiteralString(type.typeUrl))
     if (field != null) {
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }
