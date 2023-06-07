@@ -25,11 +25,10 @@
  */
 
 import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Spine.ProtoData
+import io.spine.internal.dependency.ProtoData
 
 dependencies {
-    val spine = Spine(project)
-    api(spine.server)
+    api(Spine.server)
     api(ProtoData.codegenJava)
     implementation(ProtoData.compiler)
 
@@ -37,5 +36,5 @@ dependencies {
     implementation(project(":proto:context"))
     implementation(project(":java-runtime"))
 
-    testImplementation(spine.coreJava.testUtilServer)
+    testImplementation(Spine.CoreJava.testUtilServer)
 }

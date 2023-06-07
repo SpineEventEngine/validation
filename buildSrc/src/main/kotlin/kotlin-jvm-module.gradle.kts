@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.gradle.publish
+import io.spine.internal.dependency.Kotest
+import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.JUnit
+import io.spine.internal.gradle.kotlin.applyJvmToolchain
+import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-/**
- * A DSL element of [SpinePublishing] extension which allows enabling publishing
- * of [testJar] artifact.
- *
- * This artifact contains compilation output of `test` source set. By default, it is not published.
- *
- * Take a look on [SpinePublishing.testJar] for a usage example.
+plugins {
+    id("java-module")
+    kotlin("jvm")
+    id("io.kotest")
+    id("org.jetbrains.kotlinx.kover")
+    id("detekt-code-analysis")
+    id("dokka-for-kotlin")
+}
 
- * @see [registerArtifacts]
- */
-class TestJar {
+kotlin {
+    applyJvmToolchain(BuildSettings.javaVersion.asInt())
+    explicitApi()
+}
 
-    /**
-     * Set of modules, for which a test JAR will be published.
-     */
-    var inclusions: Set<String> = emptySet()
+dependencies {
+    testImplementation(Spine.testlib)
+    testImplementation(Kotest.frameworkEngine)
+    testImplementation(Kotest.datatest)
+    testImplementation(Kotest.runnerJUnit5Jvm)
+    testImplementation(JUnit.runner)
+}
 
-    /**
-     * Enables test JAR publishing for all published modules.
-     */
-    var enabled = false
+tasks {
+    withType<KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = BuildSettings.javaVersion.toString()
+        setFreeCompilerArgs()
+    }
+}
+
+kover {
+    useJacocoTool()
+}
+
+koverReport {
+    defaults {
+        xml {
+            onCheck = true
+        }
+    }
 }

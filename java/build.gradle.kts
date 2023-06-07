@@ -26,7 +26,7 @@
 
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.Spine.ProtoData
+import io.spine.internal.dependency.ProtoData
 
 dependencies {
     api(project(":model"))

@@ -31,7 +31,7 @@ plugins {
 }
 
 dependencies {
-    implementation(Spine(project).base)
+    implementation(Spine.base)
     implementation(project(":java-runtime"))
 }
 

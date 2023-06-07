@@ -26,7 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.ProtoData
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
@@ -37,8 +37,16 @@ import io.spine.internal.gradle.standardToSpineSdk
 buildscript {
     standardSpineSdkRepositories()
     dependencies {
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+    }
+    configurations.all {
+        resolutionStrategy {
+            force(
+                io.spine.internal.dependency.Spine.toolBase,
+                io.spine.internal.dependency.Spine.pluginBase,
+            )
+        }
     }
 }
 
@@ -73,7 +81,8 @@ spinePublishing {
     artifactPrefix = "spine-validation-"
 
     dokkaJar {
-        enabled = true
+        java = true
+        kotlin = true
     }
 }
 
@@ -85,7 +94,7 @@ allprojects {
 
     configurations.all {
         resolutionStrategy {
-            force(Spine.ProtoData.pluginLib)
+            force(ProtoData.pluginLib)
         }
     }
 }

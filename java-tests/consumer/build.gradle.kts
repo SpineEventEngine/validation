@@ -52,5 +52,5 @@ dependencies {
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:extra-definitions"))
-    implementation(Spine(project).time)
+    implementation(Spine.time)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.gradle.dokka
-
-import java.io.File
-import org.gradle.api.file.FileCollection
-import org.jetbrains.dokka.gradle.GradleDokkaSourceSetBuilder
+package io.spine.internal.dependency
 
 /**
- * Returns only Java source roots out of all present in the source set.
+ * Dependencies on Spine Validation SDK.
  *
- * It is a helper method for generating documentation by Dokka only for Java code.
- * It is helpful when both Java and Kotlin source files are present in a source set.
- * Dokka can properly generate documentation for either Kotlin or Java depending on
- * the configuration, but not both.
+ * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
  */
-internal fun GradleDokkaSourceSetBuilder.onlyJavaSources(): FileCollection {
-    return sourceRoots.filter(File::isJavaSourceDirectory)
-}
-
-private fun File.isJavaSourceDirectory(): Boolean {
-    return isDirectory && name == "java"
+object Validation {
+    const val version = "2.0.0-SNAPSHOT.92"
+    const val group = "io.spine.validation"
+    const val runtime = "$group:spine-validation-java-runtime:$version"
+    const val java = "$group:spine-validation-java:$version"
+    const val model = "$group:spine-validation-model:$version"
+    const val config = "$group:spine-validation-configuration:$version"
 }
