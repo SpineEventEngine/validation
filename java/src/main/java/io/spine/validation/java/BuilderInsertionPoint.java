@@ -29,7 +29,7 @@ package io.spine.validation.java;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.util.Text;
+import io.spine.text.Text;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;

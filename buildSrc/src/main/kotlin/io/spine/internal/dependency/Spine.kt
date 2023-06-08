@@ -64,10 +64,10 @@ object Spine {
         const val core = "2.0.0-SNAPSHOT.141"
 
         /** The version of [Spine.modelCompiler]. */
-        const val mc = "2.0.0-SNAPSHOT.131"
+        const val mc = "2.0.0-SNAPSHOT.132"
 
         /** The version of [McJava]. */
-        const val mcJava = "2.0.0-SNAPSHOT.147"
+        const val mcJava = "2.0.0-SNAPSHOT.149"
 
         /** The version of [Spine.baseTypes]. */
         const val baseTypes = "2.0.0-SNAPSHOT.120"

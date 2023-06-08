@@ -26,11 +26,13 @@
 
 package io.spine.validation.java;
 
+import com.google.common.collect.ImmutableSet;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.LineNumber;
+import io.spine.text.Text;
+import io.spine.text.TextCoordinates;
 
-import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
@@ -66,7 +68,7 @@ public final class ExtraValidation implements InsertionPoint {
      * Thus, this method always returns {@code LineNumber.notInFile()}.
      */
     @Override
-    public LineNumber locate(List<String> list) {
-        return LineNumber.notInFile();
+    public Set<TextCoordinates> locate(Text text) {
+        return ImmutableSet.of(nowhere());
     }
 }

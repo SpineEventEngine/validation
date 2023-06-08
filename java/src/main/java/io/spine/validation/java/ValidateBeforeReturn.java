@@ -26,15 +26,16 @@
 
 package io.spine.validation.java;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.LineNumber;
-import io.spine.util.Text;
+import io.spine.text.Text;
+import io.spine.text.TextCoordinates;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
-import static io.spine.protodata.renderer.LineNumber.notInFile;
+import static io.spine.text.TextFactory.text;
 import static java.lang.String.format;
 
 /**
@@ -57,14 +58,13 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     }
 
     @Override
-    public LineNumber locate(List<String> lines) {
-        var text = new Text(lines);
+    public Set<TextCoordinates> locate(Text text) {
         if (!containsMessageType(text)) {
-            return notInFile();
+            return ImmutableSet.of(nowhere());
         }
         var method = findMethod(text, BUILD_METHOD);
         if (method == null) {
-            return notInFile();
+            return ImmutableSet.of(nowhere());
         }
         var methodDeclarationLine = method.getLineNumber();
         var startPosition = method.getStartPosition();
@@ -73,13 +73,12 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
         var methodSource = code.substring(startPosition, endPosition);
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
-        return LineNumber.at(returnLineNumber - 1);
+        return ImmutableSet.of(atLine(returnLineNumber - 1));
     }
 
     private static int returnLineIndex(String code) {
-        var methodLines = Text.split(code);
         var returnIndex = 0;
-        for (var line : methodLines) {
+        for (var line : text(code).lines()) {
             if (RETURN_LINE.matcher(line).matches()) {
                 return returnIndex;
             }

@@ -36,8 +36,9 @@ import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.renderer.SourceAtPoint;
+import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
+import io.spine.text.TextFactory;
 import io.spine.util.Text;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
@@ -116,20 +117,20 @@ final class ValidationCode {
         var atClassScope = classScope();
         var constraints = ValidationConstraintsCode.generate(renderer, validation);
         atClassScope.add(validateMethod(constraints.codeBlock()));
-        atClassScope.add(constraints.supportingMembersLines());
+        atClassScope.add(TextFactory.lineJoiner().join(constraints.supportingMembersLines()));
     }
 
-    private SourceAtPoint classScope() {
+    private SourceAtLine classScope() {
         return sourceFile.at(CLASS_SCOPE.forType(this.messageType));
     }
 
-    private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
+    private String validateMethod(CodeBlock constraintsCode) {
         var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
         lines.addAll(Text.split(methodSpec.toString()))
              .add(lineSeparator());
-        return lines.build();
+        return TextFactory.lineJoiner().join(lines.build());
     }
 
     private void insertBeforeBuild() {
