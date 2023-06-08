@@ -27,13 +27,14 @@
 @file:Suppress("RemoveRedundantQualifierName")
 
 import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Spine
 
 buildscript {
     standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
     }
 }
 
@@ -47,11 +48,11 @@ subprojects {
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
     } else {
-        apply(plugin = Spine.ProtoData.pluginId)
+        apply(plugin = ProtoData.pluginId)
     }
 
     dependencies {
-        implementation(Spine(project).base)
+        implementation(Spine.base)
         implementation(project(":java-runtime"))
     }
 

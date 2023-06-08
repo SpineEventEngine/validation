@@ -25,7 +25,7 @@
  */
 
 import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Spine.ProtoData
+import io.spine.internal.dependency.ProtoData
 
 plugins {
     `build-proto-model`
@@ -33,7 +33,7 @@ plugins {
 
 dependencies {
     api(ProtoData.compiler)
-    implementation(Spine(project).base)
+    implementation(Spine.base)
     implementation(project(":java-runtime"))
 }
 

@@ -44,9 +44,8 @@ dependencies {
     protoData(project(":java"))
     implementation(project(":java-runtime"))
 
-    val spine = Spine(project)
-    testImplementation(spine.base)
-    testImplementation(spine.testlib)
+    testImplementation(Spine.base)
+    testImplementation(Spine.testlib)
 }
 
 /*

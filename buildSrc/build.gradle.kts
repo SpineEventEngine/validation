@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ val grGitVersion = "4.1.1"
  * Please check that this value matches one defined in
  *  [io.spine.internal.dependency.Kotlin.version].
  */
-val kotlinVersion = "1.8.0"
+val kotlinVersion = "1.8.10"
 
 /**
  * The version of Guava used in `buildSrc`.
@@ -101,7 +101,7 @@ val protobufPluginVersion = "0.9.2"
  * @see <a href="https://github.com/Kotlin/dokka/releases">
  *     Dokka Releases</a>
  */
-val dokkaVersion = "1.7.20"
+val dokkaVersion = "1.8.10"
 
 /**
  * The version of Detekt Gradle Plugin.
@@ -109,6 +109,16 @@ val dokkaVersion = "1.7.20"
  * @see <a href="https://github.com/detekt/detekt/releases">Detekt Releases</a>
  */
 val detektVersion = "1.22.0"
+
+/**
+ * @see [io.spine.internal.dependency.Kotest]
+ */
+val kotestJvmPluginVersion = "0.4.10"
+
+/**
+ * @see [io.spine.internal.dependency.Kover]
+ */
+val koverVersion = "0.7.0-Beta"
 
 /**
  * The version of the Shadow Plugin.
@@ -168,4 +178,7 @@ dependencies {
 
     // https://github.com/srikanth-lingala/zip4j
     implementation("net.lingala.zip4j:zip4j:2.10.0")
+
+    implementation("io.kotest:kotest-gradle-plugin:$kotestJvmPluginVersion")
+    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:$koverVersion")
 }

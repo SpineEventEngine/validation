@@ -31,6 +31,7 @@ import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
+import io.spine.internal.dependency.Validation
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
@@ -149,20 +150,19 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
-                val spine = Spine(project)
                 /* Use default version of Validation, not those coming with Spine because
                    it would use `validationVersion` extension property of the project. */
-                val validationVersion = Spine.DefaultVersion.validation
+                val validationVersion = Validation.version
                 force(
                     Flogger.lib,
                     Flogger.Runtime.systemBackend,
                     JUnit.runner,
 
-                    spine.base,
-                    spine.time,
-                    spine.testlib,
-                    spine.toolBase,
-                    spine.server,
+                    Spine.base,
+                    Spine.time,
+                    Spine.testlib,
+                    Spine.toolBase,
+                    Spine.server,
                     "io.spine.validation:spine-validation-java-runtime:$validationVersion",
 
                     Jackson.core,

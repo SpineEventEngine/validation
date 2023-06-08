@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,20 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.gradle.publish
+import org.jetbrains.dokka.gradle.DokkaTask
 
-/**
- * A DSL element of [SpinePublishing] extension which configures publishing of [dokkaJar] artifact.
- *
- * This artifact contains Dokka-generated documentation. By default, it is not published.
- *
- * Take a look at the [SpinePublishing.dokkaJar] for a usage example.
- *
- * @see [registerArtifacts]
- */
-class DokkaJar {
-    /**
-     * Enables publishing `JAR`s with Dokka-generated documentation for all published modules.
-     */
-    var enabled = false
+plugins {
+    id("org.jetbrains.dokka") // Cannot use `Dokka` dependency object here yet.
+}
+
+dependencies {
+    useDokkaWithSpineExtensions()
+}
+
+tasks.withType<DokkaTask>().configureEach {
+    configureForKotlin()
 }
