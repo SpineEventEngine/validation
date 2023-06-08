@@ -29,12 +29,12 @@ package io.spine.validation.java;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
-import io.spine.util.Text;
+import io.spine.text.TextCoordinates;
+import io.spine.text.Text;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static io.spine.protodata.renderer.LineNumber.notInFile;
 import static java.lang.String.format;
 
 /**
@@ -57,27 +57,26 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     }
 
     @Override
-    public LineNumber locate(List<String> lines) {
-        var text = new Text(lines);
+    public TextCoordinates locateOccurrence(Text text) {
         if (!containsMessageType(text)) {
-            return notInFile();
+            return nowhere();
         }
         var method = findMethod(text, BUILD_METHOD);
         if (method == null) {
-            return notInFile();
+            return nowhere();
         }
         var methodDeclarationLine = method.getLineNumber();
         var startPosition = method.getStartPosition();
         var endPosition = method.getEndPosition();
-        var code = text.toString();
+        var code = text.getValue();
         var methodSource = code.substring(startPosition, endPosition);
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
-        return LineNumber.at(returnLineNumber - 1);
+        return atLine(returnLineNumber - 1);
     }
 
     private static int returnLineIndex(String code) {
-        var methodLines = Text.split(code);
+        var methodLines = io.spine.util.Text.split(code);
         var returnIndex = 0;
         for (var line : methodLines) {
             if (RETURN_LINE.matcher(line).matches()) {

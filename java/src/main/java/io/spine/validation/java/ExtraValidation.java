@@ -27,8 +27,10 @@
 package io.spine.validation.java;
 
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
 import io.spine.protodata.renderer.LineNumber;
+import io.spine.text.TextCoordinates;
+import io.spine.text.Text;
 
 import java.util.List;
 
@@ -42,7 +44,7 @@ import static java.lang.String.format;
  * <p>Goes after all the standard validation checks but before returning/throwing
  * the resulting error.
  */
-public final class ExtraValidation implements InsertionPoint {
+public final class ExtraValidation implements NonRepeatingInsertionPoint {
 
     private final TypeName name;
 
@@ -66,7 +68,7 @@ public final class ExtraValidation implements InsertionPoint {
      * Thus, this method always returns {@code LineNumber.notInFile()}.
      */
     @Override
-    public LineNumber locate(List<String> list) {
-        return LineNumber.notInFile();
+    public TextCoordinates locateOccurrence(Text t) {
+        return nowhere();
     }
 }

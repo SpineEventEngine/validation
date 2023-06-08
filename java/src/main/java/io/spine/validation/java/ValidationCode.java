@@ -36,15 +36,19 @@ import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.renderer.SourceAtPoint;
+import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.util.Text;
+import io.spine.text.Text;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.Validated;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
+
+import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.protodata.renderer.SourceAtLine;
+
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -119,7 +123,7 @@ final class ValidationCode {
         atClassScope.add(constraints.supportingMembersLines());
     }
 
-    private SourceAtPoint classScope() {
+    private SourceAtLine classScope() {
         return sourceFile.at(CLASS_SCOPE.forType(this.messageType));
     }
 
@@ -127,7 +131,7 @@ final class ValidationCode {
         var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
-        lines.addAll(Text.split(methodSpec.toString()))
+        lines.addAll(io.spine.util.Text.split(methodSpec.toString()))
              .add(lineSeparator());
         return lines.build();
     }

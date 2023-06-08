@@ -29,11 +29,11 @@ package io.spine.validation.java;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.LineNumber;
-import io.spine.util.Text;
+import io.spine.text.Text;
+import io.spine.text.TextCoordinates;
 
 import java.util.List;
 
-import static io.spine.protodata.renderer.LineNumber.notInFile;
 import static java.lang.String.format;
 
 /**
@@ -53,16 +53,15 @@ final class BuildPartialReturnTypeAnnotation extends BuilderInsertionPoint {
     }
 
     @Override
-    public LineNumber locate(List<String> lines) {
-        var text = new Text(lines);
+    public TextCoordinates locateOccurrence(Text text) {
         var method = findMethod(text, BUILD_PARTIAL_METHOD);
         if (method == null) {
-            return notInFile();
+            return nowhere();
         }
         var methodDeclarationLine = method.getLineNumber();
         //TODO:2022-10-09:alexander.yevsyukov: We should return a placement inside the line
         // after the package name and before the type name.
         // See https://github.com/SpineEventEngine/ProtoData/issues/84
-        return LineNumber.at(methodDeclarationLine);
+        return atLine(methodDeclarationLine);
     }
 }

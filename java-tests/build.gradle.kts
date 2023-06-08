@@ -36,6 +36,15 @@ buildscript {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
         classpath(io.spine.internal.dependency.ProtoData.pluginLib)
     }
+    configurations.all {
+        resolutionStrategy {
+            force(
+                io.spine.internal.dependency.ProtoData.pluginLib,
+                io.spine.internal.dependency.ProtoData.codegenJava,
+                io.spine.internal.dependency.ProtoData.compiler,
+            )
+        }
+    }
 }
 
 plugins {
@@ -47,6 +56,14 @@ val forMcJava = setOf("extensions", "extra-definitions")
 subprojects {
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
+        val validationVersion: String by extra
+        configurations.all {
+            resolutionStrategy {
+                dependencySubstitution {
+                    substitute(module("io.spine.validation:spine-validation-java-bundle")).using(project(":java"))
+                }
+            }
+        }
     } else {
         apply(plugin = ProtoData.pluginId)
     }

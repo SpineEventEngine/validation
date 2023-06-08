@@ -28,8 +28,8 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.util.Text;
+import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
+import io.spine.text.Text;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
@@ -45,7 +45,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * {@link io.spine.validate.ValidatingBuilder ValidatingBuilder} interface.
  */
 @Immutable
-abstract class BuilderInsertionPoint implements InsertionPoint {
+abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
 
     private static final String BUILDER_CLASS = "Builder";
 
