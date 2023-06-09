@@ -34,6 +34,7 @@ import io.spine.text.TextCoordinates;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
+import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.UNICODE_CASE;
 
 /**
@@ -47,7 +48,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     private static int count = 0;
 
     private static final Pattern RETURN_LINE = Pattern.compile(
-            "\\s*return .+;\\s*", UNICODE_CASE
+            "\\s*return .+;.*", UNICODE_CASE | DOTALL
     );
 
     ValidateBeforeReturn(TypeName type) {
