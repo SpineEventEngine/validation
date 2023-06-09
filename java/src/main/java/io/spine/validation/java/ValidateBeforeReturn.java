@@ -85,6 +85,6 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
             }
             returnIndex++;
         }
-        throw new IllegalArgumentException("No return line.");
+        throw new IllegalArgumentException("No return line in method: " + code);
     }
 }
