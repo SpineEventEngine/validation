@@ -27,9 +27,3 @@
 dependencies {
     implementation(project(":java"))
 }
-
-protoData {
-    renderers(
-        "io.spine.validation.java.TempLister",
-    )
-}

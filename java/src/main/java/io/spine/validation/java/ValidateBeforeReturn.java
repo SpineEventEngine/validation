@@ -46,8 +46,6 @@ import static java.util.regex.Pattern.UNICODE_CASE;
 @Immutable
 final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
-    private static int count = 0;
-
     private static final Pattern RETURN_LINE = Pattern.compile(
             "\\s*return .+;.*", UNICODE_CASE | DOTALL
     );
@@ -63,7 +61,6 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     @Override
     public TextCoordinates locateOccurrence(Text text) {
-        System.err.println(count++);
         if (!containsMessageType(text)) {
             return nowhere();
         }
@@ -90,6 +87,6 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
             }
             returnIndex++;
         }
-        throw new IllegalArgumentException("No return line in method: " + code);
+        throw new IllegalArgumentException("No return statement.");
     }
 }
