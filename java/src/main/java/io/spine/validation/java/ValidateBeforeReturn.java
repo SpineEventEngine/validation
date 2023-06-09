@@ -34,6 +34,7 @@ import io.spine.text.TextCoordinates;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
+import static java.util.regex.Pattern.UNICODE_CASE;
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
@@ -45,7 +46,9 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     private static int count = 0;
 
-    private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
+    private static final Pattern RETURN_LINE = Pattern.compile(
+            "\\s*return .+;\\s*", UNICODE_CASE
+    );
 
     ValidateBeforeReturn(TypeName type) {
         super(type);
