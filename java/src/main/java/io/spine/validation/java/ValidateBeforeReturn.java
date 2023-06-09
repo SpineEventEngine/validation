@@ -30,6 +30,7 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
+import io.spine.text.TextFactory;
 
 import java.util.regex.Pattern;
 
@@ -81,7 +82,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
     }
 
     private static int returnLineIndex(String code) {
-        var methodLines = io.spine.util.Text.split(code);
+        var methodLines = TextFactory.lineSplitter().split(code);
         var returnIndex = 0;
         for (var line : methodLines) {
             if (RETURN_LINE.matcher(line).matches()) {
