@@ -28,11 +28,9 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.LineNumber;
-import io.spine.text.TextCoordinates;
 import io.spine.text.Text;
+import io.spine.text.TextCoordinates;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
@@ -44,6 +42,8 @@ import static java.lang.String.format;
  */
 @Immutable
 final class ValidateBeforeReturn extends BuilderInsertionPoint {
+
+    private static int count = 0;
 
     private static final Pattern RETURN_LINE = Pattern.compile("\\s*return .+;\\s*");
 
@@ -58,6 +58,7 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
 
     @Override
     public TextCoordinates locateOccurrence(Text text) {
+        System.err.println(count++);
         if (!containsMessageType(text)) {
             return nowhere();
         }

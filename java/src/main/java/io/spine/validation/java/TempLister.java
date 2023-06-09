@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-dependencies {
-    implementation(project(":java"))
-}
+package io.spine.validation.java;
 
-protoData {
-    renderers(
-        "io.spine.validation.java.TempLister",
-    )
+import io.spine.protodata.codegen.java.JavaRenderer;
+import io.spine.protodata.renderer.SourceFileSet;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+@SuppressWarnings({"ALL", "ClassNamingConventions"})
+public class TempLister extends JavaRenderer {
+
+    private static int count = 0;
+
+    @Override
+    protected void render(@NonNull SourceFileSet set) {
+        set.forEach(x -> System.err.println("" + count++ + ". " + x.getRelativePath()));
+    }
 }
