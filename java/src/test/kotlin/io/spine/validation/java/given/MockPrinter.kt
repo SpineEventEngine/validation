@@ -30,6 +30,9 @@ import io.spine.protodata.renderer.InsertionPoint
 import io.spine.protodata.renderer.InsertionPointPrinter
 import io.spine.tools.code.CommonLanguages.Java
 
+/**
+ * An `InsertionPointPrinter` that prints exactly the given `insertionPoints`.
+ */
 class MockPrinter(
     private val insertionPoints: Set<InsertionPoint>
 ) : InsertionPointPrinter(Java) {
