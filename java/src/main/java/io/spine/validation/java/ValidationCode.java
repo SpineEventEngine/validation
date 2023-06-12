@@ -52,6 +52,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
+import static io.spine.text.TextFactory.lineSplitter;
 import static java.lang.System.lineSeparator;
 
 /**
@@ -126,7 +127,7 @@ final class ValidationCode {
         var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
-        lines.addAll(io.spine.util.Text.split(methodSpec.toString()))
+        lines.addAll(lineSplitter().split(methodSpec.toString()))
              .add(lineSeparator());
         return lines.build();
     }
