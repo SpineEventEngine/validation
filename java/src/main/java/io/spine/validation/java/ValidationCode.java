@@ -38,17 +38,12 @@ import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.text.Text;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.Validated;
 import io.spine.validate.ValidationError;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
-
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.SourceAtLine;
-
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -157,13 +152,13 @@ final class ValidationCode {
 
     private void annotateBuildMethod() {
         var buildMethod = new BuildMethodReturnTypeAnnotation(messageType);
-        sourceFile.at(buildMethod)
+        sourceFile.atInline(buildMethod)
                   .add(annotation(Validated.class));
     }
 
     private void annotateBuildPartialMethod() {
         var buildPartialMethod = new BuildPartialReturnTypeAnnotation(messageType);
-        sourceFile.at(buildPartialMethod)
+        sourceFile.atInline(buildPartialMethod)
                   .add(annotation(NonValidated.class));
     }
 

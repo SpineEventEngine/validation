@@ -28,40 +28,15 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.LineNumber;
-import io.spine.text.Text;
-import io.spine.text.TextCoordinates;
-
-import java.util.List;
-
-import static java.lang.String.format;
 
 /**
  * Locates the placement for annotating the type returned by
  * the {@code Builder.buildPartial()} method.
  */
 @Immutable
-final class BuildPartialReturnTypeAnnotation extends BuilderInsertionPoint {
+final class BuildPartialReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
 
     BuildPartialReturnTypeAnnotation(TypeName messageType) {
-        super(messageType);
-    }
-
-    @Override
-    public String getLabel() {
-        return format("buildPartial:%s", messageType().getTypeUrl());
-    }
-
-    @Override
-    public TextCoordinates locateOccurrence(Text text) {
-        var method = findMethod(text, BUILD_PARTIAL_METHOD);
-        if (method == null) {
-            return nowhere();
-        }
-        var methodDeclarationLine = method.getLineNumber();
-        //TODO:2022-10-09:alexander.yevsyukov: We should return a placement inside the line
-        // after the package name and before the type name.
-        // See https://github.com/SpineEventEngine/ProtoData/issues/84
-        return atLine(methodDeclarationLine);
+        super(messageType, BUILD_PARTIAL_METHOD);
     }
 }
