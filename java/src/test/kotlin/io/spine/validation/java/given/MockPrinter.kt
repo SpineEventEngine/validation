@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.Kotest
-import io.spine.internal.dependency.ProtoData
-import io.spine.internal.dependency.Roaster
+package io.spine.validation.java.given
 
-dependencies {
-    api(project(":model"))
-    api(project(":proto:context"))
-    api(ProtoData.codegenJava)
+import io.spine.protodata.renderer.InsertionPoint
+import io.spine.protodata.renderer.InsertionPointPrinter
+import io.spine.tools.code.CommonLanguages.Java
 
-    implementation(project(":java-runtime"))
-    implementation(JavaPoet.lib)
-    implementation(Roaster.api)
+class MockPrinter(
+    private val insertionPoints: Set<InsertionPoint>
+) : InsertionPointPrinter(Java) {
 
-    runtimeOnly(Roaster.jdt)
-
-    testImplementation(Kotest.assertions)
+    override fun supportedInsertionPoints() = insertionPoints
 }
