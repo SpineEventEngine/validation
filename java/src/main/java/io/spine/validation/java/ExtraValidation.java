@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,8 @@ package io.spine.validation.java;
 
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
-import io.spine.protodata.renderer.LineNumber;
-import io.spine.text.TextCoordinates;
 import io.spine.text.Text;
-
-import java.util.List;
+import io.spine.text.TextCoordinates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
