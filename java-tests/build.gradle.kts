@@ -26,8 +26,8 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
-import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.ProtoData
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 
 buildscript {
@@ -56,11 +56,14 @@ val forMcJava = setOf("extensions", "extra-definitions")
 subprojects {
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
-        val validationVersion: String by extra
         configurations.all {
             resolutionStrategy {
                 dependencySubstitution {
-                    substitute(module("io.spine.validation:spine-validation-java-bundle")).using(project(":java"))
+                    // Use the current version of Java validation code generation instead of
+                    // the version used in `mc-java`.
+                    substitute(
+                        module("io.spine.validation:spine-validation-java-bundle")
+                    ).using(project(":java"))
                 }
             }
         }
