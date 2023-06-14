@@ -59,13 +59,9 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
 
     private static Stream<BuilderInsertionPoint> supportedPoints(TypeName messageType) {
         return Stream.of(
-                new ValidateBeforeReturn(messageType)
-                //TODO:2022-10-09:alexander.yevsyukov: Uncomment when the issue below is resolved
-                // https://github.com/SpineEventEngine/ProtoData/issues/84
-                /* ,
-                new BuildPartialMethodInsertionPoint(messageType)
-                new BuildMethodInsertionPoint(messageType),
-                */
+                new ValidateBeforeReturn(messageType),
+                new BuildPartialReturnTypeAnnotation(messageType),
+                new BuildMethodReturnTypeAnnotation(messageType)
         );
     }
 }

@@ -31,7 +31,7 @@ buildscript {
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
-        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
     }
 }
 

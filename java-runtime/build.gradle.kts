@@ -37,9 +37,9 @@ dependencies {
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
-    val spine = Spine(project)
-    implementation(spine.base)
-    testImplementation(spine.testlib)
+    implementation(Spine.base)
+    implementation(Spine.logging)
+    testImplementation(Spine.testlib)
 }
 
 /**

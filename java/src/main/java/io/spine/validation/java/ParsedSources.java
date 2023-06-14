@@ -29,7 +29,7 @@ package io.spine.validation.java;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import io.spine.util.Text;
+import io.spine.text.Text;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
@@ -50,7 +50,7 @@ final class ParsedSources {
         return new CacheLoader<>() {
             @Override
             public JavaSource<?> load(Text code) {
-                var result = Roaster.parse(JavaSource.class, code.toString());
+                var result = Roaster.parse(JavaSource.class, code.getValue());
                 return result;
             }
         };

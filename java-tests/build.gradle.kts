@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
+import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 
@@ -33,7 +34,16 @@ buildscript {
     standardSpineSdkRepositories()
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.Spine.ProtoData.pluginLib)
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
+    }
+    configurations.all {
+        resolutionStrategy {
+            force(
+                io.spine.internal.dependency.ProtoData.pluginLib,
+                io.spine.internal.dependency.ProtoData.codegenJava,
+                io.spine.internal.dependency.ProtoData.compiler,
+            )
+        }
     }
 }
 
@@ -46,12 +56,23 @@ val forMcJava = setOf("extensions", "extra-definitions")
 subprojects {
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
+        configurations.all {
+            resolutionStrategy {
+                dependencySubstitution {
+                    // Use the current version of Java validation code generation instead of
+                    // the version used in `mc-java`.
+                    substitute(
+                        module("io.spine.validation:spine-validation-java-bundle")
+                    ).using(project(":java"))
+                }
+            }
+        }
     } else {
-        apply(plugin = Spine.ProtoData.pluginId)
+        apply(plugin = ProtoData.pluginId)
     }
 
     dependencies {
-        implementation(Spine(project).base)
+        implementation(Spine.base)
         implementation(project(":java-runtime"))
     }
 

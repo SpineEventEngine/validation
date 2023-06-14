@@ -25,8 +25,9 @@
  */
 
 import io.spine.internal.dependency.JavaPoet
+import io.spine.internal.dependency.Kotest
+import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.Spine.ProtoData
 
 dependencies {
     api(project(":model"))
@@ -38,4 +39,6 @@ dependencies {
     implementation(Roaster.api)
 
     runtimeOnly(Roaster.jdt)
+
+    testImplementation(Kotest.assertions)
 }

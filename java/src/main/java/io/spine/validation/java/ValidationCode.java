@@ -36,9 +36,8 @@ import io.spine.protodata.codegen.java.Literal;
 import io.spine.protodata.codegen.java.MessageReference;
 import io.spine.protodata.codegen.java.MethodCall;
 import io.spine.protodata.codegen.java.Poet;
-import io.spine.protodata.renderer.SourceAtPoint;
+import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.util.Text;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.Validated;
@@ -53,6 +52,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
 import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
+import static io.spine.text.TextFactory.lineSplitter;
 import static java.lang.System.lineSeparator;
 
 /**
@@ -119,7 +119,7 @@ final class ValidationCode {
         atClassScope.add(constraints.supportingMembersLines());
     }
 
-    private SourceAtPoint classScope() {
+    private SourceAtLine classScope() {
         return sourceFile.at(CLASS_SCOPE.forType(this.messageType));
     }
 
@@ -127,7 +127,7 @@ final class ValidationCode {
         var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
         var methodSpec = validateMethod.generate();
         var lines = ImmutableList.<String>builder();
-        lines.addAll(Text.split(methodSpec.toString()))
+        lines.addAll(lineSplitter().split(methodSpec.toString()))
              .add(lineSeparator());
         return lines.build();
     }
@@ -153,13 +153,13 @@ final class ValidationCode {
 
     private void annotateBuildMethod() {
         var buildMethod = new BuildMethodReturnTypeAnnotation(messageType);
-        sourceFile.at(buildMethod)
+        sourceFile.atInline(buildMethod)
                   .add(annotation(Validated.class));
     }
 
     private void annotateBuildPartialMethod() {
         var buildPartialMethod = new BuildPartialReturnTypeAnnotation(messageType);
-        sourceFile.at(buildPartialMethod)
+        sourceFile.atInline(buildPartialMethod)
                   .add(annotation(NonValidated.class));
     }
 

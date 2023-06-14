@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protobuf.AnyPacker
+import io.spine.protodata.TypeName
 import io.spine.protodata.event.FieldEntered
 import io.spine.protodata.event.TypeExited
-import io.spine.protodata.TypeName
 import io.spine.protodata.event.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
