@@ -104,11 +104,12 @@ subprojects {
         plugin("module")
     }
 
-//    afterEvaluate {
-        tasks.withType<CheckVersionIncrement> {
-            artifactPrefix = "spine-validation-"
-        }
-//    }
+    /**
+     * Set a proper artifact prefix for looking up validation artifacts.
+     */
+    tasks.withType<CheckVersionIncrement> {
+        artifactPrefix = "spine-validation-"
+    }
 }
 
 JacocoConfig.applyTo(project)
