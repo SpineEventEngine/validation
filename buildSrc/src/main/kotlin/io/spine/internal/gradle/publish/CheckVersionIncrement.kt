@@ -55,6 +55,9 @@ open class CheckVersionIncrement : DefaultTask() {
     @Input
     val version: String = project.version as String
 
+    @Input
+    var artifactPrefix: String = "spine-"
+
     @TaskAction
     fun fetchAndCheck() {
         val artifact = "${project.artifactPath()}/${MavenMetadata.FILE_NAME}"
@@ -88,7 +91,7 @@ open class CheckVersionIncrement : DefaultTask() {
 
     private fun Project.artifactPath(): String {
         val group = this.group as String
-        val name = "spine-${this.name}"
+        val name = "${artifactPrefix}${this.name}"
 
         val pathElements = ArrayList(group.split('.'))
         pathElements.add(name)

@@ -26,8 +26,9 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.ProtoData
+import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.publish.CheckVersionIncrement
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
@@ -101,6 +102,13 @@ allprojects {
 subprojects {
     apply {
         plugin("module")
+    }
+
+    /**
+     * Set a proper artifact prefix for looking up validation artifacts.
+     */
+    tasks.withType<CheckVersionIncrement> {
+        artifactPrefix = "spine-validation-"
     }
 }
 
