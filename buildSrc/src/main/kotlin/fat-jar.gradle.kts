@@ -91,15 +91,21 @@ tasks.shadowJar {
 }
 
 /**
- * Declare dependencies explicitly to address Gradle warnings.
+ * Makes the receiver task depend on the `jar` task.
  */
-
-tasks.withType<PublishToMavenLocal> {
+fun Task.dependsOnJar() {
     dependsOn(tasks.jar)
     logger.debug("Task `${this.name}` now depends on `${tasks.jar.name}`.")
 }
 
+/**
+ * Declare dependencies explicitly to address Gradle warnings.
+ */
+
+tasks.withType<PublishToMavenLocal> {
+    this.dependsOnJar()
+}
+
 tasks.withType<PublishToMavenRepository> {
-    dependsOn(tasks.jar)
-    logger.debug("Task `${this.name}` now depends on `${tasks.jar.name}`.")
+    this.dependsOnJar()
 }
