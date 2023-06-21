@@ -91,9 +91,21 @@ tasks.shadowJar {
 }
 
 /**
- * Declare dependency explicitly to address the Gradle warning.
+ * Makes the receiver task depend on the `jar` task.
  */
-val publishFatJarPublicationToMavenLocal: Task by tasks.getting {
+fun Task.dependsOnJar() {
     dependsOn(tasks.jar)
-    println("Task `${this.name}` now depends on `${tasks.jar.name}`.")
+    logger.debug("Task `${this.name}` now depends on `${tasks.jar.name}`.")
+}
+
+/**
+ * Declare dependencies explicitly to address Gradle warnings.
+ */
+
+tasks.withType<PublishToMavenLocal> {
+    this.dependsOnJar()
+}
+
+tasks.withType<PublishToMavenRepository> {
+    this.dependsOnJar()
 }
