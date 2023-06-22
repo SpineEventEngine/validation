@@ -42,9 +42,6 @@ plugins {
 publishing {
     publications {
         create("fatJar", MavenPublication::class) {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
             artifact(tasks.shadowJar)
         }
     }
