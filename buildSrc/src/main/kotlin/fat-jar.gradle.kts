@@ -41,12 +41,7 @@ plugins {
  */
 publishing {
     publications {
-        // The publishing settings from the root project.
-        val spinePublishing = rootProject.the<SpinePublishing>()
         create("fatJar", MavenPublication::class) {
-            groupId = project.group.toString()
-            artifactId = spinePublishing.artifactId(project)
-            version = project.version.toString()
             artifact(tasks.shadowJar)
         }
     }

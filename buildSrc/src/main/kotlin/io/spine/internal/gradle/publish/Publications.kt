@@ -27,6 +27,7 @@
 package io.spine.internal.gradle.publish
 
 import io.spine.internal.gradle.Repository
+import io.spine.internal.gradle.artifactId
 import io.spine.internal.gradle.isSnapshot
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
@@ -85,7 +86,7 @@ internal sealed class PublicationHandler(
      */
     protected fun MavenPublication.assignMavenCoordinates() {
         groupId = project.group.toString()
-        artifactId = project.spinePublishing.artifactPrefix + artifactId
+        artifactId = project.artifactId
         version = project.version.toString()
     }
 }

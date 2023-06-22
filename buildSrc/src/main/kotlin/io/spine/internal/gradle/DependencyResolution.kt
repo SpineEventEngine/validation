@@ -103,8 +103,8 @@ private fun ResolutionStrategy.forceTestDependencies() {
     force(
         Guava.testLib,
         JUnit.api,
-        JUnit.platformCommons,
-        JUnit.platformLauncher,
+        JUnit.Platform.commons,
+        JUnit.Platform.launcher,
         JUnit.legacy,
         Truth.libs
     )
