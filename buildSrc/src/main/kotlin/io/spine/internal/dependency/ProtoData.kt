@@ -33,7 +33,7 @@ package io.spine.internal.dependency
  */
 @Suppress("unused")
 object ProtoData {
-    const val version = "0.9.1"
+    const val version = "0.9.3"
     const val group = "io.spine.protodata"
     const val compiler = "$group:protodata-compiler:$version"
 

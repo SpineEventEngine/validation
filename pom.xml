@@ -74,13 +74,13 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-codegen-java</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.3</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-compiler</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.3</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -207,12 +207,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-fat-cli</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.3</version>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-protoc</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.3</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
