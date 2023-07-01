@@ -75,7 +75,8 @@ spinePublishing {
     artifactPrefix = "spine-validation-"
 
     dokkaJar {
-        enabled = true
+        java = true
+        kotlin = true
     }
 }
 
@@ -102,13 +103,6 @@ allprojects {
 subprojects {
     apply {
         plugin("module")
-    }
-
-    /**
-     * Set a proper artifact prefix for looking up validation artifacts.
-     */
-    tasks.withType<CheckVersionIncrement> {
-        artifactPrefix = "spine-validation-"
     }
 }
 
