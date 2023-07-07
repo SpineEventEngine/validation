@@ -27,18 +27,19 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
+import io.spine.protodata.Type;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
 import io.spine.text.Text;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.text.TextFactory.lineJoiner;
+import static io.spine.text.TextFactory.lineSplitter;
+import static io.spine.text.TextFactory.text;
+import static java.util.regex.Pattern.DOTALL;
 
 /**
  * Abstract base for insertion points for generated code implementing
@@ -47,23 +48,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Immutable
 abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
 
-    private static final String BUILDER_CLASS = "Builder";
-
-    /**
-     * Cached results of parsing the Java source code.
-     *
-     * <p>Without caching, this operation may be executed for too many times
-     * for the same input.
-     */
-    private static final ParsedSources parsedSources = new ParsedSources();
-
-    static final String BUILD_METHOD = "build";
-    static final String BUILD_PARTIAL_METHOD = "buildPartial";
-
     private final TypeName messageType;
+    private final TypeSystem typeSystem;
 
-    BuilderInsertionPoint(TypeName messageType) {
+    BuilderInsertionPoint(TypeName messageType, TypeSystem typeSystem) {
         this.messageType = checkNotNull(messageType);
+        this.typeSystem = checkNotNull(typeSystem);
     }
 
     /**
@@ -71,66 +61,6 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
      */
     protected final TypeName messageType() {
         return messageType;
-    }
-
-    /**
-     * Obtains the Java class source for the builder in the given code.
-     *
-     * @param code
-     *         the Java code to parse
-     * @return the found binder code or {@code null} if no builder class found
-     */
-    protected final @Nullable JavaClassSource findBuilder(Text code) {
-        var classSource = findMessageClass(code);
-        if (classSource == null) {
-            return null;
-        }
-        if (!classSource.hasNestedType(BUILDER_CLASS)) {
-            return null;
-        }
-        var builder = classSource.getNestedType(BUILDER_CLASS);
-        if (!builder.isClass()) {
-            return null;
-        }
-        var builderClass = (JavaClassSource) builder;
-        return builderClass;
-    }
-
-    private @Nullable JavaClassSource findMessageClass(Text code) {
-        var javaSource = parseSource(code);
-        if (!javaSource.isClass()) {
-            return null;
-        }
-        var source = (JavaClassSource) javaSource;
-        Deque<String> names = new ArrayDeque<>(messageType.getNestingTypeNameList());
-        names.addLast(messageType.getSimpleName());
-
-        if (source.getName().equals(names.peek())) {
-            names.poll();
-        }
-        var result = findNestedClass(source, names);
-        return result;
-    }
-
-    private static JavaSource<?> parseSource(Text code) {
-        return parsedSources.get(code);
-    }
-
-    private static
-    @Nullable JavaClassSource findNestedClass(JavaClassSource topLevelClass,
-                                              Iterable<String> names) {
-        var source = topLevelClass;
-        for (var name : names) {
-            if (!source.hasNestedType(name)) {
-                return null;
-            }
-            var nestedType = source.getNestedType(name);
-            if (!nestedType.isClass()) {
-                return null;
-            }
-            source = (JavaClassSource) nestedType;
-        }
-        return source;
     }
 
     final boolean containsMessageType(Text text) {
@@ -143,12 +73,78 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
         return false;
     }
 
-    @Nullable
-    final MethodSource<JavaClassSource> findMethod(Text code, String methodName) {
-        var builderClass = findBuilder(code);
-        var method = builderClass != null
-                     ? builderClass.getMethod(methodName)
-                     : null;
-        return method;
+    static MethodSignature buildMethod(TypeName messageType) {
+        var type = Type.newBuilder()
+                .setMessage(messageType)
+                .build();
+        return MethodSignature.newBuilder()
+                .setMethodName("build")
+                .setReturnType(type)
+                .build();
+    }
+
+    static MethodSignature buildPartialMethod(TypeName messageType) {
+        var type = Type.newBuilder()
+                .setMessage(messageType)
+                .build();
+        return MethodSignature.newBuilder()
+                .setMethodName("buildPartial")
+                .setReturnType(type)
+                .build();
+    }
+
+    Optional<FragmentCoordinates> findMethodCoordinates(Text code, MethodSignature signature) {
+        var coordinates = findSignatureCoordinates(code, signature);
+        return coordinates.map(coods -> {
+            var bodyStartLine = coods.getBodyStartLine();
+            var bodyEndLine = findMethodEndLine(code, bodyStartLine);
+            return coods.toBuilder()
+                        .setBodyEndLine(bodyEndLine)
+                        .build();
+        });
+    }
+
+    private static int findMethodEndLine(Text code, int methodStartLine) {
+        var lines = code.lines();
+        var codeFromLine = lineJoiner().join(lines.subList(methodStartLine, lines.size()));
+        var firstBraceIndex = codeFromLine.indexOf('{');
+        var braces = 1;
+        for (var i = firstBraceIndex + 1; i < codeFromLine.length(); i++) {
+            if (codeFromLine.charAt(i) == '{') {
+                braces++;
+            } else if (codeFromLine.charAt(i) == '}') {
+                braces--;
+            }
+            if (braces == 0) {
+                return lineOfIndex(text(codeFromLine), i) + methodStartLine;
+            }
+        }
+        throw new IllegalStateException(
+                "Cannot find the end of the method starting at line " + methodStartLine
+        );
+    }
+
+    final Optional<FragmentCoordinates> findSignatureCoordinates(Text code, MethodSignature signature) {
+        var javaTypeName = typeSystem.javaTypeName(signature.getReturnType());
+        var methodName = signature.getMethodName();
+        var pattern = "public" + "\\s+" + javaTypeName + "\\s+" + methodName + "\\s*?\\(.*?\\)\\s*?\\{";
+        var regex = Pattern.compile(pattern, DOTALL);
+        var matcher = regex.matcher(code.getValue());
+        if (!matcher.find()) {
+            return Optional.empty();
+        }
+        var index = matcher.start();
+        var end = matcher.group(0).length() + index;
+        return Optional.of(FragmentCoordinates.newBuilder()
+                                   .setSignatureStartLine(lineOfIndex(code, index))
+                                   .setBodyStartLine(lineOfIndex(code, end))
+                                   .build());
+    }
+
+    @SuppressWarnings("NumericCastThatLosesPrecision")
+    private static int lineOfIndex(Text code, int index) {
+        var wholeText = code.getValue();
+        var beforeIndex = wholeText.substring(0, index);
+        return (int) lineSplitter().splitToStream(beforeIndex).count() - 1;
     }
 }

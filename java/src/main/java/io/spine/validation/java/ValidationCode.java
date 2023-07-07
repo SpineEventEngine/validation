@@ -61,7 +61,6 @@ import static java.lang.System.lineSeparator;
  *
  * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
  */
-@SuppressWarnings("OverlyCoupledClass")
 final class ValidationCode {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
@@ -133,7 +132,7 @@ final class ValidationCode {
     }
 
     private void insertBeforeBuild() {
-        sourceFile.at(new ValidateBeforeReturn(messageType))
+        sourceFile.at(new ValidateBeforeReturn(messageType, renderer.typeSystem()))
                   .withExtraIndentation(2)
                   .add(validateBeforeBuild());
     }
@@ -152,14 +151,14 @@ final class ValidationCode {
     }
 
     private void annotateBuildMethod() {
-        var buildMethod = new BuildMethodReturnTypeAnnotation(messageType);
-        sourceFile.atInline(buildMethod)
+        var point = new BuildMethodReturnTypeAnnotation(messageType, renderer.typeSystem());
+        sourceFile.atInline(point)
                   .add(annotation(Validated.class));
     }
 
     private void annotateBuildPartialMethod() {
-        var buildPartialMethod = new BuildPartialReturnTypeAnnotation(messageType);
-        sourceFile.atInline(buildPartialMethod)
+        var point = new BuildPartialReturnTypeAnnotation(messageType, renderer.typeSystem());
+        sourceFile.atInline(point)
                   .add(annotation(NonValidated.class));
     }
 

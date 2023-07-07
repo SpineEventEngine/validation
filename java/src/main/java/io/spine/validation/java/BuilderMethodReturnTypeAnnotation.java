@@ -56,12 +56,16 @@ import static java.util.regex.Pattern.compile;
 class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
 
     private final Pattern signaturePattern;
-    private final String methodName;
+    private final MethodSignature method;
 
-    BuilderMethodReturnTypeAnnotation(TypeName messageType, String methodName) {
-        super(messageType);
-        this.methodName = checkNotNull(methodName);
-        this.signaturePattern = compile("\\s+public\\s+[\\w.]+\\.(\\w+)\\s+" + methodName);
+    BuilderMethodReturnTypeAnnotation(TypeName messageType,
+                                      MethodSignature method,
+                                      TypeSystem typeSystem) {
+        super(messageType, typeSystem);
+        this.method = checkNotNull(method);
+        this.signaturePattern = compile(
+                "\\s+public\\s+[\\w.]+\\.(\\w+)\\s+" + method.getMethodName()
+        );
     }
 
     @Override
@@ -71,11 +75,12 @@ class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
 
     @Override
     public TextCoordinates locateOccurrence(Text text) {
-        var method = findMethod(text, methodName);
-        if (method == null) {
+        var maybeCoords = findSignatureCoordinates(text, method);
+        if (maybeCoords.isEmpty()) {
             return nowhere();
         }
-        var declarationLineIndex = method.getLineNumber() - 1;
+        var coords = maybeCoords.get();
+        var declarationLineIndex = coords.getSignatureStartLine();
         var lines = text.lines();
 
         Matcher matcher;

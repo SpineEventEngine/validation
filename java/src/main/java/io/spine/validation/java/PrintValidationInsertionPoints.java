@@ -27,6 +27,7 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableSet;
+import io.spine.protodata.Type;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
@@ -53,15 +54,17 @@ public final class PrintValidationInsertionPoints extends InsertionPointPrinter 
         var types = select(MessageValidation.class).all();
         return types.stream()
                 .map(MessageValidation::getName)
-                .flatMap(PrintValidationInsertionPoints::supportedPoints)
+                .flatMap(this::supportedPoints)
                 .collect(toImmutableSet());
     }
 
-    private static Stream<BuilderInsertionPoint> supportedPoints(TypeName messageType) {
+    private Stream<BuilderInsertionPoint> supportedPoints(TypeName messageType) {
+        var typeSystem = TypeSystem.assemble(this);
+        var javaFqn = typeSystem.javaTypeName(Type.newBuilder().setMessage(messageType).build());
         return Stream.of(
-                new ValidateBeforeReturn(messageType),
-                new BuildPartialReturnTypeAnnotation(messageType),
-                new BuildMethodReturnTypeAnnotation(messageType)
+                new ValidateBeforeReturn(messageType, typeSystem),
+                new BuildPartialReturnTypeAnnotation(messageType, typeSystem),
+                new BuildMethodReturnTypeAnnotation(messageType, typeSystem)
         );
     }
 }

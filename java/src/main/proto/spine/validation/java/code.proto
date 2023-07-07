@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package spine.validation.java;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.java";
+option java_outer_classname = "CodeProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+
+// Coordinates of a code fragment.
+//
+// Such fragment can be a Java class or a method.
+//
+message FragmentCoordinates {
+
+    int32 signature_start_line = 1;
+
+    int32 body_start_line = 2;
+
+    int32 body_end_line = 3;
+}
+
+message MethodSignature {
+
+    spine.protodata.Type return_type = 1;
+
+    string method_name = 2;
+}

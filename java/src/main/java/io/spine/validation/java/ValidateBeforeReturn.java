@@ -30,8 +30,8 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
 import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
-import io.spine.text.TextFactory;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
@@ -50,8 +50,8 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
             "\\s*return .+;.*", UNICODE_CASE | DOTALL
     );
 
-    ValidateBeforeReturn(TypeName type) {
-        super(type);
+    ValidateBeforeReturn(TypeName type, TypeSystem typeSystem) {
+        super(type, typeSystem);
     }
 
     @Override
@@ -64,24 +64,23 @@ final class ValidateBeforeReturn extends BuilderInsertionPoint {
         if (!containsMessageType(text)) {
             return nowhere();
         }
-        var method = findMethod(text, BUILD_METHOD);
-        if (method == null) {
+        var maybeCoords = findMethodCoordinates(text, buildMethod(messageType()));
+        if (maybeCoords.isEmpty()) {
             return nowhere();
         }
-        var methodDeclarationLine = method.getLineNumber();
-        var startPosition = method.getStartPosition();
-        var endPosition = method.getEndPosition();
-        var code = text.getValue();
-        var methodSource = code.substring(startPosition, endPosition);
-        var returnIndex = returnLineIndex(methodSource);
-        var returnLineNumber = methodDeclarationLine + returnIndex;
-        return atLine(returnLineNumber - 1);
+        var coords = maybeCoords.get();
+
+        var bodyStart = coords.getBodyStartLine();
+        var bodyEnd = coords.getBodyEndLine();
+        var lines = text.lines().subList(bodyStart, bodyEnd);
+        var returnIndex = returnLineIndex(lines);
+        var returnLineNumber = bodyStart + returnIndex;
+        return atLine(returnLineNumber);
     }
 
-    private static int returnLineIndex(String code) {
-        var methodLines = TextFactory.lineSplitter().split(code);
+    private static int returnLineIndex(List<String> lines) {
         var returnIndex = 0;
-        for (var line : methodLines) {
+        for (var line : lines) {
             if (RETURN_LINE.matcher(line).matches()) {
                 return returnIndex;
             }

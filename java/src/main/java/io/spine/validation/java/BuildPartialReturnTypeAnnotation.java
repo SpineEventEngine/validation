@@ -36,7 +36,7 @@ import io.spine.protodata.TypeName;
 @Immutable
 final class BuildPartialReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
 
-    BuildPartialReturnTypeAnnotation(TypeName messageType) {
-        super(messageType, BUILD_PARTIAL_METHOD);
+    BuildPartialReturnTypeAnnotation(TypeName messageType, TypeSystem typeSystem) {
+        super(messageType, buildPartialMethod(messageType), typeSystem);
     }
 }

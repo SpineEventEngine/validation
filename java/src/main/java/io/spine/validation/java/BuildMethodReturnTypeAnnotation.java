@@ -35,7 +35,7 @@ import io.spine.protodata.TypeName;
 @Immutable
 final class BuildMethodReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
 
-    BuildMethodReturnTypeAnnotation(TypeName messageType) {
-        super(messageType, BUILD_METHOD);
+    BuildMethodReturnTypeAnnotation(TypeName messageType, TypeSystem typeSystem) {
+        super(messageType, buildMethod(messageType), typeSystem);
     }
 }

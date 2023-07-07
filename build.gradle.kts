@@ -28,7 +28,6 @@
 
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Spine
-import io.spine.internal.gradle.publish.CheckVersionIncrement
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig

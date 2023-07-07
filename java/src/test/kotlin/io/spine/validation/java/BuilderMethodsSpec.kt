@@ -26,8 +26,17 @@
 
 package io.spine.validation.java
 
+import com.google.protobuf.BoolValue
+import com.google.protobuf.StringValue
 import io.kotest.matchers.string.shouldContain
+import io.spine.protobuf.pack
+import io.spine.protodata.PrimitiveType.TYPE_BOOL
+import io.spine.protodata.PrimitiveType.TYPE_STRING
+import io.spine.protodata.file
+import io.spine.protodata.messageType
+import io.spine.protodata.option
 import io.spine.protodata.renderer.SourceFileSet
+import io.spine.protodata.type
 import io.spine.protodata.typeName
 import io.spine.validation.java.given.MockPrinter
 import java.nio.file.Path
@@ -72,9 +81,27 @@ class BuilderMethodsSpec {
             packageName = "foo.bar"
             typeUrlPrefix = "test.types.spine.io"
         }
+        val mockFile = file {
+            option.add(option {
+                name = "java_package"
+                value = StringValue.of("foo.bar").pack()
+                type = type { primitive = TYPE_STRING }
+            })
+            option.add(option {
+                name = "java_multiple_files"
+                value = BoolValue.of(true).pack()
+                type = type { primitive = TYPE_BOOL }
+            })
+        }
+        val mockType = messageType {
+            name = typeName
+        }
+        val typeSystem = TypeSystem.newBuilder()
+            .put(mockFile, mockType)
+            .build()
         val printer = MockPrinter(setOf(
-            BuildMethodReturnTypeAnnotation(typeName),
-            BuildPartialReturnTypeAnnotation(typeName)
+            BuildMethodReturnTypeAnnotation(typeName, typeSystem),
+            BuildPartialReturnTypeAnnotation(typeName, typeSystem)
         ))
         printer.renderSources(sourceFiles)
         sourceFiles.forEach { it.text() } // Run lazy operations.

@@ -27,12 +27,14 @@
 package io.spine.validation.java
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue
+import com.google.errorprone.annotations.Immutable
 import com.google.protobuf.ByteString
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.EnumDescriptor
 import io.spine.protodata.EnumType
 import io.spine.protodata.File
 import io.spine.protodata.MessageType
+import io.spine.protodata.ProtobufDependency
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.Type
 import io.spine.protodata.Type.KindCase.ENUMERATION
@@ -50,6 +52,7 @@ import io.spine.protodata.codegen.java.javaClassName
 import io.spine.protodata.codegen.java.listExpression
 import io.spine.protodata.codegen.java.mapExpression
 import io.spine.protodata.name
+import io.spine.server.query.Querying
 import io.spine.type.KnownTypes
 import io.spine.validation.Value
 import io.spine.validation.Value.KindCase.BOOL_VALUE
@@ -62,13 +65,13 @@ import io.spine.validation.Value.KindCase.MAP_VALUE
 import io.spine.validation.Value.KindCase.MESSAGE_VALUE
 import io.spine.validation.Value.KindCase.NULL_VALUE
 import io.spine.validation.Value.KindCase.STRING_VALUE
-import java.util.function.Consumer
 
 /**
  * A type system of an application.
  *
  * Includes all the types known to the app at runtime.
  */
+@Immutable
 public class TypeSystem
 private constructor(
     private val knownTypes: Map<TypeName, ClassName>
@@ -76,11 +79,39 @@ private constructor(
 
     public companion object {
 
+        private var instance: TypeSystem? = null
+
         /**
          * Creates a new `TypeSystem` builder.
          */
         @JvmStatic
         public fun newBuilder(): Builder = Builder()
+
+        @JvmStatic
+        public fun assemble(querying: Querying): TypeSystem {
+            if (instance == null) {
+                val types = newBuilder()
+                querying.addSourceFilesTo(types)
+                querying.addDependenciesTo(types)
+                instance = types.build()
+            }
+            return instance!!
+
+        }
+
+        private fun Querying.addSourceFilesTo(types: Builder) {
+            val files = select(ProtobufSourceFile::class.java).all()
+            for (file in files) {
+                types.addFrom(file)
+            }
+        }
+
+        private fun Querying.addDependenciesTo(types: Builder) {
+            val dependencies = select(ProtobufDependency::class.java).all()
+            for (d in dependencies) {
+                types.addFrom(d.file)
+            }
+        }
     }
 
     /**
@@ -154,14 +185,17 @@ private constructor(
         @CanIgnoreReturnValue
         public fun put(file: File, messageType: MessageType): Builder {
             val javaClassName = messageType.javaClassName(declaredIn = file)
-            knownTypes[messageType.name] = javaClassName
-            return this
+            return put(messageType.name, javaClassName)
         }
 
         @CanIgnoreReturnValue
         public fun put(file: File, enumType: EnumType): Builder {
             val javaClassName = enumType.javaClassName(declaredIn = file)
-            knownTypes[enumType.name] = javaClassName
+            return put(enumType.name, javaClassName)
+        }
+
+        private fun put(type: TypeName, className: ClassName): Builder {
+            knownTypes[type] = className
             return this
         }
 
