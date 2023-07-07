@@ -24,9 +24,17 @@ message FragmentCoordinates {
     int32 body_end_line = 3;
 }
 
+// A signature of a Java method.
+//
+// This signature describes an instance method that returns a Protobuf-compatible value.
+//
+// The option of several method overloads is not supported.
+//
 message MethodSignature {
 
+    // The type of the returned value.
     spine.protodata.Type return_type = 1;
 
+    // The name of the method.
     string method_name = 2;
 }
