@@ -24,11 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import Module_gradle.Module
 import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.dependency.Validation
@@ -44,7 +46,6 @@ import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.testing.configureLogging
 import io.spine.internal.gradle.testing.registerTestTasks
 import org.gradle.jvm.tasks.Jar
-import org.gradle.kotlin.dsl.idea
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -87,6 +88,10 @@ project.run {
     configureTaskDependencies()
     dependTestOnJavaRuntime()
     configureTaskDependencies()
+
+    protobuf {
+        protoc { artifact = Protobuf.compiler }
+    }
 }
 
 /**
