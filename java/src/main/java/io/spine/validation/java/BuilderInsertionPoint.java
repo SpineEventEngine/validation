@@ -37,6 +37,7 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -85,10 +86,10 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
         if (classSource == null) {
             return null;
         }
-        if (!classSource.hasNestedType(BUILDER_CLASS)) {
+        var builder = classSource.getNestedType(BUILDER_CLASS);
+        if(builder == null) {
             return null;
         }
-        var builder = classSource.getNestedType(BUILDER_CLASS);
         if (!builder.isClass()) {
             return null;
         }
@@ -116,15 +117,22 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
         return parsedSources.get(code);
     }
 
+    @SuppressWarnings("MethodWithMultipleLoops")
     private static
     @Nullable JavaClassSource findNestedClass(JavaClassSource topLevelClass,
                                               Iterable<String> names) {
         var source = topLevelClass;
+        var nestedTypes = source.getNestedTypes();
+        var nameToSource = new HashMap<String, JavaSource<?>>();
+        for (var type : nestedTypes) {
+            nameToSource.put(type.getName(), type);
+            nameToSource.put(type.getQualifiedName(), type);
+        }
         for (var name : names) {
-            if (!source.hasNestedType(name)) {
+            var nestedType = nameToSource.get(name);
+            if (nestedType == null) {
                 return null;
             }
-            var nestedType = source.getNestedType(name);
             if (!nestedType.isClass()) {
                 return null;
             }
@@ -135,12 +143,8 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
 
     final boolean containsMessageType(Text text) {
         var simpleName = messageType().getSimpleName();
-        for (var line : text.lines()) {
-            if (line.contains(simpleName)) {
-                return true;
-            }
-        }
-        return false;
+        var result = text.getValue().contains(simpleName);
+        return result;
     }
 
     @Nullable
