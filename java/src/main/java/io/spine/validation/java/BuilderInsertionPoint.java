@@ -27,26 +27,28 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
+import com.google.protobuf.GeneratedMessageV3;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
+import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.text.Text;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Optional.empty;
+import static java.util.stream.Stream.generate;
 
 /**
  * Abstract base for insertion points for generated code implementing
  * {@link io.spine.validate.ValidatingBuilder ValidatingBuilder} interface.
  */
 @Immutable
-abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
+abstract class BuilderInsertionPoint implements InsertionPoint {
 
     private static final String BUILDER_CLASS = "Builder";
 
@@ -61,18 +63,7 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
     static final String BUILD_METHOD = "build";
     static final String BUILD_PARTIAL_METHOD = "buildPartial";
 
-    private final TypeName messageType;
-
-    BuilderInsertionPoint(TypeName messageType) {
-        this.messageType = checkNotNull(messageType);
-    }
-
-    /**
-     * Obtains the name of the message type for which we find insertion point.
-     */
-    protected final TypeName messageType() {
-        return messageType;
-    }
+    private static final String MESSAGE_SUPERCLASS = GeneratedMessageV3.class.getCanonicalName();
 
     /**
      * Obtains the Java class source for the builder in the given code.
@@ -81,78 +72,56 @@ abstract class BuilderInsertionPoint implements NonRepeatingInsertionPoint {
      *         the Java code to parse
      * @return the found binder code or {@code null} if no builder class found
      */
-    protected final @Nullable JavaClassSource findBuilder(Text code) {
-        var classSource = findMessageClass(code);
-        if (classSource == null) {
-            return null;
-        }
-        var builder = classSource.getNestedType(BUILDER_CLASS);
-        if(builder == null) {
-            return null;
-        }
-        if (!builder.isClass()) {
-            return null;
-        }
-        var builderClass = (JavaClassSource) builder;
-        return builderClass;
+    protected static Stream<JavaClassSource> findBuilders(Text code) {
+        var classSources = findMessageClasses(code);
+        return classSources.flatMap(cls -> findBuilder(cls).stream());
     }
 
-    private @Nullable JavaClassSource findMessageClass(Text code) {
+    protected static Optional<JavaClassSource> findBuilder(TypeName messageName, Text code) {
+        var classSources = findMessageClasses(code);
+        var targetClassName = messageName.getSimpleName();
+        var messageClass = classSources
+                .filter(cls -> targetClassName.equals(cls.getName()))
+                .findFirst();
+        return messageClass
+                .flatMap(BuilderInsertionPoint::findBuilder);
+    }
+
+    private static Optional<JavaClassSource> findBuilder(JavaClassSource cls) {
+        var builder = cls.getNestedType(BUILDER_CLASS);
+        if (builder == null) {
+            return empty();
+        }
+        if (!builder.isClass()) {
+            return empty();
+        }
+        var builderClass = (JavaClassSource) builder;
+        return Optional.of(builderClass);
+    }
+
+    private static Stream<JavaClassSource> findMessageClasses(Text code) {
         var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
-            return null;
+            return Stream.empty();
         }
-        var source = (JavaClassSource) javaSource;
-        Deque<String> names = new ArrayDeque<>(messageType.getNestingTypeNameList());
-        names.addLast(messageType.getSimpleName());
-
-        if (source.getName().equals(names.peek())) {
-            names.poll();
-        }
-        var result = findNestedClass(source, names);
-        return result;
+        var javaClass = (JavaClassSource) javaSource;
+        Deque<JavaSource<?>> nestedTypes = new ArrayDeque<>();
+        nestedTypes.add(javaClass);
+        var types = generate(
+                () -> nestedTypes.isEmpty() ? null : nestedTypes.poll()
+        ).takeWhile(Objects::nonNull);
+        var allClasses = types.filter(JavaSource::isClass)
+                               .map(JavaClassSource.class::cast)
+                               .peek(c -> nestedTypes.addAll(c.getNestedTypes()));
+        return allClasses.filter(BuilderInsertionPoint::isMessageClass);
     }
 
     private static JavaSource<?> parseSource(Text code) {
         return parsedSources.get(code);
     }
 
-    @SuppressWarnings("MethodWithMultipleLoops")
-    private static
-    @Nullable JavaClassSource findNestedClass(JavaClassSource topLevelClass,
-                                              Iterable<String> names) {
-        var source = topLevelClass;
-        var nestedTypes = source.getNestedTypes();
-        var nameToSource = new HashMap<String, JavaSource<?>>();
-        for (var type : nestedTypes) {
-            nameToSource.put(type.getName(), type);
-            nameToSource.put(type.getQualifiedName(), type);
-        }
-        for (var name : names) {
-            var nestedType = nameToSource.get(name);
-            if (nestedType == null) {
-                return null;
-            }
-            if (!nestedType.isClass()) {
-                return null;
-            }
-            source = (JavaClassSource) nestedType;
-        }
-        return source;
-    }
-
-    final boolean containsMessageType(Text text) {
-        var simpleName = messageType().getSimpleName();
-        var result = text.getValue().contains(simpleName);
-        return result;
-    }
-
-    @Nullable
-    final MethodSource<JavaClassSource> findMethod(Text code, String methodName) {
-        var builderClass = findBuilder(code);
-        var method = builderClass != null
-                     ? builderClass.getMethod(methodName)
-                     : null;
-        return method;
+    private static boolean isMessageClass(JavaClassSource cls) {
+        var superClass = cls.getSuperType();
+        return MESSAGE_SUPERCLASS.equals(superClass);
     }
 }

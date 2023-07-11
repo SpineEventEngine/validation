@@ -28,13 +28,17 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import io.spine.protodata.TypeName;
+import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
 import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
 import io.spine.text.TextFactory;
 
 import java.util.regex.Pattern;
 
+import static io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD;
+import static io.spine.validation.java.BuilderInsertionPoint.findBuilder;
 import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.UNICODE_CASE;
 
@@ -44,35 +48,39 @@ import static java.util.regex.Pattern.UNICODE_CASE;
  * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
  */
 @Immutable
-final class ValidateBeforeReturn extends BuilderInsertionPoint {
+final class ValidateBeforeReturn implements NonRepeatingInsertionPoint {
 
     private static final Pattern RETURN_LINE = Pattern.compile(
             "\\s*return .+;.*", UNICODE_CASE | DOTALL
     );
+    private final TypeName messageType;
 
     ValidateBeforeReturn(TypeName type) {
-        super(type);
+        super();
+        this.messageType = type;
     }
 
     @Override
     public String getLabel() {
-        return format("validate:%s", messageType().getTypeUrl());
+        return format("validate:%s", messageType.getTypeUrl());
     }
 
     @Override
-    public TextCoordinates locateOccurrence(Text text) {
-        if (!containsMessageType(text)) {
+    public TextCoordinates locateOccurrence(Text code) {
+        if (!code.getValue().contains(messageType.getSimpleName())) {
             return nowhere();
         }
-        var method = findMethod(text, BUILD_METHOD);
-        if (method == null) {
+        var builderClass = findBuilder(messageType, code);
+        var method = builderClass.flatMap(cls -> ofNullable(cls.getMethod(BUILD_METHOD)));
+        if (method.isEmpty()) {
             return nowhere();
         }
-        var methodDeclarationLine = method.getLineNumber();
-        var startPosition = method.getStartPosition();
-        var endPosition = method.getEndPosition();
-        var code = text.getValue();
-        var methodSource = code.substring(startPosition, endPosition);
+        var buildMethod = method.get();
+        var methodDeclarationLine = buildMethod.getLineNumber();
+        var startPosition = buildMethod.getStartPosition();
+        var endPosition = buildMethod.getEndPosition();
+        var wholeCode = code.getValue();
+        var methodSource = wholeCode.substring(startPosition, endPosition);
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
         return atLine(returnLineNumber - 1);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+syntax = "proto3";
 
-import com.google.errorprone.annotations.Immutable;
+package spine.validation.test;
 
-/**
- * Locates the placement for annotating the type returned by the {@code Builder.build()} method.
- */
-@Immutable
-final class BuildMethodReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
+import "spine/options.proto";
 
-    BuildMethodReturnTypeAnnotation() {
-        super(BUILD_METHOD);
-    }
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "BlizzardProto";
+option java_multiple_files = true;
+option (internal_all) = true;
+
+import "spine/protodata/ast.proto";
+
+// A tuple of a message type and the file where it is declared.
+//
+message MessageWithFile {
+
+    spine.protodata.MessageType message = 1;
+
+    spine.protodata.File declared_in = 2;
 }

@@ -26,8 +26,6 @@
 
 package io.spine.validation.java;
 
-import io.spine.protodata.File;
-import io.spine.protodata.FilePath;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufDependency;
 import io.spine.protodata.ProtobufSourceFile;
@@ -35,14 +33,19 @@ import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.protodata.renderer.SourceFileSet;
+import io.spine.validate.NonValidated;
+import io.spine.validate.Validated;
 import io.spine.validation.MessageValidation;
+import io.spine.validation.test.MessageWithFile;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import java.lang.annotation.Annotation;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A {@link Renderer} for the validation code in Java.
@@ -71,6 +74,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
         this.validations = findValidations();
         var messageTypes = queryMessageTypes();
         messageTypes.forEach(this::generateCode);
+        annotateGeneratedMessages(sources, messageTypes);
     }
 
     private TypeSystem bakeTypeSystem() {
@@ -103,28 +107,31 @@ public final class JavaValidationRenderer extends JavaRenderer {
         return new Validations(client);
     }
 
-    private Stream<MessageType> queryMessageTypes() {
+    private Set<MessageWithFile> queryMessageTypes() {
         return select(ProtobufSourceFile.class)
                 .all()
                 .stream()
-                .flatMap(file -> file.getTypeMap().values().stream());
+                .flatMap(JavaValidationRenderer::messages)
+                .collect(toSet());
     }
 
-    private void generateCode(MessageType type) {
-        var protoFile = findProtoFile(type.getFile());
-        var javaFile = javaFile(type, protoFile);
-        sources.findFile(javaFile).ifPresent(sourceFile -> {
-            addValidationCode(sourceFile, type);
-        });
+    private static Stream<MessageWithFile> messages(ProtobufSourceFile file) {
+        return file
+                .getTypeMap()
+                .values()
+                .stream()
+                .map(m -> MessageWithFile.newBuilder()
+                        .setMessage(m)
+                        .setDeclaredIn(file.getFile())
+                        .build());
     }
 
-    private File findProtoFile(FilePath path) {
-        return select(ProtobufSourceFile.class)
-                .withId(path)
-                .orElseThrow(() -> newIllegalArgumentException(
-                        "No such Protobuf file: `%s`.",
-                        path.getValue()
-                )).getFile();
+    private void generateCode(MessageWithFile type) {
+        var message = type.getMessage();
+        var javaFile = javaFile(message, type.getDeclaredIn());
+        sources.findFile(javaFile).ifPresent(
+                sourceFile -> addValidationCode(sourceFile, message)
+        );
     }
 
     private void addValidationCode(SourceFile sourceFile, MessageType type) {
@@ -133,5 +140,42 @@ public final class JavaValidationRenderer extends JavaRenderer {
 
         var validationCode = new ValidationCode(this, validation, sourceFile);
         validationCode.generate();
+    }
+
+    private static void annotateGeneratedMessages(
+            SourceFileSet sources, Set<MessageWithFile> messageTypes
+    ) {
+        messageTypes.stream()
+                .map(m -> javaFile(m.getMessage(), m.getDeclaredIn()))
+                .flatMap(path -> sources.findFile(path).stream())
+                .distinct()
+                .forEach(JavaValidationRenderer::addAnnotations);
+    }
+
+    private static void addAnnotations(SourceFile file) {
+        annotateBuildMethod(file);
+        annotateBuildPartialMethod(file);
+    }
+
+    private static void annotateBuildMethod(SourceFile sourceFile) {
+        var buildMethod = new BuildMethodReturnTypeAnnotation();
+        sourceFile.atInline(buildMethod)
+                  .add(annotation(Validated.class));
+    }
+
+    private static void annotateBuildPartialMethod(SourceFile sourceFile) {
+        var buildPartialMethod = new BuildPartialReturnTypeAnnotation();
+        sourceFile.atInline(buildPartialMethod)
+                  .add(annotation(NonValidated.class));
+    }
+
+    /**
+     * Creates a string to be used in the code when using the given annotation class.
+     *
+     * @implNote Adds space before `@` so that when the type is fully qualified, the
+     *         annotation is: 1) visible better 2) two or more annotations are separated.
+     */
+    private static String annotation(Class<? extends Annotation> annotationClass) {
+        return " @" + annotationClass.getName();
     }
 }

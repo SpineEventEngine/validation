@@ -27,7 +27,6 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.protodata.TypeName;
 
 /**
  * Locates the placement for annotating the type returned by
@@ -36,7 +35,7 @@ import io.spine.protodata.TypeName;
 @Immutable
 final class BuildPartialReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
 
-    BuildPartialReturnTypeAnnotation(TypeName messageType) {
-        super(messageType, BUILD_PARTIAL_METHOD);
+    BuildPartialReturnTypeAnnotation() {
+        super(BUILD_PARTIAL_METHOD);
     }
 }
