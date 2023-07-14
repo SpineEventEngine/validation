@@ -39,7 +39,6 @@ internal class CachingJavaClassSource(
     private val delegate: JavaClassSource
 ) : JavaClassSource by delegate {
 
-
     /**
      * Cached value of [JavaClassSource.getNestedTypes()][JavaClassSource.getNestedTypes].
      */
