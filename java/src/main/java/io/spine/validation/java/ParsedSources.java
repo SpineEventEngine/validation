@@ -52,7 +52,7 @@ final class ParsedSources {
             @Override
             public JavaSource<?> load(Text code) {
                 var result = Roaster.parse(JavaSource.class, code.getValue());
-                if(result.isClass()) {
+                if (result.isClass()) {
                     return new CachingJavaClassSource((JavaClassSource) result);
                 }
                 return result;
