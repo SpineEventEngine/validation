@@ -33,14 +33,10 @@ import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
 import io.spine.protodata.codegen.java.Expression;
 import io.spine.protodata.codegen.java.Literal;
-import io.spine.protodata.codegen.java.MessageReference;
-import io.spine.protodata.codegen.java.MethodCall;
-import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.validate.ValidatableMessage;
 import io.spine.validate.ValidationError;
-import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 
 import java.lang.reflect.Type;
@@ -96,7 +92,6 @@ final class ValidationCode {
     void generate() {
         implementValidatableMessage();
         handleConstraints();
-        insertBeforeBuild();
     }
 
     private void implementValidatableMessage() {
@@ -126,22 +121,5 @@ final class ValidationCode {
         return lines.build();
     }
 
-    private void insertBeforeBuild() {
-        sourceFile.at(new ValidateBeforeReturn(messageType))
-                  .withExtraIndentation(2)
-                  .add(validateBeforeBuild());
-    }
 
-    private static ImmutableList<String> validateBeforeBuild() {
-        var result = new MessageReference("result");
-        var code = CodeBlock.builder()
-                .addStatement("$T error = $L", OPTIONAL_ERROR,
-                              new MethodCall(result, VALIDATE))
-                .beginControlFlow("if (error.isPresent())")
-                .addStatement("throw new $T(error.get().getConstraintViolationList())",
-                              ValidationException.class)
-                .endControlFlow()
-                .build();
-        return Poet.lines(code);
-    }
 }

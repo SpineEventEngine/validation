@@ -26,15 +26,21 @@
 
 package io.spine.validation.java;
 
+import com.google.common.collect.ImmutableList;
+import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufDependency;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.codegen.java.JavaRenderer;
+import io.spine.protodata.codegen.java.MessageReference;
+import io.spine.protodata.codegen.java.MethodCall;
+import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.protodata.renderer.SourceFileSet;
 import io.spine.validate.NonValidated;
 import io.spine.validate.Validated;
+import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 import io.spine.validation.test.MessageWithFile;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -45,6 +51,8 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.Ast2Java.javaFile;
+import static io.spine.validation.java.ValidationCode.OPTIONAL_ERROR;
+import static io.spine.validation.java.ValidationCode.VALIDATE;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -75,6 +83,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
         var messageTypes = queryMessageTypes();
         messageTypes.forEach(this::generateCode);
         annotateGeneratedMessages(sources, messageTypes);
+        plugValidationIntoBuild(sources, messageTypes);
     }
 
     private TypeSystem bakeTypeSystem() {
@@ -177,5 +186,35 @@ public final class JavaValidationRenderer extends JavaRenderer {
      */
     private static String annotation(Class<? extends Annotation> annotationClass) {
         return " @" + annotationClass.getName();
+    }
+
+    private static void plugValidationIntoBuild(
+            SourceFileSet sources, Set<MessageWithFile> messageTypes
+    ) {
+        messageTypes.stream()
+                .map(m -> javaFile(m.getMessage(), m.getDeclaredIn()))
+                .flatMap(path -> sources.findFile(path).stream())
+                .distinct()
+                .forEach(JavaValidationRenderer::insertBeforeBuild);
+    }
+
+    private static void insertBeforeBuild(SourceFile sourceFile) {
+        sourceFile.at(new ValidateBeforeReturn())
+                  .withExtraIndentation(2)
+                  .add(validateBeforeBuild());
+    }
+
+    private static ImmutableList<String> validateBeforeBuild() {
+        var result = new MessageReference("result");
+        var code = CodeBlock.builder()
+                .addStatement("$T error = $L",
+                              OPTIONAL_ERROR,
+                              new MethodCall(result, VALIDATE))
+                .beginControlFlow("if (error.isPresent())")
+                .addStatement("throw new $T(error.get().getConstraintViolationList())",
+                              ValidationException.class)
+                .endControlFlow()
+                .build();
+        return Poet.lines(code);
     }
 }

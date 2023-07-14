@@ -27,20 +27,22 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
+import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
 import io.spine.text.TextFactory;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD;
-import static io.spine.validation.java.BuilderInsertionPoint.findBuilder;
-import static java.lang.String.format;
-import static java.util.Optional.ofNullable;
+import static io.spine.validation.java.BuilderInsertionPoint.findBuilders;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.UNICODE_CASE;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
@@ -48,44 +50,38 @@ import static java.util.regex.Pattern.UNICODE_CASE;
  * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
  */
 @Immutable
-final class ValidateBeforeReturn implements NonRepeatingInsertionPoint {
+final class ValidateBeforeReturn implements InsertionPoint {
 
+    private static final String LABEL = ValidateBeforeReturn.class.getSimpleName();
     private static final Pattern RETURN_LINE = Pattern.compile(
             "\\s*return .+;.*", UNICODE_CASE | DOTALL
     );
-    private final TypeName messageType;
-
-    ValidateBeforeReturn(TypeName type) {
-        super();
-        this.messageType = type;
-    }
 
     @Override
     public String getLabel() {
-        return format("validate:%s", messageType.getTypeUrl());
+        return LABEL;
     }
 
+    @NonNull
     @Override
-    public TextCoordinates locateOccurrence(Text code) {
-        if (!code.getValue().contains(messageType.getSimpleName())) {
-            return nowhere();
-        }
-        var builderClass = findBuilder(messageType, code);
-        var method = builderClass.flatMap(cls -> ofNullable(cls.getMethod(BUILD_METHOD)));
-        if (method.isEmpty()) {
-            return nowhere();
-        }
-        var buildMethod = method.get();
-        var methodDeclarationLine = buildMethod.getLineNumber();
-        var startPosition = buildMethod.getStartPosition();
-        var endPosition = buildMethod.getEndPosition();
+    public Set<TextCoordinates> locate(@NonNull Text code) {
+        return findBuilders(code)
+                .map(b -> b.getMethod(BUILD_METHOD))
+                .filter(Objects::nonNull)
+                .map(m -> findLine(m, code))
+                .collect(toSet());
+    }
+
+    private TextCoordinates findLine(MethodSource<?> method, Text code) {
+        var methodDeclarationLine = method.getLineNumber();
+        var startPosition = method.getStartPosition();
+        var endPosition = method.getEndPosition();
         var wholeCode = code.getValue();
         var methodSource = wholeCode.substring(startPosition, endPosition);
         var returnIndex = returnLineIndex(methodSource);
         var returnLineNumber = methodDeclarationLine + returnIndex;
         return atLine(returnLineNumber - 1);
     }
-
     private static int returnLineIndex(String code) {
         var methodLines = TextFactory.lineSplitter().split(code);
         var returnIndex = 0;
