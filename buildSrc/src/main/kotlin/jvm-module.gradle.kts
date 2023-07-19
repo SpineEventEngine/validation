@@ -119,14 +119,6 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
             setFreeCompilerArgs()
         }
     }
-
-    koverReport {
-        defaults {
-            xml {
-                onCheck = true
-            }
-        }
-    }
 }
 
 /**
