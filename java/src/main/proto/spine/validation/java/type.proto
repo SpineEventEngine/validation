@@ -39,7 +39,6 @@ option (internal_all) = true;
 import "spine/protodata/ast.proto";
 
 // A tuple of a message type and the file where it is declared.
-//
 message MessageWithFile {
 
     spine.protodata.MessageType message = 1;
