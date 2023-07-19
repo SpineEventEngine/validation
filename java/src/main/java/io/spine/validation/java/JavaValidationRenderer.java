@@ -42,7 +42,6 @@ import io.spine.validate.NonValidated;
 import io.spine.validate.Validated;
 import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
-import io.spine.validation.test.MessageWithFile;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.lang.annotation.Annotation;
