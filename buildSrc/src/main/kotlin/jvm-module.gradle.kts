@@ -69,7 +69,7 @@ plugins {
     id("dokka-for-java")
     kotlin("jvm")
     id("io.kotest")
-//    id("org.jetbrains.kotlinx.kover")
+    id("org.jetbrains.kotlinx.kover")
     id("detekt-code-analysis")
     id("dokka-for-kotlin")
 }
@@ -116,6 +116,18 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
         withType<KotlinCompile>().configureEach {
             kotlinOptions.jvmTarget = javaVersion.toString()
             setFreeCompilerArgs()
+        }
+    }
+
+    kover {
+        useJacoco()
+    }
+
+    koverReport {
+        defaults {
+            xml {
+                onCheck = true
+            }
         }
     }
 }

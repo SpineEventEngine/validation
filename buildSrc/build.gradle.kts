@@ -118,7 +118,7 @@ val kotestJvmPluginVersion = "0.4.10"
 /**
  * @see [io.spine.internal.dependency.Kover]
  */
-val koverVersion = "0.7.0-Beta"
+val koverVersion = "0.7.2"
 
 /**
  * The version of the Shadow Plugin.
@@ -173,7 +173,6 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:$protobufPluginVersion")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
     implementation("org.jetbrains.dokka:dokka-base:${dokkaVersion}")
-
     implementation("gradle.plugin.com.github.johnrengelman:shadow:${shadowVersion}")
 
     // https://github.com/srikanth-lingala/zip4j
