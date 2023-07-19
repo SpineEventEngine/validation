@@ -25,7 +25,6 @@
  */
 
 import BuildSettings.javaVersion
-import Jvm_module_gradle.Module
 import io.spine.internal.dependency.CheckerFramework
 import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
@@ -70,7 +69,7 @@ plugins {
     id("dokka-for-java")
     kotlin("jvm")
     id("io.kotest")
-    id("org.jetbrains.kotlinx.kover")
+//    id("org.jetbrains.kotlinx.kover")
     id("detekt-code-analysis")
     id("dokka-for-kotlin")
 }
