@@ -180,5 +180,5 @@ dependencies {
     implementation("net.lingala.zip4j:zip4j:2.10.0")
 
     implementation("io.kotest:kotest-gradle-plugin:$kotestJvmPluginVersion")
-    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:$koverVersion")
+//    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:$koverVersion")
 }
