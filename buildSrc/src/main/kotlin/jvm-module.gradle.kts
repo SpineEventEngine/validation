@@ -120,10 +120,6 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
         }
     }
 
-    kover {
-        useJacoco()
-    }
-
     koverReport {
         defaults {
             xml {
