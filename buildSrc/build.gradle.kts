@@ -36,6 +36,7 @@ plugins {
     `kotlin-dsl`
     val licenseReportVersion = "2.1"
     id("com.github.jk1.dependency-license-report").version(licenseReportVersion)
+    id("com.github.johnrengelman.shadow").version("7.1.2")
 }
 
 repositories {
@@ -119,6 +120,15 @@ val kotestJvmPluginVersion = "0.4.10"
  */
 val koverVersion = "0.7.2"
 
+/**
+ * The version of the Shadow Plugin.
+ *
+ * `7.1.2` is the last version compatible with Gradle 7.x. Newer versions require Gradle v8.x.
+ *
+ * @see <a href="https://github.com/johnrengelman/shadow/releases">Shadow Plugin releases</a>
+ */
+val shadowVersion = "7.1.2"
+
 configurations.all {
     resolutionStrategy {
         force(
@@ -163,10 +173,11 @@ dependencies {
     implementation("com.google.protobuf:protobuf-gradle-plugin:$protobufPluginVersion")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}")
     implementation("org.jetbrains.dokka:dokka-base:${dokkaVersion}")
+    implementation("gradle.plugin.com.github.johnrengelman:shadow:${shadowVersion}")
 
     // https://github.com/srikanth-lingala/zip4j
     implementation("net.lingala.zip4j:zip4j:2.10.0")
 
     implementation("io.kotest:kotest-gradle-plugin:$kotestJvmPluginVersion")
-//    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:$koverVersion")
+    implementation("org.jetbrains.kotlinx:kover-gradle-plugin:$koverVersion")
 }

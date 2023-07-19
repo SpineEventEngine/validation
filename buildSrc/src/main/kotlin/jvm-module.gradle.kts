@@ -69,7 +69,7 @@ plugins {
     id("dokka-for-java")
     kotlin("jvm")
     id("io.kotest")
-//    id("org.jetbrains.kotlinx.kover")
+    id("org.jetbrains.kotlinx.kover")
     id("detekt-code-analysis")
     id("dokka-for-kotlin")
 }
