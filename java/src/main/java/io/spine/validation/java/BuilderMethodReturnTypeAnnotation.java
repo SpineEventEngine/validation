@@ -27,15 +27,21 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.protodata.TypeName;
 import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.regex.Pattern.compile;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * An insertion point for a type annotation for the return type of a method of a message builder.
@@ -58,26 +64,31 @@ class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
     private final Pattern signaturePattern;
     private final String methodName;
 
-    BuilderMethodReturnTypeAnnotation(TypeName messageType, String methodName) {
-        super(messageType);
+    BuilderMethodReturnTypeAnnotation(String methodName) {
+        super();
         this.methodName = checkNotNull(methodName);
         this.signaturePattern = compile("\\s+public\\s+[\\w.]+\\.(\\w+)\\s+" + methodName);
     }
 
     @Override
     public String getLabel() {
-        return getClass().getSimpleName() + ':' + messageType().getTypeUrl();
+        return getClass().getSimpleName();
     }
 
+    @NonNull
     @Override
-    public TextCoordinates locateOccurrence(Text text) {
-        var method = findMethod(text, methodName);
-        if (method == null) {
-            return nowhere();
-        }
-        var declarationLineIndex = method.getLineNumber() - 1;
-        var lines = text.lines();
+    public Set<TextCoordinates> locate(Text code) {
+        return findBuilders(code)
+                .map(cls -> cls.getMethod(methodName))
+                .filter(Objects::nonNull)
+                .map(method -> locateMethod(method, code.lines()))
+                .filter(Objects::nonNull)
+                .collect(toSet());
+    }
 
+    @Nullable
+    private TextCoordinates locateMethod(MethodSource<?> source, List<String> lines) {
+        var declarationLineIndex = source.getLineNumber() - 1;
         Matcher matcher;
         for (var signatureIndex = declarationLineIndex; signatureIndex < lines.size(); signatureIndex++) {
             matcher = signaturePattern.matcher(lines.get(signatureIndex));
@@ -86,6 +97,6 @@ class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
                 return at(signatureIndex, pointInLine);
             }
         }
-        return nowhere();
+        return null;
     }
 }

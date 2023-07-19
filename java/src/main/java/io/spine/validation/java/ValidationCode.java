@@ -33,19 +33,12 @@ import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
 import io.spine.protodata.codegen.java.Expression;
 import io.spine.protodata.codegen.java.Literal;
-import io.spine.protodata.codegen.java.MessageReference;
-import io.spine.protodata.codegen.java.MethodCall;
-import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.SourceAtLine;
 import io.spine.protodata.renderer.SourceFile;
-import io.spine.validate.NonValidated;
 import io.spine.validate.ValidatableMessage;
-import io.spine.validate.Validated;
 import io.spine.validate.ValidationError;
-import io.spine.validate.ValidationException;
 import io.spine.validation.MessageValidation;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
@@ -61,7 +54,6 @@ import static java.lang.System.lineSeparator;
  *
  * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
  */
-@SuppressWarnings("OverlyCoupledClass")
 final class ValidationCode {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
@@ -100,9 +92,6 @@ final class ValidationCode {
     void generate() {
         implementValidatableMessage();
         handleConstraints();
-        insertBeforeBuild();
-        annotateBuildMethod();
-        annotateBuildPartialMethod();
     }
 
     private void implementValidatableMessage() {
@@ -132,44 +121,5 @@ final class ValidationCode {
         return lines.build();
     }
 
-    private void insertBeforeBuild() {
-        sourceFile.at(new ValidateBeforeReturn(messageType))
-                  .withExtraIndentation(2)
-                  .add(validateBeforeBuild());
-    }
 
-    private static ImmutableList<String> validateBeforeBuild() {
-        var result = new MessageReference("result");
-        var code = CodeBlock.builder()
-                .addStatement("$T error = $L", OPTIONAL_ERROR,
-                              new MethodCall(result, VALIDATE))
-                .beginControlFlow("if (error.isPresent())")
-                .addStatement("throw new $T(error.get().getConstraintViolationList())",
-                              ValidationException.class)
-                .endControlFlow()
-                .build();
-        return Poet.lines(code);
-    }
-
-    private void annotateBuildMethod() {
-        var buildMethod = new BuildMethodReturnTypeAnnotation(messageType);
-        sourceFile.atInline(buildMethod)
-                  .add(annotation(Validated.class));
-    }
-
-    private void annotateBuildPartialMethod() {
-        var buildPartialMethod = new BuildPartialReturnTypeAnnotation(messageType);
-        sourceFile.atInline(buildPartialMethod)
-                  .add(annotation(NonValidated.class));
-    }
-
-    /**
-     * Creates a string to be used in the code when using the given annotation class.
-     *
-     * @implNote Adds space before `@` so that when the type is fully qualified, the
-     *         annotation is: 1) visible better 2) two or more annotations are separated.
-     */
-    private static String annotation(Class<? extends Annotation> annotationClass) {
-        return " @" + annotationClass.getName();
-    }
 }

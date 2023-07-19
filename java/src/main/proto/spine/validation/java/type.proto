@@ -24,46 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.io.File
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.jacoco
-import org.gradle.testing.jacoco.tasks.JacocoReport
+syntax = "proto3";
 
-plugins {
-    jacoco
-}
+package spine.validation.java;
 
-/**
- * Configures [JacocoReport] task to run in a Kotlin KMM project for `commonMain` and `jvmMain`
- * source sets.
- *
- * This script plugin must be applied using the following construct at the end of
- * a `build.gradle.kts` file of a module:
- *
- * ```kotlin
- * apply(plugin="jacoco-kmm-jvm")
- * ```
- * Please do not apply this script plugin in the `plugins {}` block because `jacocoTestReport`
- * task is not yet available at this stage.
- */
-private val about = ""
+import "spine/options.proto";
 
-/**
- * Configure Jacoco task with custom input from this KMM project.
- */
-val jacocoTestReport: JacocoReport by tasks.getting(JacocoReport::class) {
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.java";
+option java_outer_classname = "TypeProto";
+option java_multiple_files = true;
+option (internal_all) = true;
 
-    val classFiles = File("${buildDir}/classes/kotlin/jvm/")
-        .walkBottomUp()
-        .toSet()
-    classDirectories.setFrom(classFiles)
+import "spine/protodata/ast.proto";
 
-    val coverageSourceDirs = arrayOf(
-        "src/commonMain",
-        "src/jvmMain"
-    )
-    sourceDirectories.setFrom(files(coverageSourceDirs))
+// A tuple of a message type and the file where it is declared.
+message MessageWithFile {
 
-    executionData.setFrom(files("${buildDir}/jacoco/jvmTest.exec"))
+    spine.protodata.MessageType message = 1;
+
+    spine.protodata.File declared_in = 2;
 }

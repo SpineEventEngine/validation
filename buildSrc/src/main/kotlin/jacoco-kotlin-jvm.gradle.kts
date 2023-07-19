@@ -24,18 +24,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+import java.io.File
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.getting
+import org.gradle.kotlin.dsl.jacoco
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
+plugins {
+    jacoco
+}
 
 /**
- * The dependencies for Guava.
+ * Configures [JacocoReport] task to run in a Kotlin Multiplatform project for
+ * `commonMain` and `jvmMain` source sets.
  *
- * When changing the version, also change the version used in the `build.gradle.kts`. We need
- * to synchronize the version used in `buildSrc` and in Spine modules. Otherwise, when testing
- * Gradle plugins, errors may occur due to version clashes.
+ * This script plugin must be applied using the following construct at the end of
+ * a `build.gradle.kts` file of a module:
+ *
+ * ```kotlin
+ * apply(plugin="jacoco-kotlin-jvm")
+ * ```
+ * Please do not apply this script plugin in the `plugins {}` block because `jacocoTestReport`
+ * task is not yet available at this stage.
  */
-// https://github.com/google/guava
-object Guava {
-    private const val version = "32.1.1-jre"
-    const val lib     = "com.google.guava:guava:${version}"
-    const val testLib = "com.google.guava:guava-testlib:${version}"
+@Suppress("unused")
+private val about = ""
+
+/**
+ * Configure Jacoco task with custom input from this Kotlin Multiplatform project.
+ */
+val jacocoTestReport: JacocoReport by tasks.getting(JacocoReport::class) {
+
+    val classFiles = File("${buildDir}/classes/kotlin/jvm/")
+        .walkBottomUp()
+        .toSet()
+    classDirectories.setFrom(classFiles)
+
+    val coverageSourceDirs = arrayOf(
+        "src/commonMain",
+        "src/jvmMain"
+    )
+    sourceDirectories.setFrom(files(coverageSourceDirs))
+
+    executionData.setFrom(files("${buildDir}/jacoco/jvmTest.exec"))
 }

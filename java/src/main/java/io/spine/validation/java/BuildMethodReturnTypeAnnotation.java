@@ -27,7 +27,6 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.protodata.TypeName;
 
 /**
  * Locates the placement for annotating the type returned by the {@code Builder.build()} method.
@@ -35,7 +34,7 @@ import io.spine.protodata.TypeName;
 @Immutable
 final class BuildMethodReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
 
-    BuildMethodReturnTypeAnnotation(TypeName messageType) {
-        super(messageType, BUILD_METHOD);
+    BuildMethodReturnTypeAnnotation() {
+        super(BUILD_METHOD);
     }
 }

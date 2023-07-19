@@ -31,6 +31,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import io.spine.text.Text;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
 /**
@@ -51,6 +52,9 @@ final class ParsedSources {
             @Override
             public JavaSource<?> load(Text code) {
                 var result = Roaster.parse(JavaSource.class, code.getValue());
+                if (result.isClass()) {
+                    return new CachingJavaClassSource((JavaClassSource) result);
+                }
                 return result;
             }
         };

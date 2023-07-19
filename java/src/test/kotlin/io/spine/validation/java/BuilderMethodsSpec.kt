@@ -28,7 +28,6 @@ package io.spine.validation.java
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.renderer.SourceFileSet
-import io.spine.protodata.typeName
 import io.spine.validation.java.given.MockPrinter
 import java.nio.file.Path
 import kotlin.io.path.div
@@ -50,7 +49,7 @@ class BuilderMethodsSpec {
         file.writeText("""
             package foo.bar;
             
-            class Example {
+            class Example extends com.google.protobuf.GeneratedMessageV3 {
            
                 class Builder {
                 
@@ -67,14 +66,9 @@ class BuilderMethodsSpec {
             }
         """.trimIndent())
         val sourceFiles = SourceFileSet.from(sources)
-        val typeName = typeName {
-            simpleName = "Example"
-            packageName = "foo.bar"
-            typeUrlPrefix = "test.types.spine.io"
-        }
         val printer = MockPrinter(setOf(
-            BuildMethodReturnTypeAnnotation(typeName),
-            BuildPartialReturnTypeAnnotation(typeName)
+            BuildMethodReturnTypeAnnotation(),
+            BuildPartialReturnTypeAnnotation()
         ))
         printer.renderSources(sourceFiles)
         sourceFiles.forEach { it.text() } // Run lazy operations.

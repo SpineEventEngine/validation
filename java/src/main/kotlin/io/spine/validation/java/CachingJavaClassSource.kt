@@ -24,50 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Kotest
-import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.JUnit
-import io.spine.internal.gradle.kotlin.applyJvmToolchain
-import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package io.spine.validation.java
 
-plugins {
-    id("java-module")
-    kotlin("jvm")
-    id("io.kotest")
-    id("org.jetbrains.kotlinx.kover")
-    id("detekt-code-analysis")
-    id("dokka-for-kotlin")
-}
+import org.jboss.forge.roaster.model.source.JavaClassSource
+import org.jboss.forge.roaster.model.source.JavaSource
 
-kotlin {
-    applyJvmToolchain(BuildSettings.javaVersion.asInt())
-    explicitApi()
-}
+/**
+ * A `JavaClassSource` which caches some of its parsed components.
+ *
+ * Please note that, because of the caching, sources updated in an underlying file may not be
+ * updated in this model.
+ */
+internal class CachingJavaClassSource(
+    private val delegate: JavaClassSource
+) : JavaClassSource by delegate {
 
-dependencies {
-    testImplementation(Spine.testlib)
-    testImplementation(Kotest.frameworkEngine)
-    testImplementation(Kotest.datatest)
-    testImplementation(Kotest.runnerJUnit5Jvm)
-    testImplementation(JUnit.runner)
-}
-
-tasks {
-    withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = BuildSettings.javaVersion.toString()
-        setFreeCompilerArgs()
+    /**
+     * Cached value of [JavaClassSource.getNestedTypes()][JavaClassSource.getNestedTypes].
+     */
+    private val cachedNestedTypes: List<JavaSource<*>> by lazy {
+        delegate.nestedTypes
     }
-}
 
-kover {
-    useJacocoTool()
-}
-
-koverReport {
-    defaults {
-        xml {
-            onCheck = true
-        }
+    override fun getNestedTypes(): List<JavaSource<*>> {
+        return cachedNestedTypes
     }
 }
