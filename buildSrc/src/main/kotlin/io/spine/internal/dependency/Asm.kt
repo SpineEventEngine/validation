@@ -24,9 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.internal.dependency.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.99")
+package io.spine.internal.dependency
+
+// https://asm.ow2.io/
+@Suppress("unused")
+object Asm {
+    private const val version = "9.2"
+    const val lib = "org.ow2.asm:asm:$version"
+}
