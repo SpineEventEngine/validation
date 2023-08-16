@@ -122,7 +122,7 @@ object Spine {
         /**
          * The version of [Spine.toolBase].
          */
-        const val toolBase = "2.0.0-SNAPSHOT.171"
+        const val toolBase = "2.0.0-SNAPSHOT.182"
 
         /**
          * The version of [Spine.javadocTools].

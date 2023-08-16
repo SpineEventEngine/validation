@@ -245,5 +245,3 @@ private fun unknownType(type: Type): Nothing =
 
 private fun unknownType(typeName: TypeName): Nothing =
     error("Unknown type: `${typeName.typeUrl}`.")
-
-

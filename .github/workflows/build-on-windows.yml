@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: 11
           distribution: zulu
-#          cache: gradle
+          cache: gradle
 
       - name: Build project and run tests
         shell: cmd
