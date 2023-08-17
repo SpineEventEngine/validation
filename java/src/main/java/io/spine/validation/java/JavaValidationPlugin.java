@@ -38,6 +38,10 @@ import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * A plugin that sets up everything needed to generate Java validation code.
+ */
+@SuppressWarnings("unused") // Accessed via
 public final class JavaValidationPlugin implements Plugin {
 
     private final Plugin base;
