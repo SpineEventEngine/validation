@@ -32,7 +32,7 @@ import com.squareup.javapoet.MethodSpec;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
 import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.tools.code.CommonLanguages;
+import io.spine.tools.code.Java;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationError;
 
@@ -86,8 +86,7 @@ final class ValidateMethodCode {
 
     private CodeBlock extraInsertionPoint() {
         InsertionPoint insertionPoint = new ExtraValidation(messageType);
-        var java = CommonLanguages.java();
-        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
+        var line = Java.lang().comment(getCodeLine(insertionPoint)) + lineSeparator();
         return CodeBlock.of(line);
     }
 

@@ -29,16 +29,13 @@ import io.spine.protodata.gradle.plugin.LaunchProtoData
 
 protoData {
     renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
-
         // Suppress warnings in the generated code.
         "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
         "io.spine.protodata.codegen.java.annotation.SuppressWarningsAnnotation"
 
     )
     plugins(
-        "io.spine.validation.ValidationPlugin",
+        "io.spine.validation.java.JavaValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )
 }

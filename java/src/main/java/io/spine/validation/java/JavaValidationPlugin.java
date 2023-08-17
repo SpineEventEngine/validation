@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,29 +26,46 @@
 
 package io.spine.validation.java;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.InsertionPointPrinter;
-import io.spine.tools.code.Java;
-import io.spine.validation.MessageValidation;
+import com.google.common.collect.ImmutableList;
+import io.spine.protodata.plugin.Plugin;
+import io.spine.protodata.plugin.Policy;
+import io.spine.protodata.plugin.ViewRepository;
+import io.spine.protodata.renderer.Renderer;
+import io.spine.validation.ValidationPlugin;
 
-/**
- * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point to all the
- * message types
- * which have an associated {@link MessageValidation} view.
- */
-@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
-public final class PrintValidationInsertionPoints extends InsertionPointPrinter<Java> {
+import java.util.List;
+import java.util.Set;
 
-    public PrintValidationInsertionPoints() {
-        super(Java.lang());
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public final class JavaValidationPlugin implements Plugin {
+
+    private final Plugin base;
+
+    public JavaValidationPlugin(Plugin base) {
+        this.base = checkNotNull(base);
+    }
+
+    @SuppressWarnings("unused") // Used for reflective initialization.
+    public JavaValidationPlugin() {
+        this(new ValidationPlugin());
     }
 
     @Override
-    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        return ImmutableSet.of(
-                new ValidateBeforeReturn(),
-                new BuildPartialReturnTypeAnnotation(),
-                new BuildMethodReturnTypeAnnotation());
+    public Set<Policy<?>> policies() {
+        return base.policies();
+    }
+
+    @Override
+    public Set<ViewRepository<?, ?, ?>> viewRepositories() {
+        return base.viewRepositories();
+    }
+
+    @Override
+    public List<Renderer<?>> renderers() {
+        return ImmutableList.of(
+                new PrintValidationInsertionPoints(),
+                new JavaValidationRenderer()
+        );
     }
 }
