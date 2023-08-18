@@ -41,7 +41,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A plugin that sets up everything needed to generate Java validation code.
  */
-@SuppressWarnings("unused") // Accessed via
+@SuppressWarnings("unused") // Accessed via reflection.
 public final class JavaValidationPlugin implements Plugin {
 
     private final Plugin base;
@@ -50,7 +50,6 @@ public final class JavaValidationPlugin implements Plugin {
         this.base = checkNotNull(base);
     }
 
-    @SuppressWarnings("unused") // Used for reflective initialization.
     public JavaValidationPlugin() {
         this(new ValidationPlugin());
     }
