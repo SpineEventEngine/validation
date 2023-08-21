@@ -36,7 +36,7 @@ import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.SimpleRule
-import io.spine.validation.Value
+import io.spine.protodata.Value
 import io.spine.validation.event.SimpleRuleAdded
 import io.spine.validation.test.money.CurrencyType
 

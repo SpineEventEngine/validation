@@ -28,10 +28,14 @@ package io.spine.validation;
 
 import com.google.protobuf.Message;
 import io.spine.protodata.FieldName;
+import io.spine.protodata.NullValue;
+import io.spine.protodata.Value;
+import io.spine.protodata.backend.Values;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protobuf.AnyPacker.pack;
 import static io.spine.protobuf.Messages.isNotDefault;
+import static io.spine.protodata.NullValue.NULL_VALUE;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
@@ -73,12 +77,10 @@ public final class SimpleRules {
                 .setDescription(description)
                 .setFeature(pack(customFeature))
                 .build();
-        var other = Values.from(customFeature);
         var builder = SimpleRule.newBuilder()
                 .setCustomOperator(operator)
                 .setErrorMessage(errorMessage)
                 .setIgnoredIfUnset(true)
-                .setOtherValue(other)
                 .setDistribute(distribute);
         if (isNotDefault(field)) {
             builder.setField(field);
@@ -86,27 +88,27 @@ public final class SimpleRules {
         return builder.build();
     }
 
-    /**
-     * Creates a {@link SimpleRule} with a custom operator without an associated field.
-     *
-     * @param customFeature
-     *         the feature message describing the custom operator
-     * @param description
-     *         the human-readable text description of the feature
-     * @param errorMessage
-     *         the error message for the case of violation
-     * @return a new rule
-     */
-    public static SimpleRule withCustom(
-            Message customFeature,
-            String description,
-            String errorMessage,
-            boolean distribute
-    ) {
-        return withCustom(FieldName.getDefaultInstance(),
-                          customFeature,
-                          description,
-                          errorMessage,
-                          distribute);
-    }
+//    /**
+//     * Creates a {@link SimpleRule} with a custom operator without an associated field.
+//     *
+//     * @param customFeature
+//     *         the feature message describing the custom operator
+//     * @param description
+//     *         the human-readable text description of the feature
+//     * @param errorMessage
+//     *         the error message for the case of violation
+//     * @return a new rule
+//     */
+//    public static SimpleRule withCustom(
+//            Message customFeature,
+//            String description,
+//            String errorMessage,
+//            boolean distribute
+//    ) {
+//        return withCustom(FieldName.getDefaultInstance(),
+//                          customFeature,
+//                          description,
+//                          errorMessage,
+//                          distribute);
+//    }
 }

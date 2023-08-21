@@ -31,11 +31,14 @@ import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import io.spine.base.Identifier.newUuid
+import io.spine.protodata.Type
+import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.codegen.java.This
 import io.spine.protodata.isMap
+import io.spine.type.typeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 import javax.lang.model.element.Modifier
@@ -64,7 +67,12 @@ internal class DistributingGenerator(
     private val violationsType = object : TypeToken<ImmutableList<ConstraintViolation>>() {}.type
 
     override fun supportingMembers(): CodeBlock {
-        val typeName = ctx.typeSystem.javaTypeName(field.type)
+        val name = field.type.messageOrEnumName
+        val typeName = if (name != null) {
+            ctx.typeConvention.declarationFor(name).name
+        } else {
+            field.type.primitive.toClass()
+        }
         val fieldAccessor = ctx.fieldOrElement!!
         val collection = if (field.isMap()) {
             MethodCall(fieldAccessor, "values")

@@ -10,7 +10,6 @@ option java_outer_classname = "FieldViewsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
 
 // A view on a field that is marked `(required)`.
 message RequiredField {

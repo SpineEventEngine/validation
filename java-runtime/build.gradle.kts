@@ -26,6 +26,7 @@
 
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.Spine.Logging
 
 plugins {
     `build-proto-model`
@@ -38,7 +39,7 @@ dependencies {
     compileOnly(AutoService.annotations)
 
     implementation(Spine.base)
-    implementation(Spine.logging)
+    implementation(Logging.lib)
     testImplementation(Spine.testlib)
 }
 

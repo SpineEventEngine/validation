@@ -64,11 +64,11 @@ private constructor(private val expression: String) {
         public fun forRule(
             format: String,
             value: String = "",
-            other: String = ""
+            other: String? = ""
         ): ErrorMessage {
             val msg = Template(format).apply {
                 formatDynamic(VALUE, value)
-                formatStatic(OTHER, other)
+                formatStatic(OTHER, other ?: "")
             }
             return ErrorMessage(msg.joinExpression())
         }

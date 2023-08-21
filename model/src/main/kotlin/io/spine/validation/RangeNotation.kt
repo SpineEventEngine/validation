@@ -28,6 +28,7 @@ package io.spine.validation
 
 import com.google.common.collect.Range
 import io.spine.validate.ComparableNumber
+import io.spine.protodata.Value
 import java.util.regex.Pattern
 
 

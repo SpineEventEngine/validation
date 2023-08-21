@@ -79,7 +79,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     protected val rule = ctx.rule.simple
     private val ignoreIfNotSet  = rule.ignoredIfUnset
     protected val field = ctx.fieldFromSimpleRule!!
-    private val otherValue = ctx.typeSystem.valueToJava(rule.otherValue)
+    private val otherValue: Expression? = ctx.otherValueAsCode
 
     override fun code(): CodeBlock {
         val check = super.code()
@@ -95,7 +95,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
             return check
         }
         val sign = selectSigns()[NOT_EQUAL]!!
-        val defaultValueExpression = ctx.typeSystem.valueToJava(defaultValue.get())
+        val defaultValueExpression = ctx.valueConverter.valueToCode(defaultValue.get())
         val condition = sign(ctx.fieldOrElement!!.toCode(), defaultValueExpression.toCode())
         return CodeBlock
             .builder()
@@ -106,6 +106,9 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     override fun condition(): Expression {
+        checkNotNull(otherValue) {
+            "Expected the rule to specify `simple.other_value`, but was $rule"
+        }
         val type = field.type
         val signs = selectSigns()
         val compare = signs[rule.operator] ?: error(
@@ -129,7 +132,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),
-            otherValue.toCode()
+            otherValue?.toCode()
         )
     }
 

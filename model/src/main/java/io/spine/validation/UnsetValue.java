@@ -29,6 +29,11 @@ package io.spine.validation;
 import com.google.protobuf.ByteString;
 import io.spine.protodata.Field;
 import io.spine.protodata.Type;
+import io.spine.protodata.EnumValue;
+import io.spine.protodata.MapValue;
+import io.spine.protodata.MessageValue;
+import io.spine.protodata.ListValue;
+import io.spine.protodata.Value;
 
 import java.util.Optional;
 

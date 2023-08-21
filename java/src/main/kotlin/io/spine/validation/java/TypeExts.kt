@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,26 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.java
 
-import io.spine.protodata.Value
+import io.spine.protodata.Type
+import io.spine.protodata.TypeName
 
 /**
- * Parses this string into a number value.
+ * The type name of this type, given that the type is a complex type and not a Proto primitive.
  *
- * @return a `Value` with either `double_value` or `int_value`
+ * If the type is primitive, this value is `null`.
  */
-internal fun String.parseToNumber(): Value {
-    val fraction = contains('.')
-    return if (fraction) {
-        Value
-            .newBuilder()
-            .setDoubleValue(toDouble())
-            .build()
-    } else {
-        Value
-            .newBuilder()
-            .setIntValue(toLong())
-            .build()
+internal val Type.messageOrEnumName: TypeName?
+    get() {
+        return when {
+            hasMessage() -> message
+            hasEnumeration() -> enumeration
+            else -> null
+        }
     }
-}

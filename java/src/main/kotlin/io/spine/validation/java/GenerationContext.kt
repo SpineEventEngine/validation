@@ -32,11 +32,20 @@ import io.spine.protodata.FilePath
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.JavaValueConverter
 import io.spine.protodata.codegen.java.MessageReference
+import io.spine.protodata.codegen.java.MessageTypeConvention
+import io.spine.protodata.type.TypeConvention
+import io.spine.protodata.type.TypeSystem
+import io.spine.protodata.type.ValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.tools.code.Java
 import io.spine.validation.Rule
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 /**
  * Context of a [CodeGenerator].
@@ -93,6 +102,25 @@ internal constructor(
     private val elementReference: Expression? = null
 ) {
 
+    val typeConvention: MessageTypeConvention by lazy {
+        MessageTypeConvention(typeSystem)
+    }
+
+    /**
+     * A [JavaValueConverter] for transforming `Value`s into Java expressions.
+     */
+    val valueConverter: JavaValueConverter by lazy {
+        JavaValueConverter(typeConvention)
+    }
+
+    val otherValueAsCode: Expression?
+        get() = if (rule.hasSimple() && rule.simple.hasOtherValue()) {
+            valueConverter.valueToCode(rule.simple.otherValue)
+        } else {
+            null
+        }
+
+
     /**
      * The field associated with the given rule.
      *
@@ -133,6 +161,14 @@ internal constructor(
      * `false` otherwise.
      */
     val isElement: Boolean = elementReference != null
+
+    init {
+        System.err.println(TypeSystem::class.memberProperties.find { it.name == "files" }!!.let {
+            it.isAccessible = true
+            val files = it.get(typeSystem) as Set<ProtobufSourceFile>
+            files.map { it.file.path.value }.sorted().joinToString("\n")
+        })
+    }
 
     /**
      * Obtains a getter for a given field.
