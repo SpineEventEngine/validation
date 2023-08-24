@@ -28,7 +28,7 @@ package io.spine.validation.java.given
 
 import io.spine.protodata.renderer.InsertionPoint
 import io.spine.protodata.renderer.InsertionPointPrinter
-import io.spine.tools.code.CommonLanguages.Java
+import io.spine.tools.code.Java
 
 /**
  * An `InsertionPointPrinter` that prints exactly the given `insertionPoints`.

@@ -29,9 +29,8 @@ package io.spine.validation.java;
 import com.google.common.collect.ImmutableSet;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
+import io.spine.tools.code.Java;
 import io.spine.validation.MessageValidation;
-
-import static io.spine.tools.code.CommonLanguages.java;
 
 /**
  * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point to all the
@@ -42,7 +41,7 @@ import static io.spine.tools.code.CommonLanguages.java;
 public final class PrintValidationInsertionPoints extends InsertionPointPrinter {
 
     public PrintValidationInsertionPoints() {
-        super(java());
+        super(Java.lang());
     }
 
     @Override

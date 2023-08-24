@@ -28,6 +28,7 @@ package io.spine.validation.java
 
 import org.jboss.forge.roaster.model.source.JavaClassSource
 import org.jboss.forge.roaster.model.source.JavaSource
+import org.jboss.forge.roaster.model.source.MethodSource
 
 /**
  * A `JavaClassSource` which caches some of its parsed components.
@@ -48,5 +49,19 @@ internal class CachingJavaClassSource(
 
     override fun getNestedTypes(): List<JavaSource<*>> {
         return cachedNestedTypes
+    }
+
+    override fun getMethod(
+        name: String?,
+        vararg paramTypes: Class<*>?
+    ): MethodSource<JavaClassSource> {
+        return delegate.getMethod(name, *paramTypes)
+    }
+
+    override fun getMethod(
+        name: String?,
+        vararg paramTypes: String?
+    ): MethodSource<JavaClassSource> {
+        return delegate.getMethod(name, *paramTypes)
     }
 }

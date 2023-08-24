@@ -29,9 +29,10 @@ package io.spine.validate;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger;
 import com.google.protobuf.Descriptors.Descriptor;
 import io.spine.annotation.Internal;
+import io.spine.logging.Logger;
+import io.spine.logging.LoggingFactory;
 import io.spine.type.KnownTypes;
 import io.spine.type.MessageType;
 
@@ -44,6 +45,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
+import static java.lang.String.format;
 
 /**
  * A collection of {@linkplain ExternalMessageConstraint external constrains} known to
@@ -55,7 +57,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  */
 public final class ExternalConstraints implements Serializable {
 
-    private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+    private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
     private static final long serialVersionUID = 0L;
 
     /**
@@ -168,7 +170,7 @@ public final class ExternalConstraints implements Serializable {
     @Internal
     static final class Holder {
 
-        private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+        private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
 
         /** The singleton instance. */
         private static ExternalConstraints instance = new ExternalConstraints();
@@ -185,8 +187,8 @@ public final class ExternalConstraints implements Serializable {
          */
         private static void updateFrom(ImmutableSet<MessageType> types) {
             checkNotNull(types);
-            logger.atFine()
-                  .log("Updating external constraints from types `%s`.", types);
+            logger.atDebug()
+                  .log(() -> format("Updating external constraints from types `%s`.", types));
             var currentConstraints = instance.constraints;
             var newConstraints = constraintsFor(types);
             Set<ExternalMessageConstraint> constraints =
@@ -209,9 +211,9 @@ public final class ExternalConstraints implements Serializable {
             var proto = input.toProto();
             var result = new ConstraintFor().valueFrom(proto)
                                             .isPresent();
-            logger.atFine()
-                  .log("[HasExternalConstraint] Tested `%s` with the result of `%b`.",
-                       proto.getName(), result);
+            logger.atDebug()
+                  .log(() -> format("[HasExternalConstraint] Tested `%s` with the result of `%b`.",
+                       proto.getName(), result));
             return result;
         }
 

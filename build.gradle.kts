@@ -27,6 +27,7 @@
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
 import io.spine.internal.dependency.ProtoData
+import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.publish.CheckVersionIncrement
 import io.spine.internal.gradle.publish.PublishingRepos
@@ -89,10 +90,14 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             force(
+                Roaster.api,
+                Roaster.jdt,
                 ProtoData.pluginLib,
                 ProtoData.compiler,
                 ProtoData.codegenJava,
-                Spine.logging,
+                Spine.Logging.lib,
+                Spine.Logging.floggerApi,
+                Spine.Logging.backend,
                 Spine.toolBase,
                 Spine.pluginBase
             )

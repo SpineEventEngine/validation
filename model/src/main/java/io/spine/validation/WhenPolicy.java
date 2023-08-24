@@ -36,6 +36,8 @@ import io.spine.server.event.React;
 import io.spine.time.validation.TimeOption;
 import io.spine.validation.event.SimpleRuleAdded;
 
+import java.util.Locale;
+
 import static io.spine.server.event.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static io.spine.validation.SimpleRules.withCustom;
@@ -60,7 +62,8 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
         var feature = InTime.newBuilder()
                 .setTime(time)
                 .build();
-        var errorMessage = format("The time must be in the %s.", time.name().toLowerCase());
+        var errorMessage = format(
+                "The time must be in the %s.", time.name().toLowerCase(Locale.ENGLISH));
         var rule = withCustom(
                 event.getField(),
                 feature,

@@ -54,10 +54,10 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
                 .setName(event.getField())
                 .setType(event.getType())
                 .build();
-        var field = select(RequiredField.class).withId(id);
-        if (field.map(RequiredField::getRequired).orElse(false)) {
+        var field = select(RequiredField.class).findById(id);
+        if (field != null && field.getRequired()) {
             var declaration = findField(event.getField(), event.getType(), event.getFile(), this);
-            return EitherOf2.withA(requiredRule(declaration, field.get()));
+            return EitherOf2.withA(requiredRule(declaration, field));
         }
         return withNothing();
     }
