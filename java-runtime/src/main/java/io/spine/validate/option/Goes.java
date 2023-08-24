@@ -29,7 +29,7 @@ package io.spine.validate.option;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.logging.Logging;
+import io.spine.logging.WithLogging;
 import io.spine.option.GoesOption;
 import io.spine.option.OptionsProto;
 import io.spine.validate.Constraint;
@@ -42,7 +42,7 @@ import static java.lang.String.format;
 @Immutable
 public final class Goes
         extends FieldValidatingOption<GoesOption>
-        implements Logging {
+        implements WithLogging {
 
     private Goes() {
         super(OptionsProto.goes);
@@ -96,7 +96,7 @@ public final class Goes
         if (field.isCollection() || Required.CAN_BE_REQUIRED.contains(type)) {
             return true;
         } else {
-            _warn().log(warningMessage);
+            logger().atWarning().log(() -> warningMessage);
             return false;
         }
     }

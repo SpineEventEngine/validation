@@ -38,7 +38,7 @@ dependencies {
     compileOnly(AutoService.annotations)
 
     implementation(Spine.base)
-    implementation(Spine.logging)
+    implementation(Spine.Logging.lib)
     testImplementation(Spine.testlib)
 }
 

@@ -152,10 +152,8 @@ internal constructor(
 }
 
 private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {
-    val protoFile = select<ProtobufSourceFile>().withId(file).orElseThrow {
-        IllegalArgumentException("Unknown file: `${file.value}`.")
-    }
-    val messageType = protoFile.typeMap[type.typeUrl]
+    val protoFile = select<ProtobufSourceFile>().findById(file)
+    val messageType = protoFile!!.typeMap[type.typeUrl]
         ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl}`.")
     return messageType.lookUpField(field)
         ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl}.${field.value}`.")
