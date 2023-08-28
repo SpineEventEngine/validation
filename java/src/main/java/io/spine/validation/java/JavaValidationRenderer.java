@@ -77,7 +77,7 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceFileSet sources) {
         this.sources = sources;
-        this.typeSystem = TypeSystem.Companion.from(this);
+        this.typeSystem = TypeSystem.from(this);
         this.validations = findValidations();
         var messageTypes = queryMessageTypes();
         messageTypes.forEach(this::generateCode);
