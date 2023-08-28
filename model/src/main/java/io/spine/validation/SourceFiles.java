@@ -113,8 +113,10 @@ final class SourceFiles {
      */
     static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
         var file = querying.select(ProtobufSourceFile.class)
-                           .withId(filePath)
-                           .orElseThrow(() -> unknownFile(filePath));
+                           .findById(filePath);
+        if (file == null) {
+            throw unknownFile(filePath);
+        }
         var typeUrl = typeName.getTypeUrl();
         var type = file.getTypeMap()
                        .get(typeUrl);

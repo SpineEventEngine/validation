@@ -29,7 +29,7 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.logging.Logging
+import io.spine.logging.WithLogging
 import io.spine.protodata.codegen.java.Expression
 import io.spine.validation.ErrorMessage
 import io.spine.validation.Rule.KindCase.COMPOSITE
@@ -41,7 +41,7 @@ import io.spine.validation.Rule.KindCase.SIMPLE
  */
 internal abstract class CodeGenerator(
     protected val ctx: GenerationContext
-) : Logging {
+) : WithLogging {
 
     /**
      * Tells whether this code generator is capable of generating validation code for
@@ -59,11 +59,11 @@ internal abstract class CodeGenerator(
      */
     open fun code(): CodeBlock {
         if (!canGenerate) {
-            _debug().log("%s", lazy {
+            logger().atDebug().log {
                 "Standard Java renderer cannot generate rule: ${ctx.rule}." +
                         System.lineSeparator() +
                         "Skipping..."
-            })
+            }
             return CodeBlock.of("")
         }
         val binaryCondition = condition()

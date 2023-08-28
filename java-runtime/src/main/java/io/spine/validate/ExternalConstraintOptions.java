@@ -27,12 +27,13 @@
 package io.spine.validate;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.flogger.FluentLogger2;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.GeneratedMessage.GeneratedExtension;
 import io.spine.code.proto.FieldContext;
+import io.spine.logging.Logger;
+import io.spine.logging.LoggingFactory;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -42,6 +43,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -98,7 +100,7 @@ public final class ExternalConstraintOptions implements Serializable {
      */
     static final class Holder {
 
-        private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
+        private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
 
         /** The singleton instance. */
         private static ExternalConstraintOptions instance = new ExternalConstraintOptions();
@@ -113,9 +115,9 @@ public final class ExternalConstraintOptions implements Serializable {
          */
         static void updateFrom(Iterable<ExternalMessageConstraint> externalConstraints) {
             checkNotNull(externalConstraints);
-            logger.atFine()
-                  .log("Updating external constraint options from constraints `%s`.",
-                       externalConstraints);
+            logger.atDebug().log(() -> format(
+                    "Updating external constraint options from constraints `%s`.",
+                    externalConstraints));
             var currentOptions = instance.options;
             var newOptions = new Builder()
                     .buildFrom(externalConstraints);

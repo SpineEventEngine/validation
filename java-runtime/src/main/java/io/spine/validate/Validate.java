@@ -28,7 +28,6 @@ package io.spine.validate;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger2;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
 import com.google.protobuf.Any;
@@ -36,6 +35,8 @@ import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
+import io.spine.logging.Logger;
+import io.spine.logging.LoggingFactory;
 import io.spine.protobuf.Diff;
 import io.spine.type.KnownTypes;
 import io.spine.type.MessageType;
@@ -47,13 +48,14 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
+import static java.lang.String.format;
 
 /**
  * This class provides general validation routines.
  */
 public final class Validate {
 
-    private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
+    private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
     private Validate() {
@@ -105,10 +107,9 @@ public final class Validate {
             if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
                 msg = unpack(packed);
             } else {
-                logger.atWarning().log(
+                logger.atWarning().log(() -> format(
                     "Could not validate packed message of an unknown type `%s`.",
-                    packed.getTypeUrl()
-                );
+                    packed.getTypeUrl()));
             }
         }
         if (msg instanceof ValidatableMessage) {
@@ -264,10 +265,10 @@ public final class Validate {
 
     private static void onSetOnceMisuse(FieldDeclaration field) {
         var fieldName = field.name();
-        logger.atSevere()
-              .log("Error found in `%s`. " +
-                           "Repeated and map fields cannot be marked as `(set_once) = true`.",
-                   fieldName);
+        logger.atError().log(() -> format(
+                "Error found in `%s`. " +
+                        "Repeated and map fields cannot be marked as `(set_once) = true`.",
+                fieldName));
     }
 
     private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {

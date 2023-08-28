@@ -31,7 +31,7 @@ import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.logging.Logging;
+import io.spine.logging.WithLogging;
 import io.spine.option.OptionsProto;
 import io.spine.validate.Constraint;
 
@@ -39,6 +39,7 @@ import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.BYTE_STRI
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.ENUM;
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE;
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING;
+import static java.lang.String.format;
 
 /**
  * An option that makes a field {@code required}.
@@ -46,7 +47,7 @@ import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING;
  * <p>If a {@code required} field is missing, an error is produced.
  */
 @Immutable
-public class Required extends FieldValidatingOption<Boolean> implements Logging {
+public class Required extends FieldValidatingOption<Boolean> implements WithLogging {
 
     static final ImmutableSet<JavaType> CAN_BE_REQUIRED = ImmutableSet.of(
             MESSAGE, ENUM, STRING, BYTE_STRING
@@ -101,11 +102,10 @@ public class Required extends FieldValidatingOption<Boolean> implements Logging 
         var type = field.javaType();
         if (!CAN_BE_REQUIRED.contains(type) && field.isNotCollection()) {
             var typeName = field.descriptor().getType().name();
-            _warn().log("The field `%s.%s` has the type %s and" +
-                                " should not be declared as `(required)`.",
-                  field.declaringType().name(),
-                  field.name(),
-                  typeName);
+            logger().atWarning().log(() -> format(
+                    "The field `%s.%s` has the type %s and" +
+                            " should not be declared as `(required)`.",
+                    field.declaringType().name(), field.name(), typeName));
         }
     }
 

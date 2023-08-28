@@ -86,7 +86,8 @@ final class ValidateMethodCode {
 
     private CodeBlock extraInsertionPoint() {
         InsertionPoint insertionPoint = new ExtraValidation(messageType);
-        var line = Java.lang().comment(getCodeLine(insertionPoint)) + lineSeparator();
+        var java = Java.lang();
+        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
         return CodeBlock.of(line);
     }
 

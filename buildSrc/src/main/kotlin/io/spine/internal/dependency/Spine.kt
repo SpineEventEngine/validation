@@ -59,7 +59,7 @@ object Spine {
          *
          * @see <a href="https://github.com/SpineEventEngine/logging">spine-logging</a>
          */
-        const val logging = "2.0.0-SNAPSHOT.206"
+        const val logging = "2.0.0-SNAPSHOT.209"
 
         /**
          * The version of [Spine.testlib].
@@ -89,7 +89,7 @@ object Spine {
          *
          * @see <a href="https://github.com/SpineEventEngine/mc-java">spine-mc-java</a>
          */
-        const val mcJava = "2.0.0-SNAPSHOT.166"
+        const val mcJava = "2.0.0-SNAPSHOT.168"
 
         /**
          * The version of [Spine.baseTypes].
@@ -121,6 +121,8 @@ object Spine {
 
         /**
          * The version of [Spine.toolBase].
+         *
+         * @see <a href="https://github.com/SpineEventEngine/tool-base">spine-tool-base</a>
          */
         const val toolBase = "2.0.0-SNAPSHOT.182"
 
@@ -164,6 +166,9 @@ object Spine {
         const val lib = "$group:spine-logging:$version"
         const val backend = "$group:spine-logging-backend:$version"
         const val context = "$group:spine-logging-context:$version"
+        const val floggerApi = "$group:spine-flogger-api:$version"
+        const val floggerGrpcContext = "$group:spine-flogger-grpc-context:$version"
+        const val smokeTest = "$group:spine-logging-smoke-test:$version"
     }
 
     /**
@@ -177,7 +182,9 @@ object Spine {
         const val pluginLib = "$toolsGroup:spine-mc-java-plugins:${version}:all"
     }
 
+    @Deprecated("Please use `javadocFilter` instead.", ReplaceWith("javadocFilter"))
     const val javadocTools = "$toolsGroup::${ArtifactVersion.javadocTools}"
+    const val javadocFilter = "$toolsGroup:spine-javadoc-filter:${ArtifactVersion.javadocTools}"
 
     const val client = CoreJava.client // Added for brevity.
     const val server = CoreJava.server // Added for brevity.
@@ -188,9 +195,10 @@ object Spine {
      * See [`SpineEventEngine/core-java`](https://github.com/SpineEventEngine/core-java/).
      */
     object CoreJava {
-        const val core = "$group:spine-core:${ArtifactVersion.core}"
-        const val client = "$group:spine-client:${ArtifactVersion.core}"
-        const val server = "$group:spine-server:${ArtifactVersion.core}"
-        const val testUtilServer = "$toolsGroup:spine-testutil-server:${ArtifactVersion.core}"
+        const val version = ArtifactVersion.core
+        const val core = "$group:spine-core:$version"
+        const val client = "$group:spine-client:$version"
+        const val server = "$group:spine-server:$version"
+        const val testUtilServer = "$toolsGroup:spine-testutil-server:$version"
     }
 }

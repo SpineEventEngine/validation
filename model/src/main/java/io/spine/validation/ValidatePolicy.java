@@ -60,11 +60,11 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
                 .setName(event.getField())
                 .setType(event.getType())
                 .build();
-        var field = select(ValidatedField.class).withId(id);
-        if (field.isPresent()) {
+        var field = select(ValidatedField.class).findById(id);
+        if (field != null) {
             checkMessage(event.getField(), event.getType(), event.getFile());
         }
-        boolean shouldValidate = field.map(ValidatedField::getValidate).orElse(false);
+        var shouldValidate = field != null && field.getValidate();
         if (!shouldValidate) {
             return withNothing();
         }
@@ -73,7 +73,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
                 RecursiveValidation.getDefaultInstance(),
                 "Message field is validated by its validation rules. " +
                         "If the field is invalid, the container message is invalid as well.",
-                field.get().getErrorMessage(),
+                field.getErrorMessage(),
                 true);
         return EitherOf2.withA(
                 SimpleRuleAdded.newBuilder()

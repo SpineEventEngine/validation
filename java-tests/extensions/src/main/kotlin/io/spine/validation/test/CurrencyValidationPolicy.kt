@@ -50,17 +50,15 @@ public class CurrencyValidationPolicy : Policy<TypeExited>() {
 
     @React
     override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {
-        val currencyType = select<CurrencyType>().withId(event.type)
-        if (!currencyType.isPresent || !currencyType.get().hasCurrency()) {
+        val currencyType = select<CurrencyType>().findById(event.type)
+        if (currencyType == null || currencyType.hasCurrency().not()) {
             return EitherOf2.withB(nothing())
         }
-        val currency = currencyType.get()
-        val minorUnits = currency.minorUnitField
-        val otherValue = minorUnitsPerUnit(currency)
-        val rule = constructRule(currency.majorUnitField, minorUnits, otherValue)
+        val minorUnits = currencyType.minorUnitField
+        val otherValue = minorUnitsPerUnit(currencyType)
+        val rule = constructRule(currencyType.majorUnitField, minorUnits, otherValue)
         return EitherOf2.withA(
-            SimpleRuleAdded
-                .newBuilder()
+            SimpleRuleAdded.newBuilder()
                 .setType(event.type)
                 .setRule(rule)
                 .build()
@@ -68,8 +66,7 @@ public class CurrencyValidationPolicy : Policy<TypeExited>() {
     }
 
     private fun minorUnitsPerUnit(currencyType: CurrencyType): Value {
-        return Value
-            .newBuilder()
+        return Value.newBuilder()
             .setIntValue(currencyType.currency.minorUnits.toLong())
             .build()
     }
@@ -77,8 +74,7 @@ public class CurrencyValidationPolicy : Policy<TypeExited>() {
     private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule {
         val msg = "Expected less than {other} ${minorUnits.prettyName()} per one " +
                 "${majorUnits.prettyName()}, but got {value}."
-        return SimpleRule
-            .newBuilder()
+        return SimpleRule.newBuilder()
             .setErrorMessage(msg)
             .setField(minorUnits.name)
             .setOperator(LESS_THAN)

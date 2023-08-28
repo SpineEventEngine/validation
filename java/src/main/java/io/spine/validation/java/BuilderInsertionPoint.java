@@ -107,12 +107,13 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
         var javaClass = (JavaClassSource) javaSource;
         Deque<JavaSource<?>> nestedTypes = new ArrayDeque<>();
         nestedTypes.add(javaClass);
+        @SuppressWarnings("ReturnOfNull") // legit in this case. Filtered by `takeWhile()`.
         var types = generate(
                 () -> nestedTypes.isEmpty() ? null : nestedTypes.poll()
         ).takeWhile(Objects::nonNull);
         var allClasses = types.filter(JavaSource::isClass)
-                               .map(JavaClassSource.class::cast)
-                               .peek(c -> nestedTypes.addAll(c.getNestedTypes()));
+                              .map(JavaClassSource.class::cast)
+                              .peek(c -> nestedTypes.addAll(c.getNestedTypes()));
         return allClasses.filter(BuilderInsertionPoint::isMessageClass);
     }
 

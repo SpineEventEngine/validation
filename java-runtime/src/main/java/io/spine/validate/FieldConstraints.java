@@ -27,8 +27,9 @@
 package io.spine.validate;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger2;
 import io.spine.code.proto.FieldContext;
+import io.spine.logging.Logger;
+import io.spine.logging.LoggingFactory;
 import io.spine.validate.option.FieldValidatingOption;
 import io.spine.validate.option.StandardOptionFactory;
 import io.spine.validate.option.ValidatingOptionFactory;
@@ -40,13 +41,14 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static java.lang.String.format;
 
 /**
  * A factory of field validation {@link Constraint}s.
  */
 final class FieldConstraints {
 
-    private static final FluentLogger2 log = FluentLogger2.forEnclosingClass();
+    private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
     private static final ImmutableSet<ValidatingOptionFactory> allFactories =
             ValidatingOptionsLoader.INSTANCE.implementations();
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =
@@ -105,8 +107,8 @@ final class FieldConstraints {
             case MESSAGE:
                 return constraintsFrom(factories, ValidatingOptionFactory::forMessage, field);
             default:
-                log.atWarning()
-                   .log("Unknown field type `%s` at `%s`.", type, declaration);
+                logger.atWarning()
+                      .log(() -> format("Unknown field type `%s` at `%s`.", type, declaration));
                 return Stream.of();
         }
     }
