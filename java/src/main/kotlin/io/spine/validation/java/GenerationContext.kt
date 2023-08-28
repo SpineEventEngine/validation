@@ -120,7 +120,6 @@ internal constructor(
             null
         }
 
-
     /**
      * The field associated with the given rule.
      *
