@@ -35,8 +35,8 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "RuleProto";
 option java_multiple_files = true;
 
-import "spine/validation/value.proto";
 import "spine/protodata/ast.proto";
+import "spine/protodata/value.proto";
 import "google/protobuf/any.proto";
 
 // A simple validation rule.
@@ -58,7 +58,8 @@ message SimpleRule {
         // A simple comparison sign.
         ComparisonOperator operator = 2;
 
-        // A custom comparison method, which cannot be covered by a combination of `Sign`s.
+        // A custom comparison method, which cannot be covered by
+        // a combination of `ComparisonOperator`s.
         CustomOperator custom_operator = 3;
     }
 
@@ -70,7 +71,7 @@ message SimpleRule {
     // If the operator is a `CustomOperator`, this is the custom validation feature
     // encoded as a `MessageValue`.
     //
-    Value other_value = 4;
+    protodata.Value other_value = 4;
 
     // A human-readable message explaining the error.
     //

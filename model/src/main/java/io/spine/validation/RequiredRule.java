@@ -28,6 +28,7 @@ package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
 import io.spine.protodata.Field;
+import io.spine.protodata.Value;
 
 import java.util.Optional;
 

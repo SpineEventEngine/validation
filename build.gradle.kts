@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
@@ -98,8 +99,16 @@ allprojects {
                 Spine.Logging.lib,
                 Spine.Logging.floggerApi,
                 Spine.Logging.backend,
+                Spine.Logging.context,
+                Spine.client,
+                Spine.server,
                 Spine.toolBase,
-                Spine.pluginBase
+                Spine.pluginBase,
+                Grpc.api,
+                Grpc.context,
+                Grpc.core,
+                Grpc.protobuf,
+                Grpc.stub
             )
         }
     }

@@ -29,7 +29,6 @@ package io.spine.validation.java;
 import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.MessageType;
-import io.spine.protodata.ProtobufDependency;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.codegen.java.JavaRenderer;
 import io.spine.protodata.codegen.java.MessageReference;
@@ -38,6 +37,7 @@ import io.spine.protodata.codegen.java.Poet;
 import io.spine.protodata.renderer.Renderer;
 import io.spine.protodata.renderer.SourceFile;
 import io.spine.protodata.renderer.SourceFileSet;
+import io.spine.protodata.type.TypeSystem;
 import io.spine.validate.NonValidated;
 import io.spine.validate.Validated;
 import io.spine.validate.ValidationException;
@@ -77,33 +77,12 @@ public final class JavaValidationRenderer extends JavaRenderer {
     @Override
     protected void render(SourceFileSet sources) {
         this.sources = sources;
-        this.typeSystem = bakeTypeSystem();
+        this.typeSystem = TypeSystem.from(this);
         this.validations = findValidations();
         var messageTypes = queryMessageTypes();
         messageTypes.forEach(this::generateCode);
         annotateGeneratedMessages(sources, messageTypes);
         plugValidationIntoBuild(sources, messageTypes);
-    }
-
-    private TypeSystem bakeTypeSystem() {
-        var types = TypeSystem.newBuilder();
-        addSourceFiles(types);
-        addDependencies(types);
-        return types.build();
-    }
-
-    private void addDependencies(TypeSystem.Builder types) {
-        var dependencies = select(ProtobufDependency.class).all();
-        for (var d : dependencies) {
-            types.addFrom(d.getFile());
-        }
-    }
-
-    private void addSourceFiles(TypeSystem.Builder types) {
-        var files = select(ProtobufSourceFile.class).all();
-        for (var file : files) {
-            types.addFrom(file);
-        }
     }
 
     TypeSystem typeSystem() {

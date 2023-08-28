@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.protodata.renderer.InsertionPointPrinter;
-import io.spine.tools.code.Java;
-import io.spine.validation.MessageValidation;
+import io.spine.protodata.Type
+import io.spine.protodata.TypeName
 
 /**
- * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point to all the
- * message types
- * which have an associated {@link MessageValidation} view.
+ * The type name of this type, given that the type is a complex type and not a Proto primitive.
+ *
+ * If the type is primitive, this value is `null`.
  */
-@SuppressWarnings("unused") // Accessed via reflection by ProtoData.
-public final class PrintValidationInsertionPoints extends InsertionPointPrinter<Java> {
-
-    public PrintValidationInsertionPoints() {
-        super(Java.lang());
+internal val Type.messageOrEnumName: TypeName?
+    get() {
+        return when {
+            hasMessage() -> message
+            hasEnumeration() -> enumeration
+            else -> null
+        }
     }
-
-    @Override
-    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        return ImmutableSet.of(
-                new ValidateBeforeReturn(),
-                new BuildPartialReturnTypeAnnotation(),
-                new BuildMethodReturnTypeAnnotation());
-    }
-}

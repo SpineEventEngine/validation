@@ -26,6 +26,8 @@
 
 package io.spine.validation
 
+import io.spine.protodata.Value
+
 /**
  * Parses this string into a number value.
  *

@@ -35,7 +35,7 @@ import io.spine.tools.code.Java
  */
 class MockPrinter(
     private val insertionPoints: Set<InsertionPoint>
-) : InsertionPointPrinter(Java) {
+) : InsertionPointPrinter<Java>(Java) {
 
     override fun supportedInsertionPoints() = insertionPoints
 }

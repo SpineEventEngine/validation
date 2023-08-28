@@ -24,10 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Kotest
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
+import io.spine.internal.dependency.Spine
 
 dependencies {
     api(project(":model"))
@@ -41,4 +43,26 @@ dependencies {
     runtimeOnly(Roaster.jdt)
 
     testImplementation(Kotest.assertions)
+}
+
+configurations.all {
+    resolutionStrategy {
+        force(
+            ProtoData.pluginLib,
+            ProtoData.compiler,
+            ProtoData.codegenJava,
+            Spine.Logging.lib,
+            Spine.Logging.backend,
+            Spine.Logging.context,
+            Spine.client,
+            Spine.server,
+            Spine.toolBase,
+            Spine.pluginBase,
+            Grpc.api,
+            Grpc.context,
+            Grpc.core,
+            Grpc.protobuf,
+            Grpc.stub
+        )
+    }
 }

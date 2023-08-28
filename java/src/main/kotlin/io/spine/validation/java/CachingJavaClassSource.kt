@@ -51,6 +51,10 @@ internal class CachingJavaClassSource(
         return cachedNestedTypes
     }
 
+    // Specifying the desired implementation for `getMethod(..)` overloads explicitly because of
+    // a clash between the supertype and the delegate. For more info, remove the explicit overrides
+    // and see the warning.
+
     override fun getMethod(
         name: String?,
         vararg paramTypes: Class<*>?

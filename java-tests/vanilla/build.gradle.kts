@@ -27,16 +27,10 @@
 import io.spine.internal.dependency.Spine
 
 protoData {
-    renderers(
-        "io.spine.validation.java.PrintValidationInsertionPoints",
-        "io.spine.validation.java.JavaValidationRenderer",
-
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
-        "io.spine.protodata.codegen.java.annotation.SuppressWarningsAnnotation"
-    )
     plugins(
-        "io.spine.validation.ValidationPlugin"
+        // Suppress warnings in the generated code.
+        "io.spine.protodata.codegen.java.annotation.SuppressWarningsAnnotation",
+        "io.spine.validation.java.JavaValidationPlugin"
     )
 }
 

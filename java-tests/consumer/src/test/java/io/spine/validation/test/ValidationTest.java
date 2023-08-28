@@ -93,7 +93,7 @@ class ValidationTest {
 
         @Test
         @DisplayName("throw no exceptions if actual value is equal to the threshold")
-        void throwOnEdge() {
+        void notThrowOnEdge() {
             assertNoException(LocalTime.newBuilder().setMinutes(0));
         }
 

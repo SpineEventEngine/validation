@@ -55,20 +55,21 @@ private constructor(private val expression: String) {
         /**
          * Produces an error message for a simple validation rule.
          *
-         * @param format the message format
-         * @param value the value of the field
-         * @param other the value to which the field is compared
+         * @param format the message format.
+         * @param value the value of the field.
+         * @param other the value to which the field is compared, may be `null` if no such
+         *              value exists.
          */
         @JvmStatic
         @JvmOverloads
         public fun forRule(
             format: String,
             value: String = "",
-            other: String = ""
+            other: String? = null
         ): ErrorMessage {
             val msg = Template(format).apply {
                 formatDynamic(VALUE, value)
-                formatStatic(OTHER, other)
+                formatStatic(OTHER, other ?: "")
             }
             return ErrorMessage(msg.joinExpression())
         }
@@ -76,10 +77,10 @@ private constructor(private val expression: String) {
         /**
          * Produces an error message for a composite validation rule.
          *
-         * @param format the message format
-         * @param left the error message of the left rule
-         * @param right the error message of the right rule
-         * @param operation the operator which joins the rule conditions
+         * @param format the message format.
+         * @param left the error message of the left rule.
+         * @param right the error message of the right rule.
+         * @param operation the operator which joins the rule conditions.
          */
         @JvmStatic
         @JvmOverloads
