@@ -29,7 +29,7 @@ package io.spine.validate;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger;
+import com.google.common.flogger.FluentLogger2;
 import com.google.protobuf.Descriptors.Descriptor;
 import io.spine.annotation.Internal;
 import io.spine.type.KnownTypes;
@@ -55,7 +55,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  */
 public final class ExternalConstraints implements Serializable {
 
-    private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+    private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
     private static final long serialVersionUID = 0L;
 
     /**
@@ -168,7 +168,7 @@ public final class ExternalConstraints implements Serializable {
     @Internal
     static final class Holder {
 
-        private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+        private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
 
         /** The singleton instance. */
         private static ExternalConstraints instance = new ExternalConstraints();

@@ -27,7 +27,7 @@
 package io.spine.validate;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.flogger.FluentLogger;
+import com.google.common.flogger.FluentLogger2;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -98,7 +98,7 @@ public final class ExternalConstraintOptions implements Serializable {
      */
     static final class Holder {
 
-        private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+        private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
 
         /** The singleton instance. */
         private static ExternalConstraintOptions instance = new ExternalConstraintOptions();

@@ -28,7 +28,7 @@ package io.spine.validate;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger;
+import com.google.common.flogger.FluentLogger2;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
 import com.google.protobuf.Any;
@@ -53,7 +53,7 @@ import static io.spine.protobuf.AnyPacker.unpack;
  */
 public final class Validate {
 
-    private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+    private static final FluentLogger2 logger = FluentLogger2.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
     private Validate() {

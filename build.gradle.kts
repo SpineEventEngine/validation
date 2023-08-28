@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.publish.CheckVersionIncrement
@@ -92,9 +93,18 @@ allprojects {
                 ProtoData.pluginLib,
                 ProtoData.compiler,
                 ProtoData.codegenJava,
-                Spine.logging,
+                Spine.Logging.lib,
+                Spine.Logging.backend,
+                Spine.Logging.context,
+                Spine.client,
+                Spine.server,
                 Spine.toolBase,
-                Spine.pluginBase
+                Spine.pluginBase,
+                Grpc.api,
+                Grpc.context,
+                Grpc.core,
+                Grpc.protobuf,
+                Grpc.stub
             )
         }
     }

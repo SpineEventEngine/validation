@@ -27,7 +27,7 @@
 package io.spine.validate;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger;
+import com.google.common.flogger.FluentLogger2;
 import io.spine.code.proto.FieldContext;
 import io.spine.validate.option.FieldValidatingOption;
 import io.spine.validate.option.StandardOptionFactory;
@@ -46,7 +46,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
  */
 final class FieldConstraints {
 
-    private static final FluentLogger log = FluentLogger.forEnclosingClass();
+    private static final FluentLogger2 log = FluentLogger2.forEnclosingClass();
     private static final ImmutableSet<ValidatingOptionFactory> allFactories =
             ValidatingOptionsLoader.INSTANCE.implementations();
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =
