@@ -162,14 +162,6 @@ internal constructor(
      */
     val isElement: Boolean = elementReference != null
 
-    init {
-        System.err.println(TypeSystem::class.memberProperties.find { it.name == "files" }!!.let {
-            it.isAccessible = true
-            val files = it.get(typeSystem) as Set<ProtobufSourceFile>
-            files.map { it.file.path.value }.sorted().joinToString("\n")
-        })
-    }
-
     /**
      * Obtains a getter for a given field.
      *
