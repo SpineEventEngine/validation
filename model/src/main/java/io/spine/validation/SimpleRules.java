@@ -87,28 +87,4 @@ public final class SimpleRules {
         }
         return builder.build();
     }
-
-//    /**
-//     * Creates a {@link SimpleRule} with a custom operator without an associated field.
-//     *
-//     * @param customFeature
-//     *         the feature message describing the custom operator
-//     * @param description
-//     *         the human-readable text description of the feature
-//     * @param errorMessage
-//     *         the error message for the case of violation
-//     * @return a new rule
-//     */
-//    public static SimpleRule withCustom(
-//            Message customFeature,
-//            String description,
-//            String errorMessage,
-//            boolean distribute
-//    ) {
-//        return withCustom(FieldName.getDefaultInstance(),
-//                          customFeature,
-//                          description,
-//                          errorMessage,
-//                          distribute);
-//    }
 }
