@@ -107,7 +107,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 
     override fun condition(): Expression {
         checkNotNull(otherValue) {
-            "Expected the rule to specify `simple.other_value`, but was $rule"
+            "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
         val type = field.type
         val signs = selectSigns()
