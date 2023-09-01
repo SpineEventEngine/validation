@@ -31,10 +31,11 @@ import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.codegen.java.call
 import io.spine.protodata.isMap
 
 /**
- * Generates code for the [DistinctCollection] operator.
+ * Generates code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
  *
  * A list or the values of a map containing a duplicate is a constraint violation.
  */
