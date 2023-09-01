@@ -44,9 +44,10 @@ class BuilderMethodsSpec {
     private lateinit var code: String
 
     @BeforeEach
-    fun setUp(@TempDir sources: Path) {
-        val file = sources / "Example.java"
-        file.writeText("""
+    fun setUp(@TempDir sources: Path, @TempDir target: Path) {
+        val relativePath = "Example.java"
+        val inputFile = sources / relativePath
+        inputFile.writeText("""
             package foo.bar;
             
             class Example extends com.google.protobuf.GeneratedMessageV3 {
@@ -65,7 +66,7 @@ class BuilderMethodsSpec {
                 }
             }
         """.trimIndent())
-        val sourceFiles = SourceFileSet.from(sources)
+        val sourceFiles = SourceFileSet.create(sources, target)
         val printer = MockPrinter(setOf(
             BuildMethodReturnTypeAnnotation(),
             BuildPartialReturnTypeAnnotation()
@@ -73,7 +74,8 @@ class BuilderMethodsSpec {
         printer.renderSources(sourceFiles)
         sourceFiles.forEach { it.text() } // Run lazy operations.
         sourceFiles.write()
-        code = file.readText()
+        val outputFile = target / relativePath
+        code = outputFile.readText()
     }
 
     @Suppress("MaxLineLength")
