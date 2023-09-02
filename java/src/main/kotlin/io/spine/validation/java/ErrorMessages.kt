@@ -37,6 +37,8 @@ import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.LiteralString
+import io.spine.protodata.codegen.java.call
+import io.spine.protodata.codegen.java.newBuilder
 import io.spine.protodata.isList
 import io.spine.protodata.isMap
 import io.spine.validate.ConstraintViolation
@@ -107,8 +109,7 @@ private fun ErrorMessage.buildViolation(
     childViolations: Expression? = null,
     ignoreCardinality: Boolean = false
 ): Expression {
-    var violationBuilder = ClassName(ConstraintViolation::class.java)
-        .newBuilder()
+    var violationBuilder = ClassName(ConstraintViolation::class.java).newBuilder()
         .chainSet("msg_format", Literal(this))
         .chainSet("type_name", LiteralString(type.typeUrl))
     if (field != null) {

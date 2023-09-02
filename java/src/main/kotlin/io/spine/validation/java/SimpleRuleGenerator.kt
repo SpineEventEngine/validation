@@ -33,6 +33,7 @@ import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.call
 import io.spine.protodata.isRepeated
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL

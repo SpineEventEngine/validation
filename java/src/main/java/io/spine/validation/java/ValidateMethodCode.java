@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.codegen.java.Expressions.call;
+import static io.spine.protodata.codegen.java.Expressions.newBuilder;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.validation.java.ValidationCode.OPTIONAL_ERROR;
 import static io.spine.validation.java.ValidationCode.VALIDATE;
@@ -94,14 +96,14 @@ final class ValidateMethodCode {
     private static CodeBlock generateValidationError() {
         var code = CodeBlock.builder();
         code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        var errorBuilder = new ClassName(ValidationError.class).newBuilder()
+        var errorBuilder = newBuilder(new ClassName(ValidationError.class))
                 .chainAddAll("constraint_violation", VIOLATIONS)
                 .chainBuild();
         var optional = new ClassName(Optional.class);
-        var optionalOf = optional.call("of", ImmutableList.of(errorBuilder));
+        var optionalOf = call(optional, "of", ImmutableList.of(errorBuilder));
         code.addStatement(RETURN_LITERAL, optionalOf);
         code.nextControlFlow("else");
-        var optionalEmpty = optional.call("empty");
+        var optionalEmpty = call(optional, "empty");
         code.addStatement(RETURN_LITERAL, optionalEmpty);
         code.endControlFlow();
         return code.build();
