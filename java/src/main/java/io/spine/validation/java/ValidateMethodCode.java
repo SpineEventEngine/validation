@@ -31,6 +31,7 @@ import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.codegen.java.ClassName;
+import io.spine.protodata.codegen.java.Expressions;
 import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.tools.code.Java;
 import io.spine.validate.ConstraintViolation;
@@ -41,7 +42,6 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protodata.codegen.java.Expressions.call;
-import static io.spine.protodata.codegen.java.Expressions.newBuilder;
 import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
 import static io.spine.validation.java.ValidationCode.OPTIONAL_ERROR;
 import static io.spine.validation.java.ValidationCode.VALIDATE;
@@ -96,7 +96,7 @@ final class ValidateMethodCode {
     private static CodeBlock generateValidationError() {
         var code = CodeBlock.builder();
         code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        var errorBuilder = newBuilder(new ClassName(ValidationError.class))
+        var errorBuilder = Expressions.newBuilder(new ClassName(ValidationError.class))
                 .chainAddAll("constraint_violation", VIOLATIONS)
                 .chainBuild();
         var optional = new ClassName(Optional.class);
