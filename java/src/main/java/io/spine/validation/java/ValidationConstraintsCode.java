@@ -31,9 +31,7 @@ import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
 import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeName;
-import io.spine.protodata.codegen.java.JavaValueConverter;
 import io.spine.protodata.codegen.java.MessageReference;
-import io.spine.protodata.codegen.java.MessageTypeConvention;
 import io.spine.protodata.codegen.java.This;
 import io.spine.validation.MessageValidation;
 import io.spine.validation.Rule;
@@ -139,12 +137,11 @@ final class ValidationConstraintsCode {
 
     private GenerationContext newContext(Rule rule) {
         var typeSystem = renderer.typeSystem();
-        return new GenerationContext(rule,
-                                     messageReference,
-                                     declaringFile,
-                                     typeSystem,
-                                     messageType,
-                                     VIOLATIONS,
-                                     renderer);
+        return new GenerationContext(
+                renderer, typeSystem,
+                rule,
+                messageReference, messageType, declaringFile,
+                VIOLATIONS
+        );
     }
 }

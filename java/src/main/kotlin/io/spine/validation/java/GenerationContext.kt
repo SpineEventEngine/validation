@@ -32,20 +32,14 @@ import io.spine.protodata.FilePath
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
-import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.JavaImplConvention
 import io.spine.protodata.codegen.java.JavaValueConverter
 import io.spine.protodata.codegen.java.MessageReference
-import io.spine.protodata.codegen.java.MessageTypeConvention
-import io.spine.protodata.type.TypeConvention
 import io.spine.protodata.type.TypeSystem
-import io.spine.protodata.type.ValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.tools.code.Java
 import io.spine.validation.Rule
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
 
 /**
  * Context of a [CodeGenerator].
@@ -53,6 +47,16 @@ import kotlin.reflect.jvm.isAccessible
 public data class GenerationContext
 @JvmOverloads
 internal constructor(
+
+    /**
+     * A [Querying] ProtoData component.
+     */
+    private val client: Querying,
+
+    /**
+     * The Protobuf types known to the application.
+     */
+    val typeSystem: TypeSystem,
 
     /**
      * The rule for which the code is generated.
@@ -65,19 +69,14 @@ internal constructor(
     val msg: MessageReference,
 
     /**
-     * The path to the Protobuf file where the validated type is declared.
-     */
-    val protoFile: FilePath,
-
-    /**
-     * The Protobuf types known to the application.
-     */
-    val typeSystem: TypeSystem,
-
-    /**
      * The type of the validated message.
      */
     val validatedType: TypeName,
+
+    /**
+     * The path to the Protobuf file where the validated type is declared.
+     */
+    val protoFile: FilePath,
 
     /**
      * A reference to the mutable violations list, which accumulates all the constraint violations.
@@ -89,11 +88,6 @@ internal constructor(
     val violationsList: Expression,
 
     /**
-     * A [Querying] ProtoData component.
-     */
-    private val querying: Querying,
-
-    /**
      * A custom reference to an element of a collection field.
      *
      * If `null`, the associated field is not a collection or the associated rule does not need
@@ -102,8 +96,8 @@ internal constructor(
     private val elementReference: Expression? = null
 ) {
 
-    val typeConvention: MessageTypeConvention by lazy {
-        MessageTypeConvention(typeSystem)
+    val typeConvention: JavaImplConvention by lazy {
+        JavaImplConvention(typeSystem)
     }
 
     /**
@@ -175,7 +169,7 @@ internal constructor(
      * @throws IllegalArgumentException if there is no such field
      */
     public fun lookUpField(name: FieldName): Field =
-        querying.lookUpField(protoFile, validatedType, name)
+        client.lookUpField(protoFile, validatedType, name)
 }
 
 private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {
