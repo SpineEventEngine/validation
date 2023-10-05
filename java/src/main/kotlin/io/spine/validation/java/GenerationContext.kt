@@ -33,7 +33,7 @@ import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.JavaImplConvention
+import io.spine.protodata.codegen.java.MessageOrEnumConvention
 import io.spine.protodata.codegen.java.JavaValueConverter
 import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.type.TypeSystem
@@ -96,8 +96,8 @@ internal constructor(
     private val elementReference: Expression? = null
 ) {
 
-    val typeConvention: JavaImplConvention by lazy {
-        JavaImplConvention(typeSystem)
+    val typeConvention: MessageOrEnumConvention by lazy {
+        MessageOrEnumConvention(typeSystem)
     }
 
     /**

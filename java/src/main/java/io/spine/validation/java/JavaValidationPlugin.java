@@ -32,7 +32,6 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.protodata.plugin.View;
 import io.spine.protodata.plugin.ViewRepository;
 import io.spine.protodata.renderer.Renderer;
-import io.spine.protodata.type.TypeConvention;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.validation.ValidationPlugin;
 
@@ -90,11 +89,6 @@ public final class JavaValidationPlugin implements Plugin {
     @Override
     public void extend(BoundedContextBuilder context) {
         base.extend(context);
-    }
-
-    @Override
-    public Set<TypeConvention<?, ?>> typeConventions() {
-        return base.typeConventions();
     }
 
     @Override
