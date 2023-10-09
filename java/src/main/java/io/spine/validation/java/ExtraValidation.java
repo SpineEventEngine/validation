@@ -32,6 +32,7 @@ import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.renderer.CoordinatesFactory.nowhere;
 import static java.lang.String.format;
 
 /**
