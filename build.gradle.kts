@@ -27,6 +27,7 @@
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
 import io.spine.internal.dependency.Grpc
+import io.spine.internal.dependency.Kotlin
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
@@ -89,17 +90,19 @@ allprojects {
     version = extra["validationVersion"]!!
 
     configurations.all {
+        exclude(group = "io.spine", module = "spine-flogger-api")
+        exclude(group = "io.spine", module = "spine-logging-backend")
+
         resolutionStrategy {
+            @Suppress("DEPRECATION") // `Kotlin.stdLibJdk7` is a transitive dependency.
             force(
                 Roaster.api,
                 Roaster.jdt,
                 ProtoData.pluginLib,
                 ProtoData.compiler,
                 ProtoData.codegenJava,
+                Spine.base,
                 Spine.Logging.lib,
-                Spine.Logging.floggerApi,
-                Spine.Logging.backend,
-                Spine.Logging.context,
                 Spine.client,
                 Spine.server,
                 Spine.toolBase,
@@ -108,7 +111,8 @@ allprojects {
                 Grpc.context,
                 Grpc.core,
                 Grpc.protobuf,
-                Grpc.stub
+                Grpc.stub,
+                Kotlin.stdLibJdk7
             )
         }
     }
