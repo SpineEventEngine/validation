@@ -29,6 +29,7 @@ package io.spine.validation
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
+import io.spine.protodata.CodegenContext
 import io.spine.protodata.File.SyntaxVersion.PROTO3
 import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
@@ -54,6 +55,7 @@ import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.event.CompositeRuleAdded
 import io.spine.validation.event.SimpleRuleAdded
 import io.spine.validation.event.compositeRuleAdded
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -61,6 +63,7 @@ import org.junit.jupiter.api.Test
 @DisplayName("Validation policies should")
 class PolicySpec {
 
+    private lateinit var codegenContext: CodeGenerationContext
     private lateinit var blackBox: BlackBox
     private val filePath = filePath {
         value = "example/bar.proto"
@@ -76,11 +79,11 @@ class PolicySpec {
 
     @BeforeEach
     fun prepareBlackBox() {
-        val ctx = CodeGenerationContext(Pipeline.generateId()) {
+        codegenContext = CodeGenerationContext(Pipeline.generateId()) {
             ValidationPlugin().policies().forEach { addEventDispatcher(it) }
         }
 
-        blackBox = BlackBox.from(ctx.context)
+        blackBox = BlackBox.from(codegenContext.context)
 
         val protoFile = file {
             path = filePath
@@ -104,6 +107,12 @@ class PolicySpec {
         )
     }
 
+    @AfterEach
+    fun closeBlackBox() {
+        codegenContext.close()
+        blackBox.close()
+    }
+    
     @Test
     fun `produce simple composite rules for (range)`() {
         val rangeOption = option {
