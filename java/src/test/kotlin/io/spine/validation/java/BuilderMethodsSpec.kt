@@ -27,6 +27,7 @@
 package io.spine.validation.java
 
 import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.renderer.SourceFileSet
 import io.spine.validation.java.given.MockPrinter
 import java.nio.file.Path
@@ -67,13 +68,16 @@ class BuilderMethodsSpec {
             }
         """.trimIndent())
         val sourceFiles = SourceFileSet.create(sources, target)
-        val printer = MockPrinter(setOf(
-            BuildMethodReturnTypeAnnotation(),
-            BuildPartialReturnTypeAnnotation()
-        ))
-        printer.renderSources(sourceFiles)
-        sourceFiles.forEach { it.text() } // Run lazy operations.
-        sourceFiles.write()
+        CodeGenerationContext.newInstance().use { context ->
+            val printer = MockPrinter(setOf(
+                BuildMethodReturnTypeAnnotation(),
+                BuildPartialReturnTypeAnnotation()
+            ))
+            printer.registerWith(context)
+            printer.renderSources(sourceFiles)
+            sourceFiles.forEach { it.text() } // Run lazy operations.
+            sourceFiles.write()
+        }
         val outputFile = target / relativePath
         code = outputFile.readText()
     }
