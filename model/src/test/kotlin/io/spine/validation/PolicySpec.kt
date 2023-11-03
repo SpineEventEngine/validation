@@ -35,6 +35,7 @@ import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.Type
 import io.spine.protodata.backend.CodeGenerationContext
+import io.spine.protodata.backend.Pipeline
 import io.spine.protodata.event.fieldEntered
 import io.spine.protodata.event.fieldOptionDiscovered
 import io.spine.protodata.event.fileEntered
@@ -75,9 +76,11 @@ class PolicySpec {
 
     @BeforeEach
     fun prepareBlackBox() {
-        val ctx = CodeGenerationContext.builder()
-        ValidationPlugin().policies().forEach { ctx.addEventDispatcher(it) }
-        blackBox = BlackBox.from(ctx)
+        val ctx = CodeGenerationContext(Pipeline.generateId()) {
+            ValidationPlugin().policies().forEach { addEventDispatcher(it) }
+        }
+
+        blackBox = BlackBox.from(ctx.context)
 
         val protoFile = file {
             path = filePath
