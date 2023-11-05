@@ -34,8 +34,11 @@ plugins {
     java
     groovy
     `kotlin-dsl`
-    val licenseReportVersion = "2.1"
-    id("com.github.jk1.dependency-license-report").version(licenseReportVersion)
+
+    // https://github.com/jk1/Gradle-License-Report/releases
+    id("com.github.jk1.dependency-license-report").version("2.1")
+
+    // https://github.com/johnrengelman/shadow/releases
     id("com.github.johnrengelman.shadow").version("7.1.2")
 }
 
@@ -53,15 +56,25 @@ repositories {
  */
 val jacksonVersion = "2.15.3"
 
-val googleAuthToolVersion = "2.1.2"
+/**
+ * The version of Google Artifact Registry used by `buildSrc`.
+ *
+ * The version `2.1.5` is the latest before `2.2.0`, which introduces breaking changes.
+ *
+ * @see <a href="https://mvnrepository.com/artifact/com.google.cloud.artifactregistry/artifactregistry-auth-common">
+ *     Google Artifact Registry at Maven</a>
+ */
+val googleAuthToolVersion = "2.1.5"
+
 val licenseReportVersion = "2.1"
+
 val grGitVersion = "4.1.1"
 
 /**
- * The version of the Kotlin Gradle plugin.
+ * The version of the Kotlin Gradle plugin and Kotlin binaries used by the build process.
  *
- * Please check that this value matches one defined in
- *  [io.spine.internal.dependency.Kotlin.version].
+ * This version may change from the [version of Kotlin][io.spine.internal.dependency.Kotlin.version]
+ * used by the project.
  */
 val kotlinVersion = "1.8.22"
 
@@ -101,7 +114,7 @@ val protobufPluginVersion = "0.9.4"
  * @see <a href="https://github.com/Kotlin/dokka/releases">
  *     Dokka Releases</a>
  */
-val dokkaVersion = "1.8.20"
+val dokkaVersion = "1.9.10"
 
 /**
  * The version of Detekt Gradle Plugin.
@@ -132,6 +145,7 @@ val shadowVersion = "7.1.2"
 configurations.all {
     resolutionStrategy {
         force(
+            "com.google.guava:guava:${guavaVersion}",
             "com.google.protobuf:protobuf-gradle-plugin:$protobufPluginVersion",
 
             // Force Kotlin lib versions avoiding using those bundled with Gradle.
@@ -157,9 +171,29 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
-    implementation("com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion") {
+
+    @Suppress(
+        "VulnerableLibrariesLocal", "RedundantSuppression" /*
+        `artifactregistry-auth-common` has transitive dependency on Gson and Apache `commons-codec`.
+
+        Gson from version `2.8.6` until `2.8.9` is vulnerable to Deserialization of Untrusted Data
+         (https://devhub.checkmarx.com/cve-details/CVE-2022-25647/).
+
+        Apache `commons-codec` before 1.13 is vulnerable to information exposure
+        (https://devhub.checkmarx.com/cve-details/Cxeb68d52e-5509/).
+
+        We use Gson `2.10.1`and we force it in `forceProductionDependencies()`.
+        We use `commons-code` with version `1.16.0`, forcing it in `forceProductionDependencies()`.
+
+        So, we should be safe with the current version `artifactregistry-auth-common` until
+        we migrate to a later version. */
+    )
+    implementation(
+        "com.google.cloud.artifactregistry:artifactregistry-auth-common:$googleAuthToolVersion"
+    ) {
         exclude(group = "com.google.guava")
     }
+
     implementation("com.google.guava:guava:$guavaVersion")
     api("com.github.jk1:gradle-license-report:$licenseReportVersion")
     implementation("org.ajoberstar.grgit:grgit-core:${grGitVersion}")
