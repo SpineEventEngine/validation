@@ -26,7 +26,6 @@
 
 import io.spine.internal.dependency.Dokka
 import io.spine.internal.dependency.ErrorProne
-import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Protobuf
@@ -149,12 +148,10 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
-                /* Use default version of Validation, not those coming with Spine because
+                /* Use the default version of Validation, not those coming with Spine because
                    it would use `validationVersion` extension property of the project. */
                 val validationVersion = Validation.version
                 force(
-                    Flogger.lib,
-                    Flogger.Runtime.systemBackend,
                     JUnit.runner,
 
                     Spine.base,
