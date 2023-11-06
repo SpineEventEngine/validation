@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,41 +23,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.validation;
+package io.spine.validate
 
-import "spine/options.proto";
+import com.google.protobuf.Descriptors.FieldDescriptor
+import com.google.protobuf.Message
+import io.spine.option.OptionsProto
 
-option (type_url_prefix) = "type.spine.io";
-option java_multiple_files = true;
-option java_outer_classname = "TestGoesOptionProto";
-option java_package = "io.spine.test.validate";
+/**
+ * This file provides workarounds for supporting validation features that
+ * are not yet fully migrated to ProtoData-based code generation.
+ */
+@Suppress("unused")
+private const val ABOUT = ""
 
-import "google/protobuf/timestamp.proto";
-
-// Messages for "goes" option tests.
-
-// A scheduled payment which `id` and `timestamp` fields are filled as soon as the payment is
-// processed.
-message Payment {
-
-    PaymentId id = 1 [(goes).with = "timestamp"];
-
-    string description = 2;
-
-    google.protobuf.Timestamp timestamp = 3 [(goes).with = "id"];
+internal fun Message.hasGoesOption(): Boolean {
+    val fieldDescriptors = descriptorForType.fields
+    return fieldDescriptors.any { it.hasGoesOption() }
 }
 
-message PaymentId {
-
-    string uuid = 1;
-}
-
-
-message WithFieldNotFound {
-
-    string id = 1;
-
-    bytes avatar = 2 [(goes).with = "user_id"];
+private fun FieldDescriptor.hasGoesOption(): Boolean {
+    val extension = options.getExtension(OptionsProto.goes)
+    return extension != null
 }

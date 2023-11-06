@@ -23,94 +23,71 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import com.google.protobuf.ByteString;
-import com.google.protobuf.util.Timestamps;
-import io.spine.test.validate.Payment;
-import io.spine.test.validate.PaymentData;
-import io.spine.test.validate.PaymentId;
-import io.spine.test.validate.PaymentWithExternalConstraint;
-import io.spine.test.validate.WithFieldNotFound;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.google.common.truth.Truth.assertThat
+import com.google.protobuf.ByteString
+import com.google.protobuf.util.Timestamps
+import io.spine.base.Identifier.newUuid
+import io.spine.test.validate.Payment
+import io.spine.test.validate.WithFieldNotFound
+import io.spine.test.validate.payment
+import io.spine.test.validate.paymentId
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(goes)` option and find out that ")
-final class GoesTest extends ValidationOfConstraintTest {
+internal class GoesTest : ValidationOfConstraintTest() {
 
-    @DisplayName("`(goes).with` fields are both optional")
-    @Test
-    void goesWithFieldsAreBothOptional() {
-        var msg = Payment.newBuilder()
+    @Nested
+    @DisplayName("`(goes).with` fields")
+    inner class GoesWithFields {
+
+        private val paymentId = paymentId { uuid = newUuid() }
+
+        @Test
+        fun `are both optional` () = assertValid {
+            Payment.newBuilder()
                 .setDescription("Scheduled payment")
-                .build();
-        assertValid(msg);
+                .build()
+        }
+
+        @Test
+        fun `not filled simultaneously` () {
+            assertNotValid(payment {
+                id = paymentId
+            })
+
+            assertNotValid(payment {
+                    timestamp = Timestamps.MAX_VALUE
+            })
+        }
+
+        @Test
+        fun `are filled simultaneously`() = assertValid {
+            payment {
+                id = paymentId
+                timestamp = Timestamps.MAX_VALUE
+            }
+        }
     }
 
-    @DisplayName("`(goes).with` fields are not filled simultaneously")
     @Test
-    void goesWithFieldsShouldBeFilledSimultaneously() {
-        var id = PaymentId.newBuilder()
-                .setUuid(newUuid())
-                .build();
-        var withId = Payment.newBuilder()
-                .setId(id)
-                .build();
-        assertNotValid(withId);
-
-        var withTimestamp = Payment.newBuilder()
-                .setTimestamp(Timestamps.MAX_VALUE)
-                .build();
-        assertNotValid(withTimestamp);
-    }
-
-    @DisplayName("`(goes).with` fields are filled simultaneously")
-    @Test
-    void goesWithFieldsAreFilledSimultaneously() {
-        var id = PaymentId.newBuilder()
-                .setUuid(newUuid())
-                .build();
-        var msg = Payment.newBuilder()
-                .setId(id)
-                .setTimestamp(Timestamps.MAX_VALUE)
-                .build();
-        assertValid(msg);
-    }
-
-    @DisplayName("`(goes).with` field is not found")
-    @Test
-    void findOutThatGoesWithFieldIsNotFound() {
-        var msg = WithFieldNotFound.newBuilder()
-                .setId(newUuid())
-                .setAvatar(ByteString.copyFrom(new byte[]{0, 1, 2}))
-                .build();
-        Exception exception = assertThrows(IllegalStateException.class, () -> validate(msg));
+    fun `The value of the 'with' field is not found`() {
+        val msg = WithFieldNotFound.newBuilder()
+            .setId(newUuid())
+            .setAvatar(ByteString.copyFrom(byteArrayOf(0, 1, 2)))
+            .build()
+        val exception = assertThrows<IllegalStateException> {
+            validate(msg)
+        }
         assertThat(exception)
-                .hasCauseThat()
-                .hasMessageThat()
-                .contains("user_id");
-    }
-
-    @DisplayName("`(goes).with` is set as external constraint")
-    @Test
-    void findOutThatGoesWithIsSetAsExternalConstraint() {
-        var id = PaymentId.newBuilder()
-                .setUuid(newUuid())
-                .build();
-        var data = PaymentData.newBuilder()
-                .setTimestamp(Timestamps.MAX_VALUE)
-                .build();
-        var msg = PaymentWithExternalConstraint.newBuilder()
-                .setId(id)
-                .setData(data)
-                .build();
-        assertNotValid(msg);
+            .hasCauseThat()
+            .hasMessageThat()
+            .contains("user_id")
     }
 }
