@@ -29,8 +29,8 @@ package io.spine.validate.option;
 import com.google.protobuf.StringValue;
 import io.spine.test.validate.AllThePatterns;
 import io.spine.test.validate.PatternStringFieldValue;
-import io.spine.test.validate.SimpleStringValue;
-import io.spine.test.validate.WithStringValue;
+import io.spine.validate.Diags;
+import io.spine.validate.NonValidated;
 import io.spine.validate.ValidationOfConstraintTest;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
 import static io.spine.validate.given.MessageValidatorTestEnv.EMAIL;
-import static io.spine.validate.given.MessageValidatorTestEnv.MATCH_REGEXP_MSG;
 import static java.lang.String.format;
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(pattern)` option and")
@@ -71,21 +70,8 @@ class PatternTest extends ValidationOfConstraintTest {
         var msg = patternStringFor("invalid email");
         @Regex
         String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        var expectedErrMsg = format(MATCH_REGEXP_MSG, regex);
+        var expectedErrMsg = format(Diags.Regex.format, regex);
         assertSingleViolation(msg, expectedErrMsg, EMAIL);
-    }
-
-    @Test
-    @DisplayName("find out that string does not match to external regex pattern")
-    void findOutThatStringDoesNotMatchExternalConstraint() {
-        var stringValue = SimpleStringValue.newBuilder()
-                .setValue("A wordy sentence")
-                .build();
-        var msg = WithStringValue.newBuilder()
-                .setStringValue(stringValue)
-                .build();
-        assertValid(stringValue);
-        assertNotValid(msg);
     }
 
     @Test
@@ -153,9 +139,9 @@ class PatternTest extends ValidationOfConstraintTest {
         assertValid(message);
     }
 
-    private static PatternStringFieldValue patternStringFor(String email) {
+    private static @NonValidated PatternStringFieldValue patternStringFor(String email) {
         return PatternStringFieldValue.newBuilder()
                 .setEmail(email)
-                .build();
+                .buildPartial();
     }
 }

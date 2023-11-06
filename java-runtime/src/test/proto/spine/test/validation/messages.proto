@@ -162,7 +162,7 @@ message EnclosedMessageWithRequiredString {
 
 // Messages for testing validation of repeated fields.
 
-message MessageWithRepeatedUnchekedStringField {
+message MessageWithRepeatedUncheckedStringField {
     repeated string unchecked = 1;
 }
 

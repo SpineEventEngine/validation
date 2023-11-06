@@ -36,6 +36,7 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.string.CharSequences;
+import io.spine.validate.Diags;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
@@ -90,11 +91,10 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .addEscape('\\', "\\\\")
                 .build();
 
-        @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
         private static String notMatching(String regex) {
             var withoutLineSeparators = escapeLineSeparators(regex);
             return format(
-                    "The string must match the regular expression `%s`.",
+                    Diags.Regex.format,
                     slashEscaper.escape(withoutLineSeparators));
         }
 

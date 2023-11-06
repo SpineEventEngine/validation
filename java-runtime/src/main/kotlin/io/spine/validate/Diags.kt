@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,23 +23,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.validation;
+package io.spine.validate
 
-import "spine/options.proto";
+/**
+ * Diagnostic messages used by the validation library.
+ */
+@Suppress("ConstPropertyName") // https://bit.ly/kotlin-prop-names
+public object Diags {
 
-option (type_url_prefix) = "type.spine.io";
-option java_multiple_files = true;
-option java_outer_classname = "TestPatternOptionProto";
-option java_package = "io.spine.test.validate";
-
-// Messages for "pattern" option tests.
-
-message PatternStringFieldValue {
-    string email = 1 [(pattern).regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"];
-}
-
-message SimpleStringValue {
-    string value = 1 [(pattern).regex = "^[A-Za-z ]+$"];
+    public object Regex {
+        public const val prefix: String = "The string must match the regular expression"
+        public const val format: String = "$prefix `%s`."
+    }
 }
