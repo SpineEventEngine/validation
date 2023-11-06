@@ -35,10 +35,12 @@ import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;
+import io.spine.string.CharSequences;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.server.event.Just.just;
+import static io.spine.string.CharSequences.containsLineSeparators;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static java.lang.String.format;
 
@@ -90,9 +92,18 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
         @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
         private static String notMatching(String regex) {
+            var withoutLineSeparators = escapeLineSeparators(regex);
             return format(
                     "The string must match the regular expression `%s`.",
-                    slashEscaper.escape(regex));
+                    slashEscaper.escape(withoutLineSeparators));
+        }
+
+        private static String escapeLineSeparators(String regex) {
+            var toEscape = regex;
+            if(containsLineSeparators(regex)) {
+                toEscape = CharSequences.escapeLineSeparators(regex);
+            }
+            return toEscape;
         }
     }
 }
