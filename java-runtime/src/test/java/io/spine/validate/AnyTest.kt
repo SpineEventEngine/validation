@@ -23,69 +23,73 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
-
-import io.spine.protobuf.AnyPacker;
-import io.spine.test.validate.RequiredMsgFieldValue;
-import io.spine.test.validate.anyfields.AnyContainer;
-import io.spine.test.validate.anyfields.UncheckedAnyContainer;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static io.spine.validate.given.MessageValidatorTestEnv.newStringValue;
+import io.spine.protobuf.AnyPacker
+import io.spine.test.validate.RequiredMsgFieldValue
+import io.spine.test.validate.anyfields.AnyContainer
+import io.spine.test.validate.anyfields.UncheckedAnyContainer
+import io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "when validating `google.protobuf.Any`")
-class AnyTest extends ValidationOfConstraintTest {
+internal class AnyTest : ValidationOfConstraintTest() {
+
+    /**
+     * Since the declaration of `RequiredMsgFieldValue` contains validation constraint
+     * for the `value` field, the default instance of this type in invalid.
+     */
+    private val invalidMessage: @NonValidated RequiredMsgFieldValue =
+        RequiredMsgFieldValue.getDefaultInstance()
 
     @Test
-    @DisplayName("consider `Any` valid if content is valid")
-    void considerAnyValidIfContentIsValid() {
-        var value = RequiredMsgFieldValue.newBuilder()
-                .setValue(newStringValue())
-                .build();
-        var content = AnyPacker.pack(value);
-        var container = AnyContainer.newBuilder()
-                .setAny(content)
-                .build();
-        assertValid(container);
+    fun `consider 'Any' valid if content is valid`() {
+        val value = RequiredMsgFieldValue.newBuilder()
+            .setValue(newStringValue())
+            .build()
+        val content = AnyPacker.pack(value)
+        val container = AnyContainer.newBuilder()
+            .setAny(content)
+            .build()
+        assertValid(container)
     }
 
     @Test
-    @DisplayName("consider `Any` not valid if content is not valid")
-    void considerAnyNotValidIfContentIsNotValid() {
-        var value = RequiredMsgFieldValue.getDefaultInstance();
-        var content = AnyPacker.pack(value);
-        var container = AnyContainer.newBuilder()
-                .setAny(content)
-                .build();
-        assertNotValid(container);
+    fun `consider 'Any' not valid if content is not valid`() {
+        val content = AnyPacker.pack(invalidMessage)
+        val container = AnyContainer.newBuilder()
+            .setAny(content)
+            .build()
+        assertNotValid(container)
     }
 
     @Test
-    @DisplayName("consider `Any` valid if validation is not required")
-    void considerAnyValidIfValidationIsNotRequired() {
-        var value = RequiredMsgFieldValue.getDefaultInstance();
-        var content = AnyPacker.pack(value);
-        var container = UncheckedAnyContainer.newBuilder()
-                .setAny(content)
-                .build();
-        assertValid(container);
+    fun `consider 'Any' valid if validation is not required`() {
+        val content = AnyPacker.pack(invalidMessage)
+
+        val builder = UncheckedAnyContainer.newBuilder().setAny(content)
+
+        assertDoesNotThrow { builder.build() }
+
+        assertValid(builder.build())
     }
 
     @Test
-    @DisplayName("validate recursive messages")
-    void validateRecursiveMessages() {
-        var value = RequiredMsgFieldValue.getDefaultInstance();
-        var internalAny = AnyPacker.pack(value);
-        var internal = AnyContainer.newBuilder()
-                .setAny(internalAny)
-                .build();
-        var externalAny = AnyPacker.pack(internal);
-        var external = AnyContainer.newBuilder()
-                .setAny(externalAny)
-                .build();
-        assertNotValid(external);
+    fun `validate recursive messages`() {
+        val internalAny = AnyPacker.pack(invalidMessage)
+        val internal: @NonValidated AnyContainer = AnyContainer.newBuilder()
+            .setAny(internalAny)
+            .buildPartial()
+        val external = AnyPacker.pack(internal)
+        val builder = AnyContainer.newBuilder()
+            .setAny(external)
+
+        assertNotValid(builder.buildPartial())
+
+        assertThrows<ValidationException> { builder.build() }
     }
 }
