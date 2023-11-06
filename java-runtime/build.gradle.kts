@@ -42,9 +42,6 @@ dependencies {
     testImplementation(Spine.testlib)
 }
 
-/**
- * Turn off codegen of Validation 1.0.
- */
 modelCompiler {
     java {
         codegen {
@@ -52,3 +49,16 @@ modelCompiler {
         }
     }
 }
+
+// Uncomment the below block when remote debugging of code generation is needed.
+//
+//tasks.findByName("launchTestProtoData")?.apply {this as JavaExec
+//    debugOptions {
+//        // Set this option to `true` to enable remote debugging.
+//        enabled.set(true)
+//        port.set(5566)
+//        server.set(true)
+//        suspend.set(true)
+//    }
+//    System.err.println("Debug session for `:java-runtime test` configured.")
+//}
