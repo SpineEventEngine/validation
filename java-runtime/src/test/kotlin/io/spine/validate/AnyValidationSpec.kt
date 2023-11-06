@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "when validating `google.protobuf.Any`")
-internal class AnyTest : ValidationOfConstraintTest() {
+internal class AnyValidationSpec : ValidationOfConstraintTest() {
 
     /**
      * Since the declaration of `RequiredMsgFieldValue` contains validation constraint

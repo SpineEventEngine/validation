@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "analyze `(distinct)` option and")
-internal class DistinctTest : ValidationOfConstraintTest() {
+internal class DistinctSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `find out that empty message does not violate the contract`() {

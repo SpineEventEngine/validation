@@ -36,12 +36,11 @@ import io.spine.test.validate.PatternStringFieldValue
 import io.spine.validate.given.MessageValidatorTestEnv
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "validate enclosed messages and")
-internal class EnclosedMessageValidationTest : ValidationOfConstraintTest() {
+internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `find out that enclosed message field is valid`() {
