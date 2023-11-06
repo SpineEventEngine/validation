@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,119 +23,133 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
+import com.google.common.truth.Truth.assertThat
+import com.google.protobuf.Message
+import io.spine.validate.Validate.violationsOf
+import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
-import com.google.protobuf.Message;
+/**
+ * The abstract base for test suites of validation constraints.
+ */
+abstract class ValidationOfConstraintTest {
 
-import java.util.List;
+    private var violations: List<ConstraintViolation>? = null
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.validate.Validate.violationsOf;
-import static io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs;
-import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
-public abstract class ValidationOfConstraintTest {
-
-    public static final String VALIDATION_SHOULD = "Validation should ";
-
-    private List<ConstraintViolation> violations;
-
-    protected void validate(Message msg) {
-        violations = violationsOf(msg);
+    protected fun validate(msg: Message) {
+        violations = violationsOf(msg)
     }
 
-    protected ConstraintViolation firstViolation() {
-        return violations.get(0);
+    protected fun firstViolation(): ConstraintViolation {
+        return violations!![0]
     }
 
-    protected ConstraintViolation singleViolation() {
-        assertThat(violations).hasSize(1);
-        return violations.get(0);
+    protected fun singleViolation(): ConstraintViolation {
+        assertThat(violations).hasSize(1)
+        return violations!![0]
     }
 
-    protected void assertValid(Message msg) {
-        validate(msg);
-        assertIsValid(true);
-    }
-
-    protected void assertNotValid(Message msg) {
-        validate(msg);
-        assertIsValid(false);
-    }
-
-    protected void assertNotValid(Message msg, boolean checkFieldPath) {
-        validate(msg);
-        assertIsValid(false, checkFieldPath);
-    }
-
-    protected void assertIsValid(boolean isValid) {
-        assertIsValid(isValid, true);
-    }
-
-    protected void assertIsValid(boolean isValid, boolean checkFieldPath) {
-        if (isValid) {
-            assertThat(violations).isEmpty();
-        } else {
-            assertViolations(violations, checkFieldPath);
+    protected fun assertValid(setup: () -> Message) {
+        assertDoesNotThrow {
+            setup()
         }
     }
 
-    private static void assertViolations(List<ConstraintViolation> violations,
-                                         boolean checkFieldPath) {
-        assertThat(violations)
-                .isNotEmpty();
-        for (var violation : violations) {
-            assertHasCorrectFormat(violation);
-            if (checkFieldPath) {
-                assertHasFieldPath(violation);
+    protected fun assertNotValid(setup: () -> Message) {
+        assertThrows<ValidationException> {
+            setup()
+        }
+    }
+
+    protected fun assertValid(msg: Message) {
+        validate(msg)
+        assertIsValid(true)
+    }
+
+    protected fun assertNotValid(msg: Message) {
+        validate(msg)
+        assertIsValid(false)
+    }
+
+    protected fun assertNotValid(msg: Message, checkFieldPath: Boolean) {
+        validate(msg)
+        assertIsValid(false, checkFieldPath)
+    }
+
+    @JvmOverloads
+    protected fun assertIsValid(isValid: Boolean, checkFieldPath: Boolean = true) {
+        if (isValid) {
+            assertThat(violations).isEmpty()
+        } else {
+            assertViolations(violations, checkFieldPath)
+        }
+    }
+
+    protected fun assertSingleViolation(
+        message: Message,
+        expectedErrMsg: String,
+        invalidFieldName: String
+    ) {
+        assertNotValid(message)
+        assertThat(violations).hasSize(1)
+        assertSingleViolation(expectedErrMsg, invalidFieldName)
+    }
+
+    /** Checks that a message is not valid and has a single violation.  */
+    protected fun assertSingleViolation(expectedErrMsg: String, invalidFieldName: String) {
+        val violation = firstViolation()
+        val actualErrorMessage = String.format(
+            violation.msgFormat, *violation.paramList.toTypedArray()
+        )
+        assertThat(actualErrorMessage).isEqualTo(expectedErrMsg)
+        assertFieldPathIs(violation, invalidFieldName)
+        assertThat(violation.violationList).isEmpty()
+    }
+
+    protected fun assertSingleViolation(message: Message, invalidFieldName: String) {
+        assertNotValid(message)
+        assertThat(violations).hasSize(1)
+        assertFieldPathIs(firstViolation(), invalidFieldName)
+    }
+
+    companion object {
+
+        const val VALIDATION_SHOULD: String = "Validation should "
+
+        private fun assertViolations(
+            violations: List<ConstraintViolation?>?,
+            checkFieldPath: Boolean
+        ) {
+            assertThat(violations)
+                .isNotEmpty()
+            for (violation in violations!!) {
+                assertHasCorrectFormat(violation)
+                if (checkFieldPath) {
+                    assertHasFieldPath(violation)
+                }
             }
         }
-    }
 
-    private static void assertHasCorrectFormat(ConstraintViolation violation) {
-        var format = violation.getMsgFormat();
-        assertFalse(format.isEmpty());
-        var noParams = violation.getParamList().isEmpty();
-        if (noParams) {
-            assertThat(format)
-                    .doesNotContain("%s");
-        } else {
-            assertThat(format)
-                    .contains("%s");
+        private fun assertHasCorrectFormat(violation: ConstraintViolation?) {
+            val format = violation!!.msgFormat
+            Assertions.assertFalse(format.isEmpty())
+            val noParams = violation.paramList.isEmpty()
+            if (noParams) {
+                assertThat(format)
+                    .doesNotContain("%s")
+            } else {
+                assertThat(format)
+                    .contains("%s")
+            }
         }
-    }
 
-    private static void assertHasFieldPath(ConstraintViolation violation) {
-        assertThat(violation.getFieldPath().getFieldNameList())
-                .isNotEmpty();
-    }
-
-    protected void assertSingleViolation(Message message,
-                                         String expectedErrMsg,
-                                         String invalidFieldName) {
-        assertNotValid(message);
-        assertThat(violations)
-                .hasSize(1);
-        assertSingleViolation(expectedErrMsg, invalidFieldName);
-    }
-
-    /** Checks that a message is not valid and has a single violation. */
-    protected void assertSingleViolation(String expectedErrMsg, String invalidFieldName) {
-        var violation = firstViolation();
-        var actualErrorMessage = format(violation.getMsgFormat(), violation.getParamList()
-                                                                           .toArray());
-        assertThat(actualErrorMessage)
-                .isEqualTo(expectedErrMsg);
-        assertFieldPathIs(violation, invalidFieldName);
-        assertThat(violation.getViolationList()).isEmpty();
-    }
-
-    protected void assertSingleViolation(Message message, String invalidFieldName) {
-        assertNotValid(message);
-        assertThat(violations)
-             .hasSize(1);
-        assertFieldPathIs(firstViolation(), invalidFieldName);
+        private fun assertHasFieldPath(violation: ConstraintViolation?) {
+            assertThat(violation!!.fieldPath.fieldNameList)
+                .isNotEmpty()
+        }
     }
 }

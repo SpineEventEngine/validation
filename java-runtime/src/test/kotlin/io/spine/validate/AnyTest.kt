@@ -29,7 +29,7 @@ import io.spine.protobuf.AnyPacker
 import io.spine.test.validate.RequiredMsgFieldValue
 import io.spine.test.validate.anyfields.AnyContainer
 import io.spine.test.validate.anyfields.UncheckedAnyContainer
-import io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.DisplayName

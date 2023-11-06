@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,171 +23,117 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
+import io.spine.test.validate.DistinctValues
+import io.spine.test.validate.DistinctValues.Planet.EARTH
+import io.spine.test.validate.DistinctValues.Planet.JUPITER
+import io.spine.test.validate.DistinctValues.Planet.MARS
+import io.spine.test.validate.distinctValues
+import io.spine.validate.ValidationException
+import io.spine.validate.ValidationOfConstraintTest
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
-import io.spine.test.validate.DistinctValues;
-import io.spine.test.validate.DistinctValuesWithExternalConstraint;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-
-@DisplayName(VALIDATION_SHOULD + "analyze `(distinct)` option and")
-final class DistinctTest extends ValidationOfConstraintTest {
+@DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "analyze `(distinct)` option and")
+internal class DistinctTest : ValidationOfConstraintTest() {
 
     @Test
-    @DisplayName("find out that empty message does not violate the contract")
-    void emptyMessageNotViolatesContract() {
-        assertValid(DistinctValues.getDefaultInstance());
+    fun `find out that empty message does not violate the contract`() {
+        assertValid(DistinctValues.getDefaultInstance())
     }
 
     @Nested
     @DisplayName("find out that no duplicates do not violate contract")
-    final class NotViolates {
+    internal inner class NotViolates {
 
         @Test
-        void enums() {
-            var msg = DistinctValues.newBuilder()
-                    .addEnums(DistinctValues.Planet.EARTH)
-                    .addEnums(DistinctValues.Planet.MARS)
-                    .addEnums(DistinctValues.Planet.JUPITER)
-                    .build();
-            assertValid(msg);
+        fun enums() = assertValid {
+            distinctValues {
+                enums.add(EARTH)
+                enums.add(MARS)
+                enums.add(JUPITER)
+            }
         }
 
         @Test
-        void ints() {
-            var msg = DistinctValues.newBuilder()
-                    .addInts(1)
-                    .addInts(2)
-                    .addInts(3)
-                    .build();
-            assertValid(msg);
+        fun ints() = assertValid {
+            distinctValues {
+                ints.add(1)
+                ints.add(2)
+                ints.add(3)
+            }
         }
 
         @Test
-        void strings() {
-            var msg = DistinctValues.newBuilder()
-                    .addStrings("First")
-                    .addStrings("Second")
-                    .addStrings("Third")
-                    .build();
-            assertValid(msg);
+        fun strings() = assertValid {
+            distinctValues {
+                strings.add("First")
+                strings.add("Second")
+                strings.add("Third")
+            }
         }
 
         @Test
-        void messages() {
-            var msg = DistinctValues.newBuilder()
-                    .addMessages(customMessageOf(1))
-                    .addMessages(customMessageOf(2))
-                    .addMessages(customMessageOf(3))
-                    .build();
-            assertValid(msg);
+        fun messages() = assertValid {
+            distinctValues {
+                messages.add(customMessageOf(1))
+                messages.add(customMessageOf(2))
+                messages.add(customMessageOf(3))
+            }
         }
     }
 
     @Nested
     @DisplayName("find out that duplicate value violates contract")
-    final class DuplicateViolates {
+    internal inner class DuplicateViolates {
 
         @Test
-        void enums() {
-            var msg = DistinctValues.newBuilder()
-                    .addEnums(DistinctValues.Planet.EARTH)
-                    .addEnums(DistinctValues.Planet.EARTH)
-                    .addEnums(DistinctValues.Planet.JUPITER)
-                    .build();
-            assertNotValid(msg);
+        fun enums() = assertNotValid {
+            distinctValues {
+                enums.add(EARTH)
+                enums.add(JUPITER)
+                enums.add(EARTH)
+            }
         }
 
         @Test
-        void ints() {
-            var msg = DistinctValues.newBuilder()
-                    .addInts(1)
-                    .addInts(2)
-                    .addInts(1)
-                    .build();
-            assertNotValid(msg);
+        fun ints() = assertNotValid {
+            distinctValues {
+                ints.add(1)
+                ints.add(2)
+                ints.add(1)
+            }
         }
 
         @Test
-        void strings() {
-            var msg = DistinctValues.newBuilder()
-                    .addStrings("First")
-                    .addStrings("Second")
-                    .addStrings("First")
-                    .build();
-            assertNotValid(msg);
+        fun strings() {
+            assertThrows<ValidationException> {
+                distinctValues {
+                    strings.add("First")
+                    strings.add("Second")
+                    strings.add("First")
+                }
+            }
         }
 
         @Test
-        void messages() {
-            var msg = DistinctValues.newBuilder()
-                    .addMessages(customMessageOf(1))
-                    .addMessages(customMessageOf(2))
-                    .addMessages(customMessageOf(1))
-                    .build();
-            assertNotValid(msg);
+        fun messages() = assertNotValid {
+            distinctValues {
+                messages.add(customMessageOf(1))
+                messages.add(customMessageOf(2))
+                messages.add(customMessageOf(1))
+            }
         }
     }
 
-    @Nested
-    @DisplayName("find out that duplicate value does not violate external constraint contract")
-    final class DuplicateDoesNotViolatesExternalConstraint {
-
-        @Test
-        void enums() {
-            var msg = DistinctValues.newBuilder()
-                    .addEnums(DistinctValues.Planet.EARTH)
-                    .addEnums(DistinctValues.Planet.EARTH)
-                    .addEnums(DistinctValues.Planet.JUPITER)
-                    .build();
-            assertValid(withExternalConstraint(msg));
-        }
-
-        @Test
-        void ints() {
-            var msg = DistinctValues.newBuilder()
-                    .addInts(1)
-                    .addInts(2)
-                    .addInts(1)
-                    .build();
-            assertValid(withExternalConstraint(msg));
-        }
-
-        @Test
-        void strings() {
-            var msg = DistinctValues.newBuilder()
-                    .addStrings("First")
-                    .addStrings("Second")
-                    .addStrings("First")
-                    .build();
-            assertValid(withExternalConstraint(msg));
-        }
-
-        @Test
-        void messages() {
-            var msg = DistinctValues.newBuilder()
-                    .addMessages(customMessageOf(1))
-                    .addMessages(customMessageOf(2))
-                    .addMessages(customMessageOf(1))
-                    .build();
-            assertValid(withExternalConstraint(msg));
-        }
-
-        private DistinctValuesWithExternalConstraint withExternalConstraint(DistinctValues value) {
-            return DistinctValuesWithExternalConstraint.newBuilder()
-                    .setDistinctValues(value)
-                    .build();
-        }
-    }
-
-    private static DistinctValues.CustomMessage customMessageOf(long value) {
-        return DistinctValues.CustomMessage.newBuilder()
+    companion object {
+        private fun customMessageOf(value: Long): DistinctValues.CustomMessage {
+            return DistinctValues.CustomMessage.newBuilder()
                 .setValue(value)
-                .build();
+                .build()
+        }
     }
 }
