@@ -44,9 +44,7 @@ abstract class ValidationOfConstraintTest {
         violations = violationsOf(msg)
     }
 
-    protected fun firstViolation(): ConstraintViolation {
-        return violations!![0]
-    }
+    protected fun firstViolation(): ConstraintViolation = violations!![0]
 
     protected fun singleViolation(): ConstraintViolation {
         assertThat(violations).hasSize(1)
@@ -55,7 +53,8 @@ abstract class ValidationOfConstraintTest {
 
     protected fun assertValid(setup: () -> Message) {
         assertDoesNotThrow {
-            setup()
+            val msg = setup()
+            assertValid(msg)
         }
     }
 

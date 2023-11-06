@@ -23,317 +23,218 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
+import com.google.common.collect.ImmutableList
+import io.spine.test.validate.Hours
+import io.spine.test.validate.NumRanges
+import io.spine.test.validate.RangesHolder
+import io.spine.test.validate.hours
+import io.spine.test.validate.rangesHolder
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import java.util.stream.DoubleStream
+import java.util.stream.IntStream
+import java.util.stream.LongStream
+import java.util.stream.Stream
+import kotlin.streams.toList
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-import com.google.common.collect.ImmutableList;
-import io.spine.test.validate.Hours;
-import io.spine.test.validate.NumRanges;
-import io.spine.test.validate.RangesHolder;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-
-@SuppressWarnings("unused") // methods are invoked via `@MethodSource`.
+@Suppress("unused") // methods are invoked via `@MethodSource`.
 @DisplayName(VALIDATION_SHOULD + "analyze `(range)` option and find out that")
-final class RangeTest extends ValidationOfConstraintTest {
+internal class RangeSpec : ValidationOfConstraintTest() {
 
     @Nested
-    @DisplayName("integers")
-    final class Integers {
+    internal inner class Integers {
 
-        @DisplayName("fit into the defined range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validHours")
-        void fitIntoRange(int hour) {
-            var msg = hourRange(hour);
-            assertValid(msg);
+        @MethodSource("io.spine.validate.option.RangeSpec#validHours")
+        fun `fit into the defined range`(hour: Int) {
+            val msg = hourRange(hour)
+            assertValid(msg)
         }
 
-        @DisplayName("fit into the defined external constraint range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validHalfDayHours")
-        void fitIntoExternalConstraintRange(int hour) {
-            var msg = hourRange(hour);
-            assertValid(holderOf(msg));
+        @MethodSource("io.spine.validate.option.RangeSpec#invalidHours")
+        fun `do not fit into the defined range`(hour: Int) = assertNotValid {
+            hourRange(hour)
         }
 
-        @DisplayName("do not fit into the defined range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidHours")
-        void doNotFitIntoRange(int hour) {
-            var msg = hourRange(hour);
-            assertNotValid(msg);
-        }
-
-        @DisplayName("do not fit into the defined external constraint range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidHalfDayHours")
-        void doNotFitIntoExternalConstraintRange(int hour) {
-            var msg = hourRange(hour);
-            assertNotValid(holderOf(msg));
-        }
-
-        private NumRanges hourRange(int hour) {
-            return validRange().setHour(hour)
-                               .build();
-        }
+        private fun hourRange(hour: Int): NumRanges = validRange().setHour(hour).build()
     }
 
     @Nested
-    @DisplayName("longs")
-    final class Longs {
+    internal inner class Longs {
 
-        @DisplayName("fit into the defined range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validMinutes")
-        void fitIntoRange(long minute) {
-            var msg = minuteRange(minute);
-            assertValid(msg);
+        @MethodSource("io.spine.validate.option.RangeSpec#validMinutes")
+        fun `fit into the defined range`(minute: Long) {
+            val msg = minuteRange(minute)
+            assertValid(msg)
         }
 
-        @DisplayName("fit into the defined external constraint range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validHalfHourMinutes")
-        void fitIntoExternalConstraintRange(long minute) {
-            var msg = minuteRange(minute);
-            assertValid(holderOf(msg));
+        @MethodSource("io.spine.validate.option.RangeSpec#invalidMinutes")
+        fun `do not fit into the defined range`(minute: Long) = assertNotValid {
+            minuteRange(minute)
         }
 
-        @DisplayName("do not fit into the defined range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidMinutes")
-        void doNotFitIntoRange(long minute) {
-            var msg = minuteRange(minute);
-            assertNotValid(msg);
-        }
-
-        @DisplayName("do not fit into the defined external constraint range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidHalfHourMinutes")
-        void doNotFitIntoExternalConstraintRange(long minute) {
-            var msg = minuteRange(minute);
-            assertNotValid(holderOf(msg));
-        }
-
-        private NumRanges minuteRange(long minute) {
-            return validRange().setMinute(minute)
-                               .build();
-        }
+        private fun minuteRange(minute: Long): NumRanges =
+            validRange().setMinute(minute).build()
     }
 
     @Nested
-    @DisplayName("floats")
-    final class Floats {
+    internal inner class Floats {
 
-        @DisplayName("fit into the defined range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validDegrees")
-        void fitIntoRange(float degree) {
-            var msg = floatRange(degree);
-            assertValid(msg);
+        @MethodSource("io.spine.validate.option.RangeSpec#validDegrees")
+        fun `fit into the defined range`(degree: Float) {
+            val msg = floatRange(degree)
+            assertValid(msg)
         }
 
-        @DisplayName("fit into the defined external constraint range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validHalfRangeDegrees")
-        void fitIntoExternalConstraintRange(float degree) {
-            var msg = floatRange(degree);
-            assertValid(holderOf(msg));
+        @MethodSource("io.spine.validate.option.RangeSpec#invalidDegrees")
+        fun `do not fit into the defined range`(degree: Float) = assertNotValid {
+            floatRange(degree)
         }
 
-        @DisplayName("do not fit into the defined range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidDegrees")
-        void doNotFitIntoRange(float degree) {
-            var msg = floatRange(degree);
-            assertNotValid(msg);
-        }
-
-        @DisplayName("do not fit into the defined external constraint range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidHalfRangeDegrees")
-        void doNotFitIntoExternalConstraintRange(float degree) {
-            var msg = floatRange(degree);
-            assertNotValid(holderOf(msg));
-        }
-
-        private NumRanges floatRange(float degree) {
-            return validRange().setDegree(degree)
-                               .build();
-        }
+        private fun floatRange(degree: Float): NumRanges =
+            validRange().setDegree(degree).build()
     }
 
     @Nested
-    @DisplayName("doubles")
-    final class Doubles {
+    internal inner class Doubles {
 
-        @DisplayName("fit into the defined range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validAngles")
-        void fitIntoRange(double angle) {
-            var msg = doubleRange(angle);
-            assertValid(msg);
+        @MethodSource("io.spine.validate.option.RangeSpec#validAngles")
+        fun `fit into the defined range`(angle: Double) {
+            val msg = doubleRange(angle)
+            assertValid(msg)
         }
 
-        @DisplayName("fit into the defined external constraint range")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#validHalfRangeAngles")
-        void fitIntoExternalConstraintRange(double angle) {
-            var msg = doubleRange(angle);
-            assertValid(holderOf(msg));
+        @MethodSource("io.spine.validate.option.RangeSpec#invalidAngles")
+        fun `do not fit into the defined range`(angle: Double) = assertNotValid {
+            doubleRange(angle)
         }
 
-        @DisplayName("do not fit into the defined range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidAngles")
-        void doNotFitIntoRange(double angle) {
-            var msg = doubleRange(angle);
-            assertNotValid(msg);
-        }
-
-        @DisplayName("do not fit into the defined external constraint range")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RangeTest#invalidHalfRangeAngles")
-        void doNotFitIntoExternalConstraintRange(double angle) {
-            var msg = doubleRange(angle);
-            assertNotValid(holderOf(msg));
-        }
-
-        private NumRanges doubleRange(double angle) {
-            return validRange().setAngle(angle)
-                               .build();
-        }
+        private fun doubleRange(angle: Double): NumRanges =
+            validRange().setAngle(angle).build()
     }
 
     @Nested
     @DisplayName("repeated option is")
-    final class RepeatedRange {
+    internal inner class RepeatedRange {
 
-        @DisplayName("valid")
         @Test
-        void valid() {
-            var hours = Hours.newBuilder()
-                    .addAllHour(validHours().collect(ImmutableList.toImmutableList()))
-                    .build();
-            assertValid(hours);
+        fun valid() {
+            val hours = Hours.newBuilder()
+                .addAllHour(validHours().collect(ImmutableList.toImmutableList()))
+                .build()
+            assertValid(hours)
         }
 
-        @DisplayName("invalid")
         @Test
-        void invalid() {
-            var hours = Hours.newBuilder()
-                    .addAllHour(invalidHours().collect(ImmutableList.toImmutableList()))
-                    .build();
-            assertNotValid(hours);
+        fun invalid() = assertNotValid {
+            Hours.newBuilder()
+                .addAllHour(invalidHours().toList())
+                .build()
         }
     }
 
-    private static RangesHolder holderOf(NumRanges ranges) {
-        return RangesHolder.newBuilder()
-                .setRanges(ranges)
-                .build();
-    }
+    companion object {
 
-    private static NumRanges.Builder validRange() {
-        return NumRanges.newBuilder()
-                .setHour(1)
-                .setAngle(1)
-                .setDegree(1)
-                .setMinute(1);
-    }
+        @JvmStatic
+        fun holderOf(ranges: NumRanges): RangesHolder = rangesHolder {
+            this.ranges = ranges
+        }
 
-    private static Stream<Integer> invalidHalfDayHours() {
-        return IntStream.of(-1, 13, 23, 24, Integer.MAX_VALUE, Integer.MIN_VALUE)
-                        .boxed();
-    }
+        @JvmStatic
+        fun validRange(): NumRanges.Builder = NumRanges.newBuilder()
+            .setHour(1)
+            .setAngle(1.0)
+            .setDegree(1f)
+            .setMinute(1)
 
-    private static Stream<Integer> invalidHours() {
-        return IntStream.of(-1, 24, Integer.MAX_VALUE, Integer.MIN_VALUE)
-                        .boxed();
-    }
+        @JvmStatic
+        fun invalidHalfDayHours(): Stream<Int> =
+            IntStream.of(-1, 13, 23, 24, Int.MAX_VALUE, Int.MIN_VALUE).boxed()
 
-    private static Stream<Integer> validHours() {
-        return IntStream.range(0, 23)
-                        .boxed();
-    }
+        @JvmStatic
+        fun invalidHours(): Stream<Int> =
+            IntStream.of(-1, 24, Int.MAX_VALUE, Int.MIN_VALUE).boxed()
 
-    private static Stream<Integer> validHalfDayHours() {
-        return IntStream.range(0, 12)
-                        .boxed();
-    }
+        @JvmStatic
+        fun validHours(): Stream<Int> = IntStream.range(0, 23).boxed()
 
-    private static Stream<Long> invalidHalfHourMinutes() {
-        return LongStream.of(-1, 31, 59, 60, Long.MAX_VALUE, Long.MIN_VALUE)
-                         .boxed();
-    }
+        @JvmStatic
+        fun validHalfDayHours(): Stream<Int> = IntStream.range(0, 12).boxed()
 
-    private static Stream<Long> invalidMinutes() {
-        return LongStream.of(-1, 60, 61, Long.MAX_VALUE, Long.MIN_VALUE)
-                         .boxed();
-    }
+        @JvmStatic
+        fun invalidHalfHourMinutes(): Stream<Long> =
+            LongStream.of(-1, 31, 59, 60, Long.MAX_VALUE, Long.MIN_VALUE).boxed()
 
-    private static Stream<Long> validMinutes() {
-        return LongStream.range(0, 59)
-                         .boxed();
-    }
+        @JvmStatic
+        fun invalidMinutes(): Stream<Long> =
+            LongStream.of(-1, 60, 61, Long.MAX_VALUE, Long.MIN_VALUE).boxed()
 
-    private static Stream<Long> validHalfHourMinutes() {
-        return LongStream.range(0, 29)
-                         .boxed();
-    }
+        @JvmStatic
+        fun validMinutes(): Stream<Long> = LongStream.range(0, 59).boxed()
 
-    private static Stream<Float> invalidHalfRangeDegrees() {
-        return DoubleStream.of(-1.0, 180, 180.1, Float.MAX_VALUE, -Float.MAX_VALUE)
-                           .boxed()
-                           .map(Double::floatValue);
-    }
+        @JvmStatic
+        fun validHalfHourMinutes(): Stream<Long> = LongStream.range(0, 29).boxed()
 
-    private static Stream<Float> invalidDegrees() {
-        return DoubleStream.of(-1.0, 360, 360.1, Float.MAX_VALUE, -Float.MAX_VALUE)
-                           .boxed()
-                           .map(Double::floatValue);
-    }
+        @JvmStatic
+        fun invalidHalfRangeDegrees(): Stream<Float> = DoubleStream.of(
+            -1.0,
+            180.0,
+            180.1,
+            Float.MAX_VALUE.toDouble(),
+            (-Float.MAX_VALUE).toDouble()
+        )
+            .boxed()
+            .map { obj: Double -> obj.toFloat() }
 
-    private static Stream<Float> validDegrees() {
-        return DoubleStream.of(0, 0.54, 1.23, 31.3, 40, 59.9, 180.1, 359.9)
-                           .boxed()
-                           .map(Double::floatValue);
-    }
+        @JvmStatic
+        fun invalidDegrees(): Stream<Float> = DoubleStream.of(
+            -1.0,
+            360.0,
+            360.1,
+            Float.MAX_VALUE.toDouble(),
+            (-Float.MAX_VALUE).toDouble()
+        )
+            .boxed()
+            .map { obj: Double -> obj.toFloat() }
 
-    private static Stream<Float> validHalfRangeDegrees() {
-        return DoubleStream.of(0, 0.54, 1.23, 31.3, 40, 59.9, 179.9)
-                           .boxed()
-                           .map(Double::floatValue);
-    }
+        @JvmStatic
+        fun validDegrees(): Stream<Float> =
+            DoubleStream.of(0.0, 0.54, 1.23, 31.3, 40.0, 59.9, 180.1, 359.9).boxed()
+                .map { obj: Double -> obj.toFloat() }
 
-    private static Stream<Double> invalidHalfRangeAngles() {
-        return DoubleStream.of(-1.0, 0, 90, 90.1, Double.MAX_VALUE, -Double.MAX_VALUE)
-                           .boxed();
-    }
+        @JvmStatic
+        fun validHalfRangeDegrees(): Stream<Float> =
+            DoubleStream.of(0.0, 0.54, 1.23, 31.3, 40.0, 59.9, 179.9).boxed()
+                .map { obj: Double -> obj.toFloat() }
 
-    private static Stream<Double> invalidAngles() {
-        return DoubleStream.of(-1.0, 0, 180, 180.1, Double.MAX_VALUE, -Double.MAX_VALUE)
-                           .boxed();
-    }
+        @JvmStatic
+        fun invalidHalfRangeAngles(): Stream<Double> =
+            DoubleStream.of(-1.0, 0.0, 90.0, 90.1, Double.MAX_VALUE, -Double.MAX_VALUE).boxed()
 
-    private static Stream<Double> validAngles() {
-        return DoubleStream.of(0.01, 0.54, 1.23, 31.3, 40, 59.9, 179.9)
-                           .boxed();
-    }
+        @JvmStatic
+        fun invalidAngles(): Stream<Double> =
+            DoubleStream.of(-1.0, 0.0, 180.0, 180.1, Double.MAX_VALUE, -Double.MAX_VALUE).boxed()
 
-    private static Stream<Double> validHalfRangeAngles() {
-        return DoubleStream.of(0.01, 0.54, 1.23, 31.3, 40, 59.9, 89.9)
-                           .boxed();
+        @JvmStatic
+        fun validAngles(): Stream<Double> =
+            DoubleStream.of(0.01, 0.54, 1.23, 31.3, 40.0, 59.9, 179.9).boxed()
+
+        @JvmStatic
+        fun validHalfRangeAngles(): Stream<Double> =
+            DoubleStream.of(0.01, 0.54, 1.23, 31.3, 40.0, 59.9, 89.9).boxed()
     }
 }
