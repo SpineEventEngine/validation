@@ -36,4 +36,9 @@ public object Diags {
         public const val prefix: String = "The string must match the regular expression"
         public const val format: String = "$prefix `%s`."
     }
+
+    public object Required {
+        public const val singularErrorMsg: String = "The field must be set."
+        public const val correctionErrorMsg: String = "Collection must not be empty.";
+    }
 }
