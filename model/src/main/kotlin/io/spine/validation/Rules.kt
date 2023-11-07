@@ -52,7 +52,7 @@ internal fun Rule.toEvent(type: TypeName): RuleAdded =
     }
 
 /**
- * Creates a [Rule] from this simple rule.
+ * Creates a [Rule] from this `SimpleRule`.
  */
 internal fun SimpleRule.wrap(): Rule = rule {
     simple = this@wrap
