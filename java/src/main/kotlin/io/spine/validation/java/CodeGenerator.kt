@@ -115,5 +115,5 @@ internal fun generatorFor(ctx: GenerationContext): CodeGenerator =
         SIMPLE -> generatorForSimple(ctx)
         COMPOSITE -> CompositeRuleGenerator(ctx)
         MESSAGE_WIDE -> generatorForCustom(ctx)
-        else -> error("Empty rule.")
+        else -> throw IllegalArgumentException("Empty rule.")
     }
