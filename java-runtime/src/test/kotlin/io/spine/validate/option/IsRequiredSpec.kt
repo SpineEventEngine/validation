@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(is_required)` oneof option and")
-internal class IsRequiredTest : ValidationOfConstraintTest() {
+internal class IsRequiredSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `throw if required field group is not set`() {
