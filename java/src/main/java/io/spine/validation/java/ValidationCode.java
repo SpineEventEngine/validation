@@ -120,6 +120,4 @@ final class ValidationCode {
              .add(lineSeparator());
         return lines.build();
     }
-
-
 }
