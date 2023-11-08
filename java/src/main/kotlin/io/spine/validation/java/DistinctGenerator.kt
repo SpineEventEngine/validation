@@ -35,25 +35,35 @@ import io.spine.protodata.codegen.java.call
 import io.spine.protodata.isMap
 
 /**
- * Generates code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
+ * Generates the code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
  *
- * A list or the values of a map containing a duplicate is a constraint violation.
+ * If the generator serves a map, it checks the [values][Map.values] of the map to be distinct.
  */
 internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
+    /**
+     * Creates an expression checking that a repeated field or a map of a proto message
+     * has distinct values.
+     *
+     * If the field is a map, the generated code checks the values of the map to be distinct.
+     *
+     * The generated code assumes that if the field contains distinct values, the size of
+     * the original collection is equal to the size of the `ImmutableSet` created as a copy
+     * of the checked collection.
+     */
     override fun condition(): Expression {
         val map = ctx.fieldFromSimpleRule!!.isMap()
         val fieldValue = ctx.fieldOrElement!!
-        val comparisonCollection = if (map) MethodCall(fieldValue, "values") else fieldValue
-        return equalsOperator(
+        val collectionToCount = if (map) MethodCall(fieldValue, "values") else fieldValue
+        return equalityOf(
             MethodCall(fieldValue, "size"),
             ClassName(ImmutableSet::class)
-                .call("copyOf", listOf(comparisonCollection))
+                .call("copyOf", listOf(collectionToCount))
                 .chain("size")
         )
     }
 
-    private fun equalsOperator(left: Expression, right: Expression): Expression {
+    private fun equalityOf(left: Expression, right: Expression): Expression {
         return Literal(left.toCode() + " == " + right.toCode())
     }
 }
