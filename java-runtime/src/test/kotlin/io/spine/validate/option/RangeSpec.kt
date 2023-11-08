@@ -60,7 +60,7 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidHours")
-        fun `do not fit into the defined range`(hour: Int) = assertNotValid {
+        fun `do not fit into the defined range`(hour: Int) = assertDoesNotBuild {
             hourRange(hour)
         }
 
@@ -72,14 +72,13 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#validMinutes")
-        fun `fit into the defined range`(minute: Long) {
-            val msg = minuteRange(minute)
-            assertValid(msg)
+        fun `fit into the defined range`(minute: Long) = assertValid {
+            minuteRange(minute)
         }
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidMinutes")
-        fun `do not fit into the defined range`(minute: Long) = assertNotValid {
+        fun `do not fit into the defined range`(minute: Long) = assertDoesNotBuild {
             minuteRange(minute)
         }
 
@@ -92,14 +91,13 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#validDegrees")
-        fun `fit into the defined range`(degree: Float) {
-            val msg = floatRange(degree)
-            assertValid(msg)
+        fun `fit into the defined range`(degree: Float) = assertValid {
+            floatRange(degree)
         }
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidDegrees")
-        fun `do not fit into the defined range`(degree: Float) = assertNotValid {
+        fun `do not fit into the defined range`(degree: Float) = assertDoesNotBuild {
             floatRange(degree)
         }
 
@@ -112,14 +110,13 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#validAngles")
-        fun `fit into the defined range`(angle: Double) {
-            val msg = doubleRange(angle)
-            assertValid(msg)
+        fun `fit into the defined range`(angle: Double) = assertValid {
+            doubleRange(angle)
         }
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidAngles")
-        fun `do not fit into the defined range`(angle: Double) = assertNotValid {
+        fun `do not fit into the defined range`(angle: Double) = assertDoesNotBuild {
             doubleRange(angle)
         }
 
@@ -132,15 +129,14 @@ internal class RangeSpec : ValidationOfConstraintTest() {
     internal inner class RepeatedRange {
 
         @Test
-        fun valid() {
-            val hours = Hours.newBuilder()
-                .addAllHour(validHours().collect(ImmutableList.toImmutableList()))
-                .build()
-            assertValid(hours)
+        fun valid() = assertValid {
+            hours {
+                hour.addAll(validHours().toList())
+            }
         }
 
         @Test
-        fun invalid() = assertNotValid {
+        fun invalid() = assertDoesNotBuild {
             Hours.newBuilder()
                 .addAllHour(invalidHours().toList())
                 .build()
@@ -155,11 +151,12 @@ internal class RangeSpec : ValidationOfConstraintTest() {
         }
 
         @JvmStatic
-        fun validRange(): NumRanges.Builder = NumRanges.newBuilder()
-            .setHour(1)
-            .setAngle(1.0)
-            .setDegree(1f)
-            .setMinute(1)
+        fun validRange(): NumRanges.Builder =
+            NumRanges.newBuilder()
+                .setHour(1)
+                .setAngle(1.0)
+                .setDegree(1f)
+                .setMinute(1)
 
         @JvmStatic
         fun invalidHalfDayHours(): Stream<Int> =

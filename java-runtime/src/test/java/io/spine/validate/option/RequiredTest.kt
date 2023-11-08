@@ -23,149 +23,136 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import com.google.protobuf.StringValue;
-import io.spine.test.validate.CustomMessageWithNoRequiredOption;
-import io.spine.test.validate.Planet;
-import io.spine.test.validate.RepeatedRequiredMsgFieldValue;
-import io.spine.test.validate.RequiredBooleanFieldValue;
-import io.spine.test.validate.RequiredByteStringFieldValue;
-import io.spine.test.validate.RequiredEnumFieldValue;
-import io.spine.test.validate.RequiredMsgFieldValue;
-import io.spine.test.validate.RequiredStringFieldValue;
-import io.spine.testing.logging.mute.MuteLogging;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static io.spine.validate.given.MessageValidatorTestEnv.VALUE;
-import static io.spine.validate.given.MessageValidatorTestEnv.newByteString;
-import static io.spine.validate.given.MessageValidatorTestEnv.newStringValue;
+import com.google.protobuf.StringValue
+import io.spine.base.Identifier
+import io.spine.test.validate.CustomMessageWithNoRequiredOption
+import io.spine.test.validate.Planet
+import io.spine.test.validate.RepeatedRequiredMsgFieldValue
+import io.spine.test.validate.RequiredBooleanFieldValue
+import io.spine.test.validate.RequiredByteStringFieldValue
+import io.spine.test.validate.RequiredEnumFieldValue
+import io.spine.test.validate.RequiredMsgFieldValue
+import io.spine.test.validate.RequiredStringFieldValue
+import io.spine.test.validate.repeatedRequiredMsgFieldValue
+import io.spine.test.validate.requiredByteStringFieldValue
+import io.spine.test.validate.requiredStringFieldValue
+import io.spine.testing.logging.mute.MuteLogging
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv
+import io.spine.validate.given.MessageValidatorTestEnv.newByteString
+import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(required)` option and")
-class RequiredTest extends ValidationOfConstraintTest {
-
+internal class RequiredTest : ValidationOfConstraintTest() {
+    
     @Test
-    @DisplayName("find out that required `Message` field is set")
-    void findOutThatRequiredMessageFieldIsSet() {
-        var validMsg = RequiredMsgFieldValue.newBuilder()
-                .setValue(newStringValue())
-                .build();
-        assertValid(validMsg);
+    fun `find out that required 'Message' field is set`() = assertValid {
+        RequiredMsgFieldValue.newBuilder()
+            .setValue(newStringValue())
+            .build()
     }
 
     @Test
-    @DisplayName("find out that required message field is NOT set")
-    void findOutThatRequiredMessageFieldIsNotSet() {
-        var invalidMsg = RequiredMsgFieldValue.getDefaultInstance();
-        assertNotValid(invalidMsg);
+    fun `find out that required message field is NOT set`() = assertNotValid(
+        RequiredMsgFieldValue.getDefaultInstance()
+    )
+
+    @Test
+    fun `find out that required 'String' field is set`() = assertValid {
+        RequiredStringFieldValue.newBuilder()
+            .setValue(Identifier.newUuid())
+            .build()
     }
 
     @Test
-    @DisplayName("find out that required `String` field is set")
-    void findOutThatRequiredStringFieldIsSet() {
-        var validMsg = RequiredStringFieldValue.newBuilder()
-                .setValue(newUuid())
-                .build();
-        assertValid(validMsg);
+    fun `find out that required 'String' field is NOT set`() {
+        val invalidMsg = RequiredStringFieldValue.getDefaultInstance()
+        assertNotValid(invalidMsg)
     }
 
     @Test
-    @DisplayName("find out that required `String` field is NOT set")
-    void findOutThatRequiredStringFieldIsNotSet() {
-        var invalidMsg = RequiredStringFieldValue.getDefaultInstance();
-        assertNotValid(invalidMsg);
+    fun `find out that required 'ByteString' field is set`() = assertValid {
+        requiredByteStringFieldValue {
+            value = newByteString()
+        }
     }
 
     @Test
-    @DisplayName("find out that required `ByteString` field is set")
-    void findOutThatRequiredByteStringFieldIsSet() {
-        var validMsg = RequiredByteStringFieldValue.newBuilder()
-                .setValue(newByteString())
-                .build();
-        assertValid(validMsg);
+    fun `find out that required 'ByteString' field is NOT set`() {
+        assertCheckFails(
+            RequiredByteStringFieldValue.getDefaultInstance()
+        )
+        assertDoesNotBuild {
+            requiredStringFieldValue {  }
+        }
     }
 
     @Test
-    @DisplayName("find out that required `ByteString` field is NOT set")
-    void findOutThatRequiredByteStringFieldIsNotSet() {
-        var invalidMsg = RequiredByteStringFieldValue.getDefaultInstance();
-        assertNotValid(invalidMsg);
+    fun `find out that required 'Enum' field is set`() = assertValid {
+        RequiredEnumFieldValue.newBuilder()
+            .setValue(Planet.EARTH)
+            .build()
     }
 
     @Test
-    @DisplayName("find out that required `Enum` field is set")
-    void findOutThatRequiredEnumFieldIsNotSet() {
-        var invalidMsg = RequiredEnumFieldValue.getDefaultInstance();
-        assertNotValid(invalidMsg);
-    }
-
-    @Test
-    @DisplayName("find out that required `Enum` field is NOT set")
-    void findOutThatRequiredEnumFieldIsSet() {
-        var invalidMsg = RequiredEnumFieldValue.newBuilder()
-                .setValue(Planet.EARTH)
-                .build();
-        assertValid(invalidMsg);
-    }
+    fun `find out that required 'Enum' field is NOT set`() = assertNotValid(
+        RequiredEnumFieldValue.getDefaultInstance()
+    )
 
     @MuteLogging
     @Test
-    @DisplayName("find out that required NON-SET `Boolean` field passes validation")
-    void findOutThatRequiredNotSetBooleanFieldPassValidation() {
-        var msg = RequiredBooleanFieldValue.getDefaultInstance();
-        assertValid(msg);
+    fun `find out that required NON-SET 'Boolean' field passes validation`() = assertValid(
+        RequiredBooleanFieldValue.getDefaultInstance()
+    )
+
+    @Test
+    fun `find out that repeated required field has valid values`() = assertValid {
+        RepeatedRequiredMsgFieldValue.newBuilder()
+            .addValue(newStringValue())
+            .addValue(newStringValue())
+            .build()
     }
 
     @Test
-    @DisplayName("find out that repeated required field has valid values")
-    void findOutThatRepeatedRequiredFieldHasValidValues() {
-        var invalidMsg = RepeatedRequiredMsgFieldValue.newBuilder()
-                .addValue(newStringValue())
-                .addValue(newStringValue())
-                .build();
-        assertValid(invalidMsg);
+    fun `find out that repeated required field has no values`() = assertNotValid(
+        RepeatedRequiredMsgFieldValue.getDefaultInstance()
+    )
+
+    @Test
+    fun `accept 'repeated' and 'required' field with default message entries`() {
+        // One valid value, one default instance. We do not validate deeper.
+        assertValid {
+            repeatedRequiredMsgFieldValue {
+                value.add(newStringValue()) // valid value
+                value.add(StringValue.getDefaultInstance()) // empty value
+            }
+        }
+        // Two default instances.
+        repeatedRequiredMsgFieldValue {
+            value.add(StringValue.getDefaultInstance())
+            value.add(StringValue.getDefaultInstance())
+        }
     }
 
     @Test
-    @DisplayName("find out that repeated required field has not values")
-    void findOutThatRepeatedRequiredFieldHasNoValues() {
-        var msg = RepeatedRequiredMsgFieldValue.getDefaultInstance();
-        assertNotValid(msg);
+    fun `consider field is valid if no required option set`() {
+        val validMsg = StringValue.getDefaultInstance()
+        assertValid(validMsg)
     }
 
     @Test
-    @DisplayName("ignore repeated required field with an empty value")
-    void ignoreRepeatedRequiredFieldWithEmptyValue() {
-        var msg = RepeatedRequiredMsgFieldValue.newBuilder()
-                .addValue(newStringValue()) // valid value
-                .addValue(StringValue.getDefaultInstance()) // empty value
-                .build();
-        assertValid(msg);
+    fun `provide one valid violation if required field is NOT set`() {
+        val invalidMsg = RequiredStringFieldValue.getDefaultInstance()
+        assertSingleViolation(invalidMsg, MessageValidatorTestEnv.VALUE)
     }
 
     @Test
-    @DisplayName("consider field is valid if no required option set")
-    void considerFieldIsValidIfNoRequiredOptionSet() {
-        var msg = StringValue.getDefaultInstance();
-        assertValid(msg);
-    }
-
-    @Test
-    @DisplayName("provide one valid violation if required field is NOT set")
-    void provideOneValidViolationIfRequiredFieldIsNOTSet() {
-        var invalidMsg = RequiredStringFieldValue.getDefaultInstance();
-        assertSingleViolation(invalidMsg, VALUE);
-    }
-
-    @Test
-    @DisplayName("ignore `IfMissingOption` if field is not marked required")
-    void ignoreIfMissingOptionIfFieldNotMarkedRequired() {
-        var invalidMsg = CustomMessageWithNoRequiredOption.getDefaultInstance();
-        assertValid(invalidMsg);
+    fun `ignore 'IfMissingOption' if field is not marked required`() = assertValid {
+        CustomMessageWithNoRequiredOption.getDefaultInstance()
     }
 }

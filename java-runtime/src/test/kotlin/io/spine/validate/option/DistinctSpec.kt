@@ -91,7 +91,7 @@ internal class DistinctSpec : ValidationOfConstraintTest() {
     internal inner class DuplicateViolates {
 
         @Test
-        fun enums() = assertNotValid {
+        fun enums() = assertDoesNotBuild {
             distinctValues {
                 enums.add(EARTH)
                 enums.add(JUPITER)
@@ -100,7 +100,7 @@ internal class DistinctSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun ints() = assertNotValid {
+        fun ints() = assertDoesNotBuild {
             distinctValues {
                 ints.add(1)
                 ints.add(2)
@@ -109,18 +109,16 @@ internal class DistinctSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun strings() {
-            assertThrows<ValidationException> {
-                distinctValues {
-                    strings.add("First")
-                    strings.add("Second")
-                    strings.add("First")
-                }
+        fun strings() = assertDoesNotBuild {
+            distinctValues {
+                strings.add("First")
+                strings.add("Second")
+                strings.add("First")
             }
         }
 
         @Test
-        fun messages() = assertNotValid {
+        fun messages() = assertDoesNotBuild {
             distinctValues {
                 messages.add(customMessageOf(1))
                 messages.add(customMessageOf(2))

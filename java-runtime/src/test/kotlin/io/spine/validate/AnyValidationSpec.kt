@@ -61,10 +61,13 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
     @Test
     fun `consider 'Any' not valid if content is not valid`() {
         val content = AnyPacker.pack(invalidMessage)
-        val container = AnyContainer.newBuilder()
-            .setAny(content)
-            .build()
-        assertNotValid(container)
+        val builder = AnyContainer.newBuilder().setAny(content)
+
+        assertThrows<ValidationException> {
+            builder.build()
+        }
+
+        assertNotValid(builder.buildPartial())
     }
 
     @Test
@@ -84,6 +87,7 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
         val internal: @NonValidated AnyContainer = AnyContainer.newBuilder()
             .setAny(internalAny)
             .buildPartial()
+
         val external = AnyPacker.pack(internal)
         val builder = AnyContainer.newBuilder()
             .setAny(external)

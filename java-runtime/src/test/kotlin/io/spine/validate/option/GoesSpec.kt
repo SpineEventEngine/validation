@@ -29,10 +29,9 @@ import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.ByteString
 import com.google.protobuf.util.Timestamps
 import io.spine.base.Identifier.newUuid
-import io.spine.test.validate.Payment
-import io.spine.test.validate.WithFieldNotFound
 import io.spine.test.validate.payment
 import io.spine.test.validate.paymentId
+import io.spine.test.validate.withFieldNotFound
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import org.junit.jupiter.api.DisplayName
@@ -51,20 +50,23 @@ internal class GoesSpec : ValidationOfConstraintTest() {
 
         @Test
         fun `are both optional` () = assertValid {
-            Payment.newBuilder()
-                .setDescription("Scheduled payment")
-                .build()
+            payment {
+                description = "Scheduled payment"
+            }
         }
 
         @Test
         fun `not filled simultaneously` () {
-            assertNotValid(payment {
-                id = paymentId
-            })
-
-            assertNotValid(payment {
+            assertNotValid(
+                payment {
+                    id = paymentId
+                }
+            )
+            assertNotValid(
+                payment {
                     timestamp = Timestamps.MAX_VALUE
-            })
+                }
+            )
         }
 
         @Test
@@ -76,12 +78,21 @@ internal class GoesSpec : ValidationOfConstraintTest() {
         }
     }
 
+    /**
+     * This method checks that the validation of the `(goes).with` constraint fails
+     * if the option refers to a field which is not present in the message.
+     *
+     * The `build()` method for this message passes because the `(goes)` option is not
+     * yet supported by code generation. This option is checked on runtime.
+     */
     @Test
     fun `The value of the 'with' field is not found`() {
-        val msg = WithFieldNotFound.newBuilder()
-            .setId(newUuid())
-            .setAvatar(ByteString.copyFrom(byteArrayOf(0, 1, 2)))
-            .build()
+        val msg = withFieldNotFound {
+            id = newUuid()
+            // Here we populate the field which has `(goes).with` option referring to a
+            // field which is not present in the message (`user_id`).
+            avatar = ByteString.copyFrom(byteArrayOf(0, 1, 2))
+        }
         val exception = assertThrows<IllegalStateException> {
             validate(msg)
         }

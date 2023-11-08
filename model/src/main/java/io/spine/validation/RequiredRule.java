@@ -36,8 +36,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
+import static io.spine.validate.Diags.Required.correctionErrorMsg;
+import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
-import static io.spine.validation.LogicalOperator.AND;
 import static io.spine.validation.Options.is;
 import static io.spine.validation.Rules.wrap;
 
@@ -55,8 +56,6 @@ final class RequiredRule {
     /**
      * Creates a rule for the given field to be required.
      */
-    @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
-    // Duplication in generated code.
     static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
         var unsetValue = UnsetValue.forField(field);
@@ -64,7 +63,7 @@ final class RequiredRule {
             return Optional.empty();
         }
         var integratedRule = rule(
-                field, unsetValue.get(), errorMessage, "Field must be set.", false
+                field, unsetValue.get(), errorMessage, singularErrorMsg, false
         );
         if (!isRepeated(field)) {
             return Optional.of(wrap(integratedRule));
@@ -73,25 +72,15 @@ final class RequiredRule {
         if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }
-        var differentialRule = rule(
-                field, singularUnsetValue.get(), errorMessage, "", true
-        );
-        var composite = collectionRule(field, integratedRule, differentialRule);
-        return Optional.of(wrap(composite));
+        var collectionRule = collectionRule(integratedRule);
+        return Optional.of(collectionRule);
     }
 
-    private static CompositeRule collectionRule(Field field,
-                                                SimpleRule integratedRule,
-                                                SimpleRule differentialRule) {
-        @SuppressWarnings("DuplicateStringLiteralInspection")
-        var composite = CompositeRule.newBuilder()
-                .setLeft(wrap(integratedRule))
-                .setOperator(AND)
-                .setRight(wrap(differentialRule))
-                .setErrorMessage("Collection must not be empty and cannot contain default values.")
-                .setField(field.getName())
+    private static Rule collectionRule(SimpleRule integratedRule) {
+        var withCustomErrorMessage = integratedRule.toBuilder()
+                .setErrorMessage(correctionErrorMsg)
                 .build();
-        return composite;
+        return wrap(withCustomErrorMessage);
     }
 
     private static SimpleRule rule(Field field,
