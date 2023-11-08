@@ -36,14 +36,13 @@ import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.string.CharSequences;
-import io.spine.validate.Diags;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.server.event.Just.just;
 import static io.spine.string.CharSequences.containsLineSeparators;
+import static io.spine.validate.Diags.Regex.errorMessage;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
-import static java.lang.String.format;
 
 /**
  * A policy to add a validation rule to a type whenever the {@code (pattern)} field option
@@ -93,9 +92,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
         private static String notMatching(String regex) {
             var withoutLineSeparators = escapeLineSeparators(regex);
-            return format(
-                    Diags.Regex.format,
-                    slashEscaper.escape(withoutLineSeparators));
+            return errorMessage(slashEscaper.escape(withoutLineSeparators));
         }
 
         private static String escapeLineSeparators(String regex) {

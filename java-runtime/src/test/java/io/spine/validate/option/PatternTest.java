@@ -36,9 +36,9 @@ import org.checkerframework.checker.regex.qual.Regex;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.validate.Diags.Regex.errorMessage;
 import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
 import static io.spine.validate.given.MessageValidatorTestEnv.EMAIL;
-import static java.lang.String.format;
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(pattern)` option and")
 class PatternTest extends ValidationOfConstraintTest {
@@ -70,7 +70,7 @@ class PatternTest extends ValidationOfConstraintTest {
         var msg = patternStringFor("invalid email");
         @Regex
         String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        var expectedErrMsg = format(Diags.Regex.format, regex);
+        var expectedErrMsg = errorMessage(regex);
         assertSingleViolation(msg, expectedErrMsg, EMAIL);
     }
 

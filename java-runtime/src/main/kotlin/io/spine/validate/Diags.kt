@@ -26,19 +26,37 @@
 
 package io.spine.validate
 
+import org.checkerframework.checker.regex.qual.Regex as CheckRegex
+
 /**
  * Diagnostic messages used by the validation library.
  */
 @Suppress("ConstPropertyName") // https://bit.ly/kotlin-prop-names
 public object Diags {
 
+    /**
+     * Messages associated with the `regex` field constraint.
+     */
     public object Regex {
         public const val prefix: String = "The string must match the regular expression"
-        public const val format: String = "$prefix `%s`."
+        @JvmStatic
+        public fun errorMessage(regex: @CheckRegex String): String = "$prefix `$regex`."
     }
 
+    /**
+     * Messages associated with the `required` field constraint.
+     */
     public object Required {
         public const val singularErrorMsg: String = "The field must be set."
-        public const val correctionErrorMsg: String = "Collection must not be empty.";
+        public const val collectionErrorMsg: String = "The collection must not be empty.";
+    }
+
+    /**
+     * Messages associated with the `is_required` constraint of `oneof` fields.
+     */
+    public object IsRequired {
+        public const val operatorDescription: String = "One of the fields must be set.";
+        public fun errorMessage(oneofName: String): String =
+            "One of the fields in the `$oneofName` group must be set."
     }
 }

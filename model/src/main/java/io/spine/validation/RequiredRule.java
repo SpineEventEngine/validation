@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
-import static io.spine.validate.Diags.Required.correctionErrorMsg;
+import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
 import static io.spine.validation.Options.is;
@@ -78,7 +78,7 @@ final class RequiredRule {
 
     private static Rule collectionRule(SimpleRule integratedRule) {
         var withCustomErrorMessage = integratedRule.toBuilder()
-                .setErrorMessage(correctionErrorMsg)
+                .setErrorMessage(collectionErrorMsg)
                 .build();
         return wrap(withCustomErrorMessage);
     }
