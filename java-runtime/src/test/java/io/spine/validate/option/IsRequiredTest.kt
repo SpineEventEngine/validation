@@ -23,56 +23,53 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import io.spine.test.validate.Fish;
-import io.spine.test.validate.Meal;
-import io.spine.test.validate.Sauce;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
+import io.kotest.matchers.shouldBe
+import io.spine.test.validate.Sauce
+import io.spine.test.validate.fish
+import io.spine.test.validate.meal
+import io.spine.testing.TestValues.randomString
+import io.spine.validate.ValidationException
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(is_required)` oneof option and")
-class IsRequiredTest extends ValidationOfConstraintTest {
+internal class IsRequiredTest : ValidationOfConstraintTest() {
 
     @Test
-    @DisplayName("throw if required field group is not set")
-    void required() {
-        var message = Meal.newBuilder()
-                .setCheese(Sauce.getDefaultInstance())
-                .buildPartial();
-        validate(message);
-        assertThat(firstViolation().getFieldPath().getFieldName(0))
-                .isEqualTo("choice");
+    fun `throw if required field group is not set`() {
+        val exception = assertThrows<ValidationException> {
+            meal {
+                cheese = Sauce.getDefaultInstance()
+            }
+        }
+        val violation = exception.constraintViolations[0]
+        with(violation.fieldPath) {
+            fieldNameList.size shouldBe 1
+            fieldNameList[0] shouldBe "choice"
+        }
     }
 
     @Test
-    @DisplayName("not throw if required field group is set")
-    void requiredSet() {
-        var fish = Fish.newBuilder()
-                .setDescription(newUuid())
-                .build();
-        var message = Meal.newBuilder()
-                .setCheese(Sauce.getDefaultInstance())
-                .setFish(fish)
-                .buildPartial();
-        assertValid(message);
+    fun `not throw if required field group is set`() = assertValid {
+        meal {
+            cheese = Sauce.getDefaultInstance()
+            fish = fish {
+                description = randomString()
+            }
+        }
     }
 
     @Test
-    @DisplayName("ignore non-required field groups")
-    void notRequired() {
-        var fish = Fish.newBuilder()
-                .setDescription(newUuid())
-                .build();
-        var message = Meal.newBuilder()
-                .setFish(fish)
-                .buildPartial();
-        assertValid(message);
+    fun `ignore non-required field groups`() = assertValid {
+        meal {
+            fish = fish {
+                description = randomString()
+            }
+        }
     }
 }
