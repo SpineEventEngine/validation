@@ -38,7 +38,6 @@ import io.spine.validation.RequiredOneof
  * Creates a [CodeGenerator] for a custom validation operator for the given context.
  */
 internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
-    @Suppress("MoveVariableDeclarationIntoWhen") // For better readability.
     val feature = ctx.feature()
     return when (feature) {
         is DistinctCollection -> DistinctGenerator(ctx)
@@ -56,6 +55,6 @@ private fun GenerationContext.feature(): Message = with(rule) {
     } else if (hasMessageWide()) {
         messageWide.operator.feature.unpackGuessingType()
     } else {
-        error("Rule has no custom operator: $rule")
+        error("The rule has no custom operator: `$rule`.")
     }
 }
