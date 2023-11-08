@@ -42,13 +42,13 @@ dependencies {
     testImplementation(Spine.testlib)
 }
 
-modelCompiler {
-    java {
-        codegen {
-            validation { skipValidation() }
-        }
-    }
-}
+//modelCompiler {
+//    java {
+//        codegen {
+//            validation { skipValidation() }
+//        }
+//    }
+//}
 
 // Uncomment the below block when remote debugging of code generation is needed.
 //
