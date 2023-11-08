@@ -42,7 +42,7 @@ import static io.spine.validation.java.ValidationCode.VIOLATIONS;
 import static java.lang.System.lineSeparator;
 
 /**
- * Code generated for validations constraints specified in a message type.
+ * Code generated for validation constraints specified in a message type.
  */
 final class ValidationConstraintsCode {
 
