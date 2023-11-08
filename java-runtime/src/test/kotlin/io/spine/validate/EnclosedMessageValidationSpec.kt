@@ -25,21 +25,24 @@
  */
 package io.spine.validate
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
 import io.spine.test.validate.EnclosedMessageFieldValue
 import io.spine.test.validate.EnclosedMessageFieldValueWithCustomInvalidMessage
 import io.spine.test.validate.EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage
 import io.spine.test.validate.EnclosedMessageWithRequiredString
-import io.spine.test.validate.EnclosedMessageWithoutAnnotationFieldValue
 import io.spine.test.validate.PatternStringFieldValue
-import io.spine.validate.given.MessageValidatorTestEnv
+import io.spine.test.validate.enclosedMessageWithoutAnnotationFieldValue
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
+import io.spine.validate.given.MessageValidatorTestEnv.OUTER_MSG_FIELD
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
-@DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "validate enclosed messages and")
+@DisplayName(VALIDATION_SHOULD + "validate enclosed messages and")
 internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
     @Test
@@ -66,12 +69,13 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `consider field valid if no valid option is set`() {
-        val enclosedMsg = PatternStringFieldValue.newBuilder()
-            .setEmail("invalid email")
-            .build()
-        val msg = EnclosedMessageWithoutAnnotationFieldValue.newBuilder()
-            .setOuterMsgField(enclosedMsg)
-            .build()
+        val enclosedMsg: @NonValidated PatternStringFieldValue =
+            PatternStringFieldValue.newBuilder()
+                .setEmail("invalid email")
+                .buildPartial()
+        val msg = enclosedMessageWithoutAnnotationFieldValue {
+            outerMsgField = enclosedMsg
+        }
         assertValid(msg)
     }
 
@@ -92,13 +96,15 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-        assertEquals("The message must have valid properties.", violation.msgFormat)
+
+        violation.msgFormat shouldBe "The message must have valid properties."
+
         assertFieldPathIs(
             violation,
-            MessageValidatorTestEnv.OUTER_MSG_FIELD
+            OUTER_MSG_FIELD
         )
         val innerViolations = violation.violationList
-        assertEquals(1, innerViolations.size)
+        innerViolations shouldHaveSize  1
 
         val innerViolation = innerViolations[0]
 
@@ -106,8 +112,8 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
         assertFieldPathIs(
             innerViolation,
-            MessageValidatorTestEnv.OUTER_MSG_FIELD,
-            MessageValidatorTestEnv.EMAIL
+            OUTER_MSG_FIELD,
+            EMAIL
         )
 
         innerViolation.violationList.shouldBeEmpty()
@@ -119,8 +125,8 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
             PatternStringFieldValue.newBuilder()
                 .setEmail("invalid email")
                 .buildPartial()
-        val msg: @NonValidated EnclosedMessageFieldValueWithCustomInvalidMessage =
-            EnclosedMessageFieldValueWithCustomInvalidMessage.newBuilder()
+        val msg: @NonValidated WithValidateAndCustomMessage =
+            WithValidateAndCustomMessage.newBuilder()
                 .setOuterMsgField(enclosedMsg)
                 .buildPartial()
 
@@ -129,10 +135,19 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         singleViolation().msgFormat shouldBe "Custom error"
     }
 
+    /**
+     * This method tests that setting only a custom message for a validation constraint
+     * does not cause validation, neither runtime, nor on `build()`.
+     */
     @Test
     fun `ignore custom invalid field message if validation is disabled`() {
-        val msg = EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage
-            .getDefaultInstance()
-        assertValid(msg)
+        assertValid(WithOnlyCustomMessage.getDefaultInstance())
+        assertDoesNotThrow { WithOnlyCustomMessage.newBuilder().build() }
     }
 }
+
+private typealias WithValidateAndCustomMessage =
+        EnclosedMessageFieldValueWithCustomInvalidMessage
+
+private typealias WithOnlyCustomMessage =
+        EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage
