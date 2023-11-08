@@ -116,7 +116,7 @@ private fun ErrorMessage.buildViolation(
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }
     if (fieldValue != null) {
-        checkNotNull(field) { "Field value is set without the field." }
+        checkNotNull(field) { "The field value (`$fieldValue`) is set without the field." }
         val packingExpression = when {
             ignoreCardinality -> fieldValue.packToAny()
             field.isList() || field.isMap()  ->
