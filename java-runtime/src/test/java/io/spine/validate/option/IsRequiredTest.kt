@@ -48,10 +48,11 @@ internal class IsRequiredTest : ValidationOfConstraintTest() {
             }
         }
         val violation = exception.constraintViolations[0]
-        with(violation.fieldPath) {
-            fieldNameList.size shouldBe 1
-            fieldNameList[0] shouldBe "choice"
-        }
+
+        // We here check the value of the `msgFormat`, and not the `fieldPath` because
+        // `oneof` is not a field. As such, it does not have a `fieldPath`, and is not
+        // added to validation constraint by the code generation.
+        violation.msgFormat shouldBe "One of the fields in the `choice` group must be set."
     }
 
     @Test
