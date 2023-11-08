@@ -28,6 +28,7 @@ package io.spine.validate
 
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.Message
+import io.spine.option.GoesOption
 import io.spine.option.OptionsProto
 
 /**
@@ -44,5 +45,5 @@ internal fun Message.hasGoesOption(): Boolean {
 
 private fun FieldDescriptor.hasGoesOption(): Boolean {
     val extension = options.getExtension(OptionsProto.goes)
-    return extension != null
+    return !GoesOption.getDefaultInstance().equals(extension)
 }
