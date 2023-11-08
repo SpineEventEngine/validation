@@ -23,79 +23,76 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
+import com.google.protobuf.Descriptors.Descriptor
+import com.google.protobuf.Message
+import io.kotest.matchers.shouldBe
+import io.spine.option.OptionsProto
+import io.spine.test.validate.CustomMessageRequiredByteStringFieldValue
+import io.spine.test.validate.CustomMessageRequiredEnumFieldValue
+import io.spine.test.validate.CustomMessageRequiredMsgFieldValue
+import io.spine.test.validate.CustomMessageRequiredRepeatedMsgFieldValue
+import io.spine.test.validate.CustomMessageRequiredStringFieldValue
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.Message;
-import io.spine.option.OptionsProto;
-import io.spine.test.validate.CustomMessageRequiredByteStringFieldValue;
-import io.spine.test.validate.CustomMessageRequiredEnumFieldValue;
-import io.spine.test.validate.CustomMessageRequiredMsgFieldValue;
-import io.spine.test.validate.CustomMessageRequiredRepeatedMsgFieldValue;
-import io.spine.test.validate.CustomMessageRequiredStringFieldValue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@DisplayName(VALIDATION_SHOULD
-          + "propagate proper error message if custom message set and required")
-class ErrorWithMessageTest extends ValidationOfConstraintTest {
-
-    @Test
-    @DisplayName("Message field is NOT set")
-    void msgNotSet() {
-        var invalidMsg = CustomMessageRequiredMsgFieldValue.getDefaultInstance();
-        assertErrorMessage(invalidMsg);
-    }
+@DisplayName(
+    VALIDATION_SHOULD + "propagate proper error message if custom message set and required"
+)
+internal class ErrorWithMessageSpec : ValidationOfConstraintTest() {
 
     @Test
-    @DisplayName("String field is NOT set")
-    void stringNotSet() {
-        var invalidMsg = CustomMessageRequiredStringFieldValue.getDefaultInstance();
-        assertErrorMessage(invalidMsg);
-    }
+    fun `Message field is NOT set`() = assertErrorMessage(
+        CustomMessageRequiredMsgFieldValue.getDefaultInstance()
+    )
+
+    @Test
+    fun `String field is NOT set`() = assertErrorMessage(
+        CustomMessageRequiredStringFieldValue.getDefaultInstance()
+    )
 
     @Test
     @DisplayName("ByteString field is NOT set")
-    void bytesNotSet() {
-        var invalidMsg = CustomMessageRequiredByteStringFieldValue.getDefaultInstance();
-        assertErrorMessage(invalidMsg);
+    fun bytesNotSet() {
+        val invalidMsg = CustomMessageRequiredByteStringFieldValue.getDefaultInstance()
+        assertErrorMessage(invalidMsg)
     }
 
     @Test
     @DisplayName("repeated field is NOT set")
-    void repeatedNotSet() {
-        var invalidMsg = CustomMessageRequiredRepeatedMsgFieldValue.getDefaultInstance();
-        assertErrorMessage(invalidMsg);
+    fun repeatedNotSet() {
+        val invalidMsg = CustomMessageRequiredRepeatedMsgFieldValue.getDefaultInstance()
+        assertErrorMessage(invalidMsg)
     }
 
     @Test
     @DisplayName("Enum field is NOT set")
-    void enumNotSet() {
-        var invalidMsg = CustomMessageRequiredEnumFieldValue.getDefaultInstance();
-        assertErrorMessage(invalidMsg);
+    fun enumNotSet() {
+        val invalidMsg = CustomMessageRequiredEnumFieldValue.getDefaultInstance()
+        assertErrorMessage(invalidMsg)
     }
 
-    private void assertErrorMessage(Message message) {
-        assertNotValid(message);
-        var descriptor = message.getDescriptorForType();
-        var expectedErrorMessage = customErrorMessageFrom(descriptor);
-        checkErrorMessage(expectedErrorMessage);
+    private fun assertErrorMessage(message: Message) {
+        assertNotValid(message)
+        val expectedErrorMessage = customErrorMessageFrom(message.descriptorForType)
+        checkErrorMessage(expectedErrorMessage)
     }
 
-    private void checkErrorMessage(String expectedMessage) {
-        var constraintViolation = firstViolation();
-        assertEquals(expectedMessage, constraintViolation.getMsgFormat());
+    private fun checkErrorMessage(expectedMessage: String) {
+        val constraintViolation = firstViolation()
+        constraintViolation.msgFormat shouldBe expectedMessage
     }
 
-    @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    private static String customErrorMessageFrom(Descriptor descriptor) {
-        var firstFieldDescriptor = descriptor.getFields().get(0);
-        return firstFieldDescriptor.getOptions()
-                                   .getExtension(OptionsProto.ifMissing)
-                                   .getMsgFormat();
+    companion object {
+
+        private fun customErrorMessageFrom(descriptor: Descriptor): String {
+            val firstFieldDescriptor = descriptor.fields[0]
+            return firstFieldDescriptor.options
+                .getExtension(OptionsProto.ifMissing)
+                .errorMsg
+        }
     }
 }
+
