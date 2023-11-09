@@ -26,10 +26,13 @@
 
 package io.spine.validate
 
+import com.google.protobuf.DescriptorProtos.FieldOptions
+import com.google.protobuf.DescriptorProtos.MessageOptions
 import com.google.protobuf.Descriptors.FieldDescriptor
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.Message
-import io.spine.option.GoesOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.goes
+import io.spine.option.OptionsProto.requiredField
 
 /**
  * This file provides workarounds for supporting validation features that
@@ -38,12 +41,23 @@ import io.spine.option.OptionsProto
 @Suppress("unused")
 private const val ABOUT = ""
 
-internal fun Message.hasGoesOption(): Boolean {
+internal fun Message.requiresRuntimeValidation(): Boolean =
+    hasFieldOption(goes)
+        || hasTypeOption(requiredField)
+
+private fun Message.hasFieldOption(option: GeneratedExtension<FieldOptions, *>): Boolean {
     val fieldDescriptors = descriptorForType.fields
-    return fieldDescriptors.any { it.hasGoesOption() }
+    return fieldDescriptors.any {
+        it.hasOption(option)
+    }
 }
 
-private fun FieldDescriptor.hasGoesOption(): Boolean {
-    val extension = options.getExtension(OptionsProto.goes)
-    return !GoesOption.getDefaultInstance().equals(extension)
+private fun FieldDescriptor.hasOption(option: GeneratedExtension<FieldOptions, *>): Boolean {
+    val value = options.getExtension(option)
+    return !option.messageDefaultInstance.equals(value)
+}
+
+private fun Message.hasTypeOption(option: GeneratedExtension<MessageOptions, *>): Boolean {
+    val result = descriptorForType.options.hasExtension(option)
+    return result
 }

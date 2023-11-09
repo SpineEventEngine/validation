@@ -25,7 +25,6 @@
  */
 package io.spine.validate.option
 
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import io.spine.test.validate.requiredfield.ComplexRequiredFields
 import io.spine.test.validate.requiredfield.ComplexRequiredFields.FifthField
@@ -36,12 +35,11 @@ import io.spine.test.validate.requiredfield.OneofRequired
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import java.util.stream.Stream
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
@@ -53,13 +51,12 @@ internal class RequiredFieldSpec : ValidationOfConstraintTest() {
     internal inner class Valid {
 
         @Test
-        fun `all required fields are set`() {
-            val message = EveryFieldRequired.newBuilder()
+        fun `all required fields are set`() = assertValid {
+            EveryFieldRequired.newBuilder()
                 .setFirst("first field set")
                 .setSecond("second field set")
                 .setThird("third field set")
                 .build()
-            assertValid(message)
         }
 
         @Nested
@@ -67,44 +64,41 @@ internal class RequiredFieldSpec : ValidationOfConstraintTest() {
         internal inner class OneofField {
 
             @Test
-            fun `'first' is set`() {
-                val withFirstField = OneofRequired.newBuilder()
+            fun `'first' is set`() = assertValid {
+                OneofRequired.newBuilder()
                     .setFirst("first field set")
                     .build()
-                assertValid(withFirstField)
             }
 
             @Test
-            fun `'second' is set`() {
-                val withSecondField = OneofRequired.newBuilder()
+            fun `'second' is set`() = assertValid {
+                OneofRequired.newBuilder()
                     .setSecond("second field set")
                     .build()
-                assertValid(withSecondField)
             }
         }
 
-        @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
         @Test
-        fun `'oneof' and other field are set`() {
-            val message = OneofFieldAndOtherFieldRequired.newBuilder()
+        @Disabled("See https://github.com/SpineEventEngine/validation/issues/39")
+        fun `'oneof' and other field are set`() = assertValid {
+            OneofFieldAndOtherFieldRequired.newBuilder()
                 .setSecond("second field set")
                 .setThird("third field set")
                 .build()
-            assertValid(message)
         }
 
         @Test
         fun `all fields are optional`() {
             assertValid(EveryFieldOptional.getDefaultInstance())
-            val message = EveryFieldOptional.newBuilder()
-                .setFirst("first field set")
-                .setThird("third field set")
-                .build()
-            assertValid(message)
+            assertValid(
+                EveryFieldOptional.newBuilder()
+                    .setFirst("first field set")
+                    .setThird("third field set")
+                    .build()
+            )
         }
 
-        @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
-        @DisplayName("a message qualifies for complex required field pattern")
+        @Disabled("See https://github.com/SpineEventEngine/validation/issues/39")
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RequiredFieldSpec#validComplexMessages")
         fun `a message qualifies for complex required field pattern`(
@@ -112,7 +106,6 @@ internal class RequiredFieldSpec : ValidationOfConstraintTest() {
         ) {
             assertValid(message)
         }
-
     }
 
     @Nested
@@ -145,9 +138,9 @@ internal class RequiredFieldSpec : ValidationOfConstraintTest() {
 
         @Test
         fun `'oneof' or other field is not set`() {
-            val exception: Exception = assertThrows(
-                IllegalStateException::class.java
-            ) { validate(OneofFieldAndOtherFieldRequired.getDefaultInstance()) }
+            val exception = assertThrows<IllegalStateException> {
+                validate(OneofFieldAndOtherFieldRequired.getDefaultInstance())
+            }
             assertThat(exception)
                 .hasCauseThat()
                 .hasMessageThat()
@@ -162,7 +155,6 @@ internal class RequiredFieldSpec : ValidationOfConstraintTest() {
         ) {
             assertNotValid(message, false)
         }
-
     }
 
     companion object {
