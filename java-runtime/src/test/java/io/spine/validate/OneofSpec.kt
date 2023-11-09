@@ -114,21 +114,21 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun `a field within 'oneof' is not valid`() = assertNotValid(
+        fun `a field within 'oneof' is not valid`() = assertDoesNotBuild {
             OneofWithValidation.newBuilder()
                 .setWithValidation("   ")
                 .build()
-        )
+        }
 
         @Test
         fun `a required field is not set`() =
             assertNotValid(OneofWithRequiredFields.getDefaultInstance(), false)
 
         @Test
-        fun `a required field is not valid`() = assertNotValid(
+        fun `a required field is not valid`() = assertDoesNotBuild {
             RequiredOneofWithValidation.newBuilder()
                 .setValidValue("###")
                 .build()
-        )
+        }
     }
 }
