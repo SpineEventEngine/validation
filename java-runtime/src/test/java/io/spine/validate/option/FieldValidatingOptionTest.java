@@ -27,25 +27,20 @@
 package io.spine.validate.option;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Message;
 import io.spine.code.proto.FieldContext;
 import io.spine.test.validate.option.ATestMessage;
-import io.spine.test.validate.option.ATestMessageConstraint;
 import io.spine.test.validate.option.ATestMessageWithConstraint;
 import io.spine.test.validate.option.ATestMessageWithExternalConstraintOnly;
 import io.spine.test.validate.option.NoValidationTestMessage;
 import io.spine.test.validate.option.TestFieldOptionProto;
-import io.spine.type.MessageType;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.CustomConstraint;
-import io.spine.validate.ExternalConstraints;
 import io.spine.validate.FieldValue;
 import io.spine.validate.MessageValue;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -61,12 +56,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("`FieldValidatingOption` should")
 final class FieldValidatingOptionTest {
 
-    @BeforeAll
-    static void beforeClass() {
-        var externalConstraint = new MessageType(ATestMessageConstraint.getDescriptor());
-        ExternalConstraints.updateFrom(ImmutableSet.of(externalConstraint));
-    }
-
     @DisplayName("return empty value if option is not present in external or field constraints")
     @Test
     void returnEmptyValueIfNotPresent() {
@@ -75,14 +64,6 @@ final class FieldValidatingOptionTest {
         var fieldValue = valueField(value);
         var maxLength = new MaxLength();
         assertThat(maxLength.valueFrom(fieldValue.context())).isEmpty();
-    }
-
-    @DisplayName("return value if option is present in external constraint only")
-    @Test
-    void returnValueIfOptionIsPresentInExternalConstraint() {
-        var fieldValue = valueFieldWithExternalConstraint();
-        var maxLength = new MaxLength();
-        assertThat(maxLength.valueFrom(fieldValue.context())).isPresent();
     }
 
     @DisplayName("return value if option is present in field option")
@@ -117,14 +98,6 @@ final class FieldValidatingOptionTest {
         var fieldValue = valueField(value);
         var maxLength = new MaxLength();
         assertFalse(maxLength.shouldValidate(fieldValue.context()));
-    }
-
-    @DisplayName("validate field if option is present in external constraint")
-    @Test
-    void validateIfOptionIsPresentInExternalConstraint() {
-        var fieldValue = valueFieldWithExternalConstraint();
-        var maxLength = new MaxLength();
-        assertTrue(maxLength.shouldValidate(fieldValue.context()));
     }
 
     @DisplayName("validate field if option is present in field option")
