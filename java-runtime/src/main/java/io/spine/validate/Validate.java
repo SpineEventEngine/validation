@@ -48,7 +48,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validate.WorkaroundKt.hasGoesOption;
+import static io.spine.validate.WorkaroundKt.requiresRuntimeValidation;
 import static java.lang.String.format;
 
 /**
@@ -114,7 +114,7 @@ public final class Validate {
             }
         }
         if (msg instanceof ValidatableMessage) {
-            if (hasGoesOption(message)) {
+            if (requiresRuntimeValidation(message)) {
                 return validateAtRuntime(message);
             }
             var error = ((ValidatableMessage) msg).validate();
