@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,164 +23,156 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
-
-import com.google.protobuf.DoubleValue;
-import com.google.protobuf.Message;
-import io.spine.test.validate.InvalidBound;
-import io.spine.test.validate.MaxExclusiveNumberFieldValue;
-import io.spine.test.validate.MaxInclusiveNumberFieldValue;
-import io.spine.test.validate.MinExclusiveNumberFieldValue;
-import io.spine.test.validate.MinInclusiveNumberFieldValue;
-import io.spine.type.TypeName;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static io.spine.validate.given.MessageValidatorTestEnv.EQUAL_MAX;
-import static io.spine.validate.given.MessageValidatorTestEnv.EQUAL_MIN;
-import static io.spine.validate.given.MessageValidatorTestEnv.GREATER_MAX_MSG;
-import static io.spine.validate.given.MessageValidatorTestEnv.GREATER_THAN_MAX;
-import static io.spine.validate.given.MessageValidatorTestEnv.GREATER_THAN_MIN;
-import static io.spine.validate.given.MessageValidatorTestEnv.LESS_MIN_MSG;
-import static io.spine.validate.given.MessageValidatorTestEnv.LESS_THAN_MAX;
-import static io.spine.validate.given.MessageValidatorTestEnv.LESS_THAN_MIN;
-import static io.spine.validate.given.MessageValidatorTestEnv.VALUE;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.google.common.truth.Truth.assertThat
+import com.google.protobuf.Message
+import com.google.protobuf.doubleValue
+import io.spine.test.validate.InvalidBound
+import io.spine.test.validate.MaxExclusiveNumberFieldValue
+import io.spine.test.validate.MaxInclusiveNumberFieldValue
+import io.spine.test.validate.MinExclusiveNumberFieldValue
+import io.spine.test.validate.MinInclusiveNumberFieldValue
+import io.spine.type.TypeName
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv.VALUE
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(min)` and `(max)` options and")
-class NumberRangeTest extends ValidationOfConstraintTest {
+internal class NumberRangeSpec : ValidationOfConstraintTest() {
 
     @Test
-    @DisplayName("consider number field is valid if no number options set")
-    void considerNumberFieldIsValidIfNoNumberOptionsSet() {
-        Message nonZeroValue = DoubleValue.newBuilder()
-                                          .setValue(5)
-                                          .build();
-        assertValid(nonZeroValue);
+    fun `consider number field is valid if no number options set`() = assertValid {
+        doubleValue { value = 5.0 }
     }
 
     @Test
-    @DisplayName("find out that number is greater than min inclusive")
-    void findOutThatNumberIsGreaterThanDecimalMinInclusive() {
-        minNumberTest(GREATER_THAN_MIN, true, true);
+    fun `find out that number is greater than min inclusive`() =
+        minNumberTest(GREATER_THAN_MIN, inclusive = true, valid = true)
+
+    @Test
+    fun `find out that number is equal to min inclusive`() =
+        minNumberTest(EQUAL_MIN, inclusive = true, valid = true)
+
+    @Test
+    fun `find out that number is less than min inclusive`() =
+        minNumberTest(LESS_THAN_MIN, inclusive = true, valid = false)
+
+    @Test
+    fun `find out that number is grated than min exclusive`() =
+        minNumberTest(GREATER_THAN_MIN, inclusive = false, valid = true)
+
+    @Test
+    fun `find out that number is equal to min exclusive`() =
+        minNumberTest(EQUAL_MIN, inclusive = false, valid = false)
+
+    @Test
+    fun `find out that number is less than min exclusive`() =
+        minNumberTest(LESS_THAN_MIN, inclusive = false, valid = false)
+
+    @Test
+    fun `provide one valid violation if number is less than min`() {
+        minNumberTest(LESS_THAN_MIN, inclusive = true, valid = false)
+        assertSingleViolation(LESS_MIN_MSG, VALUE)
     }
 
     @Test
-    @DisplayName("find out that number is equal to min inclusive")
-    void findOutThatNumberIsEqualToDecimalMinInclusive() {
-        minNumberTest(EQUAL_MIN, true, true);
+    fun `find out that number is greater than max inclusive`() =
+        maxNumberTest(GREATER_THAN_MAX, inclusive = true, valid = false)
+
+    @Test
+    fun `find out that number is equal to max inclusive`() =
+        maxNumberTest(EQUAL_MAX, inclusive = true, valid = true)
+
+    @Test
+    fun `find out that number is less than max inclusive`() =
+        maxNumberTest(LESS_THAN_MAX, inclusive = true, valid = true)
+
+    @Test
+    fun `find out that number is less than max non-inclusive`() =
+        maxNumberTest(GREATER_THAN_MAX, inclusive = false, valid = false)
+
+    @Test
+    fun `find out that number is equal to max exclusive`() =
+        maxNumberTest(EQUAL_MAX, inclusive = false, valid = false)
+
+    @Test
+    fun `find out that number is less than max exclusive`() =
+        maxNumberTest(LESS_THAN_MAX, inclusive = false, valid = true)
+
+    @Test
+    fun `provide one valid violation if number is greater than max`() {
+        maxNumberTest(GREATER_THAN_MAX, inclusive = true, valid = false)
+        assertSingleViolation(
+            GREATER_MAX_MSG,
+            VALUE
+        )
     }
 
     @Test
-    @DisplayName("find out that number is less than min inclusive")
-    void findOutThatNumberIsLessThanDecimalMinInclusive() {
-        minNumberTest(LESS_THAN_MIN, true, false);
-    }
-
-    @Test
-    @DisplayName("find out that number is grated than min exclusive")
-    void findOutThatNumberIsGreaterThanDecimalMinNotInclusive() {
-        minNumberTest(GREATER_THAN_MIN, false, true);
-    }
-
-    @Test
-    @DisplayName("find out that number is equal to min exclusive")
-    void findOutThatNumberIsEqualToDecimalMinNotInclusive() {
-        minNumberTest(EQUAL_MIN, false, false);
-    }
-
-    @Test
-    @DisplayName("find out that number is less than min exclusive")
-    void findOutThatNumberIsLessThanDecimalMinNotInclusive() {
-        minNumberTest(LESS_THAN_MIN, false, false);
-    }
-
-    @Test
-    @DisplayName("provide one valid violation if number is less than min")
-    void provideOneValidViolationIfNumberIsLessThanDecimalMin() {
-        minNumberTest(LESS_THAN_MIN, true, false);
-        assertSingleViolation(LESS_MIN_MSG, VALUE);
-    }
-
-    @Test
-    @DisplayName("find out that number is greater than max inclusive")
-    void findOutThatNumberIsGreaterThanDecimalMaxInclusive() {
-        maxNumberTest(GREATER_THAN_MAX, true, false);
-    }
-
-    @Test
-    @DisplayName("find out that number is equal to max inclusive")
-    void findOutThatNumberIsEqualToDecimalMaxInclusive() {
-        maxNumberTest(EQUAL_MAX, true, true);
-    }
-
-    @Test
-    @DisplayName("find out that number is less than max inclusive")
-    void findOutThatNumberIsLessThanDecimalMaxInclusive() {
-        maxNumberTest(LESS_THAN_MAX, true, true);
-    }
-
-    @Test
-    @DisplayName("find out that number is greated than max exclusive")
-    void findOutThatNumberIsGreaterThanDecimalMaxNotInclusive() {
-        maxNumberTest(GREATER_THAN_MAX, false, false);
-    }
-
-    @Test
-    @DisplayName("find out that number is equal to max exclusive")
-    void findOutThatNumberIsEqualToDecimalMaxNotInclusive() {
-        maxNumberTest(EQUAL_MAX, false, false);
-    }
-
-    @Test
-    @DisplayName("find out that number is less than max exclusive")
-    void findOutThatNumberIsLessThanDecimalMaxNotInclusive() {
-        maxNumberTest(LESS_THAN_MAX, false, true);
-    }
-
-    @Test
-    @DisplayName("provide one valid violation if number is greater than max")
-    void provideOneValidViolationIfNumberIsGreaterThanDecimalMax() {
-        maxNumberTest(GREATER_THAN_MAX, true, false);
-        assertSingleViolation(GREATER_MAX_MSG, VALUE);
-    }
-
-    @Test
-    @DisplayName("not allow fraction boundaries for integer fields")
-    void fractionsBounds() {
-        var exception = assertThrows(IllegalStateException.class,
-                             () -> validate(InvalidBound.getDefaultInstance()));
-        var assertMessage = assertThat(exception).hasMessageThat();
+    fun `not allow fraction boundaries for integer fields`() {
+        val exception = assertThrows<ValidationException> {
+            InvalidBound.newBuilder().build()
+        }
+        val assertMessage = assertThat(exception).hasMessageThat()
         assertMessage
-                .contains("2.71");
+            .contains("2.71")
         assertMessage
-                .contains(TypeName.of(InvalidBound.class).value());
+            .contains(TypeName.of(InvalidBound::class.java).value())
     }
 
-    private void minNumberTest(double value, boolean inclusive, boolean valid) {
-        Message msg = inclusive
-                      ? MinInclusiveNumberFieldValue.newBuilder()
-                              .setValue(value)
-                              .build()
-                      : MinExclusiveNumberFieldValue.newBuilder()
-                              .setValue(value)
-                              .build();
-        validate(msg);
-        assertIsValid(valid);
+    private fun msgMin(value: Double, inclusive: Boolean): Message {
+        val builder = if (inclusive)
+            MinInclusiveNumberFieldValue.newBuilder().setValue(value)
+        else MinExclusiveNumberFieldValue.newBuilder().setValue(value)
+        return builder.buildPartial()
     }
 
-    private void maxNumberTest(double value, boolean inclusive, boolean valid) {
-        Message msg = inclusive
-                      ? MaxInclusiveNumberFieldValue.newBuilder()
-                              .setValue(value)
-                              .build()
-                      : MaxExclusiveNumberFieldValue.newBuilder()
-                              .setValue(value)
-                              .build();
-        validate(msg);
-        assertIsValid(valid);
+    private fun minNumberTest(value: Double, inclusive: Boolean, valid: Boolean) {
+        val msg = msgMin(value, inclusive)
+        validate(msg)
+        assertIsValid(valid)
+    }
+
+    private fun maxNumberTest(value: Double, inclusive: Boolean, valid: Boolean) {
+        val msg = msgMax(inclusive, value)
+        validate(msg)
+        assertIsValid(valid)
+    }
+
+    private fun msgMax(inclusive: Boolean, value: Double): Message {
+        val builder = if (inclusive)
+            MaxInclusiveNumberFieldValue.newBuilder().setValue(value)
+        else MaxExclusiveNumberFieldValue.newBuilder().setValue(value)
+        return builder.build()
+    }
+
+    companion object {
+        const val EQUAL_MIN: Double = 16.5
+        const val GREATER_THAN_MIN: Double = EQUAL_MIN + 5
+        const val LESS_THAN_MIN: Double = EQUAL_MIN - 5
+
+        const val EQUAL_MAX: Double = 64.5
+        const val GREATER_THAN_MAX: Double = EQUAL_MAX + 5
+
+        const val LESS_THAN_MAX: Double = EQUAL_MAX - 5
+
+        /**
+         * For the code which produces these diagnostic messages please see
+         * [io.spine.validation.NumberRules].
+         *
+         * We need to move the message composition logic to the [Diags] class so that we
+         * have all strings in one place. This is the first step towards making our diagnostics
+         * localized to other languages.
+         *
+         * @see io.spine.validation.NumberRules
+         */
+        const val LESS_MIN_MSG: String =
+            "The number must be greater than or equal to $EQUAL_MIN, but was $LESS_THAN_MIN."
+
+        const val GREATER_MAX_MSG: String =
+            "The number must be less than or equal to $EQUAL_MAX, but was $GREATER_THAN_MAX."
     }
 }

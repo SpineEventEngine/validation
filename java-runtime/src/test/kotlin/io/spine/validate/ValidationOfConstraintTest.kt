@@ -27,6 +27,7 @@ package io.spine.validate
 
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
+import io.kotest.matchers.shouldBe
 import io.spine.validate.Validate.violationsOf
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
 import org.junit.jupiter.api.Assertions
@@ -132,7 +133,7 @@ abstract class ValidationOfConstraintTest {
         val actualErrorMessage = String.format(
             violation.msgFormat, *violation.paramList.toTypedArray()
         )
-        assertThat(actualErrorMessage).isEqualTo(expectedErrMsg)
+        actualErrorMessage shouldBe expectedErrMsg
         assertFieldPathIs(violation, invalidFieldName)
         assertThat(violation.violationList).isEmpty()
     }
