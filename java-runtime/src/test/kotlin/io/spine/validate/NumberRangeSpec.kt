@@ -142,11 +142,11 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
         assertIsValid(valid)
     }
 
-    private fun msgMax(inclusive: Boolean, value: Double): Message {
+    private fun msgMax(inclusive: Boolean, value: Double): @NonValidated Message {
         val builder = if (inclusive)
             MaxInclusiveNumberFieldValue.newBuilder().setValue(value)
         else MaxExclusiveNumberFieldValue.newBuilder().setValue(value)
-        return builder.build()
+        return builder.buildPartial()
     }
 
     companion object {
