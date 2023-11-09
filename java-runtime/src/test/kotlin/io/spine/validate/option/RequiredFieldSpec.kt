@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,192 +23,197 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import io.spine.test.validate.requiredfield.ComplexRequiredFields;
-import io.spine.test.validate.requiredfield.EveryFieldOptional;
-import io.spine.test.validate.requiredfield.EveryFieldRequired;
-import io.spine.test.validate.requiredfield.OneofFieldAndOtherFieldRequired;
-import io.spine.test.validate.requiredfield.OneofRequired;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.stream.Stream;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
+import io.spine.test.validate.requiredfield.ComplexRequiredFields
+import io.spine.test.validate.requiredfield.ComplexRequiredFields.FifthField
+import io.spine.test.validate.requiredfield.EveryFieldOptional
+import io.spine.test.validate.requiredfield.EveryFieldRequired
+import io.spine.test.validate.requiredfield.OneofFieldAndOtherFieldRequired
+import io.spine.test.validate.requiredfield.OneofRequired
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import java.util.stream.Stream
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(required_field)` message option and consider message")
-final class RequiredFieldTest extends ValidationOfConstraintTest {
+internal class RequiredFieldSpec : ValidationOfConstraintTest() {
 
-    @DisplayName("valid if")
     @Nested
-    final class Valid {
+    @DisplayName("valid if")
+    internal inner class Valid {
 
-        @DisplayName("all required fields are set")
         @Test
-        void allRequiredFieldsAreSet() {
-            var message = EveryFieldRequired.newBuilder()
-                    .setFirst("first field set")
-                    .setSecond("second field set")
-                    .setThird("third field set")
-                    .build();
-            assertValid(message);
+        fun `all required fields are set`() {
+            val message = EveryFieldRequired.newBuilder()
+                .setFirst("first field set")
+                .setSecond("second field set")
+                .setThird("third field set")
+                .build()
+            assertValid(message)
         }
 
-        @DisplayName("`oneof` field")
         @Nested
-        final class OneofField {
+        @DisplayName("'oneof' field")
+        internal inner class OneofField {
 
-            @DisplayName("'first' is set")
             @Test
-            void first() {
-                var withFirstField = OneofRequired.newBuilder()
-                        .setFirst("first field set")
-                        .build();
-                assertValid(withFirstField);
+            fun `'first' is set`() {
+                val withFirstField = OneofRequired.newBuilder()
+                    .setFirst("first field set")
+                    .build()
+                assertValid(withFirstField)
             }
 
-            @DisplayName("'second' is set")
             @Test
-            void second() {
-                var withSecondField = OneofRequired.newBuilder()
-                        .setSecond("second field set")
-                        .build();
-                assertValid(withSecondField);
+            fun `'second' is set`() {
+                val withSecondField = OneofRequired.newBuilder()
+                    .setSecond("second field set")
+                    .build()
+                assertValid(withSecondField)
             }
         }
 
         @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
-        @DisplayName("`oneof` and other field are set")
         @Test
-        void oneofAndOtherFieldsAreSet() {
-            var message = OneofFieldAndOtherFieldRequired.newBuilder()
-                    .setSecond("second field set")
-                    .setThird("third field set")
-                    .build();
-            assertValid(message);
+        fun `'oneof' and other field are set`() {
+            val message = OneofFieldAndOtherFieldRequired.newBuilder()
+                .setSecond("second field set")
+                .setThird("third field set")
+                .build()
+            assertValid(message)
         }
 
-        @DisplayName("all fields are optional")
         @Test
-        void optionalFieldsAreNotSet() {
-            assertValid(EveryFieldOptional.getDefaultInstance());
-            var message = EveryFieldOptional.newBuilder()
-                    .setFirst("first field set")
-                    .setThird("third field set")
-                    .build();
-            assertValid(message);
+        fun `all fields are optional`() {
+            assertValid(EveryFieldOptional.getDefaultInstance())
+            val message = EveryFieldOptional.newBuilder()
+                .setFirst("first field set")
+                .setThird("third field set")
+                .build()
+            assertValid(message)
         }
 
         @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
         @DisplayName("a message qualifies for complex required field pattern")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RequiredFieldTest#validComplexMessages")
-        void qualifiesForComplexRequiredFieldPattern(ComplexRequiredFields message) {
-            assertValid(message);
+        @MethodSource("io.spine.validate.option.RequiredFieldSpec#validComplexMessages")
+        fun `a message qualifies for complex required field pattern`(
+            message: ComplexRequiredFields
+        ) {
+            assertValid(message)
         }
+
     }
 
-    @SuppressWarnings("unused") // used via `@MethodSource` value
-    private static Stream<ComplexRequiredFields> validComplexMessages() {
-        var message = ComplexRequiredFields.newBuilder()
-                .addFirst("first field set")
-                .setFourth("fourth field set")
-                .setFifth(ComplexRequiredFields.FifthField
-                                  .newBuilder()
-                                  .setValue("fifthFieldValue"))
-                .build();
-        var alternativeMessage = ComplexRequiredFields.newBuilder()
-                .putSecond("key", "second field set")
-                .setThird("fourth field set")
-                .setFifth(ComplexRequiredFields.FifthField
-                                  .newBuilder()
-                                  .setValue("fifthFieldValue"))
-                .build();
-        return Stream.of(message, alternativeMessage);
-    }
-
-    @DisplayName("invalid if")
     @Nested
-    final class Invalid {
+    @DisplayName("invalid if")
+    internal inner class Invalid {
 
-        @DisplayName("a required field is not set")
         @Test
-        void requiredFieldIsNotSet() {
-            assertNotValid(EveryFieldRequired.getDefaultInstance(), false);
-            var onlyOneRequiredSet = EveryFieldRequired.newBuilder()
-                    .setFirst("only one set")
-                    .build();
-            assertNotValid(onlyOneRequiredSet, false);
+        fun `a required field is not set`() {
+            assertNotValid(EveryFieldRequired.getDefaultInstance(), false)
+            val onlyOneRequiredSet = EveryFieldRequired.newBuilder()
+                .setFirst("only one set")
+                .build()
+            assertNotValid(onlyOneRequiredSet, false)
 
-            var twoRequiredSet = EveryFieldRequired.newBuilder()
-                    .setFirst("first set")
-                    .setSecond("second set")
-                    .build();
-            assertNotValid(twoRequiredSet, false);
+            val twoRequiredSet = EveryFieldRequired.newBuilder()
+                .setFirst("first set")
+                .setSecond("second set")
+                .build()
+            assertNotValid(twoRequiredSet, false)
         }
 
-        @DisplayName("a required `oneof` is not set")
         @Test
-        void oneofNotSet() {
-            assertNotValid(OneofRequired.getDefaultInstance(), false);
-            var withDefaultValue = OneofRequired.newBuilder()
-                    .setFirst("")
-                    .build();
-            assertNotValid(withDefaultValue, false);
+        fun `a required 'oneof' is not set`() {
+            assertNotValid(OneofRequired.getDefaultInstance(), false)
+            val withDefaultValue = OneofRequired.newBuilder()
+                .setFirst("")
+                .build()
+            assertNotValid(withDefaultValue, false)
         }
 
-        @DisplayName("`oneof` or other field is not set")
         @Test
-        void oneofOrOtherNotSet() {
-            Exception exception = assertThrows(
-                    IllegalStateException.class,
-                    () -> validate(OneofFieldAndOtherFieldRequired.getDefaultInstance())
-            );
+        fun `'oneof' or other field is not set`() {
+            val exception: Exception = assertThrows(
+                IllegalStateException::class.java
+            ) { validate(OneofFieldAndOtherFieldRequired.getDefaultInstance()) }
             assertThat(exception)
-                    .hasCauseThat()
-                    .hasMessageThat()
-                    .contains("(");
+                .hasCauseThat()
+                .hasMessageThat()
+                .contains("(")
         }
 
         @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
-        @DisplayName("a message does not qualifies for a complext required field pattern")
         @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RequiredFieldTest#invalidComplexMessages")
-        void notQualifiesForComplexPattern(ComplexRequiredFields message) {
-            assertNotValid(message, false);
+        @MethodSource("io.spine.validate.option.RequiredFieldSpec#invalidComplexMessages")
+        fun `a message does not qualifies for a complext required field pattern`(
+            message: ComplexRequiredFields
+        ) {
+            assertNotValid(message, false)
         }
+
     }
 
-    @SuppressWarnings("unused") // invoked via `@MethodSource`.
-    private static Stream<ComplexRequiredFields> invalidComplexMessages() {
-        var fifthFieldValue = ComplexRequiredFields.FifthField.newBuilder()
-                .setValue("fifthFieldValue");
-        var withoutListOrMap = ComplexRequiredFields.newBuilder()
+    companion object {
+
+        @JvmStatic
+        fun validComplexMessages(): Stream<ComplexRequiredFields> {
+            val message = ComplexRequiredFields.newBuilder()
+                .addFirst("first field set")
                 .setFourth("fourth field set")
-                .setFifth(fifthFieldValue)
-                .build();
-
-        var withoutOneof = ComplexRequiredFields.newBuilder()
-                .putSecond("key", "second field set")
-                .setFifth(fifthFieldValue)
-                .build();
-
-        var withoutMessage = ComplexRequiredFields.newBuilder()
+                .setFifth(
+                    FifthField
+                        .newBuilder()
+                        .setValue("fifthFieldValue")
+                )
+                .build()
+            val alternativeMessage = ComplexRequiredFields.newBuilder()
                 .putSecond("key", "second field set")
                 .setThird("fourth field set")
-                .build();
-        return Stream.of(ComplexRequiredFields.getDefaultInstance(),
-                         withoutListOrMap,
-                         withoutOneof,
-                         withoutMessage);
+                .setFifth(
+                    FifthField
+                        .newBuilder()
+                        .setValue("fifthFieldValue")
+                )
+                .build()
+            return Stream.of(message, alternativeMessage)
+        }
+
+        @JvmStatic
+        fun invalidComplexMessages(): Stream<ComplexRequiredFields> {
+            val fifthFieldValue = FifthField.newBuilder()
+                .setValue("fifthFieldValue")
+            val withoutListOrMap = ComplexRequiredFields.newBuilder()
+                .setFourth("fourth field set")
+                .setFifth(fifthFieldValue)
+                .build()
+
+            val withoutOneof = ComplexRequiredFields.newBuilder()
+                .putSecond("key", "second field set")
+                .setFifth(fifthFieldValue)
+                .build()
+
+            val withoutMessage = ComplexRequiredFields.newBuilder()
+                .putSecond("key", "second field set")
+                .setThird("fourth field set")
+                .build()
+            return Stream.of(
+                ComplexRequiredFields.getDefaultInstance(),
+                withoutListOrMap,
+                withoutOneof,
+                withoutMessage
+            )
+        }
     }
 }
