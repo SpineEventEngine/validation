@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,31 +89,6 @@ message RequiredDoubleFieldValue {
 
 message RequiredLongFieldValue {
     int64 value = 1 [(required) = true];
-}
-// Messages for "if_missing" option tests.
-
-message CustomMessageRequiredMsgFieldValue {
-    google.protobuf.StringValue value = 1 [(required) = true, (if_missing).msg_format = "MsgError"];
-}
-
-message CustomMessageRequiredStringFieldValue {
-    string value = 1 [(required) = true, (if_missing).msg_format = "StrError"];
-}
-
-message CustomMessageRequiredByteStringFieldValue {
-    bytes value = 1 [(required) = true, (if_missing).msg_format = "ByteStrError"];
-}
-
-message CustomMessageRequiredRepeatedMsgFieldValue {
-    repeated google.protobuf.StringValue value = 1 [(required) = true, (if_missing).msg_format = "RepeatedMsgError"];
-}
-
-message CustomMessageRequiredEnumFieldValue {
-    Planet value = 1 [(required) = true, (if_missing).msg_format = "EnumError"];
-}
-
-message CustomMessageWithNoRequiredOption {
-    string value = 1 [(if_missing).msg_format = "Custom error messages make no difference without `(required) = true`"];
 }
 
 // Messages for "min", "max" options tests.
