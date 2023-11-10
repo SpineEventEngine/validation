@@ -77,21 +77,28 @@ public fun ErrorMessage.createParentViolation(
  * it to the given mutable [violationsList].
  *
  * @param type
- *      name of the type of the validated message
+ *         a name of the validated message type.
  * @param violationsList
- *      a code reference to a list of violations
+ *         a code reference to a list of violations.
  * @param field
- *      field that is common to all the simple rules that constitute the associated composite rule,
- *      or `null` if no such field exists. If this param is `null`, `fieldValue` must
- *      also be `null`.
+ *         field that is common to all the simple rules that constitute the associated
+ *         composite rule, or `null` if no such field exists.
+ *         If this param is `null`, `fieldValue` must also be `null`.
  * @param fieldValue
- *      the expression to obtain the value of the common field, or `null` if there is no common
- *      field. If this param is `null`, `field` must also be `null`.
+ *         the expression to obtain the value of the common field, or `null`,
+ *         if there is no common field.
+ *         If this parameter is `null`, `field` must also be `null`.
  */
-public fun ErrorMessage.createCompositeViolation(type: TypeName,
-                                          violationsList: Expression,
-                                          field: Field?,
-                                          fieldValue: Expression?): CodeBlock {
+public fun ErrorMessage.createCompositeViolation(
+    type: TypeName,
+    violationsList: Expression,
+    field: Field?,
+    fieldValue: Expression?
+): CodeBlock {
+    require(field != null && fieldValue != null || field == null && fieldValue == null) {
+        "Either both `field` and `fieldValue` must be `null` or both must be not `null`." +
+                "Got `field` = `$field` and `fieldValue` = `$fieldValue`."
+    }
     val violation = buildViolation(type, field, fieldValue)
     return addViolation(violation, violationsList)
 }
