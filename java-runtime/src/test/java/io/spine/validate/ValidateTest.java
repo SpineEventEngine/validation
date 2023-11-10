@@ -99,11 +99,13 @@ class ValidateTest extends UtilityClassTest<Validate> {
         @DisplayName("throw `ValidationException` if a `(set_once)` field is overridden")
         void reportIllegalChanges() {
             var oldValue = Passport.newBuilder()
+                    .setId("AB CDE-123")
                     .setBirthplace("Kyiv")
                     .build();
-            var newValue = Passport.newBuilder()
-                    .setBirthplace("Kharkiv")
-                    .build();
+            var theBuilderToFail = oldValue.toBuilder()
+                    .setBirthplace("Kharkiv");
+
+            var newValue = theBuilderToFail.buildPartial();
             checkViolated(oldValue, newValue, BIRTHPLACE);
         }
 
@@ -137,21 +139,28 @@ class ValidateTest extends UtilityClassTest<Validate> {
         @DisplayName("allow overriding repeated fields")
         void ignoreRepeated() {
             var oldValue = Passport.newBuilder()
+                    .setId("PT 123")
                     .addPhoto(Url.newBuilder().setSpec("foo.bar/pic1").build())
                     .build();
-            var newValue = Passport.getDefaultInstance();
+            var newValue = oldValue.toBuilder()
+                    .addPhoto(Url.newBuilder().setSpec("foo.bar/pic2").build())
+                    .build();
             checkValidChange(oldValue, newValue);
         }
 
         @Test
         @DisplayName("allow overriding if `(set_once) = false`")
         void ignoreNonSetOnce() {
-            var oldValue = Passport.getDefaultInstance();
+            var id = "JB 007";
+            var oldValue = Passport.newBuilder()
+                    .setId(id)
+                    .build();
             var name = PersonName.newBuilder()
                     .setGivenName("John")
                     .setFamilyName("Doe")
                     .build();
             var newValue = Passport.newBuilder()
+                    .setId(id)
                     .setName(name)
                     .build();
             checkValidChange(oldValue, newValue);
