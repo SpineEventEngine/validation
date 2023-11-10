@@ -72,13 +72,14 @@ final class RequiredRule {
         if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }
-        var collectionRule = collectionRule(integratedRule);
+        var collectionRule = collectionRule(integratedRule, errorMessage);
         return Optional.of(collectionRule);
     }
 
-    private static Rule collectionRule(SimpleRule integratedRule) {
+    private static Rule collectionRule(SimpleRule integratedRule, String errorMessage) {
+        var msg = errorMessage.isEmpty() ? collectionErrorMsg : errorMessage;
         var withCustomErrorMessage = integratedRule.toBuilder()
-                .setErrorMessage(collectionErrorMsg)
+                .setErrorMessage(msg)
                 .build();
         return wrap(withCustomErrorMessage);
     }
