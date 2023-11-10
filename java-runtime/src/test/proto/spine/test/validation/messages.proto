@@ -37,7 +37,7 @@ option java_package = "io.spine.test.validate";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/any.proto";
 
-import "spine/test/validation/test_pattern_option.proto";
+import "spine/test/validation/pattern_option_test.proto";
 
 // Messages for general validation tests.
 
