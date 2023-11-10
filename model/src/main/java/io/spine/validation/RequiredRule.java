@@ -27,6 +27,7 @@
 package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
+import io.spine.option.IfMissingOption;
 import io.spine.protodata.Field;
 import io.spine.protodata.Value;
 
@@ -77,11 +78,40 @@ final class RequiredRule {
     }
 
     private static Rule collectionRule(SimpleRule integratedRule, String errorMessage) {
-        var msg = errorMessage.isEmpty() ? collectionErrorMsg : errorMessage;
+        var msg = collectionErrorMessage(errorMessage);
         var withCustomErrorMessage = integratedRule.toBuilder()
                 .setErrorMessage(msg)
                 .build();
         return wrap(withCustomErrorMessage);
+    }
+
+    /**
+     * This method provides a separate default message for the case of a collection field
+     * marked as `(required)`.
+     *
+     * <p>Singular fields obtain the default error message as a value of the `(default_message)`
+     * option set for `IfMissing` option type.
+     *
+     * <p>Event if a custom error message is not set by a {@code (if_missing)} field option,
+     * we want to have a different <em>default</em> message for collection fields,
+     * so that the user can find an error quicker.
+     *
+     * <p>If a custom error message is set, we use it as is.
+     *
+     * @param errorMessage
+     *         the error message coming from the {@link RequiredPolicy} which is producing
+     *         the rule while this method is called
+     * @return an error message to be used for the collection field
+     */
+    private static String collectionErrorMessage(String errorMessage) {
+        if (errorMessage.isEmpty()) {
+            return collectionErrorMsg;
+        }
+        var defaultMessage = DefaultErrorMessage.from(IfMissingOption.getDescriptor());
+        if (errorMessage.equals(defaultMessage)) {
+            return collectionErrorMsg;
+        }
+        return errorMessage;
     }
 
     private static SimpleRule rule(Field field,
