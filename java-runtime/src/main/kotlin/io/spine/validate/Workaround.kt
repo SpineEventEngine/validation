@@ -33,6 +33,7 @@ import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.Message
 import io.spine.option.OptionsProto.goes
 import io.spine.option.OptionsProto.requiredField
+import io.spine.option.OptionsProto.setOnce
 
 /**
  * This file provides workarounds for supporting validation features that
@@ -43,6 +44,7 @@ private const val ABOUT = ""
 
 internal fun Message.requiresRuntimeValidation(): Boolean =
     hasFieldOption(goes)
+        || hasFieldOption(setOnce)
         || hasTypeOption(requiredField)
 
 private fun Message.hasFieldOption(option: GeneratedExtension<FieldOptions, *>): Boolean {
@@ -52,10 +54,13 @@ private fun Message.hasFieldOption(option: GeneratedExtension<FieldOptions, *>):
     }
 }
 
-private fun FieldDescriptor.hasOption(option: GeneratedExtension<FieldOptions, *>): Boolean {
-    val value = options.getExtension(option)
-    return !option.messageDefaultInstance.equals(value)
-}
+private fun FieldDescriptor.hasOption(option: GeneratedExtension<FieldOptions, *>): Boolean =
+    when (val value = options.getExtension(option)) {
+        is Boolean -> value
+        is String -> value.isNotEmpty()
+        is Message -> !option.messageDefaultInstance.equals(value)
+        else -> false
+    }
 
 private fun Message.hasTypeOption(option: GeneratedExtension<MessageOptions, *>): Boolean {
     val result = descriptorForType.options.hasExtension(option)
