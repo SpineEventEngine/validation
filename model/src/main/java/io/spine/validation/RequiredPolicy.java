@@ -39,7 +39,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 
 /**
- * A {@link Policy} which controls whether or not a field should be validated as {@code required}.
+ * A {@link Policy} which controls whether a field should be validated as {@code required}.
  *
  * <p>Whenever a field option is discovered, if that option is the {@code required} option, and
  * the value is {@code true}, and the field type supports such validation, a validation rule
@@ -75,7 +75,7 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
         var type = field.getType()
                         .getPrimitive();
         return newIllegalStateException(
-                "Field `%s.%s` of type `%s` does not support `(required)` validation.",
+                "The field `%s.%s` of the type `%s` does not support `(required)` validation.",
                 typeUrl, fieldName, type
         );
     }
