@@ -42,9 +42,9 @@ import io.spine.validation.Placeholder.VALUE
  * The error message can contain dynamic references to values in the generated code.
  * If such references are present, they are inserted into the message via the plus (`+`) operator.
  *
- * If the target language uses a different way of concatenating strings (e.g. dots in PHP, etc.),
+ * If the target language uses a different way of concatenating strings (e.g., dots in PHP, etc.),
  * or if it defines string literals in another way rather than enclosing them in quotation marks,
- * renderers for such a language mustn't use this class and instead compile the error message on
+ * renderers for such a language must not use this class and instead compile the error message on
  * their own.
  */
 public class ErrorMessage
