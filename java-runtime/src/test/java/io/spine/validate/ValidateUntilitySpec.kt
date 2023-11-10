@@ -23,167 +23,133 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
-
-import com.google.common.testing.NullPointerTester;
-import com.google.protobuf.Message;
-import io.spine.base.Field;
-import io.spine.base.Time;
-import io.spine.code.proto.FieldContext;
-import io.spine.test.type.PersonName;
-import io.spine.test.type.Url;
-import io.spine.test.validate.Passport;
-import io.spine.test.validate.RequiredMsgFieldValue;
-import io.spine.testing.UtilityClassTest;
-import io.spine.testing.logging.mute.MuteLogging;
-import io.spine.type.TypeName;
-import io.spine.validate.diags.ViolationText;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.validate.Validate.checkValidChange;
-import static io.spine.validate.Validate.violationsOf;
-import static io.spine.validate.Validate.violationsOfCustomConstraints;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.google.common.testing.NullPointerTester
+import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.spine.base.Field
+import io.spine.base.Time
+import io.spine.code.proto.FieldContext
+import io.spine.test.type.PersonName
+import io.spine.test.type.Url
+import io.spine.test.validate.Passport
+import io.spine.test.validate.RequiredMsgFieldValue
+import io.spine.testing.UtilityClassTest
+import io.spine.testing.logging.mute.MuteLogging
+import io.spine.type.TypeName
+import io.spine.validate.Validate.checkValidChange
+import io.spine.validate.Validate.violationsOf
+import io.spine.validate.Validate.violationsOfCustomConstraints
+import io.spine.validate.diags.ViolationText
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`Validate` utility class should")
-class ValidateTest extends UtilityClassTest<Validate> {
+internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class.java) {
 
-    ValidateTest() {
-        super(Validate.class);
-    }
-
-    @Override
-    protected void configure(NullPointerTester tester) {
-        super.configure(tester);
-        tester.setDefault(Message.class, Time.currentTime())
-              .setDefault(FieldContext.class, FieldContext.empty());
+    override fun configure(tester: NullPointerTester) {
+        super.configure(tester)
+        tester.setDefault(Message::class.java, Time.currentTime())
+            .setDefault(FieldContext::class.java, FieldContext.empty())
     }
 
     @Test
-    @DisplayName("run custom validation " +
-            "and obtain no violations if there are no custom constraints")
-    void customValidation() {
-        var message = RequiredMsgFieldValue.getDefaultInstance();
-        var violations = violationsOf(message);
-        var customViolations = violationsOfCustomConstraints(message);
-        assertThat(violations).hasSize(1);
-        assertThat(customViolations).isEmpty();
+    fun `run custom validation and obtain no violations if there are no custom constraints`() {
+        val message = RequiredMsgFieldValue.getDefaultInstance()
+        val violations = violationsOf(message)
+        val customViolations = violationsOfCustomConstraints(message)
+
+        violations shouldHaveSize 1
+        customViolations.shouldBeEmpty()
     }
 
     @Test
-    @DisplayName("format message from constraint violation")
-    void formatMessageFromConstraintViolation() {
-        var violation = ConstraintViolation.newBuilder()
-                .setMsgFormat("test %s test %s")
-                .addParam("1")
-                .addParam("2")
-                .build();
-        var formatted = ViolationText.of(violation).toString();
+    fun `format message from constraint violation`() {
+        val violation = ConstraintViolation.newBuilder()
+            .setMsgFormat("test %s test %s")
+            .addParam("1")
+            .addParam("2")
+            .build()
+        val formatted = ViolationText.of(violation).toString()
 
-        assertEquals("test 1 test 2", formatted);
+        formatted shouldBe "test 1 test 2"
     }
 
     @MuteLogging
     @Nested
     @DisplayName("test message changes upon `(set_once)` and")
-    class SetOnce {
-
-        private static final String BIRTHPLACE = "birthplace";
+    internal inner class SetOnce {
 
         @Test
-        @DisplayName("throw `ValidationException` if a `(set_once)` field is overridden")
-        void reportIllegalChanges() {
-            var oldValue = Passport.newBuilder()
-                    .setId("AB CDE-123")
-                    .setBirthplace("Kyiv")
-                    .build();
-            var theBuilderToFail = oldValue.toBuilder()
-                    .setBirthplace("Kharkiv");
-
-            var newValue = theBuilderToFail.buildPartial();
-            checkViolated(oldValue, newValue, BIRTHPLACE);
+        fun `throw 'ValidationException' with several violations`() {
+            val oldValue = Passport.newBuilder()
+                .setId("MT 111")
+                .setBirthplace("London")
+                .build()
+            val newValue = Passport.newBuilder()
+                .setId("JC 424")
+                .setBirthplace("Edinburgh")
+                .build()
+            checkViolated(oldValue, newValue, Companion.BIRTHPLACE)
         }
 
         @Test
-        @DisplayName("ignore ID changes by default")
-        void reportIdChanges() {
-            var oldValue = Passport.newBuilder()
-                    .setId("MT 000100010001")
-                    .build();
-            var newValue = Passport.newBuilder()
-                    .setId("JC 424242424242")
-                    .build();
-            checkValidChange(oldValue, newValue);
+        fun `allow overriding repeated fields`() {
+            val oldValue = Passport.newBuilder()
+                .setId("PT 123")
+                .addPhoto(Url.newBuilder().setSpec("foo.bar/pic1").build())
+                .build()
+            val newValue = oldValue.toBuilder()
+                .addPhoto(Url.newBuilder().setSpec("foo.bar/pic2").build())
+                .build()
+            checkValidChange(oldValue, newValue)
         }
 
         @Test
-        @DisplayName("throw `ValidationException` with several violations")
-        void reportManyFields() {
-            var oldValue = Passport.newBuilder()
-                    .setId("MT 111")
-                    .setBirthplace("London")
-                    .build();
-            var newValue = Passport.newBuilder()
-                    .setId("JC 424")
-                    .setBirthplace("Edinburgh")
-                    .build();
-            checkViolated(oldValue, newValue, BIRTHPLACE);
+        fun `allow overriding if '(set_once) = false'`() {
+            val id = "JB 007"
+            val oldValue = Passport.newBuilder()
+                .setId(id)
+                .build()
+            val name = PersonName.newBuilder()
+                .setGivenName("John")
+                .setFamilyName("Doe")
+                .build()
+            val newValue = Passport.newBuilder()
+                .setId(id)
+                .setName(name)
+                .build()
+            checkValidChange(oldValue, newValue)
         }
 
-        @Test
-        @DisplayName("allow overriding repeated fields")
-        void ignoreRepeated() {
-            var oldValue = Passport.newBuilder()
-                    .setId("PT 123")
-                    .addPhoto(Url.newBuilder().setSpec("foo.bar/pic1").build())
-                    .build();
-            var newValue = oldValue.toBuilder()
-                    .addPhoto(Url.newBuilder().setSpec("foo.bar/pic2").build())
-                    .build();
-            checkValidChange(oldValue, newValue);
-        }
+        private fun checkViolated(oldValue: Passport, newValue: Passport, vararg fields: String) {
+            val exception = assertThrows<ValidationException> {
+                checkValidChange(oldValue, newValue)
+            }
+            val violations = exception.constraintViolations
+            violations shouldHaveSize fields.size
 
-        @Test
-        @DisplayName("allow overriding if `(set_once) = false`")
-        void ignoreNonSetOnce() {
-            var id = "JB 007";
-            var oldValue = Passport.newBuilder()
-                    .setId(id)
-                    .build();
-            var name = PersonName.newBuilder()
-                    .setGivenName("John")
-                    .setFamilyName("Doe")
-                    .build();
-            var newValue = Passport.newBuilder()
-                    .setId(id)
-                    .setName(name)
-                    .build();
-            checkValidChange(oldValue, newValue);
-        }
+            for (i in fields.indices) {
+                val violation = violations[i]
+                val field = fields[i]
 
-        private void checkViolated(Passport oldValue, Passport newValue, String... fields) {
-            var exception = assertThrows(ValidationException.class,
-                                 () -> checkValidChange(oldValue, newValue));
-            var violations = exception.getConstraintViolations();
-            assertThat(violations).hasSize(fields.length);
+                violation!!.msgFormat shouldContain "(set_once)"
 
-            for (var i = 0; i < fields.length; i++) {
-                var violation = violations.get(i);
-                var field = fields[i];
+                val expectedTypeName = TypeName.of(newValue).value()
+                violation.typeName shouldContain expectedTypeName
 
-                assertThat(violation.getMsgFormat()).contains("(set_once)");
-
-                var expectedTypeName = TypeName.of(newValue).value();
-                assertThat(violation.getTypeName()).contains(expectedTypeName);
-
-                assertThat(violation.getFieldPath())
-                        .isEqualTo(Field.parse(field).path());
+                violation.fieldPath shouldBe Field.parse(field).path()
             }
         }
+    }
+
+    companion object {
+        private const val BIRTHPLACE = "birthplace"
     }
 }
