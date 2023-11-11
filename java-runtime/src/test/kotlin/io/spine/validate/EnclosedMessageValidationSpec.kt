@@ -126,8 +126,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
             PatternStringFieldValue.newBuilder()
                 .setEmail("invalid email")
                 .buildPartial()
-        val msg: @NonValidated WithValidateAndCustomMessage =
-            WithValidateAndCustomMessage.newBuilder()
+        val msg: @NonValidated ValidateWithCustomMessage = ValidateWithCustomMessage.newBuilder()
                 .setEnclosed(enclosedMsg)
                 .buildPartial()
 
@@ -142,13 +141,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
      */
     @Test
     fun `ignore custom invalid field message if validation is disabled`() {
-        assertValid(WithOnlyCustomMessage.getDefaultInstance())
-        assertDoesNotThrow { WithOnlyCustomMessage.newBuilder().build() }
+        assertValid(NotValidateWithCustomMessage.getDefaultInstance())
+        assertDoesNotThrow { NotValidateWithCustomMessage.newBuilder().build() }
     }
 }
-
-private typealias WithValidateAndCustomMessage =
-        ValidateWithCustomMessage
-
-private typealias WithOnlyCustomMessage =
-        NotValidateWithCustomMessage
