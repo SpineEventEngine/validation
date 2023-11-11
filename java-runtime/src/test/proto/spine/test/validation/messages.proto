@@ -51,28 +51,6 @@ message TaskId {
 }
 
 
-// Messages for "min", "max" options tests.
-
-message MinInclusiveNumberFieldValue {
-    double value = 1 [(min).value = "16.5", (min).exclusive = false];
-}
-
-message MinExclusiveNumberFieldValue {
-    double value = 1 [(min).value = "16.5", (min).exclusive = true];
-}
-
-message MaxInclusiveNumberFieldValue {
-    double value = 1 [(max).value = "64.5", (max).exclusive = false];
-}
-
-message MaxExclusiveNumberFieldValue {
-    double value = 1 [(max).value = "64.5", (max).exclusive = true];
-}
-
-message InvalidBound {
-    int64 value = 1 [(min).value = "2.71"];
-}
-
 // Messages for "valid" option tests.
 
 message EnclosedMessageFieldValue {

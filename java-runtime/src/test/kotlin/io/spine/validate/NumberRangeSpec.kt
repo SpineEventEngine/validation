@@ -29,10 +29,10 @@ import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
 import com.google.protobuf.doubleValue
 import io.spine.test.validate.InvalidBound
-import io.spine.test.validate.MaxExclusiveNumberFieldValue
-import io.spine.test.validate.MaxInclusiveNumberFieldValue
-import io.spine.test.validate.MinExclusiveNumberFieldValue
-import io.spine.test.validate.MinInclusiveNumberFieldValue
+import io.spine.test.validate.MaxExclusive
+import io.spine.test.validate.MaxInclusive
+import io.spine.test.validate.MinExclusive
+import io.spine.test.validate.MinInclusive
 import io.spine.type.TypeName
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.VALUE
@@ -125,8 +125,8 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
 
     private fun msgMin(value: Double, inclusive: Boolean): Message {
         val builder = if (inclusive)
-            MinInclusiveNumberFieldValue.newBuilder().setValue(value)
-        else MinExclusiveNumberFieldValue.newBuilder().setValue(value)
+            MinInclusive.newBuilder().setValue(value)
+        else MinExclusive.newBuilder().setValue(value)
         return builder.buildPartial()
     }
 
@@ -144,8 +144,8 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
 
     private fun msgMax(inclusive: Boolean, value: Double): @NonValidated Message {
         val builder = if (inclusive)
-            MaxInclusiveNumberFieldValue.newBuilder().setValue(value)
-        else MaxExclusiveNumberFieldValue.newBuilder().setValue(value)
+            MaxInclusive.newBuilder().setValue(value)
+        else MaxExclusive.newBuilder().setValue(value)
         return builder.buildPartial()
     }
 
