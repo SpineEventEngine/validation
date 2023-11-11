@@ -50,29 +50,6 @@ message TaskId {
     string value = 1;
 }
 
-
-// Messages for "valid" option tests.
-
-message EnclosedMessageFieldValue {
-    PatternStringFieldValue outer_msg_field = 1 [(validate) = true];
-}
-
-message EnclosedMessageWithoutAnnotationFieldValue {
-    PatternStringFieldValue outer_msg_field = 1;
-}
-
-message EnclosedMessageFieldValueWithCustomInvalidMessage {
-    PatternStringFieldValue outer_msg_field = 1 [(validate) = true, (if_invalid).msg_format = "Custom error"];
-}
-
-message EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage {
-    PatternStringFieldValue outer_msg_field = 1 [(if_invalid).msg_format = "Custom error is redundant in this case"];
-}
-
-message EnclosedMessageWithRequiredString {
-    RequiredString outer_msg_field = 1 [(validate) = true];
-}
-
 // Messages for testing validation of repeated fields.
 
 message MessageWithRepeatedUncheckedStringField {

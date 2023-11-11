@@ -29,12 +29,12 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
-import io.spine.test.validate.EnclosedMessageFieldValue
-import io.spine.test.validate.EnclosedMessageFieldValueWithCustomInvalidMessage
-import io.spine.test.validate.EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage
-import io.spine.test.validate.EnclosedMessageWithRequiredString
+import io.spine.test.validate.ValidateEnclosed
+import io.spine.test.validate.ValidateWithCustomMessage
+import io.spine.test.validate.NotValidateWithCustomMessage
+import io.spine.test.validate.ValidateWithRequiredString
 import io.spine.test.validate.PatternStringFieldValue
-import io.spine.test.validate.enclosedMessageWithoutAnnotationFieldValue
+import io.spine.test.validate.notValidateEnclosed
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
 import io.spine.validate.given.MessageValidatorTestEnv.OUTER_MSG_FIELD
@@ -51,8 +51,8 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         val enclosedMsg = PatternStringFieldValue.newBuilder()
             .setEmail("valid.email@mail.com")
             .build()
-        val msg = EnclosedMessageFieldValue.newBuilder()
-            .setOuterMsgField(enclosedMsg)
+        val msg = ValidateEnclosed.newBuilder()
+            .setEnclosed(enclosedMsg)
             .build()
         assertValid(msg)
     }
@@ -62,8 +62,8 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         val enclosedMsg = PatternStringFieldValue.newBuilder()
             .setEmail("invalid email")
             .buildPartial()
-        val msg = EnclosedMessageFieldValue.newBuilder()
-            .setOuterMsgField(enclosedMsg)
+        val msg = ValidateEnclosed.newBuilder()
+            .setEnclosed(enclosedMsg)
             .buildPartial()
         assertNotValid(msg)
     }
@@ -74,15 +74,15 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
             PatternStringFieldValue.newBuilder()
                 .setEmail("invalid email")
                 .buildPartial()
-        val msg = enclosedMessageWithoutAnnotationFieldValue {
-            outerMsgField = enclosedMsg
+        val msg = notValidateEnclosed {
+            enclosed = enclosedMsg
         }
         assertValid(msg)
     }
 
     @Test
     fun `consider field valid if it is not set`() {
-        val msg = EnclosedMessageWithRequiredString.getDefaultInstance()
+        val msg = ValidateWithRequiredString.getDefaultInstance()
         assertValid(msg)
     }
 
@@ -91,8 +91,8 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         val enclosedMsg = PatternStringFieldValue.newBuilder()
             .setEmail("invalid email")
             .buildPartial()
-        val msg = EnclosedMessageFieldValue.newBuilder()
-            .setOuterMsgField(enclosedMsg)
+        val msg = ValidateEnclosed.newBuilder()
+            .setEnclosed(enclosedMsg)
             .buildPartial()
         validate(msg)
 
@@ -128,7 +128,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
                 .buildPartial()
         val msg: @NonValidated WithValidateAndCustomMessage =
             WithValidateAndCustomMessage.newBuilder()
-                .setOuterMsgField(enclosedMsg)
+                .setEnclosed(enclosedMsg)
                 .buildPartial()
 
         validate(msg)
@@ -148,7 +148,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 }
 
 private typealias WithValidateAndCustomMessage =
-        EnclosedMessageFieldValueWithCustomInvalidMessage
+        ValidateWithCustomMessage
 
 private typealias WithOnlyCustomMessage =
-        EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage
+        NotValidateWithCustomMessage
