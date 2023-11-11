@@ -1,0 +1,91 @@
+/*
+ * Copyright 2023, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_multiple_files = true;
+option java_outer_classname = "RequiredTestProto";
+option java_package = "io.spine.test.validate";
+
+import "google/protobuf/wrappers.proto";
+
+message RequiredStringValue {
+    google.protobuf.StringValue value = 1 [(required) = true];
+}
+
+message RequiredString {
+    string value = 1 [(required) = true];
+}
+
+message RequiredBytes {
+    bytes value = 1 [(required) = true];
+}
+
+message RepeatedRequiredStringValue {
+    repeated google.protobuf.StringValue value = 1 [(required) = true];
+}
+
+message RequiredEnum {
+    Planet value = 1 [(required) = true];
+}
+
+enum Planet {
+
+    PLANET_UNDEFINED = 0;
+
+    MERCURY = 1;
+    VENUS = 2;
+    EARTH = 3;
+    MARS = 4;
+    JUPITER = 5;
+    SATURN = 6;
+    URANUS = 7;
+    NEPTUNE = 8;
+}
+
+message RequiredBoolean {
+    bool value = 1 [(required) = true];
+}
+
+message RequiredInt32 {
+    int32 value = 1 [(required) = true];
+}
+
+message RequiredLongFieldValue {
+    int64 value = 1 [(required) = true];
+}
+
+message RequiredFloat {
+    float value = 1 [(required) = true];
+}
+
+message RequiredDouble {
+    double value = 1 [(required) = true];
+}

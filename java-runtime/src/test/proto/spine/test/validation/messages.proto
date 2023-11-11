@@ -38,6 +38,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/any.proto";
 
 import "spine/test/validation/pattern_option_test.proto";
+import "spine/test/validation/required_test.proto";
 
 // Messages for general validation tests.
 
@@ -49,47 +50,6 @@ message TaskId {
     string value = 1;
 }
 
-// Messages for "required" option tests.
-
-message RequiredMsgFieldValue {
-    google.protobuf.StringValue value = 1 [(required) = true];
-}
-
-message RequiredStringFieldValue {
-    string value = 1 [(required) = true];
-}
-
-message RequiredByteStringFieldValue {
-    bytes value = 1 [(required) = true];
-}
-
-message RepeatedRequiredMsgFieldValue {
-    repeated google.protobuf.StringValue value = 1 [(required) = true];
-}
-
-message RequiredEnumFieldValue {
-    Planet value = 1 [(required) = true];
-}
-
-message RequiredBooleanFieldValue {
-    bool value = 1 [(required) = true];
-}
-
-message RequiredIntFieldValue {
-    int32 value = 1 [(required) = true];
-}
-
-message RequiredFloatFieldValue {
-    float value = 1 [(required) = true];
-}
-
-message RequiredDoubleFieldValue {
-    double value = 1 [(required) = true];
-}
-
-message RequiredLongFieldValue {
-    int64 value = 1 [(required) = true];
-}
 
 // Messages for "min", "max" options tests.
 
@@ -132,7 +92,7 @@ message EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMes
 }
 
 message EnclosedMessageWithRequiredString {
-    RequiredStringFieldValue outer_msg_field = 1 [(validate) = true];
+    RequiredString outer_msg_field = 1 [(validate) = true];
 }
 
 // Messages for testing validation of repeated fields.
@@ -145,7 +105,7 @@ message MessageWithRepeatedValidatedStringField {
     repeated string validated = 1 [(validate) = true, (pattern).regex = "\\w+"];
 }
 
-message MessegeWithRepeatedRequiredStringField {
+message MessageWithRepeatedRequiredStringField {
     repeated string required_field = 1 [(required) = true];
 }
 
@@ -153,7 +113,7 @@ message MessageWithRepeatedRequiredValidatedStringField {
     repeated string bound = 1 [(validate) = true, (required) = true, (pattern).regex = "\\w+"];
 }
 
-message MessageWithRepeatedUnchekedMessageField {
+message MessageWithRepeatedUncheckedMessageField {
     repeated InvalidMessage unchecked = 1;
 }
 
@@ -161,7 +121,7 @@ message MessageWithRepeatedValidatedMessageField {
     repeated InvalidMessage validated = 1 [(validate) = true];
 }
 
-message MessegeWithRepeatedRequiredMessageField {
+message MessageWithRepeatedRequiredMessageField {
     repeated InvalidMessage required_field = 1 [(required) = true];
 }
 
@@ -226,16 +186,3 @@ message ProjectionState {
     string not_important_id = 1 [(required) = false];
 }
 
-enum Planet {
-
-    PLANET_UNDEFINED = 0;
-
-    MERCURY = 1;
-    VENUS = 2;
-    EARTH = 3;
-    MARS = 4;
-    JUPITER = 5;
-    SATURN = 6;
-    URANUS = 7;
-    NEPTUNE = 8;
-}

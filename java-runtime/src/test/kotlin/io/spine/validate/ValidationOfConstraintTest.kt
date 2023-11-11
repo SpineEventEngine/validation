@@ -27,6 +27,7 @@ package io.spine.validate
 
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.spine.validate.Validate.violationsOf
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
@@ -48,7 +49,7 @@ abstract class ValidationOfConstraintTest {
     protected fun firstViolation(): ConstraintViolation = violations!![0]
 
     protected fun singleViolation(): ConstraintViolation {
-        assertThat(violations).hasSize(1)
+        violations!! shouldHaveSize 1
         return violations!![0]
     }
 

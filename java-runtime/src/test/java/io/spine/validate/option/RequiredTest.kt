@@ -29,15 +29,15 @@ import com.google.protobuf.StringValue
 import io.spine.base.Identifier
 import io.spine.test.validate.CustomMessageWithNoRequiredOption
 import io.spine.test.validate.Planet
-import io.spine.test.validate.RepeatedRequiredMsgFieldValue
-import io.spine.test.validate.RequiredBooleanFieldValue
-import io.spine.test.validate.RequiredByteStringFieldValue
-import io.spine.test.validate.RequiredEnumFieldValue
-import io.spine.test.validate.RequiredMsgFieldValue
-import io.spine.test.validate.RequiredStringFieldValue
-import io.spine.test.validate.repeatedRequiredMsgFieldValue
-import io.spine.test.validate.requiredByteStringFieldValue
-import io.spine.test.validate.requiredStringFieldValue
+import io.spine.test.validate.RepeatedRequiredStringValue
+import io.spine.test.validate.RequiredBoolean
+import io.spine.test.validate.RequiredBytes
+import io.spine.test.validate.RequiredEnum
+import io.spine.test.validate.RequiredString
+import io.spine.test.validate.RequiredStringValue
+import io.spine.test.validate.repeatedRequiredStringValue
+import io.spine.test.validate.requiredBytes
+import io.spine.test.validate.requiredStringValue
 import io.spine.testing.logging.mute.MuteLogging
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
@@ -52,32 +52,32 @@ internal class RequiredTest : ValidationOfConstraintTest() {
     
     @Test
     fun `find out that required 'Message' field is set`() = assertValid {
-        RequiredMsgFieldValue.newBuilder()
+        RequiredStringValue.newBuilder()
             .setValue(newStringValue())
             .build()
     }
 
     @Test
     fun `find out that required message field is NOT set`() = assertNotValid(
-        RequiredMsgFieldValue.getDefaultInstance()
+        RequiredStringValue.getDefaultInstance()
     )
 
     @Test
     fun `find out that required 'String' field is set`() = assertValid {
-        RequiredStringFieldValue.newBuilder()
+        RequiredString.newBuilder()
             .setValue(Identifier.newUuid())
             .build()
     }
 
     @Test
     fun `find out that required 'String' field is NOT set`() {
-        val invalidMsg = RequiredStringFieldValue.getDefaultInstance()
+        val invalidMsg = RequiredString.getDefaultInstance()
         assertNotValid(invalidMsg)
     }
 
     @Test
     fun `find out that required 'ByteString' field is set`() = assertValid {
-        requiredByteStringFieldValue {
+        requiredBytes {
             value = newByteString()
         }
     }
@@ -85,34 +85,34 @@ internal class RequiredTest : ValidationOfConstraintTest() {
     @Test
     fun `find out that required 'ByteString' field is NOT set`() {
         assertCheckFails(
-            RequiredByteStringFieldValue.getDefaultInstance()
+            RequiredBytes.getDefaultInstance()
         )
         assertDoesNotBuild {
-            requiredStringFieldValue {  }
+            requiredStringValue {  }
         }
     }
 
     @Test
     fun `find out that required 'Enum' field is set`() = assertValid {
-        RequiredEnumFieldValue.newBuilder()
+        RequiredEnum.newBuilder()
             .setValue(Planet.EARTH)
             .build()
     }
 
     @Test
     fun `find out that required 'Enum' field is NOT set`() = assertNotValid(
-        RequiredEnumFieldValue.getDefaultInstance()
+        RequiredEnum.getDefaultInstance()
     )
 
     @MuteLogging
     @Test
     fun `find out that required NON-SET 'Boolean' field passes validation`() = assertValid(
-        RequiredBooleanFieldValue.getDefaultInstance()
+        RequiredBoolean.getDefaultInstance()
     )
 
     @Test
     fun `find out that repeated required field has valid values`() = assertValid {
-        RepeatedRequiredMsgFieldValue.newBuilder()
+        RepeatedRequiredStringValue.newBuilder()
             .addValue(newStringValue())
             .addValue(newStringValue())
             .build()
@@ -120,20 +120,20 @@ internal class RequiredTest : ValidationOfConstraintTest() {
 
     @Test
     fun `find out that repeated required field has no values`() = assertNotValid(
-        RepeatedRequiredMsgFieldValue.getDefaultInstance()
+        RepeatedRequiredStringValue.getDefaultInstance()
     )
 
     @Test
     fun `accept 'repeated' and 'required' field with default message entries`() {
         // One valid value, one default instance. We do not validate deeper.
         assertValid {
-            repeatedRequiredMsgFieldValue {
+            repeatedRequiredStringValue {
                 value.add(newStringValue()) // valid value
                 value.add(StringValue.getDefaultInstance()) // empty value
             }
         }
         // Two default instances.
-        repeatedRequiredMsgFieldValue {
+        repeatedRequiredStringValue {
             value.add(StringValue.getDefaultInstance())
             value.add(StringValue.getDefaultInstance())
         }
@@ -147,7 +147,7 @@ internal class RequiredTest : ValidationOfConstraintTest() {
 
     @Test
     fun `provide one valid violation if required field is NOT set`() {
-        val invalidMsg = RequiredStringFieldValue.getDefaultInstance()
+        val invalidMsg = RequiredString.getDefaultInstance()
         assertSingleViolation(invalidMsg, MessageValidatorTestEnv.VALUE)
     }
 

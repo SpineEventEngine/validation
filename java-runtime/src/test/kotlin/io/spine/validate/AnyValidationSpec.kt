@@ -26,7 +26,7 @@
 package io.spine.validate
 
 import io.spine.protobuf.AnyPacker
-import io.spine.test.validate.RequiredMsgFieldValue
+import io.spine.test.validate.RequiredStringValue
 import io.spine.test.validate.anyfields.AnyContainer
 import io.spine.test.validate.anyfields.UncheckedAnyContainer
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
@@ -43,12 +43,12 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
      * Since the declaration of `RequiredMsgFieldValue` contains validation constraint
      * for the `value` field, the default instance of this type in invalid.
      */
-    private val invalidMessage: @NonValidated RequiredMsgFieldValue =
-        RequiredMsgFieldValue.getDefaultInstance()
+    private val invalidMessage: @NonValidated RequiredStringValue =
+        RequiredStringValue.getDefaultInstance()
 
     @Test
     fun `consider 'Any' valid if content is valid`() {
-        val value = RequiredMsgFieldValue.newBuilder()
+        val value = RequiredStringValue.newBuilder()
             .setValue(newStringValue())
             .build()
         val content = AnyPacker.pack(value)

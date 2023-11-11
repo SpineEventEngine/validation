@@ -37,7 +37,7 @@ import io.spine.code.proto.FieldContext
 import io.spine.test.type.PersonName
 import io.spine.test.type.Url
 import io.spine.test.validate.Passport
-import io.spine.test.validate.RequiredMsgFieldValue
+import io.spine.test.validate.RequiredStringValue
 import io.spine.testing.UtilityClassTest
 import io.spine.testing.logging.mute.MuteLogging
 import io.spine.type.TypeName
@@ -61,7 +61,7 @@ internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class
 
     @Test
     fun `run custom validation and obtain no violations if there are no custom constraints`() {
-        val message = RequiredMsgFieldValue.getDefaultInstance()
+        val message = RequiredStringValue.getDefaultInstance()
         val violations = violationsOf(message)
         val customViolations = violationsOfCustomConstraints(message)
 
