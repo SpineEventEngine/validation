@@ -45,9 +45,9 @@ import java.util.*
  */
 internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-    private val validationErrorVar = varName("generated_validationError_", ctx)
+    private val validationErrorVar = varName(prefix = "validationError", ctx)
 
-    private val violationListVar = varName("generated_violationList_", ctx)
+    private val violationListVar = varName(prefix = "violationList", ctx)
 
     init {
         val field = ctx.simpleRuleField
@@ -58,6 +58,10 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         }
     }
 
+    /**
+     * Compose a variable name after the format `prefixOfFieldName`.
+     * E.g., `validationErrorOfUserId`.
+     */
     private fun varName(prefix: String, ctx: GenerationContext): Literal {
         val fieldNameSuffix = ctx.simpleRuleField.name.value.titleCase()
         return Literal("${prefix}Of$fieldNameSuffix")
