@@ -43,7 +43,7 @@ import io.spine.validation.InTime
  * Creates a code generator for the [InTime] feature.
  */
 internal fun inTimeGenerator(inTime: InTime, ctx: GenerationContext): CodeGenerator {
-    val fieldType = ctx.fieldFromSimpleRule!!.type
+    val fieldType = ctx.simpleRuleField.type
     return if (fieldType.message.typeUrl == TIMESTAMP_TYPE) {
         TimestampInTimeGenerator(inTime, ctx)
     } else {

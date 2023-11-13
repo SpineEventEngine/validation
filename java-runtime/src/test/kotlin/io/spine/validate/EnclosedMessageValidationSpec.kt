@@ -37,7 +37,7 @@ import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.notValidateEnclosed
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
-import io.spine.validate.given.MessageValidatorTestEnv.OUTER_MSG_FIELD
+import io.spine.validate.given.MessageValidatorTestEnv.ENCLOSED_FIELD_NAME
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -102,7 +102,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
         assertFieldPathIs(
             violation,
-            OUTER_MSG_FIELD
+            ENCLOSED_FIELD_NAME
         )
         val innerViolations = violation.violationList
         innerViolations shouldHaveSize  1
@@ -113,7 +113,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
         assertFieldPathIs(
             innerViolation,
-            OUTER_MSG_FIELD,
+            ENCLOSED_FIELD_NAME,
             EMAIL
         )
 

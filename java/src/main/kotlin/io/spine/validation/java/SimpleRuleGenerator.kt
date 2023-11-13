@@ -30,6 +30,7 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
 import io.spine.protodata.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.PrimitiveType.TYPE_STRING
+import io.spine.protodata.Value
 import io.spine.protodata.codegen.java.ClassName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
@@ -42,9 +43,11 @@ import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.ComparisonOperator.NOT_EQUAL
 import io.spine.validation.ErrorMessage
+import io.spine.validation.SimpleRule
 import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Java code comparing two objects.
@@ -77,33 +80,39 @@ private val PRIMITIVE_COMPARISON_OPS = mapOf(
  */
 internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(ctx) {
 
-    protected val rule = ctx.rule.simple
+    protected val rule: SimpleRule = ctx.rule.simple
     private val ignoreIfNotSet  = rule.ignoredIfUnset
-    protected val field = ctx.fieldFromSimpleRule!!
+    protected val field = ctx.simpleRuleField
     private val otherValue: Expression? = ctx.otherValueAsCode
 
     override fun code(): CodeBlock {
         val check = super.code()
-        val defaultValue = with(ctx) {
-            val field = fieldFromSimpleRule!!
-            if (isElement) {
-                UnsetValue.singular(field.type)
-            } else {
-                UnsetValue.forField(field)
-            }
-        }
-        if (!ignoreIfNotSet || !defaultValue.isPresent) {
+        val defaultValue = defaultFieldValue()
+        if (!ignoreIfNotSet || defaultValue == null) {
             return check
         }
-        val sign = selectSigns()[NOT_EQUAL]!!
-        val defaultValueExpression = ctx.valueConverter.valueToCode(defaultValue.get())
-        val condition = sign(ctx.fieldOrElement!!.toCode(), defaultValueExpression.toCode())
-        return CodeBlock
-            .builder()
+        val condition = createCondition(defaultValue)
+        return CodeBlock.builder()
             .beginControlFlow("if ($condition)")
             .add(check)
             .endControlFlow()
             .build()
+    }
+
+    private fun defaultFieldValue(): Value? = with(ctx) {
+        val field = simpleRuleField
+        return if (isElement) {
+            UnsetValue.singular(field.type)
+        } else {
+            UnsetValue.forField(field)
+        }.getOrNull()
+    }
+
+    private fun createCondition(defaultValue: Value): String {
+        val sign = selectSigns()[NOT_EQUAL]!!
+        val defaultValueExpression = ctx.valueConverter.valueToCode(defaultValue)
+        val condition = sign(ctx.fieldOrElement!!.toCode(), defaultValueExpression.toCode())
+        return condition
     }
 
     override fun condition(): Expression {
@@ -143,7 +152,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
-    val field = ctx.fieldFromSimpleRule!!
+    val field = ctx.simpleRuleField
     return if (distribute && field.isRepeated()) {
         DistributingGenerator(ctx) { generatorForSingular(it) }
     } else {

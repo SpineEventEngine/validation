@@ -34,6 +34,12 @@ import io.spine.validation.event.compositeRuleAdded
 import io.spine.validation.event.simpleRuleAdded
 
 /**
+ * Tells if this `rule` is a simple one.
+ */
+public val Rule.isSimple: Boolean
+    get() = hasSimple()
+
+/**
  * Converts this `rule` to an event.
  *
  * @param type the type name of the validated message

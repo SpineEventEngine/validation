@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protobuf.AnyPacker
 import io.spine.protodata.Field
 import io.spine.protodata.Type
 import io.spine.protodata.codegen.java.Expression
@@ -35,6 +34,7 @@ import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.qualifiedName
+import io.spine.string.titleCase
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.Validate
 import io.spine.validate.ValidationError
@@ -45,24 +45,26 @@ import java.util.*
  */
 internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-    private val validationErrorVar =
-        Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")
+    private val validationErrorVar = varName("generated_validationError_", ctx)
 
-    private val violationListVar =
-        Literal("generated_violationList_${ctx.fieldFromSimpleRule!!.name.value}")
+    private val violationListVar = varName("generated_violationList_", ctx)
 
     init {
-        val field = ctx.fieldFromSimpleRule!!
+        val field = ctx.simpleRuleField
         val fieldType = field.type
         check(fieldType.hasMessage()) {
-            "(validate) only supports `Message` types but field " +
-                    "`${field.declaringType.qualifiedName()}.${field.name.value}` " +
-                    "has type `$fieldType`."
+            "The `(validate)` option supports only `Message` types," +
+                    " but the field `${field.qualifiedName}` has the type `$fieldType`."
         }
     }
 
+    private fun varName(prefix: String, ctx: GenerationContext): Literal {
+        val fieldNameSuffix = ctx.simpleRuleField.name.value.titleCase()
+        return Literal("${prefix}Of$fieldNameSuffix")
+    }
+
     override fun prologue(): CodeBlock {
-        return if (field.type.isAny()) {
+        return if (field.type.isAny) {
             CodeBlock.builder()
                 .add(unpackAndValidate())
                 .add(wrapIntoError())
@@ -164,8 +166,20 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
 }
 
 /**
- * Tells if the Proto field type is `google.protobuf.Any`.
+ * Tells if this type is `google.protobuf.Any`.
+ *
+ * TODO: Migrate to the similar property from ProtoData.
  */
-private fun Type.isAny() = (hasMessage()
-        && message.packageName.equals("google.protobuf"))
-        && message.simpleName.equals("Any")
+private val Type.isAny: Boolean
+    get() = (hasMessage()
+            && message.packageName.equals("google.protobuf"))
+            && message.simpleName.equals("Any")
+
+
+/**
+ * Obtains the name of the field which includes a qualified name of the type which declares it.
+ *
+ * TODO: Migrate to an extension `val` from ProtoData.
+ */
+private val Field.qualifiedName: String
+    get() = "${declaringType.qualifiedName()}.${name.value}"

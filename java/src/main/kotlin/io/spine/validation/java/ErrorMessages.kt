@@ -63,7 +63,7 @@ public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
     childViolations: Expression
 ): CodeBlock {
-    val field = ctx.fieldFromSimpleRule!!
+    val field = ctx.simpleRuleField
     val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
     val violation = buildViolation(

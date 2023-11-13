@@ -102,7 +102,7 @@ internal abstract class CodeGenerator(
     /**
      * Constructs code which creates a `ConstrainViolation` and puts it into a list of violations.
      *
-     * Later, the violations will be reported to the caller.
+     * Later the violations will be reported to the caller.
      */
     protected abstract fun createViolation(): CodeBlock
 }

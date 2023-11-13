@@ -40,6 +40,7 @@ import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.Rule
+import io.spine.validation.isSimple
 
 /**
  * Context of a [CodeGenerator].
@@ -118,12 +119,28 @@ internal constructor(
      * The field associated with the given rule.
      *
      * If the [rule] is not a simple rule, the value is absent.
+     *
+     * @see simpleRuleField
      */
     val fieldFromSimpleRule: Field?
         get() = if (rule.hasSimple()) {
             lookUpField(rule.simple.field)
         } else {
             null
+        }
+
+    /**
+     * Obtains a name of the field associated with the simple rule of this context.
+     *
+     * @throws IllegalStateException if the rule is not a simple rule.
+     * @see [fieldFromSimpleRule]
+     */
+    val simpleRuleField: Field
+        get() {
+            check(rule.isSimple) {
+                "The rule is not a simple one: `$rule`."
+            }
+            return fieldFromSimpleRule!!
         }
 
     /**
@@ -175,9 +192,10 @@ internal constructor(
 private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {
     val protoFile = select<ProtobufSourceFile>().findById(file)
     val messageType = protoFile!!.typeMap[type.typeUrl]
-        ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl}`.")
-    return messageType.lookUpField(field)
-        ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl}.${field.value}`.")
+    require(messageType != null) { "Unknown type: `${type.typeUrl}`." }
+    val result = messageType.lookUpField(field)
+    require(result != null) { "Unknown field: `${type.typeUrl}.${field.value}`." }
+    return result
 }
 
 private fun MessageType.lookUpField(name: FieldName): Field? {

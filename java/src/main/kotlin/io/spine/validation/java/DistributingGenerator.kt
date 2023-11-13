@@ -56,7 +56,7 @@ internal class DistributingGenerator(
 
     private val element = Literal("element")
     private val elementContext = ctx.copy(elementReference = element)
-    private val field = ctx.fieldFromSimpleRule!!
+    private val field = ctx.simpleRuleField
     private val delegate = delegateCtor(elementContext)
     private val ruleId = "${field.name.value}_${newUuid().filter { it.isJavaIdentifierPart() }}"
     private val methodName = "validate_$ruleId"

@@ -52,7 +52,7 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * of the checked collection.
      */
     override fun condition(): Expression {
-        val map = ctx.fieldFromSimpleRule!!.isMap()
+        val map = ctx.simpleRuleField.isMap()
         val fieldValue = ctx.fieldOrElement!!
         val collectionToCount = if (map) MethodCall(fieldValue, "values") else fieldValue
         return equalityOf(

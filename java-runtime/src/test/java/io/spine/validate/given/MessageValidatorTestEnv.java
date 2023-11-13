@@ -37,7 +37,7 @@ public class MessageValidatorTestEnv {
 
     public static final String VALUE = "value";
     public static final String EMAIL = "email";
-    public static final String OUTER_MSG_FIELD = "outer_msg_field";
+    public static final String ENCLOSED_FIELD_NAME = "enclosed";
 
     /** Prevent instantiation of this test environment. */
     private MessageValidatorTestEnv() {
