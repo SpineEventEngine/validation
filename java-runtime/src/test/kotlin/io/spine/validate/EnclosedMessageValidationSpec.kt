@@ -113,7 +113,6 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
         assertFieldPathIs(
             innerViolation,
-            ENCLOSED_FIELD_NAME,
             EMAIL
         )
 
