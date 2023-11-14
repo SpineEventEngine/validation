@@ -134,9 +134,12 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *
      * ```
      *     Optional<ValidationError> [validationErrorVar] =
-     *         Optional.ofNullable([violationListVar].isEmpty() ? null : ValidationError.newBuilder()
-     *                              .addAllConstraintViolation([violationListVar])
-     *                              .build());
+     *         Optional.ofNullable([violationListVar].isEmpty()
+     *              ? null
+     *              : ValidationError.newBuilder()
+     *                     .addAllConstraintViolation([violationListVar])
+     *                     .build()
+     *        );
      * ```
      */
     private fun wrapIntoError(): CodeBlock {

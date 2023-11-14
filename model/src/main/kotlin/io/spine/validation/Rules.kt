@@ -40,6 +40,12 @@ public val Rule.isSimple: Boolean
     get() = hasSimple()
 
 /**
+ * Tells if this `rule` is a message-wide one.
+ */
+public val Rule.isMessageWide: Boolean
+    get() = hasMessageWide()
+
+/**
  * Converts this `rule` to an event.
  *
  * @param type the type name of the validated message

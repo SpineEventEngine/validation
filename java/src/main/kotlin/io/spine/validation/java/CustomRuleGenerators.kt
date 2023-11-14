@@ -33,13 +33,14 @@ import io.spine.validation.InTime
 import io.spine.validation.RecursiveValidation
 import io.spine.validation.Regex
 import io.spine.validation.RequiredOneof
+import io.spine.validation.isMessageWide
+import io.spine.validation.isSimple
 
 /**
  * Creates a [CodeGenerator] for a custom validation operator for the given context.
  */
-internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
-    val feature = ctx.feature()
-    return when (feature) {
+internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
+    when (val feature = ctx.feature()) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
         is Regex -> PatternGenerator(feature, ctx)
@@ -47,14 +48,9 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator {
         is InTime -> inTimeGenerator(feature, ctx)
         else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
     }
-}
 
-private fun GenerationContext.feature(): Message = with(rule) {
-    if (hasSimple()) {
-        simple.customOperator.feature.unpackGuessingType()
-    } else if (hasMessageWide()) {
-        messageWide.operator.feature.unpackGuessingType()
-    } else {
-        error("The rule has no custom operator: `$rule`.")
-    }
+private fun GenerationContext.feature(): Message = when {
+    rule.isSimple -> rule.simple.customOperator.feature.unpackGuessingType()
+    rule.isMessageWide -> rule.messageWide.operator.feature.unpackGuessingType()
+    else -> error("The rule has no custom operator: `$rule`.")
 }
