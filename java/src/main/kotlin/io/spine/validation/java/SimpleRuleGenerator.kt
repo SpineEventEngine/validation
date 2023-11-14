@@ -154,7 +154,9 @@ internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
     val field = ctx.simpleRuleField
     return if (distribute && field.isRepeated()) {
-        DistributingGenerator(ctx) { generatorForSingular(it) }
+        DistributingGenerator(ctx) {
+            generatorForSingular(it)
+        }
     } else {
         generatorForSingular(ctx)
     }

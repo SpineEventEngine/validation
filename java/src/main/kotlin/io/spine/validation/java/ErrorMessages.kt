@@ -52,7 +52,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
     val violation = buildViolation(
         validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
     )
-    return addViolation(violation, violationsList)
+    return addViolation(violation, violationList)
 }
 
 /**
@@ -69,7 +69,7 @@ public fun ErrorMessage.createParentViolation(
     val violation = buildViolation(
         type, field, fieldValue, childViolations, ignoreCardinality = ctx.isElement
     )
-    return addViolation(violation, ctx.violationsList)
+    return addViolation(violation, ctx.violationList)
 }
 
 /**

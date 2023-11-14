@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ internal abstract class CodeGenerator(
     }
 
     /**
-     * Code that is inserted into the message class scope.
+     * The code which is inserted into the message class scope.
      *
      * Such code may maintain caches for intermediate validation results, etc.
      */

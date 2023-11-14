@@ -88,12 +88,12 @@ internal class DistributingGenerator(
                 "\$T<\$T> \$L = \$T.builder()",
                 ImmutableList.Builder::class.java,
                 ConstraintViolation::class.java,
-                ctx.violationsList,
+                ctx.violationList,
                 ImmutableList::class.java
             ).beginControlFlow("for (\$L \$L : \$L)", typeName, element, collection)
             .add(delegate.code())
             .endControlFlow()
-            .addStatement("return \$L.build()", elementContext.violationsList)
+            .addStatement("return \$L.build()", elementContext.violationList)
             .build()
         val otherMembers = delegate.supportingMembers()
         val groupingMethod = MethodSpec.methodBuilder(methodName)
@@ -123,7 +123,7 @@ internal class DistributingGenerator(
         delegate.error()
 
     override fun createViolation(): CodeBlock {
-        val violations = Literal(ctx.violationsList)
+        val violations = Literal(ctx.violationList)
         val methodCall = MethodCall(violations, "addAll", listOf(Literal(violationsName)))
         return CodeBlock
             .builder()
