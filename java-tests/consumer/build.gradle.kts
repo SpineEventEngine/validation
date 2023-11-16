@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Kotest
 import io.spine.internal.dependency.Spine
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 
@@ -46,4 +47,18 @@ dependencies {
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:extra-definitions"))
     implementation(Spine.time)
+    testImplementation(Kotest.assertions)
 }
+
+// Uncomment the below block when remote debugging of code generation is needed.
+//
+//tasks.findByName("launchProtoData")?.apply {this as JavaExec
+//    debugOptions {
+//        // Set this option to `true` to enable remote debugging.
+//        enabled.set(true)
+//        port.set(5566)
+//        server.set(true)
+//        suspend.set(true)
+//    }
+//    System.err.println("Debug session for `:java-tests:consumer test` configured.")
+//}

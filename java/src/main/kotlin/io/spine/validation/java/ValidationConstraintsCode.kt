@@ -33,6 +33,8 @@ import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.This.asMessage
 import io.spine.validation.MessageValidation
 import io.spine.validation.Rule
+import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
+import java.lang.System.lineSeparator
 
 /**
  * Code generated for validation constraints specified in a message type.
@@ -105,19 +107,19 @@ internal class ValidationConstraintsCode private constructor(
         supportingMembers.add(generator.supportingMembers())
     }
 
-    private fun newContext(rule: Rule): GenerationContext {
-        val typeSystem = renderer.typeSystem()
-        return GenerationContext(
-            renderer, typeSystem,
-            rule,
-            messageReference, messageType, declaringFile,
-            ValidationCode.VIOLATIONS
-        )
-    }
+    private fun newContext(rule: Rule): GenerationContext = GenerationContext(
+        client = renderer,
+        typeSystem = renderer.typeSystem(),
+        rule,
+        msg = messageReference,
+        validatedType = messageType,
+        protoFile = declaringFile,
+        violationList = VIOLATIONS
+    )
 
     companion object {
 
-        private val onNewLine: Splitter = Splitter.on(System.lineSeparator())
+        private val onNewLine: Splitter = Splitter.on(lineSeparator())
 
         /**
          * Creates a new instance with the generated validation constraints code.

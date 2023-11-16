@@ -26,14 +26,13 @@
 package io.spine.validation.test
 
 import com.google.common.truth.Truth.assertThat
-import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.Message
 import com.google.protobuf.util.Timestamps
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.spine.base.Identifier
+import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidationException
@@ -67,7 +66,7 @@ internal class ValidationTest {
 
     private fun assertNoException(builder: Message.Builder) {
         try {
-            val result: Any = builder.build()
+            val result = builder.build()
             result shouldNotBe null
         } catch (e: ValidationException) {
             fail<Any>("Unexpected constraint violation: " + e.constraintViolations, e)
@@ -79,114 +78,96 @@ internal class ValidationTest {
     }
 
     @Nested
-    @DisplayName("reflect a rule with a less (`<`) sign and")
-    internal inner class LessRule {
+    internal inner class `reflect a rule with a less sign and` {
 
         @Test
-        @DisplayName("throw `ValidationException` if actual value is greater than the threshold")
-        fun throwOnMore() {
+        fun `throw ValidationException if actual value is greater than the threshold`() {
             assertValidationException(Mru.newBuilder().setKhoums(6))
         }
 
         @Test
-        @DisplayName("throw `ValidationException` if actual value is equal to the threshold")
-        fun throwOnEdge() {
+        fun `throw ValidationException if actual value is equal to the threshold`() {
             assertValidationException(Mru.newBuilder().setKhoums(5))
         }
 
         @Test
-        @DisplayName("throw no exceptions if actual value is less than the threshold")
-        fun notThrow() {
+        fun `throw no exceptions if actual value is less than the threshold`() {
             assertNoException(Mru.newBuilder().setKhoums(4))
         }
     }
 
     @Nested
-    @DisplayName("reflect a rule with a greater or equal (`>=`) sign and")
-    internal inner class GreaterRule {
+    internal inner class `reflect a rule with a greater or equal sign and` {
+        
         @Test
-        @DisplayName("throw `ValidationException` if actual value is less than the threshold")
-        fun throwOnMore() {
+        fun `throw 'ValidationException' if actual value is less than the threshold`() {
             val violation = assertValidationException(
-                LocalTime.newBuilder()
-                    .setHours(-1)
+                LocalTime.newBuilder().setHours(-1)
             )
-            assertThat(violation.msgFormat)
-                .contains("cannot be negative")
+            violation.msgFormat shouldContain "cannot be negative"
         }
 
         @Test
-        @DisplayName("throw no exceptions if actual value is equal to the threshold")
-        fun notThrowOnEdge() {
+        fun `throw no exceptions if actual value is equal to the threshold`() {
             assertNoException(LocalTime.newBuilder().setMinutes(0))
         }
 
         @Test
-        @DisplayName("throw no exceptions if actual value is greater than the threshold")
-        fun notThrow() {
+        fun `throw no exceptions if actual value is greater than the threshold`() {
             assertNoException(LocalTime.newBuilder().setMinutes(1))
         }
     }
 
     @Nested
-    @DisplayName("reflect a `(required)` rule and")
-    internal inner class Required {
+    internal inner class `reflect a '(required)' rule and` {
 
         @Test
-        @DisplayName("check string field")
-        fun throwForString() {
+        fun `check string field`() {
             val builder = Author.newBuilder()
             val violation = assertValidationException(builder)
-            assertThat(violation.msgFormat)
-                .contains("Author must have a name")
+            violation.msgFormat shouldContain "Author must have a name"
         }
 
         @Test
-        @DisplayName("check message field")
-        fun throwForMessage() {
+        fun `check message field`() {
             val builder = Book.newBuilder()
-            val violation = assertValidationException(builder)
-            assertThat(violation.msgFormat).contains("value must be set")
-            assertThat(violation.fieldPath.getFieldName(0)).isEqualTo("author")
+            assertValidationException(builder).also {
+                it.msgFormat shouldContain "value must be set"
+                it.fieldPath.getFieldName(0) shouldBe "author"
+            }
         }
 
         @Test
-        @DisplayName("pass if a value is set")
-        fun passIfSet() {
-            val builder = Author.newBuilder().setName("Evans")
-            assertNoException(builder)
-        }
+        fun `pass if a value is set`() = assertNoException(
+            Author.newBuilder().setName("Evans")
+        )
 
         @Test
-        @DisplayName("pass if not required")
-        fun passIfNotRequired() {
-            val builder = Book.newBuilder().setAuthor(validAuthor())
-            assertNoException(builder)
-        }
+        fun `pass if not required`() = assertNoException(
+            Book.newBuilder().setAuthor(validAuthor())
+        )
 
         @Test
-        @DisplayName("throw `ValidationException` if a list contains only default values")
-        fun empty() {
+        @Disabled("Until we propagate the `validate` option property to collection elements.")
+        fun `throw ValidationException if a list contains only default values`() {
             val builder = Blizzard.newBuilder()
                 .addSnowflake(Snowflake.getDefaultInstance())
             assertValidationException(builder)
         }
 
         @Test
-        @DisplayName("pass if a list contains all non-default values")
-        fun nonDefaultList() {
-            val builder = Blizzard.newBuilder()
+        fun `pass if a list contains all non-default values`() = assertNoException(
+            Blizzard.newBuilder()
                 .addSnowflake(
                     Snowflake.newBuilder()
                         .setEdges(3)
                         .setVertices(3)
                 )
-            assertNoException(builder)
-        }
+        )
 
         @Test
-        @DisplayName("throw `ValidationException` if a list contains at least one default value")
-        fun withDefault() {
+        @Disabled("Until we propagate the `validate` option property to collection elements.")
+        fun `throw 'ValidationException' if a list contains at least one default value`() {
             val builder = Blizzard.newBuilder()
                 .addSnowflake(
                     Snowflake.newBuilder()
@@ -199,11 +180,10 @@ internal class ValidationTest {
     }
 
     @Nested
-    @DisplayName("reflect a `(distinct)` rule and")
-    internal inner class DistinctRule {
+    internal inner class `reflect a (distinct) rule and` {
+
         @Test
-        @DisplayName("throw `ValidationException` if a list contains duplicate entries")
-        fun duplicateInList() {
+        fun `throw 'ValidationException' if a list contains duplicate entries`() {
             val flake = Snowflake.newBuilder()
                 .setEdges(6)
                 .setVertices(6)
@@ -215,8 +195,7 @@ internal class ValidationTest {
         }
 
         @Test
-        @DisplayName("throw `ValidationException` if a map contains duplicate entries")
-        fun duplicateInMap() {
+        fun `throw 'ValidationException' if a map contains duplicate entries`() {
             val player = Player.newBuilder()
                 .setShirtName("John Doe")
                 .build()
@@ -228,8 +207,7 @@ internal class ValidationTest {
     }
 
     @Nested
-    @DisplayName("reflect the `(pattern)` rule")
-    internal inner class PatternRule {
+    internal inner class `reflect the (pattern) rule` {
 
         @Test
         @DisplayName(ALLOW_VALID)
@@ -250,8 +228,7 @@ internal class ValidationTest {
         }
 
         @Test
-        @DisplayName("and allow partial matches")
-        fun partial() {
+        fun `and allow partial matches`() {
             val msg = Book.newBuilder()
                 .setAuthor(validAuthor())
                 .setContent("Something Something Pride Something Something")
@@ -259,8 +236,7 @@ internal class ValidationTest {
         }
 
         @Test
-        @DisplayName("and allow ignoring case")
-        fun caseInsensitive() {
+        fun `and allow ignoring case`() {
             val msg = Book.newBuilder()
                 .setAuthor(validAuthor())
                 .setContent("preJudice")
@@ -268,40 +244,31 @@ internal class ValidationTest {
         }
 
         @Test
-        @DisplayName("and still fail even with loose rules")
-        fun failWithLoose() {
+        fun `and still fail even with loose rules`() {
             val msg = Book.newBuilder()
                 .setAuthor(validAuthor())
                 .setContent("something else")
             val violation = assertValidationException(msg)
-            assertThat(
-                violation.fieldPath
-                    .getFieldName(0)
-            )
-                .isEqualTo("content")
+            violation.fieldPath.getFieldName(0) shouldBe "content"
         }
 
         @Test
-        @DisplayName("and handle special characters in the pattern properly")
-        fun allowDollarSigns() {
-            val msg = Team.newBuilder().setName("Sch 04")
-            assertNoException(msg)
-        }
+        fun `and handle special characters in the pattern properly`() =
+            assertNoException(Team.newBuilder().setName("Sch 04"))
     }
 
     @Nested
-    @DisplayName("reflect the (validate) rule")
-    internal inner class Validate {
+    internal inner class `reflect the '(validate)' rule` {
+
         @Nested
-        @DisplayName("on a singular field")
-        internal inner class Singular {
+        internal inner class `on a singular field` {
+
             @Test
             @DisplayName(ALLOW_VALID)
-            fun pass() {
-                val builder = meteoStatsInEurope()
+            fun pass() = assertNoException(
+                meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
-                assertNoException(builder)
-            }
+            )
 
             @Test
             @DisplayName(PROHIBIT_INVALID)
@@ -313,8 +280,8 @@ internal class ValidationTest {
         }
 
         @Nested
-        @DisplayName("on a singular `Any` field")
-        internal inner class SingularAny {
+        internal inner class `on a singular Any field` {
+
             @Test
             @DisplayName(ALLOW_VALID)
             fun pass() {
@@ -344,8 +311,8 @@ internal class ValidationTest {
         }
 
         @Nested
-        @DisplayName("on a repeated field")
-        internal inner class Repeated {
+        internal inner class `on a repeated field` {
+
             @Test
             @DisplayName(ALLOW_VALID)
             fun pass() {
@@ -364,8 +331,8 @@ internal class ValidationTest {
         }
 
         @Nested
-        @DisplayName("on a repeated `Any` field")
-        internal inner class RepeatedAny {
+        internal inner class `on a repeated Any field` {
+
             @Test
             @DisplayName(ALLOW_VALID)
             fun pass() {
@@ -441,39 +408,33 @@ internal class ValidationTest {
             builder: Message.Builder,
             errorPart: String = "message must have valid properties"
         ) {
-            val violation = assertValidationException(builder)
-            assertThat(violation.msgFormat)
-                .contains(errorPart)
-            assertThat(violation.violationList)
-                .hasSize(1)
+            assertValidationException(builder).run {
+                msgFormat shouldContain errorPart
+                violationList shouldHaveSize 1
+            }
         }
     }
 
     @Nested
     internal inner class IsRequired {
+
         @Test
-        @DisplayName(PROHIBIT_INVALID)
-        fun fail() {
-            val builder = Lunch.newBuilder()
-            assertValidationException(builder)
+        fun `prohibit invalid`() {
+            assertValidationException(Lunch.newBuilder())
         }
 
         @Test
-        @DisplayName(ALLOW_VALID)
-        fun pass() {
-            val builder = Lunch.newBuilder()
+        fun `allow valid`() = assertNoException(
+            Lunch.newBuilder()
                 .setHotSoup("Minestrone")
-            assertNoException(builder)
-        }
+        )
     }
 
     @Nested
-    @DisplayName("reflect the `(when)` rule")
-    internal inner class WhenRule {
+    internal inner class `reflect the '(when)' rule` {
 
         @Test
-        @DisplayName(PROHIBIT_INVALID)
-        fun fail() {
+        fun `prohibit invalid`() {
             val startWhen = Timestamps.fromSeconds(4792687200L) // 15 Nov 2121
             val player = Player.newBuilder()
                 .setStartedCareerIn(startWhen)
@@ -481,79 +442,11 @@ internal class ValidationTest {
         }
 
         @Test
-        @DisplayName(ALLOW_VALID)
-        fun pass() {
+        fun `allow valid`() {
             val timestamp = Timestamps.fromSeconds(59086800L) // 15 Nov 1971
             val player = Player.newBuilder()
                 .setStartedCareerIn(timestamp)
             assertNoException(player)
-        }
-    }
-
-    /**
-     * Tests the rules which are currently generated by `mc-java`.
-     *
-     *
-     * Note: these tests are now disabled since simultaneous application of ProtoData
-     * and `mc-java` makes impossible to pass the configuration options
-     * to the `LaunchProtoData` Gradle task. Effectively, inability to make such
-     * a configuration makes these tests fail.
-     *
-     *
-     * The tests are disabled until the code generation required by these tests
-     * is fully performed by the Validation library itself without any dependencies
-     * onto the code generated by `mc-java`. Once this is achieved, `mc-java` plugin
-     * should be turned off for the corresponding test project.
-     */
-    @Nested
-    @Disabled
-    @DisplayName("make the entity and signal IDs required")
-    internal inner class RequiredIdRule {
-        @Test
-        @DisplayName("allow valid entities")
-        fun passEntity() {
-            val entity = Fancy.newBuilder()
-                .setId(FancyId.newBuilder().setUuid(Identifier.newUuid()))
-            assertNoException(entity)
-        }
-
-        @Test
-        @DisplayName("not allow invalid entities")
-        fun failEntity() {
-            val entity = Fancy.newBuilder()
-            val violation = assertValidationException(entity)
-            violation.fieldPath.getFieldName(0) shouldBe "id"
-        }
-
-        @Test
-        @DisplayName("allow valid events")
-        fun passEvent() {
-            val event = PrefixEventRecognized.newBuilder()
-                .setId("qwerty")
-            assertNoException(event)
-        }
-
-        @Test
-        @DisplayName("not allow invalid events")
-        fun failEvent() {
-            val event = PrefixEventRecognized.newBuilder()
-            val violation = assertValidationException(event)
-            violation.fieldPath.getFieldName(0) shouldBe "id"
-        }
-
-        @Test
-        @DisplayName("allow valid commands")
-        fun passCommand() {
-            val cmd = RecognizeSuffixCommand.newBuilder().setId("42")
-            assertNoException(cmd)
-        }
-
-        @Test
-        @DisplayName("not allow invalid commands")
-        fun failCommand() {
-            val cmd = RecognizeSuffixCommand.newBuilder()
-            val violation = assertValidationException(cmd)
-            violation.fieldPath.getFieldName(0) shouldBe "id"
         }
     }
 }

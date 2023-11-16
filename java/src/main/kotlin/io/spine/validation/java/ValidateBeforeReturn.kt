@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,74 +23,65 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation.java
 
-package io.spine.validation.java;
-
-import com.google.errorprone.annotations.Immutable;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.text.Text;
-import io.spine.text.TextCoordinates;
-import io.spine.text.TextFactory;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jboss.forge.roaster.model.source.MethodSource;
-
-import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import static io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD;
-import static io.spine.validation.java.BuilderInsertionPoint.findBuilders;
-import static java.util.regex.Pattern.DOTALL;
-import static java.util.regex.Pattern.UNICODE_CASE;
-import static java.util.stream.Collectors.toSet;
+import com.google.errorprone.annotations.Immutable
+import io.spine.protodata.renderer.InsertionPoint
+import io.spine.text.Text
+import io.spine.text.TextCoordinates
+import io.spine.text.TextFactory
+import io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD
+import java.util.*
+import java.util.regex.Pattern
+import java.util.stream.Collectors.toSet
+import org.jboss.forge.roaster.model.source.MethodSource
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
  *
- * <p>Points at a line in the {@code Builder.build()} method right before the return statement.
+ *
+ * Points at a line in the `Builder.build()` method right before the return statement.
  */
 @Immutable
-final class ValidateBeforeReturn implements InsertionPoint {
+internal class ValidateBeforeReturn : InsertionPoint {
 
-    private static final String LABEL = ValidateBeforeReturn.class.getSimpleName();
-    private static final Pattern RETURN_LINE = Pattern.compile(
-            "\\s*return .+;.*", UNICODE_CASE | DOTALL
-    );
+    override val label: String
+        get() = ValidateBeforeReturn::class.java.simpleName
 
-    @Override
-    public String getLabel() {
-        return LABEL;
+    override fun locate(text: Text): Set<TextCoordinates> =
+        BuilderInsertionPoint.findBuilders(text)
+            .map { b -> b.getMethod(BUILD_METHOD) }
+            .filter { obj -> Objects.nonNull(obj) }
+            .map { m -> findLine(m, text) }
+            .collect(toSet())
+
+    private fun findLine(method: MethodSource<*>, code: Text): TextCoordinates {
+        val methodDeclarationLine = method.lineNumber
+        val startPosition = method.startPosition
+        val endPosition = method.endPosition
+        val wholeCode = code.value
+        val methodSource = wholeCode.substring(startPosition, endPosition)
+        val returnIndex = returnLineIndex(methodSource)
+        val returnLineNumber = methodDeclarationLine + returnIndex
+        return atLine(returnLineNumber - 1)
     }
 
-    @NonNull
-    @Override
-    public Set<TextCoordinates> locate(@NonNull Text code) {
-        return findBuilders(code)
-                .map(b -> b.getMethod(BUILD_METHOD))
-                .filter(Objects::nonNull)
-                .map(m -> findLine(m, code))
-                .collect(toSet());
-    }
+    companion object {
 
-    private TextCoordinates findLine(MethodSource<?> method, Text code) {
-        var methodDeclarationLine = method.getLineNumber();
-        var startPosition = method.getStartPosition();
-        var endPosition = method.getEndPosition();
-        var wholeCode = code.getValue();
-        var methodSource = wholeCode.substring(startPosition, endPosition);
-        var returnIndex = returnLineIndex(methodSource);
-        var returnLineNumber = methodDeclarationLine + returnIndex;
-        return atLine(returnLineNumber - 1);
-    }
-    private static int returnLineIndex(String code) {
-        var methodLines = TextFactory.lineSplitter().split(code);
-        var returnIndex = 0;
-        for (var line : methodLines) {
-            if (RETURN_LINE.matcher(line).matches()) {
-                return returnIndex;
+        private val RETURN_LINE: Pattern = Pattern.compile(
+            "\\s*return .+;.*", Pattern.UNICODE_CASE or Pattern.DOTALL
+        )
+
+        private fun returnLineIndex(code: String): Int {
+            val methodLines = TextFactory.lineSplitter().split(code)
+            var returnIndex = 0
+            for (line in methodLines) {
+                if (RETURN_LINE.matcher(line).matches()) {
+                    return returnIndex
+                }
+                returnIndex++
             }
-            returnIndex++;
+            throw IllegalArgumentException("No return statement.")
         }
-        throw new IllegalArgumentException("No return statement.");
     }
 }
