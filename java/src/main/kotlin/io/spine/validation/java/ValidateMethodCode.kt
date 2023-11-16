@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,89 +23,80 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation.java
 
-package io.spine.validation.java;
-
-import com.google.common.collect.ImmutableList;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.codegen.java.ClassName;
-import io.spine.protodata.codegen.java.Expressions;
-import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.tools.code.Java;
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
-
-import java.util.ArrayList;
-import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.codegen.java.Expressions.call;
-import static io.spine.protodata.renderer.InsertionPointKt.getCodeLine;
-import static io.spine.validation.java.ValidationCode.OPTIONAL_ERROR;
-import static io.spine.validation.java.ValidationCode.VALIDATE;
-import static io.spine.validation.java.ValidationCode.VIOLATIONS;
-import static java.lang.System.lineSeparator;
-import static javax.lang.model.element.Modifier.PUBLIC;
+import com.google.common.base.Preconditions
+import com.google.common.collect.ImmutableList
+import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.MethodSpec
+import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.call
+import io.spine.protodata.codegen.java.newBuilder
+import io.spine.protodata.renderer.InsertionPoint
+import io.spine.protodata.renderer.codeLine
+import io.spine.tools.code.Java.lang
+import io.spine.tools.java.codeBlock
+import io.spine.tools.java.methodSpec
+import io.spine.validate.ConstraintViolation
+import io.spine.validate.ValidationError
+import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
+import io.spine.validation.java.ValidationCode.Companion.VALIDATE
+import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
+import java.lang.System.lineSeparator
+import java.util.*
+import javax.lang.model.element.Modifier.PUBLIC
 
 /**
  * Wraps the passed constraints code into a method.
  */
-final class ValidateMethodCode {
+internal class ValidateMethodCode(
+    private val messageType: TypeName,
+    private val constraintsCode: CodeBlock
+) {
 
-    private static final String RETURN_LITERAL = "return $L";
-
-    private final CodeBlock constraintsCode;
-    private final TypeName messageType;
-
-    ValidateMethodCode(TypeName messageType, CodeBlock constraintsCode) {
-        this.constraintsCode = checkNotNull(constraintsCode);
-        this.messageType = checkNotNull(messageType);
+    fun generate(): MethodSpec {
+        val code = codeBlock {
+            addStatement(newAccumulator())
+            add(constraintsCode)
+            add(extraInsertionPoint())
+            add(generateValidationError())
+        }
+        return methodSpec(VALIDATE) {
+            returns(OPTIONAL_ERROR)
+            addModifiers(PUBLIC)
+            addCode(code)
+        }
     }
 
-    MethodSpec generate() {
-        var code = CodeBlock.builder();
-        code.addStatement(newAccumulator());
-        code.add(constraintsCode);
-        code.add(extraInsertionPoint());
-        code.add(generateValidationError());
-        var validate = MethodSpec.methodBuilder(VALIDATE)
-                .returns(OPTIONAL_ERROR)
-                .addModifiers(PUBLIC)
-                .addCode(code.build())
-                .build();
-        return validate;
+    private fun extraInsertionPoint(): CodeBlock {
+        val insertionPoint: InsertionPoint = ExtraValidation(messageType)
+        val java = lang()
+        val line = java.comment(insertionPoint.codeLine) + lineSeparator()
+        return CodeBlock.of(line)
     }
 
-    private static CodeBlock newAccumulator() {
-        return CodeBlock.of("$T<$T> $L = new $T<>()",
-                            ArrayList.class,
-                            ConstraintViolation.class,
-                            VIOLATIONS,
-                            ArrayList.class);
-    }
+    companion object {
+        private const val RETURN_LITERAL = "return \$L"
 
-    private CodeBlock extraInsertionPoint() {
-        InsertionPoint insertionPoint = new ExtraValidation(messageType);
-        var java = Java.lang();
-        var line = java.comment(getCodeLine(insertionPoint)) + lineSeparator();
-        return CodeBlock.of(line);
-    }
+        private fun newAccumulator(): CodeBlock = CodeBlock.of(
+            "var \$L = new \$T<\$T>()",
+            VIOLATIONS,
+            ArrayList::class.java,
+            ConstraintViolation::class.java
+        )
 
-    private static CodeBlock generateValidationError() {
-        var code = CodeBlock.builder();
-        code.beginControlFlow("if (!$L.isEmpty())", VIOLATIONS);
-        var errorBuilder = Expressions.newBuilder(new ClassName(ValidationError.class))
-                .chainAddAll("constraint_violation", VIOLATIONS)
-                .chainBuild();
-        var optional = new ClassName(Optional.class);
-        var optionalOf = call(optional, "of", ImmutableList.of(errorBuilder));
-        code.addStatement(RETURN_LITERAL, optionalOf);
-        code.nextControlFlow("else");
-        var optionalEmpty = call(optional, "empty");
-        code.addStatement(RETURN_LITERAL, optionalEmpty);
-        code.endControlFlow();
-        return code.build();
+        private fun generateValidationError(): CodeBlock = codeBlock {
+            beginControlFlow("if (!\$L.isEmpty())", VIOLATIONS)
+            val errorBuilder = ClassName(ValidationError::class.java).newBuilder()
+                .chainAddAll("constraint_violation", VIOLATIONS).chainBuild()
+            val optional = ClassName(Optional::class.java)
+            val optionalOf = optional.call("of", ImmutableList.of(errorBuilder))
+            addStatement(RETURN_LITERAL, optionalOf)
+            nextControlFlow("else")
+            val optionalEmpty = optional.call("empty")
+            addStatement(RETURN_LITERAL, optionalEmpty)
+            endControlFlow()
+        }
     }
 }

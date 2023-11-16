@@ -23,101 +23,85 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation.java
 
-package io.spine.validation.java;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.reflect.TypeToken;
-import com.squareup.javapoet.CodeBlock;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.codegen.java.ClassName;
-import io.spine.protodata.codegen.java.Expression;
-import io.spine.protodata.codegen.java.Literal;
-import io.spine.protodata.renderer.SourceAtLine;
-import io.spine.protodata.renderer.SourceFile;
-import io.spine.validate.ValidatableMessage;
-import io.spine.validate.ValidationError;
-import io.spine.validation.MessageValidation;
-
-import java.lang.reflect.Type;
-import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.codegen.java.TypedInsertionPoint.CLASS_SCOPE;
-import static io.spine.protodata.codegen.java.TypedInsertionPoint.MESSAGE_IMPLEMENTS;
-import static io.spine.text.TextFactory.lineSplitter;
-import static java.lang.System.lineSeparator;
+import com.google.common.base.Preconditions
+import com.google.common.collect.ImmutableList
+import com.google.common.reflect.TypeToken
+import com.squareup.javapoet.CodeBlock
+import io.spine.protodata.TypeName
+import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.Expression
+import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.codegen.java.TypedInsertionPoint
+import io.spine.protodata.renderer.SourceAtLine
+import io.spine.protodata.renderer.SourceFile
+import io.spine.text.TextFactory
+import io.spine.text.TextFactory.lineSplitter
+import io.spine.validate.ValidatableMessage
+import io.spine.validate.ValidationError
+import io.spine.validation.MessageValidation
+import java.lang.System.lineSeparator
+import java.lang.reflect.Type
+import java.util.*
 
 /**
  * Generates validation code for a given message type specified via
- * {@link MessageValidation} instance.
+ * [MessageValidation] instance.
  *
- * <p>Serves as a method object for the {@link JavaValidationRenderer} passed to the constructor.
+ *
+ * Serves as a method object for the [JavaValidationRenderer] passed to the constructor.
  */
-final class ValidationCode {
-
-    @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
-    static final String VALIDATE = "validate";
-    static final Type OPTIONAL_ERROR =
-            new TypeToken<Optional<ValidationError>>() {}.getType();
-    static final Expression VIOLATIONS = new Literal("violations");
-
-    private final JavaValidationRenderer renderer;
-    private final SourceFile sourceFile;
-    private final MessageValidation validation;
-    private final TypeName messageType;
-
-    /**
-     * Creates a new instance for generating message validation code.
-     *
-     * @param renderer
-     *         the parent renderer
-     * @param validation
-     *         the validation rule for which to generate the code
-     * @param file
-     *         the file to be extended with the validation code
-     */
-    ValidationCode(JavaValidationRenderer renderer,
-                   MessageValidation validation,
-                   SourceFile file) {
-        this.renderer = checkNotNull(renderer);
-        this.sourceFile = checkNotNull(file);
-        this.validation = checkNotNull(validation);
-        this.messageType = validation.getName();
-    }
+internal class ValidationCode(
+    private val renderer: JavaValidationRenderer,
+    private val validation: MessageValidation,
+    private val sourceFile: SourceFile
+) {
+    private val messageType: TypeName = validation.name
 
     /**
      * Generates the code in the linked source file.
      */
-    void generate() {
-        implementValidatableMessage();
-        handleConstraints();
+    fun generate() {
+        implementValidatableMessage()
+        handleConstraints()
     }
 
-    private void implementValidatableMessage() {
-        var atMessageImplements =
-                sourceFile.at(MESSAGE_IMPLEMENTS.forType(messageType))
-                          .withExtraIndentation(1);
-        atMessageImplements.add(new ClassName(ValidatableMessage.class) + ",");
+    private fun implementValidatableMessage() {
+        val atMessageImplements =
+            sourceFile.at(TypedInsertionPoint.MESSAGE_IMPLEMENTS.forType(messageType))
+                .withExtraIndentation(1)
+        atMessageImplements.add(ClassName(ValidatableMessage::class.java).toString() + ",")
     }
 
-    private void handleConstraints() {
-        var atClassScope = classScope();
-        var constraints = ValidationConstraintsCode.generate(renderer, validation);
-        atClassScope.add(validateMethod(constraints.codeBlock()));
-        atClassScope.add(constraints.supportingMembersLines());
+    private fun handleConstraints() {
+        classScope().apply {
+            val constraints = ValidationConstraintsCode.generate(renderer, validation)
+            add(validateMethod(constraints.codeBlock()))
+            add(constraints.supportingMembersCode())
+        }
     }
 
-    private SourceAtLine classScope() {
-        return sourceFile.at(CLASS_SCOPE.forType(this.messageType));
-    }
+    private fun classScope(): SourceAtLine =
+        sourceFile.at(TypedInsertionPoint.CLASS_SCOPE.forType(this.messageType))
 
-    private ImmutableList<String> validateMethod(CodeBlock constraintsCode) {
-        var validateMethod = new ValidateMethodCode(messageType, constraintsCode);
-        var methodSpec = validateMethod.generate();
-        var lines = ImmutableList.<String>builder();
+    private fun validateMethod(constraintsCode: CodeBlock): ImmutableList<String> {
+        val validateMethod = ValidateMethodCode(messageType, constraintsCode)
+        val methodSpec = validateMethod.generate()
+        val lines = ImmutableList.builder<String>()
         lines.addAll(lineSplitter().split(methodSpec.toString()))
-             .add(lineSeparator());
-        return lines.build();
+            .add(lineSeparator())
+        return lines.build()
+    }
+
+    companion object {
+
+        const val VALIDATE: String = "validate"
+
+        @JvmField
+        val OPTIONAL_ERROR: Type = object : TypeToken<Optional<ValidationError>>() {}.type
+
+        @JvmField
+        val VIOLATIONS: Expression = Literal("violations")
     }
 }
