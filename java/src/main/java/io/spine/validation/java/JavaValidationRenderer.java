@@ -67,7 +67,7 @@ import static java.util.stream.Collectors.toSet;
  *
  * <p>If the validation rules are broken, throws a {@link io.spine.validate.ValidationException}.
  */
-@SuppressWarnings("unused" /* Loaded by ProtoData via reflection. */)
+@SuppressWarnings({"unused", "OverlyCoupledClass"})
 public final class JavaValidationRenderer extends JavaRenderer {
 
     private @MonotonicNonNull SourceFileSet sources;
