@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.call
 import io.spine.protodata.isRepeated
+import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
@@ -91,12 +92,12 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         if (!ignoreIfNotSet || defaultValue == null) {
             return check
         }
-        val condition = createCondition(defaultValue)
-        return CodeBlock.builder()
-            .beginControlFlow("if ($condition)")
-            .add(check)
-            .endControlFlow()
-            .build()
+        return codeBlock {
+            val condition = createCondition(defaultValue)
+            beginControlFlow("if ($condition)")
+            add(check)
+            endControlFlow()
+        }
     }
 
     private fun defaultFieldValue(): Value? = with(ctx) {

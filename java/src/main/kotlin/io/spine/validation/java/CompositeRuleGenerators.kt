@@ -31,6 +31,7 @@ import io.spine.protobuf.isNotDefault
 import io.spine.protodata.Field
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
+import io.spine.tools.java.codeBlock
 import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
@@ -107,17 +108,13 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             ctx.validatedType, ctx.violationList, field, accessor
         )
     }
+    override fun supportingMembers(): CodeBlock = codeBlock {
+        add(left.supportingMembers())
+        add(right.supportingMembers())
+    }
 
-    override fun supportingMembers(): CodeBlock =
-        CodeBlock.builder()
-            .add(left.supportingMembers())
-            .add(right.supportingMembers())
-            .build()
-
-    override fun prologue(): CodeBlock {
-        return CodeBlock.builder()
-            .add(left.prologue())
-            .add(right.prologue())
-            .build()
+    override fun prologue(): CodeBlock = codeBlock {
+        add(left.prologue())
+        add(right.prologue())
     }
 }

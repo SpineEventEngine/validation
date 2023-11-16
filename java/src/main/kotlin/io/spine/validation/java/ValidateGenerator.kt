@@ -35,6 +35,7 @@ import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.qualifiedName
 import io.spine.string.titleCase
+import io.spine.tools.java.codeBlock
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.Validate
 import io.spine.validate.ValidationError
@@ -69,11 +70,10 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
 
     override fun prologue(): CodeBlock {
         return if (field.type.isAny) {
-            CodeBlock.builder()
-                .add(unpackAndValidate())
-                .add(wrapIntoError())
-                .build()
-
+            codeBlock {
+                add(unpackAndValidate())
+                add(wrapIntoError())
+            }
         } else {
             useGeneratedMethod()
         }
@@ -91,16 +91,15 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *     Optional<ValidationError> [validationErrorVar] = this.get[fieldName]().validate();
      * ```
      */
-    private fun useGeneratedMethod(): CodeBlock {
+    private fun useGeneratedMethod(): CodeBlock = codeBlock {
         val violations = MethodCall(ctx.fieldOrElement!!, "validate")
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$L",
-                Optional::class.java,
-                ValidationError::class.java,
-                validationErrorVar,
-                violations
-            ).build()
+        addStatement(
+            "\$T<\$T> \$L = \$L",
+            Optional::class.java,
+            ValidationError::class.java,
+            validationErrorVar,
+            violations
+        )
     }
 
     /**
@@ -114,16 +113,15 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *         Validate.violationsOf(AnyPacker.unpack(this.get[fieldName]()));
      * ```
      */
-    private fun unpackAndValidate(): CodeBlock {
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$T.violationsOf(\$L)",
-                List::class.java,
-                ConstraintViolation::class.java,
-                violationListVar,
-                Validate::class.java,
-                ctx.fieldOrElement!!
-            ).build()
+    private fun unpackAndValidate(): CodeBlock = codeBlock {
+        addStatement(
+            "\$T<\$T> \$L = \$T.violationsOf(\$L)",
+            List::class.java,
+            ConstraintViolation::class.java,
+            violationListVar,
+            Validate::class.java,
+            ctx.fieldOrElement!!
+        )
     }
 
     /**
@@ -142,21 +140,18 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *        );
      * ```
      */
-    private fun wrapIntoError(): CodeBlock {
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$T.ofNullable(" +
-                        "\$L.isEmpty() ? null " +
-                        ": \$T.newBuilder().addAllConstraintViolation(\$L).build())",
-                Optional::class.java,
-                ValidationError::class.java,
-                validationErrorVar,
-                Optional::class.java,
-                violationListVar,
-                ValidationError::class.java,
-                violationListVar
-            )
-            .build()
+    private fun wrapIntoError(): CodeBlock = codeBlock {
+        addStatement(
+            "var \$L = \$T.ofNullable(" +
+                    "\$L.isEmpty() ? null " +
+                    ": \$T.newBuilder().addAllConstraintViolation(\$L).build()" +
+                    ")",
+            validationErrorVar,
+            Optional::class.java,
+            violationListVar,
+            ValidationError::class.java,
+            violationListVar
+        )
     }
 
     override fun condition(): Expression =
