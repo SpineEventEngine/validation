@@ -44,6 +44,7 @@ import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv
 import io.spine.validate.given.MessageValidatorTestEnv.newByteString
 import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -83,6 +84,7 @@ internal class RequiredTest : ValidationOfConstraintTest() {
     }
 
     @Test
+    @Disabled("Until 'skipValidation()` is turned off.")
     fun `find out that required 'ByteString' field is NOT set`() {
         assertCheckFails(
             RequiredBytes.getDefaultInstance()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@ import io.spine.test.validate.anyfields.UncheckedAnyContainer
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
@@ -58,16 +60,23 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
         assertValid(container)
     }
 
-    @Test
-    fun `consider 'Any' not valid if content is not valid`() {
-        val content = AnyPacker.pack(invalidMessage)
-        val builder = AnyContainer.newBuilder().setAny(content)
+    @Nested
+    inner class `consider 'Any' not valid if content is not valid` {
 
-        assertThrows<ValidationException> {
-            builder.build()
+        private val builder: AnyContainer.Builder = AnyContainer.newBuilder()
+            .setAny(AnyPacker.pack(invalidMessage))
+
+        @Test
+        @Disabled("Until 'skipValidation()` is turned off.")
+        fun `on 'build()' method`() {
+            assertThrows<ValidationException> {
+                builder.build()
+            }
         }
 
-        assertNotValid(builder.buildPartial())
+        @Test
+        fun `assert not valid if builder built partially`() =
+            assertNotValid(builder.buildPartial())
     }
 
     @Test
@@ -81,19 +90,29 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
         assertValid(builder.build())
     }
 
-    @Test
-    fun `validate recursive messages`() {
-        val internalAny = AnyPacker.pack(invalidMessage)
-        val internal: @NonValidated AnyContainer = AnyContainer.newBuilder()
-            .setAny(internalAny)
-            .buildPartial()
+    @Nested
+    inner class `validate recursive messages using` {
 
-        val external = AnyPacker.pack(internal)
-        val builder = AnyContainer.newBuilder()
-            .setAny(external)
+        private val builder: AnyContainer.Builder
 
-        assertNotValid(builder.buildPartial())
+        init {
+            val internalAny = AnyPacker.pack(invalidMessage)
+            val internal: @NonValidated AnyContainer = AnyContainer.newBuilder()
+                .setAny(internalAny)
+                .buildPartial()
 
-        assertThrows<ValidationException> { builder.build() }
+            val external = AnyPacker.pack(internal)
+            builder = AnyContainer.newBuilder().setAny(external)
+        }
+
+        @Test
+        fun `using 'validate()' method`() =
+            assertNotValid(builder.buildPartial())
+
+        @Test
+        @Disabled("Until 'skipValidation()` is turned off.")
+        fun `on 'build()' method`() {
+            assertThrows<ValidationException> { builder.build() }
+        }
     }
 }

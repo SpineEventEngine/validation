@@ -39,6 +39,7 @@ import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
 import io.spine.validate.given.MessageValidatorTestEnv.ENCLOSED_FIELD_NAME
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -87,6 +88,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
     }
 
     @Test
+    @Disabled("Until 'skipValidation()` is turned off.")
     fun `provide valid violations if enclosed message field is not valid`() {
         val enclosedMsg = PatternStringFieldValue.newBuilder()
             .setEmail("invalid email")
@@ -120,6 +122,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
     }
 
     @Test
+    @Disabled("Until 'skipValidation()` is turned off.")
     fun `provide custom invalid field message if specified`() {
         val enclosedMsg: @NonValidated PatternStringFieldValue =
             PatternStringFieldValue.newBuilder()

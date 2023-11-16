@@ -32,6 +32,7 @@ import io.spine.test.validate.oneof.OneofWithRequiredFields
 import io.spine.test.validate.oneof.OneofWithValidation
 import io.spine.test.validate.oneof.RequiredOneofWithValidation
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -114,6 +115,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         }
 
         @Test
+        @Disabled("Until 'skipValidation()` is turned off.")
         fun `a field within 'oneof' is not valid`() = assertDoesNotBuild {
             OneofWithValidation.newBuilder()
                 .setWithValidation("   ")
@@ -125,6 +127,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
             assertNotValid(OneofWithRequiredFields.getDefaultInstance(), false)
 
         @Test
+        @Disabled("Until 'skipValidation()` is turned off.")
         fun `a required field is not valid`() = assertDoesNotBuild {
             RequiredOneofWithValidation.newBuilder()
                 .setValidValue("###")

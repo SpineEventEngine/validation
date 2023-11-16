@@ -37,15 +37,15 @@ dependencies {
     implementation(project(":java-runtime"))
 }
 
-//modelCompiler {
-//    java {
-//        codegen {
-//            validation {
-//                skipValidation()
-//            }
-//        }
-//    }
-//}
+modelCompiler {
+    java {
+        codegen {
+            validation {
+                skipValidation()
+            }
+        }
+    }
+}
 
 // Uncomment the below block when remote debugging of code generation is needed.
 //

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import io.spine.testing.TestValues.randomString
 import io.spine.validate.ValidationException
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -41,6 +42,7 @@ import org.junit.jupiter.api.assertThrows
 internal class IsRequiredSpec : ValidationOfConstraintTest() {
 
     @Test
+    @Disabled("Until 'skipValidation()` is turned off.")
     fun `throw if required field group is not set`() {
         val exception = assertThrows<ValidationException> {
             meal {
