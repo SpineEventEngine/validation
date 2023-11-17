@@ -199,7 +199,12 @@ object Spine {
     object McJava {
         const val version = ArtifactVersion.mcJava
         const val pluginId = "io.spine.mc-java"
+
         val pluginLib = pluginLib(version)
+
+        /**
+         * Obtains the dependency on the McJava Gradle Plugin of the given version.
+         */
         fun pluginLib(version: String): String = "$toolsGroup:spine-mc-java-plugins:$version:all"
     }
 
