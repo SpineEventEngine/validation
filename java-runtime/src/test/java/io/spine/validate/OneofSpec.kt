@@ -40,9 +40,8 @@ import org.junit.jupiter.api.Test
 @DisplayName(VALIDATION_SHOULD + "consider `oneof`")
 internal class OneofSpec : ValidationOfConstraintTest() {
 
-    @DisplayName("valid if")
-    @Nested
-    internal inner class Valid {
+    @Nested internal inner class
+    `valid if` {
 
         @Test
         fun `a required field is set to a non-default value`() = assertValid {
@@ -102,9 +101,8 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         }
     }
 
-    @DisplayName("invalid if")
-    @Nested
-    internal inner class Invalid {
+    @Nested internal inner class
+    `invalid if` {
 
         @Test
         fun `a required field is set to the default value`() {
