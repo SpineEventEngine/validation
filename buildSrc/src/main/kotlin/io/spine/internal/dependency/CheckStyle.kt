@@ -27,7 +27,7 @@
 package io.spine.internal.dependency
 
 /**
- * Dependencies on Checkstyle Java linter.
+ * A code linter for Java.
  *
  * @see <a href="https://checkstyle.sourceforge.io/">Checkstyle</a>
  * @see [io.spine.internal.gradle.checkstyle.CheckStyleConfig]
