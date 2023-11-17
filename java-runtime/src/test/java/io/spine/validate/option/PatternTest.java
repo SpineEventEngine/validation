@@ -29,7 +29,6 @@ package io.spine.validate.option;
 import com.google.protobuf.StringValue;
 import io.spine.test.validate.AllThePatterns;
 import io.spine.test.validate.PatternStringFieldValue;
-import io.spine.validate.Diags;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidationOfConstraintTest;
 import org.checkerframework.checker.regex.qual.Regex;
@@ -68,9 +67,10 @@ class PatternTest extends ValidationOfConstraintTest {
     @DisplayName("provide one valid violation if string does not match to regex pattern")
     void provideOneValidViolationIfStringDoesNotMatchToRegexPattern() {
         var msg = patternStringFor("invalid email");
-        @Regex
-        String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        var expectedErrMsg = errorMessage(regex);
+        @Regex // As defined in the stub message type `PatternStringFieldValue`.
+        String regex =
+                "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        var expectedErrMsg = errorMessage(regex).replace("\\\\", "\\");
         assertSingleViolation(msg, expectedErrMsg, EMAIL);
     }
 

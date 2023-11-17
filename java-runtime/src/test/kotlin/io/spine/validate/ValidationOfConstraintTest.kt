@@ -27,6 +27,7 @@ package io.spine.validate
 
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.spine.validate.Validate.violationsOf
@@ -136,7 +137,7 @@ abstract class ValidationOfConstraintTest {
         )
         actualErrorMessage shouldBe expectedErrMsg
         assertFieldPathIs(violation, invalidFieldName)
-        assertThat(violation.violationList).isEmpty()
+        violation.violationList.shouldBeEmpty()
     }
 
     protected fun assertSingleViolation(message: Message, invalidFieldName: String) {
