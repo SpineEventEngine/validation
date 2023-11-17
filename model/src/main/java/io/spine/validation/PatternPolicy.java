@@ -26,8 +26,6 @@
 
 package io.spine.validation;
 
-import com.google.common.escape.Escaper;
-import com.google.common.escape.Escapers;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.option.PatternOption;
@@ -35,13 +33,11 @@ import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;
-import io.spine.string.CharSequences;
+import io.spine.validate.Diags;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.server.event.Just.just;
-import static io.spine.string.CharSequences.containsLineSeparators;
-import static io.spine.validate.Diags.Regex.errorMessage;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
 /**
@@ -64,7 +60,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .build();
         var customError = optionValue.getErrorMsg();
         var error = customError.isEmpty()
-                       ? ErrorMessage.notMatching(regex)
+                       ? Diags.Regex.errorMessage(regex)
                        : customError;
         var rule = SimpleRules.withCustom(
                 event.getField(),
@@ -79,28 +75,5 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                         .setRule(rule)
                         .build()
         );
-    }
-
-    /**
-     * Creates an error message for a value not matching a given regex.
-     */
-    private static final class ErrorMessage {
-
-        private static final Escaper slashEscaper = Escapers.builder()
-                .addEscape('\\', "\\\\")
-                .build();
-
-        private static String notMatching(String regex) {
-            var withoutLineSeparators = escapeLineSeparators(regex);
-            return errorMessage(slashEscaper.escape(withoutLineSeparators));
-        }
-
-        private static String escapeLineSeparators(String regex) {
-            var toEscape = regex;
-            if (containsLineSeparators(regex)) {
-                toEscape = CharSequences.escapeLineSeparators(regex);
-            }
-            return toEscape;
-        }
     }
 }

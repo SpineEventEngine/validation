@@ -26,6 +26,10 @@
 
 package io.spine.validate
 
+import com.google.common.escape.Escaper
+import com.google.common.escape.Escapers
+import io.spine.string.containsLineSeparators
+import io.spine.string.escapeLineSeparators
 import org.checkerframework.checker.regex.qual.Regex as CheckRegex
 
 /**
@@ -38,9 +42,27 @@ public object Diags {
      * Messages associated with the `regex` field constraint.
      */
     public object Regex {
+
+        private val slashEscaper: Escaper = Escapers.builder()
+            .addEscape('\\', "\\\\")
+            .build()
+
         public const val prefix: String = "The string must match the regular expression"
+
         @JvmStatic
-        public fun errorMessage(regex: @CheckRegex String): String = "$prefix `$regex`."
+        public fun errorMessage(regex: @CheckRegex String): String {
+            val withoutLineSeparators = escapeLineSeparators(regex)
+            val escaped = slashEscaper.escape(withoutLineSeparators)
+            return "$prefix `$escaped`."
+        }
+
+        private fun escapeLineSeparators(regex: String): String {
+            var toEscape = regex
+            if (regex.containsLineSeparators()) {
+                toEscape = regex.escapeLineSeparators()
+            }
+            return toEscape
+        }
     }
 
     /**
