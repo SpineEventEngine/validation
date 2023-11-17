@@ -45,9 +45,8 @@ import org.junit.jupiter.api.assertThrows
 @Disabled("Until 'skipValidation()` is turned off.")
 internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
 
-    @Nested
-    @DisplayName("to obtain custom error message when validating on runtime if")
-    inner class RuntimeValidation {
+    @Nested inner class
+    `to obtain custom error message when validating on runtime if` {
 
         @Test
         fun `'Message' field is NOT set`() = assertErrorMessage(
@@ -86,9 +85,8 @@ internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
         }
     }
 
-    @Nested
-    @DisplayName("to obtain custom error message when validating on 'build' method")
-    inner class OnBuild {
+    @Nested inner class
+    `to obtain custom error message when validating on 'build' method` {
 
         @Test
         fun `'Message' field`() = assertErrorMessage(

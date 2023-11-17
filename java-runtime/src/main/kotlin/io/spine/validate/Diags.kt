@@ -70,14 +70,14 @@ public object Diags {
      */
     public object Required {
         public const val singularErrorMsg: String = "The field must be set."
-        public const val collectionErrorMsg: String = "The collection must not be empty.";
+        public const val collectionErrorMsg: String = "The collection must not be empty."
     }
 
     /**
      * Messages associated with the `is_required` constraint of `oneof` fields.
      */
     public object IsRequired {
-        public const val operatorDescription: String = "One of the fields must be set.";
+        public const val operatorDescription: String = "One of the fields must be set."
         public fun errorMessage(oneofName: String): String =
             "One of the fields in the `$oneofName` group must be set."
     }

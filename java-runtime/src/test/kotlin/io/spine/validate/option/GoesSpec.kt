@@ -56,7 +56,7 @@ internal class GoesSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun `not filled simultaneously` () {
+        fun `not filled separately` () {
             assertNotValid(
                 payment {
                     id = paymentId

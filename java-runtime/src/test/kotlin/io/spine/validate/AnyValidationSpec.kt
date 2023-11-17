@@ -82,11 +82,8 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
     @Test
     fun `consider 'Any' valid if validation is not required`() {
         val content = AnyPacker.pack(invalidMessage)
-
         val builder = UncheckedAnyContainer.newBuilder().setAny(content)
-
         assertDoesNotThrow { builder.build() }
-
         assertValid(builder.build())
     }
 

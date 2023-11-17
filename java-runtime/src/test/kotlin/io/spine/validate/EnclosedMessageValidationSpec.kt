@@ -99,18 +99,15 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-
         violation.msgFormat shouldBe "The message must have valid properties."
-
         assertFieldPathIs(
             violation,
             ENCLOSED_FIELD_NAME
         )
+
         val innerViolations = violation.violationList
         innerViolations shouldHaveSize  1
-
         val innerViolation = innerViolations[0]
-
         innerViolation.msgFormat shouldStartWith Diags.Regex.prefix
 
         assertFieldPathIs(
