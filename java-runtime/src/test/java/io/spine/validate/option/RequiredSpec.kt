@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validate.option
 
 import com.google.protobuf.StringValue
@@ -49,7 +50,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(required)` option and")
-internal class RequiredTest : ValidationOfConstraintTest() {
+internal class RequiredSpec : ValidationOfConstraintTest() {
     
     @Test
     fun `find out that required 'Message' field is set`() = assertValid {
