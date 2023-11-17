@@ -97,7 +97,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
 
         private static String escapeLineSeparators(String regex) {
             var toEscape = regex;
-            if(containsLineSeparators(regex)) {
+            if (containsLineSeparators(regex)) {
                 toEscape = CharSequences.escapeLineSeparators(regex);
             }
             return toEscape;
