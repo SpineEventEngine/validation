@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
@@ -43,7 +44,6 @@ import io.spine.validate.ValidationException
 import io.spine.validation.MessageValidation
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
-import java.nio.file.Path
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import java.util.stream.Stream

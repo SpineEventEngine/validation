@@ -23,17 +23,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validate
 
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldStartWith
+import io.spine.test.validate.NotValidateWithCustomMessage
+import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.ValidateEnclosed
 import io.spine.test.validate.ValidateWithCustomMessage
-import io.spine.test.validate.NotValidateWithCustomMessage
 import io.spine.test.validate.ValidateWithRequiredString
-import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.notValidateEnclosed
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL

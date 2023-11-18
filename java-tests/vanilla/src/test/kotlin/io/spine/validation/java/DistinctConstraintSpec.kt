@@ -23,14 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
-import io.spine.base.FieldPath
 import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
-import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError

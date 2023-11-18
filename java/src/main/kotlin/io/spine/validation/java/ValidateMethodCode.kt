@@ -23,9 +23,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation.java
 
-import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
