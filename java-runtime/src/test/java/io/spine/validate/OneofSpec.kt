@@ -76,7 +76,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun `an optional validated field is is default`() =
+        fun `an optional validated field is default`() =
             assertValid(OneofWithValidation.getDefaultInstance())
 
         @Test
