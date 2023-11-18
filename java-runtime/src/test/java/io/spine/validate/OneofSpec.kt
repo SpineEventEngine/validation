@@ -31,6 +31,8 @@ import io.spine.test.validate.oneof.OneofWithOptionalFields
 import io.spine.test.validate.oneof.OneofWithRequiredFields
 import io.spine.test.validate.oneof.OneofWithValidation
 import io.spine.test.validate.oneof.RequiredOneofWithValidation
+import io.spine.test.validate.oneof.oneofWithValidation
+import io.spine.test.validate.oneof.requiredOneofWithValidation
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
@@ -71,7 +73,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         fun `an optional field is properly validated`() {
             val validFieldSet = OneofWithValidation.newBuilder()
                 .setWithValidation("valid")
-                .build()
+                .buildPartial()
             assertValid(validFieldSet)
         }
 
@@ -81,23 +83,23 @@ internal class OneofSpec : ValidationOfConstraintTest() {
 
         @Test
         fun `an optional field without validation is set`() = assertValid {
-            OneofWithValidation.newBuilder()
-                .setNoValidation("does not require validation")
-                .build()
+            oneofWithValidation {
+                noValidation = "does not require validation"
+            }
         }
 
         @Test
         fun `a required field without validation is set`() = assertValid {
-            RequiredOneofWithValidation.newBuilder()
-                .setRawValue("o_0")
-                .build()
+            requiredOneofWithValidation {
+                rawValue = "o_0"
+            }
         }
 
         @Test
         fun `a required field with validation is set`() = assertValid {
-            RequiredOneofWithValidation.newBuilder()
-                .setValidValue("aaa1111")
-                .build()
+            requiredOneofWithValidation {
+                validValue = "aaa1111"
+            }
         }
     }
 
