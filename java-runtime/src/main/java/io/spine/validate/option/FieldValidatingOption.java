@@ -33,7 +33,6 @@ import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.GeneratedMessage.GeneratedExtension;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldOption;
-import io.spine.validate.ExternalConstraintOptions;
 
 import java.util.Optional;
 
@@ -91,23 +90,16 @@ public abstract class FieldValidatingOption<@ImmutableTypeParameter T>
     /**
      * Takes the value of the option from the given descriptor, given the specified context.
      *
-     * <p>The value is firstly obtained from the external constraint and if an external constraint
-     * is not present, the value is obtained from the actual field constraint.
-     *
      * @param context
      *         context of the field
      * @return an {@code Optional} with an option value if such exists, otherwise an empty
      *         {@code Optional}
      * @apiNote Use this in favour of {@link
      *         FieldOption#optionsFrom(com.google.protobuf.Descriptors.FieldDescriptor)
-     *         optionsFrom(FieldDescriptor)} when {@code FieldContext} matters, e.g. when handling
-     *         {@code (constraint_for)} options.
+     *         optionsFrom(FieldDescriptor)} when {@code FieldContext} matters.
      */
     public Optional<T> valueFrom(FieldContext context) {
-        var externalConstraint = ExternalConstraintOptions.getOptionValue(context, extension());
-        return externalConstraint.isPresent()
-               ? externalConstraint
-               : valueFrom(context.target());
+        return valueFrom(context.target());
     }
 
     /**

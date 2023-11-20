@@ -44,7 +44,7 @@ internal class PatternGenerator(
     ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
 
-    private val fieldName = ctx.fieldFromSimpleRule!!.name
+    private val fieldName = ctx.simpleRuleField.name
     private val patternConstantName = "${fieldName.value}_PATTERN"
 
     override fun condition(): Expression {

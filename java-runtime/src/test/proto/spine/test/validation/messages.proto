@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ option java_package = "io.spine.test.validate";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/any.proto";
 
-import "spine/test/validation/test_pattern_option.proto";
+import "spine/test/validation/pattern_option_test.proto";
+import "spine/test/validation/required_test.proto";
 
 // Messages for general validation tests.
 
@@ -47,183 +48,6 @@ message ProjectId {
 
 message TaskId {
     string value = 1;
-}
-
-// Messages for "required" option tests.
-
-message RequiredMsgFieldValue {
-    google.protobuf.StringValue value = 1 [(required) = true];
-}
-
-message RequiredStringFieldValue {
-    string value = 1 [(required) = true];
-}
-
-message RequiredByteStringFieldValue {
-    bytes value = 1 [(required) = true];
-}
-
-message RepeatedRequiredMsgFieldValue {
-    repeated google.protobuf.StringValue value = 1 [(required) = true];
-}
-
-message RequiredEnumFieldValue {
-    Planet value = 1 [(required) = true];
-}
-
-message RequiredBooleanFieldValue {
-    bool value = 1 [(required) = true];
-}
-
-message RequiredIntFieldValue {
-    int32 value = 1 [(required) = true];
-}
-
-message RequiredFloatFieldValue {
-    float value = 1 [(required) = true];
-}
-
-message RequiredDoubleFieldValue {
-    double value = 1 [(required) = true];
-}
-
-message RequiredLongFieldValue {
-    int64 value = 1 [(required) = true];
-}
-// Messages for "if_missing" option tests.
-
-message CustomMessageRequiredMsgFieldValue {
-    google.protobuf.StringValue value = 1 [(required) = true, (if_missing).msg_format = "MsgError"];
-}
-
-message CustomMessageRequiredStringFieldValue {
-    string value = 1 [(required) = true, (if_missing).msg_format = "StrError"];
-}
-
-message CustomMessageRequiredByteStringFieldValue {
-    bytes value = 1 [(required) = true, (if_missing).msg_format = "ByteStrError"];
-}
-
-message CustomMessageRequiredRepeatedMsgFieldValue {
-    repeated google.protobuf.StringValue value = 1 [(required) = true, (if_missing).msg_format = "RepeatedMsgError"];
-}
-
-message CustomMessageRequiredEnumFieldValue {
-    Planet value = 1 [(required) = true, (if_missing).msg_format = "EnumError"];
-}
-
-message CustomMessageWithNoRequiredOption {
-    string value = 1 [(if_missing).msg_format = "Custom error messages make no difference without `(required) = true`"];
-}
-
-// Messages for "min", "max" options tests.
-
-message MinInclusiveNumberFieldValue {
-    double value = 1 [(min).value = "16.5", (min).exclusive = false];
-}
-
-message MinExclusiveNumberFieldValue {
-    double value = 1 [(min).value = "16.5", (min).exclusive = true];
-}
-
-message MaxInclusiveNumberFieldValue {
-    double value = 1 [(max).value = "64.5", (max).exclusive = false];
-}
-
-message MaxExclusiveNumberFieldValue {
-    double value = 1 [(max).value = "64.5", (max).exclusive = true];
-}
-
-message InvalidBound {
-    int64 value = 1 [(min).value = "2.71"];
-}
-
-// Messages for "valid" option tests.
-
-message EnclosedMessageFieldValue {
-    PatternStringFieldValue outer_msg_field = 1 [(validate) = true];
-}
-
-message EnclosedMessageWithoutAnnotationFieldValue {
-    PatternStringFieldValue outer_msg_field = 1;
-}
-
-message EnclosedMessageFieldValueWithCustomInvalidMessage {
-    PatternStringFieldValue outer_msg_field = 1 [(validate) = true, (if_invalid).msg_format = "Custom error"];
-}
-
-message EnclosedMessageFieldValueWithoutAnnotationFieldValueWithCustomInvalidMessage {
-    PatternStringFieldValue outer_msg_field = 1 [(if_invalid).msg_format = "Custom error is redundant in this case"];
-}
-
-message EnclosedMessageWithRequiredString {
-    RequiredStringFieldValue outer_msg_field = 1 [(validate) = true];
-}
-
-// Messages for testing validation of repeated fields.
-
-message MessageWithRepeatedUnchekedStringField {
-    repeated string unchecked = 1;
-}
-
-message MessageWithRepeatedValidatedStringField {
-    repeated string validated = 1 [(validate) = true, (pattern).regex = "\\w+"];
-}
-
-message MessegeWithRepeatedRequiredStringField {
-    repeated string required_field = 1 [(required) = true];
-}
-
-message MessageWithRepeatedRequiredValidatedStringField {
-    repeated string bound = 1 [(validate) = true, (required) = true, (pattern).regex = "\\w+"];
-}
-
-message MessageWithRepeatedUnchekedMessageField {
-    repeated InvalidMessage unchecked = 1;
-}
-
-message MessageWithRepeatedValidatedMessageField {
-    repeated InvalidMessage validated = 1 [(validate) = true];
-}
-
-message MessegeWithRepeatedRequiredMessageField {
-    repeated InvalidMessage required_field = 1 [(required) = true];
-}
-
-message MessageWithRepeatedRequiredValidatedMessageField {
-    repeated InvalidMessage bound = 1 [(validate) = true, (required) = true];
-}
-
-message MessageWithMapStringField {
-    map<string, string> map_field = 1;
-}
-
-message MessageWithMapMessageField {
-    map<string, google.protobuf.Any> map_field = 1;
-}
-
-message MessageWithMapByteStringField {
-    map<string, bytes> map_field = 1;
-}
-
-message MessageWithMapIntField {
-    map<string, int32> map_field = 1;
-}
-
-message MessageWithMapLongField {
-    map<string, int64> map_field = 1;
-}
-
-message MessageWithMapBoolField {
-    map<string, bool> map_field = 1;
-}
-
-message MessageWithMapFloatField {
-    map<string, float> map_field = 1;
-}
-
-message MessageWithMapDoubleField {
-    map<string, double> map_field = 1;
 }
 
 // A message which is used to violate its constraints in scope of `MessageFieldValidator` tests.
@@ -251,16 +75,3 @@ message ProjectionState {
     string not_important_id = 1 [(required) = false];
 }
 
-enum Planet {
-
-    PLANET_UNDEFINED = 0;
-
-    MERCURY = 1;
-    VENUS = 2;
-    EARTH = 3;
-    MARS = 4;
-    JUPITER = 5;
-    SATURN = 6;
-    URANUS = 7;
-    NEPTUNE = 8;
-}

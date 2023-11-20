@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.validation</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.110</version>
+<version>2.0.0-SNAPSHOT.111</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -26,19 +26,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java</artifactId>
-    <version>3.24.4</version>
+    <version>3.25.0</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java-util</artifactId>
-    <version>3.24.4</version>
+    <version>3.25.0</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-kotlin</artifactId>
-    <version>3.24.4</version>
+    <version>3.25.0</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -50,37 +50,37 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-base</artifactId>
-    <version>2.0.0-SNAPSHOT.191</version>
+    <version>2.0.0-SNAPSHOT.192</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-logging</artifactId>
-    <version>2.0.0-SNAPSHOT.232</version>
+    <version>2.0.0-SNAPSHOT.233</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-server</artifactId>
-    <version>2.0.0-SNAPSHOT.171</version>
+    <version>2.0.0-SNAPSHOT.173</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-time</artifactId>
-    <version>2.0.0-SNAPSHOT.134</version>
+    <version>2.0.0-SNAPSHOT.135</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-codegen-java</artifactId>
-    <version>0.14.2</version>
+    <version>0.14.3</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-compiler</artifactId>
-    <version>0.14.2</version>
+    <version>0.14.3</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -128,7 +128,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
-    <version>5.6.2</version>
+    <version>5.8.0</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -140,7 +140,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-testutil-server</artifactId>
-    <version>2.0.0-SNAPSHOT.171</version>
+    <version>2.0.0-SNAPSHOT.173</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -182,7 +182,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.errorprone</groupId>
     <artifactId>error_prone_core</artifactId>
-    <version>2.21.1</version>
+    <version>2.23.0</version>
   </dependency>
   <dependency>
     <groupId>com.google.errorprone</groupId>
@@ -192,7 +192,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protoc</artifactId>
-    <version>3.24.4</version>
+    <version>3.25.0</version>
   </dependency>
   <dependency>
     <groupId>io.gitlab.arturbosch.detekt</groupId>
@@ -207,12 +207,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-fat-cli</artifactId>
-    <version>0.14.2</version>
+    <version>0.14.3</version>
   </dependency>
   <dependency>
     <groupId>io.spine.protodata</groupId>
     <artifactId>protodata-protoc</artifactId>
-    <version>0.14.2</version>
+    <version>0.14.3</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
@@ -273,42 +273,42 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>all-modules-page-plugin</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
-    <artifactId>dokka-analysis</artifactId>
-    <version>1.8.20</version>
+    <artifactId>analysis-kotlin-descriptors</artifactId>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-base</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>dokka-core</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>gfm-template-processing-plugin</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>javadoc-plugin</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>jekyll-template-processing-plugin</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.dokka</groupId>
     <artifactId>kotlin-as-java-plugin</artifactId>
-    <version>1.8.20</version>
+    <version>1.9.10</version>
   </dependency>
   <dependency>
     <groupId>org.jetbrains.kotlin</groupId>

@@ -23,41 +23,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-package io.spine.validate;
+package spine.test.validation;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.test.type.Uri;
-import io.spine.test.validation.AMessage;
-import io.spine.test.validation.AnExternalConstraint;
-import io.spine.type.MessageType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import "spine/options.proto";
 
-import static com.google.common.truth.Truth.assertThat;
+option (type_url_prefix) = "type.spine.io";
+option java_multiple_files = true;
+option java_outer_classname = "TestPatternOptionProto";
+option java_package = "io.spine.test.validate";
 
-@DisplayName("`ExternalConstraints` should")
-final class ExternalConstraintsTest {
+// Messages for "pattern" option tests.
 
-    @DisplayName("update rules from types")
-    @Test
-    void updateRulesFromTypes() {
-        var ruleType = new MessageType(AnExternalConstraint.getDescriptor());
-        ExternalConstraints.updateFrom(ImmutableSet.of(ruleType));
-        assertThat(ExternalConstraints.all()).hasSize(6);
-    }
+message PatternStringFieldValue {
+    string email = 1 [(pattern).regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"];
+}
 
-    @Test
-    @DisplayName("tell if an external constraint is defined for a field")
-    void checkIfDefined() {
-        var defined = ExternalConstraints.isDefinedFor(AMessage.getDescriptor(), "field");
-        assertThat(defined).isTrue();
-    }
-
-    @Test
-    @DisplayName("tell if an external constraint is NOT defined for a field")
-    void checkIfNotDefined() {
-        var defined = ExternalConstraints.isDefinedFor(Uri.getDescriptor(), "host");
-        assertThat(defined).isFalse();
-    }
+message SimpleStringValue {
+    string value = 1 [(pattern).regex = "^[A-Za-z ]+$"];
 }

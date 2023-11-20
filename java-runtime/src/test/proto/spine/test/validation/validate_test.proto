@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-package io.spine.validate;
+package spine.test.validation;
 
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
+import "spine/options.proto";
 
-@DisplayName("ExternalConstraints.Holder should")
-final class ExternalConstraintsHolderTest extends UtilityClassTest<ExternalConstraints.Holder> {
+option (type_url_prefix) = "type.spine.io";
+option java_multiple_files = true;
+option java_outer_classname = "ValidateTestProto";
+option java_package = "io.spine.test.validate";
 
-    private ExternalConstraintsHolderTest() {
-        super(ExternalConstraints.Holder.class);
-    }
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/any.proto";
+
+import "spine/test/validation/pattern_option_test.proto";
+import "spine/test/validation/required_test.proto";
+
+// Messages for "validate" option tests.
+
+message ValidateEnclosed {
+    PatternStringFieldValue enclosed = 1 [(validate) = true];
+}
+
+message NotValidateEnclosed {
+    PatternStringFieldValue enclosed = 1;
+}
+
+message ValidateWithCustomMessage {
+    PatternStringFieldValue enclosed = 1 [
+        (validate) = true,
+        (if_invalid).error_msg = "Custom error"
+    ];
+}
+
+message NotValidateWithCustomMessage {
+    PatternStringFieldValue enclosed = 1 [
+        (if_invalid).error_msg = "Custom error is redundant in this case"
+    ];
+}
+
+message ValidateWithRequiredString {
+    RequiredString enclosed = 1 [(validate) = true];
 }

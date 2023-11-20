@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protobuf.AnyPacker
 import io.spine.protodata.Field
 import io.spine.protodata.Type
 import io.spine.protodata.codegen.java.Expression
@@ -35,6 +34,8 @@ import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MessageReference
 import io.spine.protodata.codegen.java.MethodCall
 import io.spine.protodata.qualifiedName
+import io.spine.string.titleCase
+import io.spine.tools.java.codeBlock
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.Validate
 import io.spine.validate.ValidationError
@@ -45,29 +46,34 @@ import java.util.*
  */
 internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-    private val validationErrorVar =
-        Literal("generated_validationError_${ctx.fieldFromSimpleRule!!.name.value}")
+    private val validationErrorVar = varName(prefix = "validationError", ctx)
 
-    private val violationListVar =
-        Literal("generated_violationList_${ctx.fieldFromSimpleRule!!.name.value}")
+    private val violationListVar = varName(prefix = "violationList", ctx)
 
     init {
-        val field = ctx.fieldFromSimpleRule!!
+        val field = ctx.simpleRuleField
         val fieldType = field.type
         check(fieldType.hasMessage()) {
-            "(validate) only supports `Message` types but field " +
-                    "`${field.declaringType.qualifiedName()}.${field.name.value}` " +
-                    "has type `$fieldType`."
+            "The `(validate)` option supports only `Message` types," +
+                    " but the field `${field.qualifiedName}` has the type `$fieldType`."
         }
     }
 
-    override fun prologue(): CodeBlock {
-        return if (field.type.isAny()) {
-            CodeBlock.builder()
-                .add(unpackAndValidate())
-                .add(wrapIntoError())
-                .build()
+    /**
+     * Compose a variable name after the format `prefixOfFieldName`.
+     * E.g., `validationErrorOfUserId`.
+     */
+    private fun varName(prefix: String, ctx: GenerationContext): Literal {
+        val fieldNameSuffix = ctx.simpleRuleField.name.value.titleCase()
+        return Literal("${prefix}Of$fieldNameSuffix")
+    }
 
+    override fun prologue(): CodeBlock {
+        return if (field.type.isAny) {
+            codeBlock {
+                add(unpackAndValidate())
+                add(wrapIntoError())
+            }
         } else {
             useGeneratedMethod()
         }
@@ -85,16 +91,15 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *     Optional<ValidationError> [validationErrorVar] = this.get[fieldName]().validate();
      * ```
      */
-    private fun useGeneratedMethod(): CodeBlock {
+    private fun useGeneratedMethod(): CodeBlock = codeBlock {
         val violations = MethodCall(ctx.fieldOrElement!!, "validate")
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$L",
-                Optional::class.java,
-                ValidationError::class.java,
-                validationErrorVar,
-                violations
-            ).build()
+        addStatement(
+            "\$T<\$T> \$L = \$L",
+            Optional::class.java,
+            ValidationError::class.java,
+            validationErrorVar,
+            violations
+        )
     }
 
     /**
@@ -108,16 +113,15 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *         Validate.violationsOf(AnyPacker.unpack(this.get[fieldName]()));
      * ```
      */
-    private fun unpackAndValidate(): CodeBlock {
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$T.violationsOf(\$L)",
-                List::class.java,
-                ConstraintViolation::class.java,
-                violationListVar,
-                Validate::class.java,
-                ctx.fieldOrElement!!
-            ).build()
+    private fun unpackAndValidate(): CodeBlock = codeBlock {
+        addStatement(
+            "\$T<\$T> \$L = \$T.violationsOf(\$L)",
+            List::class.java,
+            ConstraintViolation::class.java,
+            violationListVar,
+            Validate::class.java,
+            ctx.fieldOrElement!!
+        )
     }
 
     /**
@@ -128,26 +132,26 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      *
      * ```
      *     Optional<ValidationError> [validationErrorVar] =
-     *         Optional.ofNullable([violationListVar].isEmpty() ? null : ValidationError.newBuilder()
-     *                              .addAllConstraintViolation([violationListVar])
-     *                              .build());
+     *         Optional.ofNullable([violationListVar].isEmpty()
+     *              ? null
+     *              : ValidationError.newBuilder()
+     *                     .addAllConstraintViolation([violationListVar])
+     *                     .build()
+     *        );
      * ```
      */
-    private fun wrapIntoError(): CodeBlock {
-        return CodeBlock.builder()
-            .addStatement(
-                "\$T<\$T> \$L = \$T.ofNullable(" +
-                        "\$L.isEmpty() ? null " +
-                        ": \$T.newBuilder().addAllConstraintViolation(\$L).build())",
-                Optional::class.java,
-                ValidationError::class.java,
-                validationErrorVar,
-                Optional::class.java,
-                violationListVar,
-                ValidationError::class.java,
-                violationListVar
-            )
-            .build()
+    private fun wrapIntoError(): CodeBlock = codeBlock {
+        addStatement(
+            "var \$L = \$T.ofNullable(" +
+                    "\$L.isEmpty() ? null " +
+                    ": \$T.newBuilder().addAllConstraintViolation(\$L).build()" +
+                    ")",
+            validationErrorVar,
+            Optional::class.java,
+            violationListVar,
+            ValidationError::class.java,
+            violationListVar
+        )
     }
 
     override fun condition(): Expression =
@@ -164,8 +168,20 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
 }
 
 /**
- * Tells if the Proto field type is `google.protobuf.Any`.
+ * Tells if this type is `google.protobuf.Any`.
+ *
+ * TODO: Migrate to the similar property from ProtoData.
  */
-private fun Type.isAny() = (hasMessage()
-        && message.packageName.equals("google.protobuf"))
-        && message.simpleName.equals("Any")
+private val Type.isAny: Boolean
+    get() = (hasMessage()
+            && message.packageName.equals("google.protobuf"))
+            && message.simpleName.equals("Any")
+
+
+/**
+ * Obtains the name of the field which includes a qualified name of the type which declares it.
+ *
+ * TODO: Migrate to an extension `val` from ProtoData.
+ */
+private val Field.qualifiedName: String
+    get() = "${declaringType.qualifiedName()}.${name.value}"

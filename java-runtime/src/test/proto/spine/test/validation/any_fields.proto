@@ -36,12 +36,12 @@ option java_package = "io.spine.test.validate.anyfields";
 
 import "google/protobuf/any.proto";
 
+// The container of `Any` with `validate` option set to `true`.
 message AnyContainer {
-
     google.protobuf.Any any = 1 [(validate) = true];
 }
 
+// The container of `Any` without validation constraints.
 message UncheckedAnyContainer  {
-
     google.protobuf.Any any = 1;
 }

@@ -52,7 +52,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
     val violation = buildViolation(
         validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
     )
-    return addViolation(violation, violationsList)
+    return addViolation(violation, violationList)
 }
 
 /**
@@ -63,13 +63,13 @@ public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
     childViolations: Expression
 ): CodeBlock {
-    val field = ctx.fieldFromSimpleRule!!
+    val field = ctx.simpleRuleField
     val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
     val violation = buildViolation(
         type, field, fieldValue, childViolations, ignoreCardinality = ctx.isElement
     )
-    return addViolation(violation, ctx.violationsList)
+    return addViolation(violation, ctx.violationList)
 }
 
 /**
@@ -77,21 +77,28 @@ public fun ErrorMessage.createParentViolation(
  * it to the given mutable [violationsList].
  *
  * @param type
- *      name of the type of the validated message
+ *         a name of the validated message type.
  * @param violationsList
- *      a code reference to a list of violations
+ *         a code reference to a list of violations.
  * @param field
- *      field that is common to all the simple rules that constitute the associated composite rule,
- *      or `null` if no such field exists. If this param is `null`, `fieldValue` must
- *      also be `null`.
+ *         field that is common to all the simple rules that constitute the associated
+ *         composite rule, or `null` if no such field exists.
+ *         If this param is `null`, `fieldValue` must also be `null`.
  * @param fieldValue
- *      the expression to obtain the value of the common field, or `null` if there is no common
- *      field. If this param is `null`, `field` must also be `null`.
+ *         the expression to obtain the value of the common field, or `null`,
+ *         if there is no common field.
+ *         If this parameter is `null`, `field` must also be `null`.
  */
-public fun ErrorMessage.createCompositeViolation(type: TypeName,
-                                          violationsList: Expression,
-                                          field: Field?,
-                                          fieldValue: Expression?): CodeBlock {
+public fun ErrorMessage.createCompositeViolation(
+    type: TypeName,
+    violationsList: Expression,
+    field: Field?,
+    fieldValue: Expression?
+): CodeBlock {
+    require(field != null && fieldValue != null || field == null && fieldValue == null) {
+        "Either both `field` and `fieldValue` must be `null` or both must be not `null`." +
+                "Got `field` = `$field` and `fieldValue` = `$fieldValue`."
+    }
     val violation = buildViolation(type, field, fieldValue)
     return addViolation(violation, violationsList)
 }
@@ -116,7 +123,7 @@ private fun ErrorMessage.buildViolation(
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }
     if (fieldValue != null) {
-        checkNotNull(field) { "Field value is set without the field." }
+        checkNotNull(field) { "The field value (`$fieldValue`) is set without the field." }
         val packingExpression = when {
             ignoreCardinality -> fieldValue.packToAny()
             field.isList() || field.isMap()  ->

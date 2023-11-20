@@ -40,6 +40,7 @@ import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.Rule
+import io.spine.validation.isSimple
 
 /**
  * Context of a [CodeGenerator].
@@ -85,13 +86,13 @@ internal constructor(
      * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
      * the generated code should add it to this list.
      */
-    val violationsList: Expression,
+    val violationList: Expression,
 
     /**
      * A custom reference to an element of a collection field.
      *
-     * If `null`, the associated field is not a collection or the associated rule does not need
-     * to be distributed to collection elements.
+     * If `null`, the associated field is not a collection or the associated rule
+     * does not need to be distributed to collection elements.
      */
     private val elementReference: Expression? = null
 ) {
@@ -108,7 +109,7 @@ internal constructor(
     }
 
     val otherValueAsCode: Expression?
-        get() = if (rule.hasSimple() && rule.simple.hasOtherValue()) {
+        get() = if (rule.isSimple && rule.simple.hasOtherValue()) {
             valueConverter.valueToCode(rule.simple.otherValue)
         } else {
             null
@@ -118,27 +119,39 @@ internal constructor(
      * The field associated with the given rule.
      *
      * If the [rule] is not a simple rule, the value is absent.
+     *
+     * @see simpleRuleField
      */
     val fieldFromSimpleRule: Field?
-        get() = if (rule.hasSimple()) {
+        get() = if (rule.isSimple) {
             lookUpField(rule.simple.field)
         } else {
             null
         }
 
     /**
+     * Obtains a name of the field associated with the simple rule of this context.
+     *
+     * @throws IllegalStateException if the rule is not a simple rule.
+     * @see [fieldFromSimpleRule]
+     */
+    val simpleRuleField: Field
+        get() {
+            check(rule.isSimple) { "The rule is not a simple one: `$rule`." }
+            return fieldFromSimpleRule!!
+        }
+
+    /**
      * If the associated field is a collection and the associated rule needs to be distributed,
-     * this is a reference to one element of the collection. If the field is not a collection or
-     * the rule does not need to be distributed, this is the reference to the field. If there is
-     * no associated field, this is `null`.
+     * this is a reference to one element of the collection.
+     *
+     * If the field is not a collection or the rule does not need to be distributed,
+     * this is the reference to the field.
+     *
+     * If there is no associated field, this is `null`.
      */
     val fieldOrElement: Expression?
-        get() {
-            if (elementReference != null) {
-                return elementReference
-            }
-            return fieldValue
-        }
+        get() = elementReference ?: fieldValue
 
     /**
      * The reference to the associated field, or `null` if there is no such field.
@@ -175,9 +188,10 @@ internal constructor(
 private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {
     val protoFile = select<ProtobufSourceFile>().findById(file)
     val messageType = protoFile!!.typeMap[type.typeUrl]
-        ?: throw IllegalArgumentException("Unknown type: `${type.typeUrl}`.")
-    return messageType.lookUpField(field)
-        ?: throw IllegalArgumentException("Unknown field: `${type.typeUrl}.${field.value}`.")
+    require(messageType != null) { "Unknown type: `${type.typeUrl}`." }
+    val result = messageType.lookUpField(field)
+    require(result != null) { "Unknown field: `${type.typeUrl}.${field.value}`." }
+    return result
 }
 
 private fun MessageType.lookUpField(name: FieldName): Field? {

@@ -35,8 +35,9 @@ import io.spine.validation.ErrorMessage
 /**
  * A code generator for the `(is_required)` constraint.
  *
- * The constraint applies to a `oneof` group and enforces an alternative to be set. The generated
- * code checks that the `oneof`'s case is one of the alternatives, i.e. not not-set.
+ * The constraint applies to a `oneof` group and enforces an alternative to be set.
+ * The generated code checks that the `oneof`'s case is one of the alternatives,
+ * i.e., not not-set.
  */
 internal class RequiredOneofGenerator(
     private val name: OneofName,

@@ -26,8 +26,6 @@
 
 package io.spine.validation;
 
-import com.google.common.escape.Escaper;
-import com.google.common.escape.Escapers;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.option.PatternOption;
@@ -35,12 +33,12 @@ import io.spine.protodata.event.FieldOptionDiscovered;
 import io.spine.protodata.plugin.Policy;
 import io.spine.server.event.Just;
 import io.spine.server.event.React;
+import io.spine.validate.Diags;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.server.event.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
-import static java.lang.String.format;
 
 /**
  * A policy to add a validation rule to a type whenever the {@code (pattern)} field option
@@ -62,7 +60,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                 .build();
         var customError = optionValue.getErrorMsg();
         var error = customError.isEmpty()
-                       ? ErrorMessage.notMatching(regex)
+                       ? Diags.Regex.errorMessage(regex)
                        : customError;
         var rule = SimpleRules.withCustom(
                 event.getField(),
@@ -77,22 +75,5 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
                         .setRule(rule)
                         .build()
         );
-    }
-
-    /**
-     * Creates an error message for a value not matching a given regex.
-     */
-    private static final class ErrorMessage {
-
-        private static final Escaper slashEscaper = Escapers.builder()
-                .addEscape('\\', "\\\\")
-                .build();
-
-        @SuppressWarnings("DuplicateStringLiteralInspection") // the other value is in tests.
-        private static String notMatching(String regex) {
-            return format(
-                    "The string must match the regular expression `%s`.",
-                    slashEscaper.escape(regex));
-        }
     }
 }

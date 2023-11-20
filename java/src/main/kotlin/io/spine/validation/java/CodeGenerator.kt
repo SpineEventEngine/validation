@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.logging.WithLogging
 import io.spine.protodata.codegen.java.Expression
+import io.spine.tools.java.codeBlock
 import io.spine.validation.ErrorMessage
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.MESSAGE_WIDE
@@ -64,28 +65,28 @@ internal abstract class CodeGenerator(
                         System.lineSeparator() +
                         "Skipping..."
             }
-            return CodeBlock.of("")
+            return noCode()
         }
         val binaryCondition = condition()
-        return CodeBlock.builder()
-            .add(prologue())
-            .beginControlFlow("if (!(\$L))", binaryCondition)
-            .add(createViolation())
-            .endControlFlow()
-            .build()
+        return codeBlock {
+            add(prologue())
+            beginControlFlow("if (!(\$L))", binaryCondition)
+            add(createViolation())
+            endControlFlow()
+        }
     }
 
     /**
-     * Code that is inserted into the message class scope.
+     * The code which is inserted into the message class scope.
      *
      * Such code may maintain caches for intermediate validation results, etc.
      */
-    open fun supportingMembers(): CodeBlock = CodeBlock.of("")
+    open fun supportingMembers(): CodeBlock = noCode()
 
     /**
      * Generated code which does preparations before the validation checks can be performed.
      */
-    open fun prologue(): CodeBlock = CodeBlock.of("")
+    open fun prologue(): CodeBlock = noCode()
 
     /**
      * Obtains an expression checking if the rule is violated.
@@ -102,7 +103,7 @@ internal abstract class CodeGenerator(
     /**
      * Constructs code which creates a `ConstrainViolation` and puts it into a list of violations.
      *
-     * Later, the violations will be reported to the caller.
+     * Later the violations will be reported to the caller.
      */
     protected abstract fun createViolation(): CodeBlock
 }
@@ -115,5 +116,12 @@ internal fun generatorFor(ctx: GenerationContext): CodeGenerator =
         SIMPLE -> generatorForSimple(ctx)
         COMPOSITE -> CompositeRuleGenerator(ctx)
         MESSAGE_WIDE -> generatorForCustom(ctx)
-        else -> throw IllegalArgumentException("Empty rule.")
+        else -> throw IllegalArgumentException(
+            "Unsupported kind detected in the rule: `${ctx.rule}`."
+        )
     }
+
+/**
+ * Obtains a code block with an empty string.
+ */
+internal fun noCode(): CodeBlock = CodeBlock.of("")

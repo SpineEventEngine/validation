@@ -35,22 +35,9 @@ import static io.spine.base.Identifier.newUuid;
 
 public class MessageValidatorTestEnv {
 
-    public static final double EQUAL_MIN = 16.5;
-    public static final double GREATER_THAN_MIN = EQUAL_MIN + 5;
-    public static final double LESS_THAN_MIN = EQUAL_MIN - 5;
-
-    public static final double EQUAL_MAX = 64.5;
-    public static final double GREATER_THAN_MAX = EQUAL_MAX + 5;
-
     public static final String VALUE = "value";
     public static final String EMAIL = "email";
-    public static final String OUTER_MSG_FIELD = "outer_msg_field";
-    public static final String LESS_MIN_MSG = "The number must be greater than or equal to 16.5.";
-    public static final String GREATER_MAX_MSG = "The number must be less than or equal to 64.5.";
-    public static final String MATCH_REGEXP_MSG =
-            "The string must match the regular expression `%s`.";
-
-    public static final double LESS_THAN_MAX = EQUAL_MAX - 5;
+    public static final String ENCLOSED_FIELD_NAME = "enclosed";
 
     /** Prevent instantiation of this test environment. */
     private MessageValidatorTestEnv() {

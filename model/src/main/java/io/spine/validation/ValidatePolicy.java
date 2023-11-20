@@ -62,7 +62,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
                 .build();
         var field = select(ValidatedField.class).findById(id);
         if (field != null) {
-            checkMessage(event.getField(), event.getType(), event.getFile());
+            ensureMessageField(event.getField(), event.getType(), event.getFile());
         }
         var shouldValidate = field != null && field.getValidate();
         if (!shouldValidate) {
@@ -83,7 +83,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         );
     }
 
-    private void checkMessage(FieldName fieldName, TypeName typeName, FilePath file) {
+    private void ensureMessageField(FieldName fieldName, TypeName typeName, FilePath file) {
         var field = findField(fieldName, typeName, file, this);
         if (!field.getType().hasMessage()) {
             throw newIllegalStateException(

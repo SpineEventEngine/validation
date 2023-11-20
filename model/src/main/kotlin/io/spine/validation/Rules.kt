@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,49 +29,57 @@
 package io.spine.validation
 
 import io.spine.protodata.TypeName
-import io.spine.validation.event.CompositeRuleAdded
 import io.spine.validation.event.RuleAdded
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.compositeRuleAdded
+import io.spine.validation.event.simpleRuleAdded
+
+/**
+ * Tells if this `rule` is a `SimpleRule`.
+ */
+public val Rule.isSimple: Boolean
+    get() = hasSimple()
+
+/**
+ * Tells if this `rule` is a message-wide one.
+ */
+public val Rule.isMessageWide: Boolean
+    get() = hasMessageWide()
 
 /**
  * Converts this `rule` to an event.
  *
  * @param type the type name of the validated message
  */
-internal fun Rule.toEvent(type: TypeName): RuleAdded {
-    return if (hasComposite()) {
-        CompositeRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(composite)
-            .build()
+internal fun Rule.toEvent(type: TypeName): RuleAdded =
+    if (hasComposite()) {
+        compositeRuleAdded {
+            this.type = type
+            rule = composite
+        }
     } else {
-        SimpleRuleAdded.newBuilder()
-            .setType(type)
-            .setRule(simple)
-            .build()
+        simpleRuleAdded {
+            this.type = type
+            rule = simple
+        }
     }
-}
 
 /**
- * Creates a [Rule] from this simple rule.
+ * Creates a [Rule] from this `SimpleRule`.
  */
-internal fun SimpleRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setSimple(this)
-        .build()
+internal fun SimpleRule.wrap(): Rule = rule {
+    simple = this@wrap
+}
 
 /**
  * Creates a [Rule] from this composite rule.
  */
-internal fun CompositeRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setComposite(this)
-        .build()
+internal fun CompositeRule.wrap(): Rule = rule {
+    composite = this@wrap
+}
 
 /**
  * Creates a [Rule] from this message-wide rule.
  */
-internal fun MessageWideRule.wrap(): Rule =
-    Rule.newBuilder()
-        .setMessageWide(this)
-        .build()
+internal fun MessageWideRule.wrap(): Rule = rule {
+    messageWide = this@wrap
+}

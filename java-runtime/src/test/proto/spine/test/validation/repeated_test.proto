@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,53 +31,41 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_multiple_files = true;
-option java_outer_classname = "TestGoesOptionProto";
+option java_outer_classname = "RepeatedTestProto";
 option java_package = "io.spine.test.validate";
 
-import "google/protobuf/timestamp.proto";
+import "spine/test/validation/messages.proto";
 
-// Messages for "goes" option tests.
+// Messages for testing validation of repeated fields.
 
-// A scheduled payment which `id` and `timestamp` fields are filled as soon as the payment is
-// processed.
-message Payment {
-
-    PaymentId id = 1 [(goes).with = "timestamp"];
-
-    string description = 2;
-
-    google.protobuf.Timestamp timestamp = 3 [(goes).with = "id"];
+message RepeatedNotRequired {
+    repeated string unchecked = 1;
 }
 
-message PaymentId {
-
-    string uuid = 1;
+message RepeatedValidateRegex {
+    repeated string validated = 1 [(validate) = true, (pattern).regex = "\\w+"];
 }
 
-
-message WithFieldNotFound {
-
-    string id = 1;
-
-    bytes avatar = 2 [(goes).with = "user_id"];
+message RepeatedRequired {
+    repeated string required_field = 1 [(required) = true];
 }
 
-message PaymentData {
-
-    string description = 1;
-
-    google.protobuf.Timestamp timestamp = 2;
+message RepeatedRequiredValidateRegex {
+    repeated string bound = 1 [(validate) = true, (required) = true, (pattern).regex = "\\w+"];
 }
 
-message PaymentWithExternalConstraint {
-
-    PaymentId id = 1;
-
-    PaymentData data = 2 [(validate) = true];
+message RepeatedNotRequiredInvalidItem {
+    repeated InvalidMessage unchecked = 1;
 }
 
-message PaymentDataExternalConstraint {
-    option (constraint_for) = "spine.test.validation.PaymentWithExternalConstraint.data";
+message RepeatedValidateInvalidItem {
+    repeated InvalidMessage validated = 1 [(validate) = true];
+}
 
-    google.protobuf.Timestamp timestamp = 1 [(goes).with = "description"];
+message RepeatedRequiredInvalidItem {
+    repeated InvalidMessage required_field = 1 [(required) = true];
+}
+
+message RepeatedRequiredValidateInvalidItem {
+    repeated InvalidMessage bound = 1 [(validate) = true, (required) = true];
 }

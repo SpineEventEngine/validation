@@ -47,3 +47,16 @@ modelCompiler {
     }
 }
 
+// Uncomment the below block when remote debugging of code generation is needed.
+//
+//tasks.findByName("launchProtoData")?.apply {this as JavaExec
+//    debugOptions {
+//        // Set this option to `true` to enable remote debugging.
+//        enabled.set(true)
+//        port.set(5566)
+//        server.set(true)
+//        suspend.set(true)
+//    }
+//    System.err.println("Debug session for `:proto:context:launchProtoData` configured.")
+//}
+

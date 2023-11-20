@@ -23,9 +23,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation
 
 import com.google.protobuf.BoolValue
+import com.google.protobuf.kotlin.unpack
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.protobuf.pack
@@ -34,7 +36,10 @@ import io.spine.protodata.plugin.Policy
 import io.spine.server.event.React
 import io.spine.server.model.Nothing
 import io.spine.server.tuple.EitherOf2
+import io.spine.validate.Diags.IsRequired.errorMessage
+import io.spine.validate.Diags.IsRequired.operatorDescription
 import io.spine.validation.event.MessageWideRuleAdded
+import io.spine.validation.event.messageWideRuleAdded
 
 /**
  * A policy to add a validation rule with the [RequiredOneof] feature whenever
@@ -47,28 +52,28 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "is_required") event: OneofOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = "is_required")
+        event: OneofOptionDiscovered
     ): EitherOf2<MessageWideRuleAdded, Nothing> {
         // We have the option defined in the type. But is it set to `true`?
-        val option = event.option.value.unpack(BoolValue::class.java)
+        val option = event.option.value.unpack<BoolValue>()
         if (!option.value) {
             return EitherOf2.withB(nothing())
         }
-
-        val feature = RequiredOneof.newBuilder()
-            .setName(event.group)
-            .build()
-        val operator = CustomOperator.newBuilder()
-            .setDescription("One of the fields must be set.")
-            .setFeature(feature.pack())
-            .build()
-        val rule = MessageWideRule.newBuilder()
-            .setErrorMessage("One of the fields in the `${event.group.value}` group must be set.")
-            .setOperator(operator)
-            .build()
-        return EitherOf2.withA(MessageWideRuleAdded.newBuilder()
-            .setRule(rule)
-            .setType(event.type)
-            .build())
+        val requiredOneof = requiredOneof {
+            name = event.group
+        }
+        val customOp = customOperator {
+            description = operatorDescription
+            feature = requiredOneof.pack()
+        }
+        val messageWideRule = messageWideRule {
+            errorMessage = errorMessage(event.group.value)
+            operator = customOp
+        }
+        return EitherOf2.withA(messageWideRuleAdded {
+            rule = messageWideRule
+            type = event.type
+        })
     }
 }

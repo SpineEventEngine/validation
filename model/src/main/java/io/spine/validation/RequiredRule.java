@@ -27,6 +27,7 @@
 package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
+import io.spine.option.IfMissingOption;
 import io.spine.protodata.Field;
 import io.spine.protodata.Value;
 
@@ -36,8 +37,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
+import static io.spine.validate.Diags.Required.collectionErrorMsg;
+import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
-import static io.spine.validation.LogicalOperator.AND;
 import static io.spine.validation.Options.is;
 import static io.spine.validation.Rules.wrap;
 
@@ -55,8 +57,6 @@ final class RequiredRule {
     /**
      * Creates a rule for the given field to be required.
      */
-    @SuppressWarnings({"DuplicateStringLiteralInspection", "RedundantSuppression"})
-    // Duplication in generated code.
     static Optional<Rule> forField(Field field, String errorMessage) {
         checkNotNull(field);
         var unsetValue = UnsetValue.forField(field);
@@ -64,7 +64,7 @@ final class RequiredRule {
             return Optional.empty();
         }
         var integratedRule = rule(
-                field, unsetValue.get(), errorMessage, "Field must be set.", false
+                field, unsetValue.get(), errorMessage, singularErrorMsg, false
         );
         if (!isRepeated(field)) {
             return Optional.of(wrap(integratedRule));
@@ -73,25 +73,45 @@ final class RequiredRule {
         if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }
-        var differentialRule = rule(
-                field, singularUnsetValue.get(), errorMessage, "", true
-        );
-        var composite = collectionRule(field, integratedRule, differentialRule);
-        return Optional.of(wrap(composite));
+        var collectionRule = collectionRule(integratedRule, errorMessage);
+        return Optional.of(collectionRule);
     }
 
-    private static CompositeRule collectionRule(Field field,
-                                                SimpleRule integratedRule,
-                                                SimpleRule differentialRule) {
-        @SuppressWarnings("DuplicateStringLiteralInspection")
-        var composite = CompositeRule.newBuilder()
-                .setLeft(wrap(integratedRule))
-                .setOperator(AND)
-                .setRight(wrap(differentialRule))
-                .setErrorMessage("Collection must not be empty and cannot contain default values.")
-                .setField(field.getName())
+    private static Rule collectionRule(SimpleRule integratedRule, String errorMessage) {
+        var msg = collectionErrorMessage(errorMessage);
+        var withCustomErrorMessage = integratedRule.toBuilder()
+                .setErrorMessage(msg)
                 .build();
-        return composite;
+        return wrap(withCustomErrorMessage);
+    }
+
+    /**
+     * This method provides a separate default message for the case of a collection field
+     * marked as `(required)`.
+     *
+     * <p>Singular fields obtain the default error message as a value of the `(default_message)`
+     * option set for `IfMissing` option type.
+     *
+     * <p>Event if a custom error message is not set by a {@code (if_missing)} field option,
+     * we want to have a different <em>default</em> message for collection fields,
+     * so that the user can find an error quicker.
+     *
+     * <p>If a custom error message is set, we use it as is.
+     *
+     * @param errorMessage
+     *         the error message coming from the {@link RequiredPolicy} which is producing
+     *         the rule while this method is called
+     * @return an error message to be used for the collection field
+     */
+    private static String collectionErrorMessage(String errorMessage) {
+        if (errorMessage.isEmpty()) {
+            return collectionErrorMsg;
+        }
+        var defaultMessage = DefaultErrorMessage.from(IfMissingOption.getDescriptor());
+        if (errorMessage.equals(defaultMessage)) {
+            return collectionErrorMsg;
+        }
+        return errorMessage;
     }
 
     private static SimpleRule rule(Field field,
