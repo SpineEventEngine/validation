@@ -87,7 +87,7 @@ internal class ValidationConstraintsCode private constructor(
     /**
      * Obtains class-level declarations used in the validation code as code lines.
      */
-    fun supportingMembersCode(): ImmutableList<String> {
+    fun supportingMembersCode(): Iterable<String> {
         return supportingMembers.build()
             .stream()
             .flatMap { code: CodeBlock -> onNewLine.splitToStream(code.toString()) }
