@@ -48,7 +48,6 @@ import java.util.*
  * Generates validation code for a given message type specified via
  * [MessageValidation] instance.
  *
- *
  * Serves as a method object for the [JavaValidationRenderer] passed to the constructor.
  */
 internal class ValidationCode(
