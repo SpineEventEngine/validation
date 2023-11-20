@@ -78,8 +78,8 @@ internal class ValidationTest {
         name = "Vernon"
     }
 
-    @Nested
-    internal inner class `reflect a rule with a less sign and` {
+    @Nested internal inner class
+    `reflect a rule with a less sign and` {
 
         @Test
         fun `throw 'ValidationException' if actual value is greater than the threshold`() {
@@ -97,8 +97,8 @@ internal class ValidationTest {
         }
     }
 
-    @Nested
-    internal inner class `reflect a rule with a greater or equal sign and` {
+    @Nested internal inner class
+    `reflect a rule with a greater or equal sign and` {
         
         @Test
         fun `throw 'ValidationException' if actual value is less than the threshold`() {
@@ -119,8 +119,8 @@ internal class ValidationTest {
         }
     }
 
-    @Nested
-    internal inner class `reflect a '(required)' rule and` {
+    @Nested internal inner class
+    `reflect a '(required)' rule and` {
 
         @Test
         fun `check string field`() {
@@ -150,7 +150,7 @@ internal class ValidationTest {
 
         @Test
         @Disabled("Until we propagate the `validate` option property to collection elements.")
-        fun `throw ValidationException if a list contains only default values`() {
+        fun `throw 'ValidationException' if a list contains only default values`() {
             val builder = Blizzard.newBuilder()
                 .addSnowflake(Snowflake.getDefaultInstance())
             assertValidationException(builder)
@@ -180,26 +180,27 @@ internal class ValidationTest {
         }
     }
 
-    @Nested
-    internal inner class `reflect a (distinct) rule and` {
+    @Nested internal inner class
+    `reflect a '(distinct)' rule and` {
 
         @Test
         fun `throw 'ValidationException' if a list contains duplicate entries`() {
-            val flake = Snowflake.newBuilder()
-                .setEdges(6)
-                .setVertices(6)
-                .build()
+            val flake = snowflake {
+                edges = 6
+                vertices = 6
+            }
             val builder = Blizzard.newBuilder()
                 .addSnowflake(flake)
                 .addSnowflake(flake)
+
             assertValidationException(builder)
         }
 
         @Test
         fun `throw 'ValidationException' if a map contains duplicate entries`() {
-            val player = Player.newBuilder()
-                .setShirtName("John Doe")
-                .build()
+            val player = player {
+                shirtName = "John Doe"
+            }
             val builder = Team.newBuilder()
                 .putPlayers(7, player)
                 .putPlayers(10, player)
@@ -207,8 +208,8 @@ internal class ValidationTest {
         }
     }
 
-    @Nested
-    internal inner class `reflect the (pattern) rule` {
+    @Nested internal inner class
+    `reflect the '(pattern)' rule` {
 
         @Test
         @DisplayName(ALLOW_VALID)
@@ -258,11 +259,11 @@ internal class ValidationTest {
             assertNoException(Team.newBuilder().setName("Sch 04"))
     }
 
-    @Nested
-    internal inner class `reflect the '(validate)' rule` {
+    @Nested internal inner class
+    `reflect the '(validate)' rule` {
 
-        @Nested
-        internal inner class `on a singular field` {
+        @Nested internal inner class
+        `on a singular field` {
 
             @Test
             @DisplayName(ALLOW_VALID)
@@ -280,8 +281,8 @@ internal class ValidationTest {
             }
         }
 
-        @Nested
-        internal inner class `on a singular Any field` {
+        @Nested internal inner class
+        `on a singular 'Any' field` {
 
             @Test
             @DisplayName(ALLOW_VALID)
@@ -311,8 +312,8 @@ internal class ValidationTest {
             }
         }
 
-        @Nested
-        internal inner class `on a repeated field` {
+        @Nested internal inner class
+        `on a 'repeated' field` {
 
             @Test
             @DisplayName(ALLOW_VALID)
@@ -331,8 +332,8 @@ internal class ValidationTest {
             }
         }
 
-        @Nested
-        internal inner class `on a repeated Any field` {
+        @Nested internal inner class
+        `on a repeated 'Any' field` {
 
             @Test
             @DisplayName(ALLOW_VALID)
@@ -370,40 +371,6 @@ internal class ValidationTest {
             }
         }
 
-        private fun meteoStatsInEurope(): MeteoStatistics.Builder {
-            return MeteoStatistics.newBuilder()
-                .putIncludedRegions("EU", someRegion())
-        }
-
-        private fun invalidRainDrop(): RainDrop {
-            return RainDrop.newBuilder()
-                .setMassInGrams(-1)
-                .buildPartial()
-        }
-
-        private fun validRainDrop(): RainDrop {
-            return RainDrop.newBuilder()
-                .setMassInGrams(1)
-                .buildPartial()
-        }
-
-        private fun validCloud(): Cloud {
-            return Cloud.newBuilder()
-                .setCubicMeters(2)
-                .build()
-        }
-
-        private fun invalidCloud(): Cloud {
-            return Cloud.newBuilder()
-                .setCubicMeters(-2)
-                .buildPartial()
-        }
-
-        private fun someRegion(): Region {
-            return Region.newBuilder()
-                .setName("Europe")
-                .build()
-        }
 
         private fun checkInvalid(
             builder: Message.Builder,
@@ -416,8 +383,8 @@ internal class ValidationTest {
         }
     }
 
-    @Nested
-    internal inner class IsRequired {
+    @Nested internal inner class
+    `support '(is_required)' constraint for 'oneof' fields` {
 
         @Test
         fun `prohibit invalid`() {
@@ -431,8 +398,8 @@ internal class ValidationTest {
         )
     }
 
-    @Nested
-    internal inner class `reflect the '(when)' rule` {
+    @Nested internal inner class
+    `reflect the '(when)' rule` {
 
         @Test
         fun `prohibit invalid`() {
@@ -450,4 +417,35 @@ internal class ValidationTest {
             assertNoException(player)
         }
     }
+}
+
+private fun meteoStatsInEurope(): MeteoStatistics.Builder {
+    return MeteoStatistics.newBuilder()
+        .putIncludedRegions("EU", someRegion())
+}
+
+private fun invalidRainDrop(): RainDrop {
+    return RainDrop.newBuilder()
+        .setMassInGrams(-1)
+        .buildPartial()
+}
+
+private fun validRainDrop(): RainDrop {
+    return RainDrop.newBuilder()
+        .setMassInGrams(1)
+        .buildPartial()
+}
+
+private fun validCloud(): Cloud = cloud {
+    cubicMeters = 2
+}
+
+private fun invalidCloud(): Cloud {
+    return Cloud.newBuilder()
+        .setCubicMeters(-2)
+        .buildPartial()
+}
+
+private fun someRegion(): Region = region {
+    name = "Europe"
 }
