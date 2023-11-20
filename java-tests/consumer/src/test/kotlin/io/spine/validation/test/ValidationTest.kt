@@ -87,7 +87,7 @@ internal class ValidationTest {
         }
 
         @Test
-        fun `throw ValidationException if actual value is equal to the threshold`() {
+        fun `throw 'ValidationException' if actual value is equal to the threshold`() {
             assertValidationException(Mru.newBuilder().setKhoums(5))
         }
 
