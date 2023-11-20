@@ -82,7 +82,7 @@ internal class ValidationTest {
     internal inner class `reflect a rule with a less sign and` {
 
         @Test
-        fun `throw ValidationException if actual value is greater than the threshold`() {
+        fun `throw 'ValidationException' if actual value is greater than the threshold`() {
             assertValidationException(Mru.newBuilder().setKhoums(6))
         }
 
