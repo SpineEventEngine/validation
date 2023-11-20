@@ -38,7 +38,6 @@ import java.util.stream.IntStream
 import java.util.stream.LongStream
 import java.util.stream.Stream
 import kotlin.streams.toList
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -61,7 +60,6 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidHours")
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `do not fit into the defined range`(hour: Int) = assertDoesNotBuild {
             hourRange(hour)
         }
@@ -80,7 +78,6 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidMinutes")
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `do not fit into the defined range`(minute: Long) = assertDoesNotBuild {
             minuteRange(minute)
         }
@@ -100,7 +97,6 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidDegrees")
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `do not fit into the defined range`(degree: Float) = assertDoesNotBuild {
             floatRange(degree)
         }
@@ -120,7 +116,6 @@ internal class RangeSpec : ValidationOfConstraintTest() {
 
         @ParameterizedTest
         @MethodSource("io.spine.validate.option.RangeSpec#invalidAngles")
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `do not fit into the defined range`(angle: Double) = assertDoesNotBuild {
             doubleRange(angle)
         }
@@ -141,7 +136,6 @@ internal class RangeSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun invalid() = assertDoesNotBuild {
             Hours.newBuilder()
                 .addAllHour(invalidHours().toList())

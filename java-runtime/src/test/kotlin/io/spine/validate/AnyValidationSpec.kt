@@ -33,7 +33,6 @@ import io.spine.test.validate.anyfields.UncheckedAnyContainer
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -68,7 +67,6 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
             .setAny(AnyPacker.pack(invalidMessage))
 
         @Test
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `on 'build()' method`() {
             assertThrows<ValidationException> {
                 builder.build()
@@ -108,7 +106,6 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
             assertNotValid(builder.buildPartial())
 
         @Test
-        @Disabled("Until 'skipValidation()` is turned off.")
         fun `on 'build()' method`() {
             assertThrows<ValidationException> { builder.build() }
         }
