@@ -50,7 +50,7 @@ import io.spine.protodata.Value.KindCase.INT_VALUE
  * A factory of validation rules for number fields.
  */
 internal class NumberRules
-private constructor(
+internal constructor(
     private val upperBound: Value? = null,
     private val lowerBound: Value? = null,
     private val uppedInclusive: Boolean = false,
@@ -76,26 +76,23 @@ private constructor(
     fun rangeRule(field: FieldName): CompositeRule = field.toRangeRule()
 
     private fun FieldName.toMinRule(): SimpleRule =
-        simpleRule(lowerBound!!, lowerInclusive, GREATER_OR_EQUAL, GREATER_THAN, "greater")
+        toRule(lowerBound!!, lowerInclusive, GREATER_OR_EQUAL, GREATER_THAN, "greater")
 
     private fun FieldName.toMaxRule(): SimpleRule =
-        simpleRule(upperBound!!, uppedInclusive, LESS_OR_EQUAL, LESS_THAN, "less")
+        toRule(upperBound!!, uppedInclusive, LESS_OR_EQUAL, LESS_THAN, "less")
 
-    private fun FieldName.simpleRule(
+    private fun FieldName.toRule(
         threshold: Value,
         inclusive: Boolean,
         inclusiveOperator: ComparisonOperator,
         exclusiveOperator: ComparisonOperator,
         adjective: String
-    ): SimpleRule {
-        val fieldName = this
-        return simpleRule {
-            field = fieldName
-            operator = if (inclusive) inclusiveOperator else exclusiveOperator
-            otherValue = threshold
-            errorMessage = compileErrorMessage(adjective, inclusive)
-            distribute = true
-        }
+    ): SimpleRule = simpleRule {
+        field = this@toRule
+        operator = if (inclusive) inclusiveOperator else exclusiveOperator
+        otherValue = threshold
+        errorMessage = compileErrorMessage(adjective, inclusive)
+        distribute = true
     }
 
     private fun compileErrorMessage(adjective: String, inclusive: Boolean): String =
@@ -114,20 +111,20 @@ private constructor(
         errorMessage = rangeErrorMessage
     }
 
-    private val rangeErrorMessage: String
-        get() {
-            fun Boolean.str(): String = if (this) "inclusive" else "exclusive"
+    private val rangeErrorMessage: String by lazy {
 
-            fun Value.str(): String = when (kindCase) {
-                DOUBLE_VALUE -> doubleValue.toString()
-                INT_VALUE -> intValue.toString()
-                else -> error("Unexpected Value: `$this`.")
-            }
+        fun Boolean.str(): String = if (this) "inclusive" else "exclusive"
 
-            return "The number must be between ${lowerBound!!.str()} " +
-                    "(${lowerInclusive.str()}) and ${upperBound!!.str()} " +
-                    "(${uppedInclusive.str()}), but was {value}."
+        fun Value.str(): String = when (kindCase) {
+            DOUBLE_VALUE -> doubleValue.toString()
+            INT_VALUE -> intValue.toString()
+            else -> error("Unexpected Value: `$this`.")
         }
+
+        "The number must be between ${lowerBound!!.str()} " +
+                "(${lowerInclusive.str()}) and ${upperBound!!.str()} " +
+                "(${uppedInclusive.str()}), but was {value}."
+    }
 
     companion object {
 
@@ -140,49 +137,6 @@ private constructor(
          */
         @JvmStatic
         fun from(option: Option): NumberRules = option.toRules()
-
-        private fun Option.toRules(): NumberRules = when {
-            isA(range) -> forRange()
-            isA(min) -> forMin()
-            isA(max) -> forMax()
-            else -> throw IllegalArgumentException(
-            "Option $name is not a number range option."
-            )
-        }
-        @Suppress("FunctionNaming") // backticked name is necessary here.
-        private fun Option.isA(generated: GeneratedExtension<*, *>) =
-            name == generated.descriptor.name && number == generated.number
-
-        private fun Option.forMin(): NumberRules {
-            val optionValue = value<MinOption>()
-            val threshold = optionValue.value.parseToNumber()
-            return NumberRules(
-                lowerBound = threshold,
-                lowerInclusive = !optionValue.exclusive,
-                customErrorMessage = optionValue.errorMsg
-            )
-        }
-
-        private fun Option.forMax(): NumberRules {
-            val optionValue = value<MaxOption>()
-            val threshold = optionValue.value.parseToNumber()
-            return NumberRules(
-                upperBound = threshold,
-                uppedInclusive = !optionValue.exclusive,
-                customErrorMessage = optionValue.errorMsg
-            )
-        }
-
-        private fun Option.forRange(): NumberRules {
-            val optionValue = value<StringValue>().value
-            val notation = RangeNotation.parse(optionValue)
-            return NumberRules(
-                upperBound = notation.max,
-                lowerBound = notation.min,
-                uppedInclusive = notation.maxInclusive,
-                lowerInclusive = notation.minInclusive
-            )
-        }
     }
 }
 
@@ -190,3 +144,46 @@ private constructor(
  * Unpacks the value of this option into a message of the given type `T`.
  */
 private inline fun <reified T : Message> Option.value() = value.unpack<T>()
+
+private fun Option.toRules(): NumberRules = when {
+    isA(range) -> forRange()
+    isA(min) -> forMin()
+    isA(max) -> forMax()
+    else -> throw IllegalArgumentException(
+        "Option $name is not a number range option."
+    )
+}
+@Suppress("FunctionNaming") // backticked name is necessary here.
+private fun Option.isA(generated: GeneratedExtension<*, *>) =
+    name == generated.descriptor.name && number == generated.number
+
+private fun Option.forMin(): NumberRules {
+    val optionValue = value<MinOption>()
+    val threshold = optionValue.value.parseToNumber()
+    return NumberRules(
+        lowerBound = threshold,
+        lowerInclusive = !optionValue.exclusive,
+        customErrorMessage = optionValue.errorMsg
+    )
+}
+
+private fun Option.forMax(): NumberRules {
+    val optionValue = value<MaxOption>()
+    val threshold = optionValue.value.parseToNumber()
+    return NumberRules(
+        upperBound = threshold,
+        uppedInclusive = !optionValue.exclusive,
+        customErrorMessage = optionValue.errorMsg
+    )
+}
+
+private fun Option.forRange(): NumberRules {
+    val optionValue = value<StringValue>().value
+    val notation = RangeNotation.parse(optionValue)
+    return NumberRules(
+        upperBound = notation.max,
+        lowerBound = notation.min,
+        uppedInclusive = notation.maxInclusive,
+        lowerInclusive = notation.minInclusive
+    )
+}
