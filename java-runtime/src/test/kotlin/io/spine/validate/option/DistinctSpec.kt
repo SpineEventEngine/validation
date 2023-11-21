@@ -32,7 +32,6 @@ import io.spine.test.validate.DistinctValues.Planet.JUPITER
 import io.spine.test.validate.DistinctValues.Planet.MARS
 import io.spine.test.validate.distinctValues
 import io.spine.validate.ValidationOfConstraintTest
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -86,10 +85,8 @@ internal class DistinctSpec : ValidationOfConstraintTest() {
         }
     }
 
-    @Nested
-    @DisplayName("find out that duplicate value violates contract")
-    @Disabled("Until 'skipValidation()` is turned off.")
-    internal inner class DuplicateViolates {
+    @Nested internal inner class
+    `find out that duplicate value violates contract` {
 
         @Test
         fun enums() = assertDoesNotBuild {

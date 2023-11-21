@@ -37,7 +37,6 @@ import io.spine.test.validate.MinInclusive
 import io.spine.type.TypeName
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.VALUE
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -75,7 +74,6 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
         minNumberTest(LESS_THAN_MIN, inclusive = false, valid = false)
 
     @Test
-    @Disabled("Until 'skipValidation()` is turned off.")
     fun `provide one valid violation if number is less than min`() {
         minNumberTest(LESS_THAN_MIN, inclusive = true, valid = false)
         assertSingleViolation(LESS_MIN_MSG, VALUE)
@@ -106,7 +104,6 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
         maxNumberTest(LESS_THAN_MAX, inclusive = false, valid = true)
 
     @Test
-    @Disabled("Until 'skipValidation()` is turned off.")
     fun `provide one valid violation if number is greater than max`() {
         maxNumberTest(GREATER_THAN_MAX, inclusive = true, valid = false)
         assertSingleViolation(
@@ -116,7 +113,6 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
     }
 
     @Test
-    @Disabled("Until 'skipValidation()` is turned off.")
     fun `not allow fraction boundaries for integer fields`() {
         val exception = assertThrows<ValidationException> {
             InvalidBound.newBuilder().build()

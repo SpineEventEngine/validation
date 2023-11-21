@@ -34,13 +34,3 @@ dependencies {
     implementation(Spine.base)
     implementation(project(":java-runtime"))
 }
-
-modelCompiler {
-    java {
-        codegen {
-            validation {
-                skipValidation()
-            }
-        }
-    }
-}
