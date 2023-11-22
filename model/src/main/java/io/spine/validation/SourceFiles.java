@@ -28,7 +28,7 @@ package io.spine.validation;
 
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldName;
-import io.spine.protodata.FilePath;
+import io.spine.protodata.File;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
@@ -63,7 +63,7 @@ final class SourceFiles {
      */
     static Field findField(FieldName fieldName,
                            TypeName typeName,
-                           FilePath filePath,
+                           File filePath,
                            Querying querying) {
         var type = findType(typeName, filePath, querying);
         var field = type.getFieldList().stream()
@@ -90,7 +90,7 @@ final class SourceFiles {
      *         the ProtoData component which conducts the search
      * @return the first field of the type
      */
-    static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
+    static Field findFirstField(TypeName typeName, File filePath, Querying querying) {
         var type = findType(typeName, filePath, querying);
         if (type.getFieldCount() == 0) {
             var url = typeName.getTypeUrl();
@@ -111,7 +111,7 @@ final class SourceFiles {
      *         the ProtoData component which conducts the search
      * @return the type
      */
-    static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
+    static MessageType findType(TypeName typeName, File filePath, Querying querying) {
         var file = querying.select(ProtobufSourceFile.class)
                            .findById(filePath);
         if (file == null) {
@@ -138,9 +138,9 @@ final class SourceFiles {
         );
     }
 
-    private static IllegalArgumentException unknownFile(FilePath filePath) {
+    private static IllegalArgumentException unknownFile(File file) {
         return newIllegalArgumentException(
-                "Unknown file `%s`.", filePath.getValue()
+                "Unknown file `%s`.", file.getPath()
         );
     }
 }

@@ -118,7 +118,7 @@ public class JavaValidationRenderer : JavaRenderer() {
                 .map { m ->
                     MessageWithFile.newBuilder()
                         .setMessage(m)
-                        .setDeclaredIn(file.file)
+                        .setDeclaredIn(file.header)
                         .build()
                 }
         }

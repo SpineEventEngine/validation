@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import io.spine.protodata.Field
 import io.spine.protodata.FieldName
-import io.spine.protodata.FilePath
+import io.spine.protodata.File
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
@@ -77,7 +77,7 @@ internal constructor(
     /**
      * The path to the Protobuf file where the validated type is declared.
      */
-    val protoFile: FilePath,
+    val protoFile: File,
 
     /**
      * A reference to the mutable violations list, which accumulates all the constraint violations.
@@ -185,7 +185,7 @@ internal constructor(
         client.lookUpField(protoFile, validatedType, name)
 }
 
-private fun Querying.lookUpField(file: FilePath, type: TypeName, field: FieldName): Field {
+private fun Querying.lookUpField(file: File, type: TypeName, field: FieldName): Field {
     val protoFile = select<ProtobufSourceFile>().findById(file)
     val messageType = protoFile!!.typeMap[type.typeUrl]
     require(messageType != null) { "Unknown type: `${type.typeUrl}`." }

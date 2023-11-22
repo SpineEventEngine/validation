@@ -43,5 +43,5 @@ message MessageWithFile {
 
     spine.protodata.MessageType message = 1;
 
-    spine.protodata.File declared_in = 2;
+    spine.protodata.ProtoFileHeader declared_in = 2;
 }

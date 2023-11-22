@@ -27,17 +27,17 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.protodata.event.FieldExited;
 import io.spine.protodata.FieldName;
-import io.spine.protodata.FilePath;
+import io.spine.protodata.File;
 import io.spine.protodata.TypeName;
+import io.spine.protodata.event.FieldExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.protodata.Ast.qualifiedName;
+import static io.spine.protodata.Ast.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 
@@ -83,13 +83,13 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         );
     }
 
-    private void ensureMessageField(FieldName fieldName, TypeName typeName, FilePath file) {
+    private void ensureMessageField(FieldName fieldName, TypeName typeName, File file) {
         var field = findField(fieldName, typeName, file, this);
         if (!field.getType().hasMessage()) {
             throw newIllegalStateException(
                     "Field `%s.%s` is not a message field and, " +
                             "therefore, should not be marked with `validate`.",
-                    qualifiedName(typeName),
+                    getQualifiedName(typeName),
                     fieldName.getValue()
             );
         }

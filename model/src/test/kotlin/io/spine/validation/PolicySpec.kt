@@ -29,8 +29,8 @@ package io.spine.validation
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
-import io.spine.protodata.CodegenContext
-import io.spine.protodata.File.SyntaxVersion.PROTO3
+import io.spine.protodata.File
+import io.spine.protodata.ProtoFileHeader.SyntaxVersion.PROTO3
 import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
@@ -44,9 +44,9 @@ import io.spine.protodata.event.typeEntered
 import io.spine.protodata.field
 import io.spine.protodata.fieldName
 import io.spine.protodata.file
-import io.spine.protodata.filePath
 import io.spine.protodata.messageType
 import io.spine.protodata.option
+import io.spine.protodata.protoFileHeader
 import io.spine.protodata.type
 import io.spine.protodata.typeName
 import io.spine.testing.server.blackbox.BlackBox
@@ -65,8 +65,8 @@ class PolicySpec {
 
     private lateinit var codegenContext: CodeGenerationContext
     private lateinit var blackBox: BlackBox
-    private val filePath = filePath {
-        value = "example/bar.proto"
+    private val filePath: File = file {
+        path = "example/bar.proto"
     }
     private val typeName = typeName {
         typeUrlPrefix = "type.example.org"
@@ -85,14 +85,14 @@ class PolicySpec {
 
         blackBox = BlackBox.from(codegenContext.context)
 
-        val protoFile = file {
-            path = filePath
+        val protoFileHeader = protoFileHeader {
+            file = filePath
             packageName = typeName.packageName
             syntax = PROTO3
         }
         val messageType = messageType {
             name = typeName
-            this@messageType.file = filePath
+            file = filePath
         }
         val int32Field = field {
             declaringType = typeName
@@ -101,7 +101,7 @@ class PolicySpec {
         }
 
         blackBox.receivesExternalEvents(
-            fileEntered { path = filePath; file = protoFile },
+            fileEntered { file = filePath; header = protoFileHeader },
             typeEntered { file = filePath; type = messageType },
             fieldEntered { field = int32Field; file = filePath; type = typeName }
         )
@@ -126,7 +126,7 @@ class PolicySpec {
             fieldOptionDiscovered {
                 field = fieldName
                 type = typeName
-                file = filePath
+                file = this@PolicySpec.filePath
                 option = rangeOption
             }
         )

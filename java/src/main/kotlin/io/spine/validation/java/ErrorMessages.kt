@@ -126,7 +126,7 @@ private fun ErrorMessage.buildViolation(
         checkNotNull(field) { "The field value (`$fieldValue`) is set without the field." }
         val packingExpression = when {
             ignoreCardinality -> fieldValue.packToAny()
-            field.isList() || field.isMap()  ->
+            field.isList || field.isMap  ->
                 ClassName(CollectionsConverter::class).call("toAny", listOf(fieldValue))
             else -> fieldValue.packToAny()
         }

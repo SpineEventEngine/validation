@@ -113,7 +113,7 @@ internal class DistributingGenerator(
 
     private fun iterableExpression(): Expression {
         val fieldAccessor = ctx.fieldOrElement!!
-        return if (field.isMap()) {
+        return if (field.isMap) {
             MethodCall(fieldAccessor, "values")
         } else {
             fieldAccessor

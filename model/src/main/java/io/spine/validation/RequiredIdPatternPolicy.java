@@ -27,7 +27,7 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.protodata.FilePath;
+import io.spine.protodata.File;
 import io.spine.protodata.event.TypeExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -72,8 +72,8 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         return withField(field);
     }
 
-    private static boolean matches(FilePath path, FilePattern pattern) {
-        var filePath = path.getValue();
+    private static boolean matches(File path, FilePattern pattern) {
+        var filePath = path.getPath();
         var kind = pattern.getKindCase();
         checkNotNull(kind, "File pattern has unknown kind: %s.", pattern);
         switch (kind) {
