@@ -72,8 +72,8 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
         return withField(field);
     }
 
-    private static boolean matches(File path, FilePattern pattern) {
-        var filePath = path.getPath();
+    private static boolean matches(File file, FilePattern pattern) {
+        var filePath = file.getPath();
         var kind = pattern.getKindCase();
         checkNotNull(kind, "File pattern has unknown kind: %s.", pattern);
         switch (kind) {
