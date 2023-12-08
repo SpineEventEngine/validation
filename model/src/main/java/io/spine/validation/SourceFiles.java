@@ -55,7 +55,7 @@ final class SourceFiles {
      *         name of the field
      * @param typeName
      *         name of the type which declares the field
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message which declares the field
      * @param querying
      *         the ProtoData component which conducts the search
@@ -63,9 +63,9 @@ final class SourceFiles {
      */
     static Field findField(FieldName fieldName,
                            TypeName typeName,
-                           File filePath,
+                           File file,
                            Querying querying) {
-        var type = findType(typeName, filePath, querying);
+        var type = findType(typeName, file, querying);
         var field = type.getFieldList().stream()
                 .filter(f -> fieldName.equals(f.getName()))
                 .findFirst();
