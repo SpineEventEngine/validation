@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+buildscript {
+    standardSpineSdkRepositories()
+    val protoData = io.spine.internal.dependency.ProtoData
+    dependencies {
+        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
+        classpath(protoData.pluginLib)
+    }
+    configurations.all {
+        resolutionStrategy {
+            force(
+                "io.spine.protodata:protodata-fat-cli:${protoData.version}",
+                protoData.pluginLib,
+                protoData.codegenJava,
+                protoData.compiler,
+            )
+        }
+    }
+}
+
 dependencies {
     implementation(project(":java"))
+}
+
+modelCompiler {
+    java {
+        codegen {
+            rejections().enabled.set(false)
+        }
+    }
 }

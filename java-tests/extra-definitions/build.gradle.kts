@@ -24,12 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:Suppress("RemoveRedundantQualifierName")
-
-import io.spine.internal.dependency.ProtoData
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.dependency.Spine
-
 buildscript {
     standardSpineSdkRepositories()
     val protoData = io.spine.internal.dependency.ProtoData
@@ -49,52 +43,10 @@ buildscript {
     }
 }
 
-plugins {
-    java
-}
-
-val forMcJava = setOf("extensions", "extra-definitions")
-
-subprojects {
-    if (project.name in forMcJava) {
-        apply(plugin = Spine.McJava.pluginId)
-        configurations.all {
-            resolutionStrategy {
-                dependencySubstitution {
-                    // Use the current version of Java validation code generation instead of
-                    // the version used in `mc-java`.
-                    substitute(
-                        module("io.spine.validation:spine-validation-java-bundle")
-                    ).using(project(":java"))
-                }
-            }
-        }
-    } else {
-        apply(plugin = ProtoData.pluginId)
-    }
-
-    dependencies {
-        implementation(Spine.base)
-        implementation(project(":java-runtime"))
-    }
-
-    configureTaskDependencies()
-
-    protobuf {
-        protoc {
-            artifact = Protobuf.compiler
-        }
-    }
-
-    val protoData = io.spine.internal.dependency.ProtoData
-    configurations.all {
-        resolutionStrategy {
-            force(
-                "io.spine.protodata:protodata-fat-cli:${protoData.version}",
-                protoData.pluginLib,
-                protoData.codegenJava,
-                protoData.compiler,
-            )
+modelCompiler {
+    java {
+        codegen {
+            rejections().enabled.set(false)
         }
     }
 }
