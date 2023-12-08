@@ -44,7 +44,6 @@ buildscript {
     val protodata = io.spine.internal.dependency.ProtoData
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(protodata.pluginLib(protodata.dogfoodingVersion))
     }
 }
 
