@@ -31,22 +31,7 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 
 buildscript {
-    standardSpineSdkRepositories()
-    val protoData = io.spine.internal.dependency.ProtoData
-    dependencies {
-        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(protoData.pluginLib)
-    }
-    configurations.all {
-        resolutionStrategy {
-            force(
-                "io.spine.protodata:protodata-fat-cli:${protoData.version}",
-                protoData.pluginLib,
-                protoData.codegenJava,
-                protoData.compiler,
-            )
-        }
-    }
+    forceCodegenPlugins()
 }
 
 plugins {
@@ -86,15 +71,5 @@ subprojects {
         }
     }
 
-    val protoData = io.spine.internal.dependency.ProtoData
-    configurations.all {
-        resolutionStrategy {
-            force(
-                "io.spine.protodata:protodata-fat-cli:${protoData.version}",
-                protoData.pluginLib,
-                protoData.codegenJava,
-                protoData.compiler,
-            )
-        }
-    }
+    configurations.forceProtoData()
 }

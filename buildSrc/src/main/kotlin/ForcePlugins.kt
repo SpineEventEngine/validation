@@ -24,14 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-buildscript {
-    forceCodegenPlugins()
+import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.kotlin.dsl.ScriptHandlerScope
+
+/**
+ * Forces the version of McJava and ProtoData for a module.
+ *
+ * The usage scenario is put the following code snippet at the top of a `build.gradle.kts` file:
+ *
+ * ```kotlin
+ * buildscript {
+ *     forceCodegenPlugins()
+ * }
+ * ```
+ */
+fun ScriptHandlerScope.forceCodegenPlugins() {
+    standardSpineSdkRepositories()
+    dependencies {
+        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
+    }
+    configurations.forceProtoData()
 }
 
-modelCompiler {
-    java {
-        codegen {
-            rejections().enabled.set(false)
-        }
+fun ConfigurationContainer.forceProtoData() = all {
+    resolutionStrategy {
+        val protoData = io.spine.internal.dependency.ProtoData
+        force(
+            protoData.fatCli,
+            protoData.pluginLib,
+            protoData.codegenJava,
+            protoData.compiler,
+        )
     }
 }
