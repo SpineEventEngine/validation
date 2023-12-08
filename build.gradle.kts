@@ -41,9 +41,10 @@ import io.spine.internal.gradle.standardToSpineSdk
 
 buildscript {
     standardSpineSdkRepositories()
+    val protodata = io.spine.internal.dependency.ProtoData
     dependencies {
         classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
+        classpath(protodata.pluginLib(protodata.dogfoodingVersion))
     }
 }
 
