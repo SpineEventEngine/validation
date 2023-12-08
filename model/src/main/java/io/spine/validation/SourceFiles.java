@@ -84,14 +84,14 @@ final class SourceFiles {
      *
      *  @param typeName
      *         name of the type which declares the field
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message which declares the field
      * @param querying
      *         the ProtoData component which conducts the search
      * @return the first field of the type
      */
-    static Field findFirstField(TypeName typeName, File filePath, Querying querying) {
-        var type = findType(typeName, filePath, querying);
+    static Field findFirstField(TypeName typeName, File file, Querying querying) {
+        var type = findType(typeName, file, querying);
         if (type.getFieldCount() == 0) {
             var url = typeName.getTypeUrl();
             throw newIllegalStateException("Type `%s` must have at least one field.", url);
@@ -105,20 +105,20 @@ final class SourceFiles {
      *
      *  @param typeName
      *         name of the type
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message
      * @param querying
      *         the ProtoData component which conducts the search
      * @return the type
      */
-    static MessageType findType(TypeName typeName, File filePath, Querying querying) {
-        var file = querying.select(ProtobufSourceFile.class)
-                           .findById(filePath);
-        if (file == null) {
-            throw unknownFile(filePath);
+    static MessageType findType(TypeName typeName, File file, Querying querying) {
+        var sourceFile = querying.select(ProtobufSourceFile.class)
+                           .findById(file);
+        if (sourceFile == null) {
+            throw unknownFile(file);
         }
         var typeUrl = typeName.getTypeUrl();
-        var type = file.getTypeMap()
+        var type = sourceFile.getTypeMap()
                        .get(typeUrl);
         if (type == null) {
             throw unknownType(typeName);
