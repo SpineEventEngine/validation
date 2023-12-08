@@ -99,6 +99,9 @@ object ProtoData {
     val codegenJava
         get() = codegenJava(version)
 
+    val fatCli
+        get() = "$group:protodata-fat-cli:$version"
+
     /**
      * An env variable storing a custom [version].
      */
