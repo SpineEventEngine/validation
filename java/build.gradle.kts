@@ -42,4 +42,3 @@ dependencies {
 
     testImplementation(Kotest.assertions)
 }
-
