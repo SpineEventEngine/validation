@@ -47,6 +47,9 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
     configurations.forceProtoData()
 }
 
+/**
+ * Forces the version of McJava and ProtoData for a module with this `ConfigurationContainer`.
+ */
 fun ConfigurationContainer.forceProtoData() = all {
     resolutionStrategy {
         val protoData = io.spine.internal.dependency.ProtoData
