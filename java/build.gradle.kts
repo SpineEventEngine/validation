@@ -29,6 +29,10 @@ import io.spine.internal.dependency.Kotest
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
 
+plugins {
+    `build-proto-model`
+}
+
 dependencies {
     api(project(":model"))
     api(project(":proto:context"))

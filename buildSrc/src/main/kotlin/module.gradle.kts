@@ -237,7 +237,7 @@ fun Project.configureTests() {
  * to IntelliJ IDEA module settings.
  *
  * @param generatedDir
- *          the name of the root directory with the generated code
+ *          the name of the root directory with the generated code.
  */
 fun Module.applyGeneratedDirectories(generatedDir: String) {
     val generatedMain = "$generatedDir/main"
