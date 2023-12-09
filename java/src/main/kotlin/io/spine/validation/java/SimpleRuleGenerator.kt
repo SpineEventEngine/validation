@@ -130,7 +130,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     private fun fieldIsJavaObject(): Boolean =
-        !field.isJavaPrimitive() || (field.isRepeated() && !ctx.isElement)
+        !field.isJavaPrimitive() || (field.isRepeated && !ctx.isElement)
 
     private fun selectSigns() = if (fieldIsJavaObject()) {
         OBJECT_COMPARISON_OPS
@@ -154,7 +154,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
     val field = ctx.simpleRuleField
-    return if (distribute && field.isRepeated()) {
+    return if (distribute && field.isRepeated) {
         DistributingGenerator(ctx) {
             generatorForSingular(it)
         }

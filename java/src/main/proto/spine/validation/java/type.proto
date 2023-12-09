@@ -38,10 +38,12 @@ option (internal_all) = true;
 
 import "spine/protodata/ast.proto";
 
-// A tuple of a message type and the file where it is declared.
+// A tuple of a message type and the header of the file where it is declared.
 message MessageWithFile {
 
+    // The type of the message.
     spine.protodata.MessageType message = 1;
 
-    spine.protodata.File declared_in = 2;
+    // The header of the file where the `message` is declared.
+    spine.protodata.ProtoFileHeader file_header = 2;
 }

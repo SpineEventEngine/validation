@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,20 +31,7 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 
 buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
-    }
-    configurations.all {
-        resolutionStrategy {
-            force(
-                io.spine.internal.dependency.ProtoData.pluginLib,
-                io.spine.internal.dependency.ProtoData.codegenJava,
-                io.spine.internal.dependency.ProtoData.compiler,
-            )
-        }
-    }
+    forceCodegenPlugins()
 }
 
 plugins {
@@ -83,4 +70,6 @@ subprojects {
             artifact = Protobuf.compiler
         }
     }
+
+    configurations.forceProtoData()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,10 @@ import io.spine.internal.dependency.Kotest
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
 
+plugins {
+    `build-proto-model`
+}
+
 dependencies {
     api(project(":model"))
     api(project(":proto:context"))
@@ -42,4 +46,3 @@ dependencies {
 
     testImplementation(Kotest.assertions)
 }
-

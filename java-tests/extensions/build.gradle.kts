@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+buildscript {
+    forceCodegenPlugins()
+}
+
 dependencies {
     implementation(project(":java"))
+}
+
+/*
+ * Disable the generation of rejections, since we don't want
+ * other plugins (potentially, still not using the latest ProtoData API)
+ * to interfere with the tests of Validation ProtoData plugin.
+ */
+modelCompiler {
+    java {
+        codegen {
+            rejections().enabled.set(false)
+        }
+    }
 }

@@ -24,33 +24,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.Spine
+import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.kotlin.dsl.ScriptHandlerScope
 
-plugins {
-    `build-proto-model`
-    module
-    id("io.spine.mc-java")
+/**
+ * Forces the version of McJava and ProtoData for a module.
+ *
+ * The usage scenario is put the following code snippet at the top of a `build.gradle.kts` file:
+ *
+ * ```kotlin
+ * buildscript {
+ *     forceCodegenPlugins()
+ * }
+ * ```
+ */
+fun ScriptHandlerScope.forceCodegenPlugins() {
+    standardSpineSdkRepositories()
+    dependencies {
+        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
+        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
+    }
+    configurations.forceProtoData()
 }
 
-dependencies {
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    implementation(Spine.base)
-    implementation(Spine.Logging.lib)
-    testImplementation(Spine.testlib)
+/**
+ * Forces the version of McJava and ProtoData for a module with this `ConfigurationContainer`.
+ */
+fun ConfigurationContainer.forceProtoData() = all {
+    resolutionStrategy {
+        val protoData = io.spine.internal.dependency.ProtoData
+        force(
+            protoData.fatCli,
+            protoData.pluginLib,
+            protoData.codegenJava,
+            protoData.compiler,
+        )
+    }
 }
-
-// Uncomment the below block when remote debugging of code generation is needed.
-//
-//tasks.findByName("launchTestProtoData")?.apply {this as JavaExec
-//    debugOptions {
-//        // Set this option to `true` to enable remote debugging.
-//        enabled.set(true)
-//        port.set(5566)
-//        server.set(true)
-//        suspend.set(true)
-//    }
-//    System.err.println("Debug session for `:java-runtime test` configured.")
-//}

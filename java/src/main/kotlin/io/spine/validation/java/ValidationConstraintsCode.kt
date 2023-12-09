@@ -29,7 +29,7 @@ package io.spine.validation.java
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.FilePath
+import io.spine.protodata.File
 import io.spine.protodata.TypeName
 import io.spine.protodata.codegen.java.This.asMessage
 import io.spine.validation.MessageValidation
@@ -61,7 +61,7 @@ internal class ValidationConstraintsCode private constructor(
     /**
      * The file which declares the message type.
      */
-    private val declaringFile: FilePath = validation.type.file
+    private val declaringFile: File = validation.type.file
 
     /**
      * The expression for referencing the message in the code.

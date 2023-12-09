@@ -28,7 +28,7 @@ package io.spine.validation;
 
 import io.spine.protodata.Field;
 import io.spine.protodata.FieldName;
-import io.spine.protodata.FilePath;
+import io.spine.protodata.File;
 import io.spine.protodata.MessageType;
 import io.spine.protodata.ProtobufSourceFile;
 import io.spine.protodata.TypeName;
@@ -55,7 +55,7 @@ final class SourceFiles {
      *         name of the field
      * @param typeName
      *         name of the type which declares the field
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message which declares the field
      * @param querying
      *         the ProtoData component which conducts the search
@@ -63,9 +63,9 @@ final class SourceFiles {
      */
     static Field findField(FieldName fieldName,
                            TypeName typeName,
-                           FilePath filePath,
+                           File file,
                            Querying querying) {
-        var type = findType(typeName, filePath, querying);
+        var type = findType(typeName, file, querying);
         var field = type.getFieldList().stream()
                 .filter(f -> fieldName.equals(f.getName()))
                 .findFirst();
@@ -84,14 +84,14 @@ final class SourceFiles {
      *
      *  @param typeName
      *         name of the type which declares the field
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message which declares the field
      * @param querying
      *         the ProtoData component which conducts the search
      * @return the first field of the type
      */
-    static Field findFirstField(TypeName typeName, FilePath filePath, Querying querying) {
-        var type = findType(typeName, filePath, querying);
+    static Field findFirstField(TypeName typeName, File file, Querying querying) {
+        var type = findType(typeName, file, querying);
         if (type.getFieldCount() == 0) {
             var url = typeName.getTypeUrl();
             throw newIllegalStateException("Type `%s` must have at least one field.", url);
@@ -105,20 +105,20 @@ final class SourceFiles {
      *
      *  @param typeName
      *         name of the type
-     * @param filePath
+     * @param file
      *         path to the Protobuf file which declares the message
      * @param querying
      *         the ProtoData component which conducts the search
      * @return the type
      */
-    static MessageType findType(TypeName typeName, FilePath filePath, Querying querying) {
-        var file = querying.select(ProtobufSourceFile.class)
-                           .findById(filePath);
-        if (file == null) {
-            throw unknownFile(filePath);
+    static MessageType findType(TypeName typeName, File file, Querying querying) {
+        var sourceFile = querying.select(ProtobufSourceFile.class)
+                           .findById(file);
+        if (sourceFile == null) {
+            throw unknownFile(file);
         }
         var typeUrl = typeName.getTypeUrl();
-        var type = file.getTypeMap()
+        var type = sourceFile.getTypeMap()
                        .get(typeUrl);
         if (type == null) {
             throw unknownType(typeName);
@@ -138,9 +138,9 @@ final class SourceFiles {
         );
     }
 
-    private static IllegalArgumentException unknownFile(FilePath filePath) {
+    private static IllegalArgumentException unknownFile(File file) {
         return newIllegalArgumentException(
-                "Unknown file `%s`.", filePath.getValue()
+                "Unknown file `%s`.", file.getPath()
         );
     }
 }

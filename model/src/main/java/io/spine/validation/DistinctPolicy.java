@@ -30,8 +30,8 @@ import com.google.protobuf.BoolValue;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.FieldName;
+import io.spine.protodata.File;
 import io.spine.protodata.event.FieldOptionDiscovered;
-import io.spine.protodata.FilePath;
 import io.spine.protodata.TypeName;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -41,7 +41,7 @@ import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.Ast.isRepeated;
-import static io.spine.protodata.Ast.qualifiedName;
+import static io.spine.protodata.Ast.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 import static io.spine.validation.SourceFiles.findField;
@@ -79,13 +79,13 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
         );
     }
 
-    private void checkCollection(FieldName fieldName, TypeName typeName, FilePath file) {
+    private void checkCollection(FieldName fieldName, TypeName typeName, File file) {
         var field = findField(fieldName, typeName, file, this);
         if (!isRepeated(field)) {
             throw newIllegalStateException(
                     "Field `%s.%s` is neither a `repeated` nor a `map` and " +
                             "therefore cannot be `distinct`.",
-                    qualifiedName(typeName),
+                    getQualifiedName(typeName),
                     fieldName.getValue());
         }
     }

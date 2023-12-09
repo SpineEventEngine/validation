@@ -184,4 +184,4 @@ private val Type.isAny: Boolean
  * TODO: Migrate to an extension `val` from ProtoData.
  */
 private val Field.qualifiedName: String
-    get() = "${declaringType.qualifiedName()}.${name.value}"
+    get() = "${declaringType.qualifiedName}.${name.value}"

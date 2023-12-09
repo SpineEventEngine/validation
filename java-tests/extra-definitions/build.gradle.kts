@@ -24,33 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.Spine
-
-plugins {
-    `build-proto-model`
-    module
-    id("io.spine.mc-java")
+buildscript {
+    forceCodegenPlugins()
 }
 
-dependencies {
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    implementation(Spine.base)
-    implementation(Spine.Logging.lib)
-    testImplementation(Spine.testlib)
+/*
+ * Disable the generation of rejections, since we don't want
+ * other plugins (potentially, still not using the latest ProtoData API)
+ * to interfere with the tests of Validation ProtoData plugin.
+ */
+modelCompiler {
+    java {
+        codegen {
+            rejections().enabled.set(false)
+        }
+    }
 }
-
-// Uncomment the below block when remote debugging of code generation is needed.
-//
-//tasks.findByName("launchTestProtoData")?.apply {this as JavaExec
-//    debugOptions {
-//        // Set this option to `true` to enable remote debugging.
-//        enabled.set(true)
-//        port.set(5566)
-//        server.set(true)
-//        suspend.set(true)
-//    }
-//    System.err.println("Debug session for `:java-runtime test` configured.")
-//}
