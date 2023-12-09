@@ -97,7 +97,7 @@ public class JavaValidationRenderer : JavaRenderer() {
 
     private fun generateCode(type: MessageWithFile) {
         val message = type.message
-        val javaFile = message.javaFile(type.declaredIn)
+        val javaFile = message.javaFile(type.fileHeader)
         sources.findFile(javaFile)
             .ifPresent { sourceFile -> addValidationCode(sourceFile, message) }
     }
@@ -107,90 +107,88 @@ public class JavaValidationRenderer : JavaRenderer() {
         val validationCode = ValidationCode(this, validation, sourceFile)
         validationCode.generate()
     }
-
-    public companion object {
-
-        private fun messages(file: ProtobufSourceFile): Stream<MessageWithFile> {
-            return file
-                .typeMap
-                .values
-                .stream()
-                .map { m ->
-                    MessageWithFile.newBuilder()
-                        .setMessage(m)
-                        .setDeclaredIn(file.header)
-                        .build()
-                }
-        }
-
-        private fun annotateGeneratedMessages(
-            sources: SourceFileSet, messageTypes: Set<MessageWithFile>
-        ) {
-            messageTypes.stream()
-                .map { m: MessageWithFile -> m.message.javaFile(m.declaredIn) }
-                .flatMap { path -> sources.findFile(path).stream() }
-                .distinct()
-                .forEach { file -> addAnnotations(file) }
-        }
-
-        private fun addAnnotations(file: SourceFile) {
-            annotateBuildMethod(file)
-            annotateBuildPartialMethod(file)
-        }
-
-        private fun annotateBuildMethod(sourceFile: SourceFile) {
-            val buildMethod = BuildMethodReturnTypeAnnotation()
-            sourceFile.atInline(buildMethod)
-                .add(annotation(Validated::class.java))
-        }
-
-        private fun annotateBuildPartialMethod(sourceFile: SourceFile) {
-            val buildPartialMethod = BuildPartialReturnTypeAnnotation()
-            sourceFile.atInline(buildPartialMethod)
-                .add(annotation(NonValidated::class.java))
-        }
-
-        /**
-         * Creates a string to be used in the code when using the given annotation class.
-         *
-         * @implNote Adds space before `@` so that when the type is fully qualified, the
-         * annotation is: 1) visible better 2) two or more annotations are separated.
-         */
-        private fun annotation(annotationClass: Class<out Annotation?>): String {
-            return " @" + annotationClass.name
-        }
-
-        private fun plugValidationIntoBuild(
-            sources: SourceFileSet, messageTypes: Set<MessageWithFile>
-        ) {
-            messageTypes.stream()
-                .map { m -> m.message.javaFile(m.declaredIn) }
-                .flatMap { path ->
-                    sources.findFile(path).stream()
-                }
-                .distinct()
-                .forEach { sourceFile -> insertBeforeBuild(sourceFile) }
-        }
-
-        private fun insertBeforeBuild(sourceFile: SourceFile) {
-            sourceFile.at(ValidateBeforeReturn())
-                .withExtraIndentation(2)
-                .add(validateBeforeBuild())
-        }
-
-        private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
-            val result = MessageReference("result")
-            addStatement(
-                "\$T error = \$L",
-                OPTIONAL_ERROR,
-                MethodCall(result, VALIDATE)
-            )
-            beginControlFlow("if (error.isPresent())")
-            addStatement(
-                "throw new \$T(error.get().getConstraintViolationList())",
-                ValidationException::class.java
-            )
-            endControlFlow()
-        }.lines()
-    }
 }
+
+private fun messages(file: ProtobufSourceFile): Stream<MessageWithFile> {
+    return file
+        .typeMap
+        .values
+        .stream()
+        .map { m ->
+            MessageWithFile.newBuilder()
+                .setMessage(m)
+                .setFileHeader(file.header)
+                .build()
+        }
+}
+
+private fun annotateGeneratedMessages(
+    sources: SourceFileSet,
+    messageTypes: Set<MessageWithFile>
+) {
+    messageTypes.stream()
+        .map { m: MessageWithFile -> m.message.javaFile(m.fileHeader) }
+        .flatMap { path -> sources.findFile(path).stream() }
+        .distinct()
+        .forEach { file -> addAnnotations(file) }
+}
+
+private fun addAnnotations(file: SourceFile) {
+    annotateBuildMethod(file)
+    annotateBuildPartialMethod(file)
+}
+
+private fun annotateBuildMethod(sourceFile: SourceFile) {
+    val buildMethod = BuildMethodReturnTypeAnnotation()
+    sourceFile.atInline(buildMethod)
+        .add(annotation(Validated::class.java))
+}
+
+private fun annotateBuildPartialMethod(sourceFile: SourceFile) {
+    val buildPartialMethod = BuildPartialReturnTypeAnnotation()
+    sourceFile.atInline(buildPartialMethod)
+        .add(annotation(NonValidated::class.java))
+}
+
+/**
+ * Creates a string to be used in the code when using the given annotation class.
+ *
+ * @implNote Adds space before `@` so that when the type is fully qualified, the
+ * annotation is: 1) visible better 2) two or more annotations are separated.
+ */
+private fun annotation(annotationClass: Class<out Annotation?>): String {
+    return " @" + annotationClass.name
+}
+
+private fun plugValidationIntoBuild(
+    sources: SourceFileSet, messageTypes: Set<MessageWithFile>
+) {
+    messageTypes.stream()
+        .map { m -> m.message.javaFile(m.fileHeader) }
+        .flatMap { path ->
+            sources.findFile(path).stream()
+        }
+        .distinct()
+        .forEach { sourceFile -> insertBeforeBuild(sourceFile) }
+}
+
+private fun insertBeforeBuild(sourceFile: SourceFile) {
+    sourceFile.at(ValidateBeforeReturn())
+        .withExtraIndentation(2)
+        .add(validateBeforeBuild())
+}
+
+private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
+    val result = MessageReference("result")
+    addStatement(
+        "\$T error = \$L",
+        OPTIONAL_ERROR,
+        MethodCall(result, VALIDATE)
+    )
+    beginControlFlow("if (error.isPresent())")
+    addStatement(
+        "throw new \$T(error.get().getConstraintViolationList())",
+        ValidationException::class.java
+    )
+    endControlFlow()
+}.lines()
