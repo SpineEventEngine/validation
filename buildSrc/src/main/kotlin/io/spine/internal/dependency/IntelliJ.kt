@@ -24,23 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:Suppress("ConstPropertyName")
+
 package io.spine.internal.dependency
 
 /**
- * Dependencies on Checkstyle Java linter.
+ * The components of the IntelliJ Platform.
  *
- * @see <a href="https://checkstyle.sourceforge.io/">Checkstyle</a>
- * @see [io.spine.internal.gradle.checkstyle.CheckStyleConfig]
+ * Make sure to add the `intellijReleases` and `jetBrainsCacheRedirector`
+ * repositories to your project. See `kotlin/Repositories.kt` for details.
  */
-@Suppress("unused", "ConstPropertyName")
-object CheckStyle {
+@Suppress("unused")
+object IntelliJ {
+
     /**
-     * The version to be used in the project.
+     * The version of the IntelliJ platform.
      *
-     * `10.12.1` is the last version in `10.12.0`, which does not introduce
-     * capability conflict over `google-collections` with Guava.
-     *
-     * @see <a href="https://checkstyle.sourceforge.io/releasenotes.html">Checkstyle</a>
+     * This is the version used by Kotlin compiler `1.9.21`.
+     * Advance this version with caution because it may break the setup of
+     * IntelliJ platform standalone execution.
      */
-    const val version = "10.12.1"
+    const val version = "213.7172.53"
+
+    object Platform {
+        private const val group = "com.jetbrains.intellij.platform"
+        const val core = "$group:core:$version"
+        const val util = "$group:util:$version"
+    }
+
+    object JavaPsi {
+        private const val group = "com.jetbrains.intellij.java"
+        const val api = "$group:java-psi:$version"
+        const val impl = "$group:java-psi-impl:$version"
+    }
 }

@@ -28,6 +28,7 @@
 
 import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Kotlin
+import io.spine.internal.dependency.KotlinX
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
@@ -111,7 +112,8 @@ allprojects {
                 Grpc.core,
                 Grpc.protobuf,
                 Grpc.stub,
-                Kotlin.stdLibJdk7
+                Kotlin.stdLibJdk7,
+                KotlinX.Coroutines.jdk8
             )
         }
     }
