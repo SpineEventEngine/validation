@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
-import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.codegen.java.ClassOrEnumName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
 import io.spine.protodata.codegen.java.MethodCall
@@ -101,7 +101,7 @@ internal class DistributingGenerator(
             .build()
     }
 
-    private fun typeName(): ClassName {
+    private fun typeName(): ClassOrEnumName {
         val name = field.type.messageOrEnumName
         val typeName = if (name != null) {
             ctx.typeConvention.declarationFor(name).name
