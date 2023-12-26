@@ -232,13 +232,13 @@
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -830,23 +830,17 @@
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -937,7 +931,7 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1174,13 +1168,13 @@ This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1752,19 +1746,13 @@ This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -1855,7 +1843,7 @@ This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:59 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2427,23 +2415,17 @@ This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2525,7 +2507,7 @@ This report was generated on **Tue Dec 26 20:47:49 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:59 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3039,9 +3021,9 @@ This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3123,7 +3105,7 @@ This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:59 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3360,13 +3342,13 @@ This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4000,23 +3982,17 @@ This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4107,7 +4083,7 @@ This report was generated on **Tue Dec 26 20:47:53 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:59 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -4344,13 +4320,13 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4945,23 +4921,17 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -5052,7 +5022,7 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:06:59 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -5771,9 +5741,9 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -5859,7 +5829,7 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:00 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -6096,13 +6066,13 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -6704,23 +6674,17 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -6811,7 +6775,7 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:00 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -7048,13 +7012,13 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -7641,19 +7605,13 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -7744,7 +7702,7 @@ This report was generated on **Tue Dec 26 20:47:57 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:00 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -8395,19 +8353,13 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -8494,7 +8446,7 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:01 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -9163,23 +9115,17 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.20.2.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : atomicfu. **Version** : 0.21.0.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.atomicfu](https://github.com/Kotlin/kotlinx.atomicfu)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.0.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.0.
-     * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
-     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.0.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-jdk8. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -9266,7 +9212,7 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:01 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -9811,9 +9757,9 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -9895,7 +9841,7 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:01 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -10590,9 +10536,9 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.6.3.**No license information found**
-1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.6.3.
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-bom. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core. **Version** : 1.7.3.**No license information found**
+1.  **Group** : org.jetbrains.kotlinx. **Name** : kotlinx-coroutines-core-jvm. **Version** : 1.7.3.
      * **Project URL:** [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -10678,4 +10624,4 @@ This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Dec 26 20:47:58 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Dec 26 22:07:01 WET 2023** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

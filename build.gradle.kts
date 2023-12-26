@@ -113,6 +113,7 @@ allprojects {
                 Grpc.protobuf,
                 Grpc.stub,
                 Kotlin.stdLibJdk7,
+                KotlinX.Coroutines.core,
                 KotlinX.Coroutines.jdk8
             )
         }
