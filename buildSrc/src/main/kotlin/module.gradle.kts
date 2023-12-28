@@ -154,6 +154,7 @@ fun Module.forceConfigurations() {
                 force(
                     JUnit.runner,
 
+                    Spine.reflect,
                     Spine.base,
                     Spine.time,
                     Spine.testlib,
