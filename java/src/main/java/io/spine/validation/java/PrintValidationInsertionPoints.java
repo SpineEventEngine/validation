@@ -27,28 +27,21 @@
 package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.renderer.InsertionPoint;
 import io.spine.protodata.renderer.InsertionPointPrinter;
 import io.spine.tools.code.Java;
 import io.spine.validation.MessageValidation;
 
 /**
- * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point to all the
- * message types
- * which have an associated {@link MessageValidation} view.
+ * An {@link InsertionPointPrinter} which adds the {@link ValidateBeforeReturn} point
+ * to all the message types which have an associated {@link MessageValidation} view.
  */
 @SuppressWarnings("unused") // Accessed via reflection by ProtoData.
 public final class PrintValidationInsertionPoints extends InsertionPointPrinter<Java> {
 
     public PrintValidationInsertionPoints() {
-        super(Java.lang());
-    }
-
-    @Override
-    protected ImmutableSet<InsertionPoint> supportedInsertionPoints() {
-        return ImmutableSet.of(
+        super(Java.lang(), ImmutableSet.of(
                 new ValidateBeforeReturn(),
                 new BuildPartialReturnTypeAnnotation(),
-                new BuildMethodReturnTypeAnnotation());
+                new BuildMethodReturnTypeAnnotation()));
     }
 }
