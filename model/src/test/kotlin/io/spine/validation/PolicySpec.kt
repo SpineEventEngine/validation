@@ -26,6 +26,7 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Empty
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
@@ -98,6 +99,7 @@ class PolicySpec {
             declaringType = typeName
             name = fieldName
             type = primitive(TYPE_INT32)
+            single = Empty.getDefaultInstance()
         }
 
         blackBox.receivesExternalEvents(
