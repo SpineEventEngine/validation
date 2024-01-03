@@ -40,6 +40,11 @@ plugins {
 
 val forMcJava = setOf("extensions", "extra-definitions")
 
+allprojects {
+    // No need to generate documentation for these test environments.
+    disableDocumentationTasks()
+}
+
 subprojects {
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
