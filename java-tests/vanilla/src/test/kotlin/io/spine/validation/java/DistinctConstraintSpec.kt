@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,9 @@
 
 package io.spine.validation.java
 
-import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.validate.NonValidated
@@ -44,45 +45,42 @@ internal class DistinctConstraintSpec {
 
     @Test
     @SuppressWarnings("ForbiddenComment")
-    fun `duplicates result is a violation`() {
+    fun `duplicated elements result is a violation`() {
         val same = "123"
         val msg = protoSetPartial(same, "321", same)
         val error: Optional<ValidationError> = msg.validate()
-        assertThat(error)
-            .isPresent()
-
-        val expected = constraintViolation {
-            fieldPath { fieldName.add("element") }
+        error shouldBePresent {
+            val expected = constraintViolation {
+                fieldPath { fieldName.add("element") }
+            }
+            assertThat(it.constraintViolationList)
+                .comparingExpectedFieldsOnly()
+                .containsExactly(expected)
         }
-        val violations = error.get().constraintViolationList
-        assertThat(violations)
-            .comparingExpectedFieldsOnly()
-            .containsExactly(expected)
     }
 
     @Test
     fun `unique elements do not result in a violation`() {
         val msg = protoSet("42", 42, 42.0f, 42.0)
-        assertThat(msg.validate()).isEmpty()
+        msg.validate().shouldBeEmpty()
     }
 
     @Test
     fun `empty list does not result in a violation`() {
         val msg = protoSet()
-        assertThat(msg.validate())
-            .isEmpty()
+        msg.validate().shouldBeEmpty()
     }
 }
 
 private fun protoSet(): @Validated ProtoSet = ProtoSet.newBuilder().build()
 
-private fun <T> protoSet(vararg element: T): @Validated ProtoSet {
+private fun <T: Any> protoSet(vararg element: T): @Validated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.build()
 }
 
-private fun <T> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
+private fun <T: Any> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.buildPartial()
