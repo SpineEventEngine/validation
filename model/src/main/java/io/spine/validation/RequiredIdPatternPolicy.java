@@ -55,10 +55,10 @@ final class RequiredIdPatternPolicy extends RequiredIdPolicy {
     @Override
     @React
     protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
-        if (!configIsPresent()) {
+        if (!settingsAvailable()) {
             return withNothing();
         }
-        var config = configAs(ValidationConfig.class);
+        var config = loadSettings(ValidationConfig.class);
         var markers = config.getMessageMarkers();
         var filePatterns = allPatterns(markers);
         var file = event.getFile();

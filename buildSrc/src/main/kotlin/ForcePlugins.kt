@@ -58,6 +58,7 @@ fun ConfigurationContainer.forceProtoData() = all {
             protoData.pluginLib,
             protoData.codegenJava,
             protoData.compiler,
+            protoData.protocPlugin,
         )
     }
 }

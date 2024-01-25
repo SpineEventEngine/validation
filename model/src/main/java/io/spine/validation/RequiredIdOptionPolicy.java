@@ -58,7 +58,7 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
     @Override
     @React
     protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
-        if (!configIsPresent()) {
+        if (!settingsAvailable()) {
             return withNothing();
         }
         var options = options();
@@ -84,7 +84,7 @@ final class RequiredIdOptionPolicy extends RequiredIdPolicy {
     }
 
     private Set<String> options() {
-        var config = configAs(ValidationConfig.class);
+        var config = loadSettings(ValidationConfig.class);
         var markers = config.getMessageMarkers();
         Set<String> options = ImmutableSet.copyOf(markers.getEntityOptionNameList());
         return options;
