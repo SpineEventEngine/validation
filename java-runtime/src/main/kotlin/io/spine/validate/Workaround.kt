@@ -31,6 +31,8 @@ import com.google.protobuf.DescriptorProtos.MessageOptions
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.Message
+import io.spine.base.CommandMessage
+import io.spine.base.EntityState
 import io.spine.option.OptionsProto.goes
 import io.spine.option.OptionsProto.requiredField
 import io.spine.option.OptionsProto.setOnce
@@ -43,9 +45,11 @@ import io.spine.option.OptionsProto.setOnce
 private const val ABOUT = ""
 
 internal fun Message.requiresRuntimeValidation(): Boolean =
-    hasFieldOption(goes)
-        || hasFieldOption(setOnce)
-        || hasTypeOption(requiredField)
+    (this is EntityState<*>)
+            || (this is CommandMessage)
+            || hasFieldOption(goes)
+            || hasFieldOption(setOnce)
+            || hasTypeOption(requiredField)
 
 private fun Message.hasFieldOption(option: GeneratedExtension<FieldOptions, *>): Boolean {
     val fieldDescriptors = descriptorForType.fields
