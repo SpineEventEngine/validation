@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@
 
 import io.spine.internal.dependency.Kotest
 import io.spine.internal.dependency.Spine
+import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
+import io.spine.util.theOnly
 
 protoData {
     plugins(
@@ -37,8 +39,18 @@ protoData {
     )
 }
 
+val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()
+
+val copySettings by tasks.registering(Copy::class) {
+    from(project.layout.projectDirectory.file(
+        "io.spine.validation.java.JavaValidationPlugin.pb.json")
+    )
+    into(settingsDirTask.settingsDir.get())
+    dependsOn(settingsDirTask)
+}
+
 tasks.withType<LaunchProtoData>().configureEach {
-    configurationFile.set(file("protodata.pb.json"))
+    dependsOn(copySettings)
 }
 
 dependencies {
