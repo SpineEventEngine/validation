@@ -75,6 +75,4 @@ subprojects {
             artifact = Protobuf.compiler
         }
     }
-
-    configurations.forceProtoData()
 }
