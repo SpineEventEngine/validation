@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.spine.protodata.settings.LoadsSettings
+import io.spine.protodata.settings.defaultConsumerId
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.internal.dependency.Spine].
+ * An interface common for components of [ValidationPlugin] that load settings
+ * passed as a file containing [ValidationConfig] instance written using the plugin class name.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.126")
+public interface ValidationPluginPart: LoadsSettings {
+
+    override val consumerId: String
+        get() = ValidationPlugin::class.java.defaultConsumerId
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,9 @@ import io.spine.validation.event.RuleAdded;
  * @param <E>
  *         the type of the event to react to
  */
-public abstract class ValidationPolicy<E extends EventMessage> extends Policy<E> {
+public abstract class ValidationPolicy<E extends EventMessage>
+        extends Policy<E>
+        implements ValidationPluginPart {
 
     @Override
     @ContractFor(handler = React.class)

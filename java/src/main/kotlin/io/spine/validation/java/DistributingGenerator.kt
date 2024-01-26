@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
+import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.codegen.java.ClassOrEnumName
 import io.spine.protodata.codegen.java.Expression
 import io.spine.protodata.codegen.java.Literal
@@ -146,25 +147,3 @@ private fun Field.ruleId(): String {
     val fieldRef = name.value.titleCase()
     return fieldRef + "_" + random
 }
-
-// TODO: Migrate to SecureRandomString from ProtoData.
-@OptIn(ExperimentalEncodingApi::class)
-private object SecureRandomString {
-
-    private const val DEFAULT_SIZE = 20
-
-    private val random: SecureRandom by lazy {
-        SecureRandom()
-    }
-
-    private val encoder: Base64 by lazy {
-        Base64.UrlSafe
-    }
-
-    fun generate(size: Int = DEFAULT_SIZE): String {
-        val buffer = ByteArray(size)
-        random.nextBytes(buffer)
-        return encoder.encode(buffer)
-    }
-}
-
