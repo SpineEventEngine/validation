@@ -42,7 +42,8 @@ import io.spine.validation.event.RuleAdded;
  * @param <E>
  *         the type of the event to react to
  */
-public abstract class ValidationPolicy<E extends EventMessage> extends Policy<E> {
+public abstract class ValidationPolicy<E extends EventMessage> extends Policy<E>
+        implements ValidationPluginPart {
 
     @Override
     @ContractFor(handler = React.class)
