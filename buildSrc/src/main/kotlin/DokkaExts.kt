@@ -189,6 +189,7 @@ fun Project.dokkaJavaJar(): TaskProvider<Jar> = tasks.getOrCreate("dokkaJavaJar"
  * This function could be useful to improve build speed when building subprojects containing
  * test environments or integration test projects.
  */
+@Suppress("unused")
 fun Project.disableDocumentationTasks() {
     gradle.taskGraph.whenReady {
         tasks.forEach { task ->
