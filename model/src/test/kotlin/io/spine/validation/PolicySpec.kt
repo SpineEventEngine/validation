@@ -31,17 +31,17 @@ import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
 import io.spine.protodata.File
-import io.spine.protodata.ProtoFileHeader.SyntaxVersion.PROTO3
 import io.spine.protodata.PrimitiveType
 import io.spine.protodata.PrimitiveType.TYPE_INT32
 import io.spine.protodata.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ProtoFileHeader.SyntaxVersion.PROTO3
 import io.spine.protodata.Type
 import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.backend.Pipeline
 import io.spine.protodata.event.fieldEntered
 import io.spine.protodata.event.fieldOptionDiscovered
 import io.spine.protodata.event.fileEntered
-import io.spine.protodata.event.typeEntered
+import io.spine.protodata.event.typeDiscovered
 import io.spine.protodata.field
 import io.spine.protodata.fieldName
 import io.spine.protodata.file
@@ -104,7 +104,7 @@ class PolicySpec {
 
         blackBox.receivesExternalEvents(
             fileEntered { file = filePath; header = protoFileHeader },
-            typeEntered { file = filePath; type = messageType },
+            typeDiscovered { file = filePath; type = messageType },
             fieldEntered { field = int32Field; file = filePath; type = typeName }
         )
     }

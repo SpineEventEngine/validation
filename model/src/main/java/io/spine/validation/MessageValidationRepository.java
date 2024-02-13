@@ -27,6 +27,7 @@
 package io.spine.validation;
 
 import io.spine.protodata.TypeName;
+import io.spine.protodata.event.TypeDiscovered;
 import io.spine.protodata.event.TypeEntered;
 import io.spine.protodata.plugin.ViewRepository;
 import io.spine.server.route.EventRouting;
@@ -43,7 +44,7 @@ final class MessageValidationRepository
     @Override
     protected void setupEventRouting(@NotNull EventRouting<TypeName> routing) {
         super.setupEventRouting(routing);
-        routing.unicast(TypeEntered.class,
+        routing.unicast(TypeDiscovered.class,
                         (message, context) -> message.getType()
                                                      .getName());
     }
