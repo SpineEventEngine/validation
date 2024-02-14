@@ -46,6 +46,7 @@ allprojects {
 }
 
 subprojects {
+    val forcedProtoData = listOf(ProtoData.fatCli, ProtoData.protocPlugin)
     if (project.name in forMcJava) {
         apply(plugin = Spine.McJava.pluginId)
         configurations.all {
@@ -57,10 +58,16 @@ subprojects {
                         module("io.spine.validation:spine-validation-java-bundle")
                     ).using(project(":java"))
                 }
+                forcedProtoData.forEach { force(it) }
             }
         }
     } else {
         apply(plugin = ProtoData.pluginId)
+        configurations.all {
+            resolutionStrategy {
+                forcedProtoData.forEach { force(it) }
+            }
+        }
     }
 
     dependencies {
