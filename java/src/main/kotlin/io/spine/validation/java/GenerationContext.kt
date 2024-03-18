@@ -32,10 +32,10 @@ import io.spine.protodata.File
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
 import io.spine.protodata.TypeName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.MessageOrEnumConvention
-import io.spine.protodata.codegen.java.JavaValueConverter
-import io.spine.protodata.codegen.java.MessageReference
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MessageOrEnumConvention
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.MessageReference
 import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
