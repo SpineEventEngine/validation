@@ -31,11 +31,11 @@ import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
 import io.spine.protodata.backend.SecureRandomString
-import io.spine.protodata.codegen.java.ClassOrEnumName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MethodCall
-import io.spine.protodata.codegen.java.This
+import io.spine.protodata.java.ClassOrEnumName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.This
 import io.spine.protodata.isMap
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock

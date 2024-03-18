@@ -27,11 +27,11 @@
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
-import io.spine.protodata.codegen.java.ClassName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MethodCall
-import io.spine.protodata.codegen.java.call
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.call
 import io.spine.protodata.isMap
 
 /**
