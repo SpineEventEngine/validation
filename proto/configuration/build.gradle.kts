@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,4 +33,13 @@ plugins {
 dependencies {
     implementation(Spine.base)
     implementation(project(":java-runtime"))
+}
+
+// Turn off validation codegen during the transition to new ProtoData API.
+modelCompiler {
+    java {
+        codegen {
+            validation().enabled.set(false)
+        }
+    }
 }
