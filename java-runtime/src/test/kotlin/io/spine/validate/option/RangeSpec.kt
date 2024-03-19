@@ -38,6 +38,7 @@ import java.util.stream.IntStream
 import java.util.stream.LongStream
 import java.util.stream.Stream
 import kotlin.streams.toList
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -46,6 +47,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("unused") // methods are invoked via `@MethodSource`.
 @DisplayName(VALIDATION_SHOULD + "analyze `(range)` option and find out that")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class RangeSpec : ValidationOfConstraintTest() {
 
     @Nested

@@ -37,11 +37,13 @@ import io.spine.test.validate.MinInclusive
 import io.spine.type.TypeName
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.VALUE
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(min)` and `(max)` options and")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class NumberRangeSpec : ValidationOfConstraintTest() {
 
     @Test

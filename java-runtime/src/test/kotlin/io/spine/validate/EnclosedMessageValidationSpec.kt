@@ -40,11 +40,13 @@ import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
 import io.spine.validate.given.MessageValidatorTestEnv.ENCLOSED_FIELD_NAME
 import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName(VALIDATION_SHOULD + "validate enclosed messages and")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
     @Test

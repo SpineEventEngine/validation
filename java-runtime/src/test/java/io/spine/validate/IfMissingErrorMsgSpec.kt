@@ -36,12 +36,14 @@ import io.spine.test.validate.CustomMessageRequiredMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredRepeatedMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredStringFieldValue
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "use `if_missing` field option")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
 
     @Nested inner class

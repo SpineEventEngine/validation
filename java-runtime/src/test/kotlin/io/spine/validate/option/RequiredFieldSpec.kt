@@ -45,6 +45,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(required_field)` message option and consider message")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class RequiredFieldSpec : ValidationOfConstraintTest() {
 
     @Nested

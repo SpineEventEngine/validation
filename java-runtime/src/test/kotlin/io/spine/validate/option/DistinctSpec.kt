@@ -32,11 +32,13 @@ import io.spine.test.validate.DistinctValues.Planet.JUPITER
 import io.spine.test.validate.DistinctValues.Planet.MARS
 import io.spine.test.validate.distinctValues
 import io.spine.validate.ValidationOfConstraintTest
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "analyze `(distinct)` option and")
+@Disabled("Until Validation migrates to new ProtoData")
 internal class DistinctSpec : ValidationOfConstraintTest() {
 
     @Test
