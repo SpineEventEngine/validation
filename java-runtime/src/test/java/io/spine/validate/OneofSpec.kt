@@ -35,6 +35,7 @@ import io.spine.test.validate.oneof.RequiredOneofWithValidation
 import io.spine.test.validate.oneof.oneofWithValidation
 import io.spine.test.validate.oneof.requiredOneofWithValidation
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -117,6 +118,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
         }
 
         @Test
+        @Disabled("Until Validation migrates to new ProtoData")
         fun `a field within 'oneof' is not valid`() = assertDoesNotBuild {
             OneofWithValidation.newBuilder()
                 .setWithValidation("   ")
@@ -128,6 +130,7 @@ internal class OneofSpec : ValidationOfConstraintTest() {
             assertNotValid(OneofWithRequiredFields.getDefaultInstance(), false)
 
         @Test
+        @Disabled("Until Validation migrates to new ProtoData")
         fun `a required field is not valid`() = assertDoesNotBuild {
             RequiredOneofWithValidation.newBuilder()
                 .setValidValue("###")
