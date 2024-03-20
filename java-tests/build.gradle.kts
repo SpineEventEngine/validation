@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ applyPluginsToProjectht 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,28 +38,48 @@ plugins {
     java
 }
 
-/**
- * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
- *
- * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
- */
-val forMcJava = setOf(
-    "extensions",
-    "extra-definitions",
-    "runtime"
-)
-
 allprojects {
     // No need to generate documentation for these test environments.
     disableDocumentationTasks()
 }
 
 subprojects {
+    applyPlugins()
+
+    dependencies {
+        implementation(Spine.base)
+        implementation(project(":java-runtime"))
+    }
+
+    configureTaskDependencies()
+
+    protobuf {
+        protoc {
+            artifact = Protobuf.compiler
+        }
+    }
+}
+
+fun Project.applyPlugins() {
     val forcedProtoData = listOf(
         ProtoData.fatCli,
         ProtoData.protocPlugin
     )
-    if (project.name in forMcJava) {
+
+    /**
+     * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
+     *
+     * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
+     */
+    val applyMcJava = setOf(
+        "extensions",
+        "extra-definitions",
+        "runtime",
+        "validation",
+        "validation-gen",
+    )
+
+    if (project.name in applyMcJava) {
         apply(plugin = Spine.McJava.pluginId)
         configurations.all {
             resolutionStrategy {
@@ -79,19 +99,6 @@ subprojects {
             resolutionStrategy {
                 forcedProtoData.forEach { force(it) }
             }
-        }
-    }
-
-    dependencies {
-        implementation(Spine.base)
-        implementation(project(":java-runtime"))
-    }
-
-    configureTaskDependencies()
-
-    protobuf {
-        protoc {
-            artifact = Protobuf.compiler
         }
     }
 }

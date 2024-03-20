@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.test.tools.validate.rule;
+
+import com.google.errorprone.annotations.Immutable;
+import io.spine.code.proto.FieldContext;
+import io.spine.option.OptionsProto;
+import io.spine.validate.Constraint;
+import io.spine.validate.option.FieldValidatingOption;
+
+/**
+ * A field validating option which creates {@link AllRequiredConstraint}s.
+ *
+ * <p>The option reuses the {@link OptionsProto#required} extension.
+ */
+@Immutable
+public final class AllRequired extends FieldValidatingOption<Boolean> {
+
+    AllRequired() {
+        super(OptionsProto.required);
+    }
+
+    @Override
+    public boolean shouldValidate(FieldContext context) {
+        return context.targetDeclaration().isCollection() && super.shouldValidate(context);
+    }
+
+    @Override
+    public Constraint constraintFor(FieldContext field) {
+        return new AllRequiredConstraint(optionValue(field), field.targetDeclaration());
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)

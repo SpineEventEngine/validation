@@ -24,31 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+import io.spine.internal.dependency.AutoService
+import io.spine.internal.dependency.Spine
+
+dependencies {
+    testAnnotationProcessor(AutoService.processor)
+    testCompileOnly(AutoService.annotations)
+    testImplementation(Spine.testlib)
+    testImplementation(Spine.Logging.lib)
 }
 
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)
+tasks.findByName("launchTestProtoData")?.apply { this as JavaExec
+    debugOptions {
+        enabled.set(false) // Set this option to `true` to enable remote debugging.
+        port.set(5566)
+        server.set(true)
+        suspend.set(true)
+    }
+}

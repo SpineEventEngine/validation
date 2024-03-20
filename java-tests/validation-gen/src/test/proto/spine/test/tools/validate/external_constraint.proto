@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,32 +23,51 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+package spine.test.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "ExternalConstraintProto";
+option java_multiple_files = true;
+
+message ShippingAddress {
+
+    string first_line = 1 [(required) = true];
+
+    string second_line = 2;
 }
 
-rootProject.name = "validation"
+message Email {
 
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)
+    string value = 1;
+}
+
+message SimplePersonName {
+
+    string value = 1;
+}
+
+message User {
+
+    SimplePersonName name = 1 [(.validate) = false];
+
+    repeated ShippingAddress shipping_address = 2 [(.validate) = true];
+
+    repeated Email contact = 3 [(.validate) = true];
+}
+
+message ValidEmail {
+    option (constraint_for) = "spine.test.validate.User.contact";
+
+    string value = 1 [(pattern).regex = ".+@.+"];
+}
+
+message ValidName {
+    option (constraint_for) = "spine.test.validate.User.name";
+
+    string value = 1 [(pattern).regex = ".{2,}"];
+}

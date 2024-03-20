@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.test.tools.validate.rule;
+
+import com.google.auto.service.AutoService;
+import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.validate.option.FieldValidatingOption;
+import io.spine.validate.option.ValidatingOptionFactory;
+
+import java.util.Set;
+
+/**
+ * A {@link ValidatingOptionFactory} which adds the {@link AllRequired} option for {@code bytes}
+ * fields.
+ */
+@Immutable
+@AutoService(ValidatingOptionFactory.class)
+public final class BytesAllRequiredFactory implements ValidatingOptionFactory {
+
+    private static final ImmutableSet<FieldValidatingOption<?>> OPTIONS =
+            ImmutableSet.of(new AllRequired());
+
+    @Override
+    public Set<FieldValidatingOption<?>> forByteString() {
+        return OPTIONS;
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)

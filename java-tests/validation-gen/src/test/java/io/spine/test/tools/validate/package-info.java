@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
-}
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.test.tools.validate;
 
-rootProject.name = "validation"
+import com.google.errorprone.annotations.CheckReturnValue;
 
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)
+import javax.annotation.ParametersAreNonnullByDefault;

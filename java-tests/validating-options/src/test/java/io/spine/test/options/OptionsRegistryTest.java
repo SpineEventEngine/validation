@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.test.options;
+
+import io.spine.option.OptionsProvider;
+
+import com.google.protobuf.Extension;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static com.google.common.truth.Truth.assertThat;
+import static io.spine.option.OptionsProto.required;
+import static io.spine.test.options.BytesDirectionOptionProto.direction;
+
+@DisplayName("`OptionExtensionRegistry` should")
+class OptionsRegistryTest {
+
+    @Test
+    @DisplayName("contain custom options")
+    void custom() {
+        assertContains(direction);
+    }
+
+    @Test
+    @DisplayName("contain standard options")
+    void standard() {
+        assertContains(required);
+    }
+
+    private static void assertContains(Extension<?, ?> option) {
+        var registry = OptionsProvider.registryWithAllOptions();
+        var descriptor = option.getDescriptor();
+        var name = descriptor.getFullName();
+        var registeredExtension = registry.findImmutableExtensionByName(name);
+        assertThat(registeredExtension).isNotNull();
+        assertThat(registeredExtension.descriptor).isEqualTo(descriptor);
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:extensions",
-    ":java-tests:extra-definitions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
-)
