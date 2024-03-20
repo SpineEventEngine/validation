@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import io.spine.test.validate.option.ATestMessageWithConstraint;
 import io.spine.test.validate.option.ATestMessageWithExternalConstraintOnly;
 import io.spine.test.validate.option.NoValidationTestMessage;
 import io.spine.test.validate.option.TestFieldOptionProto;
+import io.spine.testing.TestValues;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.CustomConstraint;
@@ -47,7 +48,6 @@ import org.junit.jupiter.api.Test;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.testing.Assertions.assertIllegalState;
-import static io.spine.testing.TestValues.randomString;
 import static io.spine.validate.MessageValue.atTopLevel;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -70,7 +70,7 @@ final class FieldValidatingOptionTest {
     @Test
     void returnValueIfOptionIsPresentInFieldOption() {
         var msg = ATestMessage.newBuilder()
-                .setValue(randomString())
+                .setValue(TestValues.randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -92,7 +92,7 @@ final class FieldValidatingOptionTest {
     @Test
     void notValidateIfOptionNotPresent() {
         var msg = NoValidationTestMessage.newBuilder()
-                .setValue(randomString())
+                .setValue(TestValues.randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -104,7 +104,7 @@ final class FieldValidatingOptionTest {
     @Test
     void validateIfOptionIsPresentInFieldOption() {
         var msg = ATestMessage.newBuilder()
-                .setValue(randomString())
+                .setValue(TestValues.randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -114,7 +114,7 @@ final class FieldValidatingOptionTest {
 
     private static FieldValue valueFieldWithExternalConstraint() {
         var testMessage = NoValidationTestMessage.newBuilder()
-                .setValue(randomString())
+                .setValue(TestValues.randomString())
                 .build();
         var msg = ATestMessageWithExternalConstraintOnly.newBuilder()
                 .setMessage(testMessage)

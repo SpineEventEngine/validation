@@ -46,5 +46,6 @@ include(
     ":java-tests:consumer",
     ":java-tests:extensions",
     ":java-tests:extra-definitions",
+    ":java-tests:runtime",
     ":java-tests:vanilla"
 )

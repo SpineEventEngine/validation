@@ -39,10 +39,19 @@ dependencies {
 
     implementation(Spine.base)
     implementation(Spine.Logging.lib)
+
     testImplementation(Spine.testlib)
 }
 
-// Turn off validation codegen during the transition to new ProtoData API.
+// We deliberately turn off validation codegen in this module to ease the issues
+// associated with the migration when ProtoData or Validation API changes.
+//
+// The production Protobuf types of this module do not declare validation constraints, again,
+// to ease the possible migration issues.
+//
+// Please see `java-tests/runtime` submodule for the tests associated with the Validation Runtime
+// and the generated code.
+//
 modelCompiler {
     java {
         codegen {

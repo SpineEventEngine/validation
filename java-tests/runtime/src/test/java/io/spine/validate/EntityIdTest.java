@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import io.spine.test.validate.AggregateState;
 import io.spine.test.validate.ProjectionState;
 import io.spine.test.validate.command.EntityIdMsgFieldValue;
 import io.spine.test.validate.command.EntityIdStringFieldValue;
+import io.spine.validate.given.MessageValidatorTestEnv;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class EntityIdTest extends ValidationOfConstraintTest {
         @DisplayName("find out that non-default message is valid")
         void findOutThatMessageEntityIdInCommandIsValid() {
             var msg = EntityIdMsgFieldValue.newBuilder()
-                    .setValue(newStringValue())
+                    .setValue(MessageValidatorTestEnv.newStringValue())
                     .build();
             assertValid(msg);
         }
@@ -82,7 +83,7 @@ class EntityIdTest extends ValidationOfConstraintTest {
         @DisplayName("provide one valid violation if is not valid")
         void provideOneValidViolationIfEntityIdInCommandIsNotValid() {
             var msg = EntityIdMsgFieldValue.getDefaultInstance();
-            assertSingleViolation(msg, VALUE);
+            assertSingleViolation(msg, MessageValidatorTestEnv.VALUE);
         }
     }
 

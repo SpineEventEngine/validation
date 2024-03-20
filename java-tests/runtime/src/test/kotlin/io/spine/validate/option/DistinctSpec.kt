@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,11 @@ import io.spine.test.validate.DistinctValues.Planet.JUPITER
 import io.spine.test.validate.DistinctValues.Planet.MARS
 import io.spine.test.validate.distinctValues
 import io.spine.validate.ValidationOfConstraintTest
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @DisplayName(ValidationOfConstraintTest.VALIDATION_SHOULD + "analyze `(distinct)` option and")
-@Disabled("Until Validation migrates to new ProtoData")
 internal class DistinctSpec : ValidationOfConstraintTest() {
 
     @Test

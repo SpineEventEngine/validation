@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import io.spine.test.validate.AllThePatterns;
 import io.spine.test.validate.PatternStringFieldValue;
 import io.spine.validate.NonValidated;
 import io.spine.validate.ValidationOfConstraintTest;
+import io.spine.validate.given.MessageValidatorTestEnv;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ class PatternTest extends ValidationOfConstraintTest {
         String regex =
                 "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         var expectedErrMsg = errorMessage(regex).replace("\\\\", "\\");
-        assertSingleViolation(msg, expectedErrMsg, EMAIL);
+        assertSingleViolation(msg, expectedErrMsg, MessageValidatorTestEnv.EMAIL);
     }
 
     @Test

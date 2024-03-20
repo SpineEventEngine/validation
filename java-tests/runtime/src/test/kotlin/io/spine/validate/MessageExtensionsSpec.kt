@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,35 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import io.spine.test.validate.AggregateState;
-import io.spine.validate.given.FieldAwareMessageTestEnv;
-import io.spine.validate.given.FieldAwareMessageTestEnv.BrokenFieldAware;
-import io.spine.validate.given.FieldAwareMessageTestEnv.FieldAwareMsg;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.kotest.matchers.types.shouldBeSameInstanceAs
+import io.spine.test.validate.Meal
+import io.spine.test.validate.Meat
+import io.spine.test.validate.meal
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.testing.Assertions.assertIllegalArgument;
-import static io.spine.validate.given.FieldAwareMessageTestEnv.msg;
+@DisplayName("Validation extensions for `Message` should")
+internal class MessageExtensionsSpec {
 
-@DisplayName("`FieldAwareMessage` should")
-class FieldAwareMessageTest {
+    @Nested
+    inner class `Check if the message is valid` {
 
-    @Test
-    @DisplayName("read values when `readValues` is properly implemented")
-    void readValues() {
-        var msg = FieldAwareMessageTestEnv.msg();
-        var state = new FieldAwareMsg(msg);
-        assertThat(state.checkFieldsReachable()).isTrue();
-    }
+        @Test
+        fun `returning 'this' if so`() {
+            val meal = meal { meat = Meat.getDefaultInstance() }
+            meal.checkValid() shouldBeSameInstanceAs meal
+        }
 
-    @Test
-    @DisplayName("fail to read values when `readValues` has implementation issues")
-    void failToReadValues() {
-        var msg = msg();
-        var state = new BrokenFieldAware(msg);
-        assertIllegalArgument(state::checkFieldsReachable);
+        @Test
+        fun `throwing 'ValidationException' if not`() {
+            assertThrows<ValidationException> {
+                Meal.getDefaultInstance().checkValid()
+            }
+        }
     }
 }

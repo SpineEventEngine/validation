@@ -38,9 +38,15 @@ plugins {
     java
 }
 
+/**
+ * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
+ *
+ * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
+ */
 val forMcJava = setOf(
     "extensions",
-    "extra-definitions"
+    "extra-definitions",
+    "runtime"
 )
 
 allprojects {

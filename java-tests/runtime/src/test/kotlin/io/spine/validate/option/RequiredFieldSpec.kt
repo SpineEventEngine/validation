@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(required_field)` message option and consider message")
-@Disabled("Until Validation migrates to new ProtoData")
 internal class RequiredFieldSpec : ValidationOfConstraintTest() {
 
     @Nested

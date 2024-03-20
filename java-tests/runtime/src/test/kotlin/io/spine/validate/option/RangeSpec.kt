@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import java.util.stream.IntStream
 import java.util.stream.LongStream
 import java.util.stream.Stream
 import kotlin.streams.toList
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -47,7 +46,6 @@ import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("unused") // methods are invoked via `@MethodSource`.
 @DisplayName(VALIDATION_SHOULD + "analyze `(range)` option and find out that")
-@Disabled("Until Validation migrates to new ProtoData")
 internal class RangeSpec : ValidationOfConstraintTest() {
 
     @Nested
