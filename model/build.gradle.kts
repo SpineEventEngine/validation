@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,13 @@
 
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.ProtoData
+import io.spine.internal.dependency.ProtoData.backend
+import io.spine.internal.dependency.ProtoData.java
 
 dependencies {
     api(Spine.server)
-    api(ProtoData.codegenJava)
-    implementation(ProtoData.compiler)
+    api(ProtoData.java)
+    implementation(backend)
 
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
