@@ -51,7 +51,9 @@ public final class NumberText {
     @SuppressWarnings("Immutable") // effectively
     private final Number value;
 
-    /** Creates a new instance that is equal to the specified number. */
+    /**
+     * Creates a new instance which represents to the given number.
+     */
     public NumberText(Number number) {
         this.text = String.valueOf(number);
         this.value = number;
