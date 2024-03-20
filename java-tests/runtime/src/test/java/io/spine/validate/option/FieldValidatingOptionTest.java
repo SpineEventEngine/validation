@@ -35,7 +35,6 @@ import io.spine.test.validate.option.ATestMessageWithConstraint;
 import io.spine.test.validate.option.ATestMessageWithExternalConstraintOnly;
 import io.spine.test.validate.option.NoValidationTestMessage;
 import io.spine.test.validate.option.TestFieldOptionProto;
-import io.spine.testing.TestValues;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.CustomConstraint;
@@ -48,6 +47,7 @@ import org.junit.jupiter.api.Test;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.testing.Assertions.assertIllegalState;
+import static io.spine.testing.TestValues.randomString;
 import static io.spine.validate.MessageValue.atTopLevel;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -70,7 +70,7 @@ final class FieldValidatingOptionTest {
     @Test
     void returnValueIfOptionIsPresentInFieldOption() {
         var msg = ATestMessage.newBuilder()
-                .setValue(TestValues.randomString())
+                .setValue(randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -92,7 +92,7 @@ final class FieldValidatingOptionTest {
     @Test
     void notValidateIfOptionNotPresent() {
         var msg = NoValidationTestMessage.newBuilder()
-                .setValue(TestValues.randomString())
+                .setValue(randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -104,7 +104,7 @@ final class FieldValidatingOptionTest {
     @Test
     void validateIfOptionIsPresentInFieldOption() {
         var msg = ATestMessage.newBuilder()
-                .setValue(TestValues.randomString())
+                .setValue(randomString())
                 .build();
         var value = atTopLevel(msg);
         var fieldValue = valueField(value);
@@ -114,7 +114,7 @@ final class FieldValidatingOptionTest {
 
     private static FieldValue valueFieldWithExternalConstraint() {
         var testMessage = NoValidationTestMessage.newBuilder()
-                .setValue(TestValues.randomString())
+                .setValue(randomString())
                 .build();
         var msg = ATestMessageWithExternalConstraintOnly.newBuilder()
                 .setMessage(testMessage)

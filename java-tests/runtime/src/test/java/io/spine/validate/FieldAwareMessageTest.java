@@ -26,9 +26,6 @@
 
 package io.spine.validate;
 
-import com.google.common.truth.Truth;
-import io.spine.test.validate.AggregateState;
-import io.spine.validate.given.FieldAwareMessageTestEnv;
 import io.spine.validate.given.FieldAwareMessageTestEnv.BrokenFieldAware;
 import io.spine.validate.given.FieldAwareMessageTestEnv.FieldAwareMsg;
 import org.junit.jupiter.api.DisplayName;
@@ -44,15 +41,15 @@ class FieldAwareMessageTest {
     @Test
     @DisplayName("read values when `readValues` is properly implemented")
     void readValues() {
-        var msg = FieldAwareMessageTestEnv.msg();
+        var msg = msg();
         var state = new FieldAwareMsg(msg);
-        Truth.assertThat(state.checkFieldsReachable()).isTrue();
+        assertThat(state.checkFieldsReachable()).isTrue();
     }
 
     @Test
     @DisplayName("fail to read values when `readValues` has implementation issues")
     void failToReadValues() {
-        var msg = FieldAwareMessageTestEnv.msg();
+        var msg = msg();
         var state = new BrokenFieldAware(msg);
         assertIllegalArgument(state::checkFieldsReachable);
     }
