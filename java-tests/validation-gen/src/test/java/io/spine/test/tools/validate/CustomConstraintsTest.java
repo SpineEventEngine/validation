@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,9 @@
 
 package io.spine.test.tools.validate;
 
+import com.google.common.truth.Truth;
+import com.google.common.truth.Truth8;
+import com.google.common.truth.extensions.proto.ProtoTruth;
 import com.google.protobuf.ByteString;
 import io.spine.base.FieldPath;
 import io.spine.test.tools.validate.rule.BytesAllRequiredFactory;
@@ -35,9 +38,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth8.assertThat;
-import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.testing.Correspondences.type;
 
 @DisplayName("Custom constraints should")
@@ -47,12 +47,11 @@ class CustomConstraintsTest {
     @Test
     @DisplayName("be discovered")
     void discovery() {
-        assertThat(ValidatingOptionsLoader
+        Truth.assertThat(ValidatingOptionsLoader
                            .INSTANCE
                            .implementations())
-                .comparingElementsUsing(type())
-                .contains(BytesAllRequiredFactory.class);
-
+             .comparingElementsUsing(type())
+             .contains(BytesAllRequiredFactory.class);
     }
 
     @Test
@@ -63,11 +62,11 @@ class CustomConstraintsTest {
                 .addValue(ByteString.EMPTY)
                 .buildPartial();
         var error = matrix.validate();
-        assertThat(error)
+        Truth8.assertThat(error)
                 .isPresent();
-        assertThat(error.get().getConstraintViolationList())
-                .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation.newBuilder()
+        ProtoTruth.assertThat(error.get().getConstraintViolationList())
+                  .comparingExpectedFieldsOnly()
+                  .containsExactly(ConstraintViolation.newBuilder()
                                          .setFieldPath(FieldPath.newBuilder()
                                                                .addFieldName("value"))
                                          .build());
@@ -79,7 +78,7 @@ class CustomConstraintsTest {
         var matrix = ByteMatrix.newBuilder()
                 .addValue(ByteString.copyFrom(new byte[]{42}))
                 .build();
-        assertThat(matrix.validate())
+        Truth8.assertThat(matrix.validate())
                 .isEmpty();
     }
 }
