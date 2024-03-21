@@ -30,7 +30,6 @@ import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.spine.test.validate.Meal
 import io.spine.test.validate.Meat
 import io.spine.test.validate.meal
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
