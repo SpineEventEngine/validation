@@ -39,7 +39,7 @@ import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Assertions related to message validness.
+ * Assertions related to message validity.
  */
 final class IsValid {
 
