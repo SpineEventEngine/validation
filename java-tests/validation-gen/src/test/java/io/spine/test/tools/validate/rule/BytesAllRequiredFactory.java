@@ -35,8 +35,8 @@ import io.spine.validate.option.ValidatingOptionFactory;
 import java.util.Set;
 
 /**
- * A {@link ValidatingOptionFactory} which adds the {@link AllRequired} option for {@code bytes}
- * fields.
+ * A {@link ValidatingOptionFactory} which adds the {@link AllRequired} option
+ * for {@code bytes} fields.
  */
 @Immutable
 @AutoService(ValidatingOptionFactory.class)
