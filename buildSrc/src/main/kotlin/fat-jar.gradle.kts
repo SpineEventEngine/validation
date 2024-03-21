@@ -53,7 +53,7 @@ tasks.publish {
 
 tasks.shadowJar {
     exclude(
-        /**
+        /*
          * Excluding this type to avoid it being located in the fat JAR.
          *
          * Locating this type in its own `io:spine:protodata` artifact is crucial
@@ -63,21 +63,41 @@ tasks.shadowJar {
         "io/spine/protodata/gradle/plugin/Plugin.class",
         "META-INF/gradle-plugins/io.spine.protodata.properties",
 
-        /**
+        /*
          * Exclude Gradle types to reduce the size of the resulting JAR.
          *
          * Those required for the plugins are available at runtime anyway.
          */
         "org/gradle/**",
 
-        /**
+        /*
          * Remove all third-party plugin declarations as well.
          *
          * They should be loaded from their respective dependencies.
          */
         "META-INF/gradle-plugins/com**",
         "META-INF/gradle-plugins/net**",
-        "META-INF/gradle-plugins/org**")
+        "META-INF/gradle-plugins/org**",
+
+        /* Exclude license files that cause or may cause issues with LicenseReport.
+           We analyze these files when building artifacts we depend on. */
+        "about_files/**",
+        "license/**",
+
+        "ant_tasks/**", // `resource-ant.jar` is of no use here.
+
+        /* Exclude `https://github.com/JetBrains/pty4j`.
+          We don't need the terminal. */
+        "resources/com/pty4j/**",
+
+        // Protobuf files.
+        "google/**",
+        "spine/**",
+        "src/**",
+
+        // Java source code files of the package `org.osgi`.
+        "OSGI-OPT/**"
+    )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
     archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
