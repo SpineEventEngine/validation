@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ plugins {
 }
 
 dependencies {
-    api(ProtoData.compiler)
+    api(ProtoData.backend)
     implementation(Spine.base)
     implementation(project(":java-runtime"))
 }
@@ -50,3 +50,19 @@ dependencies {
 //    System.err.println("Debug session for `:proto:context:launchProtoData` configured.")
 //}
 
+// We deliberately turn off validation codegen in this module to ease the issues
+// associated with the migration when ProtoData or Validation API changes.
+//
+// The production Protobuf types of this module do not declare validation constraints, again,
+// to ease the possible migration issues.
+//
+// Please see `java-tests/runtime` submodule for the tests associated with the Validation Runtime
+// and the generated code.
+//
+modelCompiler {
+    java {
+        codegen {
+            validation().enabled.set(false)
+        }
+    }
+}

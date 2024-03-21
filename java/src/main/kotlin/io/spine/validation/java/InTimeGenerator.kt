@@ -28,10 +28,10 @@ package io.spine.validation.java
 
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
-import io.spine.protodata.codegen.java.ClassName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.MethodCall
 import io.spine.time.validation.Time
 import io.spine.time.validation.Time.FUTURE
 import io.spine.time.validation.Time.PAST

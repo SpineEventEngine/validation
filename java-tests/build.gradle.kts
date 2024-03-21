@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,16 +38,48 @@ plugins {
     java
 }
 
-val forMcJava = setOf("extensions", "extra-definitions")
-
 allprojects {
     // No need to generate documentation for these test environments.
     disableDocumentationTasks()
 }
 
+/**
+ * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
+ *
+ * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
+ */
+val applyMcJava = setOf(
+    "extensions",
+    "extra-definitions",
+    "runtime",
+    "validation",
+    "validation-gen",
+)
+
 subprojects {
-    val forcedProtoData = listOf(ProtoData.fatCli, ProtoData.protocPlugin)
-    if (project.name in forMcJava) {
+    applyPlugins()
+
+    dependencies {
+        implementation(Spine.base)
+        implementation(project(":java-runtime"))
+    }
+
+    configureTaskDependencies()
+
+    protobuf {
+        protoc {
+            artifact = Protobuf.compiler
+        }
+    }
+}
+
+fun Project.applyPlugins() {
+    val forcedProtoData = listOf(
+        ProtoData.fatCli,
+        ProtoData.protocPlugin
+    )
+
+    if (project.name in applyMcJava) {
         apply(plugin = Spine.McJava.pluginId)
         configurations.all {
             resolutionStrategy {
@@ -67,19 +99,6 @@ subprojects {
             resolutionStrategy {
                 forcedProtoData.forEach { force(it) }
             }
-        }
-    }
-
-    dependencies {
-        implementation(Spine.base)
-        implementation(project(":java-runtime"))
-    }
-
-    configureTaskDependencies()
-
-    protobuf {
-        protoc {
-            artifact = Protobuf.compiler
         }
     }
 }

@@ -33,7 +33,7 @@ import io.spine.util.theOnly
 protoData {
     plugins(
         // Suppress warnings in the generated code.
-        "io.spine.protodata.codegen.java.annotation.SuppressWarningsAnnotation\$Plugin",
+        "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
         "io.spine.validation.java.JavaValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )

@@ -29,8 +29,8 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.protobuf.isNotDefault
 import io.spine.protodata.Field
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND

@@ -29,10 +29,10 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
 import io.spine.protodata.Type
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.MessageReference
-import io.spine.protodata.codegen.java.MethodCall
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.MessageReference
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.qualifiedName
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock

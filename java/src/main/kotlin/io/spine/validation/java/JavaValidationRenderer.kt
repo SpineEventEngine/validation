@@ -29,11 +29,11 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableList
 import io.spine.protodata.MessageType
 import io.spine.protodata.ProtobufSourceFile
-import io.spine.protodata.codegen.java.JavaRenderer
-import io.spine.protodata.codegen.java.MessageReference
-import io.spine.protodata.codegen.java.MethodCall
-import io.spine.protodata.codegen.java.javaFile
-import io.spine.protodata.codegen.java.lines
+import io.spine.protodata.java.JavaRenderer
+import io.spine.protodata.java.MessageReference
+import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.javaFile
+import io.spine.protodata.java.lines
 import io.spine.protodata.renderer.SourceFile
 import io.spine.protodata.renderer.SourceFileSet
 import io.spine.protodata.type.TypeSystem

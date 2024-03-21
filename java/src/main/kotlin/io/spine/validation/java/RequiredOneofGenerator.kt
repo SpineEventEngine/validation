@@ -28,8 +28,8 @@ package io.spine.validation.java
 
 import io.spine.protodata.Field
 import io.spine.protodata.OneofName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
 import io.spine.validation.ErrorMessage
 
 /**

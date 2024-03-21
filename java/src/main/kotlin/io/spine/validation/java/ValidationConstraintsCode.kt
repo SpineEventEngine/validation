@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.File
 import io.spine.protodata.TypeName
-import io.spine.protodata.codegen.java.This.asMessage
+import io.spine.protodata.java.This.asMessage
 import io.spine.validation.MessageValidation
 import io.spine.validation.Rule
 import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS

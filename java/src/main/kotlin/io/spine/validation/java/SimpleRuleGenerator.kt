@@ -31,10 +31,10 @@ import io.spine.protodata.Field
 import io.spine.protodata.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.Value
-import io.spine.protodata.codegen.java.ClassName
-import io.spine.protodata.codegen.java.Expression
-import io.spine.protodata.codegen.java.Literal
-import io.spine.protodata.codegen.java.call
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.call
 import io.spine.protodata.isRepeated
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL

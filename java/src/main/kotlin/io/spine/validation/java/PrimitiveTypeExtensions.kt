@@ -46,7 +46,7 @@ import io.spine.protodata.PrimitiveType.TYPE_STRING
 import io.spine.protodata.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.PrimitiveType.UNRECOGNIZED
-import io.spine.protodata.codegen.java.ClassName
+import io.spine.protodata.java.ClassName
 import kotlin.reflect.KClass
 
 /**
