@@ -26,7 +26,7 @@
 
 syntax = "proto3";
 
-package spine.test.vbuilder.msg;
+package spine.test.validate;
 
 import "spine/options.proto";
 
@@ -47,12 +47,12 @@ message Project {
     //
     // This field is both required and validated.
     //
-    repeated Task task = 1 [(validate) = true, (required) = true];
+    repeated Task task = 1 [(.validate) = true, (required) = true];
 
     // The emails of the project subscribers.
     //
     // This field is validated but not required.
-    repeated string subscriber_email = 2 [(validate) = true, (pattern).regex = ".+@.+\\..+"];
+    repeated string subscriber_email = 2 [(.validate) = true, (pattern).regex = ".+@.+\\..+"];
 
     // The members of the project.
     //
@@ -70,13 +70,13 @@ message Project {
     //
     // This field is required but never validated.
     //
-    map<string, Member> role = 5 [(required) = true, (validate) = true];
+    map<string, Member> role = 5 [(required) = true, (.validate) = true];
 
     // A map of the task IDs to the task attachments.
     //
     // This field validated but not required.
     //
-    map<string, Attachment> attachment = 6 [(validate) = true, (required) = false];
+    map<string, Attachment> attachment = 6 [(.validate) = true, (required) = false];
 
     // The map of the task IDs to the time when the task was deleted.
     //
@@ -117,7 +117,7 @@ message Attachment {
 
     string title = 2 [(required) = true, (pattern).regex = ".*\\w+.*"];
 
-    Url url = 3 [(required) = true, (validate) = true];
+    Url url = 3 [(required) = true, (.validate) = true];
 }
 
 // A Universal Resource Locator.
