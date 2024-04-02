@@ -36,7 +36,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.Ast.isRepeated;
+import static io.spine.protodata.Fields.isRepeated;
 import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;

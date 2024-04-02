@@ -37,7 +37,7 @@ import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.protodata.Ast.getQualifiedName;
+import static io.spine.protodata.TypeNames.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 
