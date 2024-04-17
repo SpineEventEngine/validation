@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Spine
 
 plugins {
@@ -31,6 +32,7 @@ plugins {
 }
 
 dependencies {
+    api(ProtoData.api)
     implementation(Spine.base)
     implementation(project(":java-runtime"))
 }

@@ -6,6 +6,8 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "ConfigProto";
 option java_multiple_files = true;
 
+import "spine/protodata/file.proto";
+
 // The container type for the validation config.
 //
 // ProtoData supports multiple configurations merges into a single object. In order for
@@ -27,20 +29,28 @@ message MessageMarkers {
     repeated string entity_option_name = 1;
 
     // File patterns of files where entity state messages are defined.
-    repeated FilePattern entity_pattern = 2;
+    //
+    // Deprecated: entity states are defined by the `entity` option, not
+    // by a file pattern.
+    //
+    repeated protodata.FilePattern entity_pattern = 2 [deprecated = true];
 
     // File patterns of files where event messages are defined.
-    repeated FilePattern event_pattern = 3;
+    repeated protodata.FilePattern event_pattern = 3;
 
     // File patterns of files where command messages are defined.
-    repeated FilePattern command_pattern = 4;
+    repeated protodata.FilePattern command_pattern = 4;
 
     // File patterns of files where rejection messages are defined.
-    repeated FilePattern rejection_pattern = 5;
+    repeated protodata.FilePattern rejection_pattern = 5;
 }
 
 // A pattern matching file paths.
+//
+// Deprecated: please use [spine.protodata.FilePattern] instead.
+//
 message FilePattern {
+    option deprecated = true;
 
     oneof kind {
 
