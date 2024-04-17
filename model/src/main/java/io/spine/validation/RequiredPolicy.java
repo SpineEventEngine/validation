@@ -59,7 +59,7 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
             var declaration = findField(event.getField(), event.getType(), event.getFile(), this);
             return EitherOf2.withA(requiredRule(declaration, field));
         }
-        return withNothing();
+        return noReaction();
     }
 
     private static RuleAdded requiredRule(Field declaration, RequiredField field) {

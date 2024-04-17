@@ -65,7 +65,7 @@ public abstract class ValidationPolicy<E extends EventMessage>
      *       }
      * </pre>
      */
-    protected final EitherOf2<RuleAdded, Nothing> withNothing() {
+    protected final EitherOf2<RuleAdded, Nothing> noReaction() {
         return EitherOf2.withB(nothing());
     }
 }

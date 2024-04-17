@@ -64,7 +64,7 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
     ) {
         var option = event.getOption();
         if (!unpack(option.getValue(), BoolValue.class).getValue()) {
-            return withNothing();
+            return noReaction();
         }
         checkCollection(event.getField(), event.getType(), event.getFile());
         var field = event.getField();

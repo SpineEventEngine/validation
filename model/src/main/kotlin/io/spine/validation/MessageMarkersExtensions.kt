@@ -28,6 +28,7 @@
 
 package io.spine.validation
 
+import io.spine.protodata.FilePattern
 import com.google.common.collect.ImmutableList
 
 /**
@@ -35,7 +36,6 @@ import com.google.common.collect.ImmutableList
  */
 internal fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
     return ImmutableList.builder<FilePattern>()
-        .addAll(entityPatternList)
         .addAll(eventPatternList)
         .addAll(commandPatternList)
         .addAll(rejectionPatternList)
