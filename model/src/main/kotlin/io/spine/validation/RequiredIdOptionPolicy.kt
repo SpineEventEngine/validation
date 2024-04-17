@@ -39,10 +39,6 @@ import io.spine.validation.event.RuleAdded
  * The entity state messages are discovered via the options, specified in [ValidationConfig].
  * If ProtoData runs with no config, this policy never produces any validation rules.
  *
- * This policy has a sister—[RequiredIdPatternPolicy]. They both implement the required ID
- * constraint. However, this policy looks for the ID fields in messages with certain options,
- * and the other—in the messages declared in files that match certain path patterns.
- *
  * @see RequiredIdPatternPolicy
  */
 internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
@@ -56,13 +52,14 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
     }
 
     @React
+    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (options.isEmpty()) {
-            return withNothing()
+            return noReaction()
         }
         val type = event.type
         if (!type.isEntityState()) {
-            return withNothing()
+            return noReaction()
         }
         val field = type.firstField()
         return withField(field)

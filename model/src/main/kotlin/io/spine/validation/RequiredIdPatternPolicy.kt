@@ -26,13 +26,10 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.protodata.Field
+import io.spine.protodata.File
 import io.spine.protodata.FilePattern
-import io.spine.protodata.MessageType
 import io.spine.protodata.event.TypeDiscovered
 import io.spine.protodata.matches
-import io.spine.protodata.qualifiedName
-import io.spine.protodata.settings.loadSettings
 import io.spine.server.event.React
 import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2
@@ -43,10 +40,6 @@ import io.spine.validation.event.RuleAdded
  *
  * The messages are discovered via the file patterns, specified in [ValidationConfig].
  * If ProtoData runs with no config, this policy never produces any validation rules.
- *
- * This policy has a sister—[RequiredIdOptionPolicy]. They both implement the required ID
- * constraint. However, this policy looks for the ID fields in messages that are defined in files
- * matching certain path patterns, and the other—in messages marked with certain options.
  *
  * @see RequiredIdOptionPolicy
  */
@@ -62,19 +55,21 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
     }
 
     @React
+    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (filePatterns.isEmpty()) {
-            return withNothing()
+            return noReaction()
+        }
+        if (!event.file.matchesPatterns()) {
+            return noReaction()
         }
         val type = event.type
-        val matchFile = filePatterns.any {
-            it.matches(event.file)
-        }
-        if (!matchFile) {
-            return withNothing()
-        }
         val field = type.firstField()
         return withField(field)
     }
 
+    private fun File.matchesPatterns(): Boolean =
+        filePatterns.any {
+            it.matches(this)
+        }
 }

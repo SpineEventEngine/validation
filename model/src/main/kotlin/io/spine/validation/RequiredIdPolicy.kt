@@ -39,10 +39,10 @@ import io.spine.validation.event.RuleAdded
  * A policy which defines validation rules for ID fields.
  *
  * An ID of a signal message or an entity state is the first field
- * declared in the type, disregarding its index.
+ * declared in the type, disregarding the index of the proto field.
  *
- * The ID field is assumed as required, unless it is specifically marked otherwise
- * using the field options.
+ * The ID field is assumed as required for commands and entity states,
+ * unless it is specifically marked otherwise using the field options.
  *
  * Implementations define the ways of discovering signal and entity state messages.
  */
@@ -65,14 +65,15 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      *         the ID field.
      * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
+    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     fun withField(field: Field): EitherOf2<RuleAdded, NoReaction> {
         if (!isRequired(field, true)) {
-            return withNothing()
+            return noReaction()
         }
         val errorMessage = "ID field `${field.name.value}` must be set."
         val rule = RequiredRule.forField(field, errorMessage)
         if (rule.isEmpty) {
-            return withNothing()
+            return noReaction()
         }
         return EitherOf2.withA(rule.get().toEvent(field.declaringType))
     }
@@ -83,7 +84,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      * The index of the field is not taken into account.
      */
     protected fun MessageType.firstField(): Field {
-        check(fieldCount == 0) {
+        check(fieldCount != 0) {
             "The type `${name.qualifiedName}` must have at least one field."
         }
         return getField(0)
