@@ -52,14 +52,18 @@ import io.spine.validation.event.RuleAdded
  */
 internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
 
-    private val filePatterns: List<FilePattern> by lazy {
-        val markers = config!!.messageMarkers
-        markers.allPatterns()
+    private val filePatterns: Set<FilePattern> by lazy {
+        if (config == null) {
+            emptySet()
+        } else {
+            val markers = config!!.messageMarkers
+            markers.allPatterns().toSet()
+        }
     }
 
     @React
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
-        if (config == null) {
+        if (filePatterns.isEmpty()) {
             return withNothing()
         }
         val type = event.type
