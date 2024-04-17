@@ -78,29 +78,6 @@ final class SourceFiles {
     }
 
     /**
-     * Looks up the first field in a type.
-     *
-     * <p>The order of declaration is used to look for the fields, not the field numbers.
-     *
-     *  @param typeName
-     *         name of the type which declares the field
-     * @param file
-     *         path to the Protobuf file which declares the message which declares the field
-     * @param querying
-     *         the ProtoData component which conducts the search
-     * @return the first field of the type
-     */
-    static Field findFirstField(TypeName typeName, File file, Querying querying) {
-        var type = findType(typeName, file, querying);
-        if (type.getFieldCount() == 0) {
-            var url = typeName.getTypeUrl();
-            throw newIllegalStateException("Type `%s` must have at least one field.", url);
-        }
-        var field = type.getField(0);
-        return field;
-    }
-
-    /**
      * Looks up a message type by its name.
      *
      *  @param typeName
@@ -111,7 +88,7 @@ final class SourceFiles {
      *         the ProtoData component which conducts the search
      * @return the type
      */
-    static MessageType findType(TypeName typeName, File file, Querying querying) {
+    private static MessageType findType(TypeName typeName, File file, Querying querying) {
         var sourceFile = querying.select(ProtobufSourceFile.class)
                            .findById(file);
         if (sourceFile == null) {

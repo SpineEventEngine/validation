@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,70 +23,54 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation
 
-package io.spine.validation;
-
-import com.google.common.collect.ImmutableSet;
-import io.spine.core.External;
-import io.spine.protodata.Option;
-import io.spine.protodata.event.TypeExited;
-import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
-
-import java.util.Set;
-
-import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.SourceFiles.findType;
+import io.spine.core.External
+import io.spine.protodata.MessageType
+import io.spine.protodata.event.TypeDiscovered
+import io.spine.server.event.React
+import io.spine.server.model.NoReaction
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
 
 /**
  * A policy that marks ID fields in entity state messages as required.
  *
- * <p>The entity state messages are discovered via the options, specified
- * in {@link ValidationConfig}. If ProtoData runs with no config, this policy never produces any
- * validation rules.
+ * The entity state messages are discovered via the options, specified in [ValidationConfig].
+ * If ProtoData runs with no config, this policy never produces any validation rules.
  *
- * <p>This policy has a sister—{@link RequiredIdPatternPolicy}. They both implement the required ID
+ * This policy has a sister—[RequiredIdPatternPolicy]. They both implement the required ID
  * constraint. However, this policy looks for the ID fields in messages with certain options,
  * and the other—in the messages declared in files that match certain path patterns.
  *
  * @see RequiredIdPatternPolicy
  */
-final class RequiredIdOptionPolicy extends RequiredIdPolicy {
+internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
 
-    @Override
-    @React
-    protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
-        if (!settingsAvailable()) {
-            return withNothing();
+    private val options: Set<String> by lazy {
+        if (config == null) {
+            emptySet()
+        } else {
+            config!!.messageMarkers.entityOptionNameList.toSet()
         }
-        var options = options();
-        if (options.isEmpty()) {
-            return withNothing();
-        }
-        var typeName = event.getType();
-        var type = findType(typeName, event.getFile(), this);
-        var optionMatches = type.getOptionList()
-                .stream()
-                .map(Option::getName)
-                .anyMatch(options::contains);
-        if (!optionMatches) {
-            return withNothing();
-        }
-        if (type.getFieldCount() == 0) {
-            throw newIllegalStateException(
-                    "Entity type `%s` must have at least one field.", typeName.getTypeUrl()
-            );
-        }
-        var field = type.getField(0);
-        return withField(field);
     }
 
-    private Set<String> options() {
-        var config = loadSettings(ValidationConfig.class);
-        var markers = config.getMessageMarkers();
-        Set<String> options = ImmutableSet.copyOf(markers.getEntityOptionNameList());
-        return options;
+    @React
+    override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
+        if (options.isEmpty()) {
+            return withNothing()
+        }
+        val type = event.type
+        if (!type.isEntityState()) {
+            return withNothing()
+        }
+        val field = type.firstField()
+        return withField(field)
+    }
+
+    private fun MessageType.isEntityState(): Boolean {
+        val typeOptions = optionList.map { it.name }
+        val result = typeOptions.any { it in options }
+        return result
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,48 +23,69 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation
 
-package io.spine.validation;
-
-import io.spine.protodata.Field;
-import io.spine.protodata.event.TypeExited;
-import io.spine.server.model.Nothing;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
-
-import static io.spine.validation.RequiredRule.isRequired;
-import static io.spine.validation.Rules.toEvent;
-import static java.lang.String.format;
+import io.spine.protodata.Field
+import io.spine.protodata.MessageType
+import io.spine.protodata.event.TypeDiscovered
+import io.spine.protodata.qualifiedName
+import io.spine.protodata.settings.loadSettings
+import io.spine.server.model.NoReaction
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.RequiredRule.isRequired
+import io.spine.validation.event.RuleAdded
 
 /**
  * A policy which defines validation rules for ID fields.
  *
- * <p>An ID field of a signal message or an entity is always required unless the used explicitly
- * specifies otherwise.
+ * An ID of a signal message or an entity state is the first field
+ * declared in the type, disregarding its index.
  *
- * <p>Implementations define the ways of discovering signal and entity state messages.
+ * The ID field is assumed as required, unless it is specifically marked otherwise
+ * using the field options.
+ *
+ * Implementations define the ways of discovering signal and entity state messages.
  */
-abstract class RequiredIdPolicy extends ValidationPolicy<TypeExited> {
+internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
+
+    protected val config: ValidationConfig? by lazy {
+        if (!settingsAvailable()) {
+            null
+        } else {
+            loadSettings<ValidationConfig>()
+        }
+    }
 
     /**
      * Given an ID field, generates the required rule event.
      *
-     * <p>If the field is marked with {@code (required) = false}, no rule is generated.
+     * If the field is marked with `(required) = false`, no rule is generated.
      *
      * @param field
-     *         the ID field
-     * @return a required rule event or {@code Nothing} if the ID field is not required
+     *         the ID field.
+     * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
-    final EitherOf2<RuleAdded, Nothing> withField(Field field) {
+    fun withField(field: Field): EitherOf2<RuleAdded, NoReaction> {
         if (!isRequired(field, true)) {
-            return withNothing();
+            return withNothing()
         }
-        var errorMessage = format("ID field `%s` must be set.", field.getName()
-                                                                     .getValue());
-        var rule = RequiredRule.forField(field, errorMessage);
-        if (rule.isEmpty()) {
-            return withNothing();
+        val errorMessage = "ID field `${field.name.value}` must be set."
+        val rule = RequiredRule.forField(field, errorMessage)
+        if (rule.isEmpty) {
+            return withNothing()
         }
-        return EitherOf2.withA(toEvent(rule.get(), field.getDeclaringType()));
+        return EitherOf2.withA(rule.get().toEvent(field.declaringType))
+    }
+
+    /**
+     * Obtains the first field declared in the type.
+     *
+     * The index of the field is not taken into account.
+     */
+    protected fun MessageType.firstField(): Field {
+        check(fieldCount == 0) {
+            "The type `${name.qualifiedName}` must have at least one field."
+        }
+        return getField(0)
     }
 }

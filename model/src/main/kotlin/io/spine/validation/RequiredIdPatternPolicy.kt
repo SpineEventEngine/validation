@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,69 +23,54 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation
 
-package io.spine.validation;
-
-import io.spine.core.External;
-import io.spine.protodata.File;
-import io.spine.protodata.event.TypeExited;
-import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.validation.Markers.allPatterns;
-import static io.spine.validation.SourceFiles.findFirstField;
+import io.spine.core.External
+import io.spine.protodata.Field
+import io.spine.protodata.FilePattern
+import io.spine.protodata.MessageType
+import io.spine.protodata.event.TypeDiscovered
+import io.spine.protodata.matches
+import io.spine.protodata.qualifiedName
+import io.spine.protodata.settings.loadSettings
+import io.spine.server.event.React
+import io.spine.server.model.NoReaction
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
 
 /**
  * A policy that marks ID fields in entity state messages and signal messages as required.
  *
- * <p>The messages are discovered via the file patterns, specified in {@link ValidationConfig}.
+ * The messages are discovered via the file patterns, specified in [ValidationConfig].
  * If ProtoData runs with no config, this policy never produces any validation rules.
  *
- * <p>This policy has a sister—{@link RequiredIdOptionPolicy}. They both implement the required ID
+ * This policy has a sister—[RequiredIdOptionPolicy]. They both implement the required ID
  * constraint. However, this policy looks for the ID fields in messages that are defined in files
  * matching certain path patterns, and the other—in messages marked with certain options.
  *
  * @see RequiredIdOptionPolicy
  */
-final class RequiredIdPatternPolicy extends RequiredIdPolicy {
+internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
 
-    @Override
+    private val filePatterns: List<FilePattern> by lazy {
+        val markers = config!!.messageMarkers
+        markers.allPatterns()
+    }
+
     @React
-    protected EitherOf2<RuleAdded, Nothing> whenever(@External TypeExited event) {
-        if (!settingsAvailable()) {
-            return withNothing();
+    override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
+        if (config == null) {
+            return withNothing()
         }
-        var config = loadSettings(ValidationConfig.class);
-        var markers = config.getMessageMarkers();
-        var filePatterns = allPatterns(markers);
-        var file = event.getFile();
-        var match = filePatterns.stream()
-                .anyMatch(pattern -> matches(file, pattern));
-        if (!match) {
-            return withNothing();
+        val type = event.type
+        val matchFile = filePatterns.any {
+            it.matches(event.file)
         }
-        var type = event.getType();
-        var field = findFirstField(type, file, this);
-        return withField(field);
+        if (!matchFile) {
+            return withNothing()
+        }
+        val field = type.firstField()
+        return withField(field)
     }
 
-    private static boolean matches(File file, FilePattern pattern) {
-        var filePath = file.getPath();
-        var kind = pattern.getKindCase();
-        checkNotNull(kind, "File pattern has unknown kind: %s.", pattern);
-        switch (kind) {
-            case SUFFIX:
-                return filePath.endsWith(pattern.getSuffix());
-            case PREFIX:
-                return filePath.startsWith(pattern.getPrefix());
-            case REGEX:
-                return filePath.matches(pattern.getRegex());
-            case KIND_NOT_SET:
-            default:
-                return false;
-        }
-    }
 }
