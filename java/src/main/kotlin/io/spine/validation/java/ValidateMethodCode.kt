@@ -35,7 +35,7 @@ import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.renderer.InsertionPoint
 import io.spine.protodata.renderer.codeLine
-import io.spine.tools.code.Java.lang
+import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
 import io.spine.validate.ConstraintViolation
@@ -71,8 +71,7 @@ internal class ValidateMethodCode(
 
     private fun extraInsertionPoint(): CodeBlock {
         val insertionPoint: InsertionPoint = ExtraValidation(messageType)
-        val java = lang()
-        val line = java.comment(insertionPoint.codeLine) + lineSeparator()
+        val line = Java.comment(insertionPoint.codeLine) + lineSeparator()
         return CodeBlock.of(line)
     }
 
