@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,19 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.jetbrains.dokka.gradle.DokkaTask
+package io.spine.internal.dependency
 
-plugins {
-    id("org.jetbrains.dokka") // Cannot use `Dokka` dependency object here yet.
-}
-
-dependencies {
-    useDokkaWithSpineExtensions()
-}
-
-tasks.withType<DokkaTask>().configureEach {
-    configureForKotlin()
-    onlyIf {
-        (it as DokkaTask).isInPublishingGraph()
-    }
+/**
+ * Dependencies on ProtoTap plugins.
+ *
+ * See [`SpineEventEngine/ProtoTap`](https://github.com/SpineEventEngine/ProtoTap/).
+ */
+@Suppress(
+    "unused" /* Some subprojects do not use ProtoData directly. */,
+    "ConstPropertyName" /* We use custom convention for artifact properties. */,
+    "MemberVisibilityCanBePrivate" /* The properties are used directly by other subprojects. */,
+)
+object ProtoTap {
+    const val group = "io.spine.tools"
+    const val version = "0.8.3"
+    const val gradlePluginId = "io.spine.prototap"
+    const val api = "$group:prototap-api:$version"
+    const val gradlePlugin = "$group:prototap-gradle-plugin:$version"
+    const val protocPlugin = "$group:prototap-protoc-plugin:$version"
 }
