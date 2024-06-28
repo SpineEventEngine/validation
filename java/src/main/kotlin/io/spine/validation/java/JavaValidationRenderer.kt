@@ -98,7 +98,7 @@ public class JavaValidationRenderer : JavaRenderer() {
     private fun generateCode(type: MessageWithFile) {
         val message = type.message
         val javaFile = message.javaFile(type.fileHeader)
-        sources.findFile(javaFile).ifPresent {
+        sources.find(javaFile)?.let {
             @Suppress("UNCHECKED_CAST")
             (it as SourceFile<Java>).addValidationCode(message)
         }
