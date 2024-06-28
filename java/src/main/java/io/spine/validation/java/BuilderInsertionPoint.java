@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -30,7 +30,6 @@ import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.GeneratedMessageV3;
 import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
-import io.spine.text.Text;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 
@@ -72,12 +71,12 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
      *         the Java code to parse
      * @return the found binder code or {@code null} if no builder class found
      */
-    protected static Stream<JavaClassSource> findBuilders(Text code) {
+    protected static Stream<JavaClassSource> findBuilders(String code) {
         var classSources = findMessageClasses(code);
         return classSources.flatMap(cls -> findBuilder(cls).stream());
     }
 
-    protected static Optional<JavaClassSource> findBuilder(TypeName messageName, Text code) {
+    protected static Optional<JavaClassSource> findBuilder(TypeName messageName, String code) {
         var classSources = findMessageClasses(code);
         var targetClassName = messageName.getSimpleName();
         var messageClass = classSources
@@ -99,7 +98,7 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
         return Optional.of(builderClass);
     }
 
-    private static Stream<JavaClassSource> findMessageClasses(Text code) {
+    private static Stream<JavaClassSource> findMessageClasses(String code) {
         var javaSource = parseSource(code);
         if (!javaSource.isClass()) {
             return Stream.empty();
@@ -117,7 +116,7 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
         return allClasses.filter(BuilderInsertionPoint::isMessageClass);
     }
 
-    private static JavaSource<?> parseSource(Text code) {
+    private static JavaSource<?> parseSource(String code) {
         return parsedSources.get(code);
     }
 

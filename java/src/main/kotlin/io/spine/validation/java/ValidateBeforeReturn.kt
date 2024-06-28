@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -28,7 +28,6 @@ package io.spine.validation.java
 
 import com.google.errorprone.annotations.Immutable
 import io.spine.protodata.renderer.InsertionPoint
-import io.spine.text.Text
 import io.spine.text.TextCoordinates
 import io.spine.text.TextFactory
 import io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD
@@ -49,19 +48,18 @@ internal class ValidateBeforeReturn : InsertionPoint {
     override val label: String
         get() = ValidateBeforeReturn::class.java.simpleName
 
-    override fun locate(text: Text): Set<TextCoordinates> =
+    override fun locate(text: String): Set<TextCoordinates> =
         BuilderInsertionPoint.findBuilders(text)
             .map { b -> b.getMethod(BUILD_METHOD) }
             .filter { obj -> Objects.nonNull(obj) }
             .map { m -> findLine(m, text) }
             .collect(toSet())
 
-    private fun findLine(method: MethodSource<*>, code: Text): TextCoordinates {
+    private fun findLine(method: MethodSource<*>, code: String): TextCoordinates {
         val methodDeclarationLine = method.lineNumber
         val startPosition = method.startPosition
         val endPosition = method.endPosition
-        val wholeCode = code.value
-        val methodSource = wholeCode.substring(startPosition, endPosition)
+        val methodSource = code.substring(startPosition, endPosition)
         val returnIndex = returnLineIndex(methodSource)
         val returnLineNumber = methodDeclarationLine + returnIndex
         return atLine(returnLineNumber - 1)

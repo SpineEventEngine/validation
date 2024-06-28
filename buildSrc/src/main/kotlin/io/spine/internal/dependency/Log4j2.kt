@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,37 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:Suppress("unused", "ConstPropertyName")
-
 package io.spine.internal.dependency
 
-// https://github.com/google/auto
-object AutoCommon {
-    private const val version = "1.2.2"
-    const val lib = "com.google.auto:auto-common:$version"
-}
-
-// https://github.com/google/auto
-object AutoService {
-    private const val version = "1.1.1"
-    const val annotations = "com.google.auto.service:auto-service-annotations:$version"
-    @Suppress("unused")
-    const val processor   = "com.google.auto.service:auto-service:${version}"
-}
-
-// https://github.com/google/auto
-object AutoValue {
-    private const val version = "1.10.2"
-    const val annotations = "com.google.auto.value:auto-value-annotations:$version"
-}
-
-// https://github.com/ZacSweers/auto-service-ksp
-object AutoServiceKsp {
-    /**
-     * The latest version compatible with Kotlin 1.8.22.
-     *
-     * @see Ksp.version
-     */
-    private const val version = "1.1.0"
-    const val processor = "dev.zacsweers.autoservice:auto-service-ksp:$version"
+/**
+ * An open-source logging framework.
+ *
+ * Spine uses its own [logging library][Spine.Logging], but also
+ * provides a backend implementation for [Log4j2]. This is why
+ * this dependency is needed.
+ *
+ * @see <a href="https://github.com/apache/logging-log4j2">Log4j2 releases at GitHub</a>
+ */
+@Suppress("unused", "ConstPropertyName")
+object Log4j2 {
+    private const val version = "2.20.0"
+    const val core = "org.apache.logging.log4j:log4j-core:$version"
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -37,6 +37,7 @@ import io.spine.protodata.java.TypedInsertionPoint
 import io.spine.protodata.renderer.SourceAtLine
 import io.spine.protodata.renderer.SourceFile
 import io.spine.text.TextFactory.lineSplitter
+import io.spine.tools.code.Java
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
 import io.spine.validation.MessageValidation
@@ -53,7 +54,7 @@ import java.util.*
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,
     private val validation: MessageValidation,
-    private val sourceFile: SourceFile
+    private val sourceFile: SourceFile<Java>
 ) {
     private val messageType: TypeName = validation.name
 

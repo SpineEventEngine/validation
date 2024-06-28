@@ -37,6 +37,7 @@ import io.spine.protodata.java.lines
 import io.spine.protodata.renderer.SourceFile
 import io.spine.protodata.renderer.SourceFileSet
 import io.spine.protodata.type.TypeSystem
+import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
@@ -44,8 +45,6 @@ import io.spine.validate.ValidationException
 import io.spine.validation.MessageValidation
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * A [Renderer][io.spine.protodata.renderer.Renderer] for the validation code in Java.
@@ -87,22 +86,21 @@ public class JavaValidationRenderer : JavaRenderer() {
     }
 
     private fun queryMessageTypes(): Set<MessageWithFile> {
-        return select(ProtobufSourceFile::class.java)
-            .all()
-            .stream()
-            .flatMap(ProtobufSourceFile::messages)
-            .collect(Collectors.toSet())
+        return select(ProtobufSourceFile::class.java).all()
+            .flatMap { it.messages() }
+            .toSet()
     }
 
     private fun generateCode(type: MessageWithFile) {
         val message = type.message
         val javaFile = message.javaFile(type.fileHeader)
-        sources.findFile(javaFile).ifPresent {
-            it.addValidationCode(message)
+        sources.find(javaFile)?.let {
+            @Suppress("UNCHECKED_CAST")
+            (it as SourceFile<Java>).addValidationCode(message)
         }
     }
 
-    private fun SourceFile.addValidationCode(type: MessageType) {
+    private fun SourceFile<Java>.addValidationCode(type: MessageType) {
         val validation = validations[type]
         val validationCode = ValidationCode(this@JavaValidationRenderer, validation, this)
         validationCode.generate()
@@ -110,10 +108,10 @@ public class JavaValidationRenderer : JavaRenderer() {
 }
 
 /**
- * Obtains a stream of messages from the given source file paired with the file header.
+ * Obtains a collection of messages from the given source file paired with the file header.
  */
-private fun ProtobufSourceFile.messages(): Stream<MessageWithFile> =
-    typeMap.values.stream().map {
+private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
+    typeMap.values.map {
         messageWithFile {
             message = it
             fileHeader = header
@@ -126,30 +124,34 @@ private fun ProtobufSourceFile.messages(): Stream<MessageWithFile> =
  */
 private fun SourceFileSet.forEachSourceFile(
     messageTypes: Set<MessageWithFile>,
-    action: SourceFile.() -> Unit
+    action: SourceFile<Java>.() -> Unit
 ) {
-    messageTypes.stream()
+    messageTypes
         .map { m -> m.message.javaFile(m.fileHeader) }
-        .flatMap { path -> findFile(path).stream() }
+        .mapNotNull { path -> find(path) }
         .distinct()
+        .map {
+            @Suppress("UNCHECKED_CAST") // Safe as we look for Java files.
+            it as SourceFile<Java>
+        }
         .forEach(action)
 }
 
 private fun SourceFileSet.annotateGeneratedMessages(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile::addAnnotations)
+    forEachSourceFile(messageTypes, SourceFile<Java>::addAnnotations)
 
-private fun SourceFile.addAnnotations() {
+private fun SourceFile<Java>.addAnnotations() {
     annotateBuildMethod()
     annotateBuildPartialMethod()
 }
 
-private fun SourceFile.annotateBuildMethod() {
+private fun SourceFile<Java>.annotateBuildMethod() {
     val buildMethod = BuildMethodReturnTypeAnnotation()
     atInline(buildMethod)
         .add(annotation(Validated::class.java))
 }
 
-private fun SourceFile.annotateBuildPartialMethod() {
+private fun SourceFile<Java>.annotateBuildPartialMethod() {
     val buildPartialMethod = BuildPartialReturnTypeAnnotation()
     atInline(buildPartialMethod)
         .add(annotation(NonValidated::class.java))
@@ -166,9 +168,9 @@ private fun annotation(annotationClass: Class<out Annotation>): String {
 }
 
 private fun SourceFileSet.plugValidationIntoBuild(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile::insertBeforeBuild)
+    forEachSourceFile(messageTypes, SourceFile<Java>::insertBeforeBuild)
 
-private fun SourceFile.insertBeforeBuild() {
+private fun SourceFile<Java>.insertBeforeBuild() {
     at(ValidateBeforeReturn())
         .withExtraIndentation(2)
         .add(validateBeforeBuild())

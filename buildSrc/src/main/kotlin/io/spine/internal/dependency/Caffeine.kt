@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,37 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:Suppress("unused", "ConstPropertyName")
-
 package io.spine.internal.dependency
 
-// https://github.com/google/auto
-object AutoCommon {
-    private const val version = "1.2.2"
-    const val lib = "com.google.auto:auto-common:$version"
-}
-
-// https://github.com/google/auto
-object AutoService {
-    private const val version = "1.1.1"
-    const val annotations = "com.google.auto.service:auto-service-annotations:$version"
-    @Suppress("unused")
-    const val processor   = "com.google.auto.service:auto-service:${version}"
-}
-
-// https://github.com/google/auto
-object AutoValue {
-    private const val version = "1.10.2"
-    const val annotations = "com.google.auto.value:auto-value-annotations:$version"
-}
-
-// https://github.com/ZacSweers/auto-service-ksp
-object AutoServiceKsp {
-    /**
-     * The latest version compatible with Kotlin 1.8.22.
-     *
-     * @see Ksp.version
-     */
-    private const val version = "1.1.0"
-    const val processor = "dev.zacsweers.autoservice:auto-service-ksp:$version"
+/**
+ * A [high performance](https://github.com/ben-manes/caffeine/wiki/Benchmarks),
+ * [near optimal](https://github.com/ben-manes/caffeine/wiki/Efficiency) caching library.
+ *
+ * This library is a transitive dependency for us via ErrorProne.
+ *
+ * @see <a href="https://github.com/ben-manes/caffeine">Caffeine at GitHub</a>
+ */
+@Suppress("unused")
+object Caffeine {
+    private const val version = "3.0.5"
+    const val lib = "com.github.ben-manes.caffeine:caffeine:$version"
 }

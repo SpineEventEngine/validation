@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -29,7 +29,6 @@ package io.spine.validation.java;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import io.spine.text.Text;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
@@ -42,16 +41,16 @@ final class ParsedSources {
     /**
      * Cached results of parsing the Java source code.
      */
-    private final LoadingCache<Text, JavaSource<?>> cache =
+    private final LoadingCache<String, JavaSource<?>> cache =
             CacheBuilder.newBuilder()
                     .maximumSize(300)
                     .build(loader());
 
-    private static CacheLoader<Text, JavaSource<?>> loader() {
+    private static CacheLoader<String, JavaSource<?>> loader() {
         return new CacheLoader<>() {
             @Override
-            public JavaSource<?> load(Text code) {
-                var result = Roaster.parse(JavaSource.class, code.getValue());
+            public JavaSource<?> load(String code) {
+                var result = Roaster.parse(JavaSource.class, code);
                 if (result.isClass()) {
                     return new CachingJavaClassSource((JavaClassSource) result);
                 }
@@ -67,7 +66,7 @@ final class ParsedSources {
      * <p>If the code was parsed previously, most likely the cached result
      * is returned right away, as the cache stores 300 items max.
      */
-    JavaSource<?> get(Text code) {
+    JavaSource<?> get(String code) {
         var result = cache.getUnchecked(code);
         return result;
     }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,37 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:Suppress("unused", "ConstPropertyName")
-
 package io.spine.internal.dependency
 
-// https://github.com/google/auto
-object AutoCommon {
-    private const val version = "1.2.2"
-    const val lib = "com.google.auto:auto-common:$version"
-}
-
-// https://github.com/google/auto
-object AutoService {
-    private const val version = "1.1.1"
-    const val annotations = "com.google.auto.service:auto-service-annotations:$version"
-    @Suppress("unused")
-    const val processor   = "com.google.auto.service:auto-service:${version}"
-}
-
-// https://github.com/google/auto
-object AutoValue {
-    private const val version = "1.10.2"
-    const val annotations = "com.google.auto.value:auto-value-annotations:$version"
-}
-
-// https://github.com/ZacSweers/auto-service-ksp
-object AutoServiceKsp {
+/**
+ * Kotlin Symbol Processing API.
+ *
+ * @see <a href="https://github.com/google/ksp">KSP GitHub repository</a>
+ */
+object Ksp {
     /**
-     * The latest version compatible with Kotlin 1.8.22.
-     *
-     * @see Ksp.version
+     * The latest version compatible with Kotlin v1.8.22, which is bundled with Gradle 7.6.4.
      */
-    private const val version = "1.1.0"
-    const val processor = "dev.zacsweers.autoservice:auto-service-ksp:$version"
+    const val version = "1.8.22-1.0.11"
+    const val id = "com.google.devtools.ksp"
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -27,7 +27,6 @@
 package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.text.Text;
 import io.spine.text.TextCoordinates;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -42,6 +41,7 @@ import java.util.regex.Pattern;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toSet;
+import static kotlin.text.StringsKt.lines;
 
 /**
  * An insertion point for a type annotation for the return type of a method of a message builder.
@@ -75,19 +75,17 @@ class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
         return getClass().getSimpleName();
     }
 
-    @NonNull
     @Override
-    public Set<TextCoordinates> locate(Text code) {
+    public @NonNull Set<TextCoordinates> locate(String code) {
         return findBuilders(code)
                 .map(cls -> cls.getMethod(methodName))
                 .filter(Objects::nonNull)
-                .map(method -> locateMethod(method, code.lines()))
+                .map(method -> locateMethod(method, lines(code)))
                 .filter(Objects::nonNull)
                 .collect(toSet());
     }
 
-    @Nullable
-    private TextCoordinates locateMethod(MethodSource<?> source, List<String> lines) {
+    private @Nullable TextCoordinates locateMethod(MethodSource<?> source, List<String> lines) {
         var declarationLineIndex = source.getLineNumber() - 1;
         Matcher matcher;
         for (var signatureIndex = declarationLineIndex; signatureIndex < lines.size(); signatureIndex++) {

@@ -24,37 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:Suppress("unused", "ConstPropertyName")
-
 package io.spine.internal.dependency
 
-// https://github.com/google/auto
-object AutoCommon {
-    private const val version = "1.2.2"
-    const val lib = "com.google.auto:auto-common:$version"
-}
-
-// https://github.com/google/auto
-object AutoService {
-    private const val version = "1.1.1"
-    const val annotations = "com.google.auto.service:auto-service-annotations:$version"
-    @Suppress("unused")
-    const val processor   = "com.google.auto.service:auto-service:${version}"
-}
-
-// https://github.com/google/auto
-object AutoValue {
-    private const val version = "1.10.2"
-    const val annotations = "com.google.auto.value:auto-value-annotations:$version"
-}
-
-// https://github.com/ZacSweers/auto-service-ksp
-object AutoServiceKsp {
-    /**
-     * The latest version compatible with Kotlin 1.8.22.
-     *
-     * @see Ksp.version
-     */
-    private const val version = "1.1.0"
-    const val processor = "dev.zacsweers.autoservice:auto-service-ksp:$version"
+/**
+ * Code coverage library for Java.
+ *
+ * @see <a href="https://www.eclemma.org/jacoco/">Releases</a>
+ */
+@Suppress("ConstPropertyName")
+object Jacoco {
+    const val version = "0.8.12"
 }
