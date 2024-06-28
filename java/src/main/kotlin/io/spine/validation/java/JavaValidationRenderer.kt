@@ -45,8 +45,6 @@ import io.spine.validate.ValidationException
 import io.spine.validation.MessageValidation
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * A [Renderer][io.spine.protodata.renderer.Renderer] for the validation code in Java.
@@ -88,11 +86,9 @@ public class JavaValidationRenderer : JavaRenderer() {
     }
 
     private fun queryMessageTypes(): Set<MessageWithFile> {
-        return select(ProtobufSourceFile::class.java)
-            .all()
-            .stream()
-            .flatMap(ProtobufSourceFile::messages)
-            .collect(Collectors.toSet())
+        return select(ProtobufSourceFile::class.java).all()
+            .flatMap { it.messages() }
+            .toSet()
     }
 
     private fun generateCode(type: MessageWithFile) {
@@ -112,10 +108,10 @@ public class JavaValidationRenderer : JavaRenderer() {
 }
 
 /**
- * Obtains a stream of messages from the given source file paired with the file header.
+ * Obtains a collection of messages from the given source file paired with the file header.
  */
-private fun ProtobufSourceFile.messages(): Stream<MessageWithFile> =
-    typeMap.values.stream().map {
+private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
+    typeMap.values.map {
         messageWithFile {
             message = it
             fileHeader = header
@@ -130,9 +126,9 @@ private fun SourceFileSet.forEachSourceFile(
     messageTypes: Set<MessageWithFile>,
     action: SourceFile<Java>.() -> Unit
 ) {
-    messageTypes.stream()
+    messageTypes
         .map { m -> m.message.javaFile(m.fileHeader) }
-        .flatMap { path -> findFile(path).stream() }
+        .mapNotNull { path -> find(path) }
         .distinct()
         .map {
             @Suppress("UNCHECKED_CAST") // Safe as we look for Java files.
