@@ -65,7 +65,7 @@ object ProtoData {
      * The version of ProtoData dependencies.
      */
     val version: String
-    private const val fallbackVersion = "0.30.0"
+    private const val fallbackVersion = "0.30.1"
 
     /**
      * The distinct version of ProtoData used by other build tools.
@@ -122,6 +122,9 @@ object ProtoData {
 
     val fatCli
         get() = "$group:protodata-fat-cli:$version"
+
+    val testlib
+        get() = "$group:protodata-testlib:$version"
 
     /**
      * An env variable storing a custom [version].
