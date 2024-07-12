@@ -160,8 +160,9 @@ private fun SourceFile<Java>.annotateBuildPartialMethod() {
 /**
  * Creates a string to be used in the code when using the given annotation class.
  *
- * @implNote Adds space before `@` so that when the type is fully qualified, the
- * annotation is: 1) visible better 2) two or more annotations are separated.
+ * Adds space before `@` so that when the type is fully qualified:
+ *  1) the annotation is visible better,
+ *  2) two or more annotations are separated.
  */
 private fun annotation(annotationClass: Class<out Annotation>): String {
     return " @" + annotationClass.name
