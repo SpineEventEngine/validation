@@ -61,7 +61,6 @@ import io.spine.validation.java.ValidationCode.Companion.VALIDATE
  * If the validation rules are broken,
  * throws a [ValidationException][io.spine.validate.ValidationException].
  */
-@Suppress("unused")
 public class JavaValidationRenderer : JavaRenderer() {
 
     private lateinit var sources: SourceFileSet
@@ -72,7 +71,7 @@ public class JavaValidationRenderer : JavaRenderer() {
     protected override fun render(sources: SourceFileSet) {
         this.sources = sources
         this.validations = findValidations()
-        val messageTypes = queryMessageTypes()
+        val messageTypes = findMessageTypes()
         messageTypes.forEach {
             generateCode(it)
         }
@@ -83,12 +82,6 @@ public class JavaValidationRenderer : JavaRenderer() {
     private fun findValidations(): Validations {
         val client = select(MessageValidation::class.java)
         return Validations(client)
-    }
-
-    private fun queryMessageTypes(): Set<MessageWithFile> {
-        return select(ProtobufSourceFile::class.java).all()
-            .flatMap { it.messages() }
-            .toSet()
     }
 
     private fun generateCode(type: MessageWithFile) {
@@ -106,17 +99,6 @@ public class JavaValidationRenderer : JavaRenderer() {
         validationCode.generate()
     }
 }
-
-/**
- * Obtains a collection of messages from the given source file paired with the file header.
- */
-private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
-    typeMap.values.map {
-        messageWithFile {
-            message = it
-            fileHeader = header
-        }
-    }
 
 /**
  * Locates source files for the given message types and
