@@ -49,4 +49,3 @@ private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
             fileHeader = header
         }
     }
-
