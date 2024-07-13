@@ -82,7 +82,8 @@ public final class JavaValidationPlugin implements Plugin {
         var result = ImmutableList.<Renderer<?>>builder();
         result.addAll(base.renderers());
         result.add(new PrintValidationInsertionPoints(),
-                   new JavaValidationRenderer());
+                   new JavaValidationRenderer(),
+                   new ImplementValidatingBuilder());
         return result.build();
     }
 

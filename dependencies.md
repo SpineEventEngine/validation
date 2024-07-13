@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -848,12 +848,12 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:17 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -1665,12 +1665,12 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:17 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -1781,6 +1781,11 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.15.3.
+     * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.15.3.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1795,9 +1800,21 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
      * **Project URL:** [https://github.com/ben-manes/caffeine](https://github.com/ben-manes/caffeine)
      * **License:** [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : com.github.ben-manes.caffeine. **Name** : caffeine. **Version** : 3.1.8.
+     * **Project URL:** [https://github.com/ben-manes/caffeine](https://github.com/ben-manes/caffeine)
+     * **License:** [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : com.github.kevinstern. **Name** : software-and-algorithms. **Version** : 1.0.
      * **Project URL:** [https://www.github.com/KevinStern/software-and-algorithms](https://www.github.com/KevinStern/software-and-algorithms)
      * **License:** [MIT License](http://www.opensource.org/licenses/mit-license.php)
+
+1.  **Group** : com.google.android. **Name** : annotations. **Version** : 4.1.1.4.
+     * **Project URL:** [http://source.android.com/](http://source.android.com/)
+     * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+1.  **Group** : com.google.api.grpc. **Name** : proto-google-common-protos. **Version** : 2.22.0.
+     * **Project URL:** [https://github.com/googleapis/sdk-platform-java](https://github.com/googleapis/sdk-platform-java)
+     * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.auto. **Name** : auto-common. **Version** : 1.2.2.
      * **Project URL:** [https://github.com/google/auto/tree/main/common](https://github.com/google/auto/tree/main/common)
@@ -1904,6 +1921,10 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 
 1.  **Group** : com.google.truth.extensions. **Name** : truth-proto-extension. **Version** : 1.1.5.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : com.sksamuel.aedile. **Name** : aedile-core. **Version** : 1.3.1.
+     * **Project URL:** [http://www.github.com/sksamuel/aedile](http://www.github.com/sksamuel/aedile)
+     * **License:** [The Apache 2.0 License](https://opensource.org/licenses/Apache-2.0)
 
 1.  **Group** : com.soywiz.korlibs.korte. **Name** : korte-jvm. **Version** : 2.7.0.
      * **Project URL:** [https://github.com/korlibs/korge-next](https://github.com/korlibs/korge-next)
@@ -2024,6 +2045,38 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
      * **Project URL:** [https://detekt.dev](https://detekt.dev)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : io.grpc. **Name** : grpc-api. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-context. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-core. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-inprocess. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-protobuf. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-protobuf-lite. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-stub. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.grpc. **Name** : grpc-util. **Version** : 1.59.0.
+     * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
+
 1.  **Group** : io.grpc. **Name** : protoc-gen-grpc-java. **Version** : 1.59.0.
      * **Project URL:** [https://github.com/grpc/grpc-java](https://github.com/grpc/grpc-java)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
@@ -2059,6 +2112,10 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 1.  **Group** : io.kotest. **Name** : kotest-common-jvm. **Version** : 5.8.0.
      * **Project URL:** [https://github.com/kotest/kotest](https://github.com/kotest/kotest)
      * **License:** [Apache-2.0](https://opensource.org/licenses/Apache-2.0)
+
+1.  **Group** : io.perfmark. **Name** : perfmark-api. **Version** : 0.26.0.
+     * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
+     * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
@@ -2108,6 +2165,10 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
+
+1.  **Group** : org.codehaus.mojo. **Name** : animal-sniffer-annotations. **Version** : 1.21.
+     * **License:** [MIT license](http://www.opensource.org/licenses/mit-license.php)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : org.codehaus.woodstox. **Name** : stax2-api. **Version** : 4.2.1.
      * **Project URL:** [http://github.com/FasterXML/stax2-api](http://github.com/FasterXML/stax2-api)
@@ -2349,15 +2410,19 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
      * **Project URL:** [https://bitbucket.org/snakeyaml/snakeyaml-engine](https://bitbucket.org/snakeyaml/snakeyaml-engine)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.yaml. **Name** : snakeyaml. **Version** : 2.1.
+     * **Project URL:** [https://bitbucket.org/snakeyaml/snakeyaml](https://bitbucket.org/snakeyaml/snakeyaml)
+     * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:18 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-runtime-bundle:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-java-runtime-bundle:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -2963,12 +3028,12 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:18 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -3884,12 +3949,12 @@ This report was generated on **Sat Jun 29 17:58:04 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:05 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:19 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -4740,12 +4805,12 @@ This report was generated on **Sat Jun 29 17:58:05 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:05 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:19 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -5594,12 +5659,12 @@ This report was generated on **Sat Jun 29 17:58:05 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:19 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -6463,12 +6528,12 @@ This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:19 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -7325,12 +7390,12 @@ This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:20 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-extra-definitions:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-extra-definitions:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8042,12 +8107,12 @@ This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:20 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-runtime:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-runtime:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8798,12 +8863,12 @@ This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:20 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-validating-options:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-validating-options:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -9433,12 +9498,12 @@ This report was generated on **Sat Jun 29 17:58:06 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:21 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-validation:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-validation:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -10150,12 +10215,12 @@ This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:21 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-validation-gen:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-validation-gen:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -10910,12 +10975,12 @@ This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:21 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -11661,12 +11726,12 @@ This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:21 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -12491,12 +12556,12 @@ This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:21 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.141`
+# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.150`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -13321,4 +13386,4 @@ This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Sat Jun 29 17:58:07 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Sat Jul 13 23:37:22 WEST 2024** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

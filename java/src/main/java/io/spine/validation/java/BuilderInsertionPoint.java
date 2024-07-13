@@ -28,7 +28,6 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.GeneratedMessageV3;
-import io.spine.protodata.TypeName;
 import io.spine.protodata.renderer.InsertionPoint;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
@@ -76,16 +75,6 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
         return classSources.flatMap(cls -> findBuilder(cls).stream());
     }
 
-    protected static Optional<JavaClassSource> findBuilder(TypeName messageName, String code) {
-        var classSources = findMessageClasses(code);
-        var targetClassName = messageName.getSimpleName();
-        var messageClass = classSources
-                .filter(cls -> targetClassName.equals(cls.getName()))
-                .findFirst();
-        return messageClass
-                .flatMap(BuilderInsertionPoint::findBuilder);
-    }
-
     private static Optional<JavaClassSource> findBuilder(JavaClassSource cls) {
         var builder = cls.getNestedType(BUILDER_CLASS);
         if (builder == null) {
@@ -106,7 +95,7 @@ abstract class BuilderInsertionPoint implements InsertionPoint {
         var javaClass = (JavaClassSource) javaSource;
         Deque<JavaSource<?>> nestedTypes = new ArrayDeque<>();
         nestedTypes.add(javaClass);
-        @SuppressWarnings("ReturnOfNull") // legit in this case. Filtered by `takeWhile()`.
+        @SuppressWarnings("ReturnOfNull") // legit in this case, filtered by `takeWhile()`.
         var types = generate(
                 () -> nestedTypes.isEmpty() ? null : nestedTypes.poll()
         ).takeWhile(Objects::nonNull);
