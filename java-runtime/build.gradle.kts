@@ -52,10 +52,10 @@ dependencies {
 // Please see `java-tests/runtime` submodule for the tests associated with the Validation Runtime
 // and the generated code.
 //
-modelCompiler {
-    java {
-        codegen {
-            validation().enabled.set(false)
-        }
-    }
-}
+//modelCompiler {
+//    java {
+//        codegen {
+//            validation().enabled.set(false)
+//        }
+//    }
+//}
