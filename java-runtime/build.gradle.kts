@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -41,21 +41,4 @@ dependencies {
     implementation(Spine.Logging.lib)
 
     testImplementation(Spine.testlib)
-}
-
-// We deliberately turn off validation codegen in this module to ease the issues
-// associated with the migration when ProtoData or Validation API changes.
-//
-// The production Protobuf types of this module do not declare validation constraints, again,
-// to ease the possible migration issues.
-//
-// Please see `java-tests/runtime` submodule for the tests associated with the Validation Runtime
-// and the generated code.
-//
-modelCompiler {
-    java {
-        codegen {
-            validation().enabled.set(false)
-        }
-    }
 }
