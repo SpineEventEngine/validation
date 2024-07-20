@@ -31,7 +31,7 @@ import com.intellij.psi.PsiJavaFile
 import io.spine.logging.WithLogging
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.JavaRenderer
-import io.spine.protodata.java.file.hasJavaFiles
+import io.spine.protodata.java.file.hasJavaOutput
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.renderer.SourceFile
 import io.spine.protodata.renderer.SourceFileSet
@@ -50,8 +50,7 @@ import io.spine.validate.ValidatingBuilder
 internal class ImplementValidatingBuilder : JavaRenderer(), WithLogging {
 
     override fun render(sources: SourceFileSet) {
-        val relevant = sources.hasJavaFiles
-        if (!relevant) {
+        if (!sources.hasJavaOutput) {
             return
         }
         val types = findMessageTypes()
