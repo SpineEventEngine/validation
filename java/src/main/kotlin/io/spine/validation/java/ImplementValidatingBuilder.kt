@@ -31,7 +31,7 @@ import com.intellij.psi.PsiJavaFile
 import io.spine.logging.WithLogging
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.JavaRenderer
-import io.spine.protodata.java.file.hasJavaOutput
+import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.renderer.SourceFile
 import io.spine.protodata.renderer.SourceFileSet
@@ -41,6 +41,7 @@ import io.spine.tools.kotlin.reference
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.createClassReference
 import io.spine.tools.psi.java.execute
+import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.locate
 import io.spine.validate.ValidatingBuilder
 
@@ -50,7 +51,7 @@ import io.spine.validate.ValidatingBuilder
 internal class ImplementValidatingBuilder : JavaRenderer(), WithLogging {
 
     override fun render(sources: SourceFileSet) {
-        if (!sources.hasJavaOutput) {
+        if (!sources.hasJavaRoot) {
             return
         }
         val types = findMessageTypes()
@@ -118,15 +119,5 @@ private fun PsiClass.implementValidatingBuilder(messageClass: ClassName) {
         ValidatingBuilder::class.java.reference,
         messageClass.simpleName
     )
-    val implements = implementsList!! /* The list is not `null` because `Builder` already
-        implements a generated interface which extends `MessageOrBuilder`. */
-
-    // See that the `ValidatingBuilder` is not already implemented because
-    // older McJava is used together with this code.
-    val alreadyImplements = implements.referenceElements.any {
-        it.qualifiedName == superInterface.qualifiedName
-    }
-    if (!alreadyImplements) {
-        implements.add(superInterface)
-    }
+    implement(superInterface)
 }
