@@ -36,7 +36,7 @@ buildscript {
 modelCompiler {
     java {
         codegen {
-            rejections().enabled.set(false)
+            rejections.enabled.set(false)
         }
     }
 }
