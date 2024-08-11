@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -61,8 +61,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      *
      * If the field is marked with `(required) = false`, no rule is generated.
      *
-     * @param field
-     *         the ID field.
+     * @param field ID field.
      * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
@@ -84,6 +83,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      * The index of the field is not taken into account.
      */
     protected fun MessageType.firstField(): Field {
+        //TODO:2024-07-31:alexander.yevsyukov: Migrate to `MessageType.firstField` from ProtoData.
         check(fieldCount != 0) {
             "The type `${name.qualifiedName}` must have at least one field."
         }
