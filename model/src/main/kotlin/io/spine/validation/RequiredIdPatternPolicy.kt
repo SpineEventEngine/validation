@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,12 +23,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation
 
 import io.spine.core.External
 import io.spine.protodata.File
 import io.spine.protodata.FilePattern
 import io.spine.protodata.event.TypeDiscovered
+import io.spine.protodata.firstField
 import io.spine.protodata.matches
 import io.spine.server.event.React
 import io.spine.server.model.NoReaction
@@ -64,7 +66,7 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
             return noReaction()
         }
         val type = event.type
-        val field = type.firstField()
+        val field = type.firstField
         return withField(field)
     }
 

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
-import io.spine.protodata.Type
+import io.spine.protodata.isAny
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MessageReference
@@ -166,22 +166,3 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         return error().createParentViolation(ctx, violations)
     }
 }
-
-/**
- * Tells if this type is `google.protobuf.Any`.
- *
- * TODO: Migrate to the similar property from ProtoData.
- */
-private val Type.isAny: Boolean
-    get() = (hasMessage()
-            && message.packageName.equals("google.protobuf"))
-            && message.simpleName.equals("Any")
-
-
-/**
- * Obtains the name of the field which includes a qualified name of the type which declares it.
- *
- * TODO: Migrate to an extension `val` from ProtoData.
- */
-private val Field.qualifiedName: String
-    get() = "${declaringType.qualifiedName}.${name.value}"

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.Field
+import io.spine.protodata.messageOrEnumName
 import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassOrEnumName
 import io.spine.protodata.java.Expression
@@ -51,12 +52,12 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  * A code generator that distributes the associated simple validation rule to elements of
  * a repeated field.
  *
- * A rule applied to a repeated fields, i.e., a list or a map, may be applied to the fields as
+ * A rule applied to repeated fields, i.e., a list or a map, may be applied to the fields as
  * a whole, or to individual elements of the field.
  *
  * In the first case, no extra modifications to code generation are required.
  *
- * In the second case, this generator creates code that iterated over
+ * In the second case, this generator creates the code that iterates over
  * the elements and applies the validation rule to them.
  */
 internal class DistributingGenerator(

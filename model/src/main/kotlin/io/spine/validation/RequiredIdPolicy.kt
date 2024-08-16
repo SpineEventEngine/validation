@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,9 +26,7 @@
 package io.spine.validation
 
 import io.spine.protodata.Field
-import io.spine.protodata.MessageType
 import io.spine.protodata.event.TypeDiscovered
-import io.spine.protodata.qualifiedName
 import io.spine.protodata.settings.loadSettings
 import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2
@@ -61,8 +59,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      *
      * If the field is marked with `(required) = false`, no rule is generated.
      *
-     * @param field
-     *         the ID field.
+     * @param field ID field.
      * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
@@ -76,17 +73,5 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
             return noReaction()
         }
         return EitherOf2.withA(rule.get().toEvent(field.declaringType))
-    }
-
-    /**
-     * Obtains the first field declared in the type.
-     *
-     * The index of the field is not taken into account.
-     */
-    protected fun MessageType.firstField(): Field {
-        check(fieldCount != 0) {
-            "The type `${name.qualifiedName}` must have at least one field."
-        }
-        return getField(0)
     }
 }
