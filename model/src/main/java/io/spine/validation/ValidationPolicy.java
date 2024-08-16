@@ -66,6 +66,7 @@ public abstract class ValidationPolicy<E extends EventMessage>
      * </pre>
      */
     protected final EitherOf2<RuleAdded, Nothing> noReaction() {
+        //TODO:2024-08-11:alexander.yevsyukov: Use EventProducer.noReaction() extension from `core-java`.
         return EitherOf2.withB(nothing());
     }
 }

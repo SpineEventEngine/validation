@@ -37,6 +37,7 @@ option java_multiple_files = true;
 option (internal_all) = true;
 
 import "spine/protodata/ast.proto";
+import "spine/protodata/source.proto";
 
 // A tuple of a message type and the header of the file where it is declared.
 message MessageWithFile {

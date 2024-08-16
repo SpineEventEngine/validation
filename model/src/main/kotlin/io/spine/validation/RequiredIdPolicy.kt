@@ -26,9 +26,7 @@
 package io.spine.validation
 
 import io.spine.protodata.Field
-import io.spine.protodata.MessageType
 import io.spine.protodata.event.TypeDiscovered
-import io.spine.protodata.qualifiedName
 import io.spine.protodata.settings.loadSettings
 import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2
@@ -75,18 +73,5 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
             return noReaction()
         }
         return EitherOf2.withA(rule.get().toEvent(field.declaringType))
-    }
-
-    /**
-     * Obtains the first field declared in the type.
-     *
-     * The index of the field is not taken into account.
-     */
-    protected fun MessageType.firstField(): Field {
-        //TODO:2024-07-31:alexander.yevsyukov: Migrate to `MessageType.firstField` from ProtoData.
-        check(fieldCount != 0) {
-            "The type `${name.qualifiedName}` must have at least one field."
-        }
-        return getField(0)
     }
 }

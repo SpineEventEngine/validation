@@ -29,6 +29,7 @@ import io.spine.core.External
 import io.spine.protodata.File
 import io.spine.protodata.FilePattern
 import io.spine.protodata.event.TypeDiscovered
+import io.spine.protodata.firstField
 import io.spine.protodata.matches
 import io.spine.server.event.React
 import io.spine.server.model.NoReaction
@@ -64,7 +65,7 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
             return noReaction()
         }
         val type = event.type
-        val field = type.firstField()
+        val field = type.firstField
         return withField(field)
     }
 

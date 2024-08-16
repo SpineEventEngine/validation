@@ -115,9 +115,9 @@ private fun PsiJavaFile.locateBuilderClass(messageClass: ClassName): PsiClass {
  */
 private fun PsiClass.implementValidatingBuilder(messageClass: ClassName) {
     val superInterface = elementFactory.createClassReference(
-        this,
         ValidatingBuilder::class.java.reference,
-        messageClass.simpleName
+        messageClass.simpleName,
+        context = this,
     )
     implement(superInterface)
 }

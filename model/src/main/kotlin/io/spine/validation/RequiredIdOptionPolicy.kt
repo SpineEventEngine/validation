@@ -27,6 +27,7 @@ package io.spine.validation
 
 import io.spine.core.External
 import io.spine.protodata.MessageType
+import io.spine.protodata.firstField
 import io.spine.protodata.event.TypeDiscovered
 import io.spine.server.event.React
 import io.spine.server.model.NoReaction
@@ -61,7 +62,7 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
         if (!type.isEntityState()) {
             return noReaction()
         }
-        val field = type.firstField()
+        val field = type.firstField
         return withField(field)
     }
 
