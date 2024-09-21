@@ -27,7 +27,7 @@
 package io.spine.validation;
 
 import io.spine.base.EntityState;
-import io.spine.protodata.event.FieldOptionDiscovered;
+import io.spine.protodata.ast.event.FieldOptionDiscovered;
 import io.spine.protodata.plugin.ViewRepository;
 import io.spine.server.route.EventRouting;
 

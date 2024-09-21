@@ -27,11 +27,11 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.protodata.File
-import io.spine.protodata.FilePattern
-import io.spine.protodata.event.TypeDiscovered
-import io.spine.protodata.firstField
-import io.spine.protodata.matches
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.FilePattern
+import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.ast.firstField
+import io.spine.protodata.ast.matches
 import io.spine.server.event.React
 import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2

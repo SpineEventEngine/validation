@@ -27,17 +27,17 @@
 package io.spine.validation;
 
 import io.spine.core.External;
-import io.spine.protodata.FieldName;
-import io.spine.protodata.File;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.event.FieldExited;
+import io.spine.protodata.ast.FieldName;
+import io.spine.protodata.ast.File;
+import io.spine.protodata.ast.TypeName;
+import io.spine.protodata.ast.event.FieldExited;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
-import static io.spine.protodata.TypeNames.getQualifiedName;
+import static io.spine.protodata.ast.TypeNames.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.SourceFiles.findField;
 

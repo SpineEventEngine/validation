@@ -26,9 +26,8 @@
 
 package io.spine.validation;
 
-import io.spine.protodata.TypeName;
-import io.spine.protodata.event.TypeDiscovered;
-import io.spine.protodata.event.TypeEntered;
+import io.spine.protodata.ast.TypeName;
+import io.spine.protodata.ast.event.TypeDiscovered;
 import io.spine.protodata.plugin.ViewRepository;
 import io.spine.server.route.EventRouting;
 import org.jetbrains.annotations.NotNull;

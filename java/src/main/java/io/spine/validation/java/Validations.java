@@ -28,8 +28,8 @@ package io.spine.validation.java;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
-import io.spine.protodata.MessageType;
-import io.spine.protodata.TypeName;
+import io.spine.protodata.ast.MessageType;
+import io.spine.protodata.ast.TypeName;
 import io.spine.server.query.QueryingClient;
 import io.spine.validation.MessageValidation;
 import org.checkerframework.checker.nullness.qual.Nullable;

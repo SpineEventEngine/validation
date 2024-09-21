@@ -35,16 +35,16 @@ import io.spine.option.OptionsProto.max
 import io.spine.option.OptionsProto.min
 import io.spine.option.OptionsProto.range
 import io.spine.protobuf.unpack
-import io.spine.protodata.FieldName
-import io.spine.protodata.Option
-import io.spine.protodata.Value
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.Option
+import io.spine.protodata.value.Value
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.LogicalOperator.AND
-import io.spine.protodata.Value.KindCase.DOUBLE_VALUE
-import io.spine.protodata.Value.KindCase.INT_VALUE
+import io.spine.protodata.value.Value.KindCase.DOUBLE_VALUE
+import io.spine.protodata.value.Value.KindCase.INT_VALUE
 
 /**
  * A factory of validation rules for number fields.

@@ -28,7 +28,7 @@
 
 package io.spine.validation
 
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.TypeName
 import io.spine.validation.event.RuleAdded
 import io.spine.validation.event.compositeRuleAdded
 import io.spine.validation.event.simpleRuleAdded

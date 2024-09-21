@@ -30,8 +30,8 @@ import io.spine.core.External;
 import io.spine.core.Subscribe;
 import io.spine.core.Where;
 import io.spine.option.IfMissingOption;
-import io.spine.protodata.event.FieldOptionDiscovered;
-import io.spine.protodata.Option;
+import io.spine.protodata.ast.event.FieldOptionDiscovered;
+import io.spine.protodata.ast.Option;
 
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;

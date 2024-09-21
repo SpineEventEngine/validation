@@ -26,8 +26,8 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.ProtobufSourceFile
-import io.spine.protodata.java.JavaRenderer
+import io.spine.protodata.ast.ProtobufSourceFile
+import io.spine.protodata.java.render.JavaRenderer
 
 /**
  * Obtains all the messages known to the current compilation process

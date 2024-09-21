@@ -26,16 +26,15 @@
 
 package io.spine.validation;
 
-import io.spine.protodata.Field;
-import io.spine.protodata.FieldName;
-import io.spine.protodata.File;
-import io.spine.protodata.MessageType;
-import io.spine.protodata.ProtobufSourceFile;
-import io.spine.protodata.TypeName;
+import io.spine.protodata.ast.Field;
+import io.spine.protodata.ast.FieldName;
+import io.spine.protodata.ast.File;
+import io.spine.protodata.ast.MessageType;
+import io.spine.protodata.ast.ProtobufSourceFile;
+import io.spine.protodata.ast.TypeName;
 import io.spine.server.query.Querying;
 
 import static io.spine.util.Exceptions.newIllegalArgumentException;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Utilities for working with {@link ProtobufSourceFile}s.

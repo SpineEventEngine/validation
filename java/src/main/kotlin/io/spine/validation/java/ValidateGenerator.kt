@@ -27,13 +27,13 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.Field
-import io.spine.protodata.isAny
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.isAny
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MessageReference
 import io.spine.protodata.java.MethodCall
-import io.spine.protodata.qualifiedName
+import io.spine.protodata.ast.qualifiedName
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.validate.ConstraintViolation

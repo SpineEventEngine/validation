@@ -26,8 +26,8 @@
 
 package io.spine.validation.java.given
 
-import io.spine.protodata.renderer.InsertionPoint
-import io.spine.protodata.renderer.InsertionPointPrinter
+import io.spine.protodata.render.InsertionPoint
+import io.spine.protodata.render.InsertionPointPrinter
 import io.spine.tools.code.Java
 
 /**

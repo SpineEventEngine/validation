@@ -26,12 +26,12 @@
 
 package io.spine.validation.java;
 
-import io.spine.protodata.TypeName;
-import io.spine.protodata.renderer.NonRepeatingInsertionPoint;
+import io.spine.protodata.ast.TypeName;
+import io.spine.protodata.render.NonRepeatingInsertionPoint;
 import io.spine.text.TextCoordinates;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.renderer.CoordinatesFactory.nowhere;
+import static io.spine.protodata.render.CoordinatesFactory.nowhere;
 import static java.lang.String.format;
 
 /**

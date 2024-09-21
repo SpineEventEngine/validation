@@ -26,8 +26,8 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.Field
-import io.spine.protodata.OneofName
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.OneofName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.validation.ErrorMessage

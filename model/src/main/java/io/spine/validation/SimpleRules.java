@@ -27,7 +27,7 @@
 package io.spine.validation;
 
 import com.google.protobuf.Message;
-import io.spine.protodata.FieldName;
+import io.spine.protodata.ast.FieldName;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protobuf.AnyPacker.pack;

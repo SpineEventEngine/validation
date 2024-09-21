@@ -27,7 +27,7 @@
 package io.spine.validation.java
 
 import com.google.errorprone.annotations.Immutable
-import io.spine.protodata.renderer.InsertionPoint
+import io.spine.protodata.render.InsertionPoint
 import io.spine.text.TextCoordinates
 import io.spine.text.TextFactory
 import io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD

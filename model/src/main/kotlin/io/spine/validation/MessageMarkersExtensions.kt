@@ -28,7 +28,7 @@
 
 package io.spine.validation
 
-import io.spine.protodata.FilePattern
+import io.spine.protodata.ast.FilePattern
 import com.google.common.collect.ImmutableList
 
 /**

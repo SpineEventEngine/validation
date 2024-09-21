@@ -6,7 +6,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "ConfigProto";
 option java_multiple_files = true;
 
-import "spine/protodata/file.proto";
+import "spine/protodata/file_pattern.proto";
 
 // The container type for the validation config.
 //

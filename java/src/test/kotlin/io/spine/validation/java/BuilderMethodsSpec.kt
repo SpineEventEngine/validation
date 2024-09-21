@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.backend.CodeGenerationContext
-import io.spine.protodata.renderer.SourceFileSet
+import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.java.given.MockPrinter
 import java.nio.file.Path
 import kotlin.io.path.div
