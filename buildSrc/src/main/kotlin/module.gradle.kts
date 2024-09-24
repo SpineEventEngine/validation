@@ -65,12 +65,6 @@ apply<IncrementGuard>()
 LicenseReporter.generateReportIn(project)
 JavadocConfig.applyTo(project)
 
-object BuildSettings {
-    private const val JAVA_VERSION = 11
-
-    val javaVersion = JavaLanguageVersion.of(JAVA_VERSION)
-}
-
 project.run {
     addDependencies()
     forceConfigurations()
@@ -83,7 +77,6 @@ project.run {
     configureTests()
     configureTaskDependencies()
     dependTestOnJavaRuntime()
-    configureTaskDependencies()
     configureProtoc()
 }
 
