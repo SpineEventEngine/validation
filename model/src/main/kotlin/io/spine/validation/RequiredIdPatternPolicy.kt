@@ -24,8 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:Suppress("DEPRECATION")
+
 package io.spine.validation
 
+import com.google.common.collect.ImmutableList
 import io.spine.core.External
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.FilePattern
@@ -74,4 +77,40 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
         filePatterns.any {
             it.matches(this)
         }
+}
+
+private typealias LegacyFilePattern = io.spine.protodata.FilePattern
+private typealias LegacyKindCase = io.spine.protodata.FilePattern.KindCase
+
+@Suppress("TYPEALIAS_EXPANSION_DEPRECATION")
+private fun LegacyFilePattern.fromLegacy(): FilePattern {
+    val builder = FilePattern.newBuilder()
+    when (kindCase) {
+        LegacyKindCase.SUFFIX -> builder.setSuffix(suffix)
+        LegacyKindCase.PREFIX -> builder.setPrefix(prefix)
+        LegacyKindCase.REGEX -> builder.setRegex(regex)
+        else -> error("Unknown kind case: `$kindCase`.")
+    }
+    return builder.build()
+}
+
+private fun List<Any>.fromLegacy(): List<FilePattern> {
+    val firstElement = first()
+    @Suppress("TYPEALIAS_EXPANSION_DEPRECATION")
+    if (firstElement is LegacyFilePattern) {
+        return map { (it as LegacyFilePattern).fromLegacy() }
+    }
+    @Suppress("UNCHECKED_CAST")
+    return this as List<FilePattern>
+}
+
+/**
+ * Obtains all the file patterns that mark different types of Protobuf files.
+ */
+private fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
+    return ImmutableList.builder<FilePattern>()
+        .addAll(eventPatternList.fromLegacy())
+        .addAll(commandPatternList.fromLegacy())
+        .addAll(rejectionPatternList.fromLegacy())
+        .build()
 }
