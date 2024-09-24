@@ -26,6 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
+import io.spine.internal.dependency.McJava
 import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
@@ -80,7 +81,7 @@ fun Project.applyPlugins() {
     )
 
     if (project.name in applyMcJava) {
-        apply(plugin = Spine.McJava.pluginId)
+        apply(plugin = McJava.pluginId)
         configurations.all {
             resolutionStrategy {
                 dependencySubstitution {
