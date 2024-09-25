@@ -28,7 +28,7 @@ package io.spine.validation.java;
 
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.GeneratedMessageV3;
-import io.spine.protodata.renderer.InsertionPoint;
+import io.spine.protodata.render.InsertionPoint;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
 

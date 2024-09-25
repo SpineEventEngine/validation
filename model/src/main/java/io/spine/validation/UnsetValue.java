@@ -27,21 +27,21 @@
 package io.spine.validation;
 
 import com.google.protobuf.ByteString;
-import io.spine.protodata.Field;
-import io.spine.protodata.Type;
-import io.spine.protodata.EnumValue;
-import io.spine.protodata.MapValue;
-import io.spine.protodata.MessageValue;
-import io.spine.protodata.ListValue;
-import io.spine.protodata.Value;
+import io.spine.protodata.ast.Field;
+import io.spine.protodata.ast.Type;
+import io.spine.protodata.value.EnumValue;
+import io.spine.protodata.value.MapValue;
+import io.spine.protodata.value.MessageValue;
+import io.spine.protodata.value.ListValue;
+import io.spine.protodata.value.Value;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.PrimitiveType.PT_UNKNOWN;
-import static io.spine.protodata.PrimitiveType.TYPE_BYTES;
-import static io.spine.protodata.PrimitiveType.TYPE_STRING;
-import static io.spine.protodata.PrimitiveType.UNRECOGNIZED;
+import static io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN;
+import static io.spine.protodata.ast.PrimitiveType.TYPE_BYTES;
+import static io.spine.protodata.ast.PrimitiveType.TYPE_STRING;
+import static io.spine.protodata.ast.PrimitiveType.UNRECOGNIZED;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**

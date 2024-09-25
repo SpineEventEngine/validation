@@ -32,7 +32,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.call
-import io.spine.protodata.isMap
+import io.spine.protodata.ast.isMap
 
 /**
  * Generates the code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.

@@ -31,16 +31,16 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
 import io.spine.protobuf.CollectionsConverter
-import io.spine.protodata.Field
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.LiteralString
 import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
-import io.spine.protodata.isList
-import io.spine.protodata.isMap
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 

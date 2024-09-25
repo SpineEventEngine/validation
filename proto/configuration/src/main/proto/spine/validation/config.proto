@@ -6,7 +6,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "ConfigProto";
 option java_multiple_files = true;
 
-import "spine/protodata/file.proto";
+import "spine/protodata/file_pattern.proto";
 
 // The container type for the validation config.
 //
@@ -43,24 +43,4 @@ message MessageMarkers {
 
     // File patterns of files where rejection messages are defined.
     repeated protodata.FilePattern rejection_pattern = 5;
-}
-
-// A pattern matching file paths.
-//
-// Deprecated: please use [spine.protodata.FilePattern] instead.
-//
-message FilePattern {
-    option deprecated = true;
-
-    oneof kind {
-
-        // The path must end with this string.
-        string suffix = 1;
-
-        // The path must start with this string.
-        string prefix = 2;
-
-        // The path must match this regular expression.
-        string regex = 3;
-    }
 }

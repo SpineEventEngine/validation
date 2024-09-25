@@ -27,15 +27,15 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.Field
-import io.spine.protodata.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.PrimitiveType.TYPE_STRING
-import io.spine.protodata.Value
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.value.Value
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
-import io.spine.protodata.isRepeated
+import io.spine.protodata.ast.isRepeated
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL

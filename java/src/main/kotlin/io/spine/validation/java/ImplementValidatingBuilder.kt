@@ -30,11 +30,11 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
 import io.spine.logging.WithLogging
 import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.JavaRenderer
+import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
-import io.spine.protodata.renderer.SourceFile
-import io.spine.protodata.renderer.SourceFileSet
+import io.spine.protodata.render.SourceFile
+import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
 import io.spine.tools.java.reference
 import io.spine.tools.kotlin.reference

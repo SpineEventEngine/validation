@@ -29,13 +29,13 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.TypedInsertionPoint
-import io.spine.protodata.renderer.SourceAtLine
-import io.spine.protodata.renderer.SourceFile
+import io.spine.protodata.render.SourceAtLine
+import io.spine.protodata.render.SourceFile
 import io.spine.text.TextFactory.lineSplitter
 import io.spine.tools.code.Java
 import io.spine.validate.ValidatableMessage

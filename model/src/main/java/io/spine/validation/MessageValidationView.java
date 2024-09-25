@@ -28,8 +28,8 @@ package io.spine.validation;
 
 import io.spine.core.External;
 import io.spine.core.Subscribe;
-import io.spine.protodata.TypeName;
-import io.spine.protodata.event.TypeDiscovered;
+import io.spine.protodata.ast.TypeName;
+import io.spine.protodata.ast.event.TypeDiscovered;
 import io.spine.protodata.plugin.View;
 import io.spine.validation.event.CompositeRuleAdded;
 import io.spine.validation.event.MessageWideRuleAdded;

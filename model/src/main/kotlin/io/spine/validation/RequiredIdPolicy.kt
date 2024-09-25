@@ -25,8 +25,8 @@
  */
 package io.spine.validation
 
-import io.spine.protodata.Field
-import io.spine.protodata.event.TypeDiscovered
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.event.TypeDiscovered
 import io.spine.protodata.settings.loadSettings
 import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2

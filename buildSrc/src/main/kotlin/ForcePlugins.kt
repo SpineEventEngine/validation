@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.kotlin.dsl.ScriptHandlerScope
 
 /**
@@ -40,25 +39,24 @@ import org.gradle.kotlin.dsl.ScriptHandlerScope
  */
 fun ScriptHandlerScope.forceCodegenPlugins() {
     standardSpineSdkRepositories()
-    dependencies {
-        classpath(io.spine.internal.dependency.Spine.McJava.pluginLib)
-        classpath(io.spine.internal.dependency.ProtoData.pluginLib)
-    }
-    configurations.forceProtoData()
-}
 
-/**
- * Forces the version of McJava and ProtoData for a module with this `ConfigurationContainer`.
- */
-fun ConfigurationContainer.forceProtoData() = all {
-    resolutionStrategy {
-        val protoData = io.spine.internal.dependency.ProtoData
-        force(
+    dependencies {
+        mcJava.run {
+            classpath(pluginLib(version))
+        }
+        protoData.run {
+            classpath("$module:$version")
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.force(
             protoData.fatCli,
-            protoData.pluginLib,
             protoData.java,
             protoData.backend,
             protoData.protocPlugin,
+
+            mcJava.pluginsArtifact
         )
     }
-}
+ }

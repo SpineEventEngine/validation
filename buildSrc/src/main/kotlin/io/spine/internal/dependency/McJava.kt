@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,20 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Markers")
-
-package io.spine.validation
-
-import io.spine.protodata.FilePattern
-import com.google.common.collect.ImmutableList
+package io.spine.internal.dependency
 
 /**
- * Obtains all the file patterns that mark different types of Protobuf files.
+ * Dependencies on Spine Model Compiler for Java.
+ *
+ * See [mc-java](https://github.com/SpineEventEngine/mc-java).
  */
-internal fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
-    return ImmutableList.builder<FilePattern>()
-        .addAll(eventPatternList)
-        .addAll(commandPatternList)
-        .addAll(rejectionPatternList)
-        .build()
+@Suppress(
+    "MemberVisibilityCanBePrivate" /* `pluginLib()` is used by subprojects. */,
+    "ConstPropertyName"
+)
+object McJava {
+    const val group = Spine.toolsGroup
+
+    /** The version used to in the build classpath. */
+    const val dogfoodingVersion = "2.0.0-SNAPSHOT.221"
+
+    /** The version to be used for integration tests. */
+    const val version = "2.0.0-SNAPSHOT.230"
+
+    const val pluginId = "io.spine.mc-java"
+
+    val pluginLib = pluginLib(dogfoodingVersion)
+    fun pluginLib(version: String): String = "$group:spine-mc-java-plugins:$version:all"
+
+    /** The artifact reference for forcing in configurations. */
+    const val pluginsArtifact: String = "$group:spine-mc-java-plugins:$version"
 }

@@ -26,12 +26,12 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.Field
-import io.spine.protodata.FieldName
-import io.spine.protodata.File
-import io.spine.protodata.MessageType
-import io.spine.protodata.ProtobufSourceFile
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.ProtobufSourceFile
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MessageOrEnumConvention
 import io.spine.protodata.java.JavaValueConverter

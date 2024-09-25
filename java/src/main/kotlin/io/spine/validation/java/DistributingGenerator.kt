@@ -29,24 +29,21 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.Field
-import io.spine.protodata.messageOrEnumName
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.messageOrEnumName
 import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassOrEnumName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.This
-import io.spine.protodata.isMap
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
-import java.security.SecureRandom
 import javax.lang.model.element.Modifier
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * A code generator that distributes the associated simple validation rule to elements of

@@ -29,7 +29,7 @@
 package io.spine.validation
 
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import io.spine.protodata.Option
+import io.spine.protodata.ast.Option
 
 /**
  * Checks if this option represents the given generated option.

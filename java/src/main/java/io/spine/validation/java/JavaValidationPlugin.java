@@ -31,7 +31,7 @@ import io.spine.protodata.plugin.Plugin;
 import io.spine.protodata.plugin.Policy;
 import io.spine.protodata.plugin.View;
 import io.spine.protodata.plugin.ViewRepository;
-import io.spine.protodata.renderer.Renderer;
+import io.spine.protodata.render.Renderer;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.validation.ValidationPlugin;
 

@@ -29,8 +29,8 @@ package io.spine.validation.java
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
-import io.spine.protodata.File
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.This.asMessage
 import io.spine.validation.MessageValidation
 import io.spine.validation.Rule

@@ -29,12 +29,12 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
-import io.spine.protodata.TypeName
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
-import io.spine.protodata.renderer.InsertionPoint
-import io.spine.protodata.renderer.codeLine
+import io.spine.protodata.render.InsertionPoint
+import io.spine.protodata.render.codeLine
 import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec

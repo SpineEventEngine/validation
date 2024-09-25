@@ -28,15 +28,15 @@ package io.spine.validation;
 
 import com.google.protobuf.BoolValue;
 import io.spine.option.IfMissingOption;
-import io.spine.protodata.Field;
-import io.spine.protodata.Value;
+import io.spine.protodata.ast.Field;
+import io.spine.protodata.value.Value;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.Fields.isRepeated;
+import static io.spine.protodata.ast.Fields.isRepeated;
 import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;

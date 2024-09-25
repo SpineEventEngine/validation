@@ -26,6 +26,7 @@
 
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.AutoServiceKsp
+import io.spine.internal.dependency.McJava
 
 buildscript {
     forceCodegenPlugins()
@@ -40,6 +41,14 @@ dependencies {
     ksp(AutoServiceKsp.processor)
 
     implementation(project(":java"))
+}
+
+configurations.all {
+    resolutionStrategy.force(
+        with(McJava) {
+            pluginLib(version)
+        }
+    )
 }
 
 /*

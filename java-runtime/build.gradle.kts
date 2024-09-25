@@ -27,11 +27,19 @@
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.Spine
 
+buildscript {
+    standardSpineSdkRepositories()
+    dependencies {
+        classpath(mcJava.pluginLib)
+    }
+}
+
 plugins {
     `build-proto-model`
     module
-    id("io.spine.mc-java")
 }
+
+apply(plugin = "io.spine.mc-java")
 
 dependencies {
     annotationProcessor(AutoService.processor)
