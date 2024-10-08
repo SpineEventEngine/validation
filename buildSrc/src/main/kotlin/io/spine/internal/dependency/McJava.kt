@@ -39,10 +39,10 @@ object McJava {
     const val group = Spine.toolsGroup
 
     /** The version used to in the build classpath. */
-    const val dogfoodingVersion = "2.0.0-SNAPSHOT.221"
+    const val dogfoodingVersion = "2.0.0-SNAPSHOT.243"
 
     /** The version to be used for integration tests. */
-    const val version = "2.0.0-SNAPSHOT.230"
+    const val version = "2.0.0-SNAPSHOT.243"
 
     const val pluginId = "io.spine.mc-java"
 
@@ -50,5 +50,9 @@ object McJava {
     fun pluginLib(version: String): String = "$group:spine-mc-java-plugins:$version:all"
 
     /** The artifact reference for forcing in configurations. */
+    @Suppress("unused")
     const val pluginsArtifact: String = "$group:spine-mc-java-plugins:$version"
+
+    val base = base(version)
+    fun base(version: String): String = "$group:spine-mc-java-base:$version"
 }
