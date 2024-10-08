@@ -28,11 +28,11 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import io.spine.protodata.ast.MessageType
-import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.MessageReference
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.javaFile
 import io.spine.protodata.java.lines
+import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.protodata.type.TypeSystem
@@ -46,7 +46,7 @@ import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 
 /**
- * A [Renderer][io.spine.protodata.renderer.Renderer] for the validation code in Java.
+ * A [Renderer][io.spine.protodata.render.Renderer] for the validation code in Java.
  *
  * Inserts code into the [ValidateBeforeReturn] insertion point.
  *
