@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+` * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -33,8 +33,9 @@ import io.spine.core.Where
 import io.spine.protobuf.pack
 import io.spine.protodata.ast.event.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.model.Nothing
+import io.spine.server.event.asB
 import io.spine.server.tuple.EitherOf2
 import io.spine.validate.Diags.IsRequired.errorMessage
 import io.spine.validate.Diags.IsRequired.operatorDescription
@@ -54,11 +55,11 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = "is_required")
         event: OneofOptionDiscovered
-    ): EitherOf2<MessageWideRuleAdded, Nothing> {
+    ): EitherOf2<MessageWideRuleAdded, NoReaction> {
         // We have the option defined in the type. But is it set to `true`?
         val option = event.option.value.unpack<BoolValue>()
         if (!option.value) {
-            return EitherOf2.withB(nothing())
+            return noReaction().asB()
         }
         val requiredOneof = requiredOneof {
             name = event.group

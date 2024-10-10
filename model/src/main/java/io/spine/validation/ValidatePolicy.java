@@ -31,8 +31,8 @@ import io.spine.protodata.ast.FieldName;
 import io.spine.protodata.ast.File;
 import io.spine.protodata.ast.TypeName;
 import io.spine.protodata.ast.event.FieldExited;
+import io.spine.server.event.NoReaction;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
@@ -55,7 +55,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
 
     @Override
     @React
-    protected EitherOf2<RuleAdded, Nothing> whenever(@External FieldExited event) {
+    protected EitherOf2<RuleAdded, NoReaction> whenever(@External FieldExited event) {
         var id = FieldId.newBuilder()
                 .setName(event.getField())
                 .setType(event.getType())
@@ -66,7 +66,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         }
         var shouldValidate = field != null && field.getValidate();
         if (!shouldValidate) {
-            return noReaction();
+            return ignoring();
         }
         var rule = SimpleRules.withCustom(
                 event.getField(),
