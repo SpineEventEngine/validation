@@ -31,8 +31,9 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeExited
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.value.Value
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.model.Nothing
+import io.spine.server.event.asB
 import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ComparisonOperator.LESS_THAN
@@ -49,10 +50,10 @@ import io.spine.validation.test.money.CurrencyType
 public class CurrencyValidationPolicy : Policy<TypeExited>() {
 
     @React
-    override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {
+    override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, NoReaction> {
         val currencyType = select<CurrencyType>().findById(event.type)
         if (currencyType == null || currencyType.hasCurrency().not()) {
-            return EitherOf2.withB(nothing())
+            return noReaction().asB()
         }
         val minorUnits = currencyType.minorUnitField
         val otherValue = minorUnitsPerUnit(currencyType)

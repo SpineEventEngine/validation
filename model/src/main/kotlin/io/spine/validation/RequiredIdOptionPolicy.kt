@@ -28,10 +28,10 @@ package io.spine.validation
 
 import io.spine.core.External
 import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.firstField
 import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.ast.firstField
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.RuleAdded
 
@@ -57,11 +57,11 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (options.isEmpty()) {
-            return noReaction()
+            return ignoring()
         }
         val type = event.type
         if (!type.isEntityState()) {
-            return noReaction()
+            return ignoring()
         }
         val field = type.firstField
         return withField(field)
