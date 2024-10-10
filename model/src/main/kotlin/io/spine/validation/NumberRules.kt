@@ -38,13 +38,13 @@ import io.spine.protobuf.unpack
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.Option
 import io.spine.protodata.value.Value
+import io.spine.protodata.value.Value.KindCase.DOUBLE_VALUE
+import io.spine.protodata.value.Value.KindCase.INT_VALUE
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.LogicalOperator.AND
-import io.spine.protodata.value.Value.KindCase.DOUBLE_VALUE
-import io.spine.protodata.value.Value.KindCase.INT_VALUE
 
 /**
  * A factory of validation rules for number fields.
@@ -153,7 +153,7 @@ private fun Option.toRules(): NumberRules = when {
         "Option $name is not a number range option."
     )
 }
-@Suppress("FunctionNaming") // backticked name is necessary here.
+
 private fun Option.isA(generated: GeneratedExtension<*, *>) =
     name == generated.descriptor.name && number == generated.number
 
