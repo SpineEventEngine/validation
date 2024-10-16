@@ -50,10 +50,11 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
     ) {
         var option = event.getOption();
         var rules = NumberRules.from(option);
+        var field = event.getSubject();
         return just(
                 CompositeRuleAdded.newBuilder()
-                        .setType(event.getType())
-                        .setRule(rules.rangeRule(event.getField()))
+                        .setType(field.getDeclaringType())
+                        .setRule(rules.rangeRule(field.getName()))
                         .build()
         );
     }

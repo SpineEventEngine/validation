@@ -36,8 +36,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.ProtoFileHeader.SyntaxVersion.PROTO3
 import io.spine.protodata.ast.Type
-import io.spine.protodata.backend.CodeGenerationContext
-import io.spine.protodata.backend.Pipeline
 import io.spine.protodata.ast.event.fieldEntered
 import io.spine.protodata.ast.event.fieldOptionDiscovered
 import io.spine.protodata.ast.event.fileEntered
@@ -50,6 +48,8 @@ import io.spine.protodata.ast.option
 import io.spine.protodata.ast.protoFileHeader
 import io.spine.protodata.ast.type
 import io.spine.protodata.ast.typeName
+import io.spine.protodata.backend.CodeGenerationContext
+import io.spine.protodata.backend.Pipeline
 import io.spine.testing.server.blackbox.BlackBox
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
@@ -130,6 +130,12 @@ class PolicySpec {
                 type = typeName
                 file = this@PolicySpec.filePath
                 option = rangeOption
+                subject = field {
+                    declaringType = typeName
+                    name = fieldName
+                    type = primitive(TYPE_INT32)
+                    single = Empty.getDefaultInstance()
+                }
             }
         )
         blackBox.assertEvent(CompositeRuleAdded::class.java)

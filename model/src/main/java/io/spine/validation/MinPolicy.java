@@ -49,11 +49,12 @@ final class MinPolicy extends Policy<FieldOptionDiscovered> {
             @External @Where(field = OPTION_NAME, equals = "min") FieldOptionDiscovered event
     ) {
         var option = event.getOption();
+        var field = event.getSubject();
         var rules = NumberRules.from(option);
-        var rule = rules.minRule(event.getField());
+        var rule = rules.minRule(field.getName());
         return just(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(field.getDeclaringType())
                         .setRule(rule)
                         .build()
         );

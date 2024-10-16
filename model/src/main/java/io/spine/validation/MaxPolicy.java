@@ -29,8 +29,8 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.server.event.Just;
 import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.validation.event.SimpleRuleAdded;
 
@@ -50,10 +50,11 @@ final class MaxPolicy extends Policy<FieldOptionDiscovered> {
     ) {
         var option = event.getOption();
         var rules = NumberRules.from(option);
-        var rule = rules.maxRule(event.getField());
+        var field = event.getSubject();
+        var rule = rules.maxRule(field.getName());
         return just(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(field.getDeclaringType())
                         .setRule(rule)
                         .build()
         );
