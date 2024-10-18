@@ -35,11 +35,14 @@ import io.spine.option.OptionsProto.max
 import io.spine.option.OptionsProto.min
 import io.spine.option.OptionsProto.range
 import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.Option
+import io.spine.protodata.type.TypeSystem
 import io.spine.protodata.value.Value
 import io.spine.protodata.value.Value.KindCase.DOUBLE_VALUE
 import io.spine.protodata.value.Value.KindCase.INT_VALUE
+import io.spine.protodata.value.parse
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
@@ -133,10 +136,11 @@ internal constructor(
          *
          * The option must be the `(min)`, the `(max)`, or the `(range)`.
          *
-         * @throws IllegalArgumentException upon an unsupported option
+         * @throws IllegalArgumentException upon an unsupported option.
          */
         @JvmStatic
-        fun from(option: Option): NumberRules = option.toRules()
+        fun from(field: Field, option: Option, typeSystem: TypeSystem): NumberRules =
+            option.toRules(field, typeSystem)
     }
 }
 
@@ -145,10 +149,10 @@ internal constructor(
  */
 private inline fun <reified T : Message> Option.value() = value.unpack<T>()
 
-private fun Option.toRules(): NumberRules = when {
+private fun Option.toRules(field: Field, typeSystem: TypeSystem): NumberRules = when {
     isA(range) -> forRange()
-    isA(min) -> forMin()
-    isA(max) -> forMax()
+    isA(min) -> forMin(field, typeSystem)
+    isA(max) -> forMax(field, typeSystem)
     else -> throw IllegalArgumentException(
         "Option $name is not a number range option."
     )
@@ -157,9 +161,9 @@ private fun Option.toRules(): NumberRules = when {
 private fun Option.isA(generated: GeneratedExtension<*, *>) =
     name == generated.descriptor.name && number == generated.number
 
-private fun Option.forMin(): NumberRules {
+private fun Option.forMin(field: Field, typeSystem: TypeSystem): NumberRules {
     val optionValue = value<MinOption>()
-    val threshold = optionValue.value.parseToNumber()
+    val threshold = optionValue.parse(field, typeSystem)
     return NumberRules(
         lowerBound = threshold,
         lowerInclusive = !optionValue.exclusive,
@@ -167,9 +171,9 @@ private fun Option.forMin(): NumberRules {
     )
 }
 
-private fun Option.forMax(): NumberRules {
+private fun Option.forMax(field: Field, typeSystem: TypeSystem): NumberRules {
     val optionValue = value<MaxOption>()
-    val threshold = optionValue.value.parseToNumber()
+    val threshold = optionValue.parse(field, typeSystem)
     return NumberRules(
         upperBound = threshold,
         uppedInclusive = !optionValue.exclusive,
