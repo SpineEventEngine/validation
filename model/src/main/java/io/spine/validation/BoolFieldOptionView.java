@@ -50,8 +50,12 @@ abstract class BoolFieldOptionView<
     private final String defaultMessage;
 
     BoolFieldOptionView(Descriptor optionDescriptor) {
+        this(DefaultErrorMessage.from(optionDescriptor));
+    }
+
+    BoolFieldOptionView(String defaultMessage) {
         super();
-        this.defaultMessage = DefaultErrorMessage.from(optionDescriptor);
+        this.defaultMessage = defaultMessage;
     }
 
     @ContractFor(handler = Subscribe.class)

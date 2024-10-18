@@ -35,10 +35,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A ProtoData plugin which attaches validation-related policies and views.
  */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
+@SuppressWarnings({
+        "OverlyCoupledMethod", // Registers a lot of policies and repositories.
+        "OverlyCoupledClass", // Registers a lot of policies and repositories.
+        "unused" // Loaded by ProtoData via reflection.
+})
 public class ValidationPlugin implements Plugin {
 
-    @SuppressWarnings("OverlyCoupledMethod") // Registers a lot of policies and does nothing else.
     @Override
     public ImmutableSet<Policy<?>> policies() {
         return ImmutableSet.of(
@@ -61,7 +64,8 @@ public class ValidationPlugin implements Plugin {
         return ImmutableSet.of(
                 new MessageValidationRepository(),
                 new RequiredFieldRepository(),
-                new ValidatedFieldRepository()
+                new ValidatedFieldRepository(),
+                new SetOnceFieldRepository()
         );
     }
 }

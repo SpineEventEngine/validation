@@ -46,3 +46,16 @@ message FieldId {
     // Short name of the field.
     protodata.FieldName name = 2;
 }
+
+// A view of a field that is marked with `set_once` option.
+message SetOnceField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    // Message appearing when this required field is not set.
+    string error_message = 2;
+
+    // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
+    bool set_once = 3;
+}
