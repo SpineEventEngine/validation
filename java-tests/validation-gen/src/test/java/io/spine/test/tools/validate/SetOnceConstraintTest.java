@@ -30,6 +30,7 @@ import io.spine.validate.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static com.google.protobuf.ByteString.copyFromUtf8;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,8 +39,52 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SetOnceConstraintTest {
 
     @Nested
-    @DisplayName("when set, the field is prohibited for overriding")
-    class WhenSet {
+    @DisplayName("when set, prohibit overriding")
+    class WhenSetProhibitOverriding {
+
+        @Test
+        @DisplayName("of message")
+        void message() {
+            var student = Student.newBuilder()
+                    .setName(Name.newBuilder().setValue("Jack").build())
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setName(Name.newBuilder().setValue("Donald").build())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("of message builder")
+        void messageBuilder() {
+            var student = Student.newBuilder()
+                    .setName(Name.newBuilder().setValue("Jack"))
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setName(Name.newBuilder().setValue("Donald"))
+                    .build());
+        }
+
+        @Test
+        @DisplayName("of message to message builder")
+        void messageToMessageBuilder() {
+            var student = Student.newBuilder()
+                    .setName(Name.newBuilder().setValue("Jack").build())
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setName(Name.newBuilder().setValue("Donald"))
+                    .build());
+        }
+
+        @Test
+        @DisplayName("of message builder to message")
+        void messageBuilderToMessage() {
+            var student = Student.newBuilder()
+                    .setName(Name.newBuilder().setValue("Jack").build())
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setName(Name.newBuilder().setValue("Donald").build())
+                    .build());
+        }
 
         @Test
         @DisplayName("of a string value")
@@ -47,40 +92,31 @@ class SetOnceConstraintTest {
             var student = Student.newBuilder()
                     .setId("student-id-1")
                     .build();
-            assertThrows(
-                    ValidationException.class,
-                    () -> student.toBuilder()
-                            .setId("student-id-2")
-                            .build()
-            );
+            assertValidationFails(() -> student.toBuilder()
+                    .setId("student-id-2")
+                    .build());
         }
 
         @Test
-        @DisplayName("of a string bytes value")
-        void stringBytesValue() {
+        @DisplayName("of string bytes")
+        void stringBytes() {
             var student = Student.newBuilder()
                     .setIdBytes(copyFromUtf8("student-id-1"))
                     .build();
-            assertThrows(
-                    ValidationException.class,
-                    () -> student.toBuilder()
-                            .setIdBytes(copyFromUtf8("student-id-2"))
-                            .build()
-            );
+            assertValidationFails(() -> student.toBuilder()
+                    .setIdBytes(copyFromUtf8("student-id-2"))
+                    .build());
         }
 
         @Test
-        @DisplayName("of a bytes string to string value")
+        @DisplayName("of string bytes to a string value")
         void stringBytesToStringValue() {
             var student = Student.newBuilder()
                     .setIdBytes(copyFromUtf8("student-id-1"))
                     .build();
-            assertThrows(
-                    ValidationException.class,
-                    () -> student.toBuilder()
-                            .setId("student-id-2")
-                            .build()
-            );
+            assertValidationFails(() -> student.toBuilder()
+                    .setId("student-id-2")
+                    .build());
         }
 
         @Test
@@ -89,12 +125,14 @@ class SetOnceConstraintTest {
             var student = Student.newBuilder()
                     .setId("student-id-1")
                     .build();
-            assertThrows(
-                    ValidationException.class,
-                    () -> student.toBuilder()
-                            .setIdBytes(copyFromUtf8("student-id-2"))
-                            .build()
-            );
+            assertValidationFails(() -> student.toBuilder()
+                    .setIdBytes(copyFromUtf8("student-id-2"))
+                    .build());
         }
+    }
+
+    // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
+    private static void assertValidationFails(Executable runnable) {
+        assertThrows(ValidationException.class, runnable);
     }
 }

@@ -29,6 +29,7 @@ package io.spine.validation.java
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.ast.field
+import io.spine.protodata.ast.isMessage
 import io.spine.protodata.ast.isPrimitive
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.file.hasJavaRoot
@@ -49,11 +50,15 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         if (!sources.hasJavaRoot) {
             return
         }
+
+        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to preserve the `MessageType`.
         val messages = findMessageTypes().associateBy { it.message.name }
         val fields = select<SetOnceField>().all()
         val fieldsToMessages = fields.associateWith {
             messages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
         }
+
+
         fieldsToMessages.forEach {
             val message = it.value.message
             val file = sources.javaFileOf(message)
@@ -73,22 +78,46 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val field = message.message.field(fieldName)
         val fieldType = field.type
         when {
-            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
-                alertStringSetter(fieldName, field.number)
+
+            fieldType.isMessage -> {
+                alertMessageSetter(fieldName, fieldType.message.javaClassName(message.fileHeader))
             }
 
-            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_INT32" -> {
-                alertNumberSetter()
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
+                alertStringSetter(fieldName, field.number)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
         }
     }
 
+    private fun PsiClass.alertMessageSetter(fieldName: String, fieldType: ClassName) {
+        val preconditionCheck =
+            """
+            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val messageSetterSig = elementFactory.createMethodFromText(
+            """
+            public Builder ${fieldName.javaSetter()}(${fieldType.canonical} value) {}
+            """.trimIndent(), null
+        )
+        val messageSetter = findMethodBySignature(messageSetterSig, false)!!.body!!
+        val builderSetterSig = elementFactory.createMethodFromText(
+            """
+            public Builder ${fieldName.javaSetter()}(${fieldType.canonical}.Builder builderForValue) {}
+            """.trimIndent(), null
+        )
+        val builderSetter = findMethodBySignature(builderSetterSig, false)!!.body!!
+        messageSetter.addAfter(statement, messageSetter.lBrace)
+        builderSetter.addAfter(statement, builderSetter.lBrace)
+    }
+
     private fun PsiClass.alertStringSetter(fieldName: String, fieldNumber: Int) {
         val preconditionCheck =
             """
-            if (!${fieldName}_.equals(getDescriptorForType().findFieldByNumber($fieldNumber).getDefaultValue())) {
+            if (!${fieldName.javaGetter()}.equals(getDescriptorForType().findFieldByNumber($fieldNumber).getDefaultValue())) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -97,8 +126,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
         bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }
-
-    private fun alertNumberSetter() {
-        println("Alerting Number setter")
-    }
 }
+
+// TODO:2024-10-21:yevhenii.nadtochii: Already exists in `mc-java`.
+//  Move to ProtoData?
+private fun String.javaGetter() = "get${camelCase()}()"
+
+private fun String.javaSetter() = "set${camelCase()}"
