@@ -48,6 +48,9 @@ class SetOnceConstraintTest {
         private final Student studentJack = Student.newBuilder()
                 .setName(Name.newBuilder().setValue("Jack").build())
                 .build();
+        private final Student studentDonald = Student.newBuilder()
+                .setName(donald)
+                .build();
 
         @Test
         @DisplayName("by value")
@@ -73,7 +76,7 @@ class SetOnceConstraintTest {
                     .build());
         }
 
-        @Test
+        @Test // Required additional check in `mergeName()`.
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
@@ -81,14 +84,73 @@ class SetOnceConstraintTest {
                     .build());
         }
 
+        @Test // Required additional check in `mergeName()`.
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .mergeFrom(studentDonald)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .mergeFrom(studentDonald.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("when set, prohibit overriding string")
+    class WhenSetProhibitOverridingString {
+
+        private static final String STUDENT2 = "student-2";
+
+        private final Student student1 = Student.newBuilder()
+                .setId("student-1")
+                .build();
+        private final Student student2 = Student.newBuilder()
+                .setId(STUDENT2)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> student1.toBuilder()
+                    .setId(STUDENT2)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by bytes")
+        void byBytes() {
+            assertValidationFails(() -> student1.toBuilder()
+                    .setIdBytes(copyFromUtf8(STUDENT2))
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> student1.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
+                    .build());
+        }
+
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
-            var studentDonald = Student.newBuilder()
-                            .setName(donald)
-                            .build();
-            assertValidationFails(() -> studentJack.toBuilder()
-                    .mergeFrom(studentDonald)
+            assertValidationFails(() -> student1.toBuilder()
+                    .mergeFrom(student2)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> student1.toBuilder()
+                    .mergeFrom(student2.toByteArray())
                     .build());
         }
     }
@@ -96,50 +158,6 @@ class SetOnceConstraintTest {
     @Nested
     @DisplayName("when set, prohibit overriding messages")
     class WhenSetProhibitOverridingMessagess {
-
-        @Test
-        @DisplayName("of a string value")
-        void stringValue() {
-            var student = Student.newBuilder()
-                    .setId("student-id-1")
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setId("student-id-2")
-                    .build());
-        }
-
-        @Test
-        @DisplayName("of string bytes")
-        void stringBytes() {
-            var student = Student.newBuilder()
-                    .setIdBytes(copyFromUtf8("student-id-1"))
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setIdBytes(copyFromUtf8("student-id-2"))
-                    .build());
-        }
-
-        @Test
-        @DisplayName("of string bytes to a string value")
-        void stringBytesToStringValue() {
-            var student = Student.newBuilder()
-                    .setIdBytes(copyFromUtf8("student-id-1"))
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setId("student-id-2")
-                    .build());
-        }
-
-        @Test
-        @DisplayName("of a string value to string bytes")
-        void stringValueToStringBytes() {
-            var student = Student.newBuilder()
-                    .setId("student-id-1")
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setIdBytes(copyFromUtf8("student-id-2"))
-                    .build());
-        }
 
         @Test
         @DisplayName("of double value")

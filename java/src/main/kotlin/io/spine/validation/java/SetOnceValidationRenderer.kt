@@ -26,7 +26,9 @@
 
 package io.spine.validation.java
 
+import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.ast.field
 import io.spine.protodata.ast.isMessage
@@ -58,7 +60,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             messages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
         }
 
-
         fieldsToMessages.forEach {
             val message = it.value.message
             val file = sources.javaFileOf(message)
@@ -67,7 +68,11 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             val psiFile = file.psi() as PsiJavaFile
             val psiClass = psiFile.findClass(builderClass)
             execute {
-                psiClass.render(it.key, it.value)
+                try {
+                    psiClass.render(it.key, it.value)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
             file.overwrite(psiFile.text)
         }
@@ -86,7 +91,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
+                val fieldClassName = message.message.javaClassName(message.fileHeader)
                 alertStringSetter(fieldName)
+                alertMessageMerge(fieldName, fieldClassName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_DOUBLE" -> {
@@ -143,6 +150,26 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldMerge.addAfter(statement, fieldMerge.lBrace)
     }
 
+    private fun PsiClass.alertMessageMerge(fieldName: String, fieldType: ClassName) {
+        val preconditionCheck =
+            """
+            if (!${fieldName.javaGetter()}.equals("")) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromMessageSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(${fieldType.canonical} other) {}
+            """.trimIndent(), null
+        )
+        val mergeFromMessage = findMethodBySignature(mergeFromMessageSig, false)!!.body!!
+        val checkFieldNotDefault = mergeFromMessage.statements.find {
+            it.text.startsWith("if (!other.${fieldName.javaGetter()}.isEmpty())")
+        } as PsiIfStatement
+        val thenBranch = (checkFieldNotDefault.thenBranch!! as PsiBlockStatement).codeBlock
+        thenBranch.addAfter(statement, thenBranch.lBrace)
+    }
+
     private fun PsiClass.alertNumberSetter(fieldName: String) {
         val preconditionCheck =
             """
@@ -157,7 +184,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun PsiClass.alertStringSetter(fieldName: String) {
         val preconditionCheck =
             """
-            if (${fieldName.javaGetter()} != "") {
+            if (!${fieldName.javaGetter()}.equals("")) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
