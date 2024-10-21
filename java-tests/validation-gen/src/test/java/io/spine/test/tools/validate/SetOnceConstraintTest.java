@@ -151,6 +151,28 @@ class SetOnceConstraintTest {
                     .setWeight(16.9f)
                     .build());
         }
+
+        @Test
+        @DisplayName("of int32 value")
+        void int32Value() {
+            var student = Student.newBuilder()
+                    .setAge(18)
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setAge(19)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("of int64 value")
+        void int64Value() {
+            var student = Student.newBuilder()
+                    .setSubjects(5)
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setSubjects(6)
+                    .build());
+        }
     }
 
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.

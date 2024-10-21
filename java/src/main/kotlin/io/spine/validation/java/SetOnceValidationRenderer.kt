@@ -88,11 +88,19 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_DOUBLE" -> {
-                alertFloatingPoint(fieldName)
+                alertNumberSetter(fieldName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_FLOAT" -> {
-                alertFloatingPoint(fieldName)
+                alertNumberSetter(fieldName)
+            }
+
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_INT32" -> {
+                alertNumberSetter(fieldName)
+            }
+
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_INT64" -> {
+                alertNumberSetter(fieldName)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -122,7 +130,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         builderSetter.addAfter(statement, builderSetter.lBrace)
     }
 
-    private fun PsiClass.alertFloatingPoint(fieldName: String) {
+    private fun PsiClass.alertNumberSetter(fieldName: String) {
         val preconditionCheck =
             """
             if (${fieldName.javaGetter()} != 0) {
