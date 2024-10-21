@@ -38,6 +38,7 @@ import "google/protobuf/empty.proto";
 
 message Student {
 
+    // TODO:2024-10-20:yevhenii.nadtochii: Try field names with a "_".
     string id = 1 [(set_once) = true];
     int32 age = 2 [(set_once) = true];
 }

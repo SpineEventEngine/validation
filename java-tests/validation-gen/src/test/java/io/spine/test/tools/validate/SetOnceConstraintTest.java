@@ -26,24 +26,16 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.truth.Correspondence;
-import com.google.protobuf.ByteString;
-import io.spine.validate.ConstraintViolation;
 import io.spine.validate.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.truth.Correspondence.transforming;
+import static com.google.protobuf.ByteString.copyFromUtf8;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("`(set_once)` constraint should be compiled so that")
 class SetOnceConstraintTest {
-
-    private static final Correspondence<ConstraintViolation, String> fieldName = transforming(
-            violation -> violation.getFieldPath().getFieldName(0),
-            "field name"
-    );
 
     @Nested
     @DisplayName("when set, the field is prohibited for overriding")
@@ -53,12 +45,54 @@ class SetOnceConstraintTest {
         @DisplayName("of a string value")
         void stringValue() {
             var student = Student.newBuilder()
-                    .setIdBytes(ByteString.copyFromUtf8("student-id-1"))
+                    .setId("student-id-1")
                     .build();
             assertThrows(
                     ValidationException.class,
                     () -> student.toBuilder()
                             .setId("student-id-2")
+                            .build()
+            );
+        }
+
+        @Test
+        @DisplayName("of a string bytes value")
+        void stringBytesValue() {
+            var student = Student.newBuilder()
+                    .setIdBytes(copyFromUtf8("student-id-1"))
+                    .build();
+            assertThrows(
+                    ValidationException.class,
+                    () -> student.toBuilder()
+                            .setIdBytes(copyFromUtf8("student-id-2"))
+                            .build()
+            );
+        }
+
+        @Test
+        @DisplayName("of a bytes string to string value")
+        void stringBytesToStringValue() {
+            var student = Student.newBuilder()
+                    .setIdBytes(copyFromUtf8("student-id-1"))
+                    .build();
+            assertThrows(
+                    ValidationException.class,
+                    () -> student.toBuilder()
+                            .setId("student-id-2")
+                            .build()
+            );
+        }
+
+        @Test
+        @DisplayName("of a string value to string bytes")
+        void stringValueToStringBytes() {
+            var student = Student.newBuilder()
+                    .setId("student-id-1")
+                    .build();
+            assertThrows(
+                    ValidationException.class,
+                    () -> student.toBuilder()
+                            .setIdBytes(copyFromUtf8("student-id-2"))
                             .build()
             );
         }
