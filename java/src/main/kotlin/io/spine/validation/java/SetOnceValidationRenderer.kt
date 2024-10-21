@@ -84,7 +84,15 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
-                alertStringSetter(fieldName, field.number)
+                alertStringSetter(fieldName)
+            }
+
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_DOUBLE" -> {
+                alertFloatingPoint(fieldName)
+            }
+
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_FLOAT" -> {
+                alertFloatingPoint(fieldName)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -114,15 +122,26 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         builderSetter.addAfter(statement, builderSetter.lBrace)
     }
 
-    private fun PsiClass.alertStringSetter(fieldName: String, fieldNumber: Int) {
+    private fun PsiClass.alertFloatingPoint(fieldName: String) {
         val preconditionCheck =
             """
-            if (!${fieldName.javaGetter()}.equals(getDescriptorForType().findFieldByNumber($fieldNumber).getDefaultValue())) {
+            if (${fieldName.javaGetter()} != 0) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method("set${fieldName.camelCase()}").body!!
-        val bytesSetter = method("set${fieldName.camelCase()}Bytes").body!!
+        val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertStringSetter(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != "") {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method(fieldName.javaSetter()).body!!
+        val bytesSetter = method("${fieldName.javaSetter()}Bytes").body!!
         setter.addAfter(statement, setter.lBrace)
         bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }

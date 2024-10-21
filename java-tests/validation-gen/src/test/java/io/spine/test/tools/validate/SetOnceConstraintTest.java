@@ -129,6 +129,28 @@ class SetOnceConstraintTest {
                     .setIdBytes(copyFromUtf8("student-id-2"))
                     .build());
         }
+
+        @Test
+        @DisplayName("of double value")
+        void doubleValue() {
+            var student = Student.newBuilder()
+                    .setHeight(16.8)
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setHeight(16.9)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("of float value")
+        void floatValue() {
+            var student = Student.newBuilder()
+                    .setWeight(16.8f)
+                    .build();
+            assertValidationFails(() -> student.toBuilder()
+                    .setWeight(16.9f)
+                    .build());
+        }
     }
 
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
