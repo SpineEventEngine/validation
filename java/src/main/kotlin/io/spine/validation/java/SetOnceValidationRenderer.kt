@@ -80,7 +80,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         when {
 
             fieldType.isMessage -> {
-                alertMessageSetter(fieldName, fieldType.message.javaClassName(message.fileHeader))
+                val fieldClassName = fieldType.message.javaClassName(message.fileHeader)
+                alertMessageSetter(fieldName, fieldClassName)
+                alertMessageFieldMerge(fieldName, fieldClassName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
@@ -128,6 +130,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val builderSetter = findMethodBySignature(builderSetterSig, false)!!.body!!
         messageSetter.addAfter(statement, messageSetter.lBrace)
         builderSetter.addAfter(statement, builderSetter.lBrace)
+    }
+
+    private fun PsiClass.alertMessageFieldMerge(fieldName: String, fieldType: ClassName) {
+        val preconditionCheck =
+            """
+            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val fieldMerge = method("merge${fieldName.camelCase()}").body!!
+        fieldMerge.addAfter(statement, fieldMerge.lBrace)
     }
 
     private fun PsiClass.alertNumberSetter(fieldName: String) {

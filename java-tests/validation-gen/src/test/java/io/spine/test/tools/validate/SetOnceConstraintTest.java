@@ -39,52 +39,63 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SetOnceConstraintTest {
 
     @Nested
-    @DisplayName("when set, prohibit overriding")
-    class WhenSetProhibitOverriding {
+    @DisplayName("when set, prohibit overriding messages")
+    class WhenSetProhibitOverridingMessages {
+
+        private final Name donald = Name.newBuilder()
+                .setValue("Donald")
+                .build();
+        private final Student studentJack = Student.newBuilder()
+                .setName(Name.newBuilder().setValue("Jack").build())
+                .build();
 
         @Test
-        @DisplayName("of message")
-        void message() {
-            var student = Student.newBuilder()
-                    .setName(Name.newBuilder().setValue("Jack").build())
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setName(Name.newBuilder().setValue("Donald").build())
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .setName(donald)
                     .build());
         }
 
         @Test
-        @DisplayName("of message builder")
-        void messageBuilder() {
-            var student = Student.newBuilder()
-                    .setName(Name.newBuilder().setValue("Jack"))
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setName(Name.newBuilder().setValue("Donald"))
+        @DisplayName("by builder")
+        void byBuilder() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .setName(donald.toBuilder())
                     .build());
         }
 
         @Test
-        @DisplayName("of message to message builder")
-        void messageToMessageBuilder() {
-            var student = Student.newBuilder()
-                    .setName(Name.newBuilder().setValue("Jack").build())
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setName(Name.newBuilder().setValue("Donald"))
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
                     .build());
         }
 
         @Test
-        @DisplayName("of message builder to message")
-        void messageBuilderToMessage() {
-            var student = Student.newBuilder()
-                    .setName(Name.newBuilder().setValue("Jack").build())
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setName(Name.newBuilder().setValue("Donald").build())
+        @DisplayName("by field merge")
+        void byFieldMerge() {
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .mergeName(donald)
                     .build());
         }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            var studentDonald = Student.newBuilder()
+                            .setName(donald)
+                            .build();
+            assertValidationFails(() -> studentJack.toBuilder()
+                    .mergeFrom(studentDonald)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("when set, prohibit overriding messages")
+    class WhenSetProhibitOverridingMessagess {
 
         @Test
         @DisplayName("of a string value")
@@ -171,6 +182,12 @@ class SetOnceConstraintTest {
                     .build();
             assertValidationFails(() -> student.toBuilder()
                     .setSubjects(6)
+                    .build());
+            assertValidationFails(() -> student.toBuilder()
+                    .mergeFrom(Student.newBuilder().setSubjects(6).build())
+                    .build());
+            assertValidationFails(() -> student.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("subjects"), 6)
                     .build());
         }
     }
