@@ -890,6 +890,124 @@ class SetOnceConstraintTest {
         }
     }
 
+    @Nested
+    @DisplayName("prohibit overriding enums")
+    class ProhibitOverridingEnums {
+
+        private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
+
+        private final Student firstYearStudent = Student.newBuilder()
+                .setYearOfStudy(YearOfStudy.YOS_FIRST)
+                .build();
+        private final Student thirdYearStudent = Student.newBuilder()
+                .setYearOfStudy(thirdYear)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> firstYearStudent.toBuilder()
+                    .setYearOfStudy(thirdYear)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by ordinal number")
+        void byOrdinalNumber() {
+            assertValidationFails(() -> firstYearStudent.toBuilder()
+                    .setYearOfStudyValue(3) // Third year.
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> firstYearStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("year_of_study"),
+                              thirdYear.getValueDescriptor())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> firstYearStudent.toBuilder()
+                    .mergeFrom(thirdYearStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> firstYearStudent.toBuilder()
+                    .mergeFrom(thirdYearStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value enums")
+    class AllowOverridingDefaultValueEnums {
+
+        private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
+
+        private final Student unknownYearStudent = Student.newBuilder()
+                .build();
+        private final Student thirdYearStudent = Student.newBuilder()
+                .setYearOfStudy(thirdYear)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .setYearOfStudy(thirdYear)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by ordinal number")
+        void byOrdinalNumber() {
+            assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .setYearOfStudyValue(3) // Third year.
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("year_of_study"),
+                              thirdYear.getValueDescriptor())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .mergeFrom(thirdYearStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .mergeFrom(thirdYearStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> thirdYearStudent.toBuilder()
+                    .clearYearOfStudy()
+                    .setYearOfStudy(thirdYear)
+                    .build());
+        }
+    }
+
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
     private static void assertValidationFails(Executable executable) {
         assertThrows(ValidationException.class, executable);

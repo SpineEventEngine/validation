@@ -31,6 +31,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.ast.field
+import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
 import io.spine.protodata.ast.isPrimitive
 import io.spine.protodata.java.ClassName
@@ -40,6 +41,7 @@ import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFileSet
 import io.spine.string.camelCase
+import io.spine.string.lowerCamelCase
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.method
@@ -118,6 +120,11 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BYTES" -> {
                 alertBytesSetter(fieldName)
+            }
+
+            fieldType.isEnum -> {
+                alertEnumSetter(fieldName)
+                alertEnumValueSetter(fieldName)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -208,6 +215,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertEnumSetter(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.lowerCamelCase()}_ != 0) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertEnumValueSetter(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.lowerCamelCase()}_ != 0) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method("${fieldName.javaSetter()}Value").body!!
         setter.addAfter(statement, setter.lBrace)
     }
 
