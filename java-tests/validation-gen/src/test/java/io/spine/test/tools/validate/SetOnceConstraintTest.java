@@ -33,14 +33,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import static com.google.protobuf.ByteString.copyFromUtf8;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("`(set_once)` constraint should be compiled so that")
+@DisplayName("`(set_once)` constraint should be compiled so that when set")
 class SetOnceConstraintTest {
 
     @Nested
-    @DisplayName("when set, prohibit overriding messages")
-    class WhenSetProhibitOverridingMessages {
+    @DisplayName("prohibit overriding messages")
+    class ProhibitOverridingMessages {
 
         private final Name donald = Name.newBuilder()
                 .setValue("Donald")
@@ -76,7 +77,7 @@ class SetOnceConstraintTest {
                     .build());
         }
 
-        @Test // Required additional check in `mergeName()`.
+        @Test
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
@@ -84,7 +85,7 @@ class SetOnceConstraintTest {
                     .build());
         }
 
-        @Test // Required additional check in `mergeName()`.
+        @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
@@ -102,8 +103,79 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("when set, prohibit overriding string")
-    class WhenSetProhibitOverridingString {
+    @DisplayName("allow overriding default value messages")
+    class AllowOverridingDefaultValueMessages {
+
+        private final Name donald = Name.newBuilder()
+                .setValue("Donald")
+                .build();
+        private final Student unnamedStudent = Student.newBuilder()
+                .build();
+        private final Student studentDonald = Student.newBuilder()
+                .setName(donald)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .setName(donald)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by builder")
+        void byBuilder() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .setName(donald.toBuilder())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by field merge")
+        void byFieldMerge() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .mergeName(donald)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .mergeFrom(studentDonald)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .mergeFrom(studentDonald.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> studentDonald.toBuilder()
+                    .clearName()
+                    .setName(donald)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding strings")
+    class ProhibitOverridingStrings {
 
         private static final String STUDENT2 = "student-2";
 
@@ -156,62 +228,473 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("when set, prohibit overriding messages")
-    class WhenSetProhibitOverridingMessagess {
+    @DisplayName("allow overriding default value strings")
+    class AllowOverridingDefaultValueStrings {
+
+        private static final String STUDENT2 = "student-2";
+
+        private final Student undentifiedStudent = Student.newBuilder()
+                .build();
+        private final Student student2 = Student.newBuilder()
+                .setId(STUDENT2)
+                .build();
 
         @Test
-        @DisplayName("of double value")
-        void doubleValue() {
-            var student = Student.newBuilder()
-                    .setHeight(16.8)
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setHeight(16.9)
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .setId(STUDENT2)
                     .build());
         }
 
         @Test
-        @DisplayName("of float value")
-        void floatValue() {
-            var student = Student.newBuilder()
-                    .setWeight(16.8f)
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setWeight(16.9f)
+        @DisplayName("by bytes")
+        void byBytes() {
+            assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .setIdBytes(copyFromUtf8(STUDENT2))
                     .build());
         }
 
         @Test
-        @DisplayName("of int32 value")
-        void int32Value() {
-            var student = Student.newBuilder()
-                    .setAge(18)
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setAge(19)
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
                     .build());
         }
 
         @Test
-        @DisplayName("of int64 value")
-        void int64Value() {
-            var student = Student.newBuilder()
-                    .setSubjects(5)
-                    .build();
-            assertValidationFails(() -> student.toBuilder()
-                    .setSubjects(6)
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .mergeFrom(student2)
                     .build());
-            assertValidationFails(() -> student.toBuilder()
-                    .mergeFrom(Student.newBuilder().setSubjects(6).build())
+        }
+
+        @Test
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .mergeFrom(student2.toByteArray())
                     .build());
-            assertValidationFails(() -> student.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("subjects"), 6)
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> student2.toBuilder()
+                    .clearId()
+                    .setId(STUDENT2)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding doubles")
+    class ProhibitOverridingDoubles {
+
+        private static final double halfOfMeter = 0.5;
+
+        private final Student tallStudent = Student.newBuilder()
+                .setHeight(188.5)
+                .build();
+        private final Student shortStudent = Student.newBuilder()
+                .setHeight(halfOfMeter)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> tallStudent.toBuilder()
+                    .setHeight(halfOfMeter)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> tallStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> tallStudent.toBuilder()
+                    .mergeFrom(shortStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> tallStudent.toBuilder()
+                    .mergeFrom(shortStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value doubles")
+    class AllowOverridingDefaultValueDoubles {
+
+        private static final double halfOfMeter = 0.5;
+
+        private final Student unheightedStudent = Student.newBuilder()
+                .build();
+        private final Student shortStudent = Student.newBuilder()
+                .setHeight(halfOfMeter)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .setHeight(halfOfMeter)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .mergeFrom(shortStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .mergeFrom(shortStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> shortStudent.toBuilder()
+                    .clearHeight()
+                    .setHeight(halfOfMeter)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding floats")
+    class ProhibitOverridingFloats {
+
+        private static final float fiftyKilograms = 0.5f;
+
+        private final Student heavyStudent = Student.newBuilder()
+                .setWeight(80)
+                .build();
+        private final Student thinStudent = Student.newBuilder()
+                .setWeight(fiftyKilograms)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> heavyStudent.toBuilder()
+                    .setWeight(fiftyKilograms)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> heavyStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> heavyStudent.toBuilder()
+                    .mergeFrom(thinStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> heavyStudent.toBuilder()
+                    .mergeFrom(thinStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value floats")
+    class AllowOverridingDefaultValueFloats {
+
+        private static final float fiftyKilograms = 0.5f;
+
+        private final Student unweightedStudent = Student.newBuilder()
+                .build();
+        private final Student thinStudent = Student.newBuilder()
+                .setWeight(fiftyKilograms)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .setHeight(fiftyKilograms)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .mergeFrom(thinStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .mergeFrom(thinStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> thinStudent.toBuilder()
+                    .clearHeight()
+                    .setHeight(fiftyKilograms)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding integers")
+    class ProhibitOverridingIntegers {
+
+        private static final int sixteen = 16;
+
+        private final Student oldStudent = Student.newBuilder()
+                .setAge(60)
+                .build();
+        private final Student youngStudent = Student.newBuilder()
+                .setAge(sixteen)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> oldStudent.toBuilder()
+                    .setAge(sixteen)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> oldStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> oldStudent.toBuilder()
+                    .mergeFrom(youngStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> oldStudent.toBuilder()
+                    .mergeFrom(youngStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value integers")
+    class AllowOverridingDefaultValueIntegers {
+
+        private static final int sixteen = 16;
+
+        private final Student unknownAgeStudent = Student.newBuilder()
+                .build();
+        private final Student youngStudent = Student.newBuilder()
+                .setAge(sixteen)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+                    .setAge(sixteen)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+                    .mergeFrom(youngStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+                    .mergeFrom(youngStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> youngStudent.toBuilder()
+                    .clearAge()
+                    .setAge(sixteen)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding longs")
+    class ProhibitOverridingLongs {
+
+        private static final long six = 16;
+
+        private final Student smartStudent = Student.newBuilder()
+                .setSubjects(12)
+                .build();
+        private final Student mediocreStudent = Student.newBuilder()
+                .setSubjects(six)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> smartStudent.toBuilder()
+                    .setSubjects(six)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> smartStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> smartStudent.toBuilder()
+                    .mergeFrom(mediocreStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> smartStudent.toBuilder()
+                    .mergeFrom(mediocreStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value longs")
+    class AllowOverridingDefaultValueLongs {
+
+        private static final long six = 6;
+
+        private final Student unknownSubsjectsStudent = Student.newBuilder()
+                .build();
+        private final Student mediocreStudent = Student.newBuilder()
+                .setSubjects(six)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+                    .setSubjects(six)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+                    .mergeFrom(mediocreStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+                    .mergeFrom(mediocreStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> mediocreStudent.toBuilder()
+                    .clearSubjects()
+                    .setSubjects(six)
                     .build());
         }
     }
 
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
-    private static void assertValidationFails(Executable runnable) {
-        assertThrows(ValidationException.class, runnable);
+    private static void assertValidationFails(Executable executable) {
+        assertThrows(ValidationException.class, executable);
+    }
+
+    private static void assertValidationPasses(Executable executable) {
+        assertDoesNotThrow(executable);
     }
 }
