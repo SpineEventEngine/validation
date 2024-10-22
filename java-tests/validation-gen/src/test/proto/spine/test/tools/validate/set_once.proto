@@ -45,6 +45,7 @@ message Student {
     int64 subjects = 6 [(set_once) = true];
 
     bool has_medals = 7 [(set_once) = true];
+
     bytes signature = 8 [(set_once) = true];
     YearOfStudy year_of_study = 9 [(set_once) = true];
 }

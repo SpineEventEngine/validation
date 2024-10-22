@@ -112,6 +112,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
                 alertNumberSetter(fieldName)
             }
 
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BOOL" -> {
+                alertBooleanSetter(fieldName)
+            }
+
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
         }
     }
@@ -174,6 +178,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val preconditionCheck =
             """
             if (${fieldName.javaGetter()} != 0) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertBooleanSetter(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != false) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)

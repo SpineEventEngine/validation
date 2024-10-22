@@ -689,6 +689,106 @@ class SetOnceConstraintTest {
         }
     }
 
+    @Nested
+    @DisplayName("prohibit overriding booleans")
+    class ProhibitOverridingBooleans {
+
+        private static final boolean noMedals = false;
+
+        private final Student awardedStudent = Student.newBuilder()
+                .setHasMedals(true)
+                .build();
+        private final Student ordinaryStudent = Student.newBuilder()
+                .setHasMedals(noMedals)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> awardedStudent.toBuilder()
+                    .setHasMedals(noMedals)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> awardedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals)
+                    .build());
+        }
+
+        @Test // Doesn't work by Protobuf design.
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> awardedStudent.toBuilder()
+                    .mergeFrom(ordinaryStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> awardedStudent.toBuilder()
+                    .mergeFrom(ordinaryStudent.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value booleans")
+    class AllowOverridingDefaultValueBooleans {
+
+        private static final boolean noMedals = false;
+
+        private final Student unknownMedalsStudent = Student.newBuilder()
+                .build();
+        private final Student awardedStudent = Student.newBuilder()
+                .setHasMedals(true)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+                    .setHasMedals(noMedals)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+                    .mergeFrom(awardedStudent)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+                    .mergeFrom(awardedStudent.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> awardedStudent.toBuilder()
+                    .clearHasMedals()
+                    .setHasMedals(true)
+                    .build());
+        }
+    }
+
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
     private static void assertValidationFails(Executable executable) {
         assertThrows(ValidationException.class, executable);
