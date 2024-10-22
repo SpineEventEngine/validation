@@ -26,6 +26,7 @@
 
 package io.spine.test.tools.validate;
 
+import com.google.protobuf.ByteString;
 import io.spine.validate.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -785,6 +786,106 @@ class SetOnceConstraintTest {
             assertValidationPasses(() -> awardedStudent.toBuilder()
                     .clearHasMedals()
                     .setHasMedals(true)
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("prohibit overriding bytes")
+    class ProhibitOverridingBytes {
+
+        private final ByteString fullSignature = ByteString.copyFromUtf8("full");
+
+        private final Student studentShortSignature = Student.newBuilder()
+                .setSignature(ByteString.copyFromUtf8("short"))
+                .build();
+        private final Student studentFullSignature = Student.newBuilder()
+                .setSignature(fullSignature)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationFails(() -> studentShortSignature.toBuilder()
+                    .setSignature(fullSignature)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationFails(() -> studentShortSignature.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationFails(() -> studentShortSignature.toBuilder()
+                    .mergeFrom(studentFullSignature)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationFails(() -> studentShortSignature.toBuilder()
+                    .mergeFrom(studentFullSignature.toByteArray())
+                    .build());
+        }
+    }
+
+    @Nested
+    @DisplayName("allow overriding default value bytes")
+    class AllowOverridingDefaultValueBytes {
+
+        private final ByteString fullSignature = ByteString.copyFromUtf8("full");
+
+        private final Student studentNoSignature = Student.newBuilder()
+                .build();
+        private final Student studentFullSignature = Student.newBuilder()
+                .setSignature(fullSignature)
+                .build();
+
+        @Test
+        @DisplayName("by value")
+        void byValue() {
+            assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .setSignature(fullSignature)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by reflection")
+        void byReflection() {
+            assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
+                    .build());
+        }
+
+        @Test
+        @DisplayName("by message merge")
+        void byMessageMerge() {
+            assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .mergeFrom(studentFullSignature)
+                    .build());
+        }
+
+        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @DisplayName("by bytes merge")
+        void byBytesMerge() {
+            assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .mergeFrom(studentFullSignature.toByteArray())
+                    .build());
+        }
+
+        @Test
+        @DisplayName("after clearing")
+        void afterClearing() {
+            assertValidationPasses(() -> studentFullSignature.toBuilder()
+                    .clearSignature()
+                    .setSignature(fullSignature)
                     .build());
         }
     }

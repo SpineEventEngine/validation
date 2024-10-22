@@ -116,6 +116,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
                 alertBooleanSetter(fieldName)
             }
 
+            fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BYTES" -> {
+                alertBytesSetter(fieldName)
+            }
+
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
         }
     }
@@ -157,7 +161,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun PsiClass.alertMessageMerge(fieldName: String, fieldType: ClassName) {
         val preconditionCheck =
             """
-            if (!${fieldName.javaGetter()}.equals("")) {
+            if (!${fieldName.javaGetter()}.isEmpty()) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -189,6 +193,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val preconditionCheck =
             """
             if (${fieldName.javaGetter()} != false) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertBytesSetter(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != com.google.protobuf.ByteString.EMPTY) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
