@@ -124,15 +124,18 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BOOL" -> {
                 alertBooleanSetter(fieldName)
+                alertBooleanBytesMerge(fieldName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BYTES" -> {
                 alertBytesSetter(fieldName)
+                alertBytesMerge(fieldName)
             }
 
             fieldType.isEnum -> {
                 alertEnumSetter(fieldName)
                 alertEnumValueSetter(fieldName)
+                alertEnumBytesMerge(fieldName)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -281,6 +284,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
+    private fun PsiClass.alertBooleanBytesMerge(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != false) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readBool()") },
+            strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readBool()") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
+    }
+
     private fun PsiClass.alertBytesSetter(fieldName: String) {
         val preconditionCheck =
             """
@@ -292,6 +317,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
+    private fun PsiClass.alertBytesMerge(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != com.google.protobuf.ByteString.EMPTY) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readBytes()") },
+            strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readBytes()") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
+    }
+
     private fun PsiClass.alertEnumSetter(fieldName: String) {
         val preconditionCheck =
             """
@@ -301,6 +348,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val setter = method(fieldName.javaSetter()).body!!
         setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertEnumBytesMerge(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.lowerCamelCase()}_ != 0) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readEnum()") },
+            strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readEnum()") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
     }
 
     private fun PsiClass.alertEnumValueSetter(fieldName: String) {
