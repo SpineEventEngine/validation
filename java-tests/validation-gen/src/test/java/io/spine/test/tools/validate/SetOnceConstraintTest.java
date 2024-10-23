@@ -225,7 +225,7 @@ class SetOnceConstraintTest {
 
     @Nested
     @DisplayName("allow overriding default and same-value string")
-    class AllowOverridingDefaultValueString {
+    class AllowOverridingDefaultAndSameValueString {
 
         private static final String STUDENT2 = "student-2";
 
@@ -291,8 +291,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding doubles")
-    class ProhibitOverridingDoubles {
+    @DisplayName("prohibit overriding non-default double")
+    class ProhibitOverridingNonDefaultDouble {
 
         private static final double halfOfMeter = 0.5;
 
@@ -307,38 +307,34 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setHeight(halfOfMeter)
-                    .build());
+                    .setHeight(halfOfMeter));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .mergeFrom(shortStudent)
-                    .build());
+                    .mergeFrom(shortStudent));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .mergeFrom(shortStudent.toByteArray())
-                    .build());
+                    .mergeFrom(shortStudent.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value doubles")
-    class AllowOverridingDefaultValueDoubles {
+    @DisplayName("allow overriding default and same-value double")
+    class AllowOverridingDefaultAndSameValueDouble {
 
         private static final double halfOfMeter = 0.5;
 
@@ -353,6 +349,7 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> unheightedStudent.toBuilder()
                     .setHeight(halfOfMeter)
+                    .setHeight(halfOfMeter)
                     .build());
         }
 
@@ -360,6 +357,7 @@ class SetOnceConstraintTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
                     .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
                     .build());
         }
@@ -369,13 +367,15 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> unheightedStudent.toBuilder()
                     .mergeFrom(shortStudent)
+                    .mergeFrom(shortStudent)
                     .build());
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> unheightedStudent.toBuilder()
+                    .mergeFrom(shortStudent.toByteArray())
                     .mergeFrom(shortStudent.toByteArray())
                     .build());
         }
@@ -391,8 +391,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding floats")
-    class ProhibitOverridingFloats {
+    @DisplayName("prohibit overriding non-default float")
+    class ProhibitOverridingNonDefaultFloat {
 
         private static final float fiftyKilograms = 0.5f;
 
@@ -407,38 +407,34 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setWeight(fiftyKilograms)
-                    .build());
+                    .setWeight(fiftyKilograms));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .mergeFrom(thinStudent)
-                    .build());
+                    .mergeFrom(thinStudent));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .mergeFrom(thinStudent.toByteArray())
-                    .build());
+                    .mergeFrom(thinStudent.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value floats")
-    class AllowOverridingDefaultValueFloats {
+    @DisplayName("allow overriding default and same-value float")
+    class AllowOverridingDefaultAndSameValueFloat {
 
         private static final float fiftyKilograms = 0.5f;
 
@@ -453,6 +449,7 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
                     .setHeight(fiftyKilograms)
+                    .setHeight(fiftyKilograms)
                     .build());
         }
 
@@ -460,6 +457,7 @@ class SetOnceConstraintTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
                     .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
                     .build());
         }
@@ -469,13 +467,15 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
                     .mergeFrom(thinStudent)
+                    .mergeFrom(thinStudent)
                     .build());
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
+                    .mergeFrom(thinStudent.toByteArray())
                     .mergeFrom(thinStudent.toByteArray())
                     .build());
         }
