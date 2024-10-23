@@ -28,8 +28,10 @@ package io.spine.validation.java
 
 import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
+import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.field
 import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
@@ -90,6 +92,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
                 val fieldClassName = fieldType.message.javaClassName(message.fileHeader)
                 alertMessageSetter(fieldName, fieldClassName)
                 alertMessageFieldMerge(fieldName, fieldClassName)
+                alertMessageBytesMerge(fieldName, fieldClassName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
@@ -163,6 +166,29 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val fieldMerge = method("merge${fieldName.camelCase()}").body!!
         fieldMerge.addAfter(statement, fieldMerge.lBrace)
+    }
+
+    private fun PsiClass.alertMessageBytesMerge(fieldName: String, fieldType: ClassName) {
+        val preconditionCheck =
+            """
+            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        println("Search for `get${fieldName.camelCase()}FieldBuilder().getBuilder()`")
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("get${fieldName.camelCase()}FieldBuilder().getBuilder()") },
+            strict = { it.startsWith("input.readMessage") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
     }
 
     private fun PsiClass.alertMessageMerge(fieldName: String, fieldType: ClassName) {
@@ -253,6 +279,22 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }
 }
+
+private fun Array<PsiElement>.deepSearch(
+    strict: (String) -> Boolean,
+    whole: (String) -> Boolean
+): PsiElement? =
+    asSequence().mapNotNull { element ->
+        val text = element.text
+        println("*** whole = `${whole(text)}`")
+        println(text)
+        println("*** strict = `${strict(text)}`")
+        when {
+            !whole(text) -> null
+            strict(text) -> element
+            else -> element.children.deepSearch(strict, whole)
+        }
+    }.firstOrNull()
 
 // TODO:2024-10-21:yevhenii.nadtochii: Already exists in `mc-java`.
 //  Move to ProtoData?
