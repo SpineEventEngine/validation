@@ -46,6 +46,16 @@ message Student {
     bool has_medals = 7 [(set_once) = true];
     bytes signature = 8 [(set_once) = true];
     YearOfStudy year_of_study = 9 [(set_once) = true];
+
+    Name name2 = 10;
+    string id2 = 11;
+    double height2 = 12;
+    float weight2 = 13;
+    int32 age2 = 14;
+    int64 subjects2 = 15;
+    bool has_medals2 = 16;
+    bytes signature2 = 17;
+    YearOfStudy year_of_study2 = 18;
 }
 
 message Name {

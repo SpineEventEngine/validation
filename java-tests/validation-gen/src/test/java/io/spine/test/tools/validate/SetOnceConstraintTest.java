@@ -37,8 +37,33 @@ import static com.google.protobuf.ByteString.copyFromUtf8;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("`(set_once)` constraint should be compiled so that when set")
+@DisplayName("`(set_once)` constraint should be compiled so that")
 class SetOnceConstraintTest {
+
+    @Test
+    @DisplayName("don't not affect fields without the option")
+    void doNotNotAffectMessagesWithoutOption() {
+        assertValidationPasses(() -> Student.newBuilder()
+                .setName2(Name.newBuilder().setValue("Max").build())
+                .setName2(Name.newBuilder().setValue("Jack").build())
+                .setId2("free-student-1")
+                .setId2("free-student-2")
+                .setHeight2(168.4)
+                .setHeight2(178.6)
+                .setWeight2(66.6f)
+                .setWeight2(76.8f)
+                .setAge2(18)
+                .setAge2(24)
+                .setSubjects2(5)
+                .setSubjects2(10)
+                .setHasMedals2(true)
+                .setHasMedals2(false)
+                .setSignature2(ByteString.copyFromUtf8("full-signature"))
+                .setSignature2(ByteString.copyFromUtf8("short-signature"))
+                .setYearOfStudy2(YearOfStudy.YOS_FIRST)
+                .setYearOfStudy2(YearOfStudy.YOS_SECOND)
+                .build());
+    }
 
     @Nested
     @DisplayName("prohibit overriding non-default message")
