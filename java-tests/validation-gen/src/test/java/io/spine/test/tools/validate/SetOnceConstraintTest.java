@@ -698,12 +698,12 @@ class SetOnceConstraintTest {
      * In Protobuf v3, `boolean` field type has only one non-default value: `true`. When we try
      * to override `true` with `false` by merging, the merge method does nothing because it doesn't
      * consider fields with the default values. When we override `false` with `true`, we're just
-     * effectively assigning an initial non-default value, which is covered by another tests group.
+     * effectively assigning an initial non-default value, which is covered by another test group.
      * See {@link AllowOverridingDefaultValueBooleans}.
      */
     @Nested
-    @DisplayName("prohibit overriding booleans")
-    class ProhibitOverridingBooleans {
+    @DisplayName("prohibit overriding non-default boolean")
+    class ProhibitOverridingNonDefaultBoolean {
 
         private static final boolean noMedals = false;
 
@@ -715,26 +715,24 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setHasMedals(noMedals)
-                    .build());
+                    .setHasMedals(noMedals));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value booleans")
-    class AllowOverridingDefaultValueBooleans {
+    @DisplayName("allow overriding default and same-value boolean")
+    class AllowOverridingDefaultAndSameValueBoolean {
 
-        private static final boolean noMedals = false;
+        private static final boolean has = true;
 
-        private final Student unknownMedalsStudent = Student.newBuilder()
+        private final Student studentWithoutMedals = Student.newBuilder()
                 .build();
         private final Student awardedStudent = Student.newBuilder()
                 .setHasMedals(true)
@@ -743,31 +741,35 @@ class SetOnceConstraintTest {
         @Test
         @DisplayName("by value")
         void byValue() {
-            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
-                    .setHasMedals(noMedals)
+            assertValidationPasses(() -> studentWithoutMedals.toBuilder()
+                    .setHasMedals(has)
+                    .setHasMedals(has)
                     .build());
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
-            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals)
+            assertValidationPasses(() -> studentWithoutMedals.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), has)
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), has)
                     .build());
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
-            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+            assertValidationPasses(() -> studentWithoutMedals.toBuilder()
+                    .mergeFrom(awardedStudent)
                     .mergeFrom(awardedStudent)
                     .build());
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
-            assertValidationPasses(() -> unknownMedalsStudent.toBuilder()
+            assertValidationPasses(() -> studentWithoutMedals.toBuilder()
+                    .mergeFrom(awardedStudent.toByteArray())
                     .mergeFrom(awardedStudent.toByteArray())
                     .build());
         }
@@ -777,7 +779,7 @@ class SetOnceConstraintTest {
         void afterClearing() {
             assertValidationPasses(() -> awardedStudent.toBuilder()
                     .clearHasMedals()
-                    .setHasMedals(true)
+                    .setHasMedals(has)
                     .build());
         }
     }
