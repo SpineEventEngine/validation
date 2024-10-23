@@ -36,6 +36,8 @@ option java_multiple_files = true;
 
 import "google/protobuf/empty.proto";
 
+// Better to have all these fields, so that the codegen doesn't add up unnecessary modifications
+// to a class, which it is already modifying.
 message Student {
     Name name = 1 [(set_once) = true];
     string id = 2 [(set_once) = true];
@@ -56,6 +58,16 @@ message Student {
     bool has_medals2 = 16;
     bytes signature2 = 17;
     YearOfStudy year_of_study2 = 18;
+
+    Name name3 = 19;
+    string id3 = 20;
+    double height3 = 21;
+    float weight3 = 22;
+    int32 age3 = 23;
+    int64 subjects3 = 24;
+    bool has_medals3 = 25;
+    bytes signature3 = 26;
+    YearOfStudy year_of_study3 = 27;
 }
 
 message Name {

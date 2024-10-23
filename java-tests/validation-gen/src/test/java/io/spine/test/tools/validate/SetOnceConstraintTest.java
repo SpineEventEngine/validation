@@ -42,7 +42,7 @@ class SetOnceConstraintTest {
 
     @Test
     @DisplayName("don't not affect fields without the option")
-    void doNotNotAffectMessagesWithoutOption() {
+    void doNotNotAffectFieldsWithoutOption() {
         assertValidationPasses(() -> Student.newBuilder()
                 .setName2(Name.newBuilder().setValue("Max").build())
                 .setName2(Name.newBuilder().setValue("Jack").build())
@@ -62,6 +62,31 @@ class SetOnceConstraintTest {
                 .setSignature2(ByteString.copyFromUtf8("short-signature"))
                 .setYearOfStudy2(YearOfStudy.YOS_FIRST)
                 .setYearOfStudy2(YearOfStudy.YOS_SECOND)
+                .build());
+    }
+
+    @Test
+    @DisplayName("don't not affect fields with `false` option")
+    void doNotNotAffectFieldsWithFalseOption() {
+        assertValidationPasses(() -> Student.newBuilder()
+                .setName3(Name.newBuilder().setValue("Max").build())
+                .setName3(Name.newBuilder().setValue("Jack").build())
+                .setId3("free-student-1")
+                .setId3("free-student-2")
+                .setHeight3(168.4)
+                .setHeight3(178.6)
+                .setWeight3(66.6f)
+                .setWeight3(76.8f)
+                .setAge3(18)
+                .setAge3(24)
+                .setSubjects3(5)
+                .setSubjects3(10)
+                .setHasMedals3(true)
+                .setHasMedals3(false)
+                .setSignature3(ByteString.copyFromUtf8("full-signature"))
+                .setSignature3(ByteString.copyFromUtf8("short-signature"))
+                .setYearOfStudy3(YearOfStudy.YOS_FIRST)
+                .setYearOfStudy3(YearOfStudy.YOS_SECOND)
                 .build());
     }
 
