@@ -91,6 +91,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             fieldType.isMessage -> {
                 val fieldClassName = fieldType.message.javaClassName(message.fileHeader)
                 alertMessageSetter(fieldName, fieldClassName)
+                alertMessageBuilderSetter(fieldName, fieldClassName)
                 alertMessageFieldMerge(fieldName, fieldClassName)
                 alertMessageBytesMerge(fieldName, fieldClassName)
             }
@@ -98,7 +99,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
                 val fieldClassName = message.message.javaClassName(message.fileHeader)
                 alertStringSetter(fieldName)
-                alertMessageMerge(fieldName, fieldClassName)
+                alertStringMessageMerge(fieldName, fieldClassName)
                 alertStringBytesMerge(fieldName)
             }
 
@@ -145,7 +146,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun PsiClass.alertMessageSetter(fieldName: String, fieldType: ClassName) {
         val preconditionCheck =
             """
-            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+            if (!(${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance()) || ${fieldName.javaGetter()}.equals(value))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -155,20 +156,29 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             """.trimIndent(), null
         )
         val messageSetter = findMethodBySignature(messageSetterSig, false)!!.body!!
+        messageSetter.addAfter(statement, messageSetter.lBrace)
+    }
+
+    private fun PsiClass.alertMessageBuilderSetter(fieldName: String, fieldType: ClassName) {
+        val preconditionCheck =
+            """
+            if (!(${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance()) || ${fieldName.javaGetter()}.equals(builderForValue.build()))) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val builderSetterSig = elementFactory.createMethodFromText(
             """
             public Builder ${fieldName.javaSetter()}(${fieldType.canonical}.Builder builderForValue) {}
             """.trimIndent(), null
         )
         val builderSetter = findMethodBySignature(builderSetterSig, false)!!.body!!
-        messageSetter.addAfter(statement, messageSetter.lBrace)
         builderSetter.addAfter(statement, builderSetter.lBrace)
     }
 
     private fun PsiClass.alertMessageFieldMerge(fieldName: String, fieldType: ClassName) {
         val preconditionCheck =
             """
-            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+            if (!(${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance()) || ${fieldName.javaGetter()}.equals(value))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -177,12 +187,14 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     }
 
     private fun PsiClass.alertMessageBytesMerge(fieldName: String, fieldType: ClassName) {
-        val preconditionCheck =
+        val currentFieldValue = fieldName.javaGetter()
+        val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
+        val defaultOrSameCheck = elementFactory.createStatementFromText(
             """
-            if (!${fieldName.javaGetter()}.equals(${fieldType.canonical}.getDefaultInstance())) {
+            if (!(previous.equals(${fieldType.canonical}.getDefaultInstance()) || previous.equals($currentFieldValue))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+            }""".trimIndent(), null
+        )
         val mergeFromBytesSig = elementFactory.createMethodFromText(
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
@@ -195,13 +207,14 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             whole = { it.contains("get${fieldName.camelCase()}FieldBuilder().getBuilder()") },
             strict = { it.startsWith("input.readMessage") }
         ) as PsiStatement
-        fieldReading.parent.addBefore(statement, fieldReading)
+        fieldReading.parent.addBefore(keepPrevious, fieldReading)
+        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertMessageMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alertStringMessageMerge(fieldName: String, fieldType: ClassName) {
         val preconditionCheck =
             """
-            if (!${fieldName.javaGetter()}.isEmpty()) {
+            if (!(${fieldName.javaGetter()}.isEmpty() || ${fieldName.javaGetter()}.equals(other.${fieldName.javaGetter()}))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)

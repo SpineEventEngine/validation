@@ -41,8 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SetOnceConstraintTest {
 
     @Nested
-    @DisplayName("prohibit overriding messages")
-    class ProhibitOverridingMessages {
+    @DisplayName("prohibit overriding non-default messages")
+    class ProhibitOverridingNonDefaultMessages {
 
         private final Name donald = Name.newBuilder()
                 .setValue("Donald")
@@ -58,54 +58,48 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setName(donald)
-                    .build());
+                    .setName(donald));
         }
 
         @Test
         @DisplayName("by builder")
         void byBuilder() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setName(donald.toBuilder())
-                    .build());
+                    .setName(donald.toBuilder()));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("name"), donald));
         }
 
         @Test
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .mergeName(donald)
-                    .build());
+                    .mergeName(donald));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .mergeFrom(studentDonald)
-                    .build());
+                    .mergeFrom(studentDonald));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .mergeFrom(studentDonald.toByteArray())
-                    .build());
+                    .mergeFrom(studentDonald.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value messages")
-    class AllowOverridingDefaultValueMessages {
+    @DisplayName("allow overriding default and same-value messages")
+    class AllowOverridingDefaultAndSameValueMessages {
 
         private final Name donald = Name.newBuilder()
                 .setValue("Donald")
@@ -122,12 +116,18 @@ class SetOnceConstraintTest {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .setName(donald)
                     .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
+                    .setName(donald)
+                    .build());
         }
 
         @Test
         @DisplayName("by builder")
         void byBuilder() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .setName(donald.toBuilder())
+                    .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
                     .setName(donald.toBuilder())
                     .build());
         }
@@ -138,12 +138,18 @@ class SetOnceConstraintTest {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("name"), donald)
                     .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
+                    .build());
         }
 
         @Test
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .mergeName(donald)
+                    .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
                     .mergeName(donald)
                     .build());
         }
@@ -154,12 +160,18 @@ class SetOnceConstraintTest {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .mergeFrom(studentDonald)
                     .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
+                    .mergeFrom(studentDonald)
+                    .build());
         }
 
         @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
+                    .mergeFrom(studentDonald.toByteArray())
+                    .build());
+            assertValidationPasses(() -> studentDonald.toBuilder()
                     .mergeFrom(studentDonald.toByteArray())
                     .build());
         }

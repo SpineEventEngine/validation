@@ -49,7 +49,7 @@ message Student {
 }
 
 message Name {
-    string value = 1 [(set_once) = true];
+    string value = 1;
 }
 
 enum YearOfStudy {
