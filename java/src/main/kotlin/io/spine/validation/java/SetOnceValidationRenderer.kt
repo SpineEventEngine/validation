@@ -357,9 +357,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     }
 
     private fun PsiClass.alertBytesSetter(fieldName: String) {
+        val currentFieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
-            if (${fieldName.javaGetter()} != com.google.protobuf.ByteString.EMPTY) {
+            if ($currentFieldValue != com.google.protobuf.ByteString.EMPTY && !$currentFieldValue.equals(value)) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -368,12 +369,14 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     }
 
     private fun PsiClass.alertBytesMerge(fieldName: String) {
-        val preconditionCheck =
+        val currentFieldValue = fieldName.javaGetter()
+        val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
+        val defaultOrSameCheck = elementFactory.createStatementFromText(
             """
-            if (${fieldName.javaGetter()} != com.google.protobuf.ByteString.EMPTY) {
+            if (previous != com.google.protobuf.ByteString.EMPTY && !previous.equals($currentFieldValue)) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+            }""".trimIndent(), null
+        )
         val mergeFromBytesSig = elementFactory.createMethodFromText(
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
@@ -386,7 +389,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readBytes()") },
             strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readBytes()") }
         ) as PsiStatement
-        fieldReading.parent.addBefore(statement, fieldReading)
+        fieldReading.parent.addBefore(keepPrevious, fieldReading)
+        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
     private fun PsiClass.alertEnumSetter(fieldName: String) {

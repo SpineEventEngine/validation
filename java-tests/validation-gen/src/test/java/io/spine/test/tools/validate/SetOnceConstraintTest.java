@@ -785,8 +785,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding bytes")
-    class ProhibitOverridingBytes {
+    @DisplayName("prohibit overriding non-default bytes")
+    class ProhibitOverridingNonDefaultBytes {
 
         private final ByteString fullSignature = ByteString.copyFromUtf8("full");
 
@@ -801,38 +801,34 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .setSignature(fullSignature)
-                    .build());
+                    .setSignature(fullSignature));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .mergeFrom(studentFullSignature)
-                    .build());
+                    .mergeFrom(studentFullSignature));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .mergeFrom(studentFullSignature.toByteArray())
-                    .build());
+                    .mergeFrom(studentFullSignature.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value bytes")
-    class AllowOverridingDefaultValueBytes {
+    @DisplayName("allow overriding empty and same-value bytes")
+    class AllowOverridingDefaultAndSameValueBytes {
 
         private final ByteString fullSignature = ByteString.copyFromUtf8("full");
 
@@ -847,6 +843,7 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
                     .setSignature(fullSignature)
+                    .setSignature(fullSignature)
                     .build());
         }
 
@@ -854,6 +851,7 @@ class SetOnceConstraintTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
                     .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
                     .build());
         }
@@ -863,13 +861,15 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
                     .mergeFrom(studentFullSignature)
+                    .mergeFrom(studentFullSignature)
                     .build());
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
+                    .mergeFrom(studentFullSignature.toByteArray())
                     .mergeFrom(studentFullSignature.toByteArray())
                     .build());
         }
