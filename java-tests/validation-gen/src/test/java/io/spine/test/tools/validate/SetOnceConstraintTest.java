@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.google.protobuf.ByteString.copyFromUtf8;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -719,12 +720,23 @@ class SetOnceConstraintTest {
                     .build());
         }
 
-        @Test // Doesn't work by Protobuf design.
+        /**
+         * This test can't test overriding of a non-default value by another non-default value
+         * as was initially intended. `boolean` has only one non-default value: `true`.
+         * When we try to override `true` with `false` by merging, the merge method does nothing
+         * because it skips fields with the default values. It is a Protobuf design.
+         *
+         * <p>So, particularly for `boolean` type, the test overrides `false` with `true`.
+         * From the standpoint of Protobuf, this is not necessarily "overriding", more like
+         * assignment of an initial value.
+         */
+        @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
-            assertValidationFails(() -> awardedStudent.toBuilder()
-                    .mergeFrom(ordinaryStudent)
+            var builder = awardedStudent.toBuilder();
+            assertValidationPasses(() -> builder.mergeFrom(ordinaryStudent)
                     .build());
+            assertThat(builder.build().getHasMedals()).isTrue();
         }
 
         @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
