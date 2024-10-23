@@ -99,22 +99,27 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
                 val fieldClassName = message.message.javaClassName(message.fileHeader)
                 alertStringSetter(fieldName)
                 alertMessageMerge(fieldName, fieldClassName)
+                alertStringBytesMerge(fieldName)
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_DOUBLE" -> {
                 alertNumberSetter(fieldName)
+                alertNumberBytesMerge(fieldName, "readDouble()")
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_FLOAT" -> {
                 alertNumberSetter(fieldName)
+                alertNumberBytesMerge(fieldName, "readFloat()")
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_INT32" -> {
                 alertNumberSetter(fieldName)
+                alertNumberBytesMerge(fieldName, "readInt32()")
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_INT64" -> {
                 alertNumberSetter(fieldName)
+                alertNumberBytesMerge(fieldName, "readInt64()")
             }
 
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_BOOL" -> {
@@ -183,7 +188,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             """.trimIndent(), null
         )
         val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
-        println("Search for `get${fieldName.camelCase()}FieldBuilder().getBuilder()`")
         val fieldReading = mergeFromBytes.children.deepSearch(
             whole = { it.contains("get${fieldName.camelCase()}FieldBuilder().getBuilder()") },
             strict = { it.startsWith("input.readMessage") }
@@ -211,6 +215,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         thenBranch.addAfter(statement, thenBranch.lBrace)
     }
 
+    private fun PsiClass.alertStringBytesMerge(fieldName: String) {
+        val preconditionCheck =
+            """
+            if (!${fieldName.javaGetter()}.isEmpty()) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readStringRequireUtf8()") },
+            strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readStringRequireUtf8()") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
+    }
+
     private fun PsiClass.alertNumberSetter(fieldName: String) {
         val preconditionCheck =
             """
@@ -220,6 +246,28 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val setter = method(fieldName.javaSetter()).body!!
         setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertNumberBytesMerge(fieldName: String, fieldReader: String) {
+        val preconditionCheck =
+            """
+            if (${fieldName.javaGetter()} != 0) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val mergeFromBytesSig = elementFactory.createMethodFromText(
+            """
+            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
+                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException { }
+            """.trimIndent(), null
+        )
+        val mergeFromBytes = findMethodBySignature(mergeFromBytesSig, false)!!.body!!
+        val fieldReading = mergeFromBytes.children.deepSearch(
+            whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.$fieldReader") },
+            strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.$fieldReader") }
+        ) as PsiStatement
+        fieldReading.parent.addBefore(statement, fieldReading)
     }
 
     private fun PsiClass.alertBooleanSetter(fieldName: String) {
@@ -286,9 +334,6 @@ private fun Array<PsiElement>.deepSearch(
 ): PsiElement? =
     asSequence().mapNotNull { element ->
         val text = element.text
-        println("*** whole = `${whole(text)}`")
-        println(text)
-        println("*** strict = `${strict(text)}`")
         when {
             !whole(text) -> null
             strict(text) -> element
