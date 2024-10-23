@@ -396,7 +396,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun PsiClass.alertEnumSetter(fieldName: String) {
         val preconditionCheck =
             """
-            if (${fieldName.lowerCamelCase()}_ != 0) {
+            if (${fieldName.lowerCamelCase()}_ != 0 && ${fieldName.javaGetter()} != value) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -404,13 +404,27 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertEnumBytesMerge(fieldName: String) {
+    private fun PsiClass.alertEnumValueSetter(fieldName: String) {
+        val fieldValue = fieldName.lowerCamelCase()
         val preconditionCheck =
             """
-            if (${fieldName.lowerCamelCase()}_ != 0) {
+            if (${fieldValue}_ != 0 && ${fieldValue}_ != value) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method("${fieldName.javaSetter()}Value").body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertEnumBytesMerge(fieldName: String) {
+        val currentFieldValue = "${fieldName.lowerCamelCase()}_"
+        val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
+        val defaultOrSameCheck = elementFactory.createStatementFromText(
+            """
+            if (previous != 0 && previous != $currentFieldValue) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent(), null
+        )
         val mergeFromBytesSig = elementFactory.createMethodFromText(
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
@@ -423,18 +437,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readEnum()") },
             strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readEnum()") }
         ) as PsiStatement
-        fieldReading.parent.addBefore(statement, fieldReading)
-    }
-
-    private fun PsiClass.alertEnumValueSetter(fieldName: String) {
-        val preconditionCheck =
-            """
-            if (${fieldName.lowerCamelCase()}_ != 0) {
-                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method("${fieldName.javaSetter()}Value").body!!
-        setter.addAfter(statement, setter.lBrace)
+        fieldReading.parent.addBefore(keepPrevious, fieldReading)
+        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 }
 

@@ -885,8 +885,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding enums")
-    class ProhibitOverridingEnums {
+    @DisplayName("prohibit overriding non-default enum")
+    class ProhibitOverridingNonDefaultEnum {
 
         private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
 
@@ -901,16 +901,14 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
-                    .setYearOfStudy(thirdYear)
-                    .build());
+                    .setYearOfStudy(thirdYear));
         }
 
         @Test
         @DisplayName("by ordinal number")
         void byOrdinalNumber() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
-                    .setYearOfStudyValue(3) // Third year.
-                    .build());
+                    .setYearOfStudyValue(3)); // Third year.
         }
 
         @Test
@@ -918,30 +916,27 @@ class SetOnceConstraintTest {
         void byReflection() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("year_of_study"),
-                              thirdYear.getValueDescriptor())
-                    .build());
+                              thirdYear.getValueDescriptor()));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
-                    .mergeFrom(thirdYearStudent)
-                    .build());
+                    .mergeFrom(thirdYearStudent));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
-                    .mergeFrom(thirdYearStudent.toByteArray())
-                    .build());
+                    .mergeFrom(thirdYearStudent.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value enums")
-    class AllowOverridingDefaultValueEnums {
+    @DisplayName("allow overriding default and same-value enum")
+    class AllowOverridingDefaultAndSameValueEnum {
 
         private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
 
@@ -956,6 +951,7 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
                     .setYearOfStudy(thirdYear)
+                    .setYearOfStudy(thirdYear)
                     .build());
         }
 
@@ -963,6 +959,7 @@ class SetOnceConstraintTest {
         @DisplayName("by ordinal number")
         void byOrdinalNumber() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .setYearOfStudyValue(3) // Third year.
                     .setYearOfStudyValue(3) // Third year.
                     .build());
         }
@@ -973,6 +970,8 @@ class SetOnceConstraintTest {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("year_of_study"),
                               thirdYear.getValueDescriptor())
+                    .setField(Student.getDescriptor().findFieldByName("year_of_study"),
+                              thirdYear.getValueDescriptor())
                     .build());
         }
 
@@ -981,13 +980,15 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
                     .mergeFrom(thirdYearStudent)
+                    .mergeFrom(thirdYearStudent)
                     .build());
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
+                    .mergeFrom(thirdYearStudent.toByteArray())
                     .mergeFrom(thirdYearStudent.toByteArray())
                     .build());
         }
