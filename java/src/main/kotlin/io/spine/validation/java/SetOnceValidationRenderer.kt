@@ -99,6 +99,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             fieldType.isPrimitive && fieldType.primitive.name == "TYPE_STRING" -> {
                 val fieldClassName = message.message.javaClassName(message.fileHeader)
                 alertStringSetter(fieldName)
+                alertStringBytesSetter(fieldName)
                 alertStringMessageMerge(fieldName, fieldClassName)
                 alertStringBytesMerge(fieldName)
             }
@@ -211,10 +212,35 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertStringMessageMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alertStringSetter(fieldName: String) {
+        val fieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
-            if (!(${fieldName.javaGetter()}.isEmpty() || ${fieldName.javaGetter()}.equals(other.${fieldName.javaGetter()}))) {
+            if (!($fieldValue.isEmpty() || $fieldValue.equals(value))) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val setter = method(fieldName.javaSetter()).body!!
+        setter.addAfter(statement, setter.lBrace)
+    }
+
+    private fun PsiClass.alertStringBytesSetter(fieldName: String) {
+        val fieldValue = "get${fieldName.camelCase()}Bytes()"
+        val preconditionCheck =
+            """
+            if (!($fieldValue.isEmpty() || $fieldValue.equals(value))) {
+                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
+            }""".trimIndent()
+        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+        val bytesSetter = method("${fieldName.javaSetter()}Bytes").body!!
+        bytesSetter.addAfter(statement, bytesSetter.lBrace)
+    }
+
+    private fun PsiClass.alertStringMessageMerge(fieldName: String, fieldType: ClassName) {
+        val fieldValue = fieldName.javaGetter()
+        val preconditionCheck =
+            """
+            if (!($fieldValue.isEmpty() || $fieldValue.equals(other.$fieldValue))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
             }""".trimIndent()
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
@@ -232,12 +258,14 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     }
 
     private fun PsiClass.alertStringBytesMerge(fieldName: String) {
-        val preconditionCheck =
+        val currentFieldValue = fieldName.javaGetter()
+        val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
+        val defaultOrSameCheck = elementFactory.createStatementFromText(
             """
-            if (!${fieldName.javaGetter()}.isEmpty()) {
+            if (!(previous.isEmpty() || previous.equals($currentFieldValue))) {
                 throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
+            }""".trimIndent(), null
+        )
         val mergeFromBytesSig = elementFactory.createMethodFromText(
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
@@ -250,7 +278,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             whole = { it.contains("${fieldName.lowerCamelCase()}_ = input.readStringRequireUtf8()") },
             strict = { it.startsWith("${fieldName.lowerCamelCase()}_ = input.readStringRequireUtf8()") }
         ) as PsiStatement
-        fieldReading.parent.addBefore(statement, fieldReading)
+        fieldReading.parent.addBefore(keepPrevious, fieldReading)
+        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
     private fun PsiClass.alertNumberSetter(fieldName: String) {
@@ -394,19 +423,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val setter = method("${fieldName.javaSetter()}Value").body!!
         setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alertStringSetter(fieldName: String) {
-        val preconditionCheck =
-            """
-            if (!${fieldName.javaGetter()}.equals("")) {
-                throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method(fieldName.javaSetter()).body!!
-        val bytesSetter = method("${fieldName.javaSetter()}Bytes").body!!
-        setter.addAfter(statement, setter.lBrace)
-        bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }
 }
 

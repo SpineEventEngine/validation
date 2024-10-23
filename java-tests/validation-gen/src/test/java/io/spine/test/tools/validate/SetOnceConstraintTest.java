@@ -41,8 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SetOnceConstraintTest {
 
     @Nested
-    @DisplayName("prohibit overriding non-default messages")
-    class ProhibitOverridingNonDefaultMessages {
+    @DisplayName("prohibit overriding non-default message")
+    class ProhibitOverridingNonDefaultMessage {
 
         private final Name donald = Name.newBuilder()
                 .setValue("Donald")
@@ -98,8 +98,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value messages")
-    class AllowOverridingDefaultAndSameValueMessages {
+    @DisplayName("allow overriding default and same-value message")
+    class AllowOverridingDefaultAndSameValueMessage {
 
         private final Name donald = Name.newBuilder()
                 .setValue("Donald")
@@ -115,8 +115,6 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .setName(donald)
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .setName(donald)
                     .build());
         }
@@ -126,8 +124,6 @@ class SetOnceConstraintTest {
         void byBuilder() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .setName(donald.toBuilder())
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .setName(donald.toBuilder())
                     .build());
         }
@@ -137,8 +133,6 @@ class SetOnceConstraintTest {
         void byReflection() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("name"), donald)
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("name"), donald)
                     .build());
         }
@@ -148,8 +142,6 @@ class SetOnceConstraintTest {
         void byFieldMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .mergeName(donald)
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .mergeName(donald)
                     .build());
         }
@@ -159,8 +151,6 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .mergeFrom(studentDonald)
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .mergeFrom(studentDonald)
                     .build());
         }
@@ -170,8 +160,6 @@ class SetOnceConstraintTest {
         void byBytesMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
                     .mergeFrom(studentDonald.toByteArray())
-                    .build());
-            assertValidationPasses(() -> studentDonald.toBuilder()
                     .mergeFrom(studentDonald.toByteArray())
                     .build());
         }
@@ -187,8 +175,8 @@ class SetOnceConstraintTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding strings")
-    class ProhibitOverridingStrings {
+    @DisplayName("prohibit overriding non-default string")
+    class ProhibitOverridingNonDefaultString {
 
         private static final String STUDENT2 = "student-2";
 
@@ -203,46 +191,41 @@ class SetOnceConstraintTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> student1.toBuilder()
-                    .setId(STUDENT2)
-                    .build());
+                    .setId(STUDENT2));
         }
 
         @Test
         @DisplayName("by bytes")
         void byBytes() {
             assertValidationFails(() -> student1.toBuilder()
-                    .setIdBytes(copyFromUtf8(STUDENT2))
-                    .build());
+                    .setIdBytes(copyFromUtf8(STUDENT2)));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> student1.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
-                    .build());
+                    .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2));
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
             assertValidationFails(() -> student1.toBuilder()
-                    .mergeFrom(student2)
-                    .build());
+                    .mergeFrom(student2));
         }
 
-        @Test // Requires changes to `mergeFrom(CodedInputStream, ExtensionRegistry)`.
+        @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationFails(() -> student1.toBuilder()
-                    .mergeFrom(student2.toByteArray())
-                    .build());
+                    .mergeFrom(student2.toByteArray()));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default value strings")
-    class AllowOverridingDefaultValueStrings {
+    @DisplayName("allow overriding default and same-value string")
+    class AllowOverridingDefaultValueString {
 
         private static final String STUDENT2 = "student-2";
 
@@ -257,6 +240,7 @@ class SetOnceConstraintTest {
         void byValue() {
             assertValidationPasses(() -> undentifiedStudent.toBuilder()
                     .setId(STUDENT2)
+                    .setId(STUDENT2)
                     .build());
         }
 
@@ -264,6 +248,7 @@ class SetOnceConstraintTest {
         @DisplayName("by bytes")
         void byBytes() {
             assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .setIdBytes(copyFromUtf8(STUDENT2))
                     .setIdBytes(copyFromUtf8(STUDENT2))
                     .build());
         }
@@ -273,6 +258,7 @@ class SetOnceConstraintTest {
         void byReflection() {
             assertValidationPasses(() -> undentifiedStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
+                    .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
                     .build());
         }
 
@@ -281,6 +267,7 @@ class SetOnceConstraintTest {
         void byMessageMerge() {
             assertValidationPasses(() -> undentifiedStudent.toBuilder()
                     .mergeFrom(student2)
+                    .mergeFrom(student2)
                     .build());
         }
 
@@ -288,6 +275,7 @@ class SetOnceConstraintTest {
         @DisplayName("by bytes merge")
         void byBytesMerge() {
             assertValidationPasses(() -> undentifiedStudent.toBuilder()
+                    .mergeFrom(student2.toByteArray())
                     .mergeFrom(student2.toByteArray())
                     .build());
         }
