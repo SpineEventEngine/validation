@@ -125,49 +125,49 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             fieldType.isMessage -> {
                 val fieldClassName = fieldType.message.javaClassName(message.fileHeader)
                 alterMessageSetter(fieldName, fieldClassName)
-                alertMessageBuilderSetter(fieldName, fieldClassName)
-                alertMessageFieldMerge(fieldName, fieldClassName)
-                alertMessageBytesMerge(fieldName, fieldClassName)
+                alterMessageBuilderSetter(fieldName, fieldClassName)
+                alterMessageFieldMerge(fieldName, fieldClassName)
+                alterMessageBytesMerge(fieldName, fieldClassName)
             }
 
             fieldType.isPrimitive -> when (fieldType.primitive) {
 
                 TYPE_STRING -> {
                     val fieldClassName = message.message.javaClassName(message.fileHeader)
-                    alertStringSetter(fieldName)
-                    alertStringBytesSetter(fieldName)
-                    alertStringMessageMerge(fieldName, fieldClassName)
-                    alertStringBytesMerge(fieldName)
+                    alterStringSetter(fieldName)
+                    alterStringBytesSetter(fieldName)
+                    alterStringMessageMerge(fieldName, fieldClassName)
+                    alterStringBytesMerge(fieldName)
                 }
 
                 TYPE_DOUBLE -> {
-                    alertNumberSetter(fieldName)
-                    alertNumberBytesMerge(fieldName, "readDouble()")
+                    alterNumberSetter(fieldName)
+                    alterNumberBytesMerge(fieldName, "readDouble()")
                 }
 
                 TYPE_FLOAT -> {
-                    alertNumberSetter(fieldName)
-                    alertNumberBytesMerge(fieldName, "readFloat()")
+                    alterNumberSetter(fieldName)
+                    alterNumberBytesMerge(fieldName, "readFloat()")
                 }
 
                 TYPE_INT32 -> {
-                    alertNumberSetter(fieldName)
-                    alertNumberBytesMerge(fieldName, "readInt32()")
+                    alterNumberSetter(fieldName)
+                    alterNumberBytesMerge(fieldName, "readInt32()")
                 }
 
                 TYPE_INT64 -> {
-                    alertNumberSetter(fieldName)
-                    alertNumberBytesMerge(fieldName, "readInt64()")
+                    alterNumberSetter(fieldName)
+                    alterNumberBytesMerge(fieldName, "readInt64()")
                 }
 
                 TYPE_BOOL -> {
-                    alertBooleanSetter(fieldName)
-                    alertBooleanBytesMerge(fieldName)
+                    alterBooleanSetter(fieldName)
+                    alterBooleanBytesMerge(fieldName)
                 }
 
                 TYPE_BYTES -> {
-                    alertBytesSetter(fieldName)
-                    alertBytesMerge(fieldName)
+                    alterBytesSetter(fieldName)
+                    alterBytesMerge(fieldName)
                 }
 
                 else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -175,9 +175,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             fieldType.isEnum -> {
-                alertEnumSetter(fieldName)
-                alertEnumValueSetter(fieldName)
-                alertEnumBytesMerge(fieldName)
+                alterEnumSetter(fieldName)
+                alterEnumValueSetter(fieldName)
+                alterEnumBytesMerge(fieldName)
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -187,13 +187,13 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     /**
      * Modifies a setter that assigns a message value for the field.
      *
-     * This method adds a precondition check that makes sure that the current field value
+     * The method adds a precondition check that makes sure the current field value
      * is either the default value or identical to the new value being set.
      *
      * An example of the modified setter:
      *
      * ```
-     * public Builder setName(my.proto.Name value);
+     * public Builder setName(my.proto.message.Name value);
      * ```
      */
     private fun PsiClass.alterMessageSetter(fieldName: String, fieldType: ClassName) {
@@ -220,7 +220,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
      * public Builder setName(my.proto.Name.Builder builderForValue);
      * ```
      */
-    private fun PsiClass.alertMessageBuilderSetter(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alterMessageBuilderSetter(fieldName: String, fieldType: ClassName) {
         val currentFieldValue = fieldName.javaGetter()
         val newValue = "builderForValue.build()"
         val precondition = elementFactory.createStatementFromText(
@@ -245,7 +245,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
      * public Builder mergeName(my.proto.Name value);
      * ```
      */
-    private fun PsiClass.alertMessageFieldMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alterMessageFieldMerge(fieldName: String, fieldType: ClassName) {
         val currentFieldValue = fieldName.javaGetter()
         val precondition = elementFactory.createStatementFromText(
             """
@@ -261,7 +261,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
      * Modifies the message-level [ExpectedMergeFromBytes] method to add a precondition
      * to a statement that handles a particular field denoted by [fieldName].
      */
-    private fun PsiClass.alertMessageBytesMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alterMessageBytesMerge(fieldName: String, fieldType: ClassName) {
         val currentFieldValue = fieldName.javaGetter()
         val keepPrevious =
             elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
@@ -280,7 +280,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addAfter(postcondition, fieldReading)
     }
 
-    private fun PsiClass.alertStringSetter(fieldName: String) {
+    private fun PsiClass.alterStringSetter(fieldName: String) {
         val fieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
@@ -292,7 +292,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertStringBytesSetter(fieldName: String) {
+    private fun PsiClass.alterStringBytesSetter(fieldName: String) {
         val fieldValue = "get${fieldName.camelCase()}Bytes()"
         val preconditionCheck =
             """
@@ -304,7 +304,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }
 
-    private fun PsiClass.alertStringMessageMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alterStringMessageMerge(fieldName: String, fieldType: ClassName) {
         val fieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
@@ -325,7 +325,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         thenBranch.addAfter(statement, thenBranch.lBrace)
     }
 
-    private fun PsiClass.alertStringBytesMerge(fieldName: String) {
+    private fun PsiClass.alterStringBytesMerge(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val keepPrevious =
             elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
@@ -343,7 +343,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertNumberSetter(fieldName: String) {
+    private fun PsiClass.alterNumberSetter(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val precondition = elementFactory.createStatementFromText(
             """
@@ -355,7 +355,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    private fun PsiClass.alertNumberBytesMerge(fieldName: String, fieldReader: String) {
+    private fun PsiClass.alterNumberBytesMerge(fieldName: String, fieldReader: String) {
         val currentFieldValue = fieldName.javaGetter()
         val keepPrevious =
             elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
@@ -373,7 +373,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertBooleanSetter(fieldName: String) {
+    private fun PsiClass.alterBooleanSetter(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
@@ -385,7 +385,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertBooleanBytesMerge(fieldName: String) {
+    private fun PsiClass.alterBooleanBytesMerge(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val keepPrevious =
             elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
@@ -403,7 +403,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addBefore(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertBytesSetter(fieldName: String) {
+    private fun PsiClass.alterBytesSetter(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
@@ -415,7 +415,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertBytesMerge(fieldName: String) {
+    private fun PsiClass.alterBytesMerge(fieldName: String) {
         val currentFieldValue = fieldName.javaGetter()
         val keepPrevious =
             elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
@@ -433,7 +433,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
-    private fun PsiClass.alertEnumSetter(fieldName: String) {
+    private fun PsiClass.alterEnumSetter(fieldName: String) {
         val preconditionCheck =
             """
             if (${fieldName.lowerCamelCase()}_ != 0 && ${fieldName.javaGetter()} != value) {
@@ -444,7 +444,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertEnumValueSetter(fieldName: String) {
+    private fun PsiClass.alterEnumValueSetter(fieldName: String) {
         val fieldValue = fieldName.lowerCamelCase()
         val preconditionCheck =
             """
@@ -456,7 +456,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setter.addAfter(statement, setter.lBrace)
     }
 
-    private fun PsiClass.alertEnumBytesMerge(fieldName: String) {
+    private fun PsiClass.alterEnumBytesMerge(fieldName: String) {
         val currentFieldValue = "${fieldName.lowerCamelCase()}_"
         val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
         val defaultOrSameCheck = elementFactory.createStatementFromText(
