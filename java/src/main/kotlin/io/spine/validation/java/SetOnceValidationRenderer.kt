@@ -32,6 +32,8 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
@@ -55,6 +57,8 @@ import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
+import io.spine.validation.java.setonce.SetOnceJavaView
+import io.spine.validation.java.setonce.SetOnceMessageField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
@@ -92,20 +96,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to keep the `MessageType`.
-        val messages = findMessageTypes().associateBy { it.message.name }
-        val fields = select<SetOnceField>().all()
-        val fieldsToMessages = fields.associateWith {
-            messages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
-        }
-
-        fieldsToMessages.forEach {
+        val javaViews = javaViews()
+        javaViews.forEach {
             val message = it.value.message
             val file = sources.javaFileOf(message)
-            val className = message.javaClassName(it.value.fileHeader!!)
-            val builderClass = ClassName(className.packageName, className.simpleNames + "Builder")
+            val declaringMessage = message.javaClassName(it.value.fileHeader!!)
+            val declaringMessageBuilder = ClassName(
+                declaringMessage.packageName,
+                declaringMessage.simpleNames + "Builder"
+            )
             val psiFile = file.psi() as PsiJavaFile
-            val psiClass = psiFile.findClass(builderClass)
+            val psiClass = psiFile.findClass(declaringMessageBuilder)
             execute {
                 try {
                     psiClass.render(it.key, it.value)
@@ -117,61 +118,46 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
+    /**
+     * Quires language-agnostic [SetOnceField] view states, and maps them to [SetOnceField],
+     * appending the information required to generate Java code for the option support.
+     */
+    private fun javaViews(): List<SetOnceJavaView> {
+        val allMessages = findMessageTypes().associateBy { it.message.name }
+        val setOnceViews = select<SetOnceField>().all()
+        return setOnceViews.map { view ->
+            val field: Field = view.subject
+            val declaringMessage = allMessages[field.declaringType]
+                ?: error(
+                    "Metadata for `${field.declaringType}` message, which declares `(set_once)` " +
+                            "option for its `${field.name}` field was not found."
+                )
+            setOnceJavaView(view.subject, declaringMessage)
+        }
+    }
+
+    private fun setOnceJavaView(field: Field, message: MessageWithFile): SetOnceJavaView {
+        val fieldType = field.type
+        return when {
+            fieldType.isMessage -> SetOnceMessageField(field, message)
+            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
+        }
+    }
+
     private fun PsiClass.render(setOnce: SetOnceField, message: MessageWithFile) {
         val fieldName = setOnce.id.name.value
         val fieldType = message.message.field(fieldName).type
+        val fileHeader = message.fileHeader
         when {
 
+            fieldType.isPrimitive -> renderPrimitive(fieldType.primitive, fieldName)
+
             fieldType.isMessage -> {
-                val fieldClassName = fieldType.message.javaClassName(message.fileHeader)
-                alterMessageSetter(fieldName, fieldClassName)
-                alterMessageBuilderSetter(fieldName, fieldClassName)
-                alterMessageFieldMerge(fieldName, fieldClassName)
-                alterMessageBytesMerge(fieldName, fieldClassName)
-            }
-
-            fieldType.isPrimitive -> when (fieldType.primitive) {
-
-                TYPE_STRING -> {
-                    val fieldClassName = message.message.javaClassName(message.fileHeader)
-                    alterStringSetter(fieldName)
-                    alterStringBytesSetter(fieldName)
-                    alterStringMessageMerge(fieldName, fieldClassName)
-                    alterStringBytesMerge(fieldName)
-                }
-
-                TYPE_DOUBLE -> {
-                    alterNumberSetter(fieldName)
-                    alterNumberBytesMerge(fieldName, "readDouble()")
-                }
-
-                TYPE_FLOAT -> {
-                    alterNumberSetter(fieldName)
-                    alterNumberBytesMerge(fieldName, "readFloat()")
-                }
-
-                TYPE_INT32 -> {
-                    alterNumberSetter(fieldName)
-                    alterNumberBytesMerge(fieldName, "readInt32()")
-                }
-
-                TYPE_INT64 -> {
-                    alterNumberSetter(fieldName)
-                    alterNumberBytesMerge(fieldName, "readInt64()")
-                }
-
-                TYPE_BOOL -> {
-                    alterBooleanSetter(fieldName)
-                    alterBooleanBytesMerge(fieldName)
-                }
-
-                TYPE_BYTES -> {
-                    alterBytesSetter(fieldName)
-                    alterBytesMerge(fieldName)
-                }
-
-                else -> error("Unsupported `(set_once)` field type: `$fieldType`")
-
+                val fieldTypeClass = fieldType.message.javaClassName(fileHeader)
+                alterMessageSetter(fieldName, fieldTypeClass)
+                alterMessageBuilderSetter(fieldName, fieldTypeClass)
+                alterMessageFieldMerge(fieldName, fieldTypeClass)
+                alterMessageBytesMerge(fieldName, fieldTypeClass)
             }
 
             fieldType.isEnum -> {
@@ -184,101 +170,53 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
-    /**
-     * Modifies a setter that assigns a message value for the field.
-     *
-     * The method adds a precondition check that makes sure the current field value
-     * is either the default value or identical to the new value being set.
-     *
-     * An example of the modified setter:
-     *
-     * ```
-     * public Builder setName(my.proto.message.Name value);
-     * ```
-     */
-    private fun PsiClass.alterMessageSetter(fieldName: String, fieldType: ClassName) {
-        val currentFieldValue = fieldName.javaGetter()
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if (!($currentFieldValue.equals(${fieldType.canonical}.getDefaultInstance()) || $currentFieldValue.equals(value))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val expectedSetter = elementFactory.createMethodFromText(
-            """
-            public Builder ${fieldName.javaSetterName()}(${fieldType.canonical} value) {}
-            """.trimIndent(), null
-        )
-        val setter = findMethodBySignature(expectedSetter, false)!!.body!!
-        setter.addAfter(precondition, setter.lBrace)
+    private fun PsiClass.renderPrimitive(fieldType: PrimitiveType, fieldName: String) {
+        when (fieldType) {
+
+            TYPE_STRING -> {
+                val messageClassName = message.message.javaClassName(message.fileHeader)
+                alterStringSetter(fieldName)
+                alterStringBytesSetter(fieldName)
+                alterStringMessageMerge(fieldName, messageClassName)
+                alterStringBytesMerge(fieldName)
+            }
+
+            TYPE_DOUBLE -> {
+                alterNumberSetter(fieldName)
+                alterNumberBytesMerge(fieldName, "readDouble()")
+            }
+
+            TYPE_FLOAT -> {
+                alterNumberSetter(fieldName)
+                alterNumberBytesMerge(fieldName, "readFloat()")
+            }
+
+            TYPE_INT32 -> {
+                alterNumberSetter(fieldName)
+                alterNumberBytesMerge(fieldName, "readInt32()")
+            }
+
+            TYPE_INT64 -> {
+                alterNumberSetter(fieldName)
+                alterNumberBytesMerge(fieldName, "readInt64()")
+            }
+
+            TYPE_BOOL -> {
+                alterBooleanSetter(fieldName)
+                alterBooleanBytesMerge(fieldName)
+            }
+
+            TYPE_BYTES -> {
+                alterBytesSetter(fieldName)
+                alterBytesMerge(fieldName)
+            }
+
+            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
+
+        }
     }
 
-    /**
-     * An example of the modified setter:
-     *
-     * ```
-     * public Builder setName(my.proto.Name.Builder builderForValue);
-     * ```
-     */
-    private fun PsiClass.alterMessageBuilderSetter(fieldName: String, fieldType: ClassName) {
-        val currentFieldValue = fieldName.javaGetter()
-        val newValue = "builderForValue.build()"
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if (!($currentFieldValue.equals(${fieldType.canonical}.getDefaultInstance()) || $currentFieldValue.equals($newValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val expectedSetter = elementFactory.createMethodFromText(
-            """
-            public Builder ${fieldName.javaSetterName()}(${fieldType.canonical}.Builder builderForValue) {}
-            """.trimIndent(), null
-        )
-        val setter = findMethodBySignature(expectedSetter, false)!!.body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
 
-    /**
-     * An example of the modified setter:
-     *
-     * ```
-     * public Builder mergeName(my.proto.Name value);
-     * ```
-     */
-    private fun PsiClass.alterMessageFieldMerge(fieldName: String, fieldType: ClassName) {
-        val currentFieldValue = fieldName.javaGetter()
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if (!($currentFieldValue.equals(${fieldType.canonical}.getDefaultInstance()) || $currentFieldValue.equals(value))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val merge = method("merge${fieldName.camelCase()}").body!!
-        merge.addAfter(precondition, merge.lBrace)
-    }
-
-    /**
-     * Modifies the message-level [ExpectedMergeFromBytes] method to add a precondition
-     * to a statement that handles a particular field denoted by [fieldName].
-     */
-    private fun PsiClass.alterMessageBytesMerge(fieldName: String, fieldType: ClassName) {
-        val currentFieldValue = fieldName.javaGetter()
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val postcondition = elementFactory.createStatementFromText(
-            """
-            if (!(previous.equals(${fieldType.canonical}.getDefaultInstance()) || previous.equals($currentFieldValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "input.readMessage",
-            contains = "get${fieldName.camelCase()}FieldBuilder().getBuilder()",
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(postcondition, fieldReading)
-    }
 
     private fun PsiClass.alterStringSetter(fieldName: String) {
         val fieldValue = fieldName.javaGetter()
@@ -304,7 +242,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         bytesSetter.addAfter(statement, bytesSetter.lBrace)
     }
 
-    private fun PsiClass.alterStringMessageMerge(fieldName: String, fieldType: ClassName) {
+    private fun PsiClass.alterStringMessageMerge(fieldName: String, messageType: ClassName) {
         val fieldValue = fieldName.javaGetter()
         val preconditionCheck =
             """
@@ -314,7 +252,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val statement = elementFactory.createStatementFromText(preconditionCheck, null)
         val mergeFromMessageSig = elementFactory.createMethodFromText(
             """
-            public Builder mergeFrom(${fieldType.canonical} other) {}
+            public Builder mergeFrom(${messageType.canonical} other) {}
             """.trimIndent(), null
         )
         val mergeFromMessage = findMethodBySignature(mergeFromMessageSig, false)!!.body!!
