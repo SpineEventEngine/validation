@@ -1,0 +1,73 @@
+/*
+ * Copyright 2024, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "SetOnceProto";
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+
+// Better to have all these fields, so that the codegen doesn't add up unnecessary modifications
+// to a class, which it is already modifying.
+message Student {
+    Name name = 1 [(set_once) = true];
+    string id = 2 [(set_once) = true];
+    double height = 3 [(set_once) = true];
+    float weight = 4 [(set_once) = true];
+    int32 age = 5 [(set_once) = true];
+    int64 subjects = 6 [(set_once) = true];
+    bool has_medals = 7 [(set_once) = true];
+    bytes signature = 8 [(set_once) = true];
+    YearOfStudy year_of_study = 9 [(set_once) = true];
+
+    Name name2 = 10;
+    string id2 = 11;
+    double height2 = 12;
+    float weight2 = 13;
+    int32 age2 = 14;
+    int64 subjects2 = 15;
+    bool has_medals2 = 16;
+    bytes signature2 = 17;
+    YearOfStudy year_of_study2 = 18;
+}
+
+message Name {
+    string value = 1;
+}
+
+enum YearOfStudy {
+    YOS_UNSPECIFIED = 0;
+    YOS_FIRST = 1;
+    YOS_SECOND = 2;
+    YOS_THIRD = 3;
+    YOS_FOURTH = 4;
+}
