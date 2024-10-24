@@ -58,4 +58,7 @@ message SetOnceField {
 
     // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
     bool set_once = 3;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 4;
 }

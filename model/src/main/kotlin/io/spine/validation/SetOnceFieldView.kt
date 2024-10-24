@@ -43,7 +43,10 @@ internal class SetOnceFieldView :
     @Subscribe
     override fun onConstraint(
         @External @Where(field = OPTION_NAME, equals = "set_once") e: FieldOptionDiscovered
-    ) = super.onConstraint(e)
+    ) {
+        super.onConstraint(e)
+        builder().setSubject(e.subject)
+    }
 
     override fun errorMessage(errorMessage: String) {
         builder().setErrorMessage(errorMessage)
