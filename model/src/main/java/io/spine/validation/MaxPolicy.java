@@ -29,11 +29,12 @@ package io.spine.validation;
 import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.server.event.Just;
 import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.validation.event.SimpleRuleAdded;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.server.event.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
@@ -49,11 +50,13 @@ final class MaxPolicy extends Policy<FieldOptionDiscovered> {
             @External @Where(field = OPTION_NAME, equals = "max") FieldOptionDiscovered event
     ) {
         var option = event.getOption();
-        var rules = NumberRules.from(option);
-        var rule = rules.maxRule(event.getField());
+        var field = event.getSubject();
+        var typeSystem = checkNotNull(getTypeSystem());
+        var rules = NumberRules.from(field, option, typeSystem);
+        var rule = rules.maxRule(field.getName());
         return just(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(field.getDeclaringType())
                         .setRule(rule)
                         .build()
         );

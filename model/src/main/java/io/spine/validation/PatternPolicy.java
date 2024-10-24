@@ -62,8 +62,9 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
         var error = customError.isEmpty()
                        ? Diags.Regex.errorMessage(regex)
                        : customError;
+        var field = event.getSubject();
         var rule = SimpleRules.withCustom(
-                event.getField(),
+                field.getName(),
                 feature,
                 "String should match regex.",
                 error,
@@ -71,7 +72,7 @@ final class PatternPolicy extends Policy<FieldOptionDiscovered> {
         );
         return just(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(field.getDeclaringType())
                         .setRule(rule)
                         .build()
         );
