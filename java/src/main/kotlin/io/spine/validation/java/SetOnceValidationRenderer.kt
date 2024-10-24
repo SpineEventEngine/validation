@@ -52,12 +52,13 @@ import io.spine.validation.SetOnceField
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
     override fun render(sources: SourceFileSet) {
-        // We receive `grpc` and `kotlin` output roots here. Now we do only `java`.
+        // We can receive `grpc` and `kotlin` output roots here as well.
+        // As for now, we modify only `java` sources.
         if (!sources.hasJavaRoot) {
             return
         }
 
-        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to preserve the `MessageType`.
+        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to keep the `MessageType`.
         val messages = findMessageTypes().associateBy { it.message.name }
         val fields = select<SetOnceField>().all()
         val fieldsToMessages = fields.associateWith {
