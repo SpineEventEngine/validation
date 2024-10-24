@@ -34,6 +34,7 @@ import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.validation.event.CompositeRuleAdded;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.server.event.Just.just;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
 
@@ -49,8 +50,9 @@ final class RangePolicy extends Policy<FieldOptionDiscovered> {
             @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
     ) {
         var option = event.getOption();
-        var rules = NumberRules.from(option);
         var field = event.getSubject();
+        checkNotNull(getTypeSystem());
+        var rules = NumberRules.from(field, option, getTypeSystem());
         return just(
                 CompositeRuleAdded.newBuilder()
                         .setType(field.getDeclaringType())
