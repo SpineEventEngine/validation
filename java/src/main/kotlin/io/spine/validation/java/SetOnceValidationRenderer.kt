@@ -64,7 +64,18 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         const val THROW_VALIDATION_EXCEPTION =
             "throw new io.spine.validate.ValidationException($DEFAULT_CONSTRAINT_VIOLATION);"
 
-        // It is a message-level setter, the signature of which is independent of fields.
+        /**
+         * Defines the signature of the expected base `mergeFrom(...)` method,
+         * upon which all bytes-related overloadings rely.
+         *
+         * Formally, its signature says about an input stream, but anyway, it is
+         * a stream of bytes. So, the simpler name is kept. This method is called
+         * indirectly via `mergeFrom(byte[] data)` overloading as well.
+         *
+         * Please note, it is a message-level method, the signature of which is independent
+         * of fields and their outer messages. It is present in every generated message,
+         * and with the same signature.
+         */
         val ExpectedMergeFromBytes = elementFactory.createMethodFromText(
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
