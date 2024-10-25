@@ -38,9 +38,9 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Renders Java code to support `(set_once)` option for the given [field].
+ * Renders Java code to support `(set_once)` option for the given message [field].
  *
- * @property field The field that declared the option.
+ * @property field The message field that declared the option.
  * @property message The message that contains the [field].
  * @param sourceFile The source file that contains the [message].
  */
@@ -135,7 +135,7 @@ internal class SetOnceMessageField(
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if (!($currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue))) {
+            if (!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )
