@@ -26,10 +26,8 @@
 
 package io.spine.validation.java
 
-import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.PrimitiveType
@@ -60,6 +58,7 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceMessageField
+import io.spine.validation.java.setonce.SetOnceStringField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
@@ -156,7 +155,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val fieldType = message.message.field(fieldName).type
         when {
 
-            fieldType.isPrimitive -> renderPrimitive(fieldType.primitive, fieldName, message)
+            fieldType.isPrimitive -> renderPrimitive(file, setOnce, fieldType.primitive, fieldName, message)
 
             fieldType.isMessage -> {
                 SetOnceMessageField(setOnce.subject, message, file)
@@ -172,15 +171,12 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
-    private fun PsiClass.renderPrimitive(fieldType: PrimitiveType, fieldName: String, message: MessageWithFile) {
+    private fun PsiClass.renderPrimitive(file: SourceFile<Java>, field: SetOnceField, fieldType: PrimitiveType, fieldName: String, message: MessageWithFile) {
         when (fieldType) {
 
             TYPE_STRING -> {
-                val messageClassName = message.message.javaClassName(message.fileHeader)
-                alterStringSetter(fieldName)
-                alterStringBytesSetter(fieldName)
-                alterStringMessageMerge(fieldName, messageClassName)
-                alterStringBytesMerge(fieldName)
+                SetOnceStringField(field.subject, message, file)
+                    .render()
             }
 
             TYPE_DOUBLE -> {
@@ -216,71 +212,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
 
         }
-    }
-
-
-
-    private fun PsiClass.alterStringSetter(fieldName: String) {
-        val fieldValue = fieldName.javaGetter()
-        val preconditionCheck =
-            """
-            if (!($fieldValue.isEmpty() || $fieldValue.equals(value))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method(fieldName.javaSetterName()).body!!
-        setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alterStringBytesSetter(fieldName: String) {
-        val fieldValue = "get${fieldName.camelCase()}Bytes()"
-        val preconditionCheck =
-            """
-            if (!($fieldValue.isEmpty() || $fieldValue.equals(value))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val bytesSetter = method("${fieldName.javaSetterName()}Bytes").body!!
-        bytesSetter.addAfter(statement, bytesSetter.lBrace)
-    }
-
-    private fun PsiClass.alterStringMessageMerge(fieldName: String, messageType: ClassName) {
-        val fieldValue = fieldName.javaGetter()
-        val preconditionCheck =
-            """
-            if (!($fieldValue.isEmpty() || $fieldValue.equals(other.$fieldValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val mergeFromMessageSig = elementFactory.createMethodFromText(
-            """
-            public Builder mergeFrom(${messageType.canonical} other) {}
-            """.trimIndent(), null
-        )
-        val mergeFromMessage = findMethodBySignature(mergeFromMessageSig, false)!!.body!!
-        val checkFieldNotDefault = mergeFromMessage.statements.find {
-            it.text.startsWith("if (!other.${fieldName.javaGetter()}.isEmpty())")
-        } as PsiIfStatement
-        val thenBranch = (checkFieldNotDefault.thenBranch!! as PsiBlockStatement).codeBlock
-        thenBranch.addAfter(statement, thenBranch.lBrace)
-    }
-
-    private fun PsiClass.alterStringBytesMerge(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val defaultOrSameCheck = elementFactory.createStatementFromText(
-            """
-            if (!(previous.isEmpty() || previous.equals($currentFieldValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.readStringRequireUtf8()"
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
     private fun PsiClass.alterNumberSetter(fieldName: String) {
