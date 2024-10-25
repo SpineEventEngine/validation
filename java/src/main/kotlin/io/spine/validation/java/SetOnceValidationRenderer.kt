@@ -73,39 +73,18 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 
     private fun javaField(field: Field, message: MessageWithFile): SetOnceJavaCode =
         when {
-
             field.type.isPrimitive -> javaFieldPrimitive(field, message)
-
-            field.type.isMessage -> {
-                SetOnceMessageField(field, message)
-            }
-
-            field.type.isEnum -> {
-                SetOnceEnumField(field, message)
-            }
-
+            field.type.isMessage -> SetOnceMessageField(field, message)
+            field.type.isEnum -> SetOnceEnumField(field, message)
             else -> error("Unsupported `(set_once)` field type: `${field.type}`.")
         }
 
     private fun javaFieldPrimitive(field: Field, message: MessageWithFile) =
         when (field.type.primitive) {
-
-            TYPE_STRING -> {
-                SetOnceStringField(field, message)
-            }
-
-            TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64 -> {
-                SetOnceNumberField(field, message)
-            }
-
-            TYPE_BOOL -> {
-                SetOnceBooleanField(field, message)
-            }
-
-            TYPE_BYTES -> {
-                SetOnceBytesField(field, message)
-            }
-
+            TYPE_STRING -> SetOnceStringField(field, message)
+            TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64 -> SetOnceNumberField(field, message)
+            TYPE_BOOL -> SetOnceBooleanField(field, message)
+            TYPE_BYTES -> SetOnceBytesField(field, message)
             else -> error("Unsupported `(set_once)` field type: `${field.type.primitive}`.")
         }
 }
