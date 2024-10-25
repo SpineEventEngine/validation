@@ -58,6 +58,7 @@ import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
+import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceMessageField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
@@ -163,9 +164,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             fieldType.isEnum -> {
-                alterEnumSetter(fieldName)
-                alterEnumValueSetter(fieldName)
-                alterEnumBytesMerge(fieldName)
+                SetOnceEnumField(setOnce.subject, message, file)
+                    .render()
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
@@ -368,46 +368,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
         val fieldReading = mergeFromBytes.deepSearch(
             startsWith = "${fieldName.lowerCamelCase()}_ = input.readBytes()"
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
-    }
-
-    private fun PsiClass.alterEnumSetter(fieldName: String) {
-        val preconditionCheck =
-            """
-            if (${fieldName.lowerCamelCase()}_ != 0 && ${fieldName.javaGetter()} != value) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method(fieldName.javaSetterName()).body!!
-        setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alterEnumValueSetter(fieldName: String) {
-        val fieldValue = fieldName.lowerCamelCase()
-        val preconditionCheck =
-            """
-            if (${fieldValue}_ != 0 && ${fieldValue}_ != value) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method("${fieldName.javaSetterName()}Value").body!!
-        setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alterEnumBytesMerge(fieldName: String) {
-        val currentFieldValue = "${fieldName.lowerCamelCase()}_"
-        val keepPrevious = elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val defaultOrSameCheck = elementFactory.createStatementFromText(
-            """
-            if (previous != 0 && previous != $currentFieldValue) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.readEnum()"
         ) as PsiStatement
         fieldReading.parent.addBefore(keepPrevious, fieldReading)
         fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)

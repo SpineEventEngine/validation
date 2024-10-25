@@ -31,11 +31,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
 import io.spine.string.camelCase
-import io.spine.string.lowerCamelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.execute
 import io.spine.validation.java.MessageWithFile
@@ -80,7 +80,7 @@ internal sealed class SetOnceJavaCode(
             """.trimIndent()
     }
 
-    protected val fieldName = field.name.value.lowerCamelCase()
+    protected val fieldName = field.name.javaCase()
     protected val fieldNameCamel = fieldName.camelCase()
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"

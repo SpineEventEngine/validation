@@ -29,83 +29,66 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.isMessage
-import io.spine.protodata.java.javaClassName
+import io.spine.protodata.ast.isEnum
 import io.spine.protodata.render.SourceFile
+import io.spine.string.lowerCamelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Renders Java code to support `(set_once)` option for the given message [field].
+ * Renders Java code to support `(set_once)` option for the given enum [field].
  *
- * @property field The message field that declared the option.
+ * @property field The enum field that declared the option.
  * @property message The message that contains the [field].
  * @param sourceFile The source file that contains the [message].
  */
-internal class SetOnceMessageField(
+internal class SetOnceEnumField(
     field: Field,
     message: MessageWithFile,
     sourceFile: SourceFile<Java>,
 ) : SetOnceJavaCode(field, message, sourceFile) {
 
     init {
-        check(field.type.isMessage) {
-            "`${javaClass.simpleName}` handles only message fields. " +
+        check(field.type.isEnum) {
+            "`${javaClass.simpleName}` handles only enum fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
         }
     }
 
-    private val fieldTypeClass = field.type.message
-        .javaClassName(message.fileHeader)
-        .canonical
-
     override fun PsiClass.doRender() {
         alterSetter()
-        alterBuilderSetter()
-        alterFieldMerge()
+        alterEnumValueSetter()
         alterBytesMerge()
     }
 
     /**
      * ```
-     * public Builder setName(io.spine.test.tools.validate.Name value)
+     * public Builder setYearOfStudy(io.spine.test.tools.validate.YearOfStudy value)
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
-        val setter = getMethodBySignature(
-            "public Builder $fieldSetterName($fieldTypeClass value)"
-        ).body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
-
-    /**
-     * ```
-     * public Builder setName(io.spine.test.tools.validate.Name.Builder builderForValue)
-     * ```
-     */
-    private fun PsiClass.alterBuilderSetter() {
         val precondition = checkDefaultOrSame(
-            currentValue = fieldGetter,
-            newValue = "builderForValue.build()"
+            currentValue = "${fieldName}_",
+            newValue = "value.getNumber()"
         )
-        val setter = getMethodBySignature(
-            "public Builder $fieldSetterName($fieldTypeClass.Builder builderForValue)"
-        ).body!!
+        val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
     /**
      * ```
-     * public Builder mergeName(io.spine.test.tools.validate.Name value)
+     * public Builder setYearOfStudyValue(int value)
      * ```
      */
-    private fun PsiClass.alterFieldMerge() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
-        val merge = method("merge$fieldNameCamel").body!!
-        merge.addAfter(precondition, merge.lBrace)
+    private fun PsiClass.alterEnumValueSetter() {
+        val precondition = checkDefaultOrSame(
+            currentValue = "${fieldName}_",
+            newValue = "value"
+        )
+        val setter = method("${fieldSetterName}Value").body!!
+        setter.addAfter(precondition, setter.lBrace)
     }
 
     /**
@@ -117,25 +100,24 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterBytesMerge() {
-        val rememberCurrent = elementFactory.createStatement("var previous = $fieldGetter;")
-        val postcondition = checkDefaultOrSame(
+        val rememberCurrent = elementFactory.createStatement("var previous = ${fieldName}_;")
+        val defaultOrSameCheck = checkDefaultOrSame(
             currentValue = "previous",
-            newValue = fieldGetter
+            newValue = "${fieldName}_"
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "input.readMessage",
-            contains = "${fieldGetterName}FieldBuilder().getBuilder()",
+            startsWith = "${fieldName.lowerCamelCase()}_ = input.readEnum()"
         ) as PsiStatement
         val fieldProcessing = fieldReading.parent
         fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(postcondition, fieldReading)
+        fieldProcessing.addAfter(defaultOrSameCheck, fieldReading)
     }
 
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if (!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)) {
+            if ($currentValue != 0 && $currentValue != $newValue) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )
