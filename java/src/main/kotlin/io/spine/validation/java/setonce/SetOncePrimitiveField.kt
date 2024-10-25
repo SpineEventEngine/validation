@@ -29,43 +29,72 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
 import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.string.camelCase
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
+import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedNumberTypes
+
+internal fun interface DefaultOrSamePredicate : (String, String) -> String
 
 /**
- * Renders Java code to support `(set_once)` option for the given number [field].
+ * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
- * @property field The number field that declared the option.
+ * Take a look at [SupportedNumberTypes] to know which particular primitive types
+ * are supported.
+ *
+ * @property field The primitive field that declared the option.
  * @property message The message that contains the [field].
  */
-internal class SetOnceNumberField(
+internal class SetOncePrimitiveField(
     field: Field,
     message: MessageWithFile
 ) : SetOnceJavaCode(field, message) {
 
-    private companion object {
-        val SupportedNumberTypes = mapOf(
-            TYPE_DOUBLE to "readDouble()",
-            TYPE_FLOAT to "readFloat()",
-            TYPE_INT32 to "readInt32()",
-            TYPE_INT64 to "readInt64()",
+    companion object {
+        val SupportedNumberTypes = listOf(
+            TYPE_DOUBLE, TYPE_FLOAT,
+            TYPE_INT32, TYPE_INT64,
         )
+        val SupportedPrimitiveTypes = buildMap<PrimitiveType, DefaultOrSamePredicate> {
+            put(TYPE_BOOL) { currentValue: String, newValue: String ->
+                "$currentValue != false && $currentValue != $newValue"
+            }
+            put(TYPE_BYTES) { currentValue: String, newValue: String ->
+                "$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)"
+            }
+            SupportedNumberTypes.forEach { type ->
+                put(type) { currentValue: String, newValue: String ->
+                    "$currentValue != 0 && $currentValue != $newValue"
+                }
+            }
+        }
     }
 
     private val fieldReader: String
+    private val defaultOrSame: DefaultOrSamePredicate
 
     init {
-        val fieldReader = SupportedNumberTypes[field.type.primitive]
-        check(fieldReader != null) {
-            "`${javaClass.simpleName}` handles only number fields. " +
+        val fieldType = field.type.primitive
+        check(SupportedPrimitiveTypes.contains(fieldType)) {
+            "`${javaClass.simpleName}` handles only primitive fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
         }
-        this.fieldReader = fieldReader
+
+        val javaTypeName = fieldType.name
+            .substringAfter("_")
+            .lowercase()
+            .camelCase()
+
+        fieldReader = "read$javaTypeName()"
+        defaultOrSame = SupportedPrimitiveTypes[fieldType]!!
     }
 
     override fun PsiClass.doRender() {
@@ -110,7 +139,7 @@ internal class SetOnceNumberField(
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if ($currentValue != 0 && $currentValue != $newValue) {
+            if (${defaultOrSame(currentValue, newValue)}) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )

@@ -27,12 +27,6 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
-import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
@@ -41,12 +35,11 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.setonce.SetOnceBooleanField
-import io.spine.validation.java.setonce.SetOnceBytesField
 import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceJavaCode
 import io.spine.validation.java.setonce.SetOnceMessageField
-import io.spine.validation.java.setonce.SetOnceNumberField
+import io.spine.validation.java.setonce.SetOncePrimitiveField
+import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitiveTypes
 import io.spine.validation.java.setonce.SetOnceStringField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
@@ -82,9 +75,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun javaFieldPrimitive(field: Field, message: MessageWithFile) =
         when (field.type.primitive) {
             TYPE_STRING -> SetOnceStringField(field, message)
-            TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64 -> SetOnceNumberField(field, message)
-            TYPE_BOOL -> SetOnceBooleanField(field, message)
-            TYPE_BYTES -> SetOnceBytesField(field, message)
+            in SupportedPrimitiveTypes -> SetOncePrimitiveField(field, message)
             else -> error("Unsupported `(set_once)` field type: `${field.type.primitive}`.")
         }
 }
