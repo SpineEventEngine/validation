@@ -26,8 +26,7 @@
 
 package io.spine.validation.java
 
-import com.intellij.psi.PsiJavaFile
-import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
@@ -35,23 +34,17 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.field
 import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
 import io.spine.protodata.ast.isPrimitive
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.file.hasJavaRoot
-import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
-import io.spine.protodata.java.render.findClass
-import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
-import io.spine.tools.code.Java
-import io.spine.tools.psi.java.execute
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.setonce.SetOnceBooleanField
 import io.spine.validation.java.setonce.SetOnceBytesField
 import io.spine.validation.java.setonce.SetOnceEnumField
+import io.spine.validation.java.setonce.SetOnceJavaCode
 import io.spine.validation.java.setonce.SetOnceMessageField
 import io.spine.validation.java.setonce.SetOnceNumberField
 import io.spine.validation.java.setonce.SetOnceStringField
@@ -65,117 +58,54 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to keep the `MessageType`.
-        val messages = findMessageTypes().associateBy { it.message.name }
-        val fields = select<SetOnceField>().all()
-        val fieldsToMessages = fields.associateWith {
-            messages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
+        val allKnownMessages = findMessageTypes().associateBy { it.message.name }
+        val setOnceProtoFields = select<SetOnceField>().all()
+        val fieldsToMessages = setOnceProtoFields.associateWith {
+            allKnownMessages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
         }
 
-        fieldsToMessages.forEach {
-            val message = it.value.message
-            val file = sources.javaFileOf(message)
-            val declaringMessage = message.javaClassName(it.value.fileHeader!!)
-            val declaringMessageBuilder = ClassName(
-                declaringMessage.packageName,
-                declaringMessage.simpleNames + "Builder"
-            )
-            val psiFile = file.psi() as PsiJavaFile
-            val psiClass = psiFile.findClass(declaringMessageBuilder)
-            execute {
-                try {
-                    render(file, it.key, it.value)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-            file.overwrite(psiFile.text)
+        fieldsToMessages.forEach { (protoField, messageWithFile) ->
+            val javaField = javaField(protoField.subject, messageWithFile)
+            val sourceFile = sources.javaFileOf(messageWithFile.message)
+            javaField.render(sourceFile)
         }
     }
 
-//    /**
-//     * Quires language-agnostic [SetOnceField] view states, and maps them to [SetOnceField],
-//     * appending the information required to generate Java code for the option support.
-//     */
-//    private fun javaViews(): List<SetOnceJavaCode> {
-//        val allMessages = findMessageTypes().associateBy { it.message.name }
-//        val setOnceViews = select<SetOnceField>().all()
-//        return setOnceViews.map { view ->
-//            val field: Field = view.subject
-//            val declaringMessage = allMessages[field.declaringType]
-//                ?: error(
-//                    "Metadata for `${field.declaringType}` message, which declares `(set_once)` " +
-//                            "option for its `${field.name}` field was not found."
-//                )
-//            setOnceJavaView(view.subject, declaringMessage)
-//        }
-//    }
-//
-//    private fun setOnceJavaView(field: Field, message: MessageWithFile): SetOnceJavaCode {
-//        val fieldType = field.type
-//        return when {
-//            fieldType.isMessage -> SetOnceMessageField(field, message)
-//            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
-//        }
-//    }
-
-    private fun render(file: SourceFile<Java>, setOnce: SetOnceField, message: MessageWithFile) {
-        val fieldName = setOnce.id.name.value
-        val fieldType = message.message.field(fieldName).type
+    private fun javaField(field: Field, message: MessageWithFile): SetOnceJavaCode =
         when {
 
-            fieldType.isPrimitive -> renderPrimitive(
-                file,
-                setOnce,
-                fieldType.primitive,
-                message
-            )
+            field.type.isPrimitive -> javaFieldPrimitive(field, message)
 
-            fieldType.isMessage -> {
-                SetOnceMessageField(setOnce.subject, message, file)
-                    .render()
+            field.type.isMessage -> {
+                SetOnceMessageField(field, message)
             }
 
-            fieldType.isEnum -> {
-                SetOnceEnumField(setOnce.subject, message, file)
-                    .render()
+            field.type.isEnum -> {
+                SetOnceEnumField(field, message)
             }
 
-            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
+            else -> error("Unsupported `(set_once)` field type: `${field.type}`.")
         }
-    }
 
-    private fun renderPrimitive(
-        file: SourceFile<Java>,
-        field: SetOnceField,
-        fieldType: PrimitiveType,
-        message: MessageWithFile
-    ) {
-        when (fieldType) {
+    private fun javaFieldPrimitive(field: Field, message: MessageWithFile) =
+        when (field.type.primitive) {
 
             TYPE_STRING -> {
-                SetOnceStringField(field.subject, message, file)
-                    .render()
+                SetOnceStringField(field, message)
             }
 
-            TYPE_DOUBLE, TYPE_FLOAT,
-            TYPE_INT32, TYPE_INT64 -> {
-                SetOnceNumberField(field.subject, message, file)
-                    .render()
+            TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64 -> {
+                SetOnceNumberField(field, message)
             }
 
             TYPE_BOOL -> {
-                SetOnceBooleanField(field.subject, message, file)
-                    .render()
+                SetOnceBooleanField(field, message)
             }
 
             TYPE_BYTES -> {
-                SetOnceBytesField(field.subject, message, file)
-                    .render()
+                SetOnceBytesField(field, message)
             }
 
-            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
-
+            else -> error("Unsupported `(set_once)` field type: `${field.type.primitive}`.")
         }
-    }
 }

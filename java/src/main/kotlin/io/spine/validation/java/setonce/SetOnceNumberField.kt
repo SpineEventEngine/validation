@@ -33,8 +33,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
 import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.render.SourceFile
-import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -44,13 +42,11 @@ import io.spine.validation.java.MessageWithFile
  *
  * @property field The number field that declared the option.
  * @property message The message that contains the [field].
- * @param sourceFile The source file that contains the [message].
  */
 internal class SetOnceNumberField(
     field: Field,
-    message: MessageWithFile,
-    sourceFile: SourceFile<Java>,
-) : SetOnceJavaCode(field, message, sourceFile) {
+    message: MessageWithFile
+) : SetOnceJavaCode(field, message) {
 
     private companion object {
         val SupportedNumberTypes = mapOf(

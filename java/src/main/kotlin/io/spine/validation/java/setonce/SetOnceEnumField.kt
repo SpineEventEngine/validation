@@ -30,9 +30,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isEnum
-import io.spine.protodata.render.SourceFile
 import io.spine.string.lowerCamelCase
-import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -42,13 +40,11 @@ import io.spine.validation.java.MessageWithFile
  *
  * @property field The enum field that declared the option.
  * @property message The message that contains the [field].
- * @param sourceFile The source file that contains the [message].
  */
 internal class SetOnceEnumField(
     field: Field,
-    message: MessageWithFile,
-    sourceFile: SourceFile<Java>,
-) : SetOnceJavaCode(field, message, sourceFile) {
+    message: MessageWithFile
+) : SetOnceJavaCode(field, message) {
 
     init {
         check(field.type.isEnum) {

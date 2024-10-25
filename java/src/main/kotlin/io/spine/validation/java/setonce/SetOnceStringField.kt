@@ -33,8 +33,6 @@ import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.java.javaClassName
-import io.spine.protodata.render.SourceFile
-import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -44,13 +42,11 @@ import io.spine.validation.java.MessageWithFile
  *
  * @property field The string field that declared the option.
  * @property message The message that contains the [field].
- * @param sourceFile The source file that contains the [message].
  */
 internal class SetOnceStringField(
     field: Field,
-    message: MessageWithFile,
-    sourceFile: SourceFile<Java>,
-) : SetOnceJavaCode(field, message, sourceFile) {
+    message: MessageWithFile
+) : SetOnceJavaCode(field, message) {
 
     private val messageTypeClass = message.message
         .javaClassName(message.fileHeader)

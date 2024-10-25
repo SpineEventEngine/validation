@@ -45,12 +45,10 @@ import io.spine.validation.java.MessageWithFile
  *
  * @property field The field that declared the option.
  * @property message The message that contains the [field].
- * @param sourceFile The source file that contains the [message].
  */
 internal sealed class SetOnceJavaCode(
-    val field: Field,
-    val message: MessageWithFile,
-    private val sourceFile: SourceFile<Java>
+    private val field: Field,
+    private val message: MessageWithFile,
 ) {
 
     protected companion object {
@@ -85,11 +83,10 @@ internal sealed class SetOnceJavaCode(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val fieldSetter = "$fieldSetterName()"
 
     protected abstract fun PsiClass.doRender()
 
-    fun render() {
+    fun render(sourceFile: SourceFile<Java>) {
         val declaringMessage = message.message.javaClassName(message.fileHeader)
         val declaringMessageBuilder = ClassName(
             declaringMessage.packageName,
@@ -100,6 +97,7 @@ internal sealed class SetOnceJavaCode(
         val psiClass = psiFile.findClass(declaringMessageBuilder)
 
         execute {
+            // TODO:2024-10-25:yevhenii.nadtochii: Remove try-catch.
             try {
                 psiClass.doRender()
             } catch (e: Exception) {
