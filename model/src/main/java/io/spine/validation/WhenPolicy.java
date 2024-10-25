@@ -30,8 +30,8 @@ import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protobuf.AnyPacker;
 import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.server.event.Just;
 import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.Just;
 import io.spine.server.event.React;
 import io.spine.time.validation.TimeOption;
 import io.spine.validation.event.SimpleRuleAdded;
@@ -64,15 +64,16 @@ final class WhenPolicy extends Policy<FieldOptionDiscovered> {
                 .build();
         var errorMessage = format(
                 "The time must be in the %s.", time.name().toLowerCase(Locale.ENGLISH));
+        var field = event.getSubject();
         var rule = withCustom(
-                event.getField(),
+                field.getName(),
                 feature,
                 errorMessage,
                 errorMessage,
                 true);
         return just(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(field.getDeclaringType())
                         .setRule(rule)
                         .build()
         );

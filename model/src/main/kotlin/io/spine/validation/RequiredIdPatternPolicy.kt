@@ -35,8 +35,8 @@ import io.spine.protodata.ast.FilePattern
 import io.spine.protodata.ast.event.TypeDiscovered
 import io.spine.protodata.ast.firstField
 import io.spine.protodata.ast.matches
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.model.NoReaction
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.RuleAdded
 
@@ -63,10 +63,10 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (filePatterns.isEmpty()) {
-            return noReaction()
+            return ignore()
         }
         if (!event.file.matchesPatterns()) {
-            return noReaction()
+            return ignore()
         }
         val type = event.type
         val field = type.firstField
