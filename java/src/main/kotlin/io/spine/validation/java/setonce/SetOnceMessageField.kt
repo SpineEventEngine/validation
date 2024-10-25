@@ -41,7 +41,14 @@ internal class SetOnceMessageField(
     field: Field,
     message: MessageWithFile,
     sourceFile: SourceFile<Java>,
-) : SetOnceJavaView(field, message, sourceFile) {
+) : SetOnceJavaCode(field, message, sourceFile) {
+
+    init {
+        check(field.type.isMessage) {
+            "`${javaClass.simpleName}` handles only message fields. " +
+                    "The passed field: `$field`. The declaring message: `${message.message}`."
+        }
+    }
 
     private val fieldTypeClass = field.type.message
         .javaClassName(message.fileHeader)

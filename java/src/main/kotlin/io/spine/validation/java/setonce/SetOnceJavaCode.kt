@@ -27,26 +27,27 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldName
 import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
+import io.spine.string.camelCase
+import io.spine.string.lowerCamelCase
 import io.spine.tools.code.Java
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Data required to render Java code for `(set_once)` option.
+ * Renders Java code to support `(set_once)` option for the given [field].
  *
  * @property field The field that declared the option.
  * @property message The message that contains the [field].
+ * @param sourceFile The source file that contains the [message].
  */
-internal sealed class SetOnceJavaView(
+internal sealed class SetOnceJavaCode(
     val field: Field,
     val message: MessageWithFile,
     private val sourceFile: SourceFile<Java>
@@ -68,24 +69,25 @@ internal sealed class SetOnceJavaView(
          * indirectly via `mergeFrom(byte[] data)` overloading as well.
          *
          * Please note, it is a message-level method, the signature of which is independent
-         * of fields and their outer messages. It is present in every generated message,
-         * and with the same signature.
+         * of fields and their outer messages. It is present in every generated message
+         * with the same signature.
          */
-        val ExpectedMergeFromBytes = elementFactory.createMethodFromText(
+        val MergeFromBytesSignature =
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
                                      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException { }
-            """.trimIndent(), null
-        )
+            """.trimIndent()
     }
 
-    private val fieldName: FieldName = field.name
-
-    protected val fieldGetterName = "get${fieldName.javaCase()}"
-    protected val fieldSetterName = "set${fieldName.javaCase()}"
+    protected val fieldName = field.name.value.lowerCamelCase()
+    protected val fieldNameCamel = fieldName.camelCase()
+    protected val fieldGetterName = "get$fieldNameCamel"
+    protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
     protected val fieldSetter = "$fieldSetterName()"
+
+    protected abstract fun PsiClass.doRender()
 
     fun render() {
         val declaringMessage = message.message.javaClassName(message.fileHeader)
@@ -108,5 +110,25 @@ internal sealed class SetOnceJavaView(
         sourceFile.overwrite(psiFile.text)
     }
 
-    protected abstract fun PsiClass.doRender()
+    /**
+     * Looks for the first child of this [PsiElement], the text representation of which
+     * satisfies both [startsWith] and [contains] conditions.
+     *
+     * This method performs a depth-first search of the PSI hierarchy. So, the second direct
+     * child of this [PsiElement] is checked only when the first child and all its descendants
+     * are checked.
+     */
+    // Kept in the class because it doesn't look like a general-purpose extension.
+    protected fun PsiElement.deepSearch(
+        startsWith: String,
+        contains: String = startsWith
+    ): PsiElement? = children.asSequence()
+        .mapNotNull { element ->
+            val text = element.text
+            when {
+                !text.contains(contains) -> null
+                text.startsWith(startsWith) -> element
+                else -> element.deepSearch(startsWith, contains)
+            }
+        }.firstOrNull()
 }
