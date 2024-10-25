@@ -26,13 +26,13 @@
 
 package io.spine.validation.java.setonce
 
-import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.java.javaClassName
+import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
 import io.spine.protodata.render.SourceFile
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
@@ -40,79 +40,52 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Renders Java code to support `(set_once)` option for the given string [field].
+ * Renders Java code to support `(set_once)` option for the given number [field].
  *
- * @property field The string field that declared the option.
+ * @property field The number field that declared the option.
  * @property message The message that contains the [field].
  * @param sourceFile The source file that contains the [message].
  */
-internal class SetOnceStringField(
+internal class SetOnceNumberField(
     field: Field,
     message: MessageWithFile,
     sourceFile: SourceFile<Java>,
 ) : SetOnceJavaCode(field, message, sourceFile) {
 
-    private val messageTypeClass = message.message
-        .javaClassName(message.fileHeader)
-        .canonical
+    private companion object {
+        val SupportedNumberTypes = mapOf(
+            TYPE_DOUBLE to "readDouble()",
+            TYPE_FLOAT to "readFloat()",
+            TYPE_INT32 to "readInt32()",
+            TYPE_INT64 to "readInt64()",
+        )
+    }
+
+    private val fieldReader: String
 
     init {
-        check(field.type.primitive == TYPE_STRING) {
-            "`${javaClass.simpleName}` handles only string fields. " +
+        val fieldReader = SupportedNumberTypes[field.type.primitive]
+        check(fieldReader != null) {
+            "`${javaClass.simpleName}` handles only number fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
         }
+        this.fieldReader = fieldReader
     }
 
     override fun PsiClass.doRender() {
         alterSetter()
-        alterBytesSetter()
-        alterMessageMerge()
         alterBytesMerge()
     }
 
     /**
      * ```
-     * public Builder setId(java.lang.String value)
+     * public Builder setAge(int value) {
      * ```
      */
     private fun PsiClass.alterSetter() {
         val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
-    }
-
-    /**
-     * ```
-     * public Builder setIdBytes(com.google.protobuf.ByteString value)
-     * ```
-     */
-    private fun PsiClass.alterBytesSetter() {
-        val precondition = checkDefaultOrSame(
-            currentValue = "${fieldGetterName}Bytes()",
-            newValue = "value"
-        )
-        val bytesSetter = method("${fieldSetterName}Bytes").body!!
-        bytesSetter.addAfter(precondition, bytesSetter.lBrace)
-    }
-
-    /**
-     * ```
-     * public Builder mergeFrom(io.spine.test.tools.validate.Student other)
-     * ```
-     */
-    private fun PsiClass.alterMessageMerge() {
-        val precondition = checkDefaultOrSame(
-            currentValue = fieldGetter,
-            newValue = "other.$fieldGetter"
-        )
-        val mergeFromMessage = getMethodBySignature(
-            "public Builder mergeFrom($messageTypeClass other) {}"
-        ).body!!
-        val fieldCheck = mergeFromMessage.deepSearch(
-            "if (!other.$fieldGetter.isEmpty())"
-        ) as PsiIfStatement
-        val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
-        fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 
     /**
@@ -131,7 +104,7 @@ internal class SetOnceStringField(
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName}_ = input.readStringRequireUtf8()"
+            startsWith = "${fieldName}_ = input.$fieldReader"
         ) as PsiStatement
         val fieldProcessing = fieldReading.parent
         fieldProcessing.addBefore(rememberCurrent, fieldReading)
@@ -141,7 +114,7 @@ internal class SetOnceStringField(
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if (!$currentValue.isEmpty() && !$currentValue.equals($newValue)) {
+            if ($currentValue != 0 && $currentValue != $newValue) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )

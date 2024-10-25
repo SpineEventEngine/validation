@@ -58,6 +58,7 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceMessageField
+import io.spine.validation.java.setonce.SetOnceNumberField
 import io.spine.validation.java.setonce.SetOnceStringField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
@@ -179,24 +180,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
                     .render()
             }
 
-            TYPE_DOUBLE -> {
-                alterNumberSetter(fieldName)
-                alterNumberBytesMerge(fieldName, "readDouble()")
-            }
-
-            TYPE_FLOAT -> {
-                alterNumberSetter(fieldName)
-                alterNumberBytesMerge(fieldName, "readFloat()")
-            }
-
-            TYPE_INT32 -> {
-                alterNumberSetter(fieldName)
-                alterNumberBytesMerge(fieldName, "readInt32()")
-            }
-
-            TYPE_INT64 -> {
-                alterNumberSetter(fieldName)
-                alterNumberBytesMerge(fieldName, "readInt64()")
+            TYPE_DOUBLE, TYPE_FLOAT,
+            TYPE_INT32, TYPE_INT64 -> {
+                SetOnceNumberField(field.subject, message, file)
+                    .render()
             }
 
             TYPE_BOOL -> {
@@ -212,36 +199,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
 
         }
-    }
-
-    private fun PsiClass.alterNumberSetter(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if ($currentFieldValue != 0 && $currentFieldValue != value) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val setter = method(fieldName.javaSetterName()).body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
-
-    private fun PsiClass.alterNumberBytesMerge(fieldName: String, fieldReader: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val defaultOrSameCheck = elementFactory.createStatementFromText(
-            """
-            if (previous != 0 && previous != $currentFieldValue) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.$fieldReader"
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
     }
 
     private fun PsiClass.alterBooleanSetter(fieldName: String) {
