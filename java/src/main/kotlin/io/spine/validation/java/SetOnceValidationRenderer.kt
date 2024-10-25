@@ -32,7 +32,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiIfStatement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
@@ -50,14 +49,15 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.string.camelCase
 import io.spine.string.lowerCamelCase
+import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.setonce.SetOnceJavaView
 import io.spine.validation.java.setonce.SetOnceMessageField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
@@ -96,8 +96,14 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        val javaViews = javaViews()
-        javaViews.forEach {
+        // TODO:2024-10-21:yevhenii.nadtochii: Modify the view to keep the `MessageType`.
+        val messages = findMessageTypes().associateBy { it.message.name }
+        val fields = select<SetOnceField>().all()
+        val fieldsToMessages = fields.associateWith {
+            messages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
+        }
+
+        fieldsToMessages.forEach {
             val message = it.value.message
             val file = sources.javaFileOf(message)
             val declaringMessage = message.javaClassName(it.value.fileHeader!!)
@@ -109,7 +115,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             val psiClass = psiFile.findClass(declaringMessageBuilder)
             execute {
                 try {
-                    psiClass.render(it.key, it.value)
+                    psiClass.render(file, it.key, it.value)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -118,46 +124,42 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
-    /**
-     * Quires language-agnostic [SetOnceField] view states, and maps them to [SetOnceField],
-     * appending the information required to generate Java code for the option support.
-     */
-    private fun javaViews(): List<SetOnceJavaView> {
-        val allMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceViews = select<SetOnceField>().all()
-        return setOnceViews.map { view ->
-            val field: Field = view.subject
-            val declaringMessage = allMessages[field.declaringType]
-                ?: error(
-                    "Metadata for `${field.declaringType}` message, which declares `(set_once)` " +
-                            "option for its `${field.name}` field was not found."
-                )
-            setOnceJavaView(view.subject, declaringMessage)
-        }
-    }
+//    /**
+//     * Quires language-agnostic [SetOnceField] view states, and maps them to [SetOnceField],
+//     * appending the information required to generate Java code for the option support.
+//     */
+//    private fun javaViews(): List<SetOnceJavaCode> {
+//        val allMessages = findMessageTypes().associateBy { it.message.name }
+//        val setOnceViews = select<SetOnceField>().all()
+//        return setOnceViews.map { view ->
+//            val field: Field = view.subject
+//            val declaringMessage = allMessages[field.declaringType]
+//                ?: error(
+//                    "Metadata for `${field.declaringType}` message, which declares `(set_once)` " +
+//                            "option for its `${field.name}` field was not found."
+//                )
+//            setOnceJavaView(view.subject, declaringMessage)
+//        }
+//    }
+//
+//    private fun setOnceJavaView(field: Field, message: MessageWithFile): SetOnceJavaCode {
+//        val fieldType = field.type
+//        return when {
+//            fieldType.isMessage -> SetOnceMessageField(field, message)
+//            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
+//        }
+//    }
 
-    private fun setOnceJavaView(field: Field, message: MessageWithFile): SetOnceJavaView {
-        val fieldType = field.type
-        return when {
-            fieldType.isMessage -> SetOnceMessageField(field, message)
-            else -> error("Unsupported `(set_once)` field type: `$fieldType`")
-        }
-    }
-
-    private fun PsiClass.render(setOnce: SetOnceField, message: MessageWithFile) {
+    private fun PsiClass.render(file: SourceFile<Java>, setOnce: SetOnceField, message: MessageWithFile) {
         val fieldName = setOnce.id.name.value
         val fieldType = message.message.field(fieldName).type
-        val fileHeader = message.fileHeader
         when {
 
-            fieldType.isPrimitive -> renderPrimitive(fieldType.primitive, fieldName)
+            fieldType.isPrimitive -> renderPrimitive(fieldType.primitive, fieldName, message)
 
             fieldType.isMessage -> {
-                val fieldTypeClass = fieldType.message.javaClassName(fileHeader)
-                alterMessageSetter(fieldName, fieldTypeClass)
-                alterMessageBuilderSetter(fieldName, fieldTypeClass)
-                alterMessageFieldMerge(fieldName, fieldTypeClass)
-                alterMessageBytesMerge(fieldName, fieldTypeClass)
+                SetOnceMessageField(setOnce.subject, message, file)
+                    .render()
             }
 
             fieldType.isEnum -> {
@@ -170,7 +172,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
-    private fun PsiClass.renderPrimitive(fieldType: PrimitiveType, fieldName: String) {
+    private fun PsiClass.renderPrimitive(fieldType: PrimitiveType, fieldName: String, message: MessageWithFile) {
         when (fieldType) {
 
             TYPE_STRING -> {

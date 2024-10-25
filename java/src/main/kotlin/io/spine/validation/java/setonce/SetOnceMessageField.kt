@@ -29,14 +29,21 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.isMessage
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.render.SourceFile
-import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
+/**
+ * Renders Java code to support `(set_once)` option for the given [field].
+ *
+ * @property field The field that declared the option.
+ * @property message The message that contains the [field].
+ * @param sourceFile The source file that contains the [message].
+ */
 internal class SetOnceMessageField(
     field: Field,
     message: MessageWithFile,
@@ -68,12 +75,9 @@ internal class SetOnceMessageField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
-        val setterSignature = elementFactory.createMethodFromText(
-            """
-            public Builder $fieldSetterName($fieldTypeClass value) {}
-            """.trimIndent(), null
-        )
-        val setter = findMethodBySignature(setterSignature, false)!!.body!!
+        val setter = getMethodBySignature(
+            "public Builder $fieldSetterName($fieldTypeClass value)"
+        ).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
@@ -83,19 +87,13 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterBuilderSetter() {
-        val newValue = "builderForValue.build()"
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if (!($currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
+        val precondition = checkDefaultOrSame(
+            currentValue = fieldGetter,
+            newValue = "builderForValue.build()"
         )
-        val expectedSetter = elementFactory.createMethodFromText(
-            """
-            public Builder ${fieldName.javaSetterName()}(${fieldType.canonical}.Builder builderForValue) {}
-            """.trimIndent(), null
-        )
-        val setter = findMethodBySignature(expectedSetter, false)!!.body!!
+        val setter = getMethodBySignature(
+            "public Builder $fieldSetterName($fieldTypeClass.Builder builderForValue)"
+        ).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
@@ -105,13 +103,8 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterFieldMerge() {
-        val precondition = elementFactory.createStatementFromText(
-            """
-            if (!($currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals(value))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val merge = method("merge${fieldName.camelCase()}").body!!
+        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
+        val merge = method("merge$fieldNameCamel").body!!
         merge.addAfter(precondition, merge.lBrace)
     }
 
@@ -124,28 +117,26 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterBytesMerge() {
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentValue;", null)
-        val postcondition = elementFactory.createStatementFromText(
-            """
-            if (!(previous.equals($fieldTypeClass.getDefaultInstance()) || previous.equals($currentValue))) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
+        val keepPrevious = elementFactory.createStatement("var previous = $fieldGetter;")
+        val postcondition = checkDefaultOrSame(
+            currentValue = "previous",
+            newValue = fieldGetter
         )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
+        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(
             startsWith = "input.readMessage",
-            contains = "get${fieldName.camelCase()}FieldBuilder().getBuilder()",
+            contains = "${fieldGetterName}FieldBuilder().getBuilder()",
         ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(postcondition, fieldReading)
+        val fieldHandling = fieldReading.parent
+        fieldHandling.addBefore(keepPrevious, fieldReading)
+        fieldHandling.addAfter(postcondition, fieldReading)
     }
 
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatementFromText(
+        elementFactory.createStatement(
             """
             if (!($currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue))) {
                 $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
+            }""".trimIndent()
         )
 }
