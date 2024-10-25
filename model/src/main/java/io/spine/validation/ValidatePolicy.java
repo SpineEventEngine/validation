@@ -66,7 +66,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         }
         var shouldValidate = field != null && field.getValidate();
         if (!shouldValidate) {
-            return ignoring();
+            return ignore();
         }
         var rule = SimpleRules.withCustom(
                 event.getField(),

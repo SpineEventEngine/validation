@@ -49,23 +49,4 @@ public abstract class ValidationPolicy<E extends EventMessage>
     @Override
     @ContractFor(handler = React.class)
     protected abstract EitherOf2<RuleAdded, NoReaction> whenever(E event);
-
-    /**
-     * Creates an {@link EitherOf2} with {@link NoReaction} in the {@code B} option.
-     *
-     * <p>Usage example:
-     * <pre>
-     *  {@literal class MyPolicy extends ValidationPolicy<TypeEntered>} {
-     *      {@literal @Override @React}
-     *      {@literal protected EitherOf2<RuleAdded, NoReaction> whenever}(TypeEntered event) {
-     *           if (!isRelevant(event)) {
-     *               return ignoring();
-     *           }
-     *           return myCustomRule(event);
-     *       }
-     * </pre>
-     */
-    protected final EitherOf2<RuleAdded, NoReaction> ignoring() {
-        return EitherOf2.withB(noReaction());
-    }
 }

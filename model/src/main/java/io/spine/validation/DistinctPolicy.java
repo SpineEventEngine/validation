@@ -64,7 +64,7 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
     ) {
         var option = event.getOption();
         if (!unpack(option.getValue(), BoolValue.class).getValue()) {
-            return ignoring();
+            return ignore();
         }
         var field = event.getSubject();
         var declaringType = field.getDeclaringType();

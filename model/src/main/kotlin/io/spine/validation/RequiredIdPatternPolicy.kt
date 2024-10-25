@@ -63,10 +63,10 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (filePatterns.isEmpty()) {
-            return ignoring()
+            return ignore()
         }
         if (!event.file.matchesPatterns()) {
-            return ignoring()
+            return ignore()
         }
         val type = event.type
         val field = type.firstField

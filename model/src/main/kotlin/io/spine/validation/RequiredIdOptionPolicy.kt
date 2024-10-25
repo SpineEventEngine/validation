@@ -57,11 +57,11 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
         if (options.isEmpty()) {
-            return ignoring()
+            return ignore()
         }
         val type = event.type
         if (!type.isEntityState()) {
-            return ignoring()
+            return ignore()
         }
         val field = type.firstField
         return withField(field)

@@ -35,7 +35,7 @@ import io.spine.protodata.ast.event.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.event.asB
+import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validate.Diags.IsRequired.errorMessage
 import io.spine.validate.Diags.IsRequired.operatorDescription
@@ -59,7 +59,7 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
         // We have the option defined in the type. But is it set to `true`?
         val option = event.option.value.unpack<BoolValue>()
         if (!option.value) {
-            return noReaction().asB()
+            return ignore()
         }
         val requiredOneof = requiredOneof {
             name = event.group
@@ -72,9 +72,9 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
             errorMessage = errorMessage(event.group.value)
             operator = customOp
         }
-        return EitherOf2.withA(messageWideRuleAdded {
+        return messageWideRuleAdded {
             rule = messageWideRule
             type = event.type
-        })
+        }.asA()
     }
 }
