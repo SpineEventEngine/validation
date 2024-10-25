@@ -29,10 +29,7 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.render.SourceFile
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
@@ -40,36 +37,23 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Renders Java code to support `(set_once)` option for the given number [field].
+ * Renders Java code to support `(set_once)` option for the bytes number [field].
  *
- * @property field The number field that declared the option.
+ * @property field The bytes field that declared the option.
  * @property message The message that contains the [field].
  * @param sourceFile The source file that contains the [message].
  */
-internal class SetOnceNumberField(
+internal class SetOnceBytesField(
     field: Field,
     message: MessageWithFile,
     sourceFile: SourceFile<Java>,
 ) : SetOnceJavaCode(field, message, sourceFile) {
 
-    private companion object {
-        val SupportedNumberTypes = mapOf(
-            TYPE_DOUBLE to "readDouble()",
-            TYPE_FLOAT to "readFloat()",
-            TYPE_INT32 to "readInt32()",
-            TYPE_INT64 to "readInt64()",
-        )
-    }
-
-    private val fieldReader: String
-
     init {
-        val fieldReader = SupportedNumberTypes[field.type.primitive]
-        check(fieldReader != null) {
-            "`${javaClass.simpleName}` handles only number fields. " +
+        check(field.type.primitive == TYPE_BYTES) {
+            "`${javaClass.simpleName}` handles only boolean fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
         }
-        this.fieldReader = fieldReader
     }
 
     override fun PsiClass.doRender() {
@@ -79,7 +63,7 @@ internal class SetOnceNumberField(
 
     /**
      * ```
-     * public Builder setAge(int value)
+     * public Builder setHasMedals(boolean value)
      * ```
      */
     private fun PsiClass.alterSetter() {
@@ -104,7 +88,7 @@ internal class SetOnceNumberField(
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName}_ = input.$fieldReader"
+            startsWith = "${fieldName}_ = input.readBytes()"
         ) as PsiStatement
         val fieldProcessing = fieldReading.parent
         fieldProcessing.addBefore(rememberCurrent, fieldReading)
@@ -114,7 +98,7 @@ internal class SetOnceNumberField(
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if ($currentValue != 0 && $currentValue != $newValue) {
+            if ($currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )

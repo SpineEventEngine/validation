@@ -26,10 +26,7 @@
 
 package io.spine.validation.java
 
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
-import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
@@ -49,46 +46,17 @@ import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
-import io.spine.string.camelCase
-import io.spine.string.lowerCamelCase
 import io.spine.tools.code.Java
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
-import io.spine.tools.psi.java.method
 import io.spine.validation.SetOnceField
+import io.spine.validation.java.setonce.SetOnceBooleanField
+import io.spine.validation.java.setonce.SetOnceBytesField
 import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceMessageField
 import io.spine.validation.java.setonce.SetOnceNumberField
 import io.spine.validation.java.setonce.SetOnceStringField
 
 internal class SetOnceValidationRenderer : JavaRenderer() {
-
-    private companion object {
-        const val DEFAULT_CONSTRAINT_VIOLATION =
-            "io.spine.validate.ConstraintViolation.getDefaultInstance()"
-        const val THROW_VALIDATION_EXCEPTION =
-            "throw new io.spine.validate.ValidationException($DEFAULT_CONSTRAINT_VIOLATION);"
-
-        /**
-         * Defines the signature of the expected base `mergeFrom(...)` method,
-         * upon which all bytes-related overloadings rely.
-         *
-         * Formally, its signature says about an input stream, but anyway, it is
-         * a stream of bytes. So, the simpler name is kept. This method is called
-         * indirectly via `mergeFrom(byte[] data)` overloading as well.
-         *
-         * Please note, it is a message-level method, the signature of which is independent
-         * of fields and their outer messages. It is present in every generated message,
-         * and with the same signature.
-         */
-        val ExpectedMergeFromBytes = elementFactory.createMethodFromText(
-            """
-            public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
-                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException { }
-            """.trimIndent(), null
-        )
-    }
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
@@ -116,7 +84,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             val psiClass = psiFile.findClass(declaringMessageBuilder)
             execute {
                 try {
-                    psiClass.render(file, it.key, it.value)
+                    render(file, it.key, it.value)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -151,12 +119,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 //        }
 //    }
 
-    private fun PsiClass.render(file: SourceFile<Java>, setOnce: SetOnceField, message: MessageWithFile) {
+    private fun render(file: SourceFile<Java>, setOnce: SetOnceField, message: MessageWithFile) {
         val fieldName = setOnce.id.name.value
         val fieldType = message.message.field(fieldName).type
         when {
 
-            fieldType.isPrimitive -> renderPrimitive(file, setOnce, fieldType.primitive, fieldName, message)
+            fieldType.isPrimitive -> renderPrimitive(
+                file,
+                setOnce,
+                fieldType.primitive,
+                message
+            )
 
             fieldType.isMessage -> {
                 SetOnceMessageField(setOnce.subject, message, file)
@@ -172,7 +145,12 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
     }
 
-    private fun PsiClass.renderPrimitive(file: SourceFile<Java>, field: SetOnceField, fieldType: PrimitiveType, fieldName: String, message: MessageWithFile) {
+    private fun renderPrimitive(
+        file: SourceFile<Java>,
+        field: SetOnceField,
+        fieldType: PrimitiveType,
+        message: MessageWithFile
+    ) {
         when (fieldType) {
 
             TYPE_STRING -> {
@@ -187,101 +165,17 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
 
             TYPE_BOOL -> {
-                alterBooleanSetter(fieldName)
-                alterBooleanBytesMerge(fieldName)
+                SetOnceBooleanField(field.subject, message, file)
+                    .render()
             }
 
             TYPE_BYTES -> {
-                alterBytesSetter(fieldName)
-                alterBytesMerge(fieldName)
+                SetOnceBytesField(field.subject, message, file)
+                    .render()
             }
 
             else -> error("Unsupported `(set_once)` field type: `$fieldType`")
 
         }
     }
-
-    private fun PsiClass.alterBooleanSetter(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val preconditionCheck =
-            """
-            if ($currentFieldValue != false && $currentFieldValue != value) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method(fieldName.javaSetterName()).body!!
-        setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alterBooleanBytesMerge(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val defaultOrSameCheck = elementFactory.createStatementFromText(
-            """
-            if (previous != false && previous != $currentFieldValue) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.readBool()"
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addBefore(defaultOrSameCheck, fieldReading)
-    }
-
-    private fun PsiClass.alterBytesSetter(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val preconditionCheck =
-            """
-            if ($currentFieldValue != com.google.protobuf.ByteString.EMPTY && !$currentFieldValue.equals(value)) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        val statement = elementFactory.createStatementFromText(preconditionCheck, null)
-        val setter = method(fieldName.javaSetterName()).body!!
-        setter.addAfter(statement, setter.lBrace)
-    }
-
-    private fun PsiClass.alterBytesMerge(fieldName: String) {
-        val currentFieldValue = fieldName.javaGetter()
-        val keepPrevious =
-            elementFactory.createStatementFromText("var previous = $currentFieldValue;", null)
-        val defaultOrSameCheck = elementFactory.createStatementFromText(
-            """
-            if (previous != com.google.protobuf.ByteString.EMPTY && !previous.equals($currentFieldValue)) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent(), null
-        )
-        val mergeFromBytes = findMethodBySignature(ExpectedMergeFromBytes, false)!!.body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.readBytes()"
-        ) as PsiStatement
-        fieldReading.parent.addBefore(keepPrevious, fieldReading)
-        fieldReading.parent.addAfter(defaultOrSameCheck, fieldReading)
-    }
 }
-
-/**
- * Looks for the first child of this [PsiElement], the text representation of which satisfies
- * both [startsWith] and [contains] conditions.
- *
- * This method performs a depth-first search of the PSI hierarchy. So, the second direct child
- * of this [PsiElement] is checked only when the first child and all its descendants are checked.
- */
-private fun PsiElement.deepSearch(
-    startsWith: String,
-    contains: String = startsWith
-): PsiElement? = children.asSequence()
-    .mapNotNull { element ->
-        val text = element.text
-        when {
-            !text.contains(contains) -> null
-            text.startsWith(startsWith) -> element
-            else -> element.deepSearch(startsWith, contains)
-        }
-    }.firstOrNull()
-
-private fun String.javaGetter() = "get${camelCase()}()"
-
-private fun String.javaSetterName() = "set${camelCase()}"
