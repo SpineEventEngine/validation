@@ -26,8 +26,8 @@
 
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Kotest
-import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
+import io.spine.internal.dependency.spine.ProtoData
 
 plugins {
     `build-proto-model`

@@ -29,9 +29,12 @@
 import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Kotlin
 import io.spine.internal.dependency.KotlinX
-import io.spine.internal.dependency.ProtoData
 import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.spine.CoreJava
+import io.spine.internal.dependency.spine.Logging
+import io.spine.internal.dependency.spine.ProtoData
+import io.spine.internal.dependency.spine.Spine
+import io.spine.internal.dependency.spine.ToolBase
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
@@ -93,11 +96,11 @@ allprojects {
                 ProtoData.backend,
                 ProtoData.java,
                 Spine.base,
-                Spine.Logging.lib,
-                Spine.client,
-                Spine.server,
-                Spine.toolBase,
-                Spine.pluginBase,
+                Logging.lib,
+                CoreJava.client,
+                CoreJava.server,
+                ToolBase.lib,
+                ToolBase.pluginBase,
                 Grpc.api,
                 Grpc.context,
                 Grpc.core,

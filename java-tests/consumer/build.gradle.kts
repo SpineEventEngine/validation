@@ -25,7 +25,7 @@
  */
 
 import io.spine.internal.dependency.Kotest
-import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.spine.Spine
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 import io.spine.util.theOnly
