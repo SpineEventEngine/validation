@@ -25,13 +25,14 @@
  */
 
 import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.spine.Logging
+import io.spine.internal.dependency.spine.Spine
 
 dependencies {
     testAnnotationProcessor(AutoService.processor)
     testCompileOnly(AutoService.annotations)
     testImplementation(Spine.testlib)
-    testImplementation(Spine.Logging.lib)
+    testImplementation(Logging.lib)
 }
 
 tasks.findByName("launchTestProtoData")?.apply { this as JavaExec

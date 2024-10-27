@@ -24,30 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.spine.Logging
-import io.spine.internal.dependency.spine.Spine
+package io.spine.internal.dependency.spine
 
-buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(mcJava.pluginLib)
-    }
-}
-
-plugins {
-    `build-proto-model`
-    module
-}
-
-apply(plugin = "io.spine.mc-java")
-
-dependencies {
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    implementation(Spine.base)
-    implementation(Logging.lib)
-
-    testImplementation(Spine.testlib)
+/**
+ * Dependencies on `core-java` modules.
+ *
+ * See [`SpineEventEngine/core-java`](https://github.com/SpineEventEngine/core-java/).
+ */
+@Suppress("ConstPropertyName", "unused")
+object CoreJava {
+    const val group = Spine.group
+    const val version = "2.0.0-SNAPSHOT.177"
+    const val core = "$group:spine-core:$version"
+    const val client = "$group:spine-client:$version"
+    const val server = "$group:spine-server:$version"
+    const val testUtilServer = "${Spine.toolsGroup}:spine-testutil-server:$version"
 }

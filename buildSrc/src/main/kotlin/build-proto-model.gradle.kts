@@ -26,7 +26,6 @@
 
 import com.google.protobuf.gradle.ProtobufExtension
 import io.spine.internal.dependency.Protobuf
-import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.publish.excludeGoogleProtoFromArtifacts
 
 apply {
