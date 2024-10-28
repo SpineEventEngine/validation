@@ -26,21 +26,21 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.internal.dependency.Grpc
-import io.spine.internal.dependency.Kotlin
-import io.spine.internal.dependency.KotlinX
-import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.spine.CoreJava
-import io.spine.internal.dependency.spine.Logging
-import io.spine.internal.dependency.spine.ProtoData
-import io.spine.internal.dependency.spine.Spine
-import io.spine.internal.dependency.spine.ToolBase
-import io.spine.internal.gradle.publish.PublishingRepos
-import io.spine.internal.gradle.publish.spinePublishing
-import io.spine.internal.gradle.report.coverage.JacocoConfig
-import io.spine.internal.gradle.report.license.LicenseReporter
-import io.spine.internal.gradle.report.pom.PomGenerator
-import io.spine.internal.gradle.standardToSpineSdk
+import io.spine.dependency.lib.Grpc
+import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.lib.KotlinX
+import io.spine.dependency.lib.Roaster
+import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.Logging
+import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Spine
+import io.spine.dependency.local.ToolBase
+import io.spine.gradle.publish.PublishingRepos
+import io.spine.gradle.publish.spinePublishing
+import io.spine.gradle.report.coverage.JacocoConfig
+import io.spine.gradle.report.license.LicenseReporter
+import io.spine.gradle.report.pom.PomGenerator
+import io.spine.gradle.standardToSpineSdk
 
 plugins {
     idea

@@ -55,6 +55,9 @@
 # Gradle build files
 **/build/**
 
+# Do not ignore `build` dependency objects.
+!**/buildSrc/src/main/kotlin/io/spine/dependency/build/**
+
 # Build files produced by the IDE
 **/out/**
 

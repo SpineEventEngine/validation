@@ -26,10 +26,10 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.dependency.spine.McJava
-import io.spine.internal.dependency.spine.ProtoData
-import io.spine.internal.dependency.spine.Spine
+import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.McJava
+import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Spine
 
 buildscript {
     forceCodegenPlugins()

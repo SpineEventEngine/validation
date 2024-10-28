@@ -24,9 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.AutoServiceKsp
-import io.spine.internal.dependency.spine.McJava
+import io.spine.dependency.lib.AutoService
+import io.spine.dependency.lib.AutoServiceKsp
+import io.spine.dependency.local.McJava
 
 buildscript {
     forceCodegenPlugins()

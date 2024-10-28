@@ -24,8 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.spine.CoreJava
-import io.spine.internal.dependency.spine.ProtoData
+import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.ProtoData
 
 dependencies {
     api(CoreJava.server)
