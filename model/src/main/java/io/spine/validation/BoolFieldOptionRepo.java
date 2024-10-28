@@ -44,8 +44,8 @@ abstract class BoolFieldOptionRepo<
         super.setupEventRouting(routing);
         routing.unicast(FieldOptionDiscovered.class,
                         (e, c) -> FieldId.newBuilder()
-                                .setType(e.getType())
-                                .setName(e.getField())
+                                .setType(e.getSubject().getDeclaringType())
+                                .setName(e.getSubject().getName())
                                 .build()
         );
     }

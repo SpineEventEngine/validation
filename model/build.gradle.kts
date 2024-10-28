@@ -24,19 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.ProtoData
-import io.spine.internal.dependency.ProtoData.backend
-import io.spine.internal.dependency.ProtoData.java
+import io.spine.internal.dependency.spine.CoreJava
+import io.spine.internal.dependency.spine.ProtoData
 
 dependencies {
-    api(Spine.server)
+    api(CoreJava.server)
     api(ProtoData.java)
-    implementation(backend)
+    implementation(ProtoData.backend)
 
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
     implementation(project(":java-runtime"))
 
-    testImplementation(Spine.CoreJava.testUtilServer)
+    testImplementation(CoreJava.testUtilServer)
 }

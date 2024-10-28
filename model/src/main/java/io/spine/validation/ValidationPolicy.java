@@ -29,8 +29,8 @@ package io.spine.validation;
 import io.spine.base.EventMessage;
 import io.spine.core.ContractFor;
 import io.spine.protodata.plugin.Policy;
+import io.spine.server.event.NoReaction;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 
@@ -48,25 +48,5 @@ public abstract class ValidationPolicy<E extends EventMessage>
 
     @Override
     @ContractFor(handler = React.class)
-    protected abstract EitherOf2<RuleAdded, Nothing> whenever(E event);
-
-    /**
-     * Creates an {@link EitherOf2} with {@code Nothing} in the {@code B} option.
-     *
-     * <p>Usage example:
-     * <pre>
-     *  {@literal class MyPolicy extends ValidationPolicy<TypeEntered>} {
-     *      {@literal @Override @React}
-     *      {@literal protected EitherOf2<RuleAdded, Nothing> whenever}(TypeEntered event) {
-     *           if (!isRelevant(event)) {
-     *               return withNothing();
-     *           }
-     *           return myCustomRule(event);
-     *       }
-     * </pre>
-     */
-    protected final EitherOf2<RuleAdded, Nothing> noReaction() {
-        //TODO:2024-08-11:alexander.yevsyukov: Use EventProducer.noReaction() extension from `core-java`.
-        return EitherOf2.withB(nothing());
-    }
+    protected abstract EitherOf2<RuleAdded, NoReaction> whenever(E event);
 }

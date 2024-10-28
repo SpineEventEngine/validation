@@ -28,7 +28,8 @@ package io.spine.validation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeDiscovered
 import io.spine.protodata.settings.loadSettings
-import io.spine.server.model.NoReaction
+import io.spine.server.event.NoReaction
+import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.RequiredRule.isRequired
 import io.spine.validation.event.RuleAdded
@@ -65,13 +66,13 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     fun withField(field: Field): EitherOf2<RuleAdded, NoReaction> {
         if (!isRequired(field, true)) {
-            return noReaction()
+            return ignore()
         }
         val errorMessage = "ID field `${field.name.value}` must be set."
         val rule = RequiredRule.forField(field, errorMessage)
         if (rule.isEmpty) {
-            return noReaction()
+            return ignore()
         }
-        return EitherOf2.withA(rule.get().toEvent(field.declaringType))
+        return rule.get().toEvent(field.declaringType).asA()
     }
 }

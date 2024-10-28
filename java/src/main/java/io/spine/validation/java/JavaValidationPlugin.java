@@ -28,15 +28,11 @@ package io.spine.validation.java;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.plugin.Policy;
-import io.spine.protodata.plugin.View;
-import io.spine.protodata.plugin.ViewRepository;
 import io.spine.protodata.render.Renderer;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.validation.ValidationPlugin;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -48,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * extend this plugin's behavior and supply a more rich base plugin.
  */
 @SuppressWarnings("unused") // Accessed via reflection.
-public final class JavaValidationPlugin implements Plugin {
+public final class JavaValidationPlugin extends Plugin {
 
     private final Plugin base;
 
@@ -59,6 +55,12 @@ public final class JavaValidationPlugin implements Plugin {
      * @param base the base plugin to extend
      */
     public JavaValidationPlugin(Plugin base) {
+        super(
+            mergeRenderers(base),
+            base.getViews(),
+            base.getViewRepositories(),
+            base.getPolicies()
+        );
         this.base = checkNotNull(base);
     }
 
@@ -72,15 +74,12 @@ public final class JavaValidationPlugin implements Plugin {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * <p>{@code JavaValidationPlugin} orders the renderers in such a way that the renderers of
+     * Orders the renderers in such a way that the renderers of
      * the {@code base} plugin always come before its own renderers.
      */
-    @Override
-    public List<Renderer<?>> renderers() {
+    private static List<Renderer<?>> mergeRenderers(Plugin base) {
         var result = ImmutableList.<Renderer<?>>builder();
-        result.addAll(base.renderers());
+        result.addAll(base.getRenderers());
         result.add(new PrintValidationInsertionPoints(),
                    new JavaValidationRenderer(),
                    new ImplementValidatingBuilder(),
@@ -91,20 +90,5 @@ public final class JavaValidationPlugin implements Plugin {
     @Override
     public void extend(BoundedContextBuilder context) {
         base.extend(context);
-    }
-
-    @Override
-    public Set<Class<? extends View<?, ?, ?>>> views() {
-        return base.views();
-    }
-
-    @Override
-    public Set<Policy<?>> policies() {
-        return base.policies();
-    }
-
-    @Override
-    public Set<ViewRepository<?, ?, ?>> viewRepositories() {
-        return base.viewRepositories();
     }
 }

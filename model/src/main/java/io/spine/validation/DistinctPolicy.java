@@ -31,10 +31,10 @@ import io.spine.core.External;
 import io.spine.core.Where;
 import io.spine.protodata.ast.FieldName;
 import io.spine.protodata.ast.File;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
 import io.spine.protodata.ast.TypeName;
+import io.spine.protodata.ast.event.FieldOptionDiscovered;
+import io.spine.server.event.NoReaction;
 import io.spine.server.event.React;
-import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf2;
 import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
@@ -59,21 +59,23 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
     @Override
     @React
-    protected EitherOf2<RuleAdded, Nothing> whenever(
+    protected EitherOf2<RuleAdded, NoReaction> whenever(
             @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
     ) {
         var option = event.getOption();
         if (!unpack(option.getValue(), BoolValue.class).getValue()) {
-            return noReaction();
+            return ignore();
         }
-        checkCollection(event.getField(), event.getType(), event.getFile());
-        var field = event.getField();
+        var field = event.getSubject();
+        var declaringType = field.getDeclaringType();
+        var fieldName = field.getName();
+        checkCollection(fieldName, declaringType, event.getFile());
         var rule = SimpleRules.withCustom(
-                field, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
+                fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
         );
         return EitherOf2.withA(
                 SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
+                        .setType(declaringType)
                         .setRule(rule)
                         .build()
         );
@@ -83,8 +85,8 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
         var field = findField(fieldName, typeName, file, this);
         if (!isRepeated(field)) {
             throw newIllegalStateException(
-                    "Field `%s.%s` is neither a `repeated` nor a `map` and " +
-                            "therefore cannot be `distinct`.",
+                    "The field `%s.%s` is neither a `repeated` nor a `map` and " +
+                            "therefore cannot be `(distinct)`.",
                     getQualifiedName(typeName),
                     fieldName.getValue());
         }

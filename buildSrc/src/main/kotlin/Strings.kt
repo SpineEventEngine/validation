@@ -24,30 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.spine.Logging
-import io.spine.internal.dependency.spine.Spine
+import org.gradle.configurationcache.extensions.capitalized
 
-buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(mcJava.pluginLib)
-    }
+/**
+ * This file provides extensions to `String` and `CharSequence` that wrap
+ * analogues from standard Kotlin runtime.
+ *
+ * It helps in switching between versions of Gradle which have different versions of
+ * the Kotlin runtime. Please see the bodies of the extension functions for details on
+ * switching the implementations depending on the Kotlin version at hand.
+ *
+ * Once we migrate to newer Gradle, these wrappers should be inlined with
+ * the subsequent removal of this source file.
+ */
+@Suppress("unused")
+private const val ABOUT = ""
+
+/**
+ * Makes the first character come in the title case.
+ */
+fun String.titleCaseFirstChar(): String {
+    // return replaceFirstChar { it.titlecase() }
+    // OR for earlier Kotlin versions:
+    //   1. add import of `org.gradle.configurationcache.extensions.capitalized`
+    //   2. call `capitalized()` instead of `replaceFirstChar` above.
+    return capitalized()
 }
 
-plugins {
-    `build-proto-model`
-    module
-}
-
-apply(plugin = "io.spine.mc-java")
-
-dependencies {
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    implementation(Spine.base)
-    implementation(Logging.lib)
-
-    testImplementation(Spine.testlib)
+/**
+ * Converts this string to lowercase.
+ */
+fun String.lowercased(): String {
+    //    return lowercase()
+    // OR for earlier Kotlin versions call:
+    return toLowerCase()
 }

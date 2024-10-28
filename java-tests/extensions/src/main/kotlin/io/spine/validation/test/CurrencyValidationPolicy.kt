@@ -31,13 +31,17 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeExited
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.value.Value
+import io.spine.protodata.value.value
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.model.Nothing
+import io.spine.server.event.asA
 import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.SimpleRule
 import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
+import io.spine.validation.simpleRule
 import io.spine.validation.test.money.CurrencyType
 
 /**
@@ -49,38 +53,31 @@ import io.spine.validation.test.money.CurrencyType
 public class CurrencyValidationPolicy : Policy<TypeExited>() {
 
     @React
-    override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, Nothing> {
+    override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, NoReaction> {
         val currencyType = select<CurrencyType>().findById(event.type)
         if (currencyType == null || currencyType.hasCurrency().not()) {
-            return EitherOf2.withB(nothing())
+            return ignore()
         }
         val minorUnits = currencyType.minorUnitField
         val otherValue = minorUnitsPerUnit(currencyType)
         val rule = constructRule(currencyType.majorUnitField, minorUnits, otherValue)
-        return EitherOf2.withA(
-            SimpleRuleAdded.newBuilder()
-                .setType(event.type)
-                .setRule(rule)
-                .build()
-        )
+        return simpleRuleAdded {
+            type = event.type
+            this.rule = rule
+        }.asA()
     }
 
-    private fun minorUnitsPerUnit(currencyType: CurrencyType): Value {
-        return Value.newBuilder()
-            .setIntValue(currencyType.currency.minorUnits.toLong())
-            .build()
-    }
+    private fun minorUnitsPerUnit(currencyType: CurrencyType): Value =
+        value { intValue = currencyType.currency.minorUnits.toLong() }
 
-    private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule {
-        val msg = "Expected less than {other} ${minorUnits.prettyName()} per one " +
-                "${majorUnits.prettyName()}, but got {value}."
-        return SimpleRule.newBuilder()
-            .setErrorMessage(msg)
-            .setField(minorUnits.name)
-            .setOperator(LESS_THAN)
-            .setOtherValue(otherValue)
-            .build()
-    }
+    private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule =
+        simpleRule {
+            errorMessage = "Expected less than {other} ${minorUnits.prettyName()} per one " +
+                    "${majorUnits.prettyName()}, but got {value}."
+            field = minorUnits.name
+            operator = LESS_THAN
+            this.otherValue = otherValue
+        }
 }
 
 private fun Field.prettyName() = name.value.replaceFirstChar { it.uppercase() }

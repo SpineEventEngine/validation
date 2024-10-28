@@ -24,30 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.spine.Logging
-import io.spine.internal.dependency.spine.Spine
+package io.spine.internal.dependency.spine
 
-buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(mcJava.pluginLib)
-    }
-}
+/**
+ * Dependencies on Spine Validation SDK.
+ *
+ * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
+ */
+@Suppress("unused", "ConstPropertyName")
+object Validation {
+    /**
+     * The version of the Validation library artifacts.
+     */
+    const val version = "2.0.0-SNAPSHOT.160"
 
-plugins {
-    `build-proto-model`
-    module
-}
+    const val group = "io.spine.validation"
+    private const val prefix = "spine-validation"
 
-apply(plugin = "io.spine.mc-java")
+    const val runtime = "$group:$prefix-java-runtime:$version"
+    const val java = "$group:$prefix-java:$version"
 
-dependencies {
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
+    /** Obtains the artifact for the `java-bundle` artifact of the given version. */
+    fun javaBundle(version: String) = "$group:$prefix-java-bundle:$version"
 
-    implementation(Spine.base)
-    implementation(Logging.lib)
+    val javaBundle = javaBundle(version)
 
-    testImplementation(Spine.testlib)
+    const val model = "$group:$prefix-model:$version"
+    const val config = "$group:$prefix-configuration:$version"
 }

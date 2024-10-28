@@ -26,7 +26,7 @@
 
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.AutoServiceKsp
-import io.spine.internal.dependency.McJava
+import io.spine.internal.dependency.spine.McJava
 
 buildscript {
     forceCodegenPlugins()
