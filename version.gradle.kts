@@ -27,6 +27,6 @@
 /**
  * The version of the Validation SDK to publish.
  *
- * For Spine-based dependencies please see [io.spine.internal.dependency.Spine].
+ * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.163")
+val validationVersion by extra("2.0.0-SNAPSHOT.164")
