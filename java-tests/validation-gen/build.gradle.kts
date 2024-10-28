@@ -24,9 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-import io.spine.internal.dependency.spine.Logging
-import io.spine.internal.dependency.spine.Spine
+import io.spine.dependency.lib.AutoService
+import io.spine.dependency.local.Logging
+import io.spine.dependency.local.Spine
 
 dependencies {
     testAnnotationProcessor(AutoService.processor)

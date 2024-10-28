@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.spine.ProtoData
+import io.spine.dependency.local.ProtoData
 
 plugins {
     `build-proto-model`
