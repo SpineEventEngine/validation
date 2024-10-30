@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("`(set_once)` constraint should be compiled so that")
-class SetOnceIntegerConstraintTest {
+abstract class SetOnceIntegerConstraintTest {
 
     @Nested
     @DisplayName("prohibit overriding non-default int32")
@@ -1039,11 +1039,11 @@ class SetOnceIntegerConstraintTest {
     }
 
     // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
-    private static void assertValidationFails(Executable executable) {
+    static void assertValidationFails(Executable executable) {
         assertThrows(ValidationException.class, executable);
     }
 
-    private static void assertValidationPasses(Executable executable) {
+    static void assertValidationPasses(Executable executable) {
         assertDoesNotThrow(executable);
     }
 }

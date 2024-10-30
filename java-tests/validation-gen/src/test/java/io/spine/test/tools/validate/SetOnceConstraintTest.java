@@ -27,18 +27,14 @@
 package io.spine.test.tools.validate;
 
 import com.google.protobuf.ByteString;
-import io.spine.validate.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import static com.google.protobuf.ByteString.copyFromUtf8;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("`(set_once)` constraint should be compiled so that")
-class SetOnceConstraintTest {
+class SetOnceConstraintTest extends SetOnceIntegerConstraintTest {
 
     @Test
     @DisplayName("not affect fields without the option")
@@ -871,14 +867,5 @@ class SetOnceConstraintTest {
                     .setYearOfStudy(thirdYear)
                     .build());
         }
-    }
-
-    // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
-    private static void assertValidationFails(Executable executable) {
-        assertThrows(ValidationException.class, executable);
-    }
-
-    private static void assertValidationPasses(Executable executable) {
-        assertDoesNotThrow(executable);
     }
 }
