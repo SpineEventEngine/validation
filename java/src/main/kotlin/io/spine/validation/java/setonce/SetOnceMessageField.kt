@@ -44,7 +44,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceMessageField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJavaCode(field, message) {
+) : SetOnceJava(field, message) {
 
     init {
         check(field.type.isMessage) {

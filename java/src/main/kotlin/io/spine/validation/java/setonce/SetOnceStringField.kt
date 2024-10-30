@@ -46,7 +46,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceStringField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJavaCode(field, message) {
+) : SetOnceJava(field, message) {
 
     private val messageTypeClass = message.message
         .javaClassName(message.fileHeader)

@@ -46,7 +46,7 @@ import io.spine.validation.java.MessageWithFile
  * @property field The field that declared the option.
  * @property message The message that contains the [field].
  */
-internal sealed class SetOnceJavaCode(
+internal sealed class SetOnceJava(
     private val field: Field,
     private val message: MessageWithFile,
 ) {

@@ -44,7 +44,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceEnumField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJavaCode(field, message) {
+) : SetOnceJava(field, message) {
 
     init {
         check(field.type.isEnum) {
@@ -97,7 +97,7 @@ internal class SetOnceEnumField(
      */
     private fun PsiClass.alterBytesMerge() {
         val rememberCurrent = elementFactory.createStatement("var previous = ${fieldName}_;")
-        val defaultOrSameCheck = checkDefaultOrSame(
+        val postcondition = checkDefaultOrSame(
             currentValue = "previous",
             newValue = "${fieldName}_"
         )
@@ -107,7 +107,7 @@ internal class SetOnceEnumField(
         ) as PsiStatement
         val fieldProcessing = fieldReading.parent
         fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(defaultOrSameCheck, fieldReading)
+        fieldProcessing.addAfter(postcondition, fieldReading)
     }
 
     private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =

@@ -36,7 +36,7 @@ import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.setonce.SetOnceEnumField
-import io.spine.validation.java.setonce.SetOnceJavaCode
+import io.spine.validation.java.setonce.SetOnceJava
 import io.spine.validation.java.setonce.SetOnceMessageField
 import io.spine.validation.java.setonce.SetOncePrimitiveField
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitiveTypes
@@ -73,7 +73,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaField(field: Field, message: MessageWithFile): SetOnceJavaCode =
+    private fun javaField(field: Field, message: MessageWithFile): SetOnceJava =
         when {
             field.type.isPrimitive -> javaFieldPrimitive(field, message)
             field.type.isMessage -> SetOnceMessageField(field, message)

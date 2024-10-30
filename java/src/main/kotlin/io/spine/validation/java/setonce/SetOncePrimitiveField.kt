@@ -64,7 +64,7 @@ internal fun interface DefaultOrSamePredicate : (String, String) -> String
 internal class SetOncePrimitiveField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJavaCode(field, message) {
+) : SetOnceJava(field, message) {
 
     companion object {
         private val CustomFieldReaders = mapOf(
@@ -141,7 +141,6 @@ internal class SetOncePrimitiveField(
             newValue = fieldGetter
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        println("Deep search: `${fieldName}_ = input.$fieldReader`.")
         val fieldReading = mergeFromBytes.deepSearch(
             startsWith = "${fieldName}_ = input.$fieldReader"
         ) as PsiStatement
