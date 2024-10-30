@@ -61,7 +61,15 @@ internal class SetOnceMessageField(
         alterSetter()
         alterBuilderSetter()
         alterFieldMerge()
-        alterBytesMerge()
+        alterBytesMerge(
+            currentValue = fieldGetter,
+            getFieldReading = {
+                deepSearch(
+                    startsWith = "input.readMessage",
+                    contains = "${fieldGetterName}FieldBuilder().getBuilder()",
+                )
+            }
+        )
     }
 
     /**
@@ -104,31 +112,7 @@ internal class SetOnceMessageField(
         merge.addAfter(precondition, merge.lBrace)
     }
 
-    /**
-     * ```
-     * public Builder mergeFrom(
-     *     com.google.protobuf.CodedInputStream input,
-     *     com.google.protobuf.ExtensionRegistryLite extensionRegistry
-     * ) throws java.io.IOException;
-     * ```
-     */
-    private fun PsiClass.alterBytesMerge() {
-        val rememberCurrent = elementFactory.createStatement("var previous = $fieldGetter;")
-        val postcondition = checkDefaultOrSame(
-            currentValue = "previous",
-            newValue = fieldGetter
-        )
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "input.readMessage",
-            contains = "${fieldGetterName}FieldBuilder().getBuilder()",
-        ) as PsiStatement
-        val fieldProcessing = fieldReading.parent
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(postcondition, fieldReading)
-    }
-
-    private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
             if (!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)) {

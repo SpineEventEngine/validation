@@ -111,50 +111,33 @@ internal open class SetOncePrimitiveField(
             .lowercase()
             .camelCase()
 
-        fieldReader = CustomFieldReaders[fieldType] ?: "read$javaTypeName()"
+        fieldReader = "${CustomFieldReaders[fieldType] ?: "read$javaTypeName"}()"
         defaultOrSame = SupportedPrimitiveTypes[fieldType]!!
     }
 
-    override fun PsiClass.doRender() {
+    // https://youtrack.jetbrains.com/issue/KT-11488
+    protected fun doRenderPrimitive(psiClass: PsiClass) = with(psiClass) {
         alterSetter()
-        alterBytesMerge()
+        alterBytesMerge(
+            currentValue = fieldGetter,
+            getFieldReading = { deepSearch("${fieldName}_ = input.$fieldReader;") }
+        )
     }
+
+    override fun PsiClass.doRender() = doRenderPrimitive(this)
 
     /**
      * ```
      * public Builder setAge(int value)
      * ```
      */
-    protected fun PsiClass.alterSetter() {
+    private fun PsiClass.alterSetter() {
         val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    /**
-     * ```
-     * public Builder mergeFrom(
-     *     com.google.protobuf.CodedInputStream input,
-     *     com.google.protobuf.ExtensionRegistryLite extensionRegistry
-     * ) throws java.io.IOException
-     * ```
-     */
-    protected fun PsiClass.alterBytesMerge() {
-        val rememberCurrent = elementFactory.createStatement("var previous = $fieldGetter;")
-        val postcondition = checkDefaultOrSame(
-            currentValue = "previous",
-            newValue = fieldGetter
-        )
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName}_ = input.$fieldReader"
-        ) as PsiStatement
-        val fieldProcessing = fieldReading.parent
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(postcondition, fieldReading)
-    }
-
-    protected fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
             if (${defaultOrSame(currentValue, newValue)}) {

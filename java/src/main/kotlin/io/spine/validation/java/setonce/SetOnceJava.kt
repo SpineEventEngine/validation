@@ -27,8 +27,10 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiCodeBlock
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
+import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.javaCase
@@ -37,6 +39,7 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
 import io.spine.string.camelCase
 import io.spine.tools.code.Java
+import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.validation.java.MessageWithFile
 
@@ -108,6 +111,21 @@ internal sealed class SetOnceJava(
         sourceFile.overwrite(psiFile.text)
     }
 
+    protected fun PsiClass.alterBytesMerge(currentValue: String, getFieldReading: (PsiCodeBlock) -> PsiStatement) {
+        val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
+        val postcondition = checkDefaultOrSame(
+            currentValue = "previous",
+            newValue = currentValue,
+        )
+        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
+        val fieldReading = getFieldReading(mergeFromBytes)
+        val fieldProcessing = fieldReading.parent
+        fieldProcessing.addBefore(rememberCurrent, fieldReading)
+        fieldProcessing.addAfter(postcondition, fieldReading)
+    }
+
+    protected abstract fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement
+
     /**
      * Looks for the first child of this [PsiElement], the text representation of which
      * satisfies both [startsWith] and [contains] conditions.
@@ -120,7 +138,7 @@ internal sealed class SetOnceJava(
     protected fun PsiElement.deepSearch(
         startsWith: String,
         contains: String = startsWith
-    ): PsiElement? = children.asSequence()
+    ): PsiStatement = children.asSequence()
         .mapNotNull { element ->
             val text = element.text
             when {
@@ -128,5 +146,5 @@ internal sealed class SetOnceJava(
                 text.startsWith(startsWith) -> element
                 else -> element.deepSearch(startsWith, contains)
             }
-        }.firstOrNull()
+        }.first() as PsiStatement
 }

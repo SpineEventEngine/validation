@@ -30,7 +30,6 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isEnum
-import io.spine.string.lowerCamelCase
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -56,7 +55,10 @@ internal class SetOnceEnumField(
     override fun PsiClass.doRender() {
         alterSetter()
         alterEnumValueSetter()
-        alterBytesMerge()
+        alterBytesMerge(
+            currentValue = "${fieldName}_",
+            getFieldReading = { deepSearch("${fieldName}_ = input.readEnum();") }
+        )
     }
 
     /**
@@ -87,30 +89,7 @@ internal class SetOnceEnumField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    /**
-     * ```
-     * public Builder mergeFrom(
-     *     com.google.protobuf.CodedInputStream input,
-     *     com.google.protobuf.ExtensionRegistryLite extensionRegistry
-     * ) throws java.io.IOException;
-     * ```
-     */
-    private fun PsiClass.alterBytesMerge() {
-        val rememberCurrent = elementFactory.createStatement("var previous = ${fieldName}_;")
-        val postcondition = checkDefaultOrSame(
-            currentValue = "previous",
-            newValue = "${fieldName}_"
-        )
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName.lowerCamelCase()}_ = input.readEnum()"
-        ) as PsiStatement
-        val fieldProcessing = fieldReading.parent
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(postcondition, fieldReading)
-    }
-
-    private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
             if ($currentValue != 0 && $currentValue != $newValue) {

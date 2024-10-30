@@ -58,10 +58,9 @@ internal class SetOnceStringField(
     }
 
     override fun PsiClass.doRender() {
-        alterSetter()
+        doRenderPrimitive(this)
         alterBytesSetter()
         alterMessageMerge()
-        alterBytesMerge()
     }
 
     /**
