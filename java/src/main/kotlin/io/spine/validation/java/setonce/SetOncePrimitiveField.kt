@@ -42,6 +42,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.string.camelCase
@@ -61,7 +62,7 @@ internal fun interface DefaultOrSamePredicate : (String, String) -> String
  * @property field The primitive field that declared the option.
  * @property message The message that contains the [field].
  */
-internal class SetOncePrimitiveField(
+internal open class SetOncePrimitiveField(
     field: Field,
     message: MessageWithFile
 ) : SetOnceJava(field, message) {
@@ -71,12 +72,16 @@ internal class SetOncePrimitiveField(
             TYPE_UINT32 to "readUInt32", TYPE_UINT64 to "readUInt64",
             TYPE_SINT32 to "readSInt32", TYPE_SINT64 to "readSInt64",
             TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
+            TYPE_STRING to "readStringRequireUtf8"
         )
         private val SupportedNumberTypes = listOf(
             TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64, TYPE_UINT32, TYPE_UINT64,
             TYPE_SINT32, TYPE_SINT64, TYPE_FIXED32, TYPE_FIXED64, TYPE_SFIXED32, TYPE_SFIXED64
         )
         val SupportedPrimitiveTypes = buildMap<PrimitiveType, DefaultOrSamePredicate> {
+            put(TYPE_STRING) { currentValue: String, newValue: String ->
+                "!$currentValue.isEmpty() && !$currentValue.equals($newValue)"
+            }
             put(TYPE_BOOL) { currentValue: String, newValue: String ->
                 "$currentValue != false && $currentValue != $newValue"
             }
@@ -120,7 +125,7 @@ internal class SetOncePrimitiveField(
      * public Builder setAge(int value)
      * ```
      */
-    private fun PsiClass.alterSetter() {
+    protected fun PsiClass.alterSetter() {
         val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
@@ -134,7 +139,7 @@ internal class SetOncePrimitiveField(
      * ) throws java.io.IOException
      * ```
      */
-    private fun PsiClass.alterBytesMerge() {
+    protected fun PsiClass.alterBytesMerge() {
         val rememberCurrent = elementFactory.createStatement("var previous = $fieldGetter;")
         val postcondition = checkDefaultOrSame(
             currentValue = "previous",
@@ -149,7 +154,7 @@ internal class SetOncePrimitiveField(
         fieldProcessing.addAfter(postcondition, fieldReading)
     }
 
-    private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+    protected fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
             if (${defaultOrSame(currentValue, newValue)}) {

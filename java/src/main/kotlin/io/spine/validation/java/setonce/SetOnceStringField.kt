@@ -29,11 +29,9 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
-import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.java.javaClassName
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -46,7 +44,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceStringField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJava(field, message) {
+) : SetOncePrimitiveField(field, message) {
 
     private val messageTypeClass = message.message
         .javaClassName(message.fileHeader)
@@ -64,17 +62,6 @@ internal class SetOnceStringField(
         alterBytesSetter()
         alterMessageMerge()
         alterBytesMerge()
-    }
-
-    /**
-     * ```
-     * public Builder setId(java.lang.String value)
-     * ```
-     */
-    private fun PsiClass.alterSetter() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
-        val setter = method(fieldSetterName).body!!
-        setter.addAfter(precondition, setter.lBrace)
     }
 
     /**
@@ -110,35 +97,4 @@ internal class SetOnceStringField(
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
-
-    /**
-     * ```
-     * public Builder mergeFrom(
-     *     com.google.protobuf.CodedInputStream input,
-     *     com.google.protobuf.ExtensionRegistryLite extensionRegistry
-     * ) throws java.io.IOException;
-     * ```
-     */
-    private fun PsiClass.alterBytesMerge() {
-        val rememberCurrent = elementFactory.createStatement("var previous = $fieldGetter;")
-        val postcondition = checkDefaultOrSame(
-            currentValue = "previous",
-            newValue = fieldGetter
-        )
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(
-            startsWith = "${fieldName}_ = input.readStringRequireUtf8()"
-        ) as PsiStatement
-        val fieldProcessing = fieldReading.parent
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
-        fieldProcessing.addAfter(postcondition, fieldReading)
-    }
-
-    private fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if (!$currentValue.isEmpty() && !$currentValue.equals($newValue)) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        )
 }
