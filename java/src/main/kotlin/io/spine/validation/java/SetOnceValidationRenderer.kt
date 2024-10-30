@@ -52,7 +52,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
 
         val allKnownMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceProtoFields = select<SetOnceField>().all()
+        val setOnceProtoFields = select<SetOnceField>().all().filter { it.setOnce }
         val fieldsToMessages = setOnceProtoFields.associateWith {
             allKnownMessages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
         }

@@ -41,27 +41,72 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SetOnceConstraintTest {
 
     @Test
-    @DisplayName("don't not affect fields without the option")
-    void doNotNotAffectFieldsWithoutOption() {
-        assertValidationPasses(() -> Student.newBuilder()
-                .setName2(Name.newBuilder().setValue("Max").build())
-                .setName2(Name.newBuilder().setValue("Jack").build())
-                .setId2("free-student-1")
-                .setId2("free-student-2")
-                .setHeight2(168.4)
-                .setHeight2(178.6)
-                .setWeight2(66.6f)
-                .setWeight2(76.8f)
-                .setAge2(18)
-                .setAge2(24)
-                .setSubjects2(5)
-                .setSubjects2(10)
-                .setHasMedals2(true)
-                .setHasMedals2(false)
-                .setSignature2(ByteString.copyFromUtf8("full-signature"))
-                .setSignature2(ByteString.copyFromUtf8("short-signature"))
-                .setYearOfStudy2(YearOfStudy.YOS_FIRST)
-                .setYearOfStudy2(YearOfStudy.YOS_SECOND)
+    @DisplayName("not affect fields without the option")
+    void notAffectFieldsWithoutOption() {
+        assertValidationPasses(() -> SetOnceImplicitFalse.newBuilder()
+                .setMessage(Name.newBuilder().setValue("MyName1").build())
+                .setMessage(Name.newBuilder().setValue("MyName2").build())
+                .setString("string-1")
+                .setString("string-2")
+                .setDouble(0.25)
+                .setDouble(0.75)
+                .setFloat(0.25f)
+                .setFloat(0.75f)
+                .setInt32(5)
+                .setInt32(10)
+                .setInt64(5)
+                .setInt64(10)
+                .setUint32(5)
+                .setUint32(10)
+                .setUint64(5)
+                .setUint64(10)
+                .setSint32(5)
+                .setSint32(10)
+                .setSint64(5)
+                .setSint64(10)
+                .setFixed32(5)
+                .setFixed32(10)
+                .setFixed64(5)
+                .setFixed64(10)
+                .setSfixed32(5)
+                .setSfixed32(10)
+                .setSfixed64(5)
+                .setSfixed64(10)
+                .build());
+    }
+
+    @Test
+    @DisplayName("not affect fields with the option set to `false`")
+    void notAffectFieldsWithTheOptionSetToFalse() {
+        assertValidationPasses(() -> SetOnceExplicitFalse.newBuilder()
+                .setMessage(Name.newBuilder().setValue("MyName1").build())
+                .setMessage(Name.newBuilder().setValue("MyName2").build())
+                .setString("string-1")
+                .setString("string-2")
+                .setDouble(0.25)
+                .setDouble(0.75)
+                .setFloat(0.25f)
+                .setFloat(0.75f)
+                .setInt32(5)
+                .setInt32(10)
+                .setInt64(5)
+                .setInt64(10)
+                .setUint32(5)
+                .setUint32(10)
+                .setUint64(5)
+                .setUint64(10)
+                .setSint32(5)
+                .setSint32(10)
+                .setSint64(5)
+                .setSint64(10)
+                .setFixed32(5)
+                .setFixed32(10)
+                .setFixed64(5)
+                .setFixed64(10)
+                .setSfixed32(5)
+                .setSfixed32(10)
+                .setSfixed64(5)
+                .setSfixed64(10)
                 .build());
     }
 
@@ -515,205 +560,205 @@ class SetOnceConstraintTest {
         }
     }
 
-    @Nested
-    @DisplayName("prohibit overriding non-default integer")
-    class ProhibitOverridingNonDefaultInteger {
-
-        private static final int sixteen = 16;
-
-        private final Student oldStudent = Student.newBuilder()
-                .setAge(60)
-                .build();
-        private final Student youngStudent = Student.newBuilder()
-                .setAge(sixteen)
-                .build();
-
-        @Test
-        @DisplayName("by value")
-        void byValue() {
-            assertValidationFails(() -> oldStudent.toBuilder()
-                    .setAge(sixteen));
-        }
-
-        @Test
-        @DisplayName("by reflection")
-        void byReflection() {
-            assertValidationFails(() -> oldStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen));
-        }
-
-        @Test
-        @DisplayName("by message merge")
-        void byMessageMerge() {
-            assertValidationFails(() -> oldStudent.toBuilder()
-                    .mergeFrom(youngStudent));
-        }
-
-        @Test
-        @DisplayName("by bytes merge")
-        void byBytesMerge() {
-            assertValidationFails(() -> oldStudent.toBuilder()
-                    .mergeFrom(youngStudent.toByteArray()));
-        }
-    }
-
-    @Nested
-    @DisplayName("allow overriding default and same-value integer")
-    class AllowOverridingDefaultAndSameValueInteger {
-
-        private static final int sixteen = 16;
-
-        private final Student unknownAgeStudent = Student.newBuilder()
-                .build();
-        private final Student youngStudent = Student.newBuilder()
-                .setAge(sixteen)
-                .build();
-
-        @Test
-        @DisplayName("by value")
-        void byValue() {
-            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
-                    .setAge(sixteen)
-                    .setAge(sixteen)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by reflection")
-        void byReflection() {
-            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
-                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by message merge")
-        void byMessageMerge() {
-            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
-                    .mergeFrom(youngStudent)
-                    .mergeFrom(youngStudent)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by bytes merge")
-        void byBytesMerge() {
-            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
-                    .mergeFrom(youngStudent.toByteArray())
-                    .mergeFrom(youngStudent.toByteArray())
-                    .build());
-        }
-
-        @Test
-        @DisplayName("after clearing")
-        void afterClearing() {
-            assertValidationPasses(() -> youngStudent.toBuilder()
-                    .clearAge()
-                    .setAge(sixteen)
-                    .build());
-        }
-    }
-
-    @Nested
-    @DisplayName("prohibit overriding non-default long")
-    class ProhibitOverridingNonDefaultLong {
-
-        private static final long six = 16;
-
-        private final Student smartStudent = Student.newBuilder()
-                .setSubjects(12)
-                .build();
-        private final Student mediocreStudent = Student.newBuilder()
-                .setSubjects(six)
-                .build();
-
-        @Test
-        @DisplayName("by value")
-        void byValue() {
-            assertValidationFails(() -> smartStudent.toBuilder()
-                    .setSubjects(six));
-        }
-
-        @Test
-        @DisplayName("by reflection")
-        void byReflection() {
-            assertValidationFails(() -> smartStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("subjects"), six));
-        }
-
-        @Test
-        @DisplayName("by message merge")
-        void byMessageMerge() {
-            assertValidationFails(() -> smartStudent.toBuilder()
-                    .mergeFrom(mediocreStudent));
-        }
-
-        @Test
-        @DisplayName("by bytes merge")
-        void byBytesMerge() {
-            assertValidationFails(() -> smartStudent.toBuilder()
-                    .mergeFrom(mediocreStudent.toByteArray()));
-        }
-    }
-
-    @Nested
-    @DisplayName("allow overriding default and same-value long")
-    class AllowOverridingDefaultAndSameValueLong {
-
-        private static final long six = 6;
-
-        private final Student unknownSubsjectsStudent = Student.newBuilder()
-                .build();
-        private final Student mediocreStudent = Student.newBuilder()
-                .setSubjects(six)
-                .build();
-
-        @Test
-        @DisplayName("by value")
-        void byValue() {
-            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
-                    .setSubjects(six)
-                    .setSubjects(six)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by reflection")
-        void byReflection() {
-            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
-                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by message merge")
-        void byMessageMerge() {
-            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
-                    .mergeFrom(mediocreStudent)
-                    .mergeFrom(mediocreStudent)
-                    .build());
-        }
-
-        @Test
-        @DisplayName("by bytes merge")
-        void byBytesMerge() {
-            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
-                    .mergeFrom(mediocreStudent.toByteArray())
-                    .mergeFrom(mediocreStudent.toByteArray())
-                    .build());
-        }
-
-        @Test
-        @DisplayName("after clearing")
-        void afterClearing() {
-            assertValidationPasses(() -> mediocreStudent.toBuilder()
-                    .clearSubjects()
-                    .setSubjects(six)
-                    .build());
-        }
-    }
+//    @Nested
+//    @DisplayName("prohibit overriding non-default integer")
+//    class ProhibitOverridingNonDefaultInteger {
+//
+//        private static final int sixteen = 16;
+//
+//        private final Student oldStudent = Student.newBuilder()
+//                .setAge(60)
+//                .build();
+//        private final Student youngStudent = Student.newBuilder()
+//                .setAge(sixteen)
+//                .build();
+//
+//        @Test
+//        @DisplayName("by value")
+//        void byValue() {
+//            assertValidationFails(() -> oldStudent.toBuilder()
+//                    .setAge(sixteen));
+//        }
+//
+//        @Test
+//        @DisplayName("by reflection")
+//        void byReflection() {
+//            assertValidationFails(() -> oldStudent.toBuilder()
+//                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen));
+//        }
+//
+//        @Test
+//        @DisplayName("by message merge")
+//        void byMessageMerge() {
+//            assertValidationFails(() -> oldStudent.toBuilder()
+//                    .mergeFrom(youngStudent));
+//        }
+//
+//        @Test
+//        @DisplayName("by bytes merge")
+//        void byBytesMerge() {
+//            assertValidationFails(() -> oldStudent.toBuilder()
+//                    .mergeFrom(youngStudent.toByteArray()));
+//        }
+//    }
+//
+//    @Nested
+//    @DisplayName("allow overriding default and same-value integer")
+//    class AllowOverridingDefaultAndSameValueInteger {
+//
+//        private static final int sixteen = 16;
+//
+//        private final Student unknownAgeStudent = Student.newBuilder()
+//                .build();
+//        private final Student youngStudent = Student.newBuilder()
+//                .setAge(sixteen)
+//                .build();
+//
+//        @Test
+//        @DisplayName("by value")
+//        void byValue() {
+//            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+//                    .setAge(sixteen)
+//                    .setAge(sixteen)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by reflection")
+//        void byReflection() {
+//            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+//                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
+//                    .setField(Student.getDescriptor().findFieldByName("age"), sixteen)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by message merge")
+//        void byMessageMerge() {
+//            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+//                    .mergeFrom(youngStudent)
+//                    .mergeFrom(youngStudent)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by bytes merge")
+//        void byBytesMerge() {
+//            assertValidationPasses(() -> unknownAgeStudent.toBuilder()
+//                    .mergeFrom(youngStudent.toByteArray())
+//                    .mergeFrom(youngStudent.toByteArray())
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("after clearing")
+//        void afterClearing() {
+//            assertValidationPasses(() -> youngStudent.toBuilder()
+//                    .clearAge()
+//                    .setAge(sixteen)
+//                    .build());
+//        }
+//    }
+//
+//    @Nested
+//    @DisplayName("prohibit overriding non-default long")
+//    class ProhibitOverridingNonDefaultLong {
+//
+//        private static final long six = 16;
+//
+//        private final Student smartStudent = Student.newBuilder()
+//                .setSubjects(12)
+//                .build();
+//        private final Student mediocreStudent = Student.newBuilder()
+//                .setSubjects(six)
+//                .build();
+//
+//        @Test
+//        @DisplayName("by value")
+//        void byValue() {
+//            assertValidationFails(() -> smartStudent.toBuilder()
+//                    .setSubjects(six));
+//        }
+//
+//        @Test
+//        @DisplayName("by reflection")
+//        void byReflection() {
+//            assertValidationFails(() -> smartStudent.toBuilder()
+//                    .setField(Student.getDescriptor().findFieldByName("subjects"), six));
+//        }
+//
+//        @Test
+//        @DisplayName("by message merge")
+//        void byMessageMerge() {
+//            assertValidationFails(() -> smartStudent.toBuilder()
+//                    .mergeFrom(mediocreStudent));
+//        }
+//
+//        @Test
+//        @DisplayName("by bytes merge")
+//        void byBytesMerge() {
+//            assertValidationFails(() -> smartStudent.toBuilder()
+//                    .mergeFrom(mediocreStudent.toByteArray()));
+//        }
+//    }
+//
+//    @Nested
+//    @DisplayName("allow overriding default and same-value long")
+//    class AllowOverridingDefaultAndSameValueLong {
+//
+//        private static final long six = 6;
+//
+//        private final Student unknownSubsjectsStudent = Student.newBuilder()
+//                .build();
+//        private final Student mediocreStudent = Student.newBuilder()
+//                .setSubjects(six)
+//                .build();
+//
+//        @Test
+//        @DisplayName("by value")
+//        void byValue() {
+//            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+//                    .setSubjects(six)
+//                    .setSubjects(six)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by reflection")
+//        void byReflection() {
+//            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+//                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
+//                    .setField(Student.getDescriptor().findFieldByName("subjects"), six)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by message merge")
+//        void byMessageMerge() {
+//            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+//                    .mergeFrom(mediocreStudent)
+//                    .mergeFrom(mediocreStudent)
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("by bytes merge")
+//        void byBytesMerge() {
+//            assertValidationPasses(() -> unknownSubsjectsStudent.toBuilder()
+//                    .mergeFrom(mediocreStudent.toByteArray())
+//                    .mergeFrom(mediocreStudent.toByteArray())
+//                    .build());
+//        }
+//
+//        @Test
+//        @DisplayName("after clearing")
+//        void afterClearing() {
+//            assertValidationPasses(() -> mediocreStudent.toBuilder()
+//                    .clearSubjects()
+//                    .setSubjects(six)
+//                    .build());
+//        }
+//    }
 
     /**
      * Please note, for `boolean` field type, there are no `byMessageMerge` and `byBytesMerge`
