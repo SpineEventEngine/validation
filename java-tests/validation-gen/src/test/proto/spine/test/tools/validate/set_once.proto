@@ -59,7 +59,7 @@ message Balance {
     fixed32 CHF = 7 [(set_once) = true];
     fixed64 CNY = 8 [(set_once) = true];
 
-    sfixed32 SEK = 9 [(set_once) = true];
+    sfixed32 PLN = 9 [(set_once) = true];
     sfixed64 NZD = 10 [(set_once) = true];
 }
 

@@ -33,9 +33,17 @@ import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
 import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.string.camelCase
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
@@ -59,9 +67,14 @@ internal class SetOncePrimitiveField(
 ) : SetOnceJavaCode(field, message) {
 
     companion object {
-        val SupportedNumberTypes = listOf(
-            TYPE_DOUBLE, TYPE_FLOAT,
-            TYPE_INT32, TYPE_INT64,
+        private val CustomFieldReaders = mapOf(
+            TYPE_UINT32 to "readUInt32", TYPE_UINT64 to "readUInt64",
+            TYPE_SINT32 to "readSInt32", TYPE_SINT64 to "readSInt64",
+            TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
+        )
+        private val SupportedNumberTypes = listOf(
+            TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64, TYPE_UINT32, TYPE_UINT64,
+            TYPE_SINT32, TYPE_SINT64, TYPE_FIXED32, TYPE_FIXED64, TYPE_SFIXED32, TYPE_SFIXED64
         )
         val SupportedPrimitiveTypes = buildMap<PrimitiveType, DefaultOrSamePredicate> {
             put(TYPE_BOOL) { currentValue: String, newValue: String ->
@@ -93,7 +106,7 @@ internal class SetOncePrimitiveField(
             .lowercase()
             .camelCase()
 
-        fieldReader = "read$javaTypeName()"
+        fieldReader = CustomFieldReaders[fieldType] ?: "read$javaTypeName()"
         defaultOrSame = SupportedPrimitiveTypes[fieldType]!!
     }
 
@@ -128,6 +141,7 @@ internal class SetOncePrimitiveField(
             newValue = fieldGetter
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
+        println("Deep search: `${fieldName}_ = input.$fieldReader`.")
         val fieldReading = mergeFromBytes.deepSearch(
             startsWith = "${fieldName}_ = input.$fieldReader"
         ) as PsiStatement

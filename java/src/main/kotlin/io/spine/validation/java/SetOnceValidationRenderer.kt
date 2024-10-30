@@ -52,8 +52,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
 
         val allKnownMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceProtoFields = select<SetOnceField>().all().filter { it.setOnce }
-        val fieldsToMessages = setOnceProtoFields.associateWith {
+        val setOnceFields = setOnceFields().filter { it.setOnce }
+        val fieldsToMessages = setOnceFields.associateWith {
             allKnownMessages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
         }
 
@@ -63,6 +63,15 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             javaField.render(sourceFile)
         }
     }
+
+    private fun setOnceFields() = select<SetOnceField>().all()
+        .onEach {
+            val field = it.subject
+            check(field.hasSingle()) {
+                "The `(set_once)` option is not applicable to repeated fields and maps. " +
+                        "The invalid field: `${field}`."
+            }
+        }
 
     private fun javaField(field: Field, message: MessageWithFile): SetOnceJavaCode =
         when {
