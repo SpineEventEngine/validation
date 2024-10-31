@@ -89,6 +89,7 @@ internal sealed class SetOnceJava(
 
     protected abstract fun PsiClass.doRender()
 
+    @Suppress("TooGenericExceptionCaught") // Temporarily.
     fun render(sourceFile: SourceFile<Java>) {
         val declaringMessage = message.message.javaClassName(message.fileHeader)
         val declaringMessageBuilder = ClassName(
@@ -111,7 +112,10 @@ internal sealed class SetOnceJava(
         sourceFile.overwrite(psiFile.text)
     }
 
-    protected fun PsiClass.alterBytesMerge(currentValue: String, getFieldReading: (PsiCodeBlock) -> PsiStatement) {
+    protected fun PsiClass.alterBytesMerge(
+        currentValue: String,
+        getFieldReading: (PsiCodeBlock) -> PsiStatement
+    ) {
         val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
         val postcondition = checkDefaultOrSame(
             currentValue = "previous",

@@ -86,7 +86,8 @@ internal open class SetOncePrimitiveField(
                 "$currentValue != false && $currentValue != $newValue"
             }
             put(TYPE_BYTES) { currentValue: String, newValue: String ->
-                "$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)"
+                "$currentValue != com.google.protobuf.ByteString.EMPTY " +
+                        "&& !$currentValue.equals($newValue)"
             }
             SupportedNumberTypes.forEach { type ->
                 put(type) { currentValue: String, newValue: String ->
