@@ -143,23 +143,6 @@ message EditTaskState {
     string edit_id = 1;
 }
 
-message Essay {
-
-    // Lines that the essay consists of.
-    //
-    // This field is marked with `set_once`, which, for repeated fields, is not recommended,
-    // and should produce a warning.
-    repeated string line = 1 [(set_once) = true];
-
-    // A table of contents.
-    //
-    // Maps section titles to pages.
-    //
-    // This field is marked with `set_once`, which, for map fields, is not recommended,
-    // and should produce a warning
-    map<string, int32> table_of_contents = 2 [(set_once) = true];
-}
-
 message Blizzard {
     repeated Snowflake snowflake = 1 [(distinct) = true];
 }

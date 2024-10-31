@@ -44,7 +44,4 @@ message Passport {
     type.PersonName name = 2 [(set_once) = false];
 
     string birthplace = 3 [(set_once) = true];
-
-    // Misuse of `set_once`: should not be used with `repeated` fields.
-    repeated type.Url photo = 4 [(set_once) = true];
 }

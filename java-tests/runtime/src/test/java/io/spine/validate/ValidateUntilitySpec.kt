@@ -36,7 +36,6 @@ import io.spine.base.Field
 import io.spine.base.Time
 import io.spine.code.proto.FieldContext
 import io.spine.test.type.PersonName
-import io.spine.test.type.Url
 import io.spine.test.validate.Passport
 import io.spine.test.validate.RequiredStringValue
 import io.spine.testing.UtilityClassTest
@@ -98,18 +97,6 @@ internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class
                 .setBirthplace("Edinburgh")
                 .build()
             checkViolated(oldValue, newValue, BIRTHPLACE)
-        }
-
-        @Test
-        fun `allow overriding repeated fields`() {
-            val oldValue = Passport.newBuilder()
-                .setId("PT 123")
-                .addPhoto(Url.newBuilder().setSpec("foo.bar/pic1").build())
-                .build()
-            val newValue = oldValue.toBuilder()
-                .addPhoto(Url.newBuilder().setSpec("foo.bar/pic2").build())
-                .build()
-            checkValidChange(oldValue, newValue)
         }
 
         @Test
