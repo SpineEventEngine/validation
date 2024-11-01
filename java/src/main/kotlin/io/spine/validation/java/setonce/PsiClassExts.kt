@@ -46,8 +46,8 @@ internal fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
  * specified as [text].
  *
  * @param text The method signature as text.
- * @throws
+ * @throws IllegalStateException if this class does not have such a method.
  */
 internal fun PsiClass.getMethodBySignature(text: String): PsiMethod =
     findMethodBySignature(text)
-        ?: error("Could not find method `$text` in `$qualifiedName`.")
+        ?: error("Could not find method `$text` in `$qualifiedName` class.")
