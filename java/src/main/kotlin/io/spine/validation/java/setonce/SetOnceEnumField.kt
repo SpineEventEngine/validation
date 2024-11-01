@@ -35,40 +35,44 @@ import io.spine.validation.java.MessageWithFile
 /**
  * Renders Java code to support `(set_once)` option for the given enum [field].
  *
- * @property field The enum field that declared the option.
- * @property message The message that contains the [field].
+ * @param field The enum field that declared the option.
+ * @param messageWithFile The message that contains the [field].
  */
 internal class SetOnceEnumField(
     field: Field,
-    message: MessageWithFile
-) : SetOnceJavaConstraints(field, message) {
+    messageWithFile: MessageWithFile
+) : SetOnceJavaConstraints(field, messageWithFile) {
 
     init {
         check(field.type.isEnum) {
             "`${javaClass.simpleName}` handles only enum fields. " +
-                    "The passed field: `$field`. The declaring message: `${message.message}`."
+                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
         }
     }
 
-    override fun PsiClass.doRender() {
+    override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
+        "$currentValue != 0 && $currentValue != $newValue"
+
+    override fun PsiClass.addConstraints() {
         alterSetter()
         alterEnumValueSetter()
         alterBytesMerge(
             currentValue = "${fieldName}_",
-            getFieldReading = { deepSearch("${fieldName}_ = input.readEnum();") }
+            readerStartsWith = "${fieldName}_ = input.readEnum();"
         )
     }
 
-    override fun defaultOrSame(currentValue: String, newValue: String): String =
-        "$currentValue != 0 && $currentValue != $newValue"
-
     /**
+     * Alters setter that accepts an enum constant.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setYearOfStudy(io.spine.test.tools.validate.YearOfStudy value)
+     * public Builder setMyEnum(MyEnum value)
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = checkDefaultOrSame(
+        val precondition = defaultOrSameStatement(
             currentValue = "${fieldName}_",
             newValue = "value.getNumber()"
         )
@@ -77,12 +81,16 @@ internal class SetOnceEnumField(
     }
 
     /**
+     * Alters setter that accepts an ordinal number.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setYearOfStudyValue(int value)
+     * public Builder setMyEnumValue(int value)
      * ```
      */
     private fun PsiClass.alterEnumValueSetter() {
-        val precondition = checkDefaultOrSame(
+        val precondition = defaultOrSameStatement(
             currentValue = "${fieldName}_",
             newValue = "value"
         )

@@ -36,47 +36,50 @@ import io.spine.validation.java.MessageWithFile
 /**
  * Renders Java code to support `(set_once)` option for the given message [field].
  *
- * @property field The message field that declared the option.
- * @property message The message that contains the [field].
+ * @param field The message field that declared the option.
+ * @param messageWithFile The message that contains the [field].
  */
 internal class SetOnceMessageField(
     field: Field,
-    message: MessageWithFile
-) : SetOnceJavaConstraints(field, message) {
+    messageWithFile: MessageWithFile
+) : SetOnceJavaConstraints(field, messageWithFile) {
 
     init {
         check(field.type.isMessage) {
             "`${javaClass.simpleName}` handles only message fields. " +
-                    "The passed field: `$field`. The declaring message: `${message.message}`."
+                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
         }
     }
 
     private val fieldTypeClass = field.type.message
-        .javaClassName(message.fileHeader)
+        .javaClassName(messageWithFile.fileHeader)
         .canonical
 
-    override fun PsiClass.doRender() {
+    override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
+        "!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)"
+
+    override fun PsiClass.addConstraints() {
         alterSetter()
         alterBuilderSetter()
         alterFieldMerge()
         alterBytesMerge(
             currentValue = fieldGetter,
-            getFieldReading = {
-                deepSearch(
-                    startsWith = "input.readMessage",
-                    contains = "${fieldGetterName}FieldBuilder().getBuilder()",
-                )
-            }
+            readerStartsWith = "input.readMessage",
+            readerContains = "${fieldGetterName}FieldBuilder().getBuilder()",
         )
     }
 
     /**
+     * Alters setter that accepts a message.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setName(io.spine.test.tools.validate.Name value)
+     * public Builder setMyMessage(MyMessage value)
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
+        val precondition = defaultOrSameStatement(currentValue = fieldGetter, newValue = "value")
         val setter = getMethodBySignature(
             "public Builder $fieldSetterName($fieldTypeClass value)"
         ).body!!
@@ -84,12 +87,16 @@ internal class SetOnceMessageField(
     }
 
     /**
+     * Alters setter that accepts a message builder.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setName(io.spine.test.tools.validate.Name.Builder builderForValue)
+     * public Builder setMyMessage(MyMessage.Builder builderForValue)
      * ```
      */
     private fun PsiClass.alterBuilderSetter() {
-        val precondition = checkDefaultOrSame(
+        val precondition = defaultOrSameStatement(
             currentValue = fieldGetter,
             newValue = "builderForValue.build()"
         )
@@ -100,16 +107,17 @@ internal class SetOnceMessageField(
     }
 
     /**
+     * Alters a merge method that accepts a message.
+     *
+     * For example:
+     *
      * ```
-     * public Builder mergeName(io.spine.test.tools.validate.Name value)
+     * public Builder mergeMyMessage(MyMessage value)
      * ```
      */
     private fun PsiClass.alterFieldMerge() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
+        val precondition = defaultOrSameStatement(currentValue = fieldGetter, newValue = "value")
         val merge = method("merge$fieldNameCamel").body!!
         merge.addAfter(precondition, merge.lBrace)
     }
-
-    override fun defaultOrSame(currentValue: String, newValue: String): String =
-        "!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)"
 }

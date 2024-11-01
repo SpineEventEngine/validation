@@ -27,7 +27,6 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiCodeBlock
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
@@ -48,33 +47,28 @@ import io.spine.validation.java.MessageWithFile
  *
  * The rendered Java constraints are specific to the field type. This class
  * serves as an abstract base, providing common methods and the skeleton implementation
- * of [render] method. Inheritors should perform actual rendering in [doRender].
+ * of [render] method. Inheritors should perform actual rendering in [addConstraints].
  *
  * @property field The field that declared the option.
- * @property message The message that contains the [field].
+ * @property messageWithHeader The message that contains the [field].
  */
 internal sealed class SetOnceJavaConstraints(
     private val field: Field,
-    private val message: MessageWithFile,
+    private val messageWithHeader: MessageWithFile,
 ) {
 
-    protected companion object {
-        private const val THROW_VALIDATION_EXCEPTION =
+    private companion object {
+        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
+        const val THROW_VALIDATION_EXCEPTION =
             "throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
-         * Defines the signature of the expected base `mergeFrom(...)` method,
-         * upon which all bytes-related overloadings rely.
+         * Defines the signature of the expected `mergeFrom(CodedInputStream)` method.
          *
-         * Formally, its signature says about an input stream, but anyway, it is
-         * a stream of bytes. So, the simpler name is kept. This method is called
-         * indirectly via `mergeFrom(byte[] data)` overloading as well.
-         *
-         * Please note, it is a message-level method, the signature of which is independent
-         * of fields and their outer messages. It is present in every generated message
-         * with the same signature.
+         * The signature of this method is independent of the processed field and its type.
+         * It is present in every generated message with the same signature.
          */
-        private val MergeFromBytesSignature =
+        val MergeFromBytesSignature =
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
                                      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -87,58 +81,106 @@ internal sealed class SetOnceJavaConstraints(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
+    protected val declaringMessage = messageWithHeader.message
+        .javaClassName(messageWithHeader.fileHeader)
 
-    @Suppress("TooGenericExceptionCaught") // Temporarily.
+    /**
+     * Renders Java constraints in the given [sourceFile] to make sure that the [field]
+     * can be assigned only once.
+     *
+     * @param sourceFile Protobuf-generated Java source code of the [message][messageWithHeader]
+     *  that declared the [field].
+     */
     fun render(sourceFile: SourceFile<Java>) {
-        val declaringMessage = message.message.javaClassName(message.fileHeader)
-        val declaringMessageBuilder = ClassName(
-            declaringMessage.packageName,
-            declaringMessage.simpleNames + "Builder"
+        val messageBuilder = ClassName(
+            packageName = declaringMessage.packageName,
+            simpleNames = declaringMessage.simpleNames + "Builder"
         )
-
         val psiFile = sourceFile.psi() as PsiJavaFile
-        val psiClass = psiFile.findClass(declaringMessageBuilder)
+        val psiClass = psiFile.findClass(messageBuilder)
 
         execute {
-            // TODO:2024-10-25:yevhenii.nadtochii: Remove try-catch.
-            try {
-                psiClass.doRender()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            psiClass.addConstraints()
         }
 
         sourceFile.overwrite(psiFile.text)
     }
 
-    protected abstract fun PsiClass.doRender()
+    /**
+     * Adds Java constraints to this [PsiClass] to make sure the [field] can be assigned
+     * only once.
+     *
+     * This [PsiClass] represents a Java builder for [messageWithHeader], which declares
+     * the [field].
+     */
+    protected abstract fun PsiClass.addConstraints()
 
+    /**
+     * Alters [MergeFromBytesSignature] method to make sure that a set-once field
+     * is not overridden during the merge from a byte array.
+     *
+     * This merge is done field-by-field. The method finds the place, where [field]
+     * is processed. It remembers the current field value, allows the new value
+     * to be read, and then adds [defaultOrSameStatement] predicate.
+     *
+     * Implementation of this method is common for all field types. Inheritors should
+     * call it within [addConstraints], passing the necessary parameters.
+     *
+     * The [currentValue] and [readerStartsWith] are mandatory properties. Pass [readerContains]
+     * in cases when [readerStartsWith] is not sufficient. For message fields, the beginning of
+     * the reading block is the same for all fields of this type because it doesn't include
+     * the field name.
+     *
+     * @param currentValue an expression to read the current field value.
+     * @param readerStartsWith an expression representing the beginning of the field reading block.
+     * @param readerContains an arbitrary expression within the field reading block.
+     */
     protected fun PsiClass.alterBytesMerge(
         currentValue: String,
-        getFieldReading: (PsiCodeBlock) -> PsiStatement
+        readerStartsWith: String,
+        readerContains: String = readerStartsWith,
     ) {
         val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
-        val postcondition = checkDefaultOrSame(
+        val postcondition = defaultOrSameStatement(
             currentValue = "previous",
             newValue = currentValue,
         )
         val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = getFieldReading(mergeFromBytes)
+        val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
         fieldProcessing.addBefore(rememberCurrent, fieldReading)
         fieldProcessing.addAfter(postcondition, fieldReading)
     }
 
-
-    protected fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+    /**
+     * Creates an `if` statement, which checks that the current field value is default
+     * OR if the proposed value is the same as the current.
+     *
+     * Otherwise, it throws the validation exception.
+     *
+     * @param currentValue an expression denoting the current field value.
+     * @param newValue an expression denoting the proposed value.
+     */
+    protected fun defaultOrSameStatement(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
             """
-            if (${defaultOrSame(currentValue, newValue)}) {
+            if (${defaultOrSamePredicate(currentValue, newValue)}) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
         )
 
-    protected abstract fun defaultOrSame(currentValue: String, newValue: String): String
+    /**
+     * Returns an expression representing a predicate upon [currentValue] and [newValue].
+     *
+     * The provided predicate should return `true` if [currentValue] is NOT default
+     * for its type AND if [newValue] not equal to [currentValue].
+     *
+     * In pseudocode: `currentValue != default && currentValue != newValue`.
+     *
+     * @param currentValue an expression denoting the current field value.
+     * @param newValue an expression denoting the proposed value.
+     */
+    protected abstract fun defaultOrSamePredicate(currentValue: String, newValue: String): String
 
     /**
      * Looks for the first child of this [PsiElement], the text representation of which
@@ -148,7 +190,6 @@ internal sealed class SetOnceJavaConstraints(
      * child of this [PsiElement] is checked only when the first child and all its descendants
      * are checked.
      */
-    // Kept in the class because it doesn't look like a general-purpose extension.
     protected fun PsiElement.deepSearch(
         startsWith: String,
         contains: String = startsWith

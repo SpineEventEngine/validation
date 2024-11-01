@@ -46,27 +46,22 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.java.javaClassName
 import io.spine.string.camelCase
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
-import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedNumberTypes
 
 internal fun interface DefaultOrSamePredicate : (String, String) -> String
 
 /**
  * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
- * Take a look at [SupportedNumberTypes] to know which particular primitive types
- * are supported.
- *
- * @property field The primitive field that declared the option.
- * @property message The message that contains the [field].
+ * @param field The primitive field that declared the option.
+ * @param messageWithFile The message that contains the [field].
  */
 internal open class SetOncePrimitiveField(
     field: Field,
-    message: MessageWithFile
-) : SetOnceJavaConstraints(field, message) {
+    messageWithFile: MessageWithFile
+) : SetOnceJavaConstraints(field, messageWithFile) {
 
     companion object {
         private val CustomFieldReaders = mapOf(
@@ -75,7 +70,7 @@ internal open class SetOncePrimitiveField(
             TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
             TYPE_STRING to "readStringRequireUtf8"
         )
-        private val SupportedNumberTypes = listOf(
+        private val NumberPrimitives = listOf(
             TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64, TYPE_UINT32, TYPE_UINT64,
             TYPE_SINT32, TYPE_SINT64, TYPE_FIXED32, TYPE_FIXED64, TYPE_SFIXED32, TYPE_SFIXED64
         )
@@ -90,7 +85,7 @@ internal open class SetOncePrimitiveField(
                 "$currentValue != com.google.protobuf.ByteString.EMPTY " +
                         "&& !$currentValue.equals($newValue)"
             }
-            SupportedNumberTypes.forEach { type ->
+            NumberPrimitives.forEach { type ->
                 put(type) { currentValue: String, newValue: String ->
                     "$currentValue != 0 && $currentValue != $newValue"
                 }
@@ -99,18 +94,13 @@ internal open class SetOncePrimitiveField(
     }
 
     private val fieldReader: String
-    private val defaultOrSame_: DefaultOrSamePredicate
+    private val defaultOrSame: DefaultOrSamePredicate
     private val fieldType: PrimitiveType = field.type.primitive
-    private val messageTypeClass by lazy {
-        message.message
-            .javaClassName(message.fileHeader)
-            .canonical
-    }
 
     init {
         check(SupportedPrimitives.contains(fieldType)) {
             "`${javaClass.simpleName}` handles only primitive fields. " +
-                    "The passed field: `$field`. The declaring message: `${message.message}`."
+                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
         }
 
         val javaTypeName = fieldType.name
@@ -119,43 +109,50 @@ internal open class SetOncePrimitiveField(
             .camelCase()
 
         fieldReader = "${CustomFieldReaders[fieldType] ?: "read$javaTypeName"}()"
-        defaultOrSame_ = SupportedPrimitives[fieldType]!!
+        defaultOrSame = SupportedPrimitives[fieldType]!!
     }
 
-    override fun PsiClass.doRender() {
+    override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
+        defaultOrSame(currentValue, newValue)
+
+    override fun PsiClass.addConstraints() {
         alterSetter()
         alterBytesMerge(
             currentValue = fieldGetter,
-            getFieldReading = { deepSearch("${fieldName}_ = input.$fieldReader;") }
+            readerStartsWith = "${fieldName}_ = input.$fieldReader;"
         )
-
         if (fieldType == TYPE_STRING) {
             alterStringBytesSetter()
             alterMessageMerge()
         }
     }
 
-    override fun defaultOrSame(currentValue: String, newValue: String): String =
-        defaultOrSame_(currentValue, newValue)
-
     /**
+     * Alters setter that accepts a value.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setAge(int value)
+     * public Builder setMyInt(int value)
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = checkDefaultOrSame(currentValue = fieldGetter, newValue = "value")
+        val precondition = defaultOrSameStatement(currentValue = fieldGetter, newValue = "value")
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
     /**
+     * Alters a string-specific setter that accepts a `ByteString`.
+     *
+     * For example:
+     *
      * ```
-     * public Builder setIdBytes(com.google.protobuf.ByteString value)
+     * public Builder setMyStingBytes(com.google.protobuf.ByteString value)
      * ```
      */
     private fun PsiClass.alterStringBytesSetter() {
-        val precondition = checkDefaultOrSame(
+        val precondition = defaultOrSameStatement(
             currentValue = "${fieldGetterName}Bytes()",
             newValue = "value"
         )
@@ -164,17 +161,19 @@ internal open class SetOncePrimitiveField(
     }
 
     /**
-     * ```
-     * public Builder mergeFrom(io.spine.test.tools.validate.Student other)
-     * ```
+     * Alters the message-based merge to modify merging of a string field.
+     *
+     * During the message merge, all primitives delegate updating the field value
+     * to their simple setters. Exception here is `string` type, which does it in-place.
+     * So, we have to add a check there.
      */
     private fun PsiClass.alterMessageMerge() {
-        val precondition = checkDefaultOrSame(
+        val precondition = defaultOrSameStatement(
             currentValue = fieldGetter,
             newValue = "other.$fieldGetter"
         )
         val mergeFromMessage = getMethodBySignature(
-            "public Builder mergeFrom($messageTypeClass other) {}"
+            "public Builder mergeFrom(${declaringMessage.canonical} other) {}"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(
             "if (!other.$fieldGetter.isEmpty())"

@@ -111,12 +111,12 @@ class SetOnceConstraintTest extends SetOnceFieldsTest {
     @Test
     @DisplayName("show the default error message")
     void showDefaultErrorMessage() {
-
+        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
     }
 
     @Test
     @DisplayName("show the custom error message")
     void showCustomErrorMessage() {
-
+        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
     }
 }
