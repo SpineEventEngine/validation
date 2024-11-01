@@ -35,6 +35,12 @@ import org.junit.jupiter.api.function.Executable;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * A smaller subset of {@link SetOnceConstraintTest} test cases that cover only integer fields.
+ *
+ * <p>These test cases were extracted to a separate class for convenience. They use their own
+ * test fixture ({@link Balance} and are focused only on integers.
+ */
 @DisplayName("`(set_once)` constraint should be compiled so that")
 abstract class SetOnceIntegerConstraintTest {
 
@@ -1038,7 +1044,6 @@ abstract class SetOnceIntegerConstraintTest {
         }
     }
 
-    // TODO:2024-10-21:yevhenii.nadtochii: Assert the message.
     static void assertValidationFails(Executable executable) {
         assertThrows(ValidationException.class, executable);
     }

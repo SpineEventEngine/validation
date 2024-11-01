@@ -557,15 +557,14 @@ class SetOnceConstraintTest extends SetOnceIntegerConstraintTest {
     }
 
     /**
-     * Please note, for `boolean` field type, there are no `byMessageMerge` and `byBytesMerge`
-     * tests intentionally.
+     * Please note, for `boolean` fields, there are no `byMessageMerge` and `byBytesMerge` tests.
      *
-     * <p>These tests can't override a non-default value by another non-default value as intended.
-     * In Protobuf v3, `boolean` field type has only one non-default value: `true`. When we try
-     * to override `true` with `false` by merging, the merge method does nothing because it doesn't
-     * consider fields with the default values. When we override `false` with `true`, we're just
-     * effectively assigning an initial non-default value, which is covered by another test group.
-     * See {@link AllowOverridingDefaultValueBooleans}.
+     * <p>It is impossible to override a non-default value by another non-default value
+     * for a `boolean` field. In Protobuf v3, `boolean` has only one non-default value: `true`.
+     * When we try to override `true` with `false` by merging, the merge method does nothing because
+     * it doesn't consider fields with the default values. When we override `false` with `true`,
+     * we're just effectively assigning an initial non-default value, which is tested by another
+     * test suite. See {@link AllowOverridingDefaultAndSameValueBoolean}.
      */
     @Nested
     @DisplayName("prohibit overriding non-default boolean")
