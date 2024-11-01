@@ -26,8 +26,9 @@
 
 package io.spine.validation.java.setonce
 
+import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiStatement
+import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
@@ -45,8 +46,8 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.java.javaClassName
 import io.spine.string.camelCase
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedNumberTypes
@@ -98,10 +99,15 @@ internal open class SetOncePrimitiveField(
     }
 
     private val fieldReader: String
-    private val defaultOrSame: DefaultOrSamePredicate
+    private val defaultOrSame_: DefaultOrSamePredicate
+    private val fieldType: PrimitiveType = field.type.primitive
+    private val messageTypeClass by lazy {
+        message.message
+            .javaClassName(message.fileHeader)
+            .canonical
+    }
 
     init {
-        val fieldType = field.type.primitive
         check(SupportedPrimitives.contains(fieldType)) {
             "`${javaClass.simpleName}` handles only primitive fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
@@ -113,19 +119,24 @@ internal open class SetOncePrimitiveField(
             .camelCase()
 
         fieldReader = "${CustomFieldReaders[fieldType] ?: "read$javaTypeName"}()"
-        defaultOrSame = SupportedPrimitives[fieldType]!!
+        defaultOrSame_ = SupportedPrimitives[fieldType]!!
     }
 
-    // https://youtrack.jetbrains.com/issue/KT-11488
-    protected fun doRenderPrimitive(psiClass: PsiClass) = with(psiClass) {
+    override fun PsiClass.doRender() {
         alterSetter()
         alterBytesMerge(
             currentValue = fieldGetter,
             getFieldReading = { deepSearch("${fieldName}_ = input.$fieldReader;") }
         )
+
+        if (fieldType == TYPE_STRING) {
+            alterStringBytesSetter()
+            alterMessageMerge()
+        }
     }
 
-    override fun PsiClass.doRender() = doRenderPrimitive(this)
+    override fun defaultOrSame(currentValue: String, newValue: String): String =
+        defaultOrSame_(currentValue, newValue)
 
     /**
      * ```
@@ -138,11 +149,37 @@ internal open class SetOncePrimitiveField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if (${defaultOrSame(currentValue, newValue)}) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
+    /**
+     * ```
+     * public Builder setIdBytes(com.google.protobuf.ByteString value)
+     * ```
+     */
+    private fun PsiClass.alterStringBytesSetter() {
+        val precondition = checkDefaultOrSame(
+            currentValue = "${fieldGetterName}Bytes()",
+            newValue = "value"
         )
+        val bytesSetter = method("${fieldSetterName}Bytes").body!!
+        bytesSetter.addAfter(precondition, bytesSetter.lBrace)
+    }
+
+    /**
+     * ```
+     * public Builder mergeFrom(io.spine.test.tools.validate.Student other)
+     * ```
+     */
+    private fun PsiClass.alterMessageMerge() {
+        val precondition = checkDefaultOrSame(
+            currentValue = fieldGetter,
+            newValue = "other.$fieldGetter"
+        )
+        val mergeFromMessage = getMethodBySignature(
+            "public Builder mergeFrom($messageTypeClass other) {}"
+        ).body!!
+        val fieldCheck = mergeFromMessage.deepSearch(
+            "if (!other.$fieldGetter.isEmpty())"
+        ) as PsiIfStatement
+        val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
+        fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
+    }
 }

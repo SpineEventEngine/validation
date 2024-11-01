@@ -27,10 +27,8 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isEnum
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -61,6 +59,9 @@ internal class SetOnceEnumField(
         )
     }
 
+    override fun defaultOrSame(currentValue: String, newValue: String): String =
+        "$currentValue != 0 && $currentValue != $newValue"
+
     /**
      * ```
      * public Builder setYearOfStudy(io.spine.test.tools.validate.YearOfStudy value)
@@ -88,12 +89,4 @@ internal class SetOnceEnumField(
         val setter = method("${fieldSetterName}Value").body!!
         setter.addAfter(precondition, setter.lBrace)
     }
-
-    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if ($currentValue != 0 && $currentValue != $newValue) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        )
 }

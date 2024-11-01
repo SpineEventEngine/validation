@@ -27,11 +27,9 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isMessage
 import io.spine.protodata.java.javaClassName
-import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -112,11 +110,6 @@ internal class SetOnceMessageField(
         merge.addAfter(precondition, merge.lBrace)
     }
 
-    override fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if (!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)) {
-                $THROW_VALIDATION_EXCEPTION
-            }""".trimIndent()
-        )
+    override fun defaultOrSame(currentValue: String, newValue: String): String =
+        "!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)"
 }

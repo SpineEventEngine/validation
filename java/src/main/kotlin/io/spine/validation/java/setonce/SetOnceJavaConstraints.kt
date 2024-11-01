@@ -46,6 +46,10 @@ import io.spine.validation.java.MessageWithFile
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
  *
+ * The rendered Java constraints are specific to the field type. This class
+ * serves as an abstract base, providing common methods and the skeleton implementation
+ * of [render] method. Inheritors should perform actual rendering in [doRender].
+ *
  * @property field The field that declared the option.
  * @property message The message that contains the [field].
  */
@@ -55,11 +59,8 @@ internal sealed class SetOnceJavaConstraints(
 ) {
 
     protected companion object {
-        private const val DEFAULT_CONSTRAINT_VIOLATION =
-            "io.spine.validate.ConstraintViolation.getDefaultInstance()"
-
-        const val THROW_VALIDATION_EXCEPTION =
-            "throw new io.spine.validate.ValidationException($DEFAULT_CONSTRAINT_VIOLATION);"
+        private const val THROW_VALIDATION_EXCEPTION =
+            "throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
          * Defines the signature of the expected base `mergeFrom(...)` method,
@@ -73,7 +74,7 @@ internal sealed class SetOnceJavaConstraints(
          * of fields and their outer messages. It is present in every generated message
          * with the same signature.
          */
-        val MergeFromBytesSignature =
+        private val MergeFromBytesSignature =
             """
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, 
                                      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -86,8 +87,6 @@ internal sealed class SetOnceJavaConstraints(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-
-    protected abstract fun PsiClass.doRender()
 
     @Suppress("TooGenericExceptionCaught") // Temporarily.
     fun render(sourceFile: SourceFile<Java>) {
@@ -112,6 +111,8 @@ internal sealed class SetOnceJavaConstraints(
         sourceFile.overwrite(psiFile.text)
     }
 
+    protected abstract fun PsiClass.doRender()
+
     protected fun PsiClass.alterBytesMerge(
         currentValue: String,
         getFieldReading: (PsiCodeBlock) -> PsiStatement
@@ -128,7 +129,16 @@ internal sealed class SetOnceJavaConstraints(
         fieldProcessing.addAfter(postcondition, fieldReading)
     }
 
-    protected abstract fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement
+
+    protected fun checkDefaultOrSame(currentValue: String, newValue: String): PsiStatement =
+        elementFactory.createStatement(
+            """
+            if (${defaultOrSame(currentValue, newValue)}) {
+                $THROW_VALIDATION_EXCEPTION
+            }""".trimIndent()
+        )
+
+    protected abstract fun defaultOrSame(currentValue: String, newValue: String): String
 
     /**
      * Looks for the first child of this [PsiElement], the text representation of which
