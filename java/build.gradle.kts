@@ -24,10 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.Kotest
-import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.spine.ProtoData
+import io.spine.dependency.lib.JavaPoet
+import io.spine.dependency.test.Kotest
+import io.spine.dependency.lib.Roaster
+import io.spine.dependency.local.ProtoData
 
 plugins {
     `build-proto-model`
