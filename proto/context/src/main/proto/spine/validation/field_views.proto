@@ -56,8 +56,8 @@ message SetOnceField {
     // Message appearing when this required field is not set.
     string error_message = 2;
 
-    // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
-    bool set_once = 3;
+    // Value of `set_once` boolean option.
+    bool enabled = 3;
 
     // The field in which the option was discovered.
     protodata.Field subject = 4;

@@ -53,7 +53,7 @@ internal class SetOnceFieldView :
     }
 
     override fun enableValidation() {
-        builder().setSetOnce(true)
+        builder().setEnabled(true)
     }
 
     override fun extractErrorMessage(option: Option): String =
