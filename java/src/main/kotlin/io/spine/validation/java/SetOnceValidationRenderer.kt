@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
 import io.spine.protodata.java.file.hasJavaRoot
@@ -39,7 +38,6 @@ import io.spine.validation.java.setonce.SetOnceJavaConstraints
 import io.spine.validation.java.setonce.SetOnceMessageField
 import io.spine.validation.java.setonce.SetOncePrimitiveField
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
-import io.spine.validation.java.setonce.SetOnceStringField
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builder setters
@@ -83,7 +81,6 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             field.type.isMessage -> SetOnceMessageField(field, message)
             field.type.isEnum -> SetOnceEnumField(field, message)
             field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, message)
-            field.type.primitive == TYPE_STRING -> SetOnceStringField(field, message)
             else -> error("Unsupported `(set_once)` field type: `${field.type}`.")
         }
 }
