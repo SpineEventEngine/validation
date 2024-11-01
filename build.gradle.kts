@@ -45,7 +45,6 @@ import io.spine.gradle.standardToSpineSdk
 plugins {
     idea
     jacoco
-    `gradle-doctor`
     id("project-report")
 }
 
