@@ -30,18 +30,25 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isEnum
 import io.spine.protodata.ast.isMessage
-import io.spine.protodata.ast.isPrimitive
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.setonce.SetOnceEnumField
-import io.spine.validation.java.setonce.SetOnceJava
+import io.spine.validation.java.setonce.SetOnceJavaConstraints
 import io.spine.validation.java.setonce.SetOnceMessageField
 import io.spine.validation.java.setonce.SetOncePrimitiveField
-import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitiveTypes
+import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
 import io.spine.validation.java.setonce.SetOnceStringField
 
+/**
+ * Takes the discovered [SetOnceField]s and modifies their Java builder setters
+ * to make sure the field value is assigned only once.
+ *
+ * Along with the direct field setters, auxiliary setters and merge methods are usually affected.
+ * For different field types, different methods are modified. Take a look on [SetOnceJavaConstraints]
+ * and its inheritors for details.
+ */
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
     override fun render(sources: SourceFileSet) {
@@ -51,11 +58,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        val allKnownMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceFields = setOnceFields().filter { it.setOnce }
-        val fieldsToMessages = setOnceFields.associateWith {
-            allKnownMessages[it.id.type] ?: error("Messages `${it.id.name}` not found.")
-        }
+        val compilationMessages = findMessageTypes().associateBy { it.message.name }
+        val setOnceFields = setOnceFields().filter { it.enabled }
+        val fieldsToMessages = setOnceFields.associateWith { compilationMessages[it.id.type]!! }
 
         fieldsToMessages.forEach { (protoField, messageWithFile) ->
             val javaConstraints = javaConstraints(protoField.subject, messageWithFile)
@@ -75,16 +80,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 
     private fun javaConstraints(field: Field, message: MessageWithFile): SetOnceJavaConstraints =
         when {
-            field.type.isPrimitive -> javaFieldPrimitive(field, message)
             field.type.isMessage -> SetOnceMessageField(field, message)
             field.type.isEnum -> SetOnceEnumField(field, message)
+            field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, message)
+            field.type.primitive == TYPE_STRING -> SetOnceStringField(field, message)
             else -> error("Unsupported `(set_once)` field type: `${field.type}`.")
-        }
-
-    private fun javaFieldPrimitive(field: Field, message: MessageWithFile) =
-        when (field.type.primitive) {
-            TYPE_STRING -> SetOnceStringField(field, message)
-            in SupportedPrimitiveTypes -> SetOncePrimitiveField(field, message)
-            else -> error("Unsupported `(set_once)` field type: `${field.type.primitive}`.")
         }
 }
