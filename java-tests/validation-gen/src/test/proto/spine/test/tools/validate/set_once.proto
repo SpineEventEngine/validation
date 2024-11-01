@@ -36,6 +36,7 @@ option java_multiple_files = true;
 
 import "google/protobuf/empty.proto";
 
+// Tests all supported field types except for integers.
 message Student {
     Name name = 1 [(set_once) = true];
     string id = 2 [(set_once) = true];
@@ -46,6 +47,7 @@ message Student {
     YearOfStudy year_of_study = 7 [(set_once) = true];
 }
 
+// Tests all integer field types.
 message Balance {
     int32 USD = 1 [(set_once) = true];
     int64 EUR = 2 [(set_once) = true];
@@ -63,6 +65,7 @@ message Balance {
     sfixed64 NZD = 10 [(set_once) = true];
 }
 
+// Tests that `(set_once)` behavior is not applied by default.
 message SetOnceImplicitFalse {
     Name message = 1;
     string string = 2;
@@ -83,6 +86,7 @@ message SetOnceImplicitFalse {
     YearOfStudy enum = 17;
 }
 
+// Tests that `(set_once)` behavior is not applied when the flag is `false`.
 message SetOnceExplicitFalse {
     Name message = 1 [(set_once) = false];
     string string = 2 [(set_once) = false];
