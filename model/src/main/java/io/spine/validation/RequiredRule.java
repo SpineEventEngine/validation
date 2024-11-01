@@ -36,7 +36,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.ast.Fields.isRepeated;
+import static io.spine.protodata.ast.Fields.isList;
+import static io.spine.protodata.ast.Fields.isMap;
 import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
@@ -66,7 +67,7 @@ final class RequiredRule {
         var integratedRule = rule(
                 field, unsetValue.get(), errorMessage, singularErrorMsg, false
         );
-        if (!isRepeated(field)) {
+        if (!(isList(field) || isMap(field))) {
             return Optional.of(wrap(integratedRule));
         }
         var singularUnsetValue = UnsetValue.singular(field.getType());

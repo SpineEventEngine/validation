@@ -30,12 +30,14 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ast.isList
 import io.spine.protodata.value.Value
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
-import io.spine.protodata.ast.isRepeated
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.isSingular
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -130,7 +132,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     private fun fieldIsJavaObject(): Boolean =
-        !field.isJavaPrimitive() || (field.isRepeated && !ctx.isElement)
+        !field.isJavaPrimitive() || ((field.isList || field.isMap) && !ctx.isElement)
 
     private fun selectSigns() = if (fieldIsJavaObject()) {
         OBJECT_COMPARISON_OPS
@@ -154,7 +156,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
     val field = ctx.simpleRuleField
-    return if (distribute && field.isRepeated) {
+    return if (distribute && !field.type.isSingular) {
         DistributingGenerator(ctx) {
             generatorForSingular(it)
         }

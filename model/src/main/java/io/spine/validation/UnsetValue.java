@@ -28,16 +28,17 @@ package io.spine.validation;
 
 import com.google.protobuf.ByteString;
 import io.spine.protodata.ast.Field;
-import io.spine.protodata.ast.Type;
+import io.spine.protodata.ast.FieldType;
 import io.spine.protodata.value.EnumValue;
+import io.spine.protodata.value.ListValue;
 import io.spine.protodata.value.MapValue;
 import io.spine.protodata.value.MessageValue;
-import io.spine.protodata.value.ListValue;
 import io.spine.protodata.value.Value;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.ast.FieldTypeExtsKt.getCardinality;
 import static io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_BYTES;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_STRING;
@@ -72,12 +73,12 @@ public final class UnsetValue {
     @SuppressWarnings("EnumSwitchStatementWhichMissesCases") // Covered by the "default" branch.
     public static Optional<Value> forField(Field field) {
         checkNotNull(field);
-        switch (field.getCardinalityCase()) {
-            case LIST:
+        switch (getCardinality(field.getType())) {
+            case CARDINALITY_LIST:
                 return Optional.of(Value.newBuilder()
                                         .setListValue(ListValue.getDefaultInstance())
                                         .build());
-            case MAP:
+            case CARDINALITY_MAP:
                 return Optional.of(Value.newBuilder()
                                         .setMapValue(MapValue.getDefaultInstance())
                                         .build());
@@ -96,9 +97,9 @@ public final class UnsetValue {
      * @return a {@link Value} with the field's default value or {@code Optional.empty()} if
      *         the field does not have an easily distinguished not-set value
      */
-    public static Optional<Value> singular(Type type) {
+    public static Optional<Value> singular(FieldType type) {
         var kind = type.getKindCase();
-        switch (kind) {
+        switch (type.getKindCase()) {
             case MESSAGE:
                 return Optional.of(messageValue(type));
             case ENUMERATION:
@@ -107,11 +108,13 @@ public final class UnsetValue {
                 return primitiveValue(type);
             case KIND_NOT_SET:
             default:
-                throw new IllegalArgumentException("Field type unknown.");
+                throw newIllegalArgumentException(
+                        "Cannot create `Value` for the type of kind `%s`.", kind
+                );
         }
     }
 
-    private static Optional<Value> primitiveValue(Type type) {
+    private static Optional<Value> primitiveValue(FieldType type) {
         var primitiveType = type.getPrimitive();
         if (primitiveType == PT_UNKNOWN || primitiveType == UNRECOGNIZED) {
             throw newIllegalArgumentException("Unknown primitive type `%s`.", primitiveType);
@@ -129,7 +132,7 @@ public final class UnsetValue {
         return Optional.empty();
     }
 
-    private static Value messageValue(Type type) {
+    private static Value messageValue(FieldType type) {
         var msgName = type.getMessage();
         return Value.newBuilder()
                     .setMessageValue(MessageValue.newBuilder()
@@ -138,7 +141,7 @@ public final class UnsetValue {
                     .build();
     }
 
-    private static Value enumValue(Type type) {
+    private static Value enumValue(FieldType type) {
         var enumName = type.getEnumeration();
         return Value.newBuilder()
                     .setEnumValue(EnumValue.newBuilder()

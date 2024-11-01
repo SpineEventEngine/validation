@@ -27,6 +27,8 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
+import io.spine.protodata.ast.Cardinality
+import io.spine.protodata.ast.Cardinality.CARDINALITY_LIST
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isAny
 import io.spine.protodata.java.Expression
@@ -34,6 +36,7 @@ import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MessageReference
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.toType
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.validate.ConstraintViolation
@@ -161,7 +164,7 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
     override fun createViolation(): CodeBlock {
         val validationError = MethodCall(validationErrorVar, "get")
         val violations = MessageReference(validationError.toCode())
-            .field("constraint_violation", Field.CardinalityCase.LIST)
+            .field("constraint_violation", CARDINALITY_LIST)
             .getter
         return error().createParentViolation(ctx, violations)
     }
