@@ -186,7 +186,9 @@ public final class Validate {
      *         the type of the message
      * @throws ValidationException
      *          if the value transition is not valid
+     * @deprecated {@code set_once} constraint is enforced within the message builder.
      */
+    @Deprecated
     public static <M extends Message> void checkValidChange(M previous, M current) {
         checkNotNull(previous);
         checkNotNull(current);
@@ -208,7 +210,9 @@ public final class Validate {
      *         the type of the message
      * @return a set of constraint violations, if the transaction is invalid,
      *         an empty set otherwise
+     * @deprecated {@code set_once} constraint is enforced within the message builder.
      */
+    @Deprecated
     @SuppressWarnings("WeakerAccess") // part of public API.
     public static <M extends Message>
     ImmutableSet<ConstraintViolation> validateChange(M previous, M current) {
