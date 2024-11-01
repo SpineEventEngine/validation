@@ -36,13 +36,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * A smaller subset of {@link SetOnceConstraintTest} test cases that cover only integer fields.
+ * Tests {@code (set_once)} constraint for integer fields.
+ *
+ * <p>It is a smaller subset of {@link SetOnceFieldsTest} cases that cover only integers.
  *
  * <p>These test cases were extracted to a separate class for convenience. They use their own
  * test fixture ({@link Balance} and are focused only on integers.
+ *
+ * <p>The class is abstract, so it could be executed as a part of {@link SetOnceConstraintTest}.
  */
-@DisplayName("`(set_once)` constraint should be compiled so that")
-abstract class SetOnceIntegerConstraintTest {
+abstract class SetOnceIntegerFieldsTest {
 
     @Nested
     @DisplayName("prohibit overriding non-default int32")
