@@ -142,13 +142,12 @@ internal sealed class SetOnceJava(
     protected fun PsiElement.deepSearch(
         startsWith: String,
         contains: String = startsWith
-    ): PsiStatement = children.asSequence()
-        .mapNotNull { element ->
-            val text = element.text
-            when {
-                !text.contains(contains) -> null
-                text.startsWith(startsWith) -> element
-                else -> element.deepSearch(startsWith, contains)
-            }
-        }.first() as PsiStatement
+    ): PsiStatement = children.firstNotNullOf { element ->
+        val text = element.text
+        when {
+            !text.contains(contains) -> null
+            text.startsWith(startsWith) -> element
+            else -> element.deepSearch(startsWith, contains)
+        }
+    } as PsiStatement
 }
