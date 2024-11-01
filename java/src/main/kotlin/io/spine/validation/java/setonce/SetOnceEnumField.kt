@@ -43,7 +43,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceEnumField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJava(field, message) {
+) : SetOnceJavaConstraints(field, message) {
 
     init {
         check(field.type.isEnum) {

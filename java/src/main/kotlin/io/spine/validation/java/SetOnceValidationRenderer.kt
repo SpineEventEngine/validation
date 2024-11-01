@@ -58,9 +58,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
 
         fieldsToMessages.forEach { (protoField, messageWithFile) ->
-            val javaField = javaField(protoField.subject, messageWithFile)
+            val javaConstraints = javaConstraints(protoField.subject, messageWithFile)
             val sourceFile = sources.javaFileOf(messageWithFile.message)
-            javaField.render(sourceFile)
+            javaConstraints.render(sourceFile)
         }
     }
 
@@ -73,7 +73,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaField(field: Field, message: MessageWithFile): SetOnceJava =
+    private fun javaConstraints(field: Field, message: MessageWithFile): SetOnceJavaConstraints =
         when {
             field.type.isPrimitive -> javaFieldPrimitive(field, message)
             field.type.isMessage -> SetOnceMessageField(field, message)

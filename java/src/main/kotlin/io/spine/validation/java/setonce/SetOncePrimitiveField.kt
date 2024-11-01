@@ -65,7 +65,7 @@ internal fun interface DefaultOrSamePredicate : (String, String) -> String
 internal open class SetOncePrimitiveField(
     field: Field,
     message: MessageWithFile
-) : SetOnceJava(field, message) {
+) : SetOnceJavaConstraints(field, message) {
 
     companion object {
         private val CustomFieldReaders = mapOf(
@@ -78,7 +78,7 @@ internal open class SetOncePrimitiveField(
             TYPE_DOUBLE, TYPE_FLOAT, TYPE_INT32, TYPE_INT64, TYPE_UINT32, TYPE_UINT64,
             TYPE_SINT32, TYPE_SINT64, TYPE_FIXED32, TYPE_FIXED64, TYPE_SFIXED32, TYPE_SFIXED64
         )
-        val SupportedPrimitiveTypes = buildMap<PrimitiveType, DefaultOrSamePredicate> {
+        val SupportedPrimitives = buildMap<PrimitiveType, DefaultOrSamePredicate> {
             put(TYPE_STRING) { currentValue: String, newValue: String ->
                 "!$currentValue.isEmpty() && !$currentValue.equals($newValue)"
             }
@@ -102,7 +102,7 @@ internal open class SetOncePrimitiveField(
 
     init {
         val fieldType = field.type.primitive
-        check(SupportedPrimitiveTypes.contains(fieldType)) {
+        check(SupportedPrimitives.contains(fieldType)) {
             "`${javaClass.simpleName}` handles only primitive fields. " +
                     "The passed field: `$field`. The declaring message: `${message.message}`."
         }
@@ -113,7 +113,7 @@ internal open class SetOncePrimitiveField(
             .camelCase()
 
         fieldReader = "${CustomFieldReaders[fieldType] ?: "read$javaTypeName"}()"
-        defaultOrSame = SupportedPrimitiveTypes[fieldType]!!
+        defaultOrSame = SupportedPrimitives[fieldType]!!
     }
 
     // https://youtrack.jetbrains.com/issue/KT-11488
