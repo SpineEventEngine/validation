@@ -46,7 +46,7 @@ internal class SetOnceEnumField(
     init {
         check(field.type.isEnum) {
             "`${javaClass.simpleName}` handles only enum fields. " +
-                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
+                    "The passed field: `$field`."
         }
     }
 

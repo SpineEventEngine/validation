@@ -47,7 +47,7 @@ internal class SetOnceMessageField(
     init {
         check(field.type.isMessage) {
             "`${javaClass.simpleName}` handles only message fields. " +
-                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
+                    "The passed field: `$field`."
         }
     }
 
@@ -55,6 +55,7 @@ internal class SetOnceMessageField(
         .javaClassName(messageWithFile.fileHeader)
         .canonical
 
+    @Suppress("MaxLineLength") // Easier to read.
     override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
         "!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)"
 

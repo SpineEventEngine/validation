@@ -60,7 +60,8 @@ internal sealed class SetOnceJavaConstraints(
     private companion object {
         // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
         const val THROW_VALIDATION_EXCEPTION =
-            "throw new io.spine.validate.ValidationException(io.spine.validate.ConstraintViolation.getDefaultInstance());"
+            "throw new io.spine.validate.ValidationException(" +
+                    "io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
          * Defines the signature of the expected `mergeFrom(CodedInputStream)` method.

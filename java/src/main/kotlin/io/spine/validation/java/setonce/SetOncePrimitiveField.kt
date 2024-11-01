@@ -100,7 +100,7 @@ internal open class SetOncePrimitiveField(
     init {
         check(SupportedPrimitives.contains(fieldType)) {
             "`${javaClass.simpleName}` handles only primitive fields. " +
-                    "The passed field: `$field`. The declaring message: `${messageWithFile.message}`."
+                    "The passed field: `$field`."
         }
 
         val javaTypeName = fieldType.name
