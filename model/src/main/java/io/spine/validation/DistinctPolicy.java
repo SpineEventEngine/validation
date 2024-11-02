@@ -54,7 +54,10 @@ import static io.spine.validation.SourceFiles.findField;
  */
 final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
-    @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in the generated code.
+    @SuppressWarnings({
+            "DuplicateStringLiteralInspection" /* Duplicates are in the generated code. */,
+            "RedundantSuppression" /* Suppress warning until the code is generated. */
+    })
     private static final String ERROR = "Collection must not contain duplicates.";
 
     @Override
