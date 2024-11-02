@@ -48,6 +48,8 @@ public fun FieldType.extractType(): Type = when {
 /**
  * Indicates if this field type is a message, or it refers to a message type being
  * a list or a map with such.
+ *
+ * @see refersToAny
  */
 public fun FieldType.refersToMessage(): Boolean = when {
     isMessage -> true
