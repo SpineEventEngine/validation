@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -38,6 +38,7 @@ import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.ast.Fields.isList;
 import static io.spine.protodata.ast.Fields.isMap;
+import static io.spine.protodata.ast.Fields.toType;
 import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
@@ -70,7 +71,7 @@ final class RequiredRule {
         if (!(isList(field) || isMap(field))) {
             return Optional.of(wrap(integratedRule));
         }
-        var singularUnsetValue = UnsetValue.singular(field.getType());
+        var singularUnsetValue = UnsetValue.singular(toType(field));
         if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -31,13 +31,17 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isList
-import io.spine.protodata.value.Value
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.Type
+import io.spine.protodata.ast.isMessage
+import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.toType
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
-import io.spine.protodata.ast.isMap
-import io.spine.protodata.ast.isSingular
+import io.spine.protodata.value.Value
+import io.spine.string.shortly
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -105,7 +109,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     private fun defaultFieldValue(): Value? = with(ctx) {
         val field = simpleRuleField
         return if (isElement) {
-            UnsetValue.singular(field.type)
+            UnsetValue.singular(field.directOrElementType())
         } else {
             UnsetValue.forField(field)
         }.getOrNull()
@@ -122,12 +126,14 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         checkNotNull(otherValue) {
             "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
-        val type = field.type
+        val type = field.directOrElementType()
         val signs = selectSigns()
         val compare = signs[rule.operator] ?: error(
-            "Unsupported operation `${rule.operator}` for type `$type`."
+            "Unsupported operation `${rule.operator}` for the type `$type`."
         )
-        checkNotNull(ctx.fieldOrElement) { "There is no field value for rule: $rule" }
+        checkNotNull(ctx.fieldOrElement) {
+            "There is no field value for the rule: `${rule.shortly()}`."
+        }
         return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
@@ -175,6 +181,12 @@ private fun generatorForSingular(ctx: GenerationContext): CodeGenerator {
 }
 
 private fun Field.isJavaPrimitive(): Boolean {
+    if (type.isList) {
+        return type.list.isPrimitive
+    }
+    if (type.isMap) {
+        return type.map.valueType.isPrimitive
+    }
     if (!type.hasPrimitive()) {
         return false
     }
@@ -182,4 +194,11 @@ private fun Field.isJavaPrimitive(): Boolean {
         TYPE_STRING, TYPE_BYTES -> false
         else -> true
     }
+}
+
+private fun Field.directOrElementType(): Type = when {
+    isList -> type.list
+    isMessage -> type.toType()
+    type.isSingular -> type.toType()
+    else -> error("Cannot get the type of the field `${shortly()}`.")
 }
