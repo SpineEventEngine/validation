@@ -44,3 +44,26 @@ public fun FieldType.extractType(): Type = when {
     isList -> list
     else -> error("Cannot get type info from the field type ${this.shortly()}.")
 }
+
+/**
+ * Indicates if this field type is a message, or it refers to a message type being
+ * a list or a map with such.
+ */
+public fun FieldType.refersToMessage(): Boolean = when {
+    isMessage -> true
+    isMap -> map.valueType.isMessage
+    isList -> list.isMessage
+    else -> false
+}
+
+/**
+ * Indicates if this field type refers to [com.google.protobuf.Any].
+ *
+ * @see refersToMessage
+ */
+public fun FieldType.refersToAny(): Boolean = when {
+    isAny -> true
+    isMap -> map.valueType.isAny
+    isList -> list.isAny
+    else -> false
+}

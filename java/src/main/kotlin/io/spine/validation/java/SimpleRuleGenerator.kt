@@ -136,7 +136,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     private fun fieldIsJavaObject(): Boolean =
-        !field.isJavaPrimitive() || ((field.isList || field.isMap) && !ctx.isElement)
+        !field.refersToJavaPrimitive() || ((field.isList || field.isMap) && !ctx.isElement)
 
     private fun selectSigns() = if (fieldIsJavaObject()) {
         OBJECT_COMPARISON_OPS
@@ -178,14 +178,15 @@ private fun generatorForSingular(ctx: GenerationContext): CodeGenerator {
     }
 }
 
-private fun Field.isJavaPrimitive(): Boolean {
+@Suppress("ReturnCount")
+private fun Field.refersToJavaPrimitive(): Boolean {
     if (type.isList) {
         return type.list.isPrimitive
     }
     if (type.isMap) {
         return type.map.valueType.isPrimitive
     }
-    if (!type.hasPrimitive()) {
+    if (!type.isPrimitive) {
         return false
     }
     return when (type.primitive) {

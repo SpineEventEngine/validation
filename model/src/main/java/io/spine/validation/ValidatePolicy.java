@@ -39,6 +39,7 @@ import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protodata.ast.TypeNames.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.validation.FieldTypeExtsKt.refersToMessage;
 import static io.spine.validation.SourceFiles.findField;
 
 /**
@@ -47,7 +48,7 @@ import static io.spine.validation.SourceFiles.findField;
  *
  * <p>The validation rule enforces recursive validation for the associated message field.
  *
- * <p>If the field is a list or a map, all the elements (values, in case of the map) are validated.
+ * <p>If the field is a list or a map, all the elements (values of map entries) are validated.
  *
  * <p>If the message field is invalid, the containing message is invalid as well.
  */
@@ -71,7 +72,7 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
         var rule = SimpleRules.withCustom(
                 event.getField(),
                 RecursiveValidation.getDefaultInstance(),
-                "Message field is validated by its validation rules. " +
+                "A message field is validated by its validation rules. " +
                         "If the field is invalid, the container message is invalid as well.",
                 field.getErrorMessage(),
                 true);
@@ -85,10 +86,10 @@ final class ValidatePolicy extends ValidationPolicy<FieldExited> {
 
     private void ensureMessageField(FieldName fieldName, TypeName typeName, File file) {
         var field = findField(fieldName, typeName, file, this);
-        if (!field.getType().hasMessage()) {
+        if (!refersToMessage(field.getType())) {
             throw newIllegalStateException(
-                    "Field `%s.%s` is not a message field and, " +
-                            "therefore, should not be marked with `validate`.",
+                    "The field `%s.%s` does not refer to a message type and, " +
+                            "therefore, cannot have the `validate` option.",
                     getQualifiedName(typeName),
                     fieldName.getValue()
             );
