@@ -86,7 +86,7 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
     private void checkCollection(FieldName fieldName, TypeName typeName, File file) {
         var field = findField(fieldName, typeName, file, this);
-        if (!isSingular(field.getType())) {
+        if (isSingular(field.getType())) {
             throw newIllegalStateException(
                     "The field `%s.%s` is neither a `repeated` nor a `map` and " +
                             "therefore cannot be `(distinct)`.",
