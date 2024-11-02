@@ -44,6 +44,7 @@ import static io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_BYTES;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_STRING;
 import static io.spine.protodata.ast.PrimitiveType.UNRECOGNIZED;
+import static io.spine.string.Strings.shortly;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -75,7 +76,8 @@ public final class UnsetValue {
     public static Optional<Value> forField(Field field) {
         checkNotNull(field);
         var fieldType = field.getType();
-        switch (getCardinality(fieldType)) {
+        var cardinality = getCardinality(fieldType);
+        switch (cardinality) {
             case CARDINALITY_LIST:
                 return Optional.of(Value.newBuilder()
                                         .setListValue(ListValue.getDefaultInstance())
@@ -84,9 +86,15 @@ public final class UnsetValue {
                 return Optional.of(Value.newBuilder()
                                         .setMapValue(MapValue.getDefaultInstance())
                                         .build());
-            default:
+            case CARDINALITY_SINGLE:
                 var type = toType(field);
                 return singular(type);
+            default:
+                throw newIllegalArgumentException(
+                        "Cannot create `Value` for the field `%s`." +
+                                " Unexpected cardinality encountered: `%s`.",
+                        shortly(field), cardinality
+                );
         }
     }
 

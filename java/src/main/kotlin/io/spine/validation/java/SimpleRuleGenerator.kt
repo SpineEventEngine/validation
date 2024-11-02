@@ -30,12 +30,9 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
-import io.spine.protodata.ast.Type
-import io.spine.protodata.ast.isMessage
-import io.spine.protodata.ast.isSingular
-import io.spine.protodata.ast.toType
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
@@ -54,6 +51,7 @@ import io.spine.validation.SimpleRule
 import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
+import io.spine.validation.extractType
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -196,9 +194,4 @@ private fun Field.isJavaPrimitive(): Boolean {
     }
 }
 
-private fun Field.directOrElementType(): Type = when {
-    isList -> type.list
-    isMessage -> type.toType()
-    type.isSingular -> type.toType()
-    else -> error("Cannot get the type of the field `${shortly()}`.")
-}
+private fun Field.directOrElementType(): Type = type.extractType()

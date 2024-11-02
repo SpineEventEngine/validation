@@ -38,10 +38,10 @@ import static io.spine.option.OptionsProto.required;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.protodata.ast.Fields.isList;
 import static io.spine.protodata.ast.Fields.isMap;
-import static io.spine.protodata.ast.Fields.toType;
 import static io.spine.validate.Diags.Required.collectionErrorMsg;
 import static io.spine.validate.Diags.Required.singularErrorMsg;
 import static io.spine.validation.ComparisonOperator.NOT_EQUAL;
+import static io.spine.validation.FieldTypeExtsKt.extractType;
 import static io.spine.validation.Options.is;
 import static io.spine.validation.Rules.wrap;
 
@@ -71,7 +71,8 @@ final class RequiredRule {
         if (!(isList(field) || isMap(field))) {
             return Optional.of(wrap(integratedRule));
         }
-        var singularUnsetValue = UnsetValue.singular(toType(field));
+        var type = extractType(field.getType());
+        var singularUnsetValue = UnsetValue.singular(type);
         if (singularUnsetValue.isEmpty()) {
             return Optional.of(wrap(integratedRule));
         }
