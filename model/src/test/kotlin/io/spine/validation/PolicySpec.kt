@@ -26,22 +26,22 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Empty
 import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
 import io.spine.protobuf.pack
+import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.ProtoFileHeader.SyntaxVersion.PROTO3
-import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.event.fieldEntered
 import io.spine.protodata.ast.event.fieldOptionDiscovered
 import io.spine.protodata.ast.event.fileEntered
 import io.spine.protodata.ast.event.typeDiscovered
 import io.spine.protodata.ast.field
 import io.spine.protodata.ast.fieldName
+import io.spine.protodata.ast.fieldType
 import io.spine.protodata.ast.file
 import io.spine.protodata.ast.messageType
 import io.spine.protodata.ast.option
@@ -104,7 +104,6 @@ class PolicySpec {
             declaringType = typeName
             name = fieldName
             type = primitive(TYPE_INT32)
-            single = Empty.getDefaultInstance()
         }
 
         blackBox.receivesExternalEvents(
@@ -126,7 +125,9 @@ class PolicySpec {
             name = "range"
             number = OptionsProto.range.number
             value = StringValue.of("[0..100]").pack()
-            type = primitive(TYPE_STRING)
+            type = type {
+                primitive = TYPE_STRING
+            }
         }
 
         blackBox.receivesExternalEvent(
@@ -137,7 +138,6 @@ class PolicySpec {
                     declaringType = typeName
                     name = fieldName
                     type = primitive(TYPE_INT32)
-                    single = Empty.getDefaultInstance()
                 }
             }
         )
@@ -163,7 +163,7 @@ private fun incompleteRuleWith(sign: ComparisonOperator): Rule =
         simple = simpleRule { operator = sign }
     }
 
-private fun primitive(type: PrimitiveType): Type =
-    type {
+private fun primitive(type: PrimitiveType): FieldType =
+    fieldType {
         primitive = type
     }

@@ -24,29 +24,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+package io.spine.validation
+
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.Type
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.toType
+import io.spine.string.shortly
 
 /**
- * Dependencies on the artifacts of the Spine Logging library.
- *
- * @see <a href="https://github.com/SpineEventEngine/logging">spine-logging</a>
+ * Extracts direct or element type information from this field type.
  */
-@Suppress("ConstPropertyName", "unused")
-object Logging {
-    const val version = "2.0.0-SNAPSHOT.242"
-    const val group = Spine.group
-    const val lib = "$group:spine-logging:$version"
-    const val libJvm = "$group:spine-logging-jvm:$version"
+public fun FieldType.extractType(): Type = when {
+    isMessage -> toType()
+    isEnum -> toType()
+    isPrimitive -> toType()
+    isMap -> map.valueType
+    isList -> list
+    else -> error("Cannot get type info from the field type ${this.shortly()}.")
+}
 
-    const val log4j2Backend = "$group:spine-logging-log4j2-backend:$version"
-    const val stdContext = "$group:spine-logging-std-context:$version"
-    const val grpcContext = "$group:spine-logging-grpc-context:$version"
-    const val smokeTest = "$group:spine-logging-smoke-test:$version"
+/**
+ * Indicates if this field type is a message, or it refers to a message type being
+ * a list or a map with such.
+ */
+public fun FieldType.refersToMessage(): Boolean = when {
+    isMessage -> true
+    isMap -> map.valueType.isMessage
+    isList -> list.isMessage
+    else -> false
+}
 
-    // Transitive dependencies.
-    // Make `public` and use them to force a version in a particular repository, if needed.
-    internal const val julBackend = "$group:spine-logging-jul-backend:$version"
-    internal const val middleware = "$group:spine-logging-middleware:$version"
-    internal const val platformGenerator = "$group:spine-logging-platform-generator:$version"
-    internal const val jvmDefaultPlatform = "$group:spine-logging-jvm-default-platform:$version"
+/**
+ * Indicates if this field type refers to [com.google.protobuf.Any].
+ *
+ * @see refersToMessage
+ */
+public fun FieldType.refersToAny(): Boolean = when {
+    isAny -> true
+    isMap -> map.valueType.isAny
+    isList -> list.isAny
+    else -> false
 }

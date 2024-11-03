@@ -35,11 +35,4 @@ dependencies {
     testImplementation(Logging.lib)
 }
 
-tasks.findByName("launchTestProtoData")?.apply { this as JavaExec
-    debugOptions {
-        enabled.set(false) // Set this option to `true` to enable remote debugging.
-        port.set(5566)
-        server.set(true)
-        suspend.set(true)
-    }
-}
+testProtoDataRemoteDebug(enabled = false)

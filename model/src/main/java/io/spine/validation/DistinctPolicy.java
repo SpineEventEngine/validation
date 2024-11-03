@@ -40,7 +40,7 @@ import io.spine.validation.event.RuleAdded;
 import io.spine.validation.event.SimpleRuleAdded;
 
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.ast.Fields.isRepeated;
+import static io.spine.protodata.ast.FieldTypeExtsKt.isSingular;
 import static io.spine.protodata.ast.TypeNames.getQualifiedName;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.validation.EventFieldNames.OPTION_NAME;
@@ -54,7 +54,10 @@ import static io.spine.validation.SourceFiles.findField;
  */
 final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
-    @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
+    @SuppressWarnings({
+            "DuplicateStringLiteralInspection" /* Duplicates are in the generated code. */,
+            "RedundantSuppression" /* Suppress warning until the code is generated. */
+    })
     private static final String ERROR = "Collection must not contain duplicates.";
 
     @Override
@@ -83,7 +86,7 @@ final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
 
     private void checkCollection(FieldName fieldName, TypeName typeName, File file) {
         var field = findField(fieldName, typeName, file, this);
-        if (!isRepeated(field)) {
+        if (isSingular(field.getType())) {
             throw newIllegalStateException(
                     "The field `%s.%s` is neither a `repeated` nor a `map` and " +
                             "therefore cannot be `(distinct)`.",
