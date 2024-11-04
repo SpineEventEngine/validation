@@ -28,7 +28,6 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.isEnum
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 

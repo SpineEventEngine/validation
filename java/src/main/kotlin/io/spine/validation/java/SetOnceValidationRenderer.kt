@@ -27,8 +27,8 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.isEnum
-import io.spine.protodata.ast.isMessage
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
@@ -70,7 +70,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
     private fun setOnceFields() = select<SetOnceField>().all()
         .onEach {
             val field = it.subject
-            check(field.hasSingle()) {
+            check(!field.isMap && !field.isList) {
                 "The `(set_once)` option is not applicable to repeated fields and maps. " +
                         "The invalid field: `${field}`."
             }
