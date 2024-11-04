@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,129 +23,124 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import com.google.common.collect.BoundType;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-import io.spine.code.proto.FieldDeclaration;
-import io.spine.test.type.Url;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.Set;
-import java.util.stream.Stream;
-
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static com.google.common.collect.Sets.union;
-import static io.spine.testing.Assertions.assertIllegalArgument;
-import static io.spine.validate.option.RangeConstraint.rangeFromOption;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import com.google.common.collect.BoundType
+import com.google.common.collect.ImmutableSet
+import com.google.common.collect.Sets
+import io.kotest.matchers.shouldBe
+import io.spine.code.proto.FieldDeclaration
+import io.spine.test.type.Url
+import io.spine.validate.option.RangeConstraint.rangeFromOption
+import java.util.stream.Stream
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("Range constraint should")
-class RangeConstraintTest {
+internal class RangeConstraintSpec {
 
     @ParameterizedTest
     @MethodSource("validRanges")
-    @DisplayName("be able to parse valid range strings")
-    void acceptProperRanges(String range, BoundType expected) {
-        var result = rangeFromOption(range, aDeclaration());
-        assertEquals(expected, result.upperBoundType());
-    }
+    fun `be able to parse valid range strings`(range: String, expected: BoundType) {
+        val result = rangeFromOption(range, fieldDecl())
 
-    @SuppressWarnings("unused") /* Serves as a method source. */
-    private static Stream<Arguments> validRanges() {
-        return Stream.of(
-                Arguments.of("[1..2]", BoundType.CLOSED),
-                Arguments.of("(1..2)", BoundType.OPEN),
-                Arguments.of("[1..2)", BoundType.OPEN),
-                Arguments.of("(1..2]", BoundType.CLOSED)
-        );
+        result.upperBoundType() shouldBe expected
     }
 
     @ParameterizedTest
     @MethodSource("badRanges")
-    @DisplayName("throw on incorrectly defined ranges")
-    void throwOnMalformedRanges(String badRange) {
-        assertThrows(Exception.class,
-                     () -> rangeFromOption(badRange, aDeclaration()));
-    }
-
-    @SuppressWarnings("unused") /* Serves as a method source. */
-    private static ImmutableSet<Arguments> badRanges() {
-        return argumentsFrom(
-                "{3..5]",
-                "[3..5}",
-                "{3..5}",
-                "(3..5",
-                "3..5)",
-                "((3..5]",
-                "(3..5]]",
-                "(3,5..5)",
-                "(3 5..5",
-                "[3..5 5]",
-                "[3..5,5]",
-                "[3;5]",
-                "[3...5]"
-        );
+    fun `throw on incorrectly defined ranges`(badRange: String) {
+        // Exceptions would be `NumberFormatException` or `IllegalStateException`.
+        assertThrows<Exception> {
+            rangeFromOption(badRange, fieldDecl())
+        }
     }
 
     @ParameterizedTest
     @MethodSource("emptyRanges")
-    @DisplayName("throw on empty ranges")
-    void throwOnEmptyRanges(String emptyRange) {
-        assertIllegalArgument(() -> rangeFromOption(emptyRange, aDeclaration()));
-    }
-
-    @SuppressWarnings("unused") /* Serves as a method source. */
-    private static Set<Arguments> emptyRanges() {
-        var right = 0;
-        var left = right + 1;
-        var leftGreaterThanRight =
-                rangeCombinationsFor(left,
-                                     right,
-                                     ImmutableSet.of('[', '('),
-                                     ImmutableSet.of(']', ')'));
-        var closedWithSameNumber = arguments("(0..0)");
-        return union(leftGreaterThanRight, ImmutableSet.of(closedWithSameNumber));
-    }
-
-    private static ImmutableSet<Arguments>
-    rangeCombinationsFor(Number left,
-                         Number right,
-                         ImmutableSet<Character> leftBoundary,
-                         ImmutableSet<Character> rightBoundary) {
-        var lefts = leftBoundary.stream()
-                .map(boundary -> String.valueOf(boundary) + left + "..")
-                .collect(toImmutableSet());
-        var rights = rightBoundary.stream()
-                .map(boundary -> String.valueOf(right) + boundary)
-                .collect(toImmutableSet());
-        var result = Sets.cartesianProduct(lefts, rights).stream()
-                .flatMap(product -> Stream.of(product.get(0) + product.get(1)))
-                .map(Arguments::of)
-                .collect(toImmutableSet());
-        return result;
-    }
-
-    private static ImmutableSet<Arguments> argumentsFrom(Object... elements) {
-        ImmutableSet.Builder<Arguments> builder = ImmutableSet.builder();
-        for (var element : elements) {
-            builder.add(Arguments.of(element));
+    fun `throw on empty ranges`(emptyRange: String) {
+        assertThrows<IllegalArgumentException> {
+            rangeFromOption(emptyRange, fieldDecl())
         }
-        return builder.build();
     }
 
-    private static FieldDeclaration aDeclaration() {
-        return new FieldDeclaration(
-                Url.getDescriptor()
-                   .getFields()
-                   .get(0)
-        );
+    @Suppress("unused") /* Methods used via `@MethodSource`. */
+    companion object {
+
+        @JvmStatic
+        fun validRanges(): Stream<Arguments> = Stream.of(
+            Arguments.of("[1..2]", BoundType.CLOSED),
+            Arguments.of("(1..2)", BoundType.OPEN),
+            Arguments.of("[1..2)", BoundType.OPEN),
+            Arguments.of("(1..2]", BoundType.CLOSED)
+        )
+
+        @JvmStatic
+        fun badRanges(): ImmutableSet<Arguments> = argumentsFrom(
+            "{3..5]",
+            "[3..5}",
+            "{3..5}",
+            "(3..5",
+            "3..5)",
+            "((3..5]",
+            "(3..5]]",
+            "(3,5..5)",
+            "(3 5..5",
+            "[3..5 5]",
+            "[3..5,5]",
+            "[3;5]",
+            "[3...5]"
+        )
+
+        @JvmStatic
+        fun emptyRanges(): Set<Arguments> {
+            val right = 0
+            val left = right + 1
+            val leftGreaterThanRight =
+                rangeCombinationsFor(
+                    left,
+                    right,
+                    ImmutableSet.of('[', '('),
+                    ImmutableSet.of(']', ')')
+                )
+            val closedWithSameNumber = Arguments.arguments("(0..0)")
+            return Sets.union(leftGreaterThanRight, ImmutableSet.of(closedWithSameNumber))
+        }
     }
 }
+
+private fun rangeCombinationsFor(
+    left: Number,
+    right: Number,
+    leftBoundary: ImmutableSet<Char>,
+    rightBoundary: ImmutableSet<Char>
+): ImmutableSet<Arguments> {
+    val lefts = leftBoundary.stream()
+        .map { boundary: Char -> "$boundary$left.." }
+        .collect(ImmutableSet.toImmutableSet())
+    val rights = rightBoundary.stream()
+        .map { boundary: Char -> right.toString() + boundary }
+        .collect(ImmutableSet.toImmutableSet())
+    val result = Sets.cartesianProduct(lefts, rights).stream()
+        .flatMap { product: List<String> ->
+            Stream.of(product[0] + product[1])
+        }
+        .map { arguments: String -> Arguments.of(arguments) }
+        .collect(ImmutableSet.toImmutableSet())
+    return result
+}
+
+private fun argumentsFrom(vararg elements: Any): ImmutableSet<Arguments> {
+    val builder = ImmutableSet.builder<Arguments>()
+    for (element in elements) {
+        builder.add(Arguments.of(element))
+    }
+    return builder.build()
+}
+
+private fun fieldDecl(): FieldDeclaration = FieldDeclaration(
+    Url.getDescriptor().fields[0]
+)
