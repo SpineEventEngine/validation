@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,52 +24,51 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import io.spine.validate.option.ValidatingOptionFactory;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.Set;
-import java.util.function.Function;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.spine.validate.option.ValidatingOptionFactory
+import java.util.function.Function
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("Interface `ValidatingOptionFactory` should")
-class ValidatingOptionFactoryTest {
+internal class ValidatingOptionFactorySpec {
 
-    private ValidatingOptionFactory options;
+    private lateinit var options: ValidatingOptionFactory
 
     @BeforeEach
-    void setUp() {
-        options = new ValidatingOptionFactory() {};
+    fun setUp() {
+        options = object : ValidatingOptionFactory {}
     }
 
     @Test
-    @DisplayName("have no abstract methods")
-    void noAbstract() {
-        // Actually, just has to at least compile.
-        assertDoesNotThrow(() -> new ValidatingOptionFactory() {});
+    fun `have no abstract methods`() {
+        // We do not expect the code below to throw.
+        // Here we test that the simplest derived class does not implement
+        // any method and compiles.
+        assertDoesNotThrow {
+            object : ValidatingOptionFactory {}
+        }
     }
 
     @Test
-    @DisplayName("provide empty sets of options for all types by default")
-    void provideEmptySets() {
-        assetEmpty(ValidatingOptionFactory::forBoolean);
-        assetEmpty(ValidatingOptionFactory::forByteString);
-        assetEmpty(ValidatingOptionFactory::forDouble);
-        assetEmpty(ValidatingOptionFactory::forEnum);
-        assetEmpty(ValidatingOptionFactory::forFloat);
-        assetEmpty(ValidatingOptionFactory::forInt);
-        assetEmpty(ValidatingOptionFactory::forLong);
-        assetEmpty(ValidatingOptionFactory::forMessage);
-        assetEmpty(ValidatingOptionFactory::forString);
+    fun `provide empty sets of options for all types by default`() {
+        assetEmpty { it.forBoolean() }
+        assetEmpty { it.forByteString() }
+        assetEmpty { it.forDouble() }
+        assetEmpty { it.forEnum() }
+        assetEmpty { it.forFloat() }
+        assetEmpty { it.forInt() }
+        assetEmpty { it.forLong() }
+        assetEmpty { it.forMessage() }
+        assetEmpty { it.forString() }
     }
 
-    private void assetEmpty(Function<ValidatingOptionFactory, Set<?>> typeSelector) {
-        var result = typeSelector.apply(options);
-        assertThat(result).isEmpty();
+    private fun assetEmpty(typeSelector: Function<ValidatingOptionFactory, Set<*>>) {
+        val result = typeSelector.apply(options)
+        result.shouldBeEmpty()
     }
 }
