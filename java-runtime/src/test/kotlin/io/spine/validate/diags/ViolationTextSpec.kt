@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,64 +24,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.diags;
+package io.spine.validate.diags
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.testing.NullPointerTester;
-import com.google.protobuf.Timestamp;
-import io.spine.base.Field;
-import io.spine.type.TypeName;
-import io.spine.validate.ConstraintViolation;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
+import com.google.common.testing.NullPointerTester
+import com.google.common.truth.Truth
+import com.google.protobuf.Timestamp
+import io.kotest.matchers.string.shouldContain
+import io.spine.base.Field
+import io.spine.type.TypeName
+import io.spine.validate.constraintViolation
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName("`ViolationText` should")
-class ViolationTextTest {
-
+internal class ViolationTextSpec {
+    
     @Test
-    @DisplayName("not accept `null` violations")
-    void nullTolerance() {
-        new NullPointerTester()
-                .testAllPublicStaticMethods(ViolationText.class);
+    fun `not accept 'null' violations`() {
+        NullPointerTester().testAllPublicStaticMethods(ViolationText::class.java)
     }
 
     @Test
-    @DisplayName("include type info in the violation text")
-    void includeType() {
-        var type = TypeName.of(Timestamp.class);
-        var violation = ConstraintViolation.newBuilder()
-                .setTypeName(type.value())
-                .build();
-        var text = ViolationText.of(violation);
-        assertThat(text.toString()).contains(type.value());
+    fun `include type info in the violation text`() {
+        val expected = TypeName.of(Timestamp::class.java).value()
+        val violation = constraintViolation { typeName = expected }
+        val text = ViolationText.of(violation)
+        text.toString() shouldContain expected
     }
 
     @Test
-    @DisplayName("include field info in the violation text")
-    void includeField() {
-        var field = Field.parse("msg.foo.bar");
-        var violation = ConstraintViolation.newBuilder()
-                .setFieldPath(field.path())
-                .build();
-        var text = ViolationText.of(violation);
-        assertThat(text.toString())
-                .contains(field.toString());
+    fun `include field info in the violation text`() {
+        val field = Field.parse("msg.foo.bar")
+        val violation = constraintViolation { fieldPath = field.path() }
+        val text = ViolationText.of(violation)
+        text.toString() shouldContain field.toString()
     }
 
     @Test
-    @DisplayName("compile tests for many violations into one")
-    void compileManyTexts() {
-        var first = ConstraintViolation.newBuilder()
-                .setMsgFormat("Errored with a message")
-                .build();
-        var second = ConstraintViolation.newBuilder()
-                .setMsgFormat("Messaged with an error")
-                .build();
-        var text = ViolationText.ofAll(ImmutableList.of(first, second));
-        var assertText = assertThat(text);
-        assertText.contains(ViolationText.of(first).toString());
-        assertText.contains(ViolationText.of(second).toString());
+    fun `compile tests for many violations into one`() {
+        val first = constraintViolation { msgFormat = "Errored with a message" }
+        val second = constraintViolation { msgFormat = "Messaged with an error" }
+        val text = ViolationText.ofAll(listOf(first, second))
+        val assertText = Truth.assertThat(text)
+
+        text shouldContain ViolationText.of(first).toString()
+        text shouldContain ViolationText.of(second).toString()
     }
 }

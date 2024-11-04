@@ -113,8 +113,8 @@ public final class ViolationText {
     /**
      * Returns a validation error message which may have formatting placeholders.
      *
-     * <p>A custom message is returned if it is present in the option. Otherwise,
-     * default message is returned.
+     * <p>A custom message is returned if it is present in the option.
+     * Otherwise, a default message associated with the option is returned.
      *
      * @param option
      *         a validation option used to get the default message
