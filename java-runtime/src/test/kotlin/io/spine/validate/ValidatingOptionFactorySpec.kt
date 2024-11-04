@@ -27,6 +27,7 @@
 package io.spine.validate
 
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.shouldBe
 import io.spine.validate.option.ValidatingOptionFactory
 import java.util.function.Function
 import org.junit.jupiter.api.BeforeEach
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
-@DisplayName("Interface `ValidatingOptionFactory` should")
+@DisplayName("`ValidatingOptionFactory` should")
 internal class ValidatingOptionFactorySpec {
 
     private lateinit var options: ValidatingOptionFactory
@@ -44,14 +45,19 @@ internal class ValidatingOptionFactorySpec {
         options = object : ValidatingOptionFactory {}
     }
 
+    /**
+     * Verifies that [ValidatingOptionFactory] does not force the classes that
+     * implement this interface to provide implementations for the methods.
+     *
+     * The interface has all the methods declared as `default` providing the implementations.
+     *
+     * This test checks that the requirement is met by providing the simplest possible
+     * implementation via an anonymous object. If this test compiles, we're good to go.
+     */
     @Test
     fun `have no abstract methods`() {
-        // We do not expect the code below to throw.
-        // Here we test that the simplest derived class does not implement
-        // any method and compiles.
-        assertDoesNotThrow {
-            object : ValidatingOptionFactory {}
-        }
+        val factory = object : ValidatingOptionFactory {}
+        factory.forBoolean().size shouldBe 0
     }
 
     @Test
