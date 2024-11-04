@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,32 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test;
+package io.spine.validation.test
 
-import io.spine.validate.ValidationException;
-import io.spine.validation.test.money.Usd;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import io.kotest.matchers.shouldBe
+import io.spine.validate.ValidationException
+import io.spine.validation.test.money.Usd
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("Validation error message should")
-class ErrorMessageTest {
+internal class ErrorMessageTest {
 
     @Test
-    @DisplayName("include expected and actual values")
-    void values() {
-        var exception = assertThrows(
-                ValidationException.class, () -> Usd.newBuilder()
-                        .setCents(101)
-                        .build());
-        var error = exception.asMessage();
-        assertThat(error.getConstraintViolationList())
-             .hasSize(1);
-        var violation = error.getConstraintViolation(0);
-        var assertMessage = assertThat(violation.getMsgFormat());
-        assertMessage
-                .isEqualTo("Expected less than 100 Cents per one Dollars, but got 101.");
+    fun `include expected and actual values`() {
+        ValidationException::class.java
+        val exception = assertThrows<ValidationException> {
+            Usd.newBuilder()
+                .setCents(101)
+                .build()
+        }
+        val error = exception.asMessage()
+        error.constraintViolationList.size shouldBe 1
+        val violation = error.getConstraintViolation(0)
+        violation.msgFormat shouldBe "Expected less than 100 Cents per one Dollars, but got 101."
     }
 }
