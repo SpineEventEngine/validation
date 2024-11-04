@@ -301,27 +301,27 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default double")
     class ProhibitOverridingNonDefaultDouble {
 
-        private static final double halfOfMeter = 0.5;
+        private static final double meterAndHalf = 1.55;
 
         private final Student tallStudent = Student.newBuilder()
                 .setHeight(188.5)
                 .build();
         private final Student shortStudent = Student.newBuilder()
-                .setHeight(halfOfMeter)
+                .setHeight(meterAndHalf)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setHeight(halfOfMeter));
+                    .setHeight(meterAndHalf));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter));
+                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf));
         }
 
         @Test
@@ -343,36 +343,36 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value double")
     class AllowOverridingDefaultAndSameValueDouble {
 
-        private static final double halfOfMeter = 0.5;
+        private static final double meterAndHalf = 1.55;
 
-        private final Student unheightedStudent = Student.newBuilder()
+        private final Student unmeasuredStudent = Student.newBuilder()
                 .build();
         private final Student shortStudent = Student.newBuilder()
-                .setHeight(halfOfMeter)
+                .setHeight(meterAndHalf)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
-            assertValidationPasses(() -> unheightedStudent.toBuilder()
-                    .setHeight(halfOfMeter)
-                    .setHeight(halfOfMeter)
+            assertValidationPasses(() -> unmeasuredStudent.toBuilder()
+                    .setHeight(meterAndHalf)
+                    .setHeight(meterAndHalf)
                     .build());
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
-            assertValidationPasses(() -> unheightedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
-                    .setField(Student.getDescriptor().findFieldByName("height"), halfOfMeter)
+            assertValidationPasses(() -> unmeasuredStudent.toBuilder()
+                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf)
+                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf)
                     .build());
         }
 
         @Test
         @DisplayName("by message merge")
         void byMessageMerge() {
-            assertValidationPasses(() -> unheightedStudent.toBuilder()
+            assertValidationPasses(() -> unmeasuredStudent.toBuilder()
                     .mergeFrom(shortStudent)
                     .mergeFrom(shortStudent)
                     .build());
@@ -381,7 +381,7 @@ class SetOnceFieldsTest {
         @Test
         @DisplayName("by bytes merge")
         void byBytesMerge() {
-            assertValidationPasses(() -> unheightedStudent.toBuilder()
+            assertValidationPasses(() -> unmeasuredStudent.toBuilder()
                     .mergeFrom(shortStudent.toByteArray())
                     .mergeFrom(shortStudent.toByteArray())
                     .build());
@@ -392,7 +392,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> shortStudent.toBuilder()
                     .clearHeight()
-                    .setHeight(halfOfMeter)
+                    .setHeight(meterAndHalf)
                     .build());
         }
     }
@@ -401,27 +401,27 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default float")
     class ProhibitOverridingNonDefaultFloat {
 
-        private static final float fiftyKilograms = 0.5f;
+        private static final float fiftyKg = 55.5f;
 
         private final Student heavyStudent = Student.newBuilder()
-                .setWeight(80)
+                .setWeight(88.8f)
                 .build();
         private final Student thinStudent = Student.newBuilder()
-                .setWeight(fiftyKilograms)
+                .setWeight(fiftyKg)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setWeight(fiftyKilograms));
+                    .setWeight(fiftyKg));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms));
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg));
         }
 
         @Test
@@ -443,20 +443,20 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value float")
     class AllowOverridingDefaultAndSameValueFloat {
 
-        private static final float fiftyKilograms = 0.5f;
+        private static final float fiftyKg = 55.5f;
 
         private final Student unweightedStudent = Student.newBuilder()
                 .build();
         private final Student thinStudent = Student.newBuilder()
-                .setWeight(fiftyKilograms)
+                .setWeight(fiftyKg)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
-                    .setHeight(fiftyKilograms)
-                    .setHeight(fiftyKilograms)
+                    .setWeight(fiftyKg)
+                    .setWeight(fiftyKg)
                     .build());
         }
 
@@ -464,8 +464,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKilograms)
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg)
+                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg)
                     .build());
         }
 
@@ -491,8 +491,8 @@ class SetOnceFieldsTest {
         @DisplayName("after clearing")
         void afterClearing() {
             assertValidationPasses(() -> thinStudent.toBuilder()
-                    .clearHeight()
-                    .setHeight(fiftyKilograms)
+                    .clearWeight()
+                    .setWeight(fiftyKg)
                     .build());
         }
     }
