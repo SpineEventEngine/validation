@@ -27,7 +27,6 @@
 package io.spine.validate.diags
 
 import com.google.common.testing.NullPointerTester
-import com.google.common.truth.Truth
 import com.google.protobuf.Timestamp
 import io.kotest.matchers.string.shouldContain
 import io.spine.base.Field
@@ -65,7 +64,6 @@ internal class ViolationTextSpec {
         val first = constraintViolation { msgFormat = "Errored with a message" }
         val second = constraintViolation { msgFormat = "Messaged with an error" }
         val text = ViolationText.ofAll(listOf(first, second))
-        val assertText = Truth.assertThat(text)
 
         text shouldContain ViolationText.of(first).toString()
         text shouldContain ViolationText.of(second).toString()
