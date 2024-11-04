@@ -38,7 +38,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`NumberConversion` utility should")
-internal class NumberConversionTest :
+internal class NumberConversionSpec :
     UtilityClassTest<NumberConversion>(NumberConversion::class.java) {
 
     @Nested inner class
@@ -49,17 +49,17 @@ internal class NumberConversionTest :
             assertTrue(check("1".toByte(), "2".toByte()))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#shorts")
+        @MethodSource("io.spine.validate.NumberConversionSpec#shorts")
         fun short(shortNumber: Number) =
             assertTrue(check("1".toShort(), shortNumber))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#integers")
+        @MethodSource("io.spine.validate.NumberConversionSpec#integers")
         fun integer(integerNumber: Number) =
             assertTrue(check(1, integerNumber))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#longs")
+        @MethodSource("io.spine.validate.NumberConversionSpec#longs")
         fun long(longNumber: Number) =
             assertTrue(check(1L, longNumber))
 
@@ -68,7 +68,7 @@ internal class NumberConversionTest :
             assertTrue(check(1.0f, 3.14f))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#doubles")
+        @MethodSource("io.spine.validate.NumberConversionSpec#doubles")
         fun double(doubleNumber: Number) =
             assertTrue(check(1.0, doubleNumber))
     }
@@ -77,33 +77,33 @@ internal class NumberConversionTest :
     `tell that it is not possible to convert` {
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonBytes")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonBytes")
         fun `non-'byte' to 'byte'`(nonByte: Number) =
             assertFalse(check("1".toByte(), nonByte))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonShorts")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonShorts")
         fun `non-'short' to 'short'`(nonShort: Number) {
             assertFalse(check("1".toShort(), nonShort))
         }
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonIntegers")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonIntegers")
         fun `non-'integer' to 'integer'`(nonInteger: Number) =
             assertFalse(check(1, nonInteger))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonLongs")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonLongs")
         fun `non-'long' to 'long'`(nonLong: Number) =
             assertFalse(check(1L, nonLong))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonFloats")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonFloats")
         fun `non-'float' to 'float'`(nonFloat: Number) =
             assertFalse(check(1.0f, nonFloat))
 
         @ParameterizedTest
-        @MethodSource("io.spine.validate.NumberConversionTest#nonDoubles")
+        @MethodSource("io.spine.validate.NumberConversionSpec#nonDoubles")
         fun `non-'double' to 'double'`(nonDouble: Number) {
             assertFalse(check(1.0, nonDouble))
         }
