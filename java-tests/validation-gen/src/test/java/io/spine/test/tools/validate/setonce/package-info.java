@@ -24,4 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/**
+ * Contains tests for `(set_once)` field option.
+ */
+@CheckReturnValue
+@ParametersAreNonnullByDefault
 package io.spine.test.tools.validate.setonce;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;
