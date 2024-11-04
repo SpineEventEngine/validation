@@ -56,12 +56,12 @@ internal fun interface DefaultOrSamePredicate : (String, String) -> String
  * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
  * @param field The primitive field that declared the option.
- * @param messageWithFile The message that contains the [field].
+ * @param declaredIn The message that contains the [field].
  */
 internal open class SetOncePrimitiveField(
     field: Field,
-    messageWithFile: MessageWithFile
-) : SetOnceJavaConstraints(field, messageWithFile) {
+    declaredIn: MessageWithFile
+) : SetOnceJavaConstraints(field, declaredIn) {
 
     companion object {
         private val CustomFieldReaders = mapOf(

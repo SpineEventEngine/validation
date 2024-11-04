@@ -50,11 +50,11 @@ import io.spine.validation.java.MessageWithFile
  * of [render] method. Inheritors should perform actual rendering in [renderConstraints].
  *
  * @property field The field that declared the option.
- * @property messageWithHeader The message that contains the [field].
+ * @property declaredIn The message that contains the [field].
  */
 internal sealed class SetOnceJavaConstraints(
     private val field: Field,
-    private val messageWithHeader: MessageWithFile,
+    private val declaredIn: MessageWithFile,
 ) {
 
     private companion object {
@@ -81,8 +81,8 @@ internal sealed class SetOnceJavaConstraints(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage = messageWithHeader.message
-        .javaClassName(messageWithHeader.fileHeader)
+    protected val declaringMessage = declaredIn.message
+        .javaClassName(declaredIn.fileHeader)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -91,7 +91,7 @@ internal sealed class SetOnceJavaConstraints(
      * The [field] can be assigned a new value only if the current value is default
      * for the field type OR if the assigned value is the same with the current one.
      *
-     * @param sourceFile Protobuf-generated Java source code of the [message][messageWithHeader]
+     * @param sourceFile Protobuf-generated Java source code of the [message][declaredIn]
      *  that declared the [field].
      *
      * @see defaultOrSamePredicate
@@ -116,7 +116,7 @@ internal sealed class SetOnceJavaConstraints(
      * Renders Java constraints in this [PsiClass] to make sure the [field] can be assigned
      * only once.
      *
-     * This [PsiClass] represents a Java builder for [messageWithHeader], which declared
+     * This [PsiClass] represents a Java builder for [declaredIn], which declared
      * the [field].
      */
     protected abstract fun PsiClass.renderConstraints()

@@ -28,7 +28,6 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.isMessage
 import io.spine.protodata.java.javaClassName
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -37,12 +36,12 @@ import io.spine.validation.java.MessageWithFile
  * Renders Java code to support `(set_once)` option for the given message [field].
  *
  * @param field The message field that declared the option.
- * @param messageWithFile The message that contains the [field].
+ * @param declaredIn The message that contains the [field].
  */
 internal class SetOnceMessageField(
     field: Field,
-    messageWithFile: MessageWithFile
-) : SetOnceJavaConstraints(field, messageWithFile) {
+    declaredIn: MessageWithFile
+) : SetOnceJavaConstraints(field, declaredIn) {
 
     init {
         check(field.type.isMessage) {
@@ -52,7 +51,7 @@ internal class SetOnceMessageField(
     }
 
     private val fieldTypeClass = field.type.message
-        .javaClassName(messageWithFile.fileHeader)
+        .javaClassName(declaredIn.fileHeader)
         .canonical
 
     @Suppress("MaxLineLength") // Easier to read.
