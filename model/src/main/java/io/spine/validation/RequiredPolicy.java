@@ -50,14 +50,17 @@ final class RequiredPolicy extends ValidationPolicy<FieldExited> {
     @Override
     @React
     protected EitherOf2<RuleAdded, NoReaction> whenever(@External FieldExited event) {
+        var declaringType = event.getType();
+        var fieldName = event.getField();
         var id = FieldId.newBuilder()
-                .setName(event.getField())
-                .setType(event.getType())
+                .setName(fieldName)
+                .setType(declaringType)
                 .build();
         var field = select(RequiredField.class).findById(id);
         if (field != null && field.getRequired()) {
-            var declaration = findField(event.getField(), event.getType(), event.getFile(), this);
-            return EitherOf2.withA(requiredRule(declaration, field));
+            var declaration = findField(fieldName, declaringType, event.getFile(), this);
+            var rule = requiredRule(declaration, field);
+            return EitherOf2.withA(rule);
         }
         return ignore();
     }

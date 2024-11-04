@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import com.google.protobuf.ByteString
-import io.spine.code.java.nameOfPackage
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL

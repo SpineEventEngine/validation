@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -30,18 +30,21 @@ import com.google.protobuf.ByteString;
 import io.spine.protodata.ast.Field;
 import io.spine.protodata.ast.Type;
 import io.spine.protodata.value.EnumValue;
+import io.spine.protodata.value.ListValue;
 import io.spine.protodata.value.MapValue;
 import io.spine.protodata.value.MessageValue;
-import io.spine.protodata.value.ListValue;
 import io.spine.protodata.value.Value;
 
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protodata.ast.FieldTypeExtsKt.getCardinality;
+import static io.spine.protodata.ast.Fields.toType;
 import static io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_BYTES;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_STRING;
 import static io.spine.protodata.ast.PrimitiveType.UNRECOGNIZED;
+import static io.spine.string.Strings.shortly;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
@@ -72,18 +75,26 @@ public final class UnsetValue {
     @SuppressWarnings("EnumSwitchStatementWhichMissesCases") // Covered by the "default" branch.
     public static Optional<Value> forField(Field field) {
         checkNotNull(field);
-        switch (field.getCardinalityCase()) {
-            case LIST:
+        var fieldType = field.getType();
+        var cardinality = getCardinality(fieldType);
+        switch (cardinality) {
+            case CARDINALITY_LIST:
                 return Optional.of(Value.newBuilder()
                                         .setListValue(ListValue.getDefaultInstance())
                                         .build());
-            case MAP:
+            case CARDINALITY_MAP:
                 return Optional.of(Value.newBuilder()
                                         .setMapValue(MapValue.getDefaultInstance())
                                         .build());
-            default:
-                var type = field.getType();
+            case CARDINALITY_SINGLE:
+                var type = toType(field);
                 return singular(type);
+            default:
+                throw newIllegalArgumentException(
+                        "Cannot create `Value` for the field `%s`." +
+                                " Unexpected cardinality encountered: `%s`.",
+                        shortly(field), cardinality
+                );
         }
     }
 
@@ -98,7 +109,7 @@ public final class UnsetValue {
      */
     public static Optional<Value> singular(Type type) {
         var kind = type.getKindCase();
-        switch (kind) {
+        switch (type.getKindCase()) {
             case MESSAGE:
                 return Optional.of(messageValue(type));
             case ENUMERATION:
@@ -107,7 +118,9 @@ public final class UnsetValue {
                 return primitiveValue(type);
             case KIND_NOT_SET:
             default:
-                throw new IllegalArgumentException("Field type unknown.");
+                throw newIllegalArgumentException(
+                        "Cannot create `Value` for the type of kind `%s`.", kind
+                );
         }
     }
 

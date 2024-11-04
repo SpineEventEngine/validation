@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -30,12 +30,15 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.value.Value
+import io.spine.protodata.ast.Type
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
-import io.spine.protodata.ast.isRepeated
+import io.spine.protodata.value.Value
+import io.spine.string.shortly
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ComparisonOperator.EQUAL
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -48,6 +51,7 @@ import io.spine.validation.SimpleRule
 import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
+import io.spine.validation.extractType
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -103,7 +107,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     private fun defaultFieldValue(): Value? = with(ctx) {
         val field = simpleRuleField
         return if (isElement) {
-            UnsetValue.singular(field.type)
+            UnsetValue.singular(field.directOrElementType())
         } else {
             UnsetValue.forField(field)
         }.getOrNull()
@@ -120,17 +124,19 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         checkNotNull(otherValue) {
             "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
-        val type = field.type
+        val type = field.directOrElementType()
         val signs = selectSigns()
         val compare = signs[rule.operator] ?: error(
-            "Unsupported operation `${rule.operator}` for type `$type`."
+            "Unsupported operation `${rule.operator}` for the type `$type`."
         )
-        checkNotNull(ctx.fieldOrElement) { "There is no field value for rule: $rule" }
+        checkNotNull(ctx.fieldOrElement) {
+            "There is no field value for the rule: `${rule.shortly()}`."
+        }
         return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
     private fun fieldIsJavaObject(): Boolean =
-        !field.isJavaPrimitive() || (field.isRepeated && !ctx.isElement)
+        !field.refersToJavaPrimitive() || ((field.isList || field.isMap) && !ctx.isElement)
 
     private fun selectSigns() = if (fieldIsJavaObject()) {
         OBJECT_COMPARISON_OPS
@@ -154,7 +160,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {
     val distribute = ctx.rule.simple.distribute
     val field = ctx.simpleRuleField
-    return if (distribute && field.isRepeated) {
+    return if (distribute && (field.isList || field.isMap)) {
         DistributingGenerator(ctx) {
             generatorForSingular(it)
         }
@@ -172,8 +178,15 @@ private fun generatorForSingular(ctx: GenerationContext): CodeGenerator {
     }
 }
 
-private fun Field.isJavaPrimitive(): Boolean {
-    if (!type.hasPrimitive()) {
+@Suppress("ReturnCount")
+private fun Field.refersToJavaPrimitive(): Boolean {
+    if (type.isList) {
+        return type.list.isPrimitive
+    }
+    if (type.isMap) {
+        return type.map.valueType.isPrimitive
+    }
+    if (!type.isPrimitive) {
         return false
     }
     return when (type.primitive) {
@@ -181,3 +194,5 @@ private fun Field.isJavaPrimitive(): Boolean {
         else -> true
     }
 }
+
+private fun Field.directOrElementType(): Type = type.extractType()

@@ -30,8 +30,11 @@ import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.extractPrimitiveType
+import io.spine.protodata.ast.extractTypeName
 import io.spine.protodata.ast.isMap
-import io.spine.protodata.ast.messageOrEnumName
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassOrEnumName
 import io.spine.protodata.java.Expression
@@ -101,11 +104,16 @@ internal class DistributingGenerator(
     }
 
     private fun typeName(): ClassOrEnumName {
-        val name = field.type.messageOrEnumName
+        val name = field.type.extractTypeName()
         val typeName = if (name != null) {
             ctx.typeConvention.declarationFor(name).name
         } else {
-            field.type.primitive.toClass()
+            val primitiveType = field.type.extractPrimitiveType()
+            check(primitiveType != null) {
+                "The field `${field.qualifiedName}` is not of" +
+                        " a primitive type (`${field.type.name}`)."
+            }
+            primitiveType.toClass()
         }
         return typeName
     }
