@@ -186,7 +186,8 @@ public final class Validate {
      *         the type of the message
      * @throws ValidationException
      *          if the value transition is not valid
-     * @deprecated the {@code set_once} constraint is enforced within the message builder now.
+     * @deprecated the {@code set_once} constraint is enforced by the {@link Message} builder now.
+     *              Just remove usages of this method without providing any replacement.
      */
     @Deprecated
     public static <M extends Message> void checkValidChange(M previous, M current) {
@@ -210,7 +211,8 @@ public final class Validate {
      *         the type of the message
      * @return a set of constraint violations, if the transaction is invalid,
      *         an empty set otherwise
-     * @deprecated the {@code set_once} constraint is enforced within the message builder now.
+     * @deprecated the {@code set_once} constraint is enforced by the {@link Message} builder now.
+     *              Just remove usages of this method without providing any replacement.
      */
     @Deprecated
     @SuppressWarnings("WeakerAccess") // part of public API.
