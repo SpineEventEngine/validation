@@ -59,7 +59,7 @@ class SetOnceTestEnv {
     static final float EIGHTY_KG = 88.8f;
 
     static final boolean NO = false;
-    static final boolean YES = false;
+    static final boolean YES = true;
 
     static final ByteString FULL_SIGNATURE = ByteString.copyFromUtf8("full");
     static final ByteString SHORT_SIGNATURE = ByteString.copyFromUtf8("short");
