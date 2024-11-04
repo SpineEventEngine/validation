@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,124 +24,111 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.option;
+package io.spine.validate.option
 
-import com.google.protobuf.StringValue;
-import io.spine.test.validate.AllThePatterns;
-import io.spine.test.validate.PatternStringFieldValue;
-import io.spine.validate.NonValidated;
-import io.spine.validate.ValidationOfConstraintTest;
-import org.checkerframework.checker.regex.qual.Regex;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.validate.Diags.Regex.errorMessage;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static io.spine.validate.given.MessageValidatorTestEnv.EMAIL;
+import com.google.protobuf.StringValue
+import io.spine.test.validate.AllThePatterns
+import io.spine.test.validate.PatternStringFieldValue
+import io.spine.validate.Diags.Regex.errorMessage
+import io.spine.validate.NonValidated
+import io.spine.validate.ValidationOfConstraintTest
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv
+import org.checkerframework.checker.regex.qual.Regex
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(pattern)` option and")
-class PatternTest extends ValidationOfConstraintTest {
+internal class PatternSpec : ValidationOfConstraintTest() {
+
+    /** As defined in the stub message type [PatternStringFieldValue]. */
+    private val regex: @Regex String =
+        "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
     @Test
-    @DisplayName("find out that string matches to regex pattern")
-    void findOutThatStringMatchesToRegexPattern() {
-        var msg = patternStringFor("valid.email@mail.com");
-        assertValid(msg);
+    fun `find out that string matches to regex pattern`() =
+        assertValid(patternStringFor("valid.email@mail.com"))
+
+    @Test
+    fun `find out that string does not match to regex pattern`() =
+        assertNotValid(patternStringFor("invalid email"))
+
+    @Test
+    fun `consider field is valid if 'PatternOption' is not set`() =
+        assertValid(StringValue.getDefaultInstance())
+
+    @Test
+    fun `provide one valid violation if string does not match the regex pattern`() {
+        val msg = patternStringFor("invalid email")
+
+        val expectedErrMsg = errorMessage(regex).replace("\\\\", "\\")
+
+        assertSingleViolation(msg, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
     }
 
     @Test
-    @DisplayName("find out that string does not match to regex pattern")
-    void findOutThatStringDoesNotMatchToRegexPattern() {
-        var msg = patternStringFor("invalid email");
-        assertNotValid(msg);
+    fun `validate with 'case_insensitive' modifier`() {
+        val message = AllThePatterns.newBuilder()
+            .setLetters("AbC")
+            .buildPartial()
+        assertValid(message)
+
+        val invalid = AllThePatterns.newBuilder()
+            .setLetters("12345")
+            .buildPartial()
+        assertNotValid(invalid)
     }
 
     @Test
-    @DisplayName("consider field is valid if `PatternOption` is not set")
-    void considerFieldIsValidIfNoPatternOptionSet() {
-        var msg = StringValue.getDefaultInstance();
-        assertValid(msg);
+    fun `validate with 'multiline' modifier`() {
+        val message = AllThePatterns.newBuilder()
+            .setManyLines("text" + System.lineSeparator() + "more text")
+            .buildPartial()
+        assertValid(message)
+
+        val invalid = AllThePatterns.newBuilder()
+            .setManyLines("single line text")
+            .buildPartial()
+        assertNotValid(invalid)
     }
 
     @Test
-    @DisplayName("provide one valid violation if string does not match to regex pattern")
-    void provideOneValidViolationIfStringDoesNotMatchToRegexPattern() {
-        var msg = patternStringFor("invalid email");
-        @Regex // As defined in the stub message type `PatternStringFieldValue`.
-        String regex =
-                "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        var expectedErrMsg = errorMessage(regex).replace("\\\\", "\\");
-        assertSingleViolation(msg, expectedErrMsg, EMAIL);
+    fun `validate with 'partial' modifier`() {
+        val message = AllThePatterns.newBuilder()
+            .setPartial("Hello World!")
+            .buildPartial()
+        assertValid(message)
+
+        val invalid = AllThePatterns.newBuilder()
+            .setPartial("123456")
+            .buildPartial()
+        assertNotValid(invalid)
     }
 
     @Test
-    @DisplayName("validate with `case_insensitive` modifier")
-    void caseInsensitive() {
-        var message = AllThePatterns.newBuilder()
-                .setLetters("AbC")
-                .buildPartial();
-        assertValid(message);
+    fun `validate with 'unicode' modifier`() {
+        val message = AllThePatterns.newBuilder()
+            .setUtf8("ґ")
+            .buildPartial()
+        assertValid(message)
 
-        var invalid = AllThePatterns.newBuilder()
-                .setLetters("12345")
-                .buildPartial();
-        assertNotValid(invalid);
+        val invalid = AllThePatterns.newBuilder()
+            .setUtf8("\\\\")
+            .buildPartial()
+        assertNotValid(invalid)
     }
 
     @Test
-    @DisplayName("validate with `multiline` modifier")
-    void multiline() {
-        var message = AllThePatterns.newBuilder()
-                .setManyLines("text" + System.lineSeparator() + "more text")
-                .buildPartial();
-        assertValid(message);
-
-        var invalid = AllThePatterns.newBuilder()
-                .setManyLines("single line text")
-                .buildPartial();
-        assertNotValid(invalid);
+    fun `validate with 'dot_all' modifier`() {
+        val message = AllThePatterns.newBuilder()
+            .setDotAll("ab" + System.lineSeparator() + "cd")
+            .buildPartial()
+        assertValid(message)
     }
 
-    @Test
-    @DisplayName("validate with `partial` modifier")
-    void partial() {
-        var message = AllThePatterns.newBuilder()
-                .setPartial("Hello World!")
-                .buildPartial();
-        assertValid(message);
-
-        var invalid = AllThePatterns.newBuilder()
-                .setPartial("123456")
-                .buildPartial();
-        assertNotValid(invalid);
-    }
-
-    @Test
-    @DisplayName("validate with `unicode` modifier")
-    void utf8() {
-        var message = AllThePatterns.newBuilder()
-                .setUtf8("ґ")
-                .buildPartial();
-        assertValid(message);
-
-        var invalid = AllThePatterns.newBuilder()
-                .setUtf8("\\\\")
-                .buildPartial();
-        assertNotValid(invalid);
-    }
-
-    @Test
-    @DisplayName("validate with `dot_all` modifier")
-    void dotAll() {
-        var message = AllThePatterns.newBuilder()
-                .setDotAll("ab" + System.lineSeparator() + "cd")
-                .buildPartial();
-        assertValid(message);
-    }
-
-    private static @NonValidated PatternStringFieldValue patternStringFor(String email) {
+    private fun patternStringFor(email: String): @NonValidated PatternStringFieldValue {
         return PatternStringFieldValue.newBuilder()
-                .setEmail(email)
-                .buildPartial();
+            .setEmail(email)
+            .buildPartial()
     }
 }
