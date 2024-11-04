@@ -31,7 +31,6 @@ import io.spine.test.validate.RequiredStringValue
 import io.spine.test.validate.anyfields.AnyContainer
 import io.spine.test.validate.anyfields.UncheckedAnyContainer
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -43,7 +42,7 @@ internal class AnyValidationSpec : ValidationOfConstraintTest() {
 
     /**
      * Since the declaration of `RequiredMsgFieldValue` contains validation constraint
-     * for the `value` field, the default instance of this type in invalid.
+     * for the `value` field, the default instance of this type is not valid.
      */
     private val invalidMessage: @NonValidated RequiredStringValue =
         RequiredStringValue.getDefaultInstance()

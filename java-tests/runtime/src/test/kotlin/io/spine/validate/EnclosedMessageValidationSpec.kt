@@ -39,7 +39,6 @@ import io.spine.test.validate.notValidateEnclosed
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
 import io.spine.validate.given.MessageValidatorTestEnv.ENCLOSED_FIELD_NAME
-import io.spine.validate.given.MessageValidatorTestEnv.assertFieldPathIs
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow

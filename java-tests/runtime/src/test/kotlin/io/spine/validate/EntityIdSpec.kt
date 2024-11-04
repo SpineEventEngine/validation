@@ -36,7 +36,6 @@ import io.spine.test.validate.command.entityIdMsgFieldValue
 import io.spine.test.validate.command.entityIdStringFieldValue
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv
-import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

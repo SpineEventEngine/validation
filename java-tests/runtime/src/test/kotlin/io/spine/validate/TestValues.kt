@@ -24,12 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.given
+package io.spine.validate
 
-object MessageValidatorTestEnv {
+import com.google.protobuf.ByteString
+import com.google.protobuf.StringValue
+import io.spine.testing.TestValues.randomString
 
-    const val VALUE: String = "value"
-    const val EMAIL: String = "email"
-    const val ENCLOSED_FIELD_NAME: String = "enclosed"
+/**
+ * Creates a new [StringValue] instance with random content.
+ */
+fun newStringValue(): StringValue = StringValue.of(randomString())
 
-}
+/**
+ * Creates a new [StringValue] instance with random content.
+ */
+fun newByteString(): ByteString = ByteString.copyFromUtf8(randomString())

@@ -43,9 +43,8 @@ import io.spine.testing.logging.mute.MuteLogging
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv
-import io.spine.validate.given.MessageValidatorTestEnv.newByteString
-import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
-import org.junit.jupiter.api.Disabled
+import io.spine.validate.newByteString
+import io.spine.validate.newStringValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
