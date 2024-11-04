@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,68 +24,57 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import com.google.common.testing.NullPointerTester;
-import com.google.protobuf.Descriptors.OneofDescriptor;
-import com.google.protobuf.StringValue;
-import com.google.protobuf.Value;
-import io.spine.code.proto.FieldContext;
-import io.spine.testing.ClassTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.testing.Assertions.assertIllegalArgument;
-import static io.spine.validate.MessageValue.atTopLevel;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.google.common.testing.NullPointerTester
+import com.google.protobuf.Descriptors.OneofDescriptor
+import com.google.protobuf.StringValue
+import com.google.protobuf.Value
+import com.google.protobuf.value
+import io.kotest.matchers.shouldBe
+import io.spine.code.proto.FieldContext
+import io.spine.testing.ClassTest
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`MessageValue` should")
-final class MessageValueTest extends ClassTest<MessageValue> {
+internal class MessageValueSpec : ClassTest<MessageValue>(MessageValue::class.java) {
 
-    private static final OneofDescriptor VALUE_ONEOF = Value.getDescriptor()
-                                                            .getOneofs()
-                                                            .get(0);
-
-    MessageValueTest() {
-        super(MessageValue.class);
+    override fun configure(tester: NullPointerTester) {
+        tester.setDefault(FieldContext::class.java, FieldContext.empty())
     }
 
-    @Override
-    protected void configure(NullPointerTester tester) {
-        tester.setDefault(FieldContext.class, FieldContext.empty());
-    }
-
-    @Nested
-    @DisplayName("obtain oneof value")
-    class OneofValue {
+    @Nested inner class
+    `obtain 'oneof' value` {
 
         @Test
-        @DisplayName("using the valid descriptor")
-        void withValidDescriptor() {
-            var boolValue = false;
-            var message = Value.newBuilder()
-                    .setBoolValue(boolValue)
-                    .build();
-            var value = atTopLevel(message);
-            assertOneofValue(value, boolValue);
+        fun `using the valid descriptor`() {
+            val expected = false
+            val message = value { boolValue = expected }
+            val value = MessageValue.atTopLevel(message)
+            assertOneofValue(value, expected)
         }
 
         @Test
-        @DisplayName("and throw `IAE` if a oneof is not declared in a message")
-        void throwOnMissingOneof() {
-            var message = StringValue.getDefaultInstance();
-            var value = atTopLevel(message);
-            assertIllegalArgument(() -> value.valueOf(VALUE_ONEOF));
+        fun `throwing 'IAE' if a oneof is not declared in a message`() {
+            val message = StringValue.getDefaultInstance()
+            val value = MessageValue.atTopLevel(message)
+            assertThrows<IllegalArgumentException> {
+                value.valueOf(VALUE_ONEOF)
+            }
         }
 
-        private void assertOneofValue(MessageValue message, Object expectedValue) {
-            var optionalValue = message.valueOf(VALUE_ONEOF);
-            assertTrue(optionalValue.isPresent());
-            var value = optionalValue.get();
-            assertThat(value.singleValue())
-                    .isEqualTo(expectedValue);
+        private fun assertOneofValue(message: MessageValue, expectedValue: Any) {
+            val optionalValue = message.valueOf(VALUE_ONEOF)
+            org.junit.jupiter.api.Assertions.assertTrue(optionalValue.isPresent)
+            val value = optionalValue.get()
+            value.singleValue() shouldBe expectedValue
         }
+    }
+
+    companion object {
+        private val VALUE_ONEOF: OneofDescriptor = Value.getDescriptor().oneofs[0]
     }
 }
