@@ -50,4 +50,7 @@ internal fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
  */
 internal fun PsiClass.getMethodBySignature(text: String): PsiMethod =
     findMethodBySignature(text)
-        ?: error("Could not find method `$text` in `$qualifiedName` class.")
+        ?: error(
+            "Could not find the method with the signature `$text` " +
+                    "in the `$qualifiedName` class."
+        )
