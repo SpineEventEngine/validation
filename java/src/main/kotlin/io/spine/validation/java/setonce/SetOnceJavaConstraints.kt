@@ -138,9 +138,9 @@ internal sealed class SetOnceJavaConstraints(
      * the beginning of the reading block is the same for all fields because it doesn't include
      * the field name. Differentiation is done way deeper.
      *
-     * @param currentValue an expression to read the current field value.
-     * @param readerStartsWith an expression representing the beginning of the field reading block.
-     * @param readerContains an arbitrary expression within the field reading block.
+     * @param currentValue An expression to read the current field value.
+     * @param readerStartsWith An expression representing the beginning of the field reading block.
+     * @param readerContains An arbitrary expression within the field reading block.
      */
     protected fun PsiClass.alterBytesMerge(
         currentValue: String,
@@ -168,8 +168,8 @@ internal sealed class SetOnceJavaConstraints(
      *
      * Otherwise, it throws the validation exception.
      *
-     * @param currentValue an expression denoting the current field value.
-     * @param newValue an expression denoting the proposed value.
+     * @param currentValue An expression denoting the current field value.
+     * @param newValue An expression denoting the proposed value.
      */
     protected fun defaultOrSameStatement(currentValue: String, newValue: String): PsiStatement =
         elementFactory.createStatement(
@@ -187,8 +187,8 @@ internal sealed class SetOnceJavaConstraints(
      *
      * In pseudocode: `currentValue != default && currentValue != newValue`.
      *
-     * @param currentValue an expression denoting the current field value.
-     * @param newValue an expression denoting the proposed value.
+     * @param currentValue An expression denoting the current field value.
+     * @param newValue An expression denoting the proposed value.
      */
     protected abstract fun defaultOrSamePredicate(currentValue: String, newValue: String): String
 
