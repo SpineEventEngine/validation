@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,22 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.tools.validate.setonce;
 
 import com.google.protobuf.ByteString;
+import io.spine.test.tools.validate.Name;
+import io.spine.test.tools.validate.Student;
+import io.spine.test.tools.validate.YearOfStudy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.protobuf.ByteString.copyFromUtf8;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationFails;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
 
 /**
- * Tests {@code (set_once)} constraint for the supported field types.
+ * Tests {@code (set_once)} constraint with different field types.
  *
- * <p>The class is abstract, so it could be executed as a part of {@link SetOnceConstraintTest}.
+ * <p>Please note, integer fields are covered in a separate file – {@link SetOnceIntegerFieldsTest}.
+ * There are many integer types in Protobuf.
  */
-@SuppressWarnings("AbstractClassWithoutAbstractMethods")
-abstract class SetOnceFieldsTest extends SetOnceIntegerFieldsTest {
+@DisplayName("`(set_once)` constraint should")
+class SetOnceFieldsTest {
 
     @Nested
     @DisplayName("prohibit overriding non-default message")

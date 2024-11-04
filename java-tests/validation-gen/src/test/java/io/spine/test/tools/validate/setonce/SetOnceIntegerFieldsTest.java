@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,28 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.tools.validate.setonce;
 
-import io.spine.validate.ValidationException;
+import io.spine.test.tools.validate.Balance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationFails;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
 
 /**
  * Tests {@code (set_once)} constraint for integer fields.
- *
- * <p>It is a smaller subset of {@link SetOnceFieldsTest} cases that cover only integers.
- *
- * <p>These test cases were extracted to a separate class for convenience. They use their own
- * test fixture ({@link Balance} and are focused only on integers.
- *
- * <p>The class is abstract, so it could be executed as a part of {@link SetOnceConstraintTest}.
  */
-abstract class SetOnceIntegerFieldsTest {
+@DisplayName("`(set_once)` constraint should")
+class SetOnceIntegerFieldsTest {
 
     @Nested
     @DisplayName("prohibit overriding non-default int32")
@@ -1045,13 +1038,5 @@ abstract class SetOnceIntegerFieldsTest {
                     .setNZD(sixteen)
                     .build());
         }
-    }
-
-    static void assertValidationFails(Executable executable) {
-        assertThrows(ValidationException.class, executable);
-    }
-
-    static void assertValidationPasses(Executable executable) {
-        assertDoesNotThrow(executable);
     }
 }

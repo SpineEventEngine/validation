@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,19 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.tools.validate.setonce;
 
+import io.spine.test.tools.validate.Name;
+import io.spine.test.tools.validate.SetOnceExplicitFalse;
+import io.spine.test.tools.validate.SetOnceImplicitFalse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests {@code (set_once)} constraint.
- *
- * <p>This class contains the most basic tests and aggregates (by inheritance) test cases
- * from {@link SetOnceFieldsTest} and {@link SetOnceIntegerFieldsTest} classes.
- */
-@DisplayName("`(set_once)` constraint should be compiled so that")
-class SetOnceConstraintTest extends SetOnceFieldsTest {
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
+
+@DisplayName("`(set_once)` constraint should")
+class SetOnceConstraintTest {
 
     @Test
     @DisplayName("not affect fields without the option")
@@ -106,17 +105,5 @@ class SetOnceConstraintTest extends SetOnceFieldsTest {
                 .setSfixed64(5)
                 .setSfixed64(10)
                 .build());
-    }
-
-    @Test
-    @DisplayName("show the default error message")
-    void showDefaultErrorMessage() {
-        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
-    }
-
-    @Test
-    @DisplayName("show the custom error message")
-    void showCustomErrorMessage() {
-        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
     }
 }
