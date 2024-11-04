@@ -62,7 +62,7 @@ internal class SetOnceEnumField(
     }
 
     /**
-     * Alters setter that accepts an enum constant.
+     * Alters a setter that accepts an enum constant.
      *
      * For example:
      *
@@ -80,7 +80,7 @@ internal class SetOnceEnumField(
     }
 
     /**
-     * Alters setter that accepts an ordinal number.
+     * Alters a setter that accepts an ordinal number.
      *
      * For example:
      *

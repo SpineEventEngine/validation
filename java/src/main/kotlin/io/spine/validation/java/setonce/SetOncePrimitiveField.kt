@@ -128,7 +128,7 @@ internal open class SetOncePrimitiveField(
     }
 
     /**
-     * Alters setter that accepts a value.
+     * Alters a setter that accepts a value.
      *
      * For example:
      *
@@ -161,7 +161,7 @@ internal open class SetOncePrimitiveField(
     }
 
     /**
-     * Alters the message-based merge to modify merging of a string field.
+     * Alters the message-based merge method to modify merging of a string field.
      *
      * During the message merge, all primitives delegate updating the field value
      * to their simple setters. Exception here is `string` type, which does it in-place.

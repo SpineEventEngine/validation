@@ -70,7 +70,7 @@ internal class SetOnceMessageField(
     }
 
     /**
-     * Alters setter that accepts a message.
+     * Alters a setter that accepts a message.
      *
      * For example:
      *
@@ -87,7 +87,7 @@ internal class SetOnceMessageField(
     }
 
     /**
-     * Alters setter that accepts a message builder.
+     * Alters a setter that accepts a message builder.
      *
      * For example:
      *
