@@ -34,8 +34,7 @@ option java_multiple_files = true;
 option java_outer_classname = "FieldValueTestProto";
 option java_package = "io.spine.test.validate.field";
 
-
-// The declarations for `FieldValueTest`.
+// The declarations for `FieldValueSpec`.
 
 message Message {
     map<string, string> map = 1;

@@ -43,7 +43,8 @@ import static com.google.common.base.Preconditions.checkArgument;
  * their values with no reflection {@linkplain Message#getField(Descriptors.FieldDescriptor)
  * used by Protobuf}.
  *
- * <p>This mixin is an experimental part of the framework and may be changed or removed in future.
+ * <p>This mixin is an experimental part of the framework and may be changed or
+ * removed in the future.
  */
 @GeneratedMixin
 @Experimental

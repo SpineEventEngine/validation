@@ -27,9 +27,9 @@
 package io.spine.validate
 
 import io.kotest.matchers.shouldBe
-import io.spine.validate.given.FieldAwareMessageTestEnv
-import io.spine.validate.given.FieldAwareMessageTestEnv.BrokenFieldAware
-import io.spine.validate.given.FieldAwareMessageTestEnv.FieldAwareMsg
+import io.spine.validate.given.BrokenFieldAware
+import io.spine.validate.given.FieldAwareMsg
+import io.spine.validate.given.msg
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -39,7 +39,7 @@ internal class FieldAwareMessageSpec {
 
     @Test
     fun `read values when 'readValues' is properly implemented`() {
-        val msg = FieldAwareMessageTestEnv.msg()
+        val msg = msg()
         val state = FieldAwareMsg(msg)
 
         state.checkFieldsReachable() shouldBe true
@@ -47,7 +47,7 @@ internal class FieldAwareMessageSpec {
 
     @Test
     fun `fail to read values when 'readValues' has implementation issues`() {
-        val msg = FieldAwareMessageTestEnv.msg()
+        val msg = msg()
         val state = BrokenFieldAware(msg)
 
         assertThrows<IllegalArgumentException> {

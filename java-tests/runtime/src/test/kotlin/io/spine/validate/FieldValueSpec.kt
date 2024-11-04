@@ -30,9 +30,8 @@ import com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING
 import com.google.protobuf.Syntax
 import io.kotest.matchers.shouldBe
 import io.spine.base.Identifier.newUuid
-import io.spine.validate.given.GivenField.mapContext
-import io.spine.validate.given.GivenField.repeatedContext
-import io.spine.validate.given.GivenField.scalarContext
+import io.spine.code.proto.FieldContext
+import io.spine.test.validate.field.Message
 import kotlin.streams.toList
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -140,4 +139,19 @@ internal class FieldValueSpec {
     private fun <T> assertConversion(expectedValues: Collection<T?>, fieldValue: FieldValue) {
         fieldValue.values().toList() shouldBe expectedValues
     }
+}
+
+fun mapContext(): FieldContext {
+    val mapField = Message.getDescriptor().findFieldByName("map")
+    return FieldContext.create(mapField)
+}
+
+fun repeatedContext(): FieldContext {
+    val repeatedField = Message.getDescriptor().findFieldByName("repeated")
+    return FieldContext.create(repeatedField)
+}
+
+fun scalarContext(): FieldContext {
+    val scalarField = Message.getDescriptor().findFieldByName("scalar")
+    return FieldContext.create(scalarField)
 }
