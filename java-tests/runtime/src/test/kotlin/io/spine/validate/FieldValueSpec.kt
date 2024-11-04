@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,129 +24,120 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING;
-import static com.google.protobuf.Syntax.SYNTAX_PROTO3;
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.given.GivenField.mapContext;
-import static io.spine.validate.given.GivenField.repeatedContext;
-import static io.spine.validate.given.GivenField.scalarContext;
-import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING
+import com.google.protobuf.Syntax
+import io.kotest.matchers.shouldBe
+import io.spine.base.Identifier.newUuid
+import io.spine.validate.given.GivenField.mapContext
+import io.spine.validate.given.GivenField.repeatedContext
+import io.spine.validate.given.GivenField.scalarContext
+import kotlin.streams.toList
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
 @DisplayName("`FieldValue` should")
-class FieldValueTest {
+internal class FieldValueSpec {
 
-    @Nested
-    @DisplayName("convert")
-    class Convert {
+    @Nested inner class
+    convert {
 
         @Test
-        @DisplayName("a map to values")
-        void map() {
-            Map<String, String> map = ImmutableMap.of(newUuid(), newUuid(), newUuid(), newUuid());
-            var fieldValue = FieldValue.of(map, mapContext());
-            assertConversion(map.values(), fieldValue);
+        fun `a map to values`() {
+            val map = buildMap {
+                put(newUuid(), newUuid())
+                put(newUuid(), newUuid())
+            }
+            val fieldValue = FieldValue.of(map, mapContext())
+            assertConversion(map.values, fieldValue)
         }
 
         @Test
-        @DisplayName("a repeated field")
-        void repeated() {
-            List<String> repeated = ImmutableList.of(newUuid(), newUuid());
-            var fieldValue = FieldValue.of(repeated, repeatedContext());
-            assertConversion(repeated, fieldValue);
+        fun `a repeated field`() {
+            val repeated = listOf(newUuid(), newUuid())
+            val fieldValue = FieldValue.of(repeated, repeatedContext())
+            assertConversion(repeated, fieldValue)
         }
 
         @Test
-        @DisplayName("a scalar field")
-        void scalar() {
-            var scalar = newUuid();
-            var fieldValue = FieldValue.of(scalar, scalarContext());
-            assertConversion(singletonList(scalar), fieldValue);
+        fun `a scalar field`() {
+            val scalar = newUuid()
+            val fieldValue = FieldValue.of(scalar, scalarContext())
+            assertConversion(listOf(scalar), fieldValue)
         }
     }
 
-    @Nested
-    @DisplayName("determine `JavaType` for")
-    class DetermineJavaType {
+    @Nested inner class
+    `determine 'JavaType' for` {
 
         @Test
-        @DisplayName("a map")
-        void map() {
-            var mapValue = FieldValue.of(ImmutableMap.<String, String>of(), mapContext());
-            assertEquals(STRING, mapValue.javaType());
+        fun `a map`() {
+            val mapValue = FieldValue.of(mapOf<String, String>(), mapContext())
+            mapValue.javaType() shouldBe STRING
         }
 
         @Test
-        @DisplayName("a repeated")
-        void repeated() {
-            var repeatedValue = FieldValue.of(ImmutableList.<String>of(), repeatedContext());
-            assertEquals(STRING, repeatedValue.javaType());
+        fun `a repeated`() {
+            val repeatedValue = FieldValue.of(listOf<String>(), repeatedContext())
+            repeatedValue.javaType() shouldBe STRING
         }
     }
 
     @Test
-    @DisplayName("handle `Enum` value")
-    void enumValue() {
-        var rawValue = SYNTAX_PROTO3;
-        var enumValue = FieldValue.of(rawValue, scalarContext());
-        var expectedValues = singletonList(rawValue.getValueDescriptor());
-        assertConversion(expectedValues, enumValue);
+    fun `handle 'Enum' value`() {
+        val rawValue = Syntax.SYNTAX_PROTO3
+        val enumValue = FieldValue.of(rawValue, scalarContext())
+        val expectedValues = listOf(rawValue.valueDescriptor)
+        assertConversion(expectedValues, enumValue)
     }
 
-    @Nested
-    @DisplayName("check if the value is default for a")
-    @SuppressWarnings("Immutable")
-    class Default {
+    @Nested inner class
+    `check if the value is default for a` {
 
         @Test
-        @DisplayName("repeated fields")
-        void repeatedField() {
-            assertDefault(FieldValue.of(ImmutableList.of("", "", ""), repeatedContext()));
-            assertNotDefault(FieldValue.of(ImmutableList.of("", "abc", ""), repeatedContext()));
-        }
-
-        @Test
-        @DisplayName("map fields")
-        void mapField() {
-            assertDefault(FieldValue.of(ImmutableMap.of("aaaa", ""), mapContext()));
-            assertNotDefault(FieldValue.of(ImmutableMap.of("", "",
-                                                           "aaaa", "aaa",
-                                                           " ", ""),
-                                           mapContext()));
+        fun `repeated fields`() {
+            assertDefault(FieldValue.of(listOf("", "", ""), repeatedContext()))
+            assertNotDefault(
+                FieldValue.of(
+                    listOf("", "abc", ""),
+                    repeatedContext()
+                )
+            )
         }
 
         @Test
-        @DisplayName("string fields")
-        void stringField() {
-            assertDefault(FieldValue.of("", scalarContext()));
-            assertNotDefault(FieldValue.of(" ", scalarContext()));
+        fun `map fields`() {
+            assertDefault(FieldValue.of(mapOf("aaaa" to ""), mapContext()))
+            assertNotDefault(
+                FieldValue.of(
+                    mapOf(
+                        "" to "",
+                        "aaaa" to "aaa",
+                        " " to ""
+                    ),
+                    mapContext()
+                )
+            )
         }
 
-        private void assertDefault(FieldValue value) {
-            assertThat(value.isDefault()).isTrue();
+        @Test
+        fun `string fields`() {
+            assertDefault(FieldValue.of("", scalarContext()))
+            assertNotDefault(FieldValue.of(" ", scalarContext()))
         }
 
-        private void assertNotDefault(FieldValue value) {
-            assertThat(value.isDefault()).isFalse();
+        private fun assertDefault(value: FieldValue) {
+            value.isDefault shouldBe true
+        }
+
+        private fun assertNotDefault(value: FieldValue) {
+            value.isDefault shouldBe false
         }
     }
 
-    private static <T> void assertConversion(Collection<T> expectedValues, FieldValue fieldValue) {
-        assertThat(fieldValue.values().toArray())
-                .asList()
-                .containsExactlyElementsIn(expectedValues);
+    private fun <T> assertConversion(expectedValues: Collection<T?>, fieldValue: FieldValue) {
+        fieldValue.values().toList() shouldBe expectedValues
     }
 }
