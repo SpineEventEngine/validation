@@ -35,8 +35,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.protobuf.ByteString.copyFromUtf8;
-import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationFails;
-import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
+import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationFails;
+import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationPasses;
 
 /**
  * Tests {@code (set_once)} constraint with different field types.
@@ -182,7 +182,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default string")
+    @DisplayName("prohibit overriding non-default `string`")
     class ProhibitOverridingNonDefaultString {
 
         private static final String STUDENT2 = "student-2";
@@ -231,7 +231,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value string")
+    @DisplayName("allow overriding default and same-value `string`")
     class AllowOverridingDefaultAndSameValueString {
 
         private static final String STUDENT2 = "student-2";
@@ -298,7 +298,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default double")
+    @DisplayName("prohibit overriding non-default `double`")
     class ProhibitOverridingNonDefaultDouble {
 
         private static final double meterAndHalf = 1.55;
@@ -340,7 +340,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value double")
+    @DisplayName("allow overriding default and same-value `double`")
     class AllowOverridingDefaultAndSameValueDouble {
 
         private static final double meterAndHalf = 1.55;
@@ -398,7 +398,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default float")
+    @DisplayName("prohibit overriding non-default `float`")
     class ProhibitOverridingNonDefaultFloat {
 
         private static final float fiftyKg = 55.5f;
@@ -440,7 +440,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value float")
+    @DisplayName("allow overriding default and same-value `float`")
     class AllowOverridingDefaultAndSameValueFloat {
 
         private static final float fiftyKg = 55.5f;
@@ -498,20 +498,25 @@ class SetOnceFieldsTest {
     }
 
     /**
-     * Please note, for `boolean` fields, there are no `byMessageMerge` and `byBytesMerge` tests.
+     * Tests {@code (set_once)} constraint when the option is applied to a boolean field.
+     *
+     * <p>Please note, for boolean fields, there are no {@code byMessageMerge}
+     * and {@code byBytesMerge} tests.
      *
      * <p>It is impossible to override a non-default value by another non-default value
-     * for a `boolean` field. In Protobuf v3, `boolean` has only one non-default value: `true`.
-     * When we try to override `true` with `false` by merging, the merge method does nothing because
-     * it doesn't consider fields with the default values. When we override `false` with `true`,
-     * we're just effectively assigning an initial non-default value, which is tested by another
-     * test suite. See {@link AllowOverridingDefaultAndSameValueBoolean}.
+     * for a boolean field. In Protobuf v3, boolean has only one non-default value: {@code true}.
+     * When we try to override {@code true} with {@code false} by merging, the merge method does
+     * nothing because it doesn't consider fields with the default values. When we override
+     * {@code false} with {@code true},we're just effectively assigning an initial non-default
+     * value, which is tested by another test suite.
+     *
+     * @see AllowOverridingDefaultAndSameValueBoolean
      */
     @Nested
-    @DisplayName("prohibit overriding non-default boolean")
+    @DisplayName("prohibit overriding non-default `bool`")
     class ProhibitOverridingNonDefaultBoolean {
 
-        private static final boolean noMedals = false;
+        private static final boolean no = false;
 
         private final Student awardedStudent = Student.newBuilder()
                 .setHasMedals(true)
@@ -521,22 +526,22 @@ class SetOnceFieldsTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setHasMedals(noMedals));
+                    .setHasMedals(no));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), noMedals));
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), no));
         }
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value boolean")
+    @DisplayName("allow overriding default and same-value `bool`")
     class AllowOverridingDefaultAndSameValueBoolean {
 
-        private static final boolean has = true;
+        private static final boolean yes = true;
 
         private final Student studentWithoutMedals = Student.newBuilder()
                 .build();
@@ -548,8 +553,8 @@ class SetOnceFieldsTest {
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> studentWithoutMedals.toBuilder()
-                    .setHasMedals(has)
-                    .setHasMedals(has)
+                    .setHasMedals(yes)
+                    .setHasMedals(yes)
                     .build());
         }
 
@@ -557,8 +562,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> studentWithoutMedals.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), has)
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), has)
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), yes)
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), yes)
                     .build());
         }
 
@@ -585,13 +590,13 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> awardedStudent.toBuilder()
                     .clearHasMedals()
-                    .setHasMedals(has)
+                    .setHasMedals(yes)
                     .build());
         }
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default bytes")
+    @DisplayName("prohibit overriding non-default `bytes`")
     class ProhibitOverridingNonDefaultBytes {
 
         private final ByteString fullSignature = ByteString.copyFromUtf8("full");
@@ -633,7 +638,7 @@ class SetOnceFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding empty and same-value bytes")
+    @DisplayName("allow overriding empty and same-value `bytes`")
     class AllowOverridingDefaultAndSameValueBytes {
 
         private final ByteString fullSignature = ByteString.copyFromUtf8("full");

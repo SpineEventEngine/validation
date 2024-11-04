@@ -31,8 +31,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationFails;
-import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
+import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationFails;
+import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationPasses;
 
 /**
  * Tests {@code (set_once)} constraint for integer fields.
@@ -41,7 +41,7 @@ import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidati
 class SetOnceIntegerFieldsTest {
 
     @Nested
-    @DisplayName("prohibit overriding non-default int32")
+    @DisplayName("prohibit overriding non-default `int32`")
     class ProhibitOverridingNonDefaultInt32 {
 
         private static final int sixteen = 16;
@@ -83,7 +83,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value int32")
+    @DisplayName("allow overriding default and same-value `int32`")
     class AllowOverridingDefaultAndSameValueInt32 {
 
         private static final int sixteen = 16;
@@ -141,7 +141,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default int64")
+    @DisplayName("prohibit overriding non-default `int64`")
     class ProhibitOverridingNonDefaultInt64 {
 
         private static final long sixteen = 16;
@@ -183,7 +183,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value int64")
+    @DisplayName("allow overriding default and same-value `int64`")
     class AllowOverridingDefaultAndSameValueInt64 {
 
         private static final long sixteen = 16;
@@ -241,7 +241,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default uint32")
+    @DisplayName("prohibit overriding non-default `uint32`")
     class ProhibitOverridingNonDefaultUInt32 {
 
         private static final int sixteen = 16;
@@ -283,7 +283,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value uint32")
+    @DisplayName("allow overriding default and same-value `uint32`")
     class AllowOverridingDefaultAndSameValueUInt32 {
 
         private static final int sixteen = 16;
@@ -341,7 +341,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default uint64")
+    @DisplayName("prohibit overriding non-default `uint64`")
     class ProhibitOverridingNonDefaultUInt64 {
 
         private static final long sixteen = 16;
@@ -383,7 +383,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value uint64")
+    @DisplayName("allow overriding default and same-value `uint64`")
     class AllowOverridingDefaultAndSameValueUInt64 {
 
         private static final long sixteen = 16;
@@ -441,7 +441,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default sint32")
+    @DisplayName("prohibit overriding non-default `sint32`")
     class ProhibitOverridingNonDefaultSInt32 {
 
         private static final int sixteen = 16;
@@ -483,7 +483,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value sint32")
+    @DisplayName("allow overriding default and same-value `sint32`")
     class AllowOverridingDefaultAndSameValueSInt32 {
 
         private static final int sixteen = 16;
@@ -541,7 +541,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default sint64")
+    @DisplayName("prohibit overriding non-default `sint64`")
     class ProhibitOverridingNonDefaultSInt64 {
 
         private static final long sixteen = 16;
@@ -583,7 +583,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value sint64")
+    @DisplayName("allow overriding default and same-value `sint64`")
     class AllowOverridingDefaultAndSameValueSInt64 {
 
         private static final long sixteen = 16;
@@ -641,7 +641,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default fixed32")
+    @DisplayName("prohibit overriding non-default `fixed32`")
     class ProhibitOverridingNonDefaultFixed32 {
 
         private static final int sixteen = 16;
@@ -683,7 +683,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value fixed32")
+    @DisplayName("allow overriding default and same-value `fixed32`")
     class AllowOverridingDefaultAndSameValueFixed32 {
 
         private static final int sixteen = 16;
@@ -741,7 +741,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default fixed64")
+    @DisplayName("prohibit overriding non-default `fixed64`")
     class ProhibitOverridingNonDefaultFixed64 {
 
         private static final long sixteen = 16;
@@ -783,7 +783,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value fixed64")
+    @DisplayName("allow overriding default and same-value `fixed64`")
     class AllowOverridingDefaultAndSameValueFixed64 {
 
         private static final long sixteen = 16;
@@ -841,7 +841,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default sfixed32")
+    @DisplayName("prohibit overriding non-default `sfixed32`")
     class ProhibitOverridingNonDefaultSFixed32 {
 
         private static final int sixteen = 16;
@@ -883,7 +883,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value sfixed32")
+    @DisplayName("allow overriding default and same-value `sfixed32`")
     class AllowOverridingDefaultAndSameValueSFixed32 {
 
         private static final int sixteen = 16;
@@ -941,7 +941,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("prohibit overriding non-default sfixed64")
+    @DisplayName("prohibit overriding non-default `sfixed64`")
     class ProhibitOverridingNonDefaultSFixed64 {
 
         private static final long sixteen = 16;
@@ -983,7 +983,7 @@ class SetOnceIntegerFieldsTest {
     }
 
     @Nested
-    @DisplayName("allow overriding default and same-value sfixed64")
+    @DisplayName("allow overriding default and same-value `sfixed64`")
     class AllowOverridingDefaultAndSameValueSFixed64 {
 
         private static final long sixteen = 16;

@@ -35,12 +35,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test environment for {@code (set_once)} tests.
  */
-class SetOnceTestEnv {
+class SetOnceAssertions {
 
     /**
      * Prohibit instantiation of this utility class.
      */
-    private SetOnceTestEnv() {
+    private SetOnceAssertions() {
     }
 
     /**
@@ -56,5 +56,4 @@ class SetOnceTestEnv {
     static void assertValidationPasses(Executable executable) {
         assertDoesNotThrow(executable);
     }
-
 }

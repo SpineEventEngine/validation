@@ -32,7 +32,7 @@ import io.spine.test.tools.validate.SetOnceImplicitFalse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.assertValidationPasses;
+import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationPasses;
 
 @DisplayName("`(set_once)` constraint should")
 class SetOnceConstraintTest {
