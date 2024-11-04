@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,33 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import io.spine.validate.given.FieldAwareMessageTestEnv.BrokenFieldAware;
-import io.spine.validate.given.FieldAwareMessageTestEnv.FieldAwareMsg;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.testing.Assertions.assertIllegalArgument;
-import static io.spine.validate.given.FieldAwareMessageTestEnv.msg;
+import io.kotest.matchers.shouldBe
+import io.spine.validate.given.FieldAwareMessageTestEnv
+import io.spine.validate.given.FieldAwareMessageTestEnv.BrokenFieldAware
+import io.spine.validate.given.FieldAwareMessageTestEnv.FieldAwareMsg
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`FieldAwareMessage` should")
-class FieldAwareMessageTest {
+internal class FieldAwareMessageSpec {
 
     @Test
-    @DisplayName("read values when `readValues` is properly implemented")
-    void readValues() {
-        var msg = msg();
-        var state = new FieldAwareMsg(msg);
-        assertThat(state.checkFieldsReachable()).isTrue();
+    fun `read values when 'readValues' is properly implemented`() {
+        val msg = FieldAwareMessageTestEnv.msg()
+        val state = FieldAwareMsg(msg)
+
+        state.checkFieldsReachable() shouldBe true
     }
 
     @Test
-    @DisplayName("fail to read values when `readValues` has implementation issues")
-    void failToReadValues() {
-        var msg = msg();
-        var state = new BrokenFieldAware(msg);
-        assertIllegalArgument(state::checkFieldsReachable);
+    fun `fail to read values when 'readValues' has implementation issues`() {
+        val msg = FieldAwareMessageTestEnv.msg()
+        val state = BrokenFieldAware(msg)
+
+        assertThrows<IllegalArgumentException> {
+            state.checkFieldsReachable()
+        }
     }
 }
