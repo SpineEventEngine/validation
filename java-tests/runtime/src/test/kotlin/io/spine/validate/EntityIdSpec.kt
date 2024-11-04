@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,93 +24,93 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import io.spine.test.validate.AggregateState;
-import io.spine.test.validate.ProjectionState;
-import io.spine.test.validate.command.EntityIdMsgFieldValue;
-import io.spine.test.validate.command.EntityIdStringFieldValue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.ValidationOfConstraintTest.VALIDATION_SHOULD;
-import static io.spine.validate.given.MessageValidatorTestEnv.VALUE;
-import static io.spine.validate.given.MessageValidatorTestEnv.newStringValue;
+import io.spine.base.Identifier
+import io.spine.test.validate.AggregateState
+import io.spine.test.validate.ProjectionState
+import io.spine.test.validate.aggregateState
+import io.spine.test.validate.command.EntityIdMsgFieldValue
+import io.spine.test.validate.command.EntityIdStringFieldValue
+import io.spine.test.validate.command.entityIdMsgFieldValue
+import io.spine.test.validate.command.entityIdStringFieldValue
+import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.given.MessageValidatorTestEnv
+import io.spine.validate.given.MessageValidatorTestEnv.newStringValue
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName(VALIDATION_SHOULD + "validate an entity ID")
-class EntityIdTest extends ValidationOfConstraintTest {
-    
-    @Nested
-    @DisplayName("in a command file and")
-    class InCommandFile {
+internal class EntityIdSpec : ValidationOfConstraintTest() {
+
+    @Nested inner class
+    `in a command file and` {
 
         @Test
-        @DisplayName("find out that non-default message is valid")
-        void findOutThatMessageEntityIdInCommandIsValid() {
-            var msg = EntityIdMsgFieldValue.newBuilder()
-                    .setValue(newStringValue())
-                    .build();
-            assertValid(msg);
+        fun `find out that non-default message is valid`() {
+            val state = assertDoesNotThrow {
+                entityIdMsgFieldValue {
+                    value = newStringValue()
+                }
+            }
+            assertValid(state)
         }
 
         @Test
-        @DisplayName("find out that default message is NOT valid")
-        void findOutThatMessageEntityIdInCommandIsNotValid() {
-            var msg = EntityIdMsgFieldValue.getDefaultInstance();
-            assertNotValid(msg);
+        fun `find out that default message is NOT valid`() {
+            val msg = EntityIdMsgFieldValue.getDefaultInstance()
+            assertNotValid(msg)
         }
 
         @Test
-        @DisplayName("find out that non-empty string is valid")
-        void findOutThatStringEntityIdInCommandIsValid() {
-            var msg = EntityIdStringFieldValue.newBuilder()
-                    .setValue(newUuid())
-                    .build();
-            assertValid(msg);
+        fun `find out that empty string is NOT valid`() {
+            val msg = EntityIdStringFieldValue.getDefaultInstance()
+            assertNotValid(msg)
         }
 
         @Test
-        @DisplayName("find out that empty string is NOT valid")
-        void findOutThatStringEntityIdInCommandIsNotValid() {
-            var msg = EntityIdStringFieldValue.getDefaultInstance();
-            assertNotValid(msg);
+        fun `find out that non-empty string is valid`() {
+            val state = assertDoesNotThrow {
+                entityIdStringFieldValue {
+                    value = Identifier.newUuid()
+                }
+            }
+            assertValid(state)
         }
 
         @Test
-        @DisplayName("provide one valid violation if is not valid")
-        void provideOneValidViolationIfEntityIdInCommandIsNotValid() {
-            var msg = EntityIdMsgFieldValue.getDefaultInstance();
-            assertSingleViolation(msg, VALUE);
+        fun `provide one valid violation if is not valid`() {
+            val msg = EntityIdMsgFieldValue.getDefaultInstance()
+            assertSingleViolation(msg, MessageValidatorTestEnv.VALUE)
         }
     }
 
-    @Nested
-    @DisplayName("in state and")
-    class InState {
+    @Nested inner class
+    `in state and` {
 
         @Test
-        @DisplayName("consider it required by default")
-        void requiredByDefault() {
-            var stateWithDefaultId = AggregateState.getDefaultInstance();
-            assertNotValid(stateWithDefaultId);
+        fun `consider it required by default`() {
+            val stateWithDefaultId = AggregateState.getDefaultInstance()
+            assertNotValid(stateWithDefaultId)
         }
 
         @Test
-        @DisplayName("match only the first field named `id` or ending with `_id`")
-        void onlyFirstField() {
-            var onlyEntityIdSet = AggregateState.newBuilder()
-                    .setEntityId(newUuid())
-                    .build();
-            assertValid(onlyEntityIdSet);
+        fun `match only the first field named 'id' or ending with '_id'`() {
+            val onlyEntityIdSet = assertDoesNotThrow {
+                // Only ID set.
+                aggregateState {
+                    entityId = Identifier.newUuid()
+                }
+            }
+            assertValid(onlyEntityIdSet)
         }
 
         @Test
-        @DisplayName("not consider it (required) if the option is set explicitly set to false")
-        void notRequiredIfOptionIsFalse() {
-            var stateWithDefaultId = ProjectionState.getDefaultInstance();
-            assertValid(stateWithDefaultId);
+        fun `not consider it '(required)' if the option is set explicitly set to false`() {
+            val stateWithDefaultId = ProjectionState.getDefaultInstance()
+            assertValid(stateWithDefaultId)
         }
     }
 }
