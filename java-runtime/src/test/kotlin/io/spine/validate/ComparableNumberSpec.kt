@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,59 +24,57 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import com.google.common.testing.EqualsTester;
-import com.google.common.testing.NullPointerTester;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import com.google.common.testing.EqualsTester
+import com.google.common.testing.NullPointerTester
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
-
-@DisplayName("Comparable number should")
-class ComparableNumberTest {
+@DisplayName("`ComparableNumber` should")
+internal class ComparableNumberSpec {
 
     @Test
-    @DisplayName(NOT_ACCEPT_NULLS)
-    void notAcceptNulls() {
-        var tester = new NullPointerTester();
-        tester.testAllPublicConstructors(ComparableNumber.class);
-        tester.testAllPublicInstanceMethods(new ComparableNumber(42));
+    fun `not accept nulls`() {
+        val tester = NullPointerTester()
+        tester.testAllPublicConstructors(ComparableNumber::class.java)
+        tester.testAllPublicInstanceMethods(ComparableNumber(42))
     }
 
-    @Nested
-    @DisplayName("have a consistent equality relationship")
-    class EqualsTests {
+    @Nested internal inner class
+    `have a consistent equality relationship` {
 
         @Test
-        @DisplayName("between instances")
-        void testEquals() {
-            var longMaxValue = String.valueOf(Long.MAX_VALUE);
-            var doubleMinValue = String.valueOf(Double.MIN_VALUE);
-            new EqualsTester()
-                    .addEqualityGroup(new NumberText(1L).toNumber(), new NumberText("1").toNumber())
-                    .addEqualityGroup(new NumberText(longMaxValue).toNumber(),
-                                      new NumberText(Long.MAX_VALUE).toNumber())
-                    .addEqualityGroup(new NumberText(doubleMinValue).toNumber(),
-                                      new NumberText(Double.MIN_VALUE).toNumber())
-                    .testEquals();
+        fun `between instances`() {
+            val longMaxValue = Long.MAX_VALUE.toString()
+            val doubleMinValue = Double.MIN_VALUE.toString()
+            EqualsTester()
+                .addEqualityGroup(NumberText(1L).toNumber(), NumberText("1").toNumber())
+                .addEqualityGroup(
+                    NumberText(longMaxValue).toNumber(),
+                    NumberText(Long.MAX_VALUE).toNumber()
+                )
+                .addEqualityGroup(
+                    NumberText(doubleMinValue).toNumber(),
+                    NumberText(Double.MIN_VALUE).toNumber()
+                )
+                .testEquals()
         }
 
         @Test
-        @DisplayName("between instances and primitives")
-        void testEqualsBetweenPrimitives() {
-            var doubleValue = Double.MAX_VALUE;
-            var intValue = Integer.MAX_VALUE;
-            var floatValue = Float.MAX_VALUE;
-            var longValue = Long.MAX_VALUE;
+        fun `between instances and primitives`() {
+            val doubleValue = Double.MAX_VALUE
+            val intValue = Int.MAX_VALUE
+            val floatValue = Float.MAX_VALUE
+            val longValue = Long.MAX_VALUE
 
-            new EqualsTester()
-                    .addEqualityGroup(doubleValue, new ComparableNumber(doubleValue).doubleValue())
-                    .addEqualityGroup(intValue, new ComparableNumber(intValue).intValue())
-                    .addEqualityGroup(floatValue, new ComparableNumber(floatValue).floatValue())
-                    .addEqualityGroup(longValue, new ComparableNumber(longValue).longValue())
-                    .testEquals();
+            EqualsTester()
+                .addEqualityGroup(doubleValue, ComparableNumber(doubleValue).toDouble())
+                .addEqualityGroup(intValue, ComparableNumber(intValue).toInt())
+                .addEqualityGroup(floatValue, ComparableNumber(floatValue).toFloat())
+                .addEqualityGroup(longValue, ComparableNumber(longValue).toLong())
+                .testEquals()
         }
     }
 }
