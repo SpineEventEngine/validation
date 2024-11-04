@@ -28,6 +28,7 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
@@ -211,4 +212,10 @@ internal sealed class SetOnceJavaConstraints(
             else -> element.deepSearch(startsWith, contains)
         }
     } as PsiStatement
+
+    /**
+     * Creates a new [PsiStatement] from the given [text].
+     */
+    private fun PsiElementFactory.createStatement(text: String) =
+        createStatementFromText(text, null)
 }
