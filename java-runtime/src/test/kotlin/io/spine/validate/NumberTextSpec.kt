@@ -52,7 +52,7 @@ internal class NumberTextSpec {
         val plain = NumberText("1")
         val withDecimal = NumberText("1.0")
 
-        plain.isOfSameType(withDecimal) shouldBe true
+        plain.isOfSameType(withDecimal) shouldBe false
     }
 
     @Test
