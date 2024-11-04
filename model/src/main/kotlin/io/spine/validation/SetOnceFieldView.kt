@@ -29,6 +29,7 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
+import io.spine.option.IfSetAgainOption
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 
@@ -37,7 +38,7 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
  */
 internal class SetOnceFieldView :
     BoolFieldOptionView<FieldId, SetOnceField, SetOnceField.Builder>(
-        "The field can be set only once."
+        IfSetAgainOption.getDescriptor()
     ) {
 
     @Subscribe
