@@ -34,11 +34,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName("Validation error message should")
-internal class ErrorMessageTest {
+internal class ErrorMessageSpec {
 
     @Test
     fun `include expected and actual values`() {
-        ValidationException::class.java
         val exception = assertThrows<ValidationException> {
             Usd.newBuilder()
                 .setCents(101)
