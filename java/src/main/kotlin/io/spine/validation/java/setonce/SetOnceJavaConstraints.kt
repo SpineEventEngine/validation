@@ -47,7 +47,7 @@ import io.spine.validation.java.MessageWithFile
  *
  * The rendered Java constraints are specific to the field type. This class
  * serves as an abstract base, providing common methods and the skeleton implementation
- * of [render] method. Inheritors should perform actual rendering in [addConstraints].
+ * of [render] method. Inheritors should perform actual rendering in [renderConstraints].
  *
  * @property field The field that declared the option.
  * @property messageWithHeader The message that contains the [field].
@@ -58,13 +58,12 @@ internal sealed class SetOnceJavaConstraints(
 ) {
 
     private companion object {
-        // TODO:2024-11-01:yevhenii.nadtochii: Support error messages.
         const val THROW_VALIDATION_EXCEPTION =
             "throw new io.spine.validate.ValidationException(" +
                     "io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
-         * Defines the signature of the expected `mergeFrom(CodedInputStream)` method.
+         * The signature of `mergeFrom(CodedInputStream)` method.
          *
          * The signature of this method is independent of the processed field and its type.
          * It is present in every generated message with the same signature.
@@ -89,8 +88,14 @@ internal sealed class SetOnceJavaConstraints(
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
      * can be assigned only once.
      *
+     * The [field] can be assigned a new value only if the current value is default
+     * for the field type OR if the assigned value is the same with the current one.
+     *
      * @param sourceFile Protobuf-generated Java source code of the [message][messageWithHeader]
      *  that declared the [field].
+     *
+     * @see defaultOrSamePredicate
+     * @see defaultOrSameStatement
      */
     fun render(sourceFile: SourceFile<Java>) {
         val messageBuilder = ClassName(
@@ -101,36 +106,37 @@ internal sealed class SetOnceJavaConstraints(
         val psiClass = psiFile.findClass(messageBuilder)
 
         execute {
-            psiClass.addConstraints()
+            psiClass.renderConstraints()
         }
 
         sourceFile.overwrite(psiFile.text)
     }
 
     /**
-     * Adds Java constraints to this [PsiClass] to make sure the [field] can be assigned
+     * Renders Java constraints in this [PsiClass] to make sure the [field] can be assigned
      * only once.
      *
-     * This [PsiClass] represents a Java builder for [messageWithHeader], which declares
+     * This [PsiClass] represents a Java builder for [messageWithHeader], which declared
      * the [field].
      */
-    protected abstract fun PsiClass.addConstraints()
+    protected abstract fun PsiClass.renderConstraints()
 
     /**
      * Alters [MergeFromBytesSignature] method to make sure that a set-once field
      * is not overridden during the merge from a byte array.
      *
-     * This merge is done field-by-field. The method finds the place, where [field]
-     * is processed. It remembers the current field value, allows the new value
-     * to be read, and then adds [defaultOrSameStatement] predicate.
+     * Such a merge is done field-by-field. This method finds the place, where
+     * the given [field] is processed. It adds a statement to remember the current field value,
+     * before reading of a new one. After the reading statement, it adds [defaultOrSameStatement]
+     * to check that the just read value is legal to be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
-     * call it within [addConstraints], passing the necessary parameters.
+     * invoke it within [renderConstraints], passing the necessary parameters.
      *
      * The [currentValue] and [readerStartsWith] are mandatory properties. Pass [readerContains]
-     * in cases when [readerStartsWith] is not sufficient. For message fields, the beginning of
-     * the reading block is the same for all fields of this type because it doesn't include
-     * the field name.
+     * in cases when [readerStartsWith] is not sufficient. For example, for message fields,
+     * the beginning of the reading block is the same for all fields because it doesn't include
+     * the field name. Differentiation is done way deeper.
      *
      * @param currentValue an expression to read the current field value.
      * @param readerStartsWith an expression representing the beginning of the field reading block.
@@ -141,15 +147,18 @@ internal sealed class SetOnceJavaConstraints(
         readerStartsWith: String,
         readerContains: String = readerStartsWith,
     ) {
+
+        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
+        val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
+        val fieldProcessing = fieldReading.parent
+
         val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
+        fieldProcessing.addBefore(rememberCurrent, fieldReading)
+
         val postcondition = defaultOrSameStatement(
             currentValue = "previous",
             newValue = currentValue,
         )
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
-        val fieldProcessing = fieldReading.parent
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
         fieldProcessing.addAfter(postcondition, fieldReading)
     }
 
@@ -174,7 +183,7 @@ internal sealed class SetOnceJavaConstraints(
      * Returns an expression representing a predicate upon [currentValue] and [newValue].
      *
      * The provided predicate should return `true` if [currentValue] is NOT default
-     * for its type AND if [newValue] not equal to [currentValue].
+     * for its type AND if [newValue] is not equal to [currentValue].
      *
      * In pseudocode: `currentValue != default && currentValue != newValue`.
      *

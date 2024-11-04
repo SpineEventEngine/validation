@@ -59,7 +59,7 @@ internal class SetOnceMessageField(
     override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
         "!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)"
 
-    override fun PsiClass.addConstraints() {
+    override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBuilderSetter()
         alterFieldMerge()
@@ -108,7 +108,7 @@ internal class SetOnceMessageField(
     }
 
     /**
-     * Alters a merge method that accepts a message.
+     * Alters a field merge method that accepts a message.
      *
      * For example:
      *

@@ -40,12 +40,12 @@ import io.spine.validation.java.setonce.SetOncePrimitiveField
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
 
 /**
- * Takes the discovered [SetOnceField]s and modifies their Java builder setters
- * to make sure the field value is assigned only once.
+ * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure
+ * that the field value is assigned only once.
  *
- * Along with the direct field setters, auxiliary setters and merge methods are usually affected.
- * For different field types, different methods are modified. Take a look on [SetOnceJavaConstraints]
- * and its inheritors for details.
+ * Along with the direct field setter, auxiliary setters and merge methods are also affected
+ * to enforce the constraint. For different field types, different methods are modified.
+ * Take a look on [SetOnceJavaConstraints] and its inheritors for details.
  */
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
@@ -58,9 +58,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
 
         val compilationMessages = findMessageTypes().associateBy { it.message.name }
         val setOnceFields = setOnceFields().filter { it.enabled }
-        val fieldsToMessages = setOnceFields.associateWith { compilationMessages[it.id.type]!! }
+        val fieldsAndMessages = setOnceFields.associateWith { compilationMessages[it.id.type]!! }
 
-        fieldsToMessages.forEach { (protoField, messageWithFile) ->
+        fieldsAndMessages.forEach { (protoField, messageWithFile) ->
             val javaConstraints = javaConstraints(protoField.subject, messageWithFile)
             val sourceFile = sources.javaFileOf(messageWithFile.message)
             javaConstraints.render(sourceFile)
@@ -81,6 +81,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             field.type.isMessage -> SetOnceMessageField(field, message)
             field.type.isEnum -> SetOnceEnumField(field, message)
             field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, message)
-            else -> error("Unsupported `(set_once)` field type: `${field.type}`.")
+            else -> error(
+                "Unsupported `(set_once)` field type: `${field.type}`, " +
+                        "the declaring message: `${field.declaringType}`."
+            )
         }
 }

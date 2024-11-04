@@ -52,7 +52,7 @@ internal class SetOnceEnumField(
     override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
         "$currentValue != 0 && $currentValue != $newValue"
 
-    override fun PsiClass.addConstraints() {
+    override fun PsiClass.renderConstraints() {
         alterSetter()
         alterEnumValueSetter()
         alterBytesMerge(

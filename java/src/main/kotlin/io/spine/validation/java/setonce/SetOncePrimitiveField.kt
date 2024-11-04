@@ -115,7 +115,7 @@ internal open class SetOncePrimitiveField(
     override fun defaultOrSamePredicate(currentValue: String, newValue: String): String =
         defaultOrSame(currentValue, newValue)
 
-    override fun PsiClass.addConstraints() {
+    override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
             currentValue = fieldGetter,
