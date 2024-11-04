@@ -26,10 +26,7 @@
 
 package io.spine.test.tools.validate.setonce;
 
-import com.google.protobuf.ByteString;
-import io.spine.test.tools.validate.Name;
 import io.spine.test.tools.validate.Student;
-import io.spine.test.tools.validate.YearOfStudy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,6 +34,20 @@ import org.junit.jupiter.api.Test;
 import static com.google.protobuf.ByteString.copyFromUtf8;
 import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationFails;
 import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationPasses;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.STUDENT1;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.STUDENT2;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.DONALD;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.EIGHTY_KG;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.FIFTY_KG;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.FIRST_YEAR;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.FULL_SIGNATURE;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.JACK;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.METER_AND_EIGHT;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.METER_AND_HALF;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.NO;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.SHORT_SIGNATURE;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.THIRD_YEAR;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.YES;
 
 /**
  * Tests {@code (set_once)} constraint with different field types.
@@ -51,42 +62,39 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default message")
     class ProhibitOverridingNonDefaultMessage {
 
-        private final Name donald = Name.newBuilder()
-                .setValue("Donald")
-                .build();
         private final Student studentJack = Student.newBuilder()
-                .setName(Name.newBuilder().setValue("Jack").build())
+                .setName(JACK)
                 .build();
         private final Student studentDonald = Student.newBuilder()
-                .setName(donald)
+                .setName(DONALD)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setName(donald));
+                    .setName(DONALD));
         }
 
         @Test
         @DisplayName("by builder")
         void byBuilder() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setName(donald.toBuilder()));
+                    .setName(DONALD.toBuilder()));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("name"), donald));
+                    .setField(Student.getDescriptor().findFieldByName("name"), DONALD));
         }
 
         @Test
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationFails(() -> studentJack.toBuilder()
-                    .mergeName(donald));
+                    .mergeName(DONALD));
         }
 
         @Test
@@ -108,21 +116,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value message")
     class AllowOverridingDefaultAndSameValueMessage {
 
-        private final Name donald = Name.newBuilder()
-                .setValue("Donald")
-                .build();
         private final Student unnamedStudent = Student.newBuilder()
                 .build();
         private final Student studentDonald = Student.newBuilder()
-                .setName(donald)
+                .setName(DONALD)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
-                    .setName(donald)
-                    .setName(donald)
+                    .setName(DONALD)
+                    .setName(DONALD)
                     .build());
         }
 
@@ -130,8 +135,8 @@ class SetOnceFieldsTest {
         @DisplayName("by builder")
         void byBuilder() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
-                    .setName(donald.toBuilder())
-                    .setName(donald.toBuilder())
+                    .setName(DONALD.toBuilder())
+                    .setName(DONALD.toBuilder())
                     .build());
         }
 
@@ -139,8 +144,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
-                    .setField(Student.getDescriptor().findFieldByName("name"), donald)
+                    .setField(Student.getDescriptor().findFieldByName("name"), DONALD)
+                    .setField(Student.getDescriptor().findFieldByName("name"), DONALD)
                     .build());
         }
 
@@ -148,8 +153,8 @@ class SetOnceFieldsTest {
         @DisplayName("by field merge")
         void byFieldMerge() {
             assertValidationPasses(() -> unnamedStudent.toBuilder()
-                    .mergeName(donald)
-                    .mergeName(donald)
+                    .mergeName(DONALD)
+                    .mergeName(DONALD)
                     .build());
         }
 
@@ -176,7 +181,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> studentDonald.toBuilder()
                     .clearName()
-                    .setName(donald)
+                    .setName(DONALD)
                     .build());
         }
     }
@@ -185,10 +190,8 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default `string`")
     class ProhibitOverridingNonDefaultString {
 
-        private static final String STUDENT2 = "student-2";
-
         private final Student student1 = Student.newBuilder()
-                .setId("student-1")
+                .setId(STUDENT1)
                 .build();
         private final Student student2 = Student.newBuilder()
                 .setId(STUDENT2)
@@ -233,8 +236,6 @@ class SetOnceFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `string`")
     class AllowOverridingDefaultAndSameValueString {
-
-        private static final String STUDENT2 = "student-2";
 
         private final Student undentifiedStudent = Student.newBuilder()
                 .build();
@@ -301,27 +302,25 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default `double`")
     class ProhibitOverridingNonDefaultDouble {
 
-        private static final double meterAndHalf = 1.55;
-
         private final Student tallStudent = Student.newBuilder()
-                .setHeight(188.5)
+                .setHeight(METER_AND_EIGHT)
                 .build();
         private final Student shortStudent = Student.newBuilder()
-                .setHeight(meterAndHalf)
+                .setHeight(METER_AND_HALF)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setHeight(meterAndHalf));
+                    .setHeight(METER_AND_HALF));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> tallStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf));
+                    .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF));
         }
 
         @Test
@@ -343,20 +342,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value `double`")
     class AllowOverridingDefaultAndSameValueDouble {
 
-        private static final double meterAndHalf = 1.55;
-
         private final Student unmeasuredStudent = Student.newBuilder()
                 .build();
         private final Student shortStudent = Student.newBuilder()
-                .setHeight(meterAndHalf)
+                .setHeight(METER_AND_HALF)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unmeasuredStudent.toBuilder()
-                    .setHeight(meterAndHalf)
-                    .setHeight(meterAndHalf)
+                    .setHeight(METER_AND_HALF)
+                    .setHeight(METER_AND_HALF)
                     .build());
         }
 
@@ -364,8 +361,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unmeasuredStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf)
-                    .setField(Student.getDescriptor().findFieldByName("height"), meterAndHalf)
+                    .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF)
+                    .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF)
                     .build());
         }
 
@@ -392,7 +389,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> shortStudent.toBuilder()
                     .clearHeight()
-                    .setHeight(meterAndHalf)
+                    .setHeight(METER_AND_HALF)
                     .build());
         }
     }
@@ -401,27 +398,26 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default `float`")
     class ProhibitOverridingNonDefaultFloat {
 
-        private static final float fiftyKg = 55.5f;
 
         private final Student heavyStudent = Student.newBuilder()
-                .setWeight(88.8f)
+                .setWeight(EIGHTY_KG)
                 .build();
         private final Student thinStudent = Student.newBuilder()
-                .setWeight(fiftyKg)
+                .setWeight(FIFTY_KG)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setWeight(fiftyKg));
+                    .setWeight(FIFTY_KG));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> heavyStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg));
+                    .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG));
         }
 
         @Test
@@ -443,20 +439,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value `float`")
     class AllowOverridingDefaultAndSameValueFloat {
 
-        private static final float fiftyKg = 55.5f;
-
         private final Student unweightedStudent = Student.newBuilder()
                 .build();
         private final Student thinStudent = Student.newBuilder()
-                .setWeight(fiftyKg)
+                .setWeight(FIFTY_KG)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
-                    .setWeight(fiftyKg)
-                    .setWeight(fiftyKg)
+                    .setWeight(FIFTY_KG)
+                    .setWeight(FIFTY_KG)
                     .build());
         }
 
@@ -464,8 +458,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unweightedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg)
-                    .setField(Student.getDescriptor().findFieldByName("weight"), fiftyKg)
+                    .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG)
+                    .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG)
                     .build());
         }
 
@@ -492,7 +486,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> thinStudent.toBuilder()
                     .clearWeight()
-                    .setWeight(fiftyKg)
+                    .setWeight(FIFTY_KG)
                     .build());
         }
     }
@@ -516,24 +510,22 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default `bool`")
     class ProhibitOverridingNonDefaultBoolean {
 
-        private static final boolean no = false;
-
         private final Student awardedStudent = Student.newBuilder()
-                .setHasMedals(true)
+                .setHasMedals(YES)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setHasMedals(no));
+                    .setHasMedals(NO));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> awardedStudent.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), no));
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), NO));
         }
     }
 
@@ -541,20 +533,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value `bool`")
     class AllowOverridingDefaultAndSameValueBoolean {
 
-        private static final boolean yes = true;
-
         private final Student studentWithoutMedals = Student.newBuilder()
                 .build();
         private final Student awardedStudent = Student.newBuilder()
-                .setHasMedals(true)
+                .setHasMedals(YES)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> studentWithoutMedals.toBuilder()
-                    .setHasMedals(yes)
-                    .setHasMedals(yes)
+                    .setHasMedals(YES)
+                    .setHasMedals(YES)
                     .build());
         }
 
@@ -562,8 +552,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> studentWithoutMedals.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), yes)
-                    .setField(Student.getDescriptor().findFieldByName("has_medals"), yes)
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), YES)
+                    .setField(Student.getDescriptor().findFieldByName("has_medals"), YES)
                     .build());
         }
 
@@ -590,7 +580,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> awardedStudent.toBuilder()
                     .clearHasMedals()
-                    .setHasMedals(yes)
+                    .setHasMedals(YES)
                     .build());
         }
     }
@@ -599,27 +589,25 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default `bytes`")
     class ProhibitOverridingNonDefaultBytes {
 
-        private final ByteString fullSignature = ByteString.copyFromUtf8("full");
-
         private final Student studentShortSignature = Student.newBuilder()
-                .setSignature(ByteString.copyFromUtf8("short"))
+                .setSignature(SHORT_SIGNATURE)
                 .build();
         private final Student studentFullSignature = Student.newBuilder()
-                .setSignature(fullSignature)
+                .setSignature(FULL_SIGNATURE)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .setSignature(fullSignature));
+                    .setSignature(FULL_SIGNATURE));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> studentShortSignature.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature));
+                    .setField(Student.getDescriptor().findFieldByName("signature"), FULL_SIGNATURE));
         }
 
         @Test
@@ -641,20 +629,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding empty and same-value `bytes`")
     class AllowOverridingDefaultAndSameValueBytes {
 
-        private final ByteString fullSignature = ByteString.copyFromUtf8("full");
-
         private final Student studentNoSignature = Student.newBuilder()
                 .build();
         private final Student studentFullSignature = Student.newBuilder()
-                .setSignature(fullSignature)
+                .setSignature(FULL_SIGNATURE)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
-                    .setSignature(fullSignature)
-                    .setSignature(fullSignature)
+                    .setSignature(FULL_SIGNATURE)
+                    .setSignature(FULL_SIGNATURE)
                     .build());
         }
 
@@ -662,8 +648,8 @@ class SetOnceFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> studentNoSignature.toBuilder()
-                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
-                    .setField(Student.getDescriptor().findFieldByName("signature"), fullSignature)
+                    .setField(Student.getDescriptor().findFieldByName("signature"), FULL_SIGNATURE)
+                    .setField(Student.getDescriptor().findFieldByName("signature"), FULL_SIGNATURE)
                     .build());
         }
 
@@ -690,7 +676,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> studentFullSignature.toBuilder()
                     .clearSignature()
-                    .setSignature(fullSignature)
+                    .setSignature(FULL_SIGNATURE)
                     .build());
         }
     }
@@ -699,20 +685,18 @@ class SetOnceFieldsTest {
     @DisplayName("prohibit overriding non-default enum")
     class ProhibitOverridingNonDefaultEnum {
 
-        private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
-
         private final Student firstYearStudent = Student.newBuilder()
-                .setYearOfStudy(YearOfStudy.YOS_FIRST)
+                .setYearOfStudy(FIRST_YEAR)
                 .build();
         private final Student thirdYearStudent = Student.newBuilder()
-                .setYearOfStudy(thirdYear)
+                .setYearOfStudy(THIRD_YEAR)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
-                    .setYearOfStudy(thirdYear));
+                    .setYearOfStudy(THIRD_YEAR));
         }
 
         @Test
@@ -727,7 +711,7 @@ class SetOnceFieldsTest {
         void byReflection() {
             assertValidationFails(() -> firstYearStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("year_of_study"),
-                              thirdYear.getValueDescriptor()));
+                              THIRD_YEAR.getValueDescriptor()));
         }
 
         @Test
@@ -749,20 +733,18 @@ class SetOnceFieldsTest {
     @DisplayName("allow overriding default and same-value enum")
     class AllowOverridingDefaultAndSameValueEnum {
 
-        private final YearOfStudy thirdYear = YearOfStudy.YOS_THIRD;
-
         private final Student unknownYearStudent = Student.newBuilder()
                 .build();
         private final Student thirdYearStudent = Student.newBuilder()
-                .setYearOfStudy(thirdYear)
+                .setYearOfStudy(THIRD_YEAR)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
-                    .setYearOfStudy(thirdYear)
-                    .setYearOfStudy(thirdYear)
+                    .setYearOfStudy(THIRD_YEAR)
+                    .setYearOfStudy(THIRD_YEAR)
                     .build());
         }
 
@@ -780,9 +762,9 @@ class SetOnceFieldsTest {
         void byReflection() {
             assertValidationPasses(() -> unknownYearStudent.toBuilder()
                     .setField(Student.getDescriptor().findFieldByName("year_of_study"),
-                              thirdYear.getValueDescriptor())
+                              THIRD_YEAR.getValueDescriptor())
                     .setField(Student.getDescriptor().findFieldByName("year_of_study"),
-                              thirdYear.getValueDescriptor())
+                              THIRD_YEAR.getValueDescriptor())
                     .build());
         }
 
@@ -809,7 +791,7 @@ class SetOnceFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> thirdYearStudent.toBuilder()
                     .clearYearOfStudy()
-                    .setYearOfStudy(thirdYear)
+                    .setYearOfStudy(THIRD_YEAR)
                     .build());
         }
     }

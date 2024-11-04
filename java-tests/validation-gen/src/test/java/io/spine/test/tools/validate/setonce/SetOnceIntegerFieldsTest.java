@@ -33,6 +33,10 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationFails;
 import static io.spine.test.tools.validate.setonce.SetOnceAssertions.assertValidationPasses;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.eighteen;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.eighty;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.sixteen;
+import static io.spine.test.tools.validate.setonce.SetOnceTestEnv.sixty;
 
 /**
  * Tests {@code (set_once)} constraint for integer fields.
@@ -44,10 +48,8 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `int32`")
     class ProhibitOverridingNonDefaultInt32 {
 
-        private static final int sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setUSD(60)
+                .setUSD(sixty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
                 .setUSD(sixteen)
@@ -85,8 +87,6 @@ class SetOnceIntegerFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `int32`")
     class AllowOverridingDefaultAndSameValueInt32 {
-
-        private static final int sixteen = 16;
 
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
@@ -144,27 +144,25 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `int64`")
     class ProhibitOverridingNonDefaultInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setEUR(60)
+                .setEUR(eighty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setEUR(sixteen)
+                .setEUR(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setEUR(sixteen));
+                    .setEUR(eighteen));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("EUR"), sixteen));
+                    .setField(Balance.getDescriptor().findFieldByName("EUR"), eighteen));
         }
 
         @Test
@@ -186,20 +184,18 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("allow overriding default and same-value `int64`")
     class AllowOverridingDefaultAndSameValueInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setEUR(sixteen)
+                .setEUR(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setEUR(sixteen)
-                    .setEUR(sixteen)
+                    .setEUR(eighteen)
+                    .setEUR(eighteen)
                     .build());
         }
 
@@ -207,8 +203,8 @@ class SetOnceIntegerFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("EUR"), sixteen)
-                    .setField(Balance.getDescriptor().findFieldByName("EUR"), sixteen)
+                    .setField(Balance.getDescriptor().findFieldByName("EUR"), eighteen)
+                    .setField(Balance.getDescriptor().findFieldByName("EUR"), eighteen)
                     .build());
         }
 
@@ -235,7 +231,7 @@ class SetOnceIntegerFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> newBalance.toBuilder()
                     .clearEUR()
-                    .setEUR(sixteen)
+                    .setEUR(eighteen)
                     .build());
         }
     }
@@ -244,10 +240,8 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `uint32`")
     class ProhibitOverridingNonDefaultUInt32 {
 
-        private static final int sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setJPY(60)
+                .setJPY(sixty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
                 .setJPY(sixteen)
@@ -285,8 +279,6 @@ class SetOnceIntegerFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `uint32`")
     class AllowOverridingDefaultAndSameValueUInt32 {
-
-        private static final int sixteen = 16;
 
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
@@ -344,27 +336,25 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `uint64`")
     class ProhibitOverridingNonDefaultUInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setGBP(60)
+                .setGBP(eighty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setGBP(sixteen)
+                .setGBP(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setGBP(sixteen));
+                    .setGBP(eighteen));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("GBP"), sixteen));
+                    .setField(Balance.getDescriptor().findFieldByName("GBP"), eighteen));
         }
 
         @Test
@@ -386,20 +376,18 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("allow overriding default and same-value `uint64`")
     class AllowOverridingDefaultAndSameValueUInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setGBP(sixteen)
+                .setGBP(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setGBP(sixteen)
-                    .setGBP(sixteen)
+                    .setGBP(eighteen)
+                    .setGBP(eighteen)
                     .build());
         }
 
@@ -407,8 +395,8 @@ class SetOnceIntegerFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("GBP"), sixteen)
-                    .setField(Balance.getDescriptor().findFieldByName("GBP"), sixteen)
+                    .setField(Balance.getDescriptor().findFieldByName("GBP"), eighteen)
+                    .setField(Balance.getDescriptor().findFieldByName("GBP"), eighteen)
                     .build());
         }
 
@@ -435,7 +423,7 @@ class SetOnceIntegerFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> newBalance.toBuilder()
                     .clearGBP()
-                    .setGBP(sixteen)
+                    .setGBP(eighteen)
                     .build());
         }
     }
@@ -444,10 +432,8 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `sint32`")
     class ProhibitOverridingNonDefaultSInt32 {
 
-        private static final int sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setAUD(60)
+                .setAUD(sixty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
                 .setAUD(sixteen)
@@ -485,8 +471,6 @@ class SetOnceIntegerFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `sint32`")
     class AllowOverridingDefaultAndSameValueSInt32 {
-
-        private static final int sixteen = 16;
 
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
@@ -544,27 +528,25 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `sint64`")
     class ProhibitOverridingNonDefaultSInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setCAD(60)
+                .setCAD(eighty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setCAD(sixteen)
+                .setCAD(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setCAD(sixteen));
+                    .setCAD(eighteen));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("CAD"), sixteen));
+                    .setField(Balance.getDescriptor().findFieldByName("CAD"), eighteen));
         }
 
         @Test
@@ -586,20 +568,18 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("allow overriding default and same-value `sint64`")
     class AllowOverridingDefaultAndSameValueSInt64 {
 
-        private static final long sixteen = 16;
-
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setCAD(sixteen)
+                .setCAD(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setCAD(sixteen)
-                    .setCAD(sixteen)
+                    .setCAD(eighteen)
+                    .setCAD(eighteen)
                     .build());
         }
 
@@ -607,8 +587,8 @@ class SetOnceIntegerFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("CAD"), sixteen)
-                    .setField(Balance.getDescriptor().findFieldByName("CAD"), sixteen)
+                    .setField(Balance.getDescriptor().findFieldByName("CAD"), eighteen)
+                    .setField(Balance.getDescriptor().findFieldByName("CAD"), eighteen)
                     .build());
         }
 
@@ -635,7 +615,7 @@ class SetOnceIntegerFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> newBalance.toBuilder()
                     .clearCAD()
-                    .setCAD(sixteen)
+                    .setCAD(eighteen)
                     .build());
         }
     }
@@ -644,10 +624,8 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `fixed32`")
     class ProhibitOverridingNonDefaultFixed32 {
 
-        private static final int sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setCHF(60)
+                .setCHF(sixty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
                 .setCHF(sixteen)
@@ -685,8 +663,6 @@ class SetOnceIntegerFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `fixed32`")
     class AllowOverridingDefaultAndSameValueFixed32 {
-
-        private static final int sixteen = 16;
 
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
@@ -744,27 +720,25 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `fixed64`")
     class ProhibitOverridingNonDefaultFixed64 {
 
-        private static final long sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setCNY(60)
+                .setCNY(eighty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setCNY(sixteen)
+                .setCNY(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setCNY(sixteen));
+                    .setCNY(eighteen));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("CNY"), sixteen));
+                    .setField(Balance.getDescriptor().findFieldByName("CNY"), eighteen));
         }
 
         @Test
@@ -786,20 +760,18 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("allow overriding default and same-value `fixed64`")
     class AllowOverridingDefaultAndSameValueFixed64 {
 
-        private static final long sixteen = 16;
-
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setCNY(sixteen)
+                .setCNY(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setCNY(sixteen)
-                    .setCNY(sixteen)
+                    .setCNY(eighteen)
+                    .setCNY(eighteen)
                     .build());
         }
 
@@ -807,8 +779,8 @@ class SetOnceIntegerFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("CNY"), sixteen)
-                    .setField(Balance.getDescriptor().findFieldByName("CNY"), sixteen)
+                    .setField(Balance.getDescriptor().findFieldByName("CNY"), eighteen)
+                    .setField(Balance.getDescriptor().findFieldByName("CNY"), eighteen)
                     .build());
         }
 
@@ -835,7 +807,7 @@ class SetOnceIntegerFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> newBalance.toBuilder()
                     .clearCNY()
-                    .setCNY(sixteen)
+                    .setCNY(eighteen)
                     .build());
         }
     }
@@ -844,10 +816,8 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `sfixed32`")
     class ProhibitOverridingNonDefaultSFixed32 {
 
-        private static final int sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setPLN(60)
+                .setPLN(sixty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
                 .setPLN(sixteen)
@@ -885,8 +855,6 @@ class SetOnceIntegerFieldsTest {
     @Nested
     @DisplayName("allow overriding default and same-value `sfixed32`")
     class AllowOverridingDefaultAndSameValueSFixed32 {
-
-        private static final int sixteen = 16;
 
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
@@ -944,27 +912,25 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("prohibit overriding non-default `sfixed64`")
     class ProhibitOverridingNonDefaultSFixed64 {
 
-        private static final long sixteen = 16;
-
         private final Balance currentBalance = Balance.newBuilder()
-                .setNZD(60)
+                .setNZD(eighty)
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setNZD(sixteen)
+                .setNZD(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setNZD(sixteen));
+                    .setNZD(eighteen));
         }
 
         @Test
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationFails(() -> currentBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("NZD"), sixteen));
+                    .setField(Balance.getDescriptor().findFieldByName("NZD"), eighteen));
         }
 
         @Test
@@ -986,20 +952,18 @@ class SetOnceIntegerFieldsTest {
     @DisplayName("allow overriding default and same-value `sfixed64`")
     class AllowOverridingDefaultAndSameValueSFixed64 {
 
-        private static final long sixteen = 16;
-
         private final Balance unknownBalance = Balance.newBuilder()
                 .build();
         private final Balance newBalance = Balance.newBuilder()
-                .setNZD(sixteen)
+                .setNZD(eighteen)
                 .build();
 
         @Test
         @DisplayName("by value")
         void byValue() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setNZD(sixteen)
-                    .setNZD(sixteen)
+                    .setNZD(eighteen)
+                    .setNZD(eighteen)
                     .build());
         }
 
@@ -1007,8 +971,8 @@ class SetOnceIntegerFieldsTest {
         @DisplayName("by reflection")
         void byReflection() {
             assertValidationPasses(() -> unknownBalance.toBuilder()
-                    .setField(Balance.getDescriptor().findFieldByName("NZD"), sixteen)
-                    .setField(Balance.getDescriptor().findFieldByName("NZD"), sixteen)
+                    .setField(Balance.getDescriptor().findFieldByName("NZD"), eighteen)
+                    .setField(Balance.getDescriptor().findFieldByName("NZD"), eighteen)
                     .build());
         }
 
@@ -1035,7 +999,7 @@ class SetOnceIntegerFieldsTest {
         void afterClearing() {
             assertValidationPasses(() -> newBalance.toBuilder()
                     .clearNZD()
-                    .setNZD(sixteen)
+                    .setNZD(eighteen)
                     .build());
         }
     }
