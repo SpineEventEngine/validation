@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,41 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate;
+package io.spine.validate
 
-import com.google.common.collect.ImmutableList;
-import io.spine.protobuf.AnyPacker;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.base.Errors.fromThrowable;
+import io.kotest.matchers.shouldBe
+import io.spine.base.Errors
+import io.spine.protobuf.unpackGuessingType
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName("`ValidationException` should")
-class ValidationExceptionTest {
+internal class ValidationExceptionSpec {
 
     @Test
-    @DisplayName("provide `ValidationError`")
-    void error() {
-        var violations =
-                ImmutableList.of(ConstraintViolation.newBuilder()
-                                         .setTypeName("example.org/example.Type")
-                                         .setMsgFormat("Test error")
-                                         .build());
-        var exception = new ValidationException(violations);
-        assertThat(exception.asMessage())
-                .isEqualTo(ValidationError.newBuilder()
-                                   .addAllConstraintViolation(violations)
-                                   .build());
+    fun `provide 'ValidationError'`() {
+        val violations = listOf<@Validated ConstraintViolation>(
+                constraintViolation {
+                    typeName = "example.org/example.Type"
+                    msgFormat = "Test error"
+                }
+            )
+        val exception = ValidationException(violations)
+        val expected = validationError { constraintViolation.addAll(violations) }
+
+        exception.asMessage() shouldBe expected
     }
 
     @Test
-    @DisplayName("convert `ValidationException` into an error")
-    void validation() {
-        var violation = ConstraintViolation.newBuilder().build();
-        var exception = new ValidationException(violation);
-        var error = fromThrowable(exception);
-        assertThat(AnyPacker.unpack(error.getDetails()))
-                .isEqualTo(exception.asMessage());
+    fun `convert 'ValidationException' into an error`() {
+        val violation = ConstraintViolation.newBuilder().build()
+        val exception = ValidationException(violation)
+        val error = Errors.fromThrowable(exception)
+
+        error.details.unpackGuessingType() shouldBe exception.asMessage()
     }
 }
