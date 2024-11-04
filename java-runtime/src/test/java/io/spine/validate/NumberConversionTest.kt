@@ -23,174 +23,133 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate
 
-package io.spine.validate;
-
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.math.BigDecimal;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import io.spine.testing.UtilityClassTest
+import io.spine.validate.NumberConversion.check
+import java.math.BigDecimal
+import java.util.stream.Stream
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`NumberConversion` utility should")
-final class NumberConversionTest extends UtilityClassTest<NumberConversion> {
+internal class NumberConversionTest :
+    UtilityClassTest<NumberConversion>(NumberConversion::class.java) {
 
-    NumberConversionTest() {
-        super(NumberConversion.class);
-    }
+    @Nested inner class
+    `tell that it is possible to convert to` {
 
-    @DisplayName("tell that it is possible to convert")
-    @Nested
-    final class PossibleToConvert {
-
-        @DisplayName("to `byte`")
         @Test
-        void toByte() {
-            assertTrue(NumberConversion.check(Byte.valueOf("1"), Byte.valueOf("2")));
-        }
+        fun byte() =
+            assertTrue(check("1".toByte(), "2".toByte()))
 
-        @DisplayName("to `short`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#shorts")
-        void toShort(Number shortNumber) {
-            assertTrue(NumberConversion.check(Short.valueOf("1"), shortNumber));
-        }
+        fun short(shortNumber: Number) =
+            assertTrue(check("1".toShort(), shortNumber))
 
-        @DisplayName("to `integer`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#integers")
-        void toInteger(Number integerNumber) {
-            assertTrue(NumberConversion.check(1, integerNumber));
-        }
+        fun integer(integerNumber: Number) =
+            assertTrue(check(1, integerNumber))
 
-        @DisplayName("to `long`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#longs")
-        void toLong(Number longNumber) {
-            assertTrue(NumberConversion.check(1L, longNumber));
-        }
+        fun long(longNumber: Number) =
+            assertTrue(check(1L, longNumber))
 
-        @DisplayName("to `float`")
         @Test
-        void toFloat() {
-            assertTrue(NumberConversion.check(1.0f, 3.14f));
-        }
+        fun float() =
+            assertTrue(check(1.0f, 3.14f))
 
-        @DisplayName("to `double`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#doubles")
-        void toDouble(Number doubleNumber) {
-            assertTrue(NumberConversion.check(1.0d, doubleNumber));
-        }
+        fun double(doubleNumber: Number) =
+            assertTrue(check(1.0, doubleNumber))
     }
 
-    @DisplayName("tell that it is not possible to convert")
-    @Nested
-    final class NotPossibleToConvert {
+    @Nested inner class
+    `tell that it is not possible to convert` {
 
-        @DisplayName("it is not possible to convert non-`byte` to `byte`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonBytes")
-        void byteToOthers(Number nonByte) {
-            assertFalse(NumberConversion.check(Byte.valueOf("1"), nonByte));
-        }
+        fun `non-'byte' to 'byte'`(nonByte: Number) =
+            assertFalse(check("1".toByte(), nonByte))
 
-        @DisplayName("it is not possible to convert non-`short` to `short`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonShorts")
-        void shortToOthers(Number nonShort) {
-            assertFalse(NumberConversion.check(Short.valueOf("1"), nonShort));
+        fun `non-'short' to 'short'`(nonShort: Number) {
+            assertFalse(check("1".toShort(), nonShort))
         }
 
-        @DisplayName("it is not possible to convert non-`integer` to `integer`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonIntegers")
-        void integerToOthers(Number nonInteger) {
-            assertFalse(NumberConversion.check(1, nonInteger));
-        }
+        fun `non-'integer' to 'integer'`(nonInteger: Number) =
+            assertFalse(check(1, nonInteger))
 
-        @DisplayName("it is not possible to convert non-`long` to `long`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonLongs")
-        void longToOthers(Number nonLong) {
-            assertFalse(NumberConversion.check(1L, nonLong));
-        }
+        fun `non-'long' to 'long'`(nonLong: Number) =
+            assertFalse(check(1L, nonLong))
 
-        @DisplayName("it is not possible to convert non-`float` to `float`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonFloats")
-        void floatToOthers(Number nonFloat) {
-            assertFalse(NumberConversion.check(1.0f, nonFloat));
-        }
+        fun `non-'float' to 'float'`(nonFloat: Number) =
+            assertFalse(check(1.0f, nonFloat))
 
-        @DisplayName("it is not possible to convert non-`double` to `double`")
         @ParameterizedTest
         @MethodSource("io.spine.validate.NumberConversionTest#nonDoubles")
-        void doubleToOthers(Number nonDouble) {
-            assertFalse(NumberConversion.check(1.0d, nonDouble));
+        fun `non-'double' to 'double'`(nonDouble: Number) {
+            assertFalse(check(1.0, nonDouble))
         }
     }
 
-    @DisplayName("tell that `ComparableNumber` instances are automatically unwrapped")
     @Test
-    void comparableNumbersAreUnwrapped() {
-        var number = new ComparableNumber(3);
-        assertTrue(NumberConversion.check(number, number));
+    fun `tell that 'ComparableNumber' instances are automatically unwrapped`() {
+        val number = ComparableNumber(3)
+        assertTrue(check(number, number))
     }
 
-    @DisplayName("tell that `BigDecimal`s are not supported")
     @Test
-    void bigDecimalsAreNotSupported() {
-        assertFalse(NumberConversion.check(BigDecimal.valueOf(1), 1L));
-    }
+    fun `tell that 'BigDecimal's are not supported`() =
+        assertFalse(check(BigDecimal.valueOf(1), 1L))
 
-    @SuppressWarnings("unused") /* Serves as a source for argument values. */
-    private static Stream<Number> nonBytes() {
-        return Stream.concat(Stream.of(Short.valueOf("1")), nonShorts());
-    }
+    @Suppress("unused") /* Serves as a source for argument values. */
+    companion object {
 
-    private static Stream<Number> nonShorts() {
-        return Stream.concat(Stream.of(2), nonIntegers());
-    }
+        @JvmStatic
+        fun nonBytes(): Stream<Number> = Stream.concat(Stream.of("1".toShort()), nonShorts())
 
-    private static Stream<Number> nonIntegers() {
-        return Stream.concat(Stream.of(3L), nonLongs());
-    }
+        @JvmStatic
+        fun nonShorts(): Stream<Number> = Stream.concat(Stream.of(2), nonIntegers())
 
-    private static Stream<Number> nonLongs() {
-        return Stream.of(4.0, 5.1f);
-    }
+        @JvmStatic
+        fun nonIntegers(): Stream<Number> = Stream.concat(Stream.of(3L), nonLongs())
 
-    @SuppressWarnings("unused") /* Serves as a source for argument values. */
-    private static Stream<Number> nonFloats() {
-        return Stream.concat(nonDoubles(), Stream.of(4.0));
-    }
+        @JvmStatic
+        fun nonLongs(): Stream<Number> = Stream.of(4.0, 5.1f)
 
-    private static Stream<Number> nonDoubles() {
-        return Stream.of(Byte.valueOf("1"), Short.valueOf("1"), 2, 3L);
-    }
+        @JvmStatic
+        fun nonFloats(): Stream<Number> = Stream.concat(nonDoubles(), Stream.of(4.0))
 
-    private static Stream<Number> shorts() {
-        return Stream.of(Byte.valueOf("1"), Short.valueOf("2"));
-    }
+        @JvmStatic
+        fun nonDoubles(): Stream<Number> = Stream.of("1".toByte(), "1".toShort(), 2, 3L)
 
-    private static Stream<Number> integers() {
-        return Stream.concat(shorts(), Stream.of(2));
-    }
+        @JvmStatic
+        fun shorts(): Stream<Number> = Stream.of("1".toByte(), "2".toShort())
 
-    @SuppressWarnings("unused") /* Serves as a source for argument values. */
-    private static Stream<Number> longs() {
-        return Stream.concat(integers(), Stream.of(3L));
-    }
+        @JvmStatic
+        fun integers(): Stream<Number> = Stream.concat(shorts(), Stream.of(2))
 
-    private static Stream<Number> doubles() {
-        return Stream.of(3.14f, 8.19d);
+        @JvmStatic
+        fun longs(): Stream<Number> = Stream.concat(integers(), Stream.of(3L))
+
+        @JvmStatic
+        fun doubles(): Stream<Number> = Stream.of(3.14f, 8.19)
     }
 }
