@@ -415,10 +415,8 @@ internal class SetOnceFieldsTest {
     /**
      * Tests `(set_once)` constraint when the option is applied to a boolean field.
      *
-     *
      * Please note, for boolean fields, there are no `byMessageMerge`
      * and `byBytesMerge` tests.
-     *
      *
      * It is impossible to override a non-default value by another non-default value
      * for a boolean field. In Protobuf v3, boolean has only one non-default value: `true`.

@@ -28,15 +28,14 @@ package io.spine.test.tools.validate.setonce
 import com.google.protobuf.ByteString
 import io.spine.test.tools.validate.Name
 import io.spine.test.tools.validate.YearOfStudy
+import io.spine.test.tools.validate.name
 
 /**
  * Test environment for `(set_once)` option.
  *
- *
  * This class declares two distinct constants for each Java field type.
  * Tests use them to verify whether a field with a non-default value can be
  * overridden by another non-default value.
- *
  *
  * Although Protobuf has 10 integer types, in Java, all 32bit numbers are
  * mapped to `int`, and all 64bit numbers are mapped to `long`.
@@ -45,12 +44,8 @@ internal object SetOnceTestEnv {
     const val STUDENT1: String = "student-1"
     const val STUDENT2: String = "student-2"
 
-    val JACK: Name = Name.newBuilder()
-        .setValue("Jack")
-        .build()
-    val DONALD: Name = Name.newBuilder()
-        .setValue("Donald")
-        .build()
+    val JACK: Name = name { value = "Jack" }
+    val DONALD: Name = name { value = "Donald" }
 
     const val METER_AND_HALF: Double = 1.55
     const val METER_AND_EIGHT: Double = 1.88
