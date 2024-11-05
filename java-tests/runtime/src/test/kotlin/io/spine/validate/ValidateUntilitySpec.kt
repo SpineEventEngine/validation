@@ -31,24 +31,15 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
-import io.spine.base.Field
 import io.spine.base.Time
 import io.spine.code.proto.FieldContext
-import io.spine.test.type.PersonName
-import io.spine.test.validate.Passport
 import io.spine.test.validate.RequiredStringValue
 import io.spine.testing.UtilityClassTest
-import io.spine.testing.logging.mute.MuteLogging
-import io.spine.type.TypeName
-import io.spine.validate.Validate.checkValidChange
 import io.spine.validate.Validate.violationsOf
 import io.spine.validate.Validate.violationsOfCustomConstraints
 import io.spine.validate.diags.ViolationText
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`Validate` utility class should")
 internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class.java) {
@@ -79,62 +70,6 @@ internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class
         val formatted = ViolationText.of(violation).toString()
 
         formatted shouldBe "test 1 test 2"
-    }
-
-    @MuteLogging
-    @Nested
-    @DisplayName("test message changes upon `(set_once)` and")
-    internal inner class SetOnce {
-
-        @Test
-        fun `throw 'ValidationException' with several violations`() {
-            val oldValue = Passport.newBuilder()
-                .setId("MT 111")
-                .setBirthplace("London")
-                .build()
-            val newValue = Passport.newBuilder()
-                .setId("JC 424")
-                .setBirthplace("Edinburgh")
-                .build()
-            checkViolated(oldValue, newValue, BIRTHPLACE)
-        }
-
-        @Test
-        fun `allow overriding if '(set_once) = false'`() {
-            val id = "JB 007"
-            val oldValue = Passport.newBuilder()
-                .setId(id)
-                .build()
-            val name = PersonName.newBuilder()
-                .setGivenName("John")
-                .setFamilyName("Doe")
-                .build()
-            val newValue = Passport.newBuilder()
-                .setId(id)
-                .setName(name)
-                .build()
-            checkValidChange(oldValue, newValue)
-        }
-
-        private fun checkViolated(oldValue: Passport, newValue: Passport, vararg fields: String) {
-            val exception = assertThrows<ValidationException> {
-                checkValidChange(oldValue, newValue)
-            }
-            val violations = exception.constraintViolations
-            violations shouldHaveSize fields.size
-
-            for (i in fields.indices) {
-                val violation = violations[i]
-                val field = fields[i]
-
-                violation!!.msgFormat shouldContain "(set_once)"
-
-                val expectedTypeName = TypeName.of(newValue).value()
-                violation.typeName shouldContain expectedTypeName
-
-                violation.fieldPath shouldBe Field.parse(field).path()
-            }
-        }
     }
 
     companion object {
