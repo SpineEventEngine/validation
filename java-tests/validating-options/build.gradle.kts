@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -25,8 +25,20 @@
  */
 
 import io.spine.dependency.lib.AutoService
+import io.spine.dependency.local.Spine
+import io.spine.dependency.local.Validation
+
+plugins {
+    `java-test-fixtures`
+}
 
 dependencies {
-    testAnnotationProcessor(AutoService.processor)
-    testCompileOnly(AutoService.annotations)
+    testFixturesAnnotationProcessor(AutoService.processor)
+    testFixturesCompileOnly(AutoService.annotations)
+    arrayOf(
+        Spine.base,
+        Validation.runtime
+    ).forEach {
+        testFixturesImplementation(it)
+    }
 }
