@@ -54,9 +54,8 @@ tasks.withType<LaunchProtoData>().configureEach {
 
 dependencies {
     protoData(project(":java-tests:extensions"))
-    protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extra-definitions"))
+    implementation(project(":java-tests:consumer-dependency"))
     implementation(Spine.time)
 }
 

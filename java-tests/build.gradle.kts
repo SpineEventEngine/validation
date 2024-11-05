@@ -51,7 +51,7 @@ allprojects {
  */
 val applyMcJava = setOf(
     "extensions",
-    "extra-definitions",
+    "consumer-dependency",
     "runtime",
     "validation",
     "validation-gen",
