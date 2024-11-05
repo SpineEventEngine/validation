@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Test environment for {@code (set_once)} tests.
+ * Test assertions for {@code (set_once)} tests.
  */
 class SetOnceAssertions {
 

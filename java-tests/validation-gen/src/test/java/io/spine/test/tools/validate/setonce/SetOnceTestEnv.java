@@ -34,7 +34,7 @@ import io.spine.test.tools.validate.YearOfStudy;
  * Test environment for {@code (set_once)} option.
  *
  * <p>This class declares two distinct constants for each Java field type.
- * Tests use them to test whether a field with a non-default value can be
+ * Tests use them to verify whether a field with a non-default value can be
  * overridden by another non-default value.
  *
  * <p>Although Protobuf has 10 integer types, in Java, all 32bit numbers are
