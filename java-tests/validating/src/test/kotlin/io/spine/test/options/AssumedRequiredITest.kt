@@ -36,7 +36,7 @@ import io.spine.test.tools.validate.event.ProjectCreated
 import io.spine.test.tools.validate.rejection.TestRejections
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -50,7 +50,7 @@ internal class AssumedRequiredITest {
         @Test
         fun `which must have an id`() {
             val msg = CreateProject.newBuilder()
-            checkViolation(msg, "id")
+            assertViolation(msg, "id")
         }
 
         @Test
@@ -72,7 +72,7 @@ internal class AssumedRequiredITest {
         @Test
         fun `requiring it`() {
             val msg = ProjectCreated.newBuilder()
-            checkViolation(msg, "id")
+            assertViolation(msg, "id")
         }
     }
 
@@ -82,7 +82,7 @@ internal class AssumedRequiredITest {
         @Test
         fun `requiring it`() {
             val msg = TestRejections.CannotCreateProject.newBuilder()
-            checkViolation(msg, "id")
+            assertViolation(msg, "id")
         }
     }
 
@@ -92,7 +92,7 @@ internal class AssumedRequiredITest {
         @Test
         fun `which is an ID of the entity`() {
             val msg = Project.newBuilder()
-            checkViolation(msg, "id")
+            assertViolation(msg, "id")
         }
 
         @Test

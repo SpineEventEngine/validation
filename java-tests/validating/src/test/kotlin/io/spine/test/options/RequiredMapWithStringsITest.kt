@@ -31,7 +31,7 @@ import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
 import io.spine.validate.Diags
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -42,7 +42,7 @@ internal class RequiredMapWithStringsITest {
     @Test
     fun `require at least one entry`() {
         val instance = Collections.newBuilder()
-        checkViolation(instance,
+        assertViolation(instance,
             "contains_a_non_empty_string_value",
             Diags.Required.collectionErrorMsg
         )

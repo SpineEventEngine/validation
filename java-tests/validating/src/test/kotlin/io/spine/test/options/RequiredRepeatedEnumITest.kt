@@ -28,7 +28,7 @@ package io.spine.test.options
 
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -41,7 +41,7 @@ internal class RequiredRepeatedEnumITest {
     @Test
     fun `require at least one item`() {
         val instance = Collections.newBuilder()
-        checkViolation(instance, field, "must not be empty")
+        assertViolation(instance, field, "must not be empty")
     }
 
     @Test // https://github.com/SpineEventEngine/mc-java/issues/119
@@ -53,7 +53,7 @@ internal class RequiredRepeatedEnumITest {
             .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
             .putContainsANonEmptyStringValue("  ", "   ")
             .addNotEmptyListOfLongs(42L)
-        checkViolation(allZero, field, "cannot contain default values")
+        assertViolation(allZero, field, "cannot contain default values")
     }
 
     @Test // https://github.com/SpineEventEngine/mc-java/issues/119
@@ -66,6 +66,6 @@ internal class RequiredRepeatedEnumITest {
             .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
             .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
             .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-        checkViolation(instance, field, "default values")
+        assertViolation(instance, field, "default values")
     }
 }

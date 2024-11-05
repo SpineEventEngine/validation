@@ -29,7 +29,7 @@ package io.spine.test.options
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -39,7 +39,7 @@ internal class RequiredMapWithNumbersITest {
     @Test
     fun `require at least one entry`() {
         val instance = Collections.newBuilder()
-        checkViolation(instance, "not_empty_map_of_ints")
+        assertViolation(instance, "not_empty_map_of_ints")
     }
 
     @Test

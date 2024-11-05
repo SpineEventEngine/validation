@@ -75,7 +75,7 @@ private val fieldName: Correspondence<ConstraintViolation, String> =
  * Asserts that the builder of the message produces a violation for the field
  * with the given name, and that the error message contains the given part.
  */
-fun checkViolation(
+fun assertViolation(
     message: Message.Builder,
     field: String,
     errorMessagePart: String = "must be set"

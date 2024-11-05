@@ -31,7 +31,7 @@ import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -41,7 +41,7 @@ internal class RequiredStringITest {
     @Test
     fun `require a non empty value being set`() {
         val singulars = Singulars.newBuilder()
-        checkViolation(singulars, "not_empty_string")
+        assertViolation(singulars, "not_empty_string")
     }
 
     @Test

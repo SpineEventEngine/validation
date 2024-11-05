@@ -29,7 +29,7 @@ package io.spine.test.options
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -39,7 +39,7 @@ internal class RequiredRepeatedNumberITest {
     @Test
     fun `require a list with at lest one element`() {
         val instance = Collections.newBuilder()
-        checkViolation(instance, "not_empty_list_of_longs")
+        assertViolation(instance, "not_empty_list_of_longs")
     }
 
     @Test

@@ -31,7 +31,7 @@ import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -42,7 +42,7 @@ internal class RequiredEnumITest {
     fun `not allow a zero-index enum item value`() {
         val msg = Singulars.newBuilder()
             .setNotVegetable(UltimateChoice.VEGETABLE)
-        checkViolation(msg, "not_vegetable")
+        assertViolation(msg, "not_vegetable")
     }
 
     @Test

@@ -34,7 +34,7 @@ import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.checkViolation
+import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -45,7 +45,7 @@ internal class RequiredMessageITest {
     @DisplayName("cannot have a default instance")
     fun `prohibit a default message`() {
         val singulars = Singulars.newBuilder()
-        checkViolation(singulars, "not_default")
+        assertViolation(singulars, "not_default")
     }
 
     @Test
@@ -63,10 +63,10 @@ internal class RequiredMessageITest {
         val fieldName = "impossible"
 
         val unset = AlwaysInvalid.newBuilder()
-        checkViolation(unset, fieldName)
+        assertViolation(unset, fieldName)
 
         val set = AlwaysInvalid.newBuilder()
             .setImpossible(Empty.getDefaultInstance())
-        checkViolation(set, fieldName)
+        assertViolation(set, fieldName)
     }
 }
