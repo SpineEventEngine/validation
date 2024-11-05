@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test assertions for {@code (set_once)} tests.
  */
-class SetOnceAssertions {
+final class SetOnceAssertions {
 
     /**
      * Prohibit instantiation of this utility class.

@@ -40,7 +40,7 @@ import io.spine.test.tools.validate.YearOfStudy;
  * <p>Although Protobuf has 10 integer types, in Java, all 32bit numbers are
  * mapped to {@code int}, and all 64bit numbers are mapped to {@code long}.
  */
-class SetOnceTestEnv {
+final class SetOnceTestEnv {
 
     static final String STUDENT1 = "student-1";
     static final String STUDENT2 = "student-2";
