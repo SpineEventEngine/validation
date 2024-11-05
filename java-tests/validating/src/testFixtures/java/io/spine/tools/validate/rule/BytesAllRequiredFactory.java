@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.tools.validate.rule;
+
+import com.google.auto.service.AutoService;
+import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.validate.option.FieldValidatingOption;
+import io.spine.validate.option.ValidatingOptionFactory;
+
+import java.util.Set;
+
+/**
+ * A {@link ValidatingOptionFactory} which adds the {@link AllRequired} option
+ * for {@code bytes} fields.
+ */
+@Immutable
+@AutoService(ValidatingOptionFactory.class)
+public final class BytesAllRequiredFactory implements ValidatingOptionFactory {
+
+    private static final ImmutableSet<FieldValidatingOption<?>> OPTIONS =
+            ImmutableSet.of(new AllRequired());
+
+    @Override
+    public Set<FieldValidatingOption<?>> forByteString() {
+        return OPTIONS;
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-runtime-bundle",
-    "java-bundle",
-    ":java-tests",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:extensions",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-)

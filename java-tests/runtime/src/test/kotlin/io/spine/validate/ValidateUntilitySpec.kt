@@ -71,8 +71,4 @@ internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class
 
         formatted shouldBe "test 1 test 2"
     }
-
-    companion object {
-        private const val BIRTHPLACE = "birthplace"
-    }
 }

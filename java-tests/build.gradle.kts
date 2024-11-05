@@ -53,8 +53,7 @@ val applyMcJava = setOf(
     "extensions",
     "consumer-dependency",
     "runtime",
-    "validation",
-    "validation-gen",
+    "validating"
 )
 
 subprojects {
