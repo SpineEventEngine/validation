@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test
 internal class GoesConstraintSpec {
 
     companion object {
-        const val UNTIL = "Until code rendering for (goes_with) is migrated from `mc-java`"
+        const val UNTIL = "Until code rendering for (goes) is migrated from `mc-java`"
     }
 
     private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()

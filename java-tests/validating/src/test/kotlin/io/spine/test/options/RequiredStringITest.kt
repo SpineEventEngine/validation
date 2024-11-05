@@ -26,22 +26,31 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.optional.shouldBePresent
+import com.google.protobuf.ByteString
+import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
+import io.spine.test.tools.validate.UltimateChoice
+import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option should be compiled so that")
-internal class RequiredITest {
+@DisplayName("(required) option in a string field should")
+internal class RequiredStringITest {
 
     @Test
-    fun `all violations on a single message are collected`() {
-        val instance = Singulars.getDefaultInstance()
-        val error = instance.validate()
-        assertThat(error).isPresent()
-        error.shouldBePresent()
-        error.get().constraintViolationList shouldHaveSize 4
+    fun `require a non empty value being set`() {
+        val singulars = Singulars.newBuilder()
+        checkViolation(singulars, "not_empty_string")
+    }
+
+    @Test
+    fun `accept non-empty values`() {
+        val singulars = Singulars.newBuilder()
+            .setNotEmptyString(" ")
+            .setNotVegetable(UltimateChoice.FISH)
+            .setNotDefault(Enclosed.newBuilder().setValue("  "))
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("foobar"))
+        assertValid(singulars)
     }
 }

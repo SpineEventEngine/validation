@@ -24,24 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.validation.assertions
 
-import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.optional.shouldBePresent
-import io.spine.test.tools.validate.Singulars
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import com.google.common.truth.Correspondence
+import com.google.common.truth.Truth.assertThat
+import com.google.protobuf.Message
+import io.kotest.matchers.string.shouldContain
+import io.spine.tools.validate.IsValid.assertInvalid
+import io.spine.validate.ConstraintViolation
+import org.junit.jupiter.api.Assertions.fail
 
-@DisplayName("`(required)` option should be compiled so that")
-internal class RequiredITest {
+private val fieldName: Correspondence<ConstraintViolation, String> =
+    Correspondence.transforming(
+        { it.fieldPath.getFieldName(0) },
+        "field name"
+    )
 
-    @Test
-    fun `all violations on a single message are collected`() {
-        val instance = Singulars.getDefaultInstance()
-        val error = instance.validate()
-        assertThat(error).isPresent()
-        error.shouldBePresent()
-        error.get().constraintViolationList shouldHaveSize 4
-    }
+fun checkViolation(
+    message: Message.Builder,
+    field: String,
+    errorMessagePart: String = "must be set"
+) {
+    val violations = assertInvalid(message)
+    assertThat(violations)
+        .comparingElementsUsing(fieldName)
+        .contains(field)
+
+    val violation = violations.atField(field)
+
+    violation.msgFormat shouldContain errorMessagePart
+}
+
+private fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViolation {
+    return find { it.fieldPath.fieldNameList[0] == fieldName }
+        ?: fail("No violation for field `$fieldName`. Violations: `$this`.")
 }

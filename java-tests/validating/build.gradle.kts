@@ -29,6 +29,7 @@ import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Spine
 import io.spine.dependency.local.Validation
 import io.spine.dependency.test.JUnit
+import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Truth
 
 plugins {
@@ -38,15 +39,17 @@ plugins {
 dependencies {
     testFixturesAnnotationProcessor(AutoService.processor)
     testFixturesCompileOnly(AutoService.annotations)
-    arrayOf(
+
+    val testFixtureDependencies = listOf(
         Spine.base,
         Logging.lib,
         Validation.runtime,
-    ).forEach {
+        Kotest.assertions
+    ) + JUnit.api + Truth.libs
+
+    testFixtureDependencies.forEach {
         testFixturesImplementation(it)
     }
-    JUnit.api.forEach(::testFixturesImplementation)
-    Truth.libs.forEach(::testFixturesImplementation)
 
     testImplementation(Spine.testlib)
 }

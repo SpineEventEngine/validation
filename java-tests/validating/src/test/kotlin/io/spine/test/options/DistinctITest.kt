@@ -29,75 +29,55 @@ package io.spine.test.options
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
-import io.kotest.matchers.shouldBe
-import io.spine.base.Time
 import io.spine.base.fieldPath
-import io.spine.test.tools.validate.ArchiveId
-import io.spine.test.tools.validate.Paper
-import io.spine.test.tools.validate.paper
-import io.spine.type.TypeName
+import io.spine.protobuf.TypeConverter.toAny
+import io.spine.test.tools.validate.ProtoSet
+import io.spine.test.tools.validate.protoSet
 import io.spine.validate.constraintViolation
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
-@DisplayName("`(goes)` option should be compiled so that")
-@Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
-internal class GoesOptionITest {
+@DisplayName("`(distinct)` option should be compiled, so that")
+internal class DistinctITest {
 
     @Test
-    fun `it indicates violation if the associated field is not set and the target field is set`() {
-        val paper = Paper.newBuilder()
-            .setWhenArchived(Time.currentTime())
+    fun `duplicates result in a violation`() {
+        val msg = ProtoSet.newBuilder()
+            .addElement(toAny("123"))
+            .addElement(toAny("321"))
+            .addElement(toAny("123"))
             .buildPartial()
-        val error = paper.validate()
+
+        val error = msg.validate()
         error.shouldBePresent()
 
         val violations = error.get().constraintViolationList
-        violations.size shouldBe 1
-
         val expected = constraintViolation {
-            typeName = TypeName.of(paper).value()
-            fieldPath = fieldPath { fieldName.add("when_archived") }
+            fieldPath = fieldPath { fieldName.add("element") }
         }
 
-        assertThat(violations[0])
+        assertThat(violations)
             .comparingExpectedFieldsOnly()
-            .isEqualTo(expected)
-    }
-
-    @Nested inner class
-    `indicate no violation if` {
-
-        @Test
-        fun `if both fields are set`() {
-            val paper = assertDoesNotThrow {
-                paper {
-                    archiveId = ArchiveId.generate()
-                    whenArchived = Time.currentTime()
-                }
-            }
-            paper.validate().shouldBeEmpty()
-        }
-
-        @Test
-        fun `if neither field is set`() {
-            val paper = assertDoesNotThrow {
-                paper { }
-            }
-            paper.validate().shouldBeEmpty()
-        }
+            .containsExactly(expected)
     }
 
     @Test
-    fun `if the associated field is set and target is not set`() {
-        val paper = assertDoesNotThrow {
-            paper {
-                archiveId = ArchiveId.generate()
+    fun `unique elements do not result in a violation`() {
+        val msg = assertDoesNotThrow {
+            protoSet {
+                element.add(toAny("42"))
+                element.add(toAny(42))
             }
         }
-        paper.validate().shouldBeEmpty()
+        msg.validate().shouldBeEmpty()
+    }
+
+    @Test
+    fun `empty list does not result in a violation`() {
+        val msg = assertDoesNotThrow {
+            ProtoSet.newBuilder().build()
+        }
+        msg.validate().shouldBeEmpty()
     }
 }

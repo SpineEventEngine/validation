@@ -26,22 +26,29 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.optional.shouldBePresent
-import io.spine.test.tools.validate.Singulars
+import io.spine.test.tools.validate.Collections
+import io.spine.test.tools.validate.UltimateChoice
+import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option should be compiled so that")
-internal class RequiredITest {
+@DisplayName("`(required)` option in a map field with number values should")
+internal class RequiredMapWithNumbersITest {
 
     @Test
-    fun `all violations on a single message are collected`() {
-        val instance = Singulars.getDefaultInstance()
-        val error = instance.validate()
-        assertThat(error).isPresent()
-        error.shouldBePresent()
-        error.get().constraintViolationList shouldHaveSize 4
+    fun `require at least one entry`() {
+        val instance = Collections.newBuilder()
+        checkViolation(instance, "not_empty_map_of_ints")
+    }
+
+    @Test
+    fun `allow entries with any values, including zero`() {
+        val instance = Collections.newBuilder()
+            .putNotEmptyMapOfInts(0, 0)
+            .putContainsANonEmptyStringValue("  ", "qwertyuiop")
+            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
+            .addNotEmptyListOfLongs(981L)
+        assertValid(instance)
     }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -34,8 +34,16 @@ option java_package = "io.spine.test.tools.validate.command";
 option java_outer_classname = "CommandsProto";
 option java_multiple_files = true;
 
+import "spine/test/tools/validate/project_domain.proto";
+
 message CreateProject {
 
     // Since this is a command, this field is assumed to be required.
     string id = 1;
+}
+
+message AssignTask {
+
+    // Since this is a command too, this field is assumed to be required.
+    TaskId task = 1;
 }

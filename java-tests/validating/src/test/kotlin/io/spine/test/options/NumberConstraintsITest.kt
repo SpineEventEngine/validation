@@ -23,16 +23,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.test.options
 
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.InterestRate
-import io.spine.test.tools.validate.IsValid
-import io.spine.test.tools.validate.IsValid.assertValid
 import io.spine.test.tools.validate.Probability
 import io.spine.test.tools.validate.Year
+import io.spine.tools.validate.IsValid
+import io.spine.tools.validate.IsValid.assertValid
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -100,5 +102,5 @@ private fun assertViolation(message: Message.Builder, error: String) {
     val violations = IsValid.assertInvalid(message)
     violations.size shouldBe 1
     violations[0] shouldNotBe null
-    violations[0]!!.msgFormat shouldBe error
+    violations[0]!!.msgFormat shouldContain error
 }

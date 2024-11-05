@@ -26,22 +26,39 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.optional.shouldBePresent
+import com.google.protobuf.ByteString
+import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
+import io.spine.test.tools.validate.UltimateChoice
+import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option should be compiled so that")
-internal class RequiredITest {
+@DisplayName("(required) option set in a `bytes` field should")
+internal class RequiredBytesITest {
 
     @Test
-    fun `all violations on a single message are collected`() {
-        val instance = Singulars.getDefaultInstance()
-        val error = instance.validate()
-        assertThat(error).isPresent()
-        error.shouldBePresent()
-        error.get().constraintViolationList shouldHaveSize 4
+    fun `require non-empty value`() {
+        val singulars = Singulars.newBuilder()
+        checkViolation(singulars, "one_or_more_bytes")
+    }
+
+    @Test
+    fun `allow all zeros`() {
+        val nonZeros = Singulars.newBuilder()
+            .setNotDefault(Enclosed.newBuilder().setValue("non-default enclosed"))
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("non-empty"))
+            .setNotEmptyString("str")
+        assertValid(nonZeros)
+
+        val zeros = byteArrayOf(0)
+        val withZeroes = Singulars.newBuilder()
+            .setOneOrMoreBytes(ByteString.copyFrom(zeros))
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setNotDefault(Enclosed.newBuilder().setValue("   "))
+            .setNotEmptyString("  ")
+        assertValid(withZeroes)
     }
 }

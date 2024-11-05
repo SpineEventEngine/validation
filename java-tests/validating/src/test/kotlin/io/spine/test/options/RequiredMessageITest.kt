@@ -26,22 +26,47 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.optional.shouldBePresent
+import com.google.protobuf.ByteString
+import com.google.protobuf.Empty
+import io.spine.base.Identifier
+import io.spine.test.tools.validate.AlwaysInvalid
+import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
+import io.spine.test.tools.validate.UltimateChoice
+import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option should be compiled so that")
-internal class RequiredITest {
+@DisplayName("(required)` option in a message field should")
+internal class RequiredMessageITest {
 
     @Test
-    fun `all violations on a single message are collected`() {
-        val instance = Singulars.getDefaultInstance()
-        val error = instance.validate()
-        assertThat(error).isPresent()
-        error.shouldBePresent()
-        error.get().constraintViolationList shouldHaveSize 4
+    @DisplayName("cannot have a default instance")
+    fun `prohibit a default message`() {
+        val singulars = Singulars.newBuilder()
+        checkViolation(singulars, "not_default")
+    }
+
+    @Test
+    fun `accept a non-default instance`() {
+        val singulars = Singulars.newBuilder()
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("lalala"))
+            .setNotDefault(Enclosed.newBuilder().setValue(Identifier.newUuid()))
+            .setNotEmptyString(" ")
+        assertValid(singulars)
+    }
+
+    @Test
+    fun `cannot be of type 'Empty'`() {
+        val fieldName = "impossible"
+
+        val unset = AlwaysInvalid.newBuilder()
+        checkViolation(unset, fieldName)
+
+        val set = AlwaysInvalid.newBuilder()
+            .setImpossible(Empty.getDefaultInstance())
+        checkViolation(set, fieldName)
     }
 }

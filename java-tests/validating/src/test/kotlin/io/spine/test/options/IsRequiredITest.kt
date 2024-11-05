@@ -42,7 +42,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`(is_required)` option should be compiled so that")
-internal class IsRequiredOptionITest {
+internal class IsRequiredITest {
 
     @Test
     fun `throw if required field group is not set`() {
