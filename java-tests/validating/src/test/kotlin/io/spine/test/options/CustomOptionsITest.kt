@@ -24,13 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate
+package io.spine.test.options
 
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import com.google.protobuf.ByteString
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.spine.base.fieldPath
+import io.spine.test.tools.validate.ByteMatrix
 import io.spine.tools.validate.rule.BytesAllRequiredFactory
 import io.spine.validate.constraintViolation
 import io.spine.validate.option.ValidatingOptionsLoader
@@ -38,8 +39,8 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("Custom constraints should")
-internal class CustomConstraintsITest {
+@DisplayName("Custom validation options should")
+internal class CustomOptionsITest {
 
     @Test
     fun `be discovered`() {

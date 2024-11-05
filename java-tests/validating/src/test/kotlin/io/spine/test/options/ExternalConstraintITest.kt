@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,69 +24,65 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.options
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
+import io.spine.test.tools.validate.Email
+import io.spine.test.tools.validate.ShippingAddress
+import io.spine.test.tools.validate.SimplePersonName
+import io.spine.test.tools.validate.User
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth8.assertThat;
-
-@DisplayName("Generated code should")
-class ExternalConstraintTest {
+@DisplayName("External constraints in the generated code should")
+internal class ExternalConstraintITest {
 
     @Test
-    @DisplayName("call external validation")
-    @Disabled // https://github.com/SpineEventEngine/mc-java/issues/119
-    void validateExternal() {
-        var user = User.newBuilder()
-                .addContact(Email.newBuilder().setValue("not an email"))
-                .buildPartial();
-        var error = user.validate();
-        assertThat(error)
-                .isPresent();
-        var violations = error.get().getConstraintViolationList();
-        assertThat(violations)
-                .hasSize(1);
-        assertThat(violations.get(0)
-                             .getFieldPath()
-                             .getFieldName(0))
-                .isEqualTo("contact");
+    @Disabled("We probably do not want to support external constraints since 2.0.0 at all.")
+    fun `call external validation`() {
+        val user = User.newBuilder()
+            .addContact(Email.newBuilder().setValue("not an email"))
+            .buildPartial()
+
+        val error = user.validate()
+        error.shouldBePresent()
+
+        val violations = error.get().constraintViolationList
+
+        violations.size shouldBe 2
+        violations[0].fieldPath.fieldNameList[0] shouldBe "contact"
     }
 
     @Test
-    @DisplayName("invoke generated validation if no external validation is defined")
-    void noExternal() {
-        var address = ShippingAddress
-                .newBuilder()
-                .setSecondLine("first line is required and not set")
-                .buildPartial();
-        var user = User.newBuilder()
-                .addShippingAddress(address)
-                .buildPartial();
-        var error = user.validate();
-        assertThat(error)
-                .isPresent();
-        var violations = error.get().getConstraintViolationList();
-        assertThat(violations)
-                .hasSize(1);
-        assertThat(violations.get(0)
-                             .getFieldPath()
-                             .getFieldName(0))
-                .isEqualTo("shipping_address");
+    fun `invoke generated validation if no external validation is defined`() {
+        val address = ShippingAddress.newBuilder()
+            .setSecondLine("first line is required and not set")
+            .buildPartial()
+        val user = User.newBuilder()
+            .addShippingAddress(address)
+            .buildPartial()
+
+        val error = user.validate()
+        error.shouldBePresent()
+
+        val violations = error.get().constraintViolationList
+
+        violations.size shouldBe 1
+        violations[0].fieldPath.fieldNameList[0] shouldBe "shipping_address"
     }
 
     @Test
-    @DisplayName("ignore external constraints if `(validate)` is not set")
-    void noValidate() {
-        var name = SimplePersonName.newBuilder()
-                .setValue("A")
-                .buildPartial();
-        var user = User.newBuilder()
-                .setName(name)
-                .buildPartial();
-        assertThat(user.validate())
-                .isEmpty();
+    fun `ignore external constraints if '(validate)' is not set`() {
+        val name = SimplePersonName.newBuilder()
+            .setValue("A")
+            .buildPartial()
+        val user = User.newBuilder()
+            .setName(name)
+            .buildPartial()
+
+        user.validate().shouldBeEmpty()
     }
 }
