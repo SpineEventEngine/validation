@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,39 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options;
+package io.spine.test.options
 
-import io.spine.option.OptionsProvider;
+import com.google.protobuf.Extension
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.spine.option.OptionsProto
+import io.spine.option.OptionsProvider
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import com.google.protobuf.Extension;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+@DisplayName("`ValidatingOptionFactory` should")
+internal class ValidatingOptionFactoryITest {
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.option.OptionsProto.required;
-import static io.spine.test.options.BytesDirectionOptionProto.direction;
-
-@DisplayName("`OptionExtensionRegistry` should")
-class OptionsRegistryTest {
-
-    @Test
-    @DisplayName("contain custom options")
-    void custom() {
-        assertContains(direction);
+    private val registry by lazy {
+        OptionsProvider.registryWithAllOptions()
     }
 
     @Test
-    @DisplayName("contain standard options")
-    void standard() {
-        assertContains(required);
+    fun `contain standard options`() {
+        assertContains(OptionsProto.required)
     }
 
-    private static void assertContains(Extension<?, ?> option) {
-        var registry = OptionsProvider.registryWithAllOptions();
-        var descriptor = option.getDescriptor();
-        var name = descriptor.getFullName();
-        var registeredExtension = registry.findImmutableExtensionByName(name);
-        assertThat(registeredExtension).isNotNull();
-        assertThat(registeredExtension.descriptor).isEqualTo(descriptor);
+    @Test
+    fun `contain custom options`() {
+        assertContains(BytesDirectionOptionProto.direction)
+    }
+
+    private fun assertContains(option: Extension<*, *>) {
+        val descriptor = option.descriptor
+        val name = descriptor.fullName
+        val registeredExtension = registry.findImmutableExtensionByName(name)
+
+        registeredExtension shouldNotBe null
+        registeredExtension.descriptor shouldBe descriptor
     }
 }

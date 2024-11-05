@@ -34,7 +34,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`ValidatingOptionsLoader` should")
-internal class ValidatingOptionFactoryLoaderSpec {
+internal class ValidatingOptionLoaderSpec {
 
     @Test
     fun `load common options`() {
