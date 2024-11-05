@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,59 +24,63 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.options
 
-import com.google.protobuf.Message;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
+import io.spine.base.Identifier
+import io.spine.test.tools.validate.Fish
+import io.spine.test.tools.validate.Meal
+import io.spine.test.tools.validate.Sauce
+import io.spine.test.tools.validate.fish
+import io.spine.testing.TestValues.randomString
+import io.spine.validate.Validate.violationsOf
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.base.Identifier.newUuid;
-import static io.spine.validate.Validate.violationsOf;
-
-@DisplayName("`(is_required)` constraint should be compiled so that")
-class IsRequiredTest {
-
-    @Test
-    @DisplayName("throw if required field group is not set")
-    void required() {
-        var message = Meal.newBuilder()
-                .setCheese(Sauce.getDefaultInstance())
-                .buildPartial();
-        var violations = violationsOf(message);
-        assertThat(violations)
-                .hasSize(1);
-        assertThat(violations.get(0).getMsgFormat())
-                .contains("choice");
-    }
+@DisplayName("`(is_required)` option should be compiled so that")
+internal class IsRequiredOptionITest {
 
     @Test
-    @DisplayName("not throw if required field group is set")
-    void requiredSet() {
-        var fish = Fish.newBuilder()
-                .setDescription(newUuid())
-                .build();
-        var message = Meal.newBuilder()
-                .setCheese(Sauce.getDefaultInstance())
-                .setFish(fish)
-                .buildPartial();
-        assertValid(message);
+    fun `throw if required field group is not set`() {
+        val message = Meal.newBuilder()
+            .setCheese(Sauce.getDefaultInstance())
+            .buildPartial()
+
+        val violations = violationsOf(message)
+
+        violations.size shouldBe 1
+        violations[0] shouldNotBe null
+        violations[0]!!.msgFormat shouldContain "choice"
     }
 
     @Test
-    @DisplayName("ignore non-required field groups")
-    void notRequired() {
-        var fish = Fish.newBuilder()
-                .setDescription(newUuid())
-                .build();
-        var message = Meal.newBuilder()
-                .setFish(fish)
-                .buildPartial();
-        assertValid(message);
+    fun `not throw if required field group is set`() {
+        val fish = fish {
+            description = randomString()
+        }
+        val message = Meal.newBuilder()
+            .setCheese(Sauce.getDefaultInstance())
+            .setFish(fish)
+            .buildPartial()
+        assertValid(message)
     }
 
-    private static void assertValid(Message message) {
-        assertThat(violationsOf(message))
-                .isEmpty();
+    @Test
+    fun `ignore non-required field groups`() {
+        val fish = Fish.newBuilder()
+            .setDescription(Identifier.newUuid())
+            .build()
+        val message = Meal.newBuilder()
+            .setFish(fish)
+            .buildPartial()
+        assertValid(message)
     }
+}
+
+private fun assertValid(message: Message) {
+    violationsOf(message).shouldBeEmpty()
 }
