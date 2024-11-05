@@ -48,7 +48,7 @@ internal fun msg(): AggregateState {
 }
 
 /**
- * A wrapper that has errors implementing [.readValue].
+ * A wrapper that has errors implementing [readValue].
  */
 internal class BrokenFieldAware(
     delegate: AggregateState
