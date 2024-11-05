@@ -172,7 +172,7 @@ internal open class SetOncePrimitiveField(
             currentValue = fieldGetter,
             newValue = "other.$fieldGetter"
         )
-        val mergeFromMessage = getMethodBySignature(
+        val mergeFromMessage = methodWithSignature(
             "public Builder mergeFrom(${declaringMessage.canonical} other)"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(

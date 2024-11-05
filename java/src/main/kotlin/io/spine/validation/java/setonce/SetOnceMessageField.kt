@@ -80,7 +80,7 @@ internal class SetOnceMessageField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(currentValue = fieldGetter, newValue = "value")
-        val setter = getMethodBySignature(
+        val setter = methodWithSignature(
             "public Builder $fieldSetterName($fieldTypeClass value)"
         ).body!!
         setter.addAfter(precondition, setter.lBrace)
@@ -100,7 +100,7 @@ internal class SetOnceMessageField(
             currentValue = fieldGetter,
             newValue = "builderForValue.build()"
         )
-        val setter = getMethodBySignature(
+        val setter = methodWithSignature(
             "public Builder $fieldSetterName($fieldTypeClass.Builder builderForValue)"
         ).body!!
         setter.addAfter(precondition, setter.lBrace)

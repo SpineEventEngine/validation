@@ -82,8 +82,7 @@ internal sealed class SetOnceJavaConstraints(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage = declaredIn.message
-        .javaClassName(declaredIn.fileHeader)
+    protected val declaringMessage = declaredIn.message.javaClassName(declaredIn.fileHeader)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -149,7 +148,7 @@ internal sealed class SetOnceJavaConstraints(
         readerContains: String = readerStartsWith,
     ) {
 
-        val mergeFromBytes = getMethodBySignature(MergeFromBytesSignature).body!!
+        val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
 
