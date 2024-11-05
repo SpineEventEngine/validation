@@ -1,0 +1,120 @@
+/*
+ * Copyright 2024, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "SetOnceProto";
+option java_multiple_files = true;
+
+import "google/protobuf/empty.proto";
+
+// Tests all supported field types except for integers.
+message Student {
+    Name name = 1 [(set_once) = true];
+    string id = 2 [(set_once) = true];
+    double height = 3 [(set_once) = true];
+    float weight = 4 [(set_once) = true];
+    bool has_medals = 5 [(set_once) = true];
+    bytes signature = 6 [(set_once) = true];
+    YearOfStudy year_of_study = 7 [(set_once) = true];
+}
+
+// Tests all integer field types.
+message Balance {
+    int32 USD = 1 [(set_once) = true];
+    int64 EUR = 2 [(set_once) = true];
+
+    uint32 JPY = 3 [(set_once) = true];
+    uint64 GBP = 4 [(set_once) = true];
+
+    sint32 AUD = 5 [(set_once) = true];
+    sint64 CAD = 6 [(set_once) = true];
+
+    fixed32 CHF = 7 [(set_once) = true];
+    fixed64 CNY = 8 [(set_once) = true];
+
+    sfixed32 PLN = 9 [(set_once) = true];
+    sfixed64 NZD = 10 [(set_once) = true];
+}
+
+// Tests that `(set_once)` behavior is not applied by default.
+message SetOnceImplicitFalse {
+    Name message = 1;
+    string string = 2;
+    double double = 3;
+    float float = 4;
+    int32 int32 = 5;
+    int64 int64 = 6;
+    uint32 uint32 = 7;
+    uint64 uint64 = 8;
+    sint32 sint32 = 9;
+    sint64 sint64 = 10;
+    fixed32 fixed32 = 11;
+    fixed64 fixed64 = 12;
+    sfixed32 sfixed32 = 13;
+    sfixed64 sfixed64 = 14;
+    bool bool = 15;
+    bytes bytes = 16;
+    YearOfStudy enum = 17;
+}
+
+// Tests that `(set_once)` behavior is not applied when the flag is `false`.
+message SetOnceExplicitFalse {
+    Name message = 1 [(set_once) = false];
+    string string = 2 [(set_once) = false];
+    double double = 3 [(set_once) = false];
+    float float = 4 [(set_once) = false];
+    int32 int32 = 5 [(set_once) = false];
+    int64 int64 = 6 [(set_once) = false];
+    uint32 uint32 = 7 [(set_once) = false];
+    uint64 uint64 = 8 [(set_once) = false];
+    sint32 sint32 = 9 [(set_once) = false];
+    sint64 sint64 = 10 [(set_once) = false];
+    fixed32 fixed32 = 11 [(set_once) = false];
+    fixed64 fixed64 = 12 [(set_once) = false];
+    sfixed32 sfixed32 = 13 [(set_once) = false];
+    sfixed64 sfixed64 = 14 [(set_once) = false];
+    bool bool = 15 [(set_once) = false];
+    bytes bytes = 16 [(set_once) = false];
+    YearOfStudy enum = 17 [(set_once) = false];
+}
+
+message Name {
+    string value = 1;
+}
+
+enum YearOfStudy {
+    YOS_UNSPECIFIED = 0;
+    YOS_FIRST = 1;
+    YOS_SECOND = 2;
+    YOS_THIRD = 3;
+    YOS_FOURTH = 4;
+}

@@ -35,7 +35,6 @@ import io.spine.base.CommandMessage
 import io.spine.base.EntityState
 import io.spine.option.OptionsProto.goes
 import io.spine.option.OptionsProto.requiredField
-import io.spine.option.OptionsProto.setOnce
 
 /**
  * This file provides workarounds for supporting validation features that
@@ -48,7 +47,6 @@ internal fun Message.requiresRuntimeValidation(): Boolean =
     (this is EntityState<*>)
             || (this is CommandMessage)
             || hasFieldOption(goes)
-            || hasFieldOption(setOnce)
             || hasTypeOption(requiredField)
 
 private fun Message.hasFieldOption(option: GeneratedExtension<FieldOptions, *>): Boolean {

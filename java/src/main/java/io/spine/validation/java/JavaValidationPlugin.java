@@ -82,7 +82,8 @@ public final class JavaValidationPlugin extends Plugin {
         result.addAll(base.getRenderers());
         result.add(new PrintValidationInsertionPoints(),
                    new JavaValidationRenderer(),
-                   new ImplementValidatingBuilder());
+                   new ImplementValidatingBuilder(),
+                   new SetOnceValidationRenderer());
         return result.build();
     }
 
