@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -28,6 +28,7 @@ package io.spine.test.tools.validate;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
+import io.spine.tools.validate.IsValid;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.Disabled;
@@ -36,7 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.base.Charsets.UTF_16;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.test.tools.validate.IsValid.assertValid;
+import static io.spine.tools.validate.IsValid.assertValid;
 
 @DisplayName("`(required_field)` option should be compiled so that")
 @Disabled

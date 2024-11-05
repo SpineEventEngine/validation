@@ -24,31 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.AutoService
-import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Spine
-import io.spine.dependency.local.Validation
-import io.spine.dependency.test.JUnit
-import io.spine.dependency.test.Truth
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.validate;
 
-plugins {
-    `java-test-fixtures`
-}
+import com.google.errorprone.annotations.CheckReturnValue;
 
-dependencies {
-    testFixturesAnnotationProcessor(AutoService.processor)
-    testFixturesCompileOnly(AutoService.annotations)
-    arrayOf(
-        Spine.base,
-        Logging.lib,
-        Validation.runtime,
-    ).forEach {
-        testFixturesImplementation(it)
-    }
-    JUnit.api.forEach(::testFixturesImplementation)
-    Truth.libs.forEach(::testFixturesImplementation)
-
-    testImplementation(Spine.testlib)
-}
-
-testProtoDataRemoteDebug(enabled = false)
+import javax.annotation.ParametersAreNonnullByDefault;

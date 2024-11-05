@@ -23,13 +23,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.test.tools.validate
+package io.spine.test.options
 
-import com.google.common.truth.Truth
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.spine.test.tools.validate.InterestRate
+import io.spine.test.tools.validate.IsValid
 import io.spine.test.tools.validate.IsValid.assertValid
+import io.spine.test.tools.validate.Probability
+import io.spine.test.tools.validate.Year
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

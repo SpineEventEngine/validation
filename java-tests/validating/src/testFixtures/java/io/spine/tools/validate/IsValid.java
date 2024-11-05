@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.tools.validate;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Assertions related to message validity.
  */
-final class IsValid {
+public final class IsValid {
 
     /**
      * Prevents the utility class instantiation.
@@ -55,10 +55,10 @@ final class IsValid {
      * @param builder
      *         the message builder
      */
-    static void assertValid(Message.Builder builder) {
+    public static void assertValid(Message.Builder builder) {
         var msg = builder.build();
         assertThat(msg)
-                .isNotNull();
+             .isNotNull();
     }
 
     /**
@@ -69,7 +69,7 @@ final class IsValid {
      * @return the violations received from building the message
      */
     @CanIgnoreReturnValue
-    static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
+    public static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
         try {
             var msg = builder.build();
             return fail(format("Expected an invalid message but got: %s", toJson(msg)));

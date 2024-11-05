@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -48,8 +48,8 @@ import static com.google.common.truth.Correspondence.transforming;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.base.Identifier.newUuid;
-import static io.spine.test.tools.validate.IsValid.assertInvalid;
-import static io.spine.test.tools.validate.IsValid.assertValid;
+import static io.spine.tools.validate.IsValid.assertInvalid;
+import static io.spine.tools.validate.IsValid.assertValid;
 import static io.spine.test.tools.validate.UltimateChoice.CHICKEN;
 import static io.spine.test.tools.validate.UltimateChoice.FISH;
 import static io.spine.test.tools.validate.UltimateChoice.VEGETABLE;
