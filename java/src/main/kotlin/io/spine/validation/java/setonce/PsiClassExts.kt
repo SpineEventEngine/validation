@@ -24,9 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.setonce
+
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiMethod
+import io.spine.tools.psi.java.Environment.elementFactory
+
 /**
- * The version of the Validation SDK to publish.
+ * Searches for a method in this [PsiClass] matching the given signature
+ * specified as [text].
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * An example usage:
+ *
+ * ```
+ * val method = psiClass.findMethodBySignature("public Builder setName(Name value)")
+ * ```
+ *
+ * @param text The method signature as text.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.166")
+internal fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
+    val reference = elementFactory.createMethodFromText(text, null)
+    return findMethodBySignature(reference, false)
+}
+
+/**
+ * Returns a method from this [PsiClass] matching the given signature
+ * specified as [text].
+ *
+ * An example usage:
+ *
+ * ```
+ * val method = psiClass.getMethodBySignature("public Builder setName(Name value)")
+ * ```
+ *
+ * @param text The method signature as text.
+ * @throws IllegalStateException if this class does not have such a method.
+ */
+internal fun PsiClass.methodWithSignature(text: String): PsiMethod =
+    findMethodBySignature(text)
+        ?: error(
+            "Could not find the method with the signature `$text` " +
+                    "in the `$qualifiedName` class."
+        )

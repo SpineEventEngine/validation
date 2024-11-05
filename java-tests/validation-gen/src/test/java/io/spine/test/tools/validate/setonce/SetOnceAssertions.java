@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,25 +23,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.validation;
+package io.spine.test.tools.validate.setonce;
 
-import "spine/options.proto";
+import io.spine.validate.ValidationException;
+import org.junit.jupiter.api.function.Executable;
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.test.validate";
-option java_outer_classname = "SetOnceTestProto";
-option java_multiple_files = true;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import "spine/test/type/types.proto";
+/**
+ * Test assertions for {@code (set_once)} tests.
+ */
+final class SetOnceAssertions {
 
-message Passport {
-    option (entity).kind = ENTITY;
+    /**
+     * Prohibit instantiation of this utility class.
+     */
+    private SetOnceAssertions() {
+    }
 
-    string id = 1; // implicitly: (set_once) = false
+    /**
+     * Asserts that the given {@code executable} throws {@link ValidationException}.
+     */
+    static void assertValidationFails(Executable executable) {
+        assertThrows(ValidationException.class, executable);
+    }
 
-    type.PersonName name = 2 [(set_once) = false];
-
-    string birthplace = 3 [(set_once) = true];
+    /**
+     * Asserts that the given {@code executable} doesn't throw anything.
+     */
+    static void assertValidationPasses(Executable executable) {
+        assertDoesNotThrow(executable);
+    }
 }

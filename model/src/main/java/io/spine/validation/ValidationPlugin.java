@@ -33,7 +33,10 @@ import io.spine.protodata.plugin.Plugin;
 /**
  * A ProtoData plugin which attaches validation-related policies and views.
  */
-@SuppressWarnings("unused") // Loaded by ProtoData via reflection.
+@SuppressWarnings({
+        "OverlyCoupledClass", // Registers a lot of policies and repositories.
+        "unused" // Loaded by ProtoData via reflection.
+})
 public class ValidationPlugin extends Plugin {
 
     @SuppressWarnings("OverlyCoupledMethod")
@@ -44,7 +47,8 @@ public class ValidationPlugin extends Plugin {
                 ImmutableSet.of(
                         new MessageValidationRepository(),
                         new RequiredFieldRepository(),
-                        new ValidatedFieldRepository()
+                        new ValidatedFieldRepository(),
+                        new SetOnceFieldRepository()
                 ),
                 ImmutableSet.of(
                         new RequiredPolicy(),
