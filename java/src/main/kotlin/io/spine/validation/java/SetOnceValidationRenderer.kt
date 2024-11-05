@@ -71,7 +71,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         .onEach {
             val field = it.subject
             check(!field.isMap && !field.isList) {
-                "The `(set_once)` option is not applicable to repeated fields and maps. " +
+                "The `(set_once)` option is not applicable to repeated fields or maps. " +
                         "The invalid field: `${field}`."
             }
         }
