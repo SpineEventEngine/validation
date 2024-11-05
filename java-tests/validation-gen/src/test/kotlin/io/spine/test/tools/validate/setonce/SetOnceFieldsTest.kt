@@ -65,7 +65,7 @@ internal class SetOnceFieldsTest {
         private val studentDonald = student { name = DONALD }
 
         @Test
-        fun `by value`(): Unit = assertValidationFails {
+        fun `by value`() = assertValidationFails {
             studentJack.toBuilder()
                 .setName(DONALD)
         }
@@ -165,7 +165,7 @@ internal class SetOnceFieldsTest {
     }
 
     @Nested inner class
-    `prohibit overriding non-default 'string` {
+    `prohibit overriding non-default 'string'` {
 
         private val student1 = student { id = STUDENT1 }
         private val student2 = student { id = STUDENT2 }
