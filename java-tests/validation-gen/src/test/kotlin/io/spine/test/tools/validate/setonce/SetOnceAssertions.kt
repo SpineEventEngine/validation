@@ -24,36 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate.setonce;
+package io.spine.test.tools.validate.setonce
 
-import io.spine.validate.ValidationException;
-import org.junit.jupiter.api.function.Executable;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import io.spine.validate.ValidationException
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 /**
- * Test assertions for {@code (set_once)} tests.
+ * Assertions for `(set_once)` tests.
  */
-final class SetOnceAssertions {
+internal object SetOnceAssertions {
 
     /**
-     * Prohibit instantiation of this utility class.
+     * Asserts that the given [runnable] throws [ValidationException].
      */
-    private SetOnceAssertions() {
+    fun assertValidationFails(runnable: () -> Unit) {
+        assertThrows<ValidationException>(runnable)
     }
 
     /**
-     * Asserts that the given {@code executable} throws {@link ValidationException}.
+     * Asserts that the given [runnable] doesn't throw anything.
      */
-    static void assertValidationFails(Executable executable) {
-        assertThrows(ValidationException.class, executable);
-    }
-
-    /**
-     * Asserts that the given {@code executable} doesn't throw anything.
-     */
-    static void assertValidationPasses(Executable executable) {
-        assertDoesNotThrow(executable);
-    }
+    fun assertValidationPasses(runnable: () -> Unit) =
+        assertDoesNotThrow(runnable)
 }
