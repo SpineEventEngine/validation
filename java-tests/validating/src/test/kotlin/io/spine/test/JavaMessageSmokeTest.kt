@@ -27,9 +27,13 @@
 package io.spine.test
 
 import com.google.common.truth.Truth
+import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.shouldNotBe
 import io.spine.test.protobuf.CardNumber
+import io.spine.validate.NonValidated
 import io.spine.validate.Validate
+import io.spine.validate.Validate.check
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -56,7 +60,7 @@ internal class JavaMessageSmokeTest {
     fun `create a valid message using 'build()'`() {
         assertDoesNotThrow {
             val number = valid.build()
-            Validate.check(number)
+            check(number)
         }
     }
 
@@ -70,11 +74,11 @@ internal class JavaMessageSmokeTest {
     }
 
     @Test
-    fun `ignore invalid message when skipping validation intentionally`() {
-        val number = invalid.buildPartial()
-        Truth.assertThat(number).isNotNull()
-        Assertions.assertThrows(
-            ValidationException::class.java
-        ) { Validate.check(number) }
+    fun `ignore invalid message when skipping validation intentionally via 'buildPartial'`() {
+        val number: @NonValidated Message = invalid.buildPartial()
+        number shouldNotBe null
+        assertThrows<ValidationException> {
+            check(number)
+        }
     }
 }
