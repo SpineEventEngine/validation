@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,68 +24,80 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.options
 
-import io.spine.base.FieldPath;
-import io.spine.type.TypeName;
-import io.spine.validate.ConstraintViolation;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth8.assertThat;
-import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.base.Time.currentTime;
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
+import io.spine.base.Time
+import io.spine.base.fieldPath
+import io.spine.test.tools.validate.ArchiveId
+import io.spine.test.tools.validate.Paper
+import io.spine.test.tools.validate.paper
+import io.spine.type.TypeName
+import io.spine.validate.constraintViolation
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("`(goes)` option should be compiled so that")
-@Disabled // https://github.com/SpineEventEngine/mc-java/issues/119
-class GoesConstraintTest {
+@Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
+internal class GoesOptionITest {
 
     @Test
-    @DisplayName("if the associated field is not set and the target field is set, " +
-            "a violation is produced")
-    void failIfNotSet() {
-        var paper = Paper.newBuilder()
-                .setWhenArchived(currentTime())
-                .buildPartial();
-        var error = paper.validate();
-        assertThat(error)
-                .isPresent();
-        var violations = error.get().getConstraintViolationList();
-        assertThat(violations)
-                .hasSize(1);
-        assertThat(violations.get(0))
-                .comparingExpectedFieldsOnly()
-                .isEqualTo(ConstraintViolation.newBuilder()
-                                   .setTypeName(TypeName.of(paper).value())
-                                   .setFieldPath(FieldPath.newBuilder()
-                                                         .addFieldName("when_archived"))
-                                   .build());
+    fun `it indicates violation if the associated field is not set and the target field is set`() {
+        val paper = Paper.newBuilder()
+            .setWhenArchived(Time.currentTime())
+            .buildPartial()
+        val error = paper.validate()
+        error.shouldBePresent()
+
+        val violations = error.get().constraintViolationList
+        violations.size shouldBe 1
+
+        val expected = constraintViolation {
+            typeName = TypeName.of(paper).value()
+            fieldPath = fieldPath { fieldName.add("when_archived") }
+        }
+
+        assertThat(violations[0])
+            .comparingExpectedFieldsOnly()
+            .isEqualTo(expected)
+    }
+
+    @Nested inner class
+    `indicate no violation if` {
+
+        @Test
+        fun `if both fields are set`() {
+            val paper = assertDoesNotThrow {
+                paper {
+                    archiveId = ArchiveId.generate()
+                    whenArchived = Time.currentTime()
+                }
+            }
+            paper.validate().shouldBeEmpty()
+        }
+
+        @Test
+        fun `if neither field is set`() {
+            val paper = assertDoesNotThrow {
+                paper { }
+            }
+            paper.validate().shouldBeEmpty()
+        }
     }
 
     @Test
-    @DisplayName("if both fields are set, no violation")
-    void bothSet() {
-        var paper = Paper.newBuilder()
-                .setArchiveId(ArchiveId.generate())
-                .setWhenArchived(currentTime())
-                .build();
-        assertThat(paper.validate()).isEmpty();
-    }
-
-    @Test
-    @DisplayName("if neither field is set, no violation")
-    void noneSet() {
-        var paper = Paper.newBuilder().build();
-        assertThat(paper.validate()).isEmpty();
-    }
-
-    @Test
-    @DisplayName("if the associated field is set and target is not set, no violation")
-    void targetNotSet() {
-        var paper = Paper.newBuilder()
-                .setArchiveId(ArchiveId.generate())
-                .build();
-        assertThat(paper.validate()).isEmpty();
+    fun `if the associated field is set and target is not set`() {
+        val paper = assertDoesNotThrow {
+            paper {
+                archiveId = ArchiveId.generate()
+            }
+        }
+        paper.validate().shouldBeEmpty()
     }
 }
