@@ -42,6 +42,7 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validate.CustomConstraint
 import io.spine.validate.FieldValue
 import io.spine.validate.MessageValue
+import io.spine.validate.constraintViolation
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -133,11 +134,11 @@ private class MaxLengthConstraint(
         val value = containingMessage.valueOf(field())
         val maxLength = optionValue()
         val context = value.context()
-        val violation = ConstraintViolation.newBuilder()
-            .setFieldPath(context.fieldPath())
-            .setTypeName(containingMessage.declaration().name().value())
-            .setMsgFormat(errorMessage(context))
-            .build()
+        val violation = constraintViolation {
+            fieldPath = context.fieldPath()
+            typeName = containingMessage.declaration().name().value()
+            msgFormat = errorMessage(context)
+        }
         return value.nonDefault()
             .filter { it.toString().length > maxLength }
             .map { violation }
