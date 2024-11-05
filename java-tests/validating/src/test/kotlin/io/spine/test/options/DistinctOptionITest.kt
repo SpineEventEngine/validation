@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,56 +24,60 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.options
 
-import io.spine.base.FieldPath;
-import io.spine.validate.ConstraintViolation;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.Truth8.assertThat;
-import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.protobuf.TypeConverter.toAny;
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.spine.base.fieldPath
+import io.spine.protobuf.TypeConverter.toAny
+import io.spine.test.tools.validate.ProtoSet
+import io.spine.test.tools.validate.protoSet
+import io.spine.validate.constraintViolation
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("`(distinct)` option should be compiled, so that")
-class DistinctConstraintTest {
+internal class DistinctOptionITest {
 
     @Test
-    @DisplayName("duplicates result in a violation")
-    void notUnique() {
-        var msg = ProtoSet.newBuilder()
-                .addElement(toAny("123"))
-                .addElement(toAny("321"))
-                .addElement(toAny("123"))
-                .buildPartial();
-        var error = msg.validate();
-        assertThat(error)
-                .isPresent();
-        var violations = error.get().getConstraintViolationList();
+    fun `duplicates result in a violation`() {
+        val msg = ProtoSet.newBuilder()
+            .addElement(toAny("123"))
+            .addElement(toAny("321"))
+            .addElement(toAny("123"))
+            .buildPartial()
+
+        val error = msg.validate()
+        error.shouldBePresent()
+
+        val violations = error.get().constraintViolationList
+        val expected = constraintViolation {
+            fieldPath = fieldPath { fieldName.add("element") }
+        }
+
         assertThat(violations)
-                .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation.newBuilder()
-                                         .setFieldPath(FieldPath.newBuilder()
-                                                               .addFieldName("element"))
-                                         .build());
+            .comparingExpectedFieldsOnly()
+            .containsExactly(expected)
     }
 
     @Test
-    @DisplayName("unique elements do not result in a violation")
-    void unique() {
-        var msg = ProtoSet.newBuilder()
-                .addElement(toAny("42"))
-                .addElement(toAny(42))
-                .build();
-        assertThat(msg.validate())
-                .isEmpty();
+    fun `unique elements do not result in a violation`() {
+        val msg = assertDoesNotThrow {
+            protoSet {
+                element.add(toAny("42"))
+                element.add(toAny(42))
+            }
+        }
+        msg.validate().shouldBeEmpty()
     }
 
     @Test
-    @DisplayName("empty list does not result in a violation")
-    void empty() {
-        var msg = ProtoSet.newBuilder().build();
-        assertThat(msg.validate())
-                .isEmpty();
+    fun `empty list does not result in a violation`() {
+        val msg = assertDoesNotThrow {
+            ProtoSet.newBuilder().build()
+        }
+        msg.validate().shouldBeEmpty()
     }
 }

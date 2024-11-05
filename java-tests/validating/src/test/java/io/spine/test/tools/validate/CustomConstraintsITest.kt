@@ -24,62 +24,53 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.tools.validate
 
-import com.google.protobuf.ByteString;
-import io.spine.base.FieldPath;
-import io.spine.tools.validate.rule.BytesAllRequiredFactory;
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.option.ValidatingOptionsLoader;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth8.assertThat;
-import static io.spine.testing.Correspondences.type;
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import com.google.protobuf.ByteString
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.spine.base.fieldPath
+import io.spine.tools.validate.rule.BytesAllRequiredFactory
+import io.spine.validate.constraintViolation
+import io.spine.validate.option.ValidatingOptionsLoader
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName("Custom constraints should")
-class CustomConstraintsTest {
+internal class CustomConstraintsITest {
 
     @Test
-    @DisplayName("be discovered")
-    void discovery() {
-        var implementations = ValidatingOptionsLoader.INSTANCE.implementations();
-        assertThat(implementations)
-                .comparingElementsUsing(type())
-                .contains(BytesAllRequiredFactory.class);
+    fun `be discovered`() {
+        val implementations = ValidatingOptionsLoader.INSTANCE.implementations()
+        val classes = implementations.map { it::class.java }
+        classes.contains(BytesAllRequiredFactory::class.java)
     }
 
     @Test
-    @DisplayName("be applied to validated messages")
-    @Disabled // https://github.com/SpineEventEngine/mc-java/issues/119
-    void application() {
-        var matrix = ByteMatrix.newBuilder()
-                .addValue(ByteString.copyFrom(new byte[]{42}))
-                .addValue(ByteString.EMPTY)
-                .buildPartial();
-        var error = matrix.validate();
-        assertThat(error)
-                .isPresent();
-        var violations = error.get().getConstraintViolationList();
-        var expected = ConstraintViolation.newBuilder()
-                .setFieldPath(FieldPath.newBuilder()
-                                      .addFieldName("value"))
-                .build();
+    @Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
+    fun `be applied to validated messages`() {
+        val matrix = ByteMatrix.newBuilder()
+            .addValue(ByteString.copyFrom(byteArrayOf(42)))
+            .addValue(ByteString.EMPTY)
+            .buildPartial()
+
+        val error = matrix.validate()
+        error.shouldBePresent()
+
+        val violations = error.get().constraintViolationList
+        val expected = constraintViolation { fieldPath = fieldPath { fieldName.add("value") } }
         assertThat(violations)
-                .comparingExpectedFieldsOnly()
-                .containsExactly(expected);
+            .comparingExpectedFieldsOnly()
+            .containsExactly(expected)
     }
 
     @Test
-    @DisplayName("be applied to valid messages and pass")
-    void validMessages() {
-        var matrix = ByteMatrix.newBuilder()
-                .addValue(ByteString.copyFrom(new byte[]{42}))
-                .build();
-        assertThat(matrix.validate())
-                .isEmpty();
+    fun `be applied to valid messages and pass`() {
+        val matrix = ByteMatrix.newBuilder()
+            .addValue(ByteString.copyFrom(byteArrayOf(42)))
+            .build()
+        matrix.validate().shouldBeEmpty()
     }
 }
