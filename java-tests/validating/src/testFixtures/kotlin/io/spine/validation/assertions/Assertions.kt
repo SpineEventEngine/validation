@@ -24,15 +24,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("Assertions")
+
 package io.spine.validation.assertions
 
 import com.google.common.truth.Correspondence
 import com.google.common.truth.Truth.assertThat
+import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.Message
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
-import io.spine.tools.validate.IsValid.assertInvalid
+import io.spine.type.toJson
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.ValidationException
 import org.junit.jupiter.api.Assertions.fail
+
+/**
+ * Assert the given [builder] produces a valid message.
+ *
+ * @param builder The message builder.
+ */
+fun assertValid(builder: Message.Builder) {
+    val msg = builder.build()
+    msg shouldNotBe null
+}
+
+/**
+ * Assert the given `builder` produces an invalid message.
+ *
+ * @param builder The message builder.
+ * @return Violations received from building the message.
+ */
+@CanIgnoreReturnValue
+fun assertInvalid(builder: Message.Builder): List<ConstraintViolation> {
+    try {
+        val msg = builder.build()
+        return fail( "Expected an invalid message but got: ${msg.toJson()}")
+    } catch (e: ValidationException) {
+        return e.constraintViolations
+    }
+}
 
 private val fieldName: Correspondence<ConstraintViolation, String> =
     Correspondence.transforming(
@@ -40,6 +71,10 @@ private val fieldName: Correspondence<ConstraintViolation, String> =
         "field name"
     )
 
+/**
+ * Asserts that the builder of the message produces a violation for the field
+ * with the given name, and that the error message contains the given part.
+ */
 fun checkViolation(
     message: Message.Builder,
     field: String,
@@ -59,3 +94,4 @@ private fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViol
     return find { it.fieldPath.fieldNameList[0] == fieldName }
         ?: fail("No violation for field `$fieldName`. Violations: `$this`.")
 }
+

@@ -33,8 +33,8 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.InterestRate
 import io.spine.test.tools.validate.Probability
 import io.spine.test.tools.validate.Year
-import io.spine.tools.validate.IsValid
-import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.assertInvalid
+import io.spine.validation.assertions.assertValid
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -99,8 +99,8 @@ internal class NumberConstraintsITest {
 }
 
 private fun assertViolation(message: Message.Builder, error: String) {
-    val violations = IsValid.assertInvalid(message)
+    val violations = assertInvalid(message)
     violations.size shouldBe 1
     violations[0] shouldNotBe null
-    violations[0]!!.msgFormat shouldContain error
+    violations[0].msgFormat shouldContain error
 }

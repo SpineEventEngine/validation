@@ -28,8 +28,8 @@ package io.spine.test.options
 
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
-import io.spine.tools.validate.IsValid.assertInvalid
-import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.assertInvalid
+import io.spine.validation.assertions.assertValid
 import io.spine.validate.Diags
 import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.Disabled

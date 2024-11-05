@@ -34,8 +34,8 @@ import io.spine.test.tools.validate.entity.Project
 import io.spine.test.tools.validate.entity.Task
 import io.spine.test.tools.validate.event.ProjectCreated
 import io.spine.test.tools.validate.rejection.TestRejections
-import io.spine.tools.validate.IsValid.assertInvalid
-import io.spine.tools.validate.IsValid.assertValid
+import io.spine.validation.assertions.assertInvalid
+import io.spine.validation.assertions.assertValid
 import io.spine.validation.assertions.checkViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

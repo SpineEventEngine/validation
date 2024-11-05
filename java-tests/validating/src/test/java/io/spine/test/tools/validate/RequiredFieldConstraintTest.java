@@ -28,7 +28,7 @@ package io.spine.test.tools.validate;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
-import io.spine.tools.validate.IsValid;
+import io.spine.validation.assertions.Assertions;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.Disabled;
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.base.Charsets.UTF_16;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.tools.validate.IsValid.assertValid;
+import static io.spine.validation.assertions.Assertions.assertValid;
 
 @DisplayName("`(required_field)` option should be compiled so that")
 @Disabled
@@ -80,7 +80,7 @@ class RequiredFieldConstraintTest {
     }
 
     private static void assertInvalid(Message.Builder message, String violationParam) {
-        var violations = IsValid.assertInvalid(message);
+        var violations = Assertions.assertInvalid(message);
         var typeName = TypeName.of(message.buildPartial());
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
