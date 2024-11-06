@@ -62,7 +62,7 @@ fun assertValid(builder: Message.Builder) {
 fun assertInvalid(builder: Message.Builder): List<ConstraintViolation> {
     try {
         val msg = builder.build()
-        return fail( "Expected an invalid message but got: ${msg.toJson()}")
+        return fail("Expected an invalid message but got: ${msg.toJson()}")
     } catch (e: ValidationException) {
         return e.constraintViolations
     }
