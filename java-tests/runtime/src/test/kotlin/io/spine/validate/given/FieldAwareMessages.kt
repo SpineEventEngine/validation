@@ -55,7 +55,7 @@ internal class BrokenFieldAware(
 ) : AggregateStateProxy(delegate), FieldAwareMessage {
 
     override fun readValue(field: FieldDescriptor): Any {
-        // Error here. The `field.getIndex()` value isn not taken into account at all.
+        // Error here. The `field.getIndex()` value is not taken into account at all.
         return entityId
     }
 }
