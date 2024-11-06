@@ -37,7 +37,7 @@ internal class ValidationExceptionSpec {
 
     @Test
     fun `provide 'ValidationError'`() {
-        val violations = listOf<@Validated ConstraintViolation>(
+        val violations = listOf(
                 constraintViolation {
                     typeName = "example.org/example.Type"
                     msgFormat = "Test error"
