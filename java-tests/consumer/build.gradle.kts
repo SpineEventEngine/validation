@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.test.Kotest
 import io.spine.dependency.local.Spine
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
@@ -55,11 +54,9 @@ tasks.withType<LaunchProtoData>().configureEach {
 
 dependencies {
     protoData(project(":java-tests:extensions"))
-    protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extra-definitions"))
+    implementation(project(":java-tests:consumer-dependency"))
     implementation(Spine.time)
-    testImplementation(Kotest.assertions)
 }
 
 protoDataRemoteDebug(enabled = false)

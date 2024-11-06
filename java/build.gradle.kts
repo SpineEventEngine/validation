@@ -43,6 +43,4 @@ dependencies {
     implementation(Roaster.api)
 
     runtimeOnly(Roaster.jdt)
-
-    testImplementation(Kotest.assertions)
 }
