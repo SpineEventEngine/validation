@@ -74,13 +74,13 @@ internal class FieldValueSpec {
     `determine 'JavaType' for` {
 
         @Test
-        fun `a map`() {
+        fun `a map field`() {
             val mapValue = FieldValue.of(mapOf<String, Timestamp>(), mapContext())
             mapValue.javaType() shouldBe MESSAGE
         }
 
         @Test
-        fun `a repeated`() {
+        fun `a repeated field`() {
             val repeatedValue = FieldValue.of(listOf<String>(), repeatedContext())
             repeatedValue.javaType() shouldBe STRING
         }
@@ -95,7 +95,7 @@ internal class FieldValueSpec {
     }
 
     @Nested inner class
-    `check if the value is default for a` {
+    `check if the value is default for` {
 
         @Test
         fun `repeated fields`() {
