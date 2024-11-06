@@ -48,19 +48,19 @@ internal class AssumedRequiredITest {
     `a command` {
 
         @Test
-        fun `which must have an id`() {
+        fun `which must have an ID`() {
             val msg = CreateProject.newBuilder()
             assertViolation(msg, "id")
         }
 
         @Test
-        fun `an id of which cannot be empty`() = assertValid(
+        fun `an ID of which cannot be empty`() = assertValid(
             CreateProject.newBuilder()
                 .setId(Identifier.newUuid())
         )
 
         @Test
-        fun `an id of which cannot be a default message`() {
+        fun `an ID of which cannot be a default message`() {
             val builder = AssignTask.newBuilder().setTask(TaskId.getDefaultInstance())
             assertInvalid(builder)
         }
@@ -96,8 +96,7 @@ internal class AssumedRequiredITest {
         }
 
         @Test
-        @DisplayName("ID of which must be a non-empty value")
-        fun set() {
+        fun `ID of which must be a non-empty value`() {
             val msg = Project.newBuilder()
                 .setId(Identifier.newUuid())
             assertValid(msg)
