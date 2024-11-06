@@ -46,7 +46,7 @@ internal class RequiredRepeatedEnumITest {
 
     @Test // https://github.com/SpineEventEngine/mc-java/issues/119
     @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
-    fun `cannot have all items with zero-index enum item value`() {
+    fun `prohibit all items with zero-index enum item value`() {
         val allZero = Collections.newBuilder()
             .putNotEmptyMapOfInts(42, 314)
             .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
@@ -58,7 +58,7 @@ internal class RequiredRepeatedEnumITest {
 
     @Test // https://github.com/SpineEventEngine/mc-java/issues/119
     @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
-    fun `must not have event one value with non-zero enum item value`() {
+    fun `prohibit even one zero-index enum item value`() {
         val instance = Collections.newBuilder()
             .putContainsANonEmptyStringValue("111", "222")
             .addNotEmptyListOfLongs(0L)
