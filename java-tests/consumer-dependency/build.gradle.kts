@@ -28,13 +28,6 @@ buildscript {
     forceCodegenPlugins()
 }
 
-/**
- * This module is for testing of how a library with proto files is handled as a dependency.
- *
- * Please see the `consumer` module for details.
- */
-private val about = ""
-
 /*
  * Disable the generation of rejections, since we don't want
  * other plugins (potentially, still not using the latest ProtoData API)
