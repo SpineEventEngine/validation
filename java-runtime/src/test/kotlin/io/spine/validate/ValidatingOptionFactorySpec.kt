@@ -30,19 +30,11 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.spine.validate.option.ValidatingOptionFactory
 import java.util.function.Function
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`ValidatingOptionFactory` should")
 internal class ValidatingOptionFactorySpec {
-
-    private lateinit var options: ValidatingOptionFactory
-
-    @BeforeEach
-    fun setUp() {
-        options = object : ValidatingOptionFactory {}
-    }
 
     /**
      * Verifies that [ValidatingOptionFactory] does not force the classes that
@@ -61,6 +53,10 @@ internal class ValidatingOptionFactorySpec {
 
     @Test
     fun `provide empty sets of options for all types by default`() {
+        val options = object : ValidatingOptionFactory {}
+        fun assetEmpty(selector: Function<ValidatingOptionFactory, Set<*>>) =
+            selector.apply(options).shouldBeEmpty()
+
         assetEmpty { it.forBoolean() }
         assetEmpty { it.forByteString() }
         assetEmpty { it.forDouble() }
@@ -70,10 +66,5 @@ internal class ValidatingOptionFactorySpec {
         assetEmpty { it.forLong() }
         assetEmpty { it.forMessage() }
         assetEmpty { it.forString() }
-    }
-
-    private fun assetEmpty(typeSelector: Function<ValidatingOptionFactory, Set<*>>) {
-        val result = typeSelector.apply(options)
-        result.shouldBeEmpty()
     }
 }
