@@ -37,14 +37,13 @@ import org.junit.jupiter.api.Test
 internal class RequiredRepeatedNumberITest {
 
     @Test
-    fun `require a list with at lest one element`() {
+    fun `require at lest one element`() {
         val instance = Collections.newBuilder()
         assertViolation(instance, "not_empty_list_of_longs")
     }
 
     @Test
-    @DisplayName("can have any items, including zero")
-    fun repeatedInt() {
+    fun `allow any items, including zero`() {
         val instance = Collections.newBuilder()
             .addNotEmptyListOfLongs(0L)
             .putContainsANonEmptyStringValue("222", "111")
