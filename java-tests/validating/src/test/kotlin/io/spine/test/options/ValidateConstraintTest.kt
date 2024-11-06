@@ -132,7 +132,7 @@ internal class ValidateConstraintTest {
     }
 
     @Test
-    @DisplayName("not run validation if the option is `false`")
+    @DisplayName("no validation is done if the option is `false`")
     fun ignoreIfFalse() {
         val name = PersonName.newBuilder().setGivenName("Shawn")
         val town = Town.newBuilder().setName("Oeiras").setCountry("Portugal")
