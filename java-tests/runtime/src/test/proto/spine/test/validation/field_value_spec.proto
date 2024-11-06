@@ -34,10 +34,11 @@ option java_multiple_files = true;
 option java_outer_classname = "FieldValueTestProto";
 option java_package = "io.spine.test.validate.field";
 
-// The declarations for `FieldValueSpec`.
+import "google/protobuf/timestamp.proto";
 
-message Message {
-    map<string, string> map = 1;
+// The declarations for `FieldValueSpec`.
+message Stub {
+    map<string, google.protobuf.Timestamp> map = 1;
     repeated string repeated = 2;
     string scalar = 3;
 }

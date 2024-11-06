@@ -27,11 +27,13 @@
 package io.spine.validate
 
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING
+import com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE
 import com.google.protobuf.Syntax
+import com.google.protobuf.Timestamp
 import io.kotest.matchers.shouldBe
 import io.spine.base.Identifier.newUuid
 import io.spine.code.proto.FieldContext
-import io.spine.test.validate.field.Message
+import io.spine.test.validate.field.Stub
 import kotlin.streams.toList
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -73,8 +75,8 @@ internal class FieldValueSpec {
 
         @Test
         fun `a map`() {
-            val mapValue = FieldValue.of(mapOf<String, String>(), mapContext())
-            mapValue.javaType() shouldBe STRING
+            val mapValue = FieldValue.of(mapOf<String, Timestamp>(), mapContext())
+            mapValue.javaType() shouldBe MESSAGE
         }
 
         @Test
@@ -141,17 +143,19 @@ internal class FieldValueSpec {
     }
 }
 
+private val descriptor = Stub.getDescriptor()
+
 fun mapContext(): FieldContext {
-    val mapField = Message.getDescriptor().findFieldByName("map")
+    val mapField = descriptor.findFieldByName("map")
     return FieldContext.create(mapField)
 }
 
 fun repeatedContext(): FieldContext {
-    val repeatedField = Message.getDescriptor().findFieldByName("repeated")
+    val repeatedField = descriptor.findFieldByName("repeated")
     return FieldContext.create(repeatedField)
 }
 
 fun scalarContext(): FieldContext {
-    val scalarField = Message.getDescriptor().findFieldByName("scalar")
+    val scalarField = descriptor.findFieldByName("scalar")
     return FieldContext.create(scalarField)
 }
