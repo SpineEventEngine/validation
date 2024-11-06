@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test
 internal class IsRequiredITest {
 
     @Test
-    fun `throw if required field group is not set`() {
+    fun `it causes violation if required field group is not set`() {
         val message = Meal.newBuilder()
             .setCheese(Sauce.getDefaultInstance())
             .buildPartial()
@@ -58,7 +58,7 @@ internal class IsRequiredITest {
     }
 
     @Test
-    fun `not throw if required field group is set`() {
+    fun `there is no violation if required field group is set`() {
         val fish = fish {
             description = randomString()
         }
@@ -70,7 +70,7 @@ internal class IsRequiredITest {
     }
 
     @Test
-    fun `ignore non-required field groups`() {
+    fun `non-required field groups are ignored`() {
         val fish = Fish.newBuilder()
             .setDescription(Identifier.newUuid())
             .build()

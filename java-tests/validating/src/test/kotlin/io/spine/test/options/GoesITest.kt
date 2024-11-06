@@ -44,10 +44,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("`(goes)` option should be compiled so that")
-@Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
 internal class GoesITest {
 
     @Test
+    @Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
     fun `it indicates violation if the associated field is not set and the target field is set`() {
         val paper = Paper.newBuilder()
             .setWhenArchived(Time.currentTime())
@@ -69,10 +69,10 @@ internal class GoesITest {
     }
 
     @Nested inner class
-    `indicate no violation if` {
+    `it indicates no violation if` {
 
         @Test
-        fun `if both fields are set`() {
+        fun `both fields are set`() {
             val paper = assertDoesNotThrow {
                 paper {
                     archiveId = ArchiveId.generate()
@@ -83,7 +83,7 @@ internal class GoesITest {
         }
 
         @Test
-        fun `if neither field is set`() {
+        fun `neither field is set`() {
             val paper = assertDoesNotThrow {
                 paper { }
             }
@@ -92,7 +92,7 @@ internal class GoesITest {
     }
 
     @Test
-    fun `if the associated field is set and target is not set`() {
+    fun `there is no violation if the associated field is set and target is not set`() {
         val paper = assertDoesNotThrow {
             paper {
                 archiveId = ArchiveId.generate()
