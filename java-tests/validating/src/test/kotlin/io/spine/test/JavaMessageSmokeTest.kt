@@ -26,16 +26,13 @@
 
 package io.spine.test
 
-import com.google.common.truth.Truth
 import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldNotBe
 import io.spine.test.protobuf.CardNumber
 import io.spine.validate.NonValidated
-import io.spine.validate.Validate
 import io.spine.validate.Validate.check
 import io.spine.validate.ValidationException
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -65,8 +62,7 @@ internal class JavaMessageSmokeTest {
     }
 
     @Test
-    @DisplayName("throw `ValidationException` if the message is not valid")
-    fun throwIfInvalid() {
+    fun `throw 'ValidationException' if the message is not valid`() {
         val exception = assertThrows<ValidationException> {
             invalid.build()
         }
