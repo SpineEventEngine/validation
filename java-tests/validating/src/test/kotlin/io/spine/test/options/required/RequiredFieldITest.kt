@@ -45,14 +45,14 @@ internal class RequiredFieldITest {
 
     @Test
     @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
-    fun `not set fields produce a violation`() {
+    fun `unset fields produce a violation`() {
         val invalidMessage = Due.newBuilder()
         assertInvalidWithParam(invalidMessage, "date | never")
     }
 
     @Test
     @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
-    fun `a complete group of fields must be set`() {
+    fun `incomplete group causes a violation`() {
         val invalidMessage = Combination.newBuilder()
             .setA1("a1")
             .setB2(ByteString.copyFrom("b2", Charsets.UTF_16))
@@ -60,7 +60,7 @@ internal class RequiredFieldITest {
     }
 
     @Test
-    fun `if at least one alternative is set, no violation`() {
+    fun `at least one alternative satisfies the constraint`() {
         val message = Combination.newBuilder()
             .setA1("a1")
             .addA2("a2")
@@ -68,7 +68,7 @@ internal class RequiredFieldITest {
     }
 
     @Test
-    fun `if all the alternatives are set, no violation`() {
+    fun `if all the alternatives set the constraint is satisfied`() {
         val message = Combination.newBuilder()
             .setA1("a1")
             .addA2("a2")
