@@ -42,7 +42,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`Validate` utility class should")
-internal class ValidateUntilitySpec : UtilityClassTest<Validate>(Validate::class.java) {
+internal class ValidateUtilitySpec : UtilityClassTest<Validate>(Validate::class.java) {
 
     override fun configure(tester: NullPointerTester) {
         super.configure(tester)
