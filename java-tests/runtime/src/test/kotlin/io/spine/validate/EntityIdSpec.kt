@@ -80,7 +80,7 @@ internal class EntityIdSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun `provide one valid violation if is not valid`() {
+        fun `provide a violation if is not valid`() {
             val msg = EntityIdMsgFieldValue.getDefaultInstance()
             assertSingleViolation(msg, MessageValidatorTestEnv.VALUE)
         }
