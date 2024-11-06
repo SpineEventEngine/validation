@@ -125,10 +125,9 @@ internal class PatternSpec : ValidationOfConstraintTest() {
             .buildPartial()
         assertValid(message)
     }
-
-    private fun patternStringFor(email: String): @NonValidated PatternStringFieldValue {
-        return PatternStringFieldValue.newBuilder()
-            .setEmail(email)
-            .buildPartial()
-    }
 }
+
+private fun patternStringFor(email: String): @NonValidated PatternStringFieldValue =
+    PatternStringFieldValue.newBuilder()
+        .setEmail(email)
+        .buildPartial()
