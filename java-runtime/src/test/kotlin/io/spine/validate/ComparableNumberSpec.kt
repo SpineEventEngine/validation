@@ -42,7 +42,7 @@ internal class ComparableNumberSpec {
         tester.testAllPublicInstanceMethods(ComparableNumber(42))
     }
 
-    @Nested internal inner class
+    @Nested inner class
     `have a consistent equality relationship` {
 
         @Test

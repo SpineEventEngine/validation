@@ -31,6 +31,7 @@ import com.google.protobuf.Descriptors.OneofDescriptor
 import com.google.protobuf.StringValue
 import com.google.protobuf.Value
 import com.google.protobuf.value
+import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
 import io.spine.code.proto.FieldContext
 import io.spine.testing.ClassTest
@@ -68,7 +69,7 @@ internal class MessageValueSpec : ClassTest<MessageValue>(MessageValue::class.ja
 
         private fun assertOneofValue(message: MessageValue, expectedValue: Any) {
             val optionalValue = message.valueOf(VALUE_ONEOF)
-            org.junit.jupiter.api.Assertions.assertTrue(optionalValue.isPresent)
+            optionalValue.shouldBePresent()
             val value = optionalValue.get()
             value.singleValue() shouldBe expectedValue
         }

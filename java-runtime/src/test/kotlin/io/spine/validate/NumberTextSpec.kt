@@ -95,9 +95,8 @@ internal class NumberTextSpec {
         }
     }
 
-    @DisplayName("throw on a number with too many decimal separators")
     @Test
-    fun throwOnTooManySeparators() {
+    fun `throw on a number with too many decimal separators`() {
         assertThrows<IllegalStateException> {
             NumberText("1.0.0")
         }
