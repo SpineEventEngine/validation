@@ -60,7 +60,7 @@ internal class AssumedRequiredITest {
         )
 
         @Test
-        fun `an id which cannot be a default message`() {
+        fun `an id of which cannot be a default message`() {
             val builder = AssignTask.newBuilder().setTask(TaskId.getDefaultInstance())
             assertInvalid(builder)
         }
