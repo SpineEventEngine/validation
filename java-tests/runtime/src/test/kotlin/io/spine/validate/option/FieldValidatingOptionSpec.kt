@@ -145,6 +145,7 @@ private class MaxLengthConstraint(
             .collect(ImmutableList.toImmutableList())
     }
 }
+
 @Immutable
 private class MaxLength : FieldValidatingOption<Int>(TestFieldOptionProto.maxLength) {
     override fun constraintFor(field: FieldContext): Constraint {
