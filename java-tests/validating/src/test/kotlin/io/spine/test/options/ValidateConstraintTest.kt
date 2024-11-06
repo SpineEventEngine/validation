@@ -78,8 +78,7 @@ internal class ValidateConstraintTest {
     }
 
     @Test
-    @DisplayName("repeated message fields are validated and violations are stored separately")
-    fun validateRepeated() {
+    fun `repeated message fields are validated and violations are stored separately`() {
         val name = PersonName.newBuilder().setGivenName("Eve")
         val invalidNumbers = arrayOf(
             PhoneNumber.getDefaultInstance(),
@@ -114,8 +113,7 @@ internal class ValidateConstraintTest {
     }
 
     @Test
-    @DisplayName("recursive validation has an exit point")
-    fun recursive() {
+    fun `recursive validation has an exit point`() {
         val nonEmptyAny = Identifier.pack(Identifier.newUuid())
         val tree = BinaryTree.newBuilder()
             .setValue(nonEmptyAny)
@@ -132,8 +130,7 @@ internal class ValidateConstraintTest {
     }
 
     @Test
-    @DisplayName("no validation is done if the option is `false`")
-    fun ignoreIfFalse() {
+    fun `no validation is done if the option is 'false'`() {
         val name = PersonName.newBuilder().setGivenName("Shawn")
         val town = Town.newBuilder().setName("Oeiras").setCountry("Portugal")
         val invalidEmail = EmailAddress.newBuilder()
