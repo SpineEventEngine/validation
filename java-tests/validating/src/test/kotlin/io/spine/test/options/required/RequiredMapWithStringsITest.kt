@@ -71,8 +71,7 @@ internal class RequiredMapWithStringsITest {
     }
 
     @Test
-    @DisplayName("allow an entry with the empty key and non-empty value")
-    fun mapOfStrings() {
+    fun `allow an entry with the empty key and non-empty value`() {
         val instance = Collections.newBuilder()
             .addNotEmptyListOfLongs(42L)
             .putContainsANonEmptyStringValue("", " ")
