@@ -56,11 +56,11 @@ internal class NumberTextSpec {
     }
 
     @Test
-    fun `recognize that two numbers are of the same types`() {
-        val fitsIntoByte = NumberText("4")
+    fun `recognize that two numbers are of the same type`() {
+        val fitsIntoInt = NumberText("4")
         val maxInt = NumberText(Int.MAX_VALUE.toString())
 
-        fitsIntoByte.isOfSameType(maxInt) shouldBe true
+        fitsIntoInt.isOfSameType(maxInt) shouldBe true
     }
 
     @Test
