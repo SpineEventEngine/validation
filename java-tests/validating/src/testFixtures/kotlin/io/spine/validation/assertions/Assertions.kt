@@ -37,7 +37,10 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.type.toJson
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidationException
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.function.Executable
 
 /**
  * Assert the given [builder] produces a valid message.
@@ -98,3 +101,16 @@ fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViolation {
         ?: fail("Cannot find a violation for the field `$fieldName`. Violations: `$this`.")
 }
 
+/**
+ * Asserts that the given `executable` throws [ValidationException].
+ */
+fun assertValidationFails(executable: Executable) {
+    assertThrows(ValidationException::class.java, executable)
+}
+
+/**
+ * Asserts that the given `executable` doesn't throw anything.
+ */
+fun assertValidationPasses(executable: Executable) {
+    assertDoesNotThrow(executable)
+}
