@@ -29,7 +29,7 @@ buildscript {
 }
 
 /**
- * This module is for testing how a library with proto files is handled as a dependency.
+ * This module is for testing of how a library with proto files is handled as a dependency.
  *
  * Please see the `consumer` module for details.
  */
