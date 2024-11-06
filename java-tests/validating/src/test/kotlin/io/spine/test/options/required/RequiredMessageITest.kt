@@ -42,7 +42,6 @@ import org.junit.jupiter.api.Test
 internal class RequiredMessageITest {
 
     @Test
-    @DisplayName("cannot have a default instance")
     fun `prohibit a default message`() {
         val singulars = Singulars.newBuilder()
         assertViolation(singulars, "not_default")
@@ -58,8 +57,15 @@ internal class RequiredMessageITest {
         assertValid(singulars)
     }
 
+    /**
+     * This function tests that the validation fails on the option applied
+     * to the field with the type [Empty].
+     *
+     * We should do more and
+     * [raise compile-time error](https://github.com/SpineEventEngine/validation/issues/146).
+     */
     @Test
-    fun `cannot be of type 'Empty'`() {
+    fun `not be applied to the type 'Empty'`() {
         val fieldName = "impossible"
 
         val unset = AlwaysInvalid.newBuilder()
