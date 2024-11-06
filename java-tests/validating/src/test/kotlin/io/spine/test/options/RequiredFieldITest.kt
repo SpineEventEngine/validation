@@ -24,69 +24,68 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.tools.validate;
+package io.spine.test.options
 
-import com.google.protobuf.ByteString;
-import com.google.protobuf.Message;
-import io.spine.validation.assertions.Assertions;
-import io.spine.type.TypeName;
-import io.spine.validate.ConstraintViolation;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static com.google.common.base.Charsets.UTF_16;
-import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.validation.assertions.Assertions.assertValid;
+import com.google.common.base.Charsets
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import com.google.protobuf.ByteString
+import com.google.protobuf.Message
+import io.spine.test.tools.validate.Combination
+import io.spine.test.tools.validate.Due
+import io.spine.type.TypeName
+import io.spine.validate.constraintViolation
+import io.spine.validation.assertions.assertInvalid
+import io.spine.validation.assertions.assertValid
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 @DisplayName("`(required_field)` option should be compiled so that")
-@Disabled
-class RequiredFieldConstraintTest {
+internal class RequiredFieldITest {
 
     @Test
-    @DisplayName("not set fields produce a violation")
-    void notSet() {
-        var invalidMessage = Due.newBuilder();
-        assertInvalid(invalidMessage, "date | never");
-    }
-
-    @Test
-    @DisplayName("a complete group of fields must be set")
-    void notComplete() {
-        var invalidMessage = Combination.newBuilder()
-                .setA1("a1")
-                .setB2(ByteString.copyFrom("b2", UTF_16));
-        assertInvalid(invalidMessage, "a1 & a2 | b1 & b2");
+    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
+    fun `not set fields produce a violation`() {
+        val invalidMessage = Due.newBuilder()
+        assertInvalidWithParam(invalidMessage, "date | never")
     }
 
     @Test
-    @DisplayName("if at least one alternative is set, no violation")
-    void valid() {
-        var message = Combination.newBuilder()
-                .setA1("a1")
-                .addA2("a2");
-        assertValid(message);
+    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
+    fun `a complete group of fields must be set`() {
+        val invalidMessage = Combination.newBuilder()
+            .setA1("a1")
+            .setB2(ByteString.copyFrom("b2", Charsets.UTF_16))
+        assertInvalidWithParam(invalidMessage, "a1 & a2 | b1 & b2")
     }
 
     @Test
-    @DisplayName("if all the alternatives are set, no violation")
-    void all() {
-        var message = Combination.newBuilder()
-                .setA1("a1")
-                .addA2("a2")
-                .putB1(42, 314)
-                .setB2(ByteString.copyFromUtf8("b2"));
-        assertValid(message);
+    fun `if at least one alternative is set, no violation`() {
+        val message = Combination.newBuilder()
+            .setA1("a1")
+            .addA2("a2")
+        assertValid(message)
     }
 
-    private static void assertInvalid(Message.Builder message, String violationParam) {
-        var violations = Assertions.assertInvalid(message);
-        var typeName = TypeName.of(message.buildPartial());
-        assertThat(violations)
-                .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation.newBuilder()
-                                         .setTypeName(typeName.value())
-                                         .addParam(violationParam)
-                                         .build());
+    @Test
+    fun `if all the alternatives are set, no violation`() {
+        val message = Combination.newBuilder()
+            .setA1("a1")
+            .addA2("a2")
+            .putB1(42, 314)
+            .setB2(ByteString.copyFromUtf8("b2"))
+        assertValid(message)
     }
+}
+
+private fun assertInvalidWithParam(message: Message.Builder, violationParam: String) {
+    val violations = assertInvalid(message)
+    val partial = message.buildPartial()
+    val expected = constraintViolation {
+        typeName = TypeName.of(partial).value()
+        param.add(violationParam)
+    }
+    assertThat(violations)
+        .comparingExpectedFieldsOnly()
+        .containsExactly(expected)
 }
