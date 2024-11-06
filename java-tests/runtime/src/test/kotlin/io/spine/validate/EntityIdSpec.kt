@@ -87,7 +87,7 @@ internal class EntityIdSpec : ValidationOfConstraintTest() {
     }
 
     @Nested inner class
-    `in state and` {
+    `in a state and` {
 
         @Test
         fun `consider it required by default`() {
@@ -107,7 +107,7 @@ internal class EntityIdSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        fun `not consider it '(required)' if the option is set explicitly set to false`() {
+        fun `not consider it '(required)' if the option is set explicitly to false`() {
             val stateWithDefaultId = ProjectionState.getDefaultInstance()
             assertValid(stateWithDefaultId)
         }
