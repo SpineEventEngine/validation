@@ -24,9 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
 import com.google.protobuf.ByteString
+import com.google.protobuf.Empty
+import io.spine.base.Identifier
+import io.spine.test.tools.validate.AlwaysInvalid
 import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
@@ -35,22 +38,35 @@ import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required) option in a string field should")
-internal class RequiredStringITest {
+@DisplayName("(required)` option in a message field should")
+internal class RequiredMessageITest {
 
     @Test
-    fun `require a non empty value being set`() {
+    @DisplayName("cannot have a default instance")
+    fun `prohibit a default message`() {
         val singulars = Singulars.newBuilder()
-        assertViolation(singulars, "not_empty_string")
+        assertViolation(singulars, "not_default")
     }
 
     @Test
-    fun `accept non-empty values`() {
+    fun `accept a non-default instance`() {
         val singulars = Singulars.newBuilder()
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("lalala"))
+            .setNotDefault(Enclosed.newBuilder().setValue(Identifier.newUuid()))
             .setNotEmptyString(" ")
-            .setNotVegetable(UltimateChoice.FISH)
-            .setNotDefault(Enclosed.newBuilder().setValue("  "))
-            .setOneOrMoreBytes(ByteString.copyFromUtf8("foobar"))
         assertValid(singulars)
+    }
+
+    @Test
+    fun `cannot be of type 'Empty'`() {
+        val fieldName = "impossible"
+
+        val unset = AlwaysInvalid.newBuilder()
+        assertViolation(unset, fieldName)
+
+        val set = AlwaysInvalid.newBuilder()
+            .setImpossible(Empty.getDefaultInstance())
+        assertViolation(set, fieldName)
     }
 }

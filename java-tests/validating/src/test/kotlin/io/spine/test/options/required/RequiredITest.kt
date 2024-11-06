@@ -24,35 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
-import com.google.protobuf.ByteString
-import io.spine.test.tools.validate.Enclosed
+import com.google.common.truth.Truth8.assertThat
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.optional.shouldBePresent
 import io.spine.test.tools.validate.Singulars
-import io.spine.test.tools.validate.UltimateChoice
-import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required)` option in an enum field should")
-internal class RequiredEnumITest {
+@DisplayName("`(required)` option should be compiled so that")
+internal class RequiredITest {
 
     @Test
-    fun `not allow a zero-index enum item value`() {
-        val msg = Singulars.newBuilder()
-            .setNotVegetable(UltimateChoice.VEGETABLE)
-        assertViolation(msg, "not_vegetable")
-    }
-
-    @Test
-    fun `accept a non-zero index item value`() {
-        val singulars = Singulars
-            .newBuilder()
-            .setOneOrMoreBytes(ByteString.copyFrom(byteArrayOf(0)))
-            .setNotDefault(Enclosed.newBuilder().setValue("baz"))
-            .setNotVegetable(UltimateChoice.CHICKEN)
-            .setNotEmptyString("not empty")
-        assertValid(singulars)
+    fun `all violations on a single message are collected`() {
+        val instance = Singulars.getDefaultInstance()
+        val error = instance.validate()
+        assertThat(error).isPresent()
+        error.shouldBePresent()
+        error.get().constraintViolationList shouldHaveSize 4
     }
 }

@@ -24,48 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
+import io.spine.validation.assertions.assertValid
 import io.spine.validation.assertions.assertViolation
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option in a repeated enum field should")
-internal class RequiredRepeatedEnumITest {
-
-    private val field = "at_least_one_piece_of_meat"
+@DisplayName("`(required)` option in a map field with number values should")
+internal class RequiredMapWithNumbersITest {
 
     @Test
-    fun `require at least one item`() {
+    fun `require at least one entry`() {
         val instance = Collections.newBuilder()
-        assertViolation(instance, field, "must not be empty")
+        assertViolation(instance, "not_empty_map_of_ints")
     }
 
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
-    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
-    fun `cannot have all items with zero-index enum item value`() {
-        val allZero = Collections.newBuilder()
-            .putNotEmptyMapOfInts(42, 314)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-            .putContainsANonEmptyStringValue("  ", "   ")
-            .addNotEmptyListOfLongs(42L)
-        assertViolation(allZero, field, "cannot contain default values")
-    }
-
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
-    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
-    fun `must not have event one value with non-zero enum item value`() {
+    @Test
+    fun `allow entries with any values, including zero`() {
         val instance = Collections.newBuilder()
-            .putContainsANonEmptyStringValue("111", "222")
-            .addNotEmptyListOfLongs(0L)
             .putNotEmptyMapOfInts(0, 0)
+            .putContainsANonEmptyStringValue("  ", "qwertyuiop")
             .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-        assertViolation(instance, field, "default values")
+            .addNotEmptyListOfLongs(981L)
+        assertValid(instance)
     }
 }

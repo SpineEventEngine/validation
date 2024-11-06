@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
 import com.google.common.base.Charsets
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat

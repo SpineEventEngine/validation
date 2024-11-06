@@ -24,31 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
-import io.spine.test.tools.validate.Collections
+import com.google.protobuf.ByteString
+import io.spine.test.tools.validate.Enclosed
+import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
 import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option in a map field with number values should")
-internal class RequiredMapWithNumbersITest {
+@DisplayName("(required) option in a string field should")
+internal class RequiredStringITest {
 
     @Test
-    fun `require at least one entry`() {
-        val instance = Collections.newBuilder()
-        assertViolation(instance, "not_empty_map_of_ints")
+    fun `require a non empty value being set`() {
+        val singulars = Singulars.newBuilder()
+        assertViolation(singulars, "not_empty_string")
     }
 
     @Test
-    fun `allow entries with any values, including zero`() {
-        val instance = Collections.newBuilder()
-            .putNotEmptyMapOfInts(0, 0)
-            .putContainsANonEmptyStringValue("  ", "qwertyuiop")
-            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
-            .addNotEmptyListOfLongs(981L)
-        assertValid(instance)
+    fun `accept non-empty values`() {
+        val singulars = Singulars.newBuilder()
+            .setNotEmptyString(" ")
+            .setNotVegetable(UltimateChoice.FISH)
+            .setNotDefault(Enclosed.newBuilder().setValue("  "))
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("foobar"))
+        assertValid(singulars)
     }
 }

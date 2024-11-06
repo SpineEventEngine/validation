@@ -24,60 +24,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
-import io.spine.validation.assertions.assertInvalid
-import io.spine.validation.assertions.assertValid
-import io.spine.validate.Diags
 import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option in a map field with string values should")
-internal class RequiredMapWithStringsITest {
+@DisplayName("`(required)` option in a repeated enum field should")
+internal class RequiredRepeatedEnumITest {
+
+    private val field = "at_least_one_piece_of_meat"
 
     @Test
-    fun `require at least one entry`() {
+    fun `require at least one item`() {
         val instance = Collections.newBuilder()
-        assertViolation(instance,
-            "contains_a_non_empty_string_value",
-            Diags.Required.collectionErrorMsg
-        )
+        assertViolation(instance, field, "must not be empty")
     }
 
-    @Test
-    @Disabled("temporarily until the issue with empty entries is finalised")
-    fun `prohibit an entry with empty string`() {
-        val empty = Collections.newBuilder()
-            .putContainsANonEmptyStringValue("", "")
-            .putNotEmptyMapOfInts(111, 314)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
+    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
+    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
+    fun `cannot have all items with zero-index enum item value`() {
+        val allZero = Collections.newBuilder()
+            .putNotEmptyMapOfInts(42, 314)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
+            .putContainsANonEmptyStringValue("  ", "   ")
             .addNotEmptyListOfLongs(42L)
-        assertInvalid(empty)
+        assertViolation(allZero, field, "cannot contain default values")
     }
 
-    @Test
-    fun `allow entries with non-empty string`() {
-        val nonEmpty = Collections.newBuilder()
-            .putContainsANonEmptyStringValue("bar", "foo")
-            .putContainsANonEmptyStringValue("foo", "bar")
-            .putNotEmptyMapOfInts(111, 314)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
-            .addNotEmptyListOfLongs(42L)
-        assertValid(nonEmpty)
-    }
-
-    @Test
-    @DisplayName("allow an entry with the empty key and non-empty value")
-    fun mapOfStrings() {
+    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
+    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
+    fun `must not have event one value with non-zero enum item value`() {
         val instance = Collections.newBuilder()
-            .addNotEmptyListOfLongs(42L)
-            .putContainsANonEmptyStringValue("", " ")
+            .putContainsANonEmptyStringValue("111", "222")
+            .addNotEmptyListOfLongs(0L)
             .putNotEmptyMapOfInts(0, 0)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
             .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
-        assertValid(instance)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
+        assertViolation(instance, field, "default values")
     }
 }

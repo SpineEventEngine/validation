@@ -24,23 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.setonce
+package io.spine.test.options.setonce
 
 import com.google.protobuf.ByteString.copyFromUtf8
-import io.spine.test.setonce.TestEnv.DONALD
-import io.spine.test.setonce.TestEnv.EIGHTY_KG
-import io.spine.test.setonce.TestEnv.FIFTY_KG
-import io.spine.test.setonce.TestEnv.FIRST_YEAR
-import io.spine.test.setonce.TestEnv.FULL_SIGNATURE
-import io.spine.test.setonce.TestEnv.JACK
-import io.spine.test.setonce.TestEnv.METER_AND_EIGHT
-import io.spine.test.setonce.TestEnv.METER_AND_HALF
-import io.spine.test.setonce.TestEnv.NO
-import io.spine.test.setonce.TestEnv.SHORT_SIGNATURE
-import io.spine.test.setonce.TestEnv.STUDENT1
-import io.spine.test.setonce.TestEnv.STUDENT2
-import io.spine.test.setonce.TestEnv.THIRD_YEAR
-import io.spine.test.setonce.TestEnv.YES
+import io.spine.test.options.setonce.TestEnv.DONALD
+import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
+import io.spine.test.options.setonce.TestEnv.FIFTY_KG
+import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
+import io.spine.test.options.setonce.TestEnv.FULL_SIGNATURE
+import io.spine.test.options.setonce.TestEnv.JACK
+import io.spine.test.options.setonce.TestEnv.METER_AND_EIGHT
+import io.spine.test.options.setonce.TestEnv.METER_AND_HALF
+import io.spine.test.options.setonce.TestEnv.NO
+import io.spine.test.options.setonce.TestEnv.SHORT_SIGNATURE
+import io.spine.test.options.setonce.TestEnv.STUDENT1
+import io.spine.test.options.setonce.TestEnv.STUDENT2
+import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
+import io.spine.test.options.setonce.TestEnv.YES
 import io.spine.test.tools.validate.Student
 import io.spine.test.tools.validate.student
 import io.spine.validation.assertions.assertValidationFails

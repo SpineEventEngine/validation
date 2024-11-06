@@ -24,12 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
 import com.google.protobuf.ByteString
-import com.google.protobuf.Empty
-import io.spine.base.Identifier
-import io.spine.test.tools.validate.AlwaysInvalid
 import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
@@ -38,35 +35,24 @@ import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required)` option in a message field should")
-internal class RequiredMessageITest {
+@DisplayName("(required)` option in an enum field should")
+internal class RequiredEnumITest {
 
     @Test
-    @DisplayName("cannot have a default instance")
-    fun `prohibit a default message`() {
-        val singulars = Singulars.newBuilder()
-        assertViolation(singulars, "not_default")
+    fun `not allow a zero-index enum item value`() {
+        val msg = Singulars.newBuilder()
+            .setNotVegetable(UltimateChoice.VEGETABLE)
+        assertViolation(msg, "not_vegetable")
     }
 
     @Test
-    fun `accept a non-default instance`() {
-        val singulars = Singulars.newBuilder()
+    fun `accept a non-zero index item value`() {
+        val singulars = Singulars
+            .newBuilder()
+            .setOneOrMoreBytes(ByteString.copyFrom(byteArrayOf(0)))
+            .setNotDefault(Enclosed.newBuilder().setValue("baz"))
             .setNotVegetable(UltimateChoice.CHICKEN)
-            .setOneOrMoreBytes(ByteString.copyFromUtf8("lalala"))
-            .setNotDefault(Enclosed.newBuilder().setValue(Identifier.newUuid()))
-            .setNotEmptyString(" ")
+            .setNotEmptyString("not empty")
         assertValid(singulars)
-    }
-
-    @Test
-    fun `cannot be of type 'Empty'`() {
-        val fieldName = "impossible"
-
-        val unset = AlwaysInvalid.newBuilder()
-        assertViolation(unset, fieldName)
-
-        val set = AlwaysInvalid.newBuilder()
-            .setImpossible(Empty.getDefaultInstance())
-        assertViolation(set, fieldName)
     }
 }

@@ -24,32 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options
+package io.spine.test.options.required
 
-import io.spine.test.tools.validate.Collections
+import com.google.protobuf.ByteString
+import io.spine.test.tools.validate.Enclosed
+import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertValid
 import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option in a repeated number field should")
-internal class RequiredRepeatedNumberITest {
+@DisplayName("(required) option set in a `bytes` field should")
+internal class RequiredBytesITest {
 
     @Test
-    fun `require a list with at lest one element`() {
-        val instance = Collections.newBuilder()
-        assertViolation(instance, "not_empty_list_of_longs")
+    fun `require non-empty value`() {
+        val singulars = Singulars.newBuilder()
+        assertViolation(singulars, "one_or_more_bytes")
     }
 
     @Test
-    @DisplayName("can have any items, including zero")
-    fun repeatedInt() {
-        val instance = Collections.newBuilder()
-            .addNotEmptyListOfLongs(0L)
-            .putContainsANonEmptyStringValue("222", "111")
-            .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
-            .putNotEmptyMapOfInts(42, 42)
-        assertValid(instance)
+    fun `allow all zeros`() {
+        val nonZeros = Singulars.newBuilder()
+            .setNotDefault(Enclosed.newBuilder().setValue("non-default enclosed"))
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setOneOrMoreBytes(ByteString.copyFromUtf8("non-empty"))
+            .setNotEmptyString("str")
+        assertValid(nonZeros)
+
+        val zeros = byteArrayOf(0)
+        val withZeroes = Singulars.newBuilder()
+            .setOneOrMoreBytes(ByteString.copyFrom(zeros))
+            .setNotVegetable(UltimateChoice.CHICKEN)
+            .setNotDefault(Enclosed.newBuilder().setValue("   "))
+            .setNotEmptyString("  ")
+        assertValid(withZeroes)
     }
 }

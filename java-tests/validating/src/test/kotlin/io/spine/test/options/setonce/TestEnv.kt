@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.setonce
+package io.spine.test.options.setonce
 
 import com.google.protobuf.ByteString
 import io.spine.test.tools.validate.Name

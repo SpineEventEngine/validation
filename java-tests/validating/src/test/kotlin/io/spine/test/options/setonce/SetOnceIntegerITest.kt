@@ -24,12 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.setonce
+package io.spine.test.options.setonce
 
-import io.spine.test.setonce.TestEnv.EIGHTEEN
-import io.spine.test.setonce.TestEnv.EIGHTY
-import io.spine.test.setonce.TestEnv.SIXTEEN
-import io.spine.test.setonce.TestEnv.SIXTY
+import io.spine.test.options.setonce.TestEnv.EIGHTEEN
+import io.spine.test.options.setonce.TestEnv.EIGHTY
+import io.spine.test.options.setonce.TestEnv.SIXTEEN
+import io.spine.test.options.setonce.TestEnv.SIXTY
 import io.spine.test.tools.validate.Balance
 import io.spine.test.tools.validate.balance
 import io.spine.validation.assertions.assertValidationFails
