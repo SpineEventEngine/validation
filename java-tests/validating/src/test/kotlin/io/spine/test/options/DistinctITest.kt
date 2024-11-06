@@ -42,7 +42,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 internal class DistinctITest {
 
     @Test
-    fun `duplicates result in a violation`() {
+    fun `duplicated entries result in a violation`() {
         val msg = ProtoSet.newBuilder()
             .addElement(toAny("123"))
             .addElement(toAny("321"))
