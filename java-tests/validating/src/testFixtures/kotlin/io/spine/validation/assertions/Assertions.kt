@@ -90,8 +90,11 @@ fun assertViolation(
     violation.msgFormat shouldContain errorMessagePart
 }
 
-private fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViolation {
+/**
+ * Obtains a violation for the field with the given name.
+ */
+fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViolation {
     return find { it.fieldPath.fieldNameList[0] == fieldName }
-        ?: fail("No violation for field `$fieldName`. Violations: `$this`.")
+        ?: fail("Cannot find a violation for the field `$fieldName`. Violations: `$this`.")
 }
 
