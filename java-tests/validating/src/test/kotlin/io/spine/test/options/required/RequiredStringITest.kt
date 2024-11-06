@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test
 internal class RequiredStringITest {
 
     @Test
-    fun `require a non empty value being set`() {
+    fun `require a non-empty value being set`() {
         val singulars = Singulars.newBuilder()
         assertViolation(singulars, "not_empty_string")
     }
