@@ -44,7 +44,7 @@ internal class ViolationTextSpec {
     }
 
     @Test
-    fun `include type info in the violation text`() {
+    fun `include type info`() {
         val expected = TypeName.of(Timestamp::class.java).value()
         val violation = constraintViolation { typeName = expected }
         val text = ViolationText.of(violation)
@@ -52,7 +52,7 @@ internal class ViolationTextSpec {
     }
 
     @Test
-    fun `include field info in the violation text`() {
+    fun `include field info`() {
         val field = Field.parse("msg.foo.bar")
         val violation = constraintViolation { fieldPath = field.path() }
         val text = ViolationText.of(violation)
