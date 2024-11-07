@@ -52,7 +52,7 @@ public class JavaValidationPlugin(
     policies = base.policies
 ) {
     /**
-     * The constructor to be involed reflectively by ProtoData.
+     * The constructor to be invoked reflectively by ProtoData.
      */
     public constructor() : this(ValidationPlugin())
 
