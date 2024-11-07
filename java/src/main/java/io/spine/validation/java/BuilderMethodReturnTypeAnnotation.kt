@@ -39,7 +39,7 @@ import org.jboss.forge.roaster.model.source.MethodSource
  * An insertion point for a type annotation for the type returned by a message builder method.
  *
  * The insertion point is placed in the spot where the `TYPE_USE` annotation can be put.
- * The annotation would mark the return type of a method with the given name.
+ * The annotation would mark the method return type with the given name.
  *
  * It is assumed that:
  *
