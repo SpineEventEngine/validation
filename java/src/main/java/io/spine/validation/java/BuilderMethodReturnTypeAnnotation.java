@@ -54,7 +54,7 @@ import static kotlin.text.StringsKt.lines;
  *     <li>The method has no parameters.
  *     <li>The method is public.
  *     <li>The method returns a value.
- *     <li>The return type is formatted as a fully-qualified name of a class and placed on the same
+ *     <li>The return type is formatted as a fully qualified name of a class and placed on the same
  *         line with the {@code public} modifier and the method name.
  * </ol>
  */

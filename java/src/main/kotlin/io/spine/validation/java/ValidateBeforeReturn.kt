@@ -30,7 +30,7 @@ import com.google.errorprone.annotations.Immutable
 import io.spine.protodata.render.InsertionPoint
 import io.spine.text.TextCoordinates
 import io.spine.text.TextFactory
-import io.spine.validation.java.BuilderInsertionPoint.BUILD_METHOD
+import io.spine.validation.java.BuilderInsertionPoint.Companion.BUILD_METHOD
 import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors.toSet
@@ -38,7 +38,6 @@ import org.jboss.forge.roaster.model.source.MethodSource
 
 /**
  * An insertion point at the place where Java validation code should be inserted.
- *
  *
  * Points at a line in the `Builder.build()` method right before the return statement.
  */
