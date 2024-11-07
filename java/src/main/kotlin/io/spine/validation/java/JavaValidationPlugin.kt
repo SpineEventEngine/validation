@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,72 +24,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java
 
-import com.google.common.collect.ImmutableList;
-import io.spine.protodata.plugin.Plugin;
-import io.spine.protodata.render.Renderer;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.validation.ValidationPlugin;
-import io.spine.validation.java.point.PrintValidationInsertionPoints;
-
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.render.Renderer
+import io.spine.server.BoundedContextBuilder
+import io.spine.validation.ValidationPlugin
+import io.spine.validation.java.point.PrintValidationInsertionPoints
 
 /**
  * A plugin that sets up everything needed to generate Java validation code.
  *
- * <p>This plugin uses a delegate plugin to set up some on the components needed for
- * code generation. By default, a {@link ValidationPlugin} is used. However, API users may
+ * This plugin uses a delegate plugin to set up some on the components needed for
+ * code generation. By default, a [ValidationPlugin] is used. However, API users may
  * extend this plugin's behavior and supply a more rich base plugin.
+ *
+ * @param base The base plugin to extend.
+ * @constructor Creates an instance that contains all the components from the given [base] plugin.
  */
-@SuppressWarnings("unused") // Accessed via reflection.
-public final class JavaValidationPlugin extends Plugin {
-
-    private final Plugin base;
-
+@Suppress("unused") // Accessed via reflection.
+public class JavaValidationPlugin(
+    private val base: Plugin
+) : Plugin(
+    renderers = mergeRenderers(base),
+    views = base.views,
+    viewRepositories = base.viewRepositories,
+    policies = base.policies
+) {
     /**
-     * Constructs a {@code JavaValidationPlugin} that contains all the components from
-     * the given {@code base} plugin.
-     *
-     * @param base the base plugin to extend
+     * The constructor to be involed reflectively by ProtoData.
      */
-    public JavaValidationPlugin(Plugin base) {
-        super(
-            mergeRenderers(base),
-            base.getViews(),
-            base.getViewRepositories(),
-            base.getPolicies()
-        );
-        this.base = checkNotNull(base);
+    public constructor() : this(ValidationPlugin())
+
+    override fun extend(context: BoundedContextBuilder) {
+        base.extend(context)
     }
 
-    /**
-     * Constructs a {@code JavaValidationPlugin} based on a {@link ValidationPlugin}.
-     *
-     * <p>This is the default constructor used by ProtoData's reflective mechanisms.
-     */
-    public JavaValidationPlugin() {
-        this(new ValidationPlugin());
-    }
+    public companion object {
 
-    /**
-     * Orders the renderers in such a way that the renderers of
-     * the {@code base} plugin always come before its own renderers.
-     */
-    private static List<Renderer<?>> mergeRenderers(Plugin base) {
-        var result = ImmutableList.<Renderer<?>>builder();
-        result.addAll(base.getRenderers());
-        result.add(new PrintValidationInsertionPoints(),
-                   new JavaValidationRenderer(),
-                   new ImplementValidatingBuilder(),
-                   new SetOnceValidationRenderer());
-        return result.build();
-    }
-
-    @Override
-    public void extend(BoundedContextBuilder context) {
-        base.extend(context);
+        /**
+         * Orders the renderers in such a way that the renderers of
+         * the `base` plugin always come before its own renderers.
+         */
+        private fun mergeRenderers(base: Plugin): List<Renderer<*>> = buildList {
+            addAll(base.renderers)
+            add(PrintValidationInsertionPoints())
+            add(JavaValidationRenderer())
+            add(ImplementValidatingBuilder())
+            add(SetOnceValidationRenderer())
+        }
     }
 }
