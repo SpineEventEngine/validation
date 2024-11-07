@@ -31,6 +31,7 @@ import io.spine.protodata.render.Renderer
 import io.spine.server.BoundedContextBuilder
 import io.spine.validation.ValidationPlugin
 import io.spine.validation.java.point.PrintValidationInsertionPoints
+import io.spine.validation.java.setonce.SetOnceValidationRenderer
 
 /**
  * A plugin that sets up everything needed to generate Java validation code.
