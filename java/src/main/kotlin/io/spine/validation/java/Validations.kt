@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,75 +24,71 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableMap;
-import io.spine.protodata.ast.MessageType;
-import io.spine.protodata.ast.TypeName;
-import io.spine.server.query.QueryingClient;
-import io.spine.validation.MessageValidation;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-import java.util.Objects;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableMap.toImmutableMap;
+import com.google.common.base.MoreObjects
+import com.google.common.collect.ImmutableMap
+import com.google.common.collect.ImmutableMap.toImmutableMap
+import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.QueryingClient
+import io.spine.validation.MessageValidation
+import io.spine.validation.messageValidation
+import java.util.*
 
 /**
  * Maps a message type map to corresponding validation rules.
+ *
+ * @param client The client to request all instances of [MessageValidation] known to
+ *  Validation backend by the time of the call to the constructor.
+ *
+ * @see io.spine.validation.MessageValidationView
+ * @see io.spine.validation.MessageValidationRepository
  */
-final class Validations {
+internal class Validations(client: QueryingClient<MessageValidation>) {
 
-    private final ImmutableMap<TypeName, MessageValidation> map;
-
-    /**
-     * Creates a new instance taking all the validations obtained from the passed client.
-     */
-    Validations(QueryingClient<MessageValidation> client) {
-        this.map = checkNotNull(client).all()
-                .stream()
-                .collect(toImmutableMap(v -> v.getType().getName(), v -> v));
-    }
+    private val map: ImmutableMap<TypeName, MessageValidation> =
+        client.all()
+            .stream()
+            .collect(
+                toImmutableMap<MessageValidation, TypeName, MessageValidation>(
+                    { it.type.name },
+                    { it })
+            )
 
     /**
      * Obtains validation for the given type.
      *
-     * <p>If there are no validation rules specified for this type, the method returns
+     * If there are no validation rules specified for this type, the method returns
      * an instance which refers to the type, containing no validation rules.
      */
-    MessageValidation get(MessageType type) {
-        @Nullable MessageValidation validation = map.get(type.getName());
-        if (validation == null) {
-            return MessageValidation.newBuilder()
-                    .setName(type.getName())
-                    .setType(type)
-                    .build();
+    operator fun get(type: MessageType): MessageValidation =
+        map[type.name] ?: noValidation(type)
+
+    private fun noValidation(type: MessageType): MessageValidation =
+        messageValidation {
+            name = type.name
+            this@messageValidation.type = type
         }
-        return validation;
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        if (other == null || javaClass != other.javaClass) {
+            return false
+        }
+        val that = other as Validations
+        return map == that.map
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        var that = (Validations) o;
-        return map.equals(that.map);
+    override fun hashCode(): Int {
+        return Objects.hash(map)
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(map);
-    }
-
-    @Override
-    public String toString() {
+    override fun toString(): String {
         return MoreObjects.toStringHelper(this)
-                          .add("map", map)
-                          .toString();
+            .add("map", map)
+            .toString()
     }
 }
