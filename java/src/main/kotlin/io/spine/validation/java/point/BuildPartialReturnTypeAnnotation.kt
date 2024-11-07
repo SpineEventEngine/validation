@@ -23,14 +23,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package io.spine.validation.java
+package io.spine.validation.java.point
 
 import com.google.errorprone.annotations.Immutable
 
 /**
- * Locates the placement for annotating the type returned by the `Builder.build()` method.
+ * Locates the placement for annotating the type returned by
+ * the `Builder.buildPartial()` method.
  */
 @Immutable
-internal class BuildMethodReturnTypeAnnotation :
-    BuilderMethodReturnTypeAnnotation(BUILD_METHOD)
+internal class BuildPartialReturnTypeAnnotation :
+    BuilderMethodReturnTypeAnnotation(BUILD_PARTIAL_METHOD)

@@ -30,6 +30,8 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.java.given.MockPrinter
+import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
+import io.spine.validation.java.point.BuildPartialReturnTypeAnnotation
 import java.nio.file.Path
 import kotlin.io.path.div
 import kotlin.io.path.readText

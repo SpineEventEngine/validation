@@ -43,6 +43,7 @@ import io.spine.validate.ValidationError
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
+import io.spine.validation.java.point.ExtraValidation
 import java.lang.System.lineSeparator
 import java.util.*
 import javax.lang.model.element.Modifier.PUBLIC

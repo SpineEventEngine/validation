@@ -31,6 +31,7 @@ import io.spine.protodata.plugin.Plugin;
 import io.spine.protodata.render.Renderer;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.validation.ValidationPlugin;
+import io.spine.validation.java.point.PrintValidationInsertionPoints;
 
 import java.util.List;
 

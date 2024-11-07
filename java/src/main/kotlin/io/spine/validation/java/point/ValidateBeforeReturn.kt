@@ -24,13 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.point
 
 import com.google.errorprone.annotations.Immutable
 import io.spine.protodata.render.InsertionPoint
 import io.spine.text.TextCoordinates
 import io.spine.text.TextFactory
-import io.spine.validation.java.BuilderInsertionPoint.Companion.BUILD_METHOD
+import io.spine.validation.java.point.BuilderInsertionPoint.Companion.BUILD_METHOD
 import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors.toSet
