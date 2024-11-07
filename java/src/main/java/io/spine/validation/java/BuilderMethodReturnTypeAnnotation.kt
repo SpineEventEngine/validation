@@ -24,77 +24,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.text.TextCoordinates;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jboss.forge.roaster.model.source.MethodSource;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.regex.Pattern.compile;
-import static java.util.stream.Collectors.toSet;
-import static kotlin.text.StringsKt.lines;
+import com.google.errorprone.annotations.Immutable
+import io.spine.text.TextCoordinates
+import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+import java.util.stream.Collectors
+import org.jboss.forge.roaster.model.source.JavaClassSource
+import org.jboss.forge.roaster.model.source.MethodSource
 
 /**
- * An insertion point for a type annotation for the return type of a method of a message builder.
+ * An insertion point for a type annotation for the type returned by a message builder method.
  *
- * <p>The insertion point is placed in the spot where the {@code TYPE_USE} annotation can be put.
+ * The insertion point is placed in the spot where the `TYPE_USE` annotation can be put.
  * The annotation would mark the return type of a method with the given name.
  *
- * <p>It is assumed that:
- * <ol>
- *     <li>The method has no parameters.
- *     <li>The method is public.
- *     <li>The method returns a value.
- *     <li>The return type is formatted as a fully qualified name of a class and placed on the same
- *         line with the {@code public} modifier and the method name.
- * </ol>
+ * It is assumed that:
+ *
+ *  1. The method has no parameters.
+ *  2. The method is public.
+ *  3. The method returns a value.
+ *  4. The return type is formatted as a fully qualified name of a class and placed on the same
+ *   line with the `public` modifier and the method name.
  */
 @Immutable
-class BuilderMethodReturnTypeAnnotation extends BuilderInsertionPoint {
+internal open class BuilderMethodReturnTypeAnnotation(
+    private val methodName: String
+) : BuilderInsertionPoint() {
 
-    private final Pattern signaturePattern;
-    private final String methodName;
+    private val signaturePattern: Pattern =
+        Pattern.compile("\\s+public\\s+[\\w.]+\\.(\\w+)\\s+$methodName")
 
-    BuilderMethodReturnTypeAnnotation(String methodName) {
-        super();
-        this.methodName = checkNotNull(methodName);
-        this.signaturePattern = compile("\\s+public\\s+[\\w.]+\\.(\\w+)\\s+" + methodName);
+    override val label: String
+        get() = javaClass.simpleName
+
+    override fun locate(text: String): Set<TextCoordinates> {
+        return findBuilders(text)
+            .map { it.getMethod(methodName) }
+            .filter(Objects::nonNull)
+            .map { it.locateMethod(text.lines()) }
+            .filter(Objects::nonNull)
+            .map { it!! }
+            .collect(Collectors.toSet())
     }
 
-    @Override
-    public String getLabel() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
-    public @NonNull Set<TextCoordinates> locate(String code) {
-        return findBuilders(code)
-                .map(cls -> cls.getMethod(methodName))
-                .filter(Objects::nonNull)
-                .map(method -> locateMethod(method, lines(code)))
-                .filter(Objects::nonNull)
-                .collect(toSet());
-    }
-
-    private @Nullable TextCoordinates locateMethod(MethodSource<?> source, List<String> lines) {
-        var declarationLineIndex = source.getLineNumber() - 1;
-        Matcher matcher;
-        for (var signatureIndex = declarationLineIndex; signatureIndex < lines.size(); signatureIndex++) {
-            matcher = signaturePattern.matcher(lines.get(signatureIndex));
+    private fun MethodSource<JavaClassSource>.locateMethod(lines: List<String>): TextCoordinates? {
+        val declarationLineIndex = lineNumber - 1
+        var matcher: Matcher
+        for (signatureIndex in declarationLineIndex..<lines.size) {
+            matcher = signaturePattern.matcher(lines[signatureIndex])
             if (matcher.find()) {
-                var pointInLine = matcher.start(1);
-                return at(signatureIndex, pointInLine);
+                val pointInLine = matcher.start(1)
+                return at(signatureIndex, pointInLine)
             }
         }
-        return null;
+        return null
     }
 }
