@@ -27,8 +27,6 @@
 package io.spine.validation.java
 
 import com.google.common.base.MoreObjects
-import com.google.common.collect.ImmutableMap
-import com.google.common.collect.ImmutableMap.toImmutableMap
 import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.TypeName
 import io.spine.server.query.QueryingClient
@@ -47,14 +45,8 @@ import java.util.*
  */
 internal class Validations(client: QueryingClient<MessageValidation>) {
 
-    private val map: ImmutableMap<TypeName, MessageValidation> =
-        client.all()
-            .stream()
-            .collect(
-                toImmutableMap<MessageValidation, TypeName, MessageValidation>(
-                    { it.type.name },
-                    { it })
-            )
+    private val map: Map<TypeName, MessageValidation> =
+        client.all().associateBy { it.type.name }
 
     /**
      * Obtains validation for the given type.
