@@ -44,14 +44,9 @@ import io.spine.validation.java.setonce.SetOnceValidationRenderer
  * @constructor Creates an instance that contains all the components from the given [base] plugin.
  */
 @Suppress("unused") // Accessed via reflection.
-public class JavaValidationPlugin(
-    private val base: Plugin
-) : Plugin(
-    renderers = mergeRenderers(base),
-    views = base.views,
-    viewRepositories = base.viewRepositories,
-    policies = base.policies
-) {
+public class JavaValidationPlugin(private val base: Plugin) :
+    Plugin(mergeRenderers(base), base.views, base.viewRepositories, base.policies) {
+
     /**
      * The constructor to be invoked reflectively by ProtoData.
      */
