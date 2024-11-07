@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,19 +23,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation.java
 
-package io.spine.validation.java;
-
-import com.google.errorprone.annotations.Immutable;
+import com.google.errorprone.annotations.Immutable
 
 /**
  * Locates the placement for annotating the type returned by
- * the {@code Builder.buildPartial()} method.
+ * the `Builder.buildPartial()` method.
  */
 @Immutable
-final class BuildPartialReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
-
-    BuildPartialReturnTypeAnnotation() {
-        super(BUILD_PARTIAL_METHOD);
-    }
-}
+internal class BuildPartialReturnTypeAnnotation :
+    BuilderMethodReturnTypeAnnotation(BUILD_PARTIAL_METHOD)
