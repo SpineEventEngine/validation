@@ -29,9 +29,8 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.java.ArbitraryElement
-import io.spine.protodata.java.ArbitraryExpression
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -44,18 +43,18 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceBytesField(
     field: Field,
     declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<ByteString>(field, declaredIn, ByteString::class) {
+) : SetOnceJavaConstraints<ByteString>(field, declaredIn) {
 
     override fun defaultOrSame(
         currentValue: Expression<ByteString>,
         newValue: Expression<ByteString>
-    ): Expression<Boolean> = ArbitraryExpression<Boolean>("$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression("$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
-            currentValue = ArbitraryExpression<ByteString>(fieldGetter),
-            readerStartsWith = ArbitraryElement("${fieldName}_ = input.readBytes();")
+            currentValue = Expression(fieldGetter),
+            readerStartsWith = JavaElement("${fieldName}_ = input.readBytes();")
         )
     }
 
@@ -70,8 +69,8 @@ internal class SetOnceBytesField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<ByteString>(fieldGetter),
-            newValue = ArbitraryExpression<ByteString>("value")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("value")
         )
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)

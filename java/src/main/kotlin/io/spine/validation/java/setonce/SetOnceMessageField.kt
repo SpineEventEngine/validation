@@ -29,9 +29,8 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.java.ArbitraryElement
-import io.spine.protodata.java.ArbitraryExpression
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaElement
 import io.spine.protodata.java.javaClassName
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -45,7 +44,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceMessageField(
     field: Field,
     declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<Message>(field, declaredIn, Message::class) {
+) : SetOnceJavaConstraints<Message>(field, declaredIn) {
 
     init {
         check(field.type.isMessage) {
@@ -62,16 +61,16 @@ internal class SetOnceMessageField(
     override fun defaultOrSame(
         currentValue: Expression<Message>,
         newValue: Expression<Message>
-    ): Expression<Boolean> = ArbitraryExpression<Boolean>("!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression("!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBuilderSetter()
         alterFieldMerge()
         alterBytesMerge(
-            currentValue = ArbitraryExpression<Message>(fieldGetter),
-            readerStartsWith = ArbitraryElement("input.readMessage"),
-            readerContains = ArbitraryElement("${fieldGetterName}FieldBuilder().getBuilder()"),
+            currentValue = Expression(fieldGetter),
+            readerStartsWith = JavaElement("input.readMessage"),
+            readerContains = JavaElement("${fieldGetterName}FieldBuilder().getBuilder()"),
         )
     }
 
@@ -86,8 +85,8 @@ internal class SetOnceMessageField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Message>(fieldGetter),
-            newValue = ArbitraryExpression<Message>("value")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("value")
         )
         val setter = methodWithSignature(
             "public Builder $fieldSetterName($fieldTypeClass value)"
@@ -106,8 +105,8 @@ internal class SetOnceMessageField(
      */
     private fun PsiClass.alterBuilderSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Message>(fieldGetter),
-            newValue = ArbitraryExpression<Message>("builderForValue.build()")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("builderForValue.build()")
         )
         val setter = methodWithSignature(
             "public Builder $fieldSetterName($fieldTypeClass.Builder builderForValue)"
@@ -126,8 +125,8 @@ internal class SetOnceMessageField(
      */
     private fun PsiClass.alterFieldMerge() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Message>(fieldGetter),
-            newValue = ArbitraryExpression<Message>("value")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("value")
         )
         val merge = method("merge$fieldNameCamel").body!!
         merge.addAfter(precondition, merge.lBrace)

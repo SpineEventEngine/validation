@@ -40,9 +40,8 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.java.ArbitraryElement
-import io.spine.protodata.java.ArbitraryExpression
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -55,7 +54,7 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceNumberField(
     field: Field,
     declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<Number>(field, declaredIn, Number::class) {
+) : SetOnceJavaConstraints<Number>(field, declaredIn) {
 
     companion object {
         private val FieldReaders = mapOf(
@@ -75,13 +74,13 @@ internal class SetOnceNumberField(
     override fun defaultOrSame(
         currentValue: Expression<Number>,
         newValue: Expression<Number>
-    ): Expression<Boolean> = ArbitraryExpression<Boolean>("$currentValue != 0 && $currentValue != $newValue")
+    ): Expression<Boolean> = Expression("$currentValue != 0 && $currentValue != $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
-            currentValue = ArbitraryExpression<Number>(fieldGetter),
-            readerStartsWith = ArbitraryElement("${fieldName}_ = input.$fieldReader();")
+            currentValue = Expression(fieldGetter),
+            readerStartsWith = JavaElement("${fieldName}_ = input.$fieldReader();")
         )
     }
 
@@ -96,8 +95,8 @@ internal class SetOnceNumberField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Number>(fieldGetter),
-            newValue = ArbitraryExpression<Number>("value")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("value")
         )
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)

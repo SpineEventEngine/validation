@@ -30,9 +30,8 @@ import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.java.ArbitraryElement
-import io.spine.protodata.java.ArbitraryExpression
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -45,20 +44,20 @@ import io.spine.validation.java.MessageWithFile
 internal class SetOnceStringField(
     field: Field,
     declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<String>(field, declaredIn, String::class) {
+) : SetOnceJavaConstraints<String>(field, declaredIn) {
 
     override fun defaultOrSame(
         currentValue: Expression<String>,
         newValue: Expression<String>
-    ): Expression<Boolean> = ArbitraryExpression<Boolean>("!$currentValue.isEmpty() && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression("!$currentValue.isEmpty() && !$currentValue.equals($newValue)")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterStringBytesSetter()
         alterMessageMerge()
         alterBytesMerge(
-            currentValue = ArbitraryExpression<String>(fieldGetter),
-            readerStartsWith = ArbitraryElement("${fieldName}_ = input.readStringRequireUtf8();")
+            currentValue = Expression(fieldGetter),
+            readerStartsWith = JavaElement("${fieldName}_ = input.readStringRequireUtf8();")
         )
     }
 
@@ -73,8 +72,8 @@ internal class SetOnceStringField(
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<String>(fieldGetter),
-            newValue = ArbitraryExpression<String>("value")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("value")
         )
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
@@ -91,8 +90,8 @@ internal class SetOnceStringField(
      */
     private fun PsiClass.alterStringBytesSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<String>("${fieldGetterName}Bytes()"),
-            newValue = ArbitraryExpression<String>("value")
+            currentValue = Expression("${fieldGetterName}Bytes()"),
+            newValue = Expression("value")
         )
         val bytesSetter = method("${fieldSetterName}Bytes").body!!
         bytesSetter.addAfter(precondition, bytesSetter.lBrace)
@@ -107,14 +106,14 @@ internal class SetOnceStringField(
      */
     private fun PsiClass.alterMessageMerge() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<String>(fieldGetter),
-            newValue = ArbitraryExpression<String>("other.$fieldGetter")
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("other.$fieldGetter")
         )
         val mergeFromMessage = methodWithSignature(
             "public Builder mergeFrom(${declaringMessage.canonical} other)"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(
-            ArbitraryElement("if (!other.$fieldGetter.isEmpty())")
+            JavaElement("if (!other.$fieldGetter.isEmpty())")
         ) as PsiIfStatement
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)

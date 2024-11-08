@@ -31,23 +31,21 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
-import com.sun.xml.bind.v2.schemagen.episode.Klass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaElement
-import io.spine.protodata.java.JavaStatement
 import io.spine.protodata.java.VariableDeclaration
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.java.toPsi
 import io.spine.protodata.render.SourceFile
 import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.validation.java.MessageWithFile
-import kotlin.reflect.KClass
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -64,7 +62,6 @@ import kotlin.reflect.KClass
 internal sealed class SetOnceJavaConstraints<T : Any>(
     private val field: Field,
     private val declaredIn: MessageWithFile,
-    private val type: KClass<T>
 ) {
 
     private companion object {
@@ -165,11 +162,11 @@ internal sealed class SetOnceJavaConstraints<T : Any>(
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
 
-        val rememberCurrent = VariableDeclaration("previous", currentValue, type)
-        fieldProcessing.addBefore(rememberCurrent.toPsi(), fieldReading)
+        val previousValue = VariableDeclaration("previous", currentValue)
+        fieldProcessing.addBefore(previousValue.toPsi(), fieldReading)
 
         val postcondition = defaultOrSameStatement(
-            currentValue = rememberCurrent.read(),
+            currentValue = previousValue.read(),
             newValue = currentValue,
         )
         fieldProcessing.addAfter(postcondition, fieldReading)
@@ -238,9 +235,4 @@ internal sealed class SetOnceJavaConstraints<T : Any>(
      */
     private fun PsiElementFactory.createStatement(text: String) =
         createStatementFromText(text, null)
-
-    /**
-     * Creates a new [PsiStatement] from this [JavaStatement].
-     */
-    private fun JavaStatement.toPsi() = elementFactory.createStatement(toCode())
 }
