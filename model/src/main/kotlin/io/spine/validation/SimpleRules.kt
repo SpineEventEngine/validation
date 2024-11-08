@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,63 +24,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+@file:JvmName("SimpleRules")
 
-import com.google.protobuf.Message;
-import io.spine.protodata.ast.FieldName;
+package io.spine.validation
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protobuf.AnyPacker.pack;
-import static io.spine.protobuf.Messages.isNotDefault;
-import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import com.google.protobuf.Message
+import io.spine.protobuf.isNotDefault
+import io.spine.protobuf.pack
+import io.spine.protodata.ast.FieldName
 
 /**
- * A factory of {@link SimpleRule}s.
+ * Creates a [SimpleRule] with a custom operator.
+ *
+ * @param field The target field
+ * @param customFeature The feature message describing the custom operator
+ * @param description The human-readable text description of the feature
+ * @param errorMessage The error message for the case of violation
+ * @return a new rule.
  */
-public final class SimpleRules {
+public fun SimpleRule(
+    field: FieldName,
+    customFeature: Message,
+    description: String,
+    errorMessage: String,
+    distribute: Boolean
+): SimpleRule {
+    require(description.isNotEmpty())
+    require(errorMessage.isNotEmpty())
+    require(description.isNotBlank())
+    require(errorMessage.isNotBlank())
 
-    /**
-     * Prevents the utility class instantiation.
-     */
-    private SimpleRules() {
+    val operator = customOperator {
+        this.description = description
+        feature = customFeature.pack()
     }
-
-    /**
-     * Creates a {@link SimpleRule} with a custom operator.
-     *
-     * @param field
-     *         the target field
-     * @param customFeature
-     *         the feature message describing the custom operator
-     * @param description
-     *         the human-readable text description of the feature
-     * @param errorMessage
-     *         the error message for the case of violation
-     * @return a new rule
-     */
-    public static SimpleRule withCustom(
-            FieldName field,
-            Message customFeature,
-            String description,
-            String errorMessage,
-            boolean distribute
-    ) {
-        checkNotNull(field);
-        checkNotNull(customFeature);
-        checkNotEmptyOrBlank(description);
-        checkNotEmptyOrBlank(errorMessage);
-        var operator = CustomOperator.newBuilder()
-                .setDescription(description)
-                .setFeature(pack(customFeature))
-                .build();
-        var builder = SimpleRule.newBuilder()
-                .setCustomOperator(operator)
-                .setErrorMessage(errorMessage)
-                .setIgnoredIfUnset(true)
-                .setDistribute(distribute);
-        if (isNotDefault(field)) {
-            builder.setField(field);
+    return simpleRule {
+        customOperator = operator
+        this.errorMessage = errorMessage
+        ignoredIfUnset = true
+        this.distribute = distribute
+        if (field.isNotDefault()) {
+            this.field = field
         }
-        return builder.build();
     }
 }

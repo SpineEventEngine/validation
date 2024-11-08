@@ -62,7 +62,7 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
 
         checkCollection(fieldName, declaringType, event.file)
 
-        val rule = SimpleRules.withCustom(
+        val rule = SimpleRule(
             fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
         )
         return simpleRuleAdded {
@@ -72,7 +72,7 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
     }
 
     private fun checkCollection(fieldName: FieldName, typeName: TypeName, file: File) {
-        val field = SourceFiles.findField(fieldName, typeName, file, this)
+        val field = findField(fieldName, typeName, file, this)
         if (field.type.isSingular) {
             error("The field `${typeName.qualifiedName}.${fieldName.value}` is neither" +
                     " a `repeated` nor a `map` and therefore cannot be `(distinct)`.",)

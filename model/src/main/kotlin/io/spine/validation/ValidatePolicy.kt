@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,75 +24,69 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.protodata.ast.FieldName;
-import io.spine.protodata.ast.File;
-import io.spine.protodata.ast.TypeName;
-import io.spine.protodata.ast.event.FieldExited;
-import io.spine.server.event.NoReaction;
-import io.spine.server.event.React;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import static io.spine.protodata.ast.TypeNames.getQualifiedName;
-import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.FieldTypeExtsKt.refersToMessage;
-import static io.spine.validation.SourceFiles.findField;
+import io.spine.core.External
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.event.FieldExited
+import io.spine.protodata.ast.qualifiedName
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.query.select
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
- * A policy which, upon encountering a field with the {@code (validate)} option, generates
+ * A policy which, upon encountering a field with the `(validate)` option, generates
  * a validation rule.
  *
- * <p>The validation rule enforces recursive validation for the associated message field.
+ * The validation rule enforces recursive validation for the associated message field.
  *
- * <p>If the field is a list or a map, all the elements (values of map entries) are validated.
+ * If the field is a list or a map, all the elements (values of map entries) are validated.
  *
- * <p>If the message field is invalid, the containing message is invalid as well.
+ * If the message field is invalid, the containing message is invalid as well.
  */
-final class ValidatePolicy extends ValidationPolicy<FieldExited> {
+internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
 
-    @Override
     @React
-    protected EitherOf2<RuleAdded, NoReaction> whenever(@External FieldExited event) {
-        var id = FieldId.newBuilder()
-                .setName(event.getField())
-                .setType(event.getType())
-                .build();
-        var field = select(ValidatedField.class).findById(id);
+    override fun whenever(@External event: FieldExited): EitherOf2<RuleAdded, NoReaction> {
+        val id = fieldId {
+            name = event.field
+            type = event.type
+        }
+        val field = select<ValidatedField>().findById(id)
         if (field != null) {
-            ensureMessageField(event.getField(), event.getType(), event.getFile());
+            ensureMessageField(event.field, event.type, event.file)
         }
-        var shouldValidate = field != null && field.getValidate();
+        val shouldValidate = field != null && field.validate
         if (!shouldValidate) {
-            return ignore();
+            return ignore()
         }
-        var rule = SimpleRules.withCustom(
-                event.getField(),
-                RecursiveValidation.getDefaultInstance(),
-                "A message field is validated by its validation rules. " +
-                        "If the field is invalid, the container message is invalid as well.",
-                field.getErrorMessage(),
-                true);
-        return EitherOf2.withA(
-                SimpleRuleAdded.newBuilder()
-                        .setType(event.getType())
-                        .setRule(rule)
-                        .build()
-        );
+        val rule = SimpleRule(
+            event.field,
+            RecursiveValidation.getDefaultInstance(),
+            "A message field is validated by its validation rules. " +
+                    "If the field is invalid, the container message is invalid as well.",
+            field!!.errorMessage,
+            true
+        )
+        return simpleRuleAdded {
+            type = event.type
+            this.rule = rule
+        }.asA()
     }
 
-    private void ensureMessageField(FieldName fieldName, TypeName typeName, File file) {
-        var field = findField(fieldName, typeName, file, this);
-        if (!refersToMessage(field.getType())) {
-            throw newIllegalStateException(
-                    "The field `%s.%s` does not refer to a message type and, " +
-                            "therefore, cannot have the `validate` option.",
-                    getQualifiedName(typeName),
-                    fieldName.getValue()
-            );
+    private fun ensureMessageField(fieldName: FieldName, typeName: TypeName, file: File) {
+        val field = findField(fieldName, typeName, file, this)
+        if (!field.type.refersToMessage()) {
+            error(
+                "The field `${typeName.qualifiedName}.${fieldName.value}` does not refer" +
+                        " to a message type and, therefore, cannot have the `validate` option.",
+            )
         }
     }
 }

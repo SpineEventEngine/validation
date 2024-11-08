@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,57 +24,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.option.PatternOption;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.Just;
-import io.spine.server.event.React;
-import io.spine.validate.Diags;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.server.event.Just.just;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.option.PatternOption
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.Just.Companion.just
+import io.spine.server.event.React
+import io.spine.validate.Diags.Regex.errorMessage
+import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
- * A policy to add a validation rule to a type whenever the {@code (pattern)} field option
+ * A policy to add a validation rule to a type whenever the `(pattern)` field option
  * is discovered.
  */
-final class PatternPolicy extends Policy<FieldOptionDiscovered> {
+internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
-    @Override
     @React
-    protected Just<SimpleRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "pattern") FieldOptionDiscovered event
-    ) {
-        var option = event.getOption();
-        var optionValue = unpack(option.getValue(), PatternOption.class);
-        var regex = optionValue.getRegex();
-        var feature = Regex.newBuilder()
-                .setPattern(regex)
-                .setModifier(optionValue.getModifier())
-                .build();
-        var customError = optionValue.getErrorMsg();
-        var error = customError.isEmpty()
-                       ? Diags.Regex.errorMessage(regex)
-                       : customError;
-        var field = event.getSubject();
-        var rule = SimpleRules.withCustom(
-                field.getName(),
-                feature,
-                "String should match regex.",
-                error,
-                true
-        );
-        return just(
-                SimpleRuleAdded.newBuilder()
-                        .setType(field.getDeclaringType())
-                        .setRule(rule)
-                        .build()
-        );
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "pattern") event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val patternOption = event.option.value.unpack<PatternOption>()
+        val regex = patternOption.regex
+        val feature = regex {
+            pattern = regex
+            modifier = patternOption.modifier
+        }
+        val customError = patternOption.errorMsg
+        val error = customError.ifEmpty { errorMessage(regex) }
+        val field = event.subject
+        val rule = SimpleRule(
+            field.name,
+            feature,
+            "String should match regex.",
+            error,
+            true
+        )
+        return just(simpleRuleAdded {
+            type = field.declaringType
+            this.rule = rule
+        })
     }
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,41 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.Just;
-import io.spine.server.event.React;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.server.event.Just.just;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.Just.Companion.just
+import io.spine.server.event.React
+import io.spine.validation.NumberRules.Companion.from
+import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
- * A policy to add a validation rule to a type whenever the {@code (max)} field option
- * is discovered.
+ * A policy to add a validation rule to a type whenever the `(max)` field option is discovered.
  */
-final class MinPolicy extends Policy<FieldOptionDiscovered> {
+internal class MinPolicy : Policy<FieldOptionDiscovered>() {
 
-    @Override
     @React
-    protected Just<SimpleRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "min") FieldOptionDiscovered event
-    ) {
-        var option = event.getOption();
-        var field = event.getSubject();
-        var typeSystem = checkNotNull(getTypeSystem());
-        var rules = NumberRules.from(field, option, typeSystem);
-        var rule = rules.minRule(field.getName());
-        return just(
-                SimpleRuleAdded.newBuilder()
-                        .setType(field.getDeclaringType())
-                        .setRule(rule)
-                        .build()
-        );
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "min") event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val field = event.subject
+        val rules = from(field, event.option, typeSystem!!)
+        val rule = rules.minRule(field.name)
+        return just(simpleRuleAdded {
+            type = field.declaringType
+            this.rule = rule
+        })
     }
 }

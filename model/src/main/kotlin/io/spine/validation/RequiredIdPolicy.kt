@@ -70,9 +70,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
         }
         val errorMessage = "ID field `${field.name.value}` must be set."
         val rule = RequiredRule.forField(field, errorMessage)
-        if (rule.isEmpty) {
-            return ignore()
-        }
-        return rule.get().toEvent(field.declaringType).asA()
+            ?: return ignore()
+        return rule.toEvent(field.declaringType).asA()
     }
 }

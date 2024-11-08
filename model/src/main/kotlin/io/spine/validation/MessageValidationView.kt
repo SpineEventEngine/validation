@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,50 +24,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.core.Subscribe;
-import io.spine.protodata.ast.TypeName;
-import io.spine.protodata.ast.event.TypeDiscovered;
-import io.spine.protodata.plugin.View;
-import io.spine.validation.event.CompositeRuleAdded;
-import io.spine.validation.event.MessageWideRuleAdded;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import static io.spine.validation.Rules.wrap;
+import io.spine.core.External
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.MessageWideRuleAdded
+import io.spine.validation.event.SimpleRuleAdded
 
 /**
  * A view which accumulates validation data for a message type.
  *
- * <p>To add more rules to the message validation, emit {@code SimpleRuleAdded} or
- * {@code CompositeRuleAdded} events.
+ * To add more rules to the message validation, emit [SimpleRuleAdded] or
+ * [CompositeRuleAdded] events.
  */
-final class MessageValidationView
-        extends View<TypeName, MessageValidation, MessageValidation.Builder> {
+internal class MessageValidationView :
+    View<TypeName, MessageValidation, MessageValidation.Builder>() {
 
     @Subscribe
-    void on(@External TypeDiscovered event) {
-        var type = event.getType();
-        builder().setName(type.getName())
-                 .setType(type);
+    fun on(@External event: TypeDiscovered) = alter {
+        val messageType = event.type
+        type = messageType
+        name = messageType.name
     }
 
     @Subscribe
-    void on(SimpleRuleAdded event) {
-        var rule = wrap(event.getRule());
-        builder().addRule(rule);
+    fun on(event: SimpleRuleAdded) = alter {
+        addRule(event.rule.wrap())
     }
 
     @Subscribe
-    void on(CompositeRuleAdded event) {
-        var rule = wrap(event.getRule());
-        builder().addRule(rule);
+    fun on(event: CompositeRuleAdded) = alter {
+        addRule(event.rule.wrap())
     }
 
     @Subscribe
-    void on(MessageWideRuleAdded event) {
-        var rule = wrap(event.getRule());
-        builder().addRule(rule);
+    fun on(event: MessageWideRuleAdded) = alter {
+        addRule(event.rule.wrap())
     }
 }

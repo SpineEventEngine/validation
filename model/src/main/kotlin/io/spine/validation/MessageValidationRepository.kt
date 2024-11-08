@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,27 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.protodata.ast.TypeName;
-import io.spine.protodata.ast.event.TypeDiscovered;
-import io.spine.protodata.plugin.ViewRepository;
-import io.spine.server.route.EventRouting;
-import org.jetbrains.annotations.NotNull;
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.plugin.ViewRepository
+import io.spine.server.route.EventRouting
 
 /**
- * A repository for the {@link MessageValidationView}.
+ * A repository for the [MessageValidationView].
  *
- * <p>Routes the {@code TypeEntered} events to the view by the type name.
+ * Routes the `TypeEntered` events to the view by the type name.
  */
-final class MessageValidationRepository
-        extends ViewRepository<TypeName, MessageValidationView, MessageValidation> {
+internal class MessageValidationRepository :
+    ViewRepository<TypeName, MessageValidationView, MessageValidation>() {
 
-    @Override
-    protected void setupEventRouting(@NotNull EventRouting<TypeName> routing) {
-        super.setupEventRouting(routing);
-        routing.unicast(TypeDiscovered.class,
-                        (message, context) -> message.getType()
-                                                     .getName());
+    override fun setupEventRouting(routing: EventRouting<TypeName>) {
+        super.setupEventRouting(routing)
+        routing.unicast<TypeDiscovered> { e, _ ->
+            e.type.name
+        }
     }
 }

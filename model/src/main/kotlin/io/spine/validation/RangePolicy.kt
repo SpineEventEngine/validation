@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,40 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.Just;
-import io.spine.server.event.React;
-import io.spine.validation.event.CompositeRuleAdded;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.server.event.Just.just;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.Just.Companion.just
+import io.spine.server.event.React
+import io.spine.validation.NumberRules.Companion.from
+import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.compositeRuleAdded
 
 /**
- * A policy to add validation rules to a type whenever the {@code (range)} field option
+ * A policy to add validation rules to a type whenever the `(range)` field option
  * is discovered.
  */
-final class RangePolicy extends Policy<FieldOptionDiscovered> {
+internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
-    @Override
     @React
-    protected Just<CompositeRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "range") FieldOptionDiscovered event
-    ) {
-        var option = event.getOption();
-        var field = event.getSubject();
-        checkNotNull(getTypeSystem());
-        var rules = NumberRules.from(field, option, getTypeSystem());
-        return just(
-                CompositeRuleAdded.newBuilder()
-                        .setType(field.getDeclaringType())
-                        .setRule(rules.rangeRule(field.getName()))
-                        .build()
-        );
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "range") event: FieldOptionDiscovered
+    ): Just<CompositeRuleAdded> {
+        val field = event.subject
+        val rules = from(field, event.option, typeSystem!!)
+        return just(compositeRuleAdded {
+                type = field.declaringType
+                rule = rules.rangeRule(field.name)
+        })
     }
 }

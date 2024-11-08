@@ -23,14 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation
 
-import com.google.protobuf.BoolValue
 import com.google.protobuf.Descriptors.Descriptor
 import io.spine.base.EntityState
 import io.spine.core.ContractFor
 import io.spine.core.Subscribe
-import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.plugin.View
