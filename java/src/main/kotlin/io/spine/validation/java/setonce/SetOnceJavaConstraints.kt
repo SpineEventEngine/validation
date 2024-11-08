@@ -31,8 +31,13 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
+import com.sun.xml.bind.v2.schemagen.episode.Klass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaElement
+import io.spine.protodata.java.JavaStatement
+import io.spine.protodata.java.VariableDeclaration
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
@@ -42,6 +47,7 @@ import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.validation.java.MessageWithFile
+import kotlin.reflect.KClass
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -50,12 +56,15 @@ import io.spine.validation.java.MessageWithFile
  * serves as an abstract base, providing common methods and the skeleton implementation
  * of [render] method. Inheritors should perform actual rendering in [renderConstraints].
  *
+ * @param T The field data type. See docs to an abstract [defaultOrSame] method for usage details.
+ *
  * @property field The field that declared the option.
  * @property declaredIn The message that contains the [field].
  */
-internal sealed class SetOnceJavaConstraints(
+internal sealed class SetOnceJavaConstraints<T : Any>(
     private val field: Field,
     private val declaredIn: MessageWithFile,
+    private val type: KClass<T>
 ) {
 
     private companion object {
@@ -94,7 +103,7 @@ internal sealed class SetOnceJavaConstraints(
      * @param sourceFile Protobuf-generated Java source code of the [message][declaredIn]
      *  that declared the [field].
      *
-     * @see defaultOrSamePredicate
+     * @see defaultOrSame
      * @see defaultOrSameStatement
      */
     fun render(sourceFile: SourceFile<Java>) {
@@ -106,7 +115,11 @@ internal sealed class SetOnceJavaConstraints(
         val psiClass = psiFile.findClass(messageBuilder)
 
         execute {
-            psiClass.renderConstraints()
+            try {
+                psiClass.renderConstraints()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         sourceFile.overwrite(psiFile.text)
@@ -125,10 +138,10 @@ internal sealed class SetOnceJavaConstraints(
      * Alters [MergeFromBytesSignature] method to make sure that a set-once field
      * is not overridden during the merge from a byte array.
      *
-     * Such a merge is done field-by-field. This method finds the place, where
-     * the given [field] is processed. It adds a statement to remember the current field value,
-     * before reading of a new one. After the reading statement, it adds [defaultOrSameStatement]
-     * to check that the just read value is legal to be assigned.
+     * Such a merge is done field-by-field. This method finds a place, where the given [field]
+     * is processed. It adds a statement to remember the current field value, before reading
+     * of a new one. After the reading statement, it adds [defaultOrSameStatement] to check
+     * that the just read value is legal to be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
      * invoke it within [renderConstraints], passing the necessary parameters.
@@ -138,25 +151,25 @@ internal sealed class SetOnceJavaConstraints(
      * the beginning of the reading block is the same for all fields because it doesn't include
      * the field name. Differentiation is done way deeper.
      *
-     * @param currentValue An expression to read the current field value.
-     * @param readerStartsWith An expression representing the beginning of the field reading block.
-     * @param readerContains An arbitrary expression within the field reading block.
+     * @param currentValue The current field value.
+     * @param readerStartsWith The beginning of the field reading block.
+     * @param readerContains An arbitrary code that must be present within the reading block.
      */
     protected fun PsiClass.alterBytesMerge(
-        currentValue: String,
-        readerStartsWith: String,
-        readerContains: String = readerStartsWith,
+        currentValue: Expression<T>,
+        readerStartsWith: JavaElement,
+        readerContains: JavaElement = readerStartsWith,
     ) {
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
 
-        val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
+        val rememberCurrent = VariableDeclaration("previous", currentValue, type)
+        fieldProcessing.addBefore(rememberCurrent.toPsi(), fieldReading)
 
         val postcondition = defaultOrSameStatement(
-            currentValue = "previous",
+            currentValue = rememberCurrent.read(),
             newValue = currentValue,
         )
         fieldProcessing.addAfter(postcondition, fieldReading)
@@ -168,46 +181,54 @@ internal sealed class SetOnceJavaConstraints(
      *
      * Otherwise, it throws the validation exception.
      *
-     * @param currentValue An expression denoting the current field value.
-     * @param newValue An expression denoting the proposed value.
+     * @param currentValue The current field value.
+     * @param newValue The proposed value.
      */
-    protected fun defaultOrSameStatement(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if (${defaultOrSamePredicate(currentValue, newValue)}) {
+    protected fun defaultOrSameStatement(
+        currentValue: Expression<T>,
+        newValue: Expression<T>
+    ): PsiStatement = elementFactory.createStatement(
+        """
+            if (${defaultOrSame(currentValue, newValue)}) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
-        )
+    )
 
     /**
-     * Returns an expression representing a predicate upon [currentValue] and [newValue].
+     * Returns a boolean expression upon [currentValue] and [newValue].
      *
-     * The provided predicate should return `true` if [currentValue] is NOT default
-     * for its type AND if [newValue] is not equal to [currentValue].
+     * The provided expression should return `true` if both conditions are met:
+     *
+     * 1. [currentValue] is NOT default for its type.
+     * 2. [newValue] is not equal to [currentValue].
      *
      * In pseudocode: `currentValue != default && currentValue != newValue`.
      *
      * @param currentValue An expression denoting the current field value.
      * @param newValue An expression denoting the proposed value.
      */
-    protected abstract fun defaultOrSamePredicate(currentValue: String, newValue: String): String
+    // TODO:2024-11-06:yevhenii.nadtochii: Reverse the expression.
+    protected abstract fun defaultOrSame(
+        currentValue: Expression<T>,
+        newValue: Expression<T>
+    ): Expression<Boolean>
 
     /**
      * Looks for the first child of this [PsiElement], the text representation of which
-     * satisfies both [startsWith] and [contains] conditions.
+     * satisfies both [startsWith] and [contains] criteria.
      *
      * This method performs a depth-first search of the PSI hierarchy. So, the second direct
      * child of this [PsiElement] is checked only when the first child and all its descendants
      * are checked.
      */
     protected fun PsiElement.deepSearch(
-        startsWith: String,
-        contains: String = startsWith
+        startsWith: JavaElement,
+        contains: JavaElement = startsWith
     ): PsiStatement = children.firstNotNullOf { element ->
         val text = element.text
         when {
-            !text.contains(contains) -> null
-            text.startsWith(startsWith) -> element
+            !text.contains("$contains") -> null
+            text.startsWith("$startsWith") -> element
             else -> element.deepSearch(startsWith, contains)
         }
     } as PsiStatement
@@ -217,4 +238,9 @@ internal sealed class SetOnceJavaConstraints(
      */
     private fun PsiElementFactory.createStatement(text: String) =
         createStatementFromText(text, null)
+
+    /**
+     * Creates a new [PsiStatement] from this [JavaStatement].
+     */
+    private fun JavaStatement.toPsi() = elementFactory.createStatement(toCode())
 }

@@ -27,17 +27,23 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
+import io.spine.validation.java.setonce.SetOnceBooleanField
+import io.spine.validation.java.setonce.SetOnceBytesField
 import io.spine.validation.java.setonce.SetOnceEnumField
 import io.spine.validation.java.setonce.SetOnceJavaConstraints
 import io.spine.validation.java.setonce.SetOnceMessageField
-import io.spine.validation.java.setonce.SetOncePrimitiveField
-import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
+import io.spine.validation.java.setonce.SetOnceNumberField
+import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
+import io.spine.validation.java.setonce.SetOnceStringField
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure
@@ -76,14 +82,25 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaConstraints(field: Field, message: MessageWithFile): SetOnceJavaConstraints =
+    private fun javaConstraints(field: Field, message: MessageWithFile): SetOnceJavaConstraints<*> =
         when {
             field.type.isMessage -> SetOnceMessageField(field, message)
             field.type.isEnum -> SetOnceEnumField(field, message)
-            field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, message)
-            else -> error(
-                "Unsupported `(set_once)` field type: `${field.type}`, " +
-                        "the declaring message: `${field.declaringType}`."
-            )
+            field.type.isPrimitive -> forPrimitives(field, message)
+            else -> throwUnsupportedType(field)
         }
+
+    private fun forPrimitives(field: Field, message: MessageWithFile): SetOnceJavaConstraints<*> =
+        when (field.type.primitive) {
+            TYPE_STRING -> SetOnceStringField(field, message)
+            TYPE_BOOL -> SetOnceBooleanField(field, message)
+            TYPE_BYTES -> SetOnceBytesField(field, message)
+            in SupportedNumbers -> SetOnceNumberField(field, message)
+            else -> throwUnsupportedType(field)
+        }
+
+    private fun throwUnsupportedType(field: Field): Nothing = error(
+        "Unsupported `(set_once)` field type: `${field.type}`, " +
+                "the declaring message: `${field.declaringType}`."
+    )
 }

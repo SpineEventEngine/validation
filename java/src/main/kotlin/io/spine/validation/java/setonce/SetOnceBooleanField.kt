@@ -35,70 +35,44 @@ import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
 /**
- * Renders Java code to support `(set_once)` option for the given enum [field].
+ * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
- * @param field The enum field that declared the option.
+ * @param field The primitive field that declared the option.
  * @param declaredIn The message that contains the [field].
  */
-internal class SetOnceEnumField(
+internal class SetOnceBooleanField(
     field: Field,
     declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<Int>(field, declaredIn, Int::class) {
-
-    init {
-        check(field.type.isEnum) {
-            "`${javaClass.simpleName}` handles only enum fields. " +
-                    "The passed field: `$field`."
-        }
-    }
+) : SetOnceJavaConstraints<Boolean>(field, declaredIn, Boolean::class) {
 
     override fun defaultOrSame(
-        currentValue: Expression<Int>,
-        newValue: Expression<Int>
-    ): Expression<Boolean> = ArbitraryExpression<Boolean>("$currentValue != 0 && $currentValue != $newValue")
+        currentValue: Expression<Boolean>,
+        newValue: Expression<Boolean>
+    ): Expression<Boolean> = ArbitraryExpression<Boolean>("$currentValue != false && $currentValue != $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
-        alterEnumValueSetter()
         alterBytesMerge(
-            currentValue = ArbitraryExpression<Int>("${fieldName}_"),
-            readerStartsWith = ArbitraryElement("${fieldName}_ = input.readEnum();")
+            currentValue = ArbitraryExpression<Boolean>(fieldGetter),
+            readerStartsWith = ArbitraryElement("${fieldName}_ = input.readBool();")
         )
     }
 
     /**
-     * Alters a setter that accepts an enum constant.
+     * Alters a setter that accepts a value.
      *
      * For example:
      *
      * ```
-     * public Builder setMyEnum(MyEnum value)
+     * public Builder setMyBool(boolean value)
      * ```
      */
     private fun PsiClass.alterSetter() {
         val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Int>("${fieldName}_"),
-            newValue = ArbitraryExpression<Int>("value.getNumber()"),
+            currentValue = ArbitraryExpression<Boolean>(fieldGetter),
+            newValue = ArbitraryExpression<Boolean>("value")
         )
         val setter = method(fieldSetterName).body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
-
-    /**
-     * Alters a setter that accepts an ordinal number.
-     *
-     * For example:
-     *
-     * ```
-     * public Builder setMyEnumValue(int value)
-     * ```
-     */
-    private fun PsiClass.alterEnumValueSetter() {
-        val precondition = defaultOrSameStatement(
-            currentValue = ArbitraryExpression<Int>("${fieldName}_"),
-            newValue = ArbitraryExpression<Int>("value")
-        )
-        val setter = method("${fieldSetterName}Value").body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 }
