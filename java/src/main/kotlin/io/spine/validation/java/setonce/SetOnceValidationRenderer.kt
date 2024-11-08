@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.setonce
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isList
@@ -33,10 +33,8 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.setonce.SetOnceEnumField
-import io.spine.validation.java.setonce.SetOnceJavaConstraints
-import io.spine.validation.java.setonce.SetOnceMessageField
-import io.spine.validation.java.setonce.SetOncePrimitiveField
+import io.spine.validation.java.MessageWithFile
+import io.spine.validation.java.findMessageTypes
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
 
 /**

@@ -41,6 +41,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.This
+import io.spine.protodata.java.toJavaClass
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
@@ -113,7 +114,7 @@ internal class DistributingGenerator(
                 "The field `${field.qualifiedName}` is not of" +
                         " a primitive type (`${field.type.name}`)."
             }
-            primitiveType.toClass()
+            primitiveType.toJavaClass()
         }
         return typeName
     }

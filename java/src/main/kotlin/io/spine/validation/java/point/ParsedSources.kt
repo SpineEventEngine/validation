@@ -24,50 +24,51 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java.point
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaSource;
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
+import org.jboss.forge.roaster.Roaster
+import org.jboss.forge.roaster.model.source.JavaClassSource
+import org.jboss.forge.roaster.model.source.JavaSource
 
 /**
- * Parses the source code via {@code Roaster} and caches the results for further use.
+ * Parses the source code via `Roaster` and caches the results for further use.
  */
-final class ParsedSources {
+internal class ParsedSources {
 
     /**
      * Cached results of parsing the Java source code.
      */
-    private final LoadingCache<String, JavaSource<?>> cache =
-            CacheBuilder.newBuilder()
-                    .maximumSize(300)
-                    .build(loader());
-
-    private static CacheLoader<String, JavaSource<?>> loader() {
-        return new CacheLoader<>() {
-            @Override
-            public JavaSource<?> load(String code) {
-                var result = Roaster.parse(JavaSource.class, code);
-                if (result.isClass()) {
-                    return new CachingJavaClassSource((JavaClassSource) result);
-                }
-                return result;
-            }
-        };
-    }
+    private val cache = CacheBuilder.newBuilder()
+        .maximumSize(MAX_CACHE_SIZE)
+        .build(loader())
 
     /**
-     * Parses the Java code and returns it as the parsed {@code JavaSource},
+     * Parses the Java code and returns it as the parsed `JavaSource`,
      * caching it for future use.
      *
-     * <p>If the code was parsed previously, most likely the cached result
+     * If the code was parsed previously, most likely the cached result
      * is returned right away, as the cache stores 300 items max.
      */
-    JavaSource<?> get(String code) {
-        var result = cache.getUnchecked(code);
-        return result;
+    operator fun get(code: String): JavaSource<*> {
+        val result = cache.getUnchecked(code)
+        return result
+    }
+
+    companion object {
+
+        private const val MAX_CACHE_SIZE: Long = 300
+
+        private fun loader(): CacheLoader<String, JavaSource<*>> =
+            object : CacheLoader<String, JavaSource<*>>() {
+                override fun load(code: String): JavaSource<*> {
+                    val result = Roaster.parse(JavaSource::class.java, code)
+                    if (result.isClass) {
+                        return CachingJavaClassSource(result as JavaClassSource)
+                    }
+                    return result
+                }
+            }
     }
 }

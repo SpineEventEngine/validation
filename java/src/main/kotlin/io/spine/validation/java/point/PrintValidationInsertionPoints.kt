@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,18 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java;
+package io.spine.validation.java.point
 
-import com.google.errorprone.annotations.Immutable;
+import io.spine.protodata.render.InsertionPointPrinter
+import io.spine.tools.code.Java
 
 /**
- * Locates the placement for annotating the type returned by
- * the {@code Builder.buildPartial()} method.
+ * An [InsertionPointPrinter] which adds the [ValidateBeforeReturn] point
+ * to all the message types which have an associated
+ * [MessageValidation][io.spine.validation.MessageValidation] view.
  */
-@Immutable
-final class BuildPartialReturnTypeAnnotation extends BuilderMethodReturnTypeAnnotation {
-
-    BuildPartialReturnTypeAnnotation() {
-        super(BUILD_PARTIAL_METHOD);
-    }
-}
+@Suppress("unused") // Accessed via reflection by ProtoData API.
+public class PrintValidationInsertionPoints : InsertionPointPrinter<Java>(
+    target = Java,
+    points = setOf(
+        ValidateBeforeReturn(),
+        BuildPartialReturnTypeAnnotation(),
+        BuildMethodReturnTypeAnnotation()
+    )
+)
