@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,58 +24,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.core.External;
-import io.spine.core.Subscribe;
-import io.spine.core.Where;
-import io.spine.option.IfInvalidOption;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.ast.Option;
-
-import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
+import io.spine.core.External
+import io.spine.core.Subscribe
+import io.spine.core.Where
+import io.spine.option.IfInvalidOption
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.event.FieldOptionDiscovered
 
 /**
- * A view of a field that is marked with {@code validate}.
+ * A view of a field that is marked with `validate`.
  */
-final class ValidatedFieldView
-        extends BoolFieldOptionView<FieldId, ValidatedField, ValidatedField.Builder> {
+internal class ValidatedFieldView :
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(IfInvalidOption.getDescriptor()) {
 
-    ValidatedFieldView() {
-        super(IfInvalidOption.getDescriptor());
-    }
-
-    @Override
     @Subscribe
-    void onConstraint(
-            @External @Where(field = OPTION_NAME, equals = "validate") FieldOptionDiscovered e
-    ) {
-        super.onConstraint(e);
+    override fun onConstraint(
+        @External @Where(field = OPTION_NAME, equals = "validate") e: FieldOptionDiscovered
+    ) = super.onConstraint(e)
+
+    override fun errorMessage(errorMessage: String) {
+        builder()!!.setErrorMessage(errorMessage)
     }
 
-    @Override
-    protected void errorMessage(String errorMessage) {
-        builder().setErrorMessage(errorMessage);
+    override fun enableValidation() {
+        builder()!!.setValidate(true)
     }
 
-    @Override
-    protected void enableValidation() {
-        builder().setValidate(true);
-    }
-
-    @Override
     @Subscribe
-    void onErrorMessage(
-            @External @Where(field = OPTION_NAME, equals = "if_invalid") FieldOptionDiscovered e
-    ) {
-        super.onErrorMessage(e);
-    }
+    override fun onErrorMessage(
+        @External @Where(field = OPTION_NAME, equals = "if_invalid") e: FieldOptionDiscovered
+    ) = super.onErrorMessage(e)
 
-    @Override
-    protected String extractErrorMessage(Option option) {
-        var value = unpack(option.getValue(), IfInvalidOption.class);
-        var errorMessage = value.getErrorMsg();
-        return errorMessage;
+    override fun extractErrorMessage(option: Option): String {
+        val value = option.value.unpack<IfInvalidOption>()
+        val errorMessage = value.errorMsg
+        return errorMessage
     }
 }

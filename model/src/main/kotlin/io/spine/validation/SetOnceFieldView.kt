@@ -37,9 +37,7 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
  * A view of a field that is marked with `set_once` option.
  */
 internal class SetOnceFieldView :
-    BoolFieldOptionView<FieldId, SetOnceField, SetOnceField.Builder>(
-        IfSetAgainOption.getDescriptor()
-    ) {
+    BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
 
     @Subscribe
     override fun onConstraint(

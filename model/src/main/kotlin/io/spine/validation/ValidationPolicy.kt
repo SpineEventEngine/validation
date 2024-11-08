@@ -24,29 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.base.EventMessage;
-import io.spine.core.ContractFor;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.NoReaction;
-import io.spine.server.event.React;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
+import io.spine.base.EventMessage
+import io.spine.core.ContractFor
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
 
 /**
- * A policy that reacts to an event with a {@link RuleAdded} event.
+ * A policy that reacts to an event with a [RuleAdded] event.
  *
- * <p>May ignore an event and return {@code Nothing} if necessary.
+ * May ignore an event and return [NoReaction] if necessary.
  *
- * @param <E>
- *         the type of the event to react to
+ * @param E The type of the event to react to.
  */
-public abstract class ValidationPolicy<E extends EventMessage>
-        extends Policy<E>
-        implements ValidationPluginPart {
+public abstract class ValidationPolicy<E : EventMessage> : Policy<E>(), ValidationPluginPart {
 
-    @Override
-    @ContractFor(handler = React.class)
-    protected abstract EitherOf2<RuleAdded, NoReaction> whenever(E event);
+    @ContractFor(handler = React::class)
+    protected abstract override fun whenever(event: E): EitherOf2<RuleAdded, NoReaction>
 }

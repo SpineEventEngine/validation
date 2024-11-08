@@ -23,59 +23,48 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation
 
-package io.spine.validation;
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.time.validation.TimeOption
+import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.protobuf.AnyPacker;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.Just;
-import io.spine.server.event.React;
-import io.spine.time.validation.TimeOption;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import java.util.Locale;
-
-import static io.spine.server.event.Just.just;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
-import static io.spine.validation.SimpleRules.withCustom;
-import static java.lang.String.format;
 /**
- * A policy which, upon encountering a field with the {@code (when)} option, generates
+ * A policy which, upon encountering a field with the `(when)` option, generates
  * a validation rule.
  *
- * <p>The validation rule ensures that the associated field value is in the future or in the past
+ *
+ * The validation rule ensures that the associated field value is in the future or in the past
  * from the current time (depending on the option definition).
  */
-final class WhenPolicy extends Policy<FieldOptionDiscovered> {
+internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 
-    @Override
     @React
-    protected Just<SimpleRuleAdded> whenever(
-            @External @Where(field = OPTION_NAME, equals = "when") FieldOptionDiscovered event
-    ) {
-        var option = event.getOption();
-        var timeOption = AnyPacker.unpack(option.getValue(), TimeOption.class);
-        var time = timeOption.getIn();
-        var feature = InTime.newBuilder()
-                .setTime(time)
-                .build();
-        var errorMessage = format(
-                "The time must be in the %s.", time.name().toLowerCase(Locale.ENGLISH));
-        var field = event.getSubject();
-        var rule = withCustom(
-                field.getName(),
-                feature,
-                errorMessage,
-                errorMessage,
-                true);
-        return just(
-                SimpleRuleAdded.newBuilder()
-                        .setType(field.getDeclaringType())
-                        .setRule(rule)
-                        .build()
-        );
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "when") event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val option = event.option.value.unpack<TimeOption>()
+        val futureOrPast = option.getIn()
+        val feature = inTime { time = futureOrPast }
+        val errorMessage = "The time must be in the ${futureOrPast.name.lowercase()}."
+        val field = event.subject
+        val newRule = SimpleRules.withCustom(
+            field.name,
+            feature,
+            errorMessage,
+            errorMessage,
+            true
+        )
+        return Just(simpleRuleAdded {
+            type = field.declaringType
+            rule = newRule
+        })
     }
 }

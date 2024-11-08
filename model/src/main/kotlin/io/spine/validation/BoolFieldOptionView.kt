@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,67 +23,58 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validation
 
-package io.spine.validation;
-
-import com.google.protobuf.BoolValue;
-import com.google.protobuf.Descriptors.Descriptor;
-import io.spine.base.EntityState;
-import io.spine.core.ContractFor;
-import io.spine.core.Subscribe;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.ast.Option;
-import io.spine.protodata.plugin.View;
-import io.spine.validate.ValidatingBuilder;
-
-import static io.spine.protobuf.AnyPacker.unpack;
+import com.google.protobuf.BoolValue
+import com.google.protobuf.Descriptors.Descriptor
+import io.spine.base.EntityState
+import io.spine.core.ContractFor
+import io.spine.core.Subscribe
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.View
+import io.spine.validate.ValidatingBuilder
 
 /**
  * A view on a field marked with a boolean validation option.
  */
-abstract class BoolFieldOptionView<
-        I extends FieldId,
-        S extends EntityState<I>,
-        B extends ValidatingBuilder<S>>
-        extends View<I, S, B> {
+internal abstract class BoolFieldOptionView<
+        S : EntityState<FieldId>,
+        B : ValidatingBuilder<S>
+        >(optionDescriptor: Descriptor) : View<FieldId, S, B>() {
 
-    private final String defaultMessage;
+    private val defaultMessage: String = DefaultErrorMessage.from(optionDescriptor)
 
-    BoolFieldOptionView(Descriptor optionDescriptor) {
-        super();
-        this.defaultMessage = DefaultErrorMessage.from(optionDescriptor);
-    }
-
-    @ContractFor(handler = Subscribe.class)
-    void onConstraint(FieldOptionDiscovered e) {
-        errorMessage(defaultMessage);
-        var value = unpack(e.getOption().getValue(), BoolValue.class).getValue();
+    @ContractFor(handler = Subscribe::class)
+    open fun onConstraint(e: FieldOptionDiscovered) {
+        errorMessage(defaultMessage)
+        val value = e.option.value.unpack<BoolValue>().value
         if (value) {
-            enableValidation();
+            enableValidation()
         }
     }
 
     /**
      * Saves the given error message into the view.
      */
-    protected abstract void errorMessage(String errorMessage);
+    protected abstract fun errorMessage(errorMessage: String)
 
     /**
      * Enables the validation associated with the option.
      */
-    protected abstract void enableValidation();
+    protected abstract fun enableValidation()
 
-    @ContractFor(handler = Subscribe.class)
-    void onErrorMessage(FieldOptionDiscovered e) {
-        var message = extractErrorMessage(e.getOption());
-        errorMessage(message);
+    @ContractFor(handler = Subscribe::class)
+    open fun onErrorMessage(e: FieldOptionDiscovered) {
+        val message = extractErrorMessage(e.option)
+        errorMessage(message)
     }
 
     /**
      * Attempts to extract a custom error message from the given option.
      *
-     * @throws io.spine.type.UnexpectedTypeException
-     *         if the option value is of an unexpected type
+     * @throws io.spine.type.UnexpectedTypeException If the option value is of an unexpected type.
      */
-    protected abstract String extractErrorMessage(Option option);
+    protected abstract fun extractErrorMessage(option: Option): String
 }
