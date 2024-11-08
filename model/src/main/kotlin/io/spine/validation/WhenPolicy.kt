@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.validation
 
 import io.spine.core.External
@@ -34,12 +35,10 @@ import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.time.validation.TimeOption
 import io.spine.validation.event.SimpleRuleAdded
-import io.spine.validation.event.simpleRuleAdded
 
 /**
  * A policy which, upon encountering a field with the `(when)` option, generates
  * a validation rule.
- *
  *
  * The validation rule ensures that the associated field value is in the future or in the past
  * from the current time (depending on the option definition).
@@ -62,9 +61,6 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
             errorMessage,
             true
         )
-        return Just(simpleRuleAdded {
-            type = field.declaringType
-            rule = newRule
-        })
+        return simpleRuleAdded(field.declaringType, newRule)
     }
 }

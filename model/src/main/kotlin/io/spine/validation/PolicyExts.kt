@@ -26,43 +26,16 @@
 
 package io.spine.validation
 
-import io.spine.core.External
-import io.spine.core.Where
-import io.spine.option.PatternOption
-import io.spine.protobuf.unpack
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.plugin.Policy
+import io.spine.protodata.ast.TypeName
 import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.validate.Diags.Regex.errorMessage
 import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
- * A policy to add a validation rule to a type whenever the `(pattern)` field option
- * is discovered.
+ * A shortcut for creating [SimpleRuleAdded] wrapped into [Just].
  */
-internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
-
-    @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "pattern") event: FieldOptionDiscovered
-    ): Just<SimpleRuleAdded> {
-        val patternOption = event.option.value.unpack<PatternOption>()
-        val regex = patternOption.regex
-        val feature = regex {
-            pattern = regex
-            modifier = patternOption.modifier
-        }
-        val customError = patternOption.errorMsg
-        val error = customError.ifEmpty { errorMessage(regex) }
-        val field = event.subject
-        val rule = SimpleRule(
-            field.name,
-            feature,
-            "String should match regex.",
-            error,
-            true
-        )
-        return simpleRuleAdded(field.declaringType, rule)
-    }
-}
+internal fun simpleRuleAdded(declaringType: TypeName, rule: SimpleRule): Just<SimpleRuleAdded> =
+    Just(simpleRuleAdded {
+        type = declaringType
+        this.rule = rule
+    })

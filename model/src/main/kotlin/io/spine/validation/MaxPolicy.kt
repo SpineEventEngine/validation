@@ -31,11 +31,9 @@ import io.spine.core.Where
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.just
 import io.spine.server.event.React
 import io.spine.validation.NumberRules.Companion.from
 import io.spine.validation.event.SimpleRuleAdded
-import io.spine.validation.event.simpleRuleAdded
 
 /**
  * A policy to add a validation rule to a type whenever the `(max)` field option
@@ -50,9 +48,6 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
         val field = event.subject
         val rules = from(field, event.option, typeSystem!!)
         val rule = rules.maxRule(field.name)
-        return just(simpleRuleAdded {
-            type = field.declaringType
-            this.rule = rule
-        })
+        return simpleRuleAdded(field.declaringType, rule)
     }
 }

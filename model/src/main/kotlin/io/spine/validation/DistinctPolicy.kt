@@ -72,7 +72,7 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
     }
 
     private fun checkCollection(fieldName: FieldName, typeName: TypeName, file: File) {
-        val field = findField(fieldName, typeName, file, this)
+        val field = findField(fieldName, typeName, file)
         if (field.type.isSingular) {
             error("The field `${typeName.qualifiedName}.${fieldName.value}` is neither" +
                     " a `repeated` nor a `map` and therefore cannot be `(distinct)`.",)

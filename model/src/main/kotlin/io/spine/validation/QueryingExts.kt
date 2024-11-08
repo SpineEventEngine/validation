@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * httpы://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,8 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("SourceFiles")
-
 package io.spine.validation
 
 import io.spine.protodata.ast.Field
@@ -43,16 +41,14 @@ import io.spine.server.query.select
  * @param fieldName The name of the field.
  * @param typeName The name of the type which declares the field.
  * @param file The path to the Protobuf file which declares the message which declares the field.
- * @param querying The ProtoData component which conducts the search.
  * @return the field.
  */
-internal fun findField(
+internal fun Querying.findField(
     fieldName: FieldName,
     typeName: TypeName,
-    file: File,
-    querying: Querying
+    file: File
 ): Field {
-    val type = findType(typeName, file, querying)
+    val type = findType(typeName, file)
     val field = type.fieldList.firstOrNull { f -> fieldName == f.name }
     val foundField = field ?: run {
         type.oneofGroupList
@@ -68,11 +64,10 @@ internal fun findField(
  *
  * @param typeName The name of the type.
  * @param file The path to the Protobuf file which declares the message.
- * @param querying The ProtoData component which conducts the search.
  * @return the type.
  */
-private fun findType(typeName: TypeName, file: File, querying: Querying): MessageType {
-    val sourceFile = querying.select<ProtobufSourceFile>().findById(file)
+private fun Querying.findType(typeName: TypeName, file: File): MessageType {
+    val sourceFile = select<ProtobufSourceFile>().findById(file)
         ?: unknownFile(file)
     val typeUrl = typeName.typeUrl
     val type = sourceFile.typeMap[typeUrl]

@@ -81,7 +81,7 @@ internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
     }
 
     private fun ensureMessageField(fieldName: FieldName, typeName: TypeName, file: File) {
-        val field = findField(fieldName, typeName, file, this)
+        val field = findField(fieldName, typeName, file)
         if (!field.type.refersToMessage()) {
             error(
                 "The field `${typeName.qualifiedName}.${fieldName.value}` does not refer" +
