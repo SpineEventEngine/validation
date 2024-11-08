@@ -49,7 +49,7 @@ internal abstract class BoolFieldOptionView<
     @ContractFor(handler = Subscribe::class)
     open fun onConstraint(e: FieldOptionDiscovered) {
         errorMessage(defaultMessage)
-        val value = e.option.value.unpack<BoolValue>().value
+        val value = e.option.boolValue
         if (value) {
             enableValidation()
         }

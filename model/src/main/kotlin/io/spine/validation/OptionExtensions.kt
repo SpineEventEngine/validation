@@ -28,7 +28,9 @@
 
 package io.spine.validation
 
+import com.google.protobuf.BoolValue
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 
 /**
@@ -36,8 +38,16 @@ import io.spine.protodata.ast.Option
  *
  * @return `true` if both option name and number are the same, `false` otherwise
  */
-@Suppress("FunctionNaming") // backticked name is necessary here.
+@Suppress( "FunctionNaming" /* backticked because `is` is the Kotlin keyword. */ )
 public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
     return name == generated.descriptor.name
             && number == generated.number
 }
+
+/**
+ * Unpacks a [BoolValue] from this option.
+ *
+ * @throws io.spine.type.UnexpectedTypeException If the option stores a value of another type.
+ */
+public val Option.boolValue: Boolean
+    get() = value.unpack<BoolValue>().value

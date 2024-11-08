@@ -24,45 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import io.spine.protodata.plugin.Plugin;
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.ViewRepository
 
 /**
  * A ProtoData plugin which attaches validation-related policies and views.
  */
-@SuppressWarnings({
-        "OverlyCoupledClass", // Registers a lot of policies and repositories.
-        "unused" // Loaded by ProtoData via reflection.
-})
-public class ValidationPlugin extends Plugin {
-
-    @SuppressWarnings("OverlyCoupledMethod")
-    public ValidationPlugin() {
-        super(
-                ImmutableList.of() /* renderers */,
-                ImmutableSet.of() /* views */,
-                ImmutableSet.of(
-                        new MessageValidationRepository(),
-                        new RequiredFieldRepository(),
-                        new ValidatedFieldRepository(),
-                        new SetOnceFieldRepository()
-                ),
-                ImmutableSet.of(
-                        new RequiredPolicy(),
-                        new RangePolicy(),
-                        new MinPolicy(),
-                        new MaxPolicy(),
-                        new DistinctPolicy(),
-                        new ValidatePolicy(),
-                        new PatternPolicy(),
-                        new IsRequiredPolicy(),
-                        new WhenPolicy(),
-                        new RequiredIdPatternPolicy(),
-                        new RequiredIdOptionPolicy()
-                )
-        );
-    }
-}
+public class ValidationPlugin : Plugin(
+    renderers = listOf(),
+    views = setOf(),
+    viewRepositories = setOf<ViewRepository<*, *, *>>(
+        MessageValidationRepository(),
+        RequiredFieldRepository(),
+        ValidatedFieldRepository(),
+        SetOnceFieldRepository()
+    ),
+    policies = setOf<Policy<*>>(
+        RequiredPolicy(),
+        RangePolicy(),
+        MinPolicy(),
+        MaxPolicy(),
+        DistinctPolicy(),
+        ValidatePolicy(),
+        PatternPolicy(),
+        IsRequiredPolicy(),
+        WhenPolicy(),
+        RequiredIdPatternPolicy(),
+        RequiredIdOptionPolicy()
+    )
+)

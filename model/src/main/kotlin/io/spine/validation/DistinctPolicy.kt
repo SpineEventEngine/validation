@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,74 +24,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import com.google.protobuf.BoolValue;
-import io.spine.core.External;
-import io.spine.core.Where;
-import io.spine.protodata.ast.FieldName;
-import io.spine.protodata.ast.File;
-import io.spine.protodata.ast.TypeName;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.server.event.NoReaction;
-import io.spine.server.event.React;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
-import io.spine.validation.event.SimpleRuleAdded;
-
-import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.protodata.ast.FieldTypes.isSingular;
-import static io.spine.protodata.ast.TypeNames.getQualifiedName;
-import static io.spine.util.Exceptions.newIllegalStateException;
-import static io.spine.validation.EventFieldNames.OPTION_NAME;
-import static io.spine.validation.SourceFiles.findField;
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.qualifiedName
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
- * A policy which, upon encountering a field with the {@code (distinct)} option, generates
- * a validation rule.
+ * A policy which, upon encountering a field with the `(distinct)` option,
+ * generates a validation rule.
  *
- * <p>The validation rule prohibits duplicate entries in the associated field.
+ * The validation rule prohibits duplicate entries in the associated field.
  */
-final class DistinctPolicy extends ValidationPolicy<FieldOptionDiscovered> {
+internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
 
-    @SuppressWarnings({
-            "DuplicateStringLiteralInspection" /* Duplicates are in the generated code. */,
-            "RedundantSuppression" /* Suppress warning until the code is generated. */
-    })
-    private static final String ERROR = "Collection must not contain duplicates.";
-
-    @Override
     @React
-    protected EitherOf2<RuleAdded, NoReaction> whenever(
-            @External @Where(field = OPTION_NAME, equals = "distinct") FieldOptionDiscovered event
-    ) {
-        var option = event.getOption();
-        if (!unpack(option.getValue(), BoolValue.class).getValue()) {
-            return ignore();
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = "distinct") event: FieldOptionDiscovered
+    ): EitherOf2<RuleAdded, NoReaction> {
+        if (!event.option.boolValue) {
+            return ignore()
         }
-        var field = event.getSubject();
-        var declaringType = field.getDeclaringType();
-        var fieldName = field.getName();
-        checkCollection(fieldName, declaringType, event.getFile());
-        var rule = SimpleRules.withCustom(
-                fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
-        );
-        return EitherOf2.withA(
-                SimpleRuleAdded.newBuilder()
-                        .setType(declaringType)
-                        .setRule(rule)
-                        .build()
-        );
+        val field = event.subject
+        val declaringType = field.declaringType
+        val fieldName = field.name
+
+        checkCollection(fieldName, declaringType, event.file)
+
+        val rule = SimpleRules.withCustom(
+            fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
+        )
+        return simpleRuleAdded {
+            type = declaringType
+            this@simpleRuleAdded.rule = rule
+        }.asA()
     }
 
-    private void checkCollection(FieldName fieldName, TypeName typeName, File file) {
-        var field = findField(fieldName, typeName, file, this);
-        if (isSingular(field.getType())) {
-            throw newIllegalStateException(
-                    "The field `%s.%s` is neither a `repeated` nor a `map` and " +
-                            "therefore cannot be `(distinct)`.",
-                    getQualifiedName(typeName),
-                    fieldName.getValue());
+    private fun checkCollection(fieldName: FieldName, typeName: TypeName, file: File) {
+        val field = SourceFiles.findField(fieldName, typeName, file, this)
+        if (field.type.isSingular) {
+            error("The field `${typeName.qualifiedName}.${fieldName.value}` is neither" +
+                    " a `repeated` nor a `map` and therefore cannot be `(distinct)`.",)
         }
+    }
+
+    companion object {
+        private const val ERROR = "Collection must not contain duplicates."
     }
 }
