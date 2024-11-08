@@ -50,7 +50,6 @@ import io.spine.protodata.value.MessageValue
 import io.spine.protodata.value.Value
 import io.spine.protodata.value.value
 import io.spine.string.shortly
-import java.util.*
 
 /**
  * A factory of [Value]s representing default states of Protobuf message fields.
@@ -68,22 +67,14 @@ public object UnsetValue {
      * set or just be the default values. For these cases, and only for these cases, the method
      * returns `Optional.empty()`.
      *
-     * @return a [Value] with the field's default value or `Optional.empty()` if
+     * @return a [Value] with the field's default value or `null` if
      *   the field does not have an easily distinguished not-set value
      */
-    public fun forField(field: Field): Optional<Value> =
+    public fun forField(field: Field): Value? =
         when (val cardinality = field.type.cardinality) {
-            CARDINALITY_LIST -> Optional.of(
-                value { listValue = ListValue.getDefaultInstance() }
-            )
-
-            CARDINALITY_MAP -> Optional.of(
-                value { mapValue = MapValue.getDefaultInstance() }
-            )
-            CARDINALITY_SINGLE -> {
-                val type = field.toType()
-                singular(type)
-            }
+            CARDINALITY_LIST -> value { listValue = ListValue.getDefaultInstance() }
+            CARDINALITY_MAP ->  value { mapValue = MapValue.getDefaultInstance() }
+            CARDINALITY_SINGLE ->  singular(field.toType())
             else -> error(
                 "Cannot create `Value` for the field `${field.shortly()}`." +
                         " Unexpected cardinality encountered: `$cardinality`."
@@ -93,16 +84,16 @@ public object UnsetValue {
     /**
      * Obtains the default value for the type of the given field.
      *
-     * Behaves in a similar way to [forField], but never returns an empty list or an empty map.
+     * Behaves similarly to [forField], but never returns an empty list or an empty map.
      *
      * @return a [Value] with the field's default value or `Optional.empty()` if
      *   the field does not have an easily distinguished not-set value
      */
-    public fun singular(type: Type): Optional<Value> {
+    public fun singular(type: Type): Value? {
         val kind = type.kindCase
         return when (type.kindCase) {
-            MESSAGE -> Optional.of(messageValue(type))
-            ENUMERATION -> Optional.of(enumValue(type))
+            MESSAGE -> messageValue(type)
+            ENUMERATION -> enumValue(type)
             PRIMITIVE -> primitiveValue(type)
             KIND_NOT_SET -> error("Cannot create `Value` for the type of kind `$kind`.")
             else -> error("Cannot create `Value` for the type of kind `$kind`.")
@@ -111,18 +102,18 @@ public object UnsetValue {
 }
 
 @Suppress("ReturnCount")
-private fun primitiveValue(type: Type): Optional<Value> {
+private fun primitiveValue(type: Type): Value? {
     val primitiveType: PrimitiveType = type.primitive
     if (primitiveType == PT_UNKNOWN || primitiveType == UNRECOGNIZED) {
         error("Unknown primitive type `$primitiveType`.")
     }
     if (primitiveType == TYPE_STRING) {
-        return Optional.of(value { stringValue = "" })
+        return value { stringValue = "" }
     }
     if (primitiveType == TYPE_BYTES) {
-        return Optional.of(value { bytesValue = ByteString.EMPTY })
+        return value { bytesValue = ByteString.EMPTY }
     }
-    return Optional.empty()
+    return null
 }
 
 private fun enumValue(type: Type): Value = value {

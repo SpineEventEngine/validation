@@ -48,20 +48,17 @@ internal object RequiredRule {
     @Suppress("ReturnCount")
     fun forField(field: Field, errorMessage: String): Rule? {
         val unsetValue = UnsetValue.forField(field)
-        if (unsetValue.isEmpty) {
+        if (unsetValue == null) {
             return null
         }
         val integratedRule = rule(
-            field, unsetValue.get(), errorMessage, singularErrorMsg, false
+            field, unsetValue, errorMessage, singularErrorMsg, false
         )
         if (!(field.isList || field.isMap)) {
             return integratedRule.wrap()
         }
         val type = field.type.extractType()
-        val singularUnsetValue = UnsetValue.singular(type)
-        if (singularUnsetValue.isEmpty) {
-            return integratedRule.wrap()
-        }
+        UnsetValue.singular(type) ?: return integratedRule.wrap()
         val collectionRule = collectionRule(integratedRule, errorMessage)
         return collectionRule
     }
@@ -78,21 +75,17 @@ internal object RequiredRule {
      * This method provides a separate default message for the case of a collection field
      * marked as `(required)`.
      *
-     *
      * Singular fields obtain the default error message as a value of the `(default_message)`
      * option set for `IfMissing` option type.
-     *
      *
      * Event if a custom error message is not set by a `(if_missing)` field option,
      * we want to have a different *default* message for collection fields,
      * so that the user can find an error quicker.
      *
-     *
      * If a custom error message is set, we use it as is.
      *
-     * @param errorMessage
-     * the error message coming from the [RequiredPolicy] which is producing
-     * the rule while this method is called
+     * @param errorMessage The error message coming from the [RequiredPolicy] which is producing
+     *   the rule while this method is called.
      * @return an error message to be used for the collection field
      */
     @Suppress("ReturnCount")

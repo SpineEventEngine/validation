@@ -110,7 +110,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
             UnsetValue.singular(field.directOrElementType())
         } else {
             UnsetValue.forField(field)
-        }.getOrNull()
+        }
     }
 
     private fun createCondition(defaultValue: Value): String {
