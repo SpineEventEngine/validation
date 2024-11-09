@@ -47,7 +47,8 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = WHEN) event: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = WHEN)
+        event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
         val option = event.option.value.unpack<TimeOption>()
         val futureOrPast = option.getIn()
