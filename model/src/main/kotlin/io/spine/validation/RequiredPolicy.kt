@@ -40,7 +40,7 @@ import io.spine.validation.event.RuleAdded
  * A [ValidationPolicy] which controls whether a field should be validated as `required`.
  *
  * Whenever a field option is discovered, if that option is the `required` option, and
- * the value is `true`, and the field type supports such validation, a validation rule
+ * the value is `true`, and the field type supports such a validation, the validation rule
  * is added. If any of these conditions are not met, nothing happens.
  */
 internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
