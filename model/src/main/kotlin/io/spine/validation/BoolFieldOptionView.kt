@@ -47,9 +47,8 @@ internal abstract class BoolFieldOptionView<
 
     @ContractFor(handler = Subscribe::class)
     open fun onConstraint(e: FieldOptionDiscovered) {
-        errorMessage(defaultMessage)
-        val value = e.option.boolValue
-        if (value) {
+        saveErrorMessage(defaultMessage)
+        if (e.option.boolValue) {
             enableValidation()
         }
     }
@@ -57,7 +56,7 @@ internal abstract class BoolFieldOptionView<
     /**
      * Saves the given error message into the view.
      */
-    protected abstract fun errorMessage(errorMessage: String)
+    protected abstract fun saveErrorMessage(errorMessage: String)
 
     /**
      * Enables the validation associated with the option.
@@ -67,7 +66,7 @@ internal abstract class BoolFieldOptionView<
     @ContractFor(handler = Subscribe::class)
     open fun onErrorMessage(e: FieldOptionDiscovered) {
         val message = extractErrorMessage(e.option)
-        errorMessage(message)
+        saveErrorMessage(message)
     }
 
     /**

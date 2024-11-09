@@ -33,6 +33,7 @@ import io.spine.option.IfMissingOption
 import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.server.entity.alter
 
 /**
  * A view of a field that is marked as `required`.
@@ -46,12 +47,12 @@ internal class RequiredFieldView : BoolFieldOptionView<RequiredField, RequiredFi
         @External @Where(field = OPTION_NAME, equals = "required") e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
-    override fun errorMessage(errorMessage: String) {
-        builder()!!.setErrorMessage(errorMessage)
+    override fun saveErrorMessage(errorMessage: String) = alter {
+        this.errorMessage = errorMessage
     }
 
-    override fun enableValidation() {
-        builder()!!.setRequired(true)
+    override fun enableValidation() = alter {
+        required = true
     }
 
     @Subscribe
@@ -60,7 +61,7 @@ internal class RequiredFieldView : BoolFieldOptionView<RequiredField, RequiredFi
     ) = super.onErrorMessage(e)
 
     override fun extractErrorMessage(option: Option): String {
-        val value = option.value.unpack<IfMissingOption>()
-        return value.errorMsg
+        val ifMissing = option.value.unpack<IfMissingOption>()
+        return ifMissing.errorMsg
     }
 }

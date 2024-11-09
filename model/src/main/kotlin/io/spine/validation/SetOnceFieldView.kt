@@ -47,7 +47,7 @@ internal class SetOnceFieldView :
         builder().setSubject(e.subject)
     }
 
-    override fun errorMessage(errorMessage: String) {
+    override fun saveErrorMessage(errorMessage: String) {
         builder().setErrorMessage(errorMessage)
     }
 

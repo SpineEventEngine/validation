@@ -45,7 +45,7 @@ internal class ValidatedFieldView :
         @External @Where(field = OPTION_NAME, equals = "validate") e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
-    override fun errorMessage(errorMessage: String) {
+    override fun saveErrorMessage(errorMessage: String) {
         builder()!!.setErrorMessage(errorMessage)
     }
 
