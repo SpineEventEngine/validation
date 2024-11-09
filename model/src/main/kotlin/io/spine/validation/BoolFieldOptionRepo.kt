@@ -33,6 +33,9 @@ import io.spine.server.route.EventRouting
 
 /**
  * A repository for a view on a field marked with a boolean validation option.
+ *
+ * @param V Tye type of the views managed by the repository.
+ * @param S The type of the view entity state.
  */
 internal abstract class BoolFieldOptionRepo<
         V : BoolFieldOptionView<S, *>,
