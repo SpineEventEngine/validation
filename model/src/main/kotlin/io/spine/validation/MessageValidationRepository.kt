@@ -34,7 +34,7 @@ import io.spine.server.route.EventRouting
 /**
  * A repository for the [MessageValidationView].
  *
- * Routes the `TypeEntered` events to the view by the type name.
+ * Routes the [TypeDiscovered] events to the view by the type name.
  */
 internal class MessageValidationRepository :
     ViewRepository<TypeName, MessageValidationView, MessageValidation>() {
