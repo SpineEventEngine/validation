@@ -37,6 +37,9 @@ import io.spine.validate.ValidatingBuilder
 
 /**
  * A view on a field marked with a boolean validation option.
+ *
+ * @param S The type of the view entity state.
+ * @param B The type of the validating builder of the state.
  */
 internal abstract class BoolFieldOptionView<
         S : EntityState<FieldId>,
