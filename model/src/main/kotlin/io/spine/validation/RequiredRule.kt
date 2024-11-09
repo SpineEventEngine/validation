@@ -35,7 +35,6 @@ import io.spine.protodata.value.Value
 import io.spine.validate.Diags.Required.collectionErrorMsg
 import io.spine.validate.Diags.Required.singularErrorMsg
 import io.spine.validation.DefaultErrorMessage.from
-import io.spine.validation.event.simpleRuleAdded
 
 /**
  * A factory of [SimpleRule]s which represent the `(required)` constraint.
