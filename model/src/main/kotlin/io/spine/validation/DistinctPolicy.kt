@@ -80,6 +80,6 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
     }
 
     companion object {
-        private const val ERROR = "Collection must not contain duplicates."
+        private const val ERROR = "A field with `(distinct) = true` must not contain duplicates."
     }
 }
