@@ -36,10 +36,10 @@ import io.spine.protodata.ast.FieldName
 /**
  * Creates a [SimpleRule] with a custom operator.
  *
- * @param field The target field
- * @param customFeature The feature message describing the custom operator
- * @param description The human-readable text description of the feature
- * @param errorMessage The error message for the case of violation
+ * @param field The target field.
+ * @param customFeature The feature message describing the custom operator.
+ * @param description The human-readable text description of the feature.
+ * @param errorMessage The error message for the case of violation.
  * @return a new rule.
  */
 public fun SimpleRule(
