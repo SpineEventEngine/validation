@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,11 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
+
+import io.spine.base.EntityState
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.ViewRepository
+import io.spine.server.route.EventRouting
 
 /**
- * A repository for the {@link ValidatedFieldView}s.
+ * A repository for a view on a field marked with a boolean validation option.
+ *
+ * @param V The type of the views managed by the repository.
+ * @param S The type of the view entity state.
  */
-final class ValidatedFieldRepository
-        extends BoolFieldOptionRepo<ValidatedFieldView, ValidatedField> {
+internal abstract class BoolFieldOptionRepo<
+        V : BoolFieldOptionView<S, *>,
+        S : EntityState<FieldId>
+        > : ViewRepository<FieldId, V, S>() {
+
+    override fun setupEventRouting(routing: EventRouting<FieldId>) {
+        super.setupEventRouting(routing)
+        routing.unicast<FieldOptionDiscovered> { e, _ ->
+            fieldId {
+                type = e.subject.declaringType
+                name = e.subject.name
+            }
+        }
+    }
 }

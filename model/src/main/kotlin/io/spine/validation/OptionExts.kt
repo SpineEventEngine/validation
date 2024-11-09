@@ -24,32 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+@file:JvmName("Options")
 
-import com.google.protobuf.Descriptors.Descriptor;
+package io.spine.validation
 
-import static io.spine.option.OptionsProto.defaultMessage;
+import com.google.protobuf.BoolValue
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Option
 
 /**
- * A factory of validation error messages.
+ * Checks if this option represents the given generated option.
+ *
+ * @return `true` if both option name and number are the same, `false` otherwise
  */
-final class DefaultErrorMessage {
-
-    /**
-     * Prevents the utility class instantiation.
-     */
-    private DefaultErrorMessage() {
-    }
-
-    /**
-     * Obtains the validation error message from the given option descriptor.
-     *
-     * <p>The descriptor should be marked with the {@code (default_message)} option. If the option
-     * is absent, an empty message is returned.
-     */
-    static String from(Descriptor optionDescriptor) {
-        return optionDescriptor
-                .getOptions()
-                .getExtension(defaultMessage);
-    }
+@Suppress( "FunctionNaming" /* backticked because `is` is the Kotlin keyword. */ )
+public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
+    return name == generated.descriptor.name
+            && number == generated.number
 }
+
+/**
+ * Unpacks a [BoolValue] from this option.
+ *
+ * @throws io.spine.type.UnexpectedTypeException If the option stores a value of another type.
+ */
+public val Option.boolValue: Boolean
+    get() = value.unpack<BoolValue>().value

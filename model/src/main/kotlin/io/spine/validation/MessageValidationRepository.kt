@@ -24,29 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
+package io.spine.validation
 
-import io.spine.base.EventMessage;
-import io.spine.core.ContractFor;
-import io.spine.protodata.plugin.Policy;
-import io.spine.server.event.NoReaction;
-import io.spine.server.event.React;
-import io.spine.server.tuple.EitherOf2;
-import io.spine.validation.event.RuleAdded;
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.plugin.ViewRepository
+import io.spine.server.route.EventRouting
 
 /**
- * A policy that reacts to an event with a {@link RuleAdded} event.
+ * A repository for the [MessageValidationView].
  *
- * <p>May ignore an event and return {@code Nothing} if necessary.
- *
- * @param <E>
- *         the type of the event to react to
+ * Routes the [TypeDiscovered] events to the view by the type name.
  */
-public abstract class ValidationPolicy<E extends EventMessage>
-        extends Policy<E>
-        implements ValidationPluginPart {
+internal class MessageValidationRepository :
+    ViewRepository<TypeName, MessageValidationView, MessageValidation>() {
 
-    @Override
-    @ContractFor(handler = React.class)
-    protected abstract EitherOf2<RuleAdded, NoReaction> whenever(E event);
+    override fun setupEventRouting(routing: EventRouting<TypeName>) {
+        super.setupEventRouting(routing)
+        routing.unicast<TypeDiscovered> { e, _ ->
+            e.type.name
+        }
+    }
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,11 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("EventFieldNames")
-
 package io.spine.validation
 
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.Just.Companion.just
+import io.spine.server.event.React
+import io.spine.validation.NumberRules.Companion.from
+import io.spine.validation.event.CompositeRuleAdded
+import io.spine.validation.event.compositeRuleAdded
+
 /**
- * Path to the name field of the option in the [io.spine.protodata.FieldOptionDiscovered] event.
+ * A policy to add validation rules to a type whenever the `(range)` field option
+ * is discovered.
  */
-public const val OPTION_NAME: String = "option.name"
+internal class RangePolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = RANGE)
+        event: FieldOptionDiscovered
+    ): Just<CompositeRuleAdded> {
+        val field = event.subject
+        val rules = from(field, event.option, typeSystem!!)
+        return just(compositeRuleAdded {
+                type = field.declaringType
+                rule = rules.rangeRule(field.name)
+        })
+    }
+}

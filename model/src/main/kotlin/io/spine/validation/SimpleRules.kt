@@ -24,9 +24,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("SimpleRules")
+
+package io.spine.validation
+
+import com.google.protobuf.Message
+import io.spine.protobuf.isNotDefault
+import io.spine.protobuf.pack
+import io.spine.protodata.ast.FieldName
+
 /**
- * The version of the Validation SDK to publish.
+ * Creates a [SimpleRule] with a custom operator.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * @param field The target field.
+ * @param customFeature The feature message describing the custom operator.
+ * @param description The human-readable text description of the feature.
+ * @param errorMessage The error message for the case of violation.
+ * @return a new rule.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+public fun SimpleRule(
+    field: FieldName,
+    customFeature: Message,
+    description: String,
+    errorMessage: String,
+    distribute: Boolean
+): SimpleRule {
+    require(description.isNotEmpty())
+    require(errorMessage.isNotEmpty())
+    require(description.isNotBlank())
+    require(errorMessage.isNotBlank())
+
+    val operator = customOperator {
+        this.description = description
+        feature = customFeature.pack()
+    }
+    return simpleRule {
+        customOperator = operator
+        this.errorMessage = errorMessage
+        ignoredIfUnset = true
+        this.distribute = distribute
+        if (field.isNotDefault()) {
+            this.field = field
+        }
+    }
+}

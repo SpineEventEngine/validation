@@ -27,36 +27,41 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfSetAgainOption
-import io.spine.protodata.ast.Option
+import io.spine.protobuf.unpack
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.server.entity.alter
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.time.validation.TimeOption
+import io.spine.validation.event.SimpleRuleAdded
 
 /**
- * A view of a field that is marked with `set_once` option.
+ * A policy which, upon encountering a field with the `(when)` option, generates
+ * a validation rule.
+ *
+ * The validation rule ensures that the associated field value is in the future or in the past
+ * from the current time (depending on the option definition).
  */
-internal class SetOnceFieldView :
-    BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
+internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 
-    @Subscribe
-    override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
-        e: FieldOptionDiscovered
-    ) = alter {
-        super.onConstraint(e)
-        subject = e.subject
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = WHEN)
+        event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val option = event.option.value.unpack<TimeOption>()
+        val futureOrPast = option.getIn()
+        val feature = inTime { time = futureOrPast }
+        val errorMessage = "The time must be in the ${futureOrPast.name.lowercase()}."
+        val field = event.subject
+        val newRule = SimpleRule(
+            field.name,
+            feature,
+            errorMessage,
+            errorMessage,
+            true
+        )
+        return simpleRuleAdded(field.declaringType, newRule)
     }
-
-    override fun saveErrorMessage(errorMessage: String) = alter {
-        this.errorMessage = errorMessage
-    }
-
-    override fun enableValidation() = alter {
-        enabled = true
-    }
-
-    override fun extractErrorMessage(option: Option): String =
-        throw NotImplementedError("`($SET_ONCE)` option does not support custom error messages.")
 }

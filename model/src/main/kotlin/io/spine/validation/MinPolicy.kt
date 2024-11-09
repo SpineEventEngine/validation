@@ -24,9 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.spine.core.External
+import io.spine.core.Where
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.validation.NumberRules.Companion.from
+import io.spine.validation.event.SimpleRuleAdded
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * A policy to add a validation rule to a type whenever the `(max)` field option is discovered.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+internal class MinPolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = MIN)
+        event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val field = event.subject
+        val rules = from(field, event.option, typeSystem!!)
+        val rule = rules.minRule(field.name)
+        return simpleRuleAdded(field.declaringType, rule)
+    }
+}

@@ -27,36 +27,43 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfSetAgainOption
-import io.spine.protodata.ast.Option
+import io.spine.option.PatternOption
+import io.spine.protobuf.unpack
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.server.entity.alter
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.validate.Diags.Regex.errorMessage
+import io.spine.validation.event.SimpleRuleAdded
 
 /**
- * A view of a field that is marked with `set_once` option.
+ * A policy to add a validation rule to a type whenever the `(pattern)` field option
+ * is discovered.
  */
-internal class SetOnceFieldView :
-    BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
+internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
-    @Subscribe
-    override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
-        e: FieldOptionDiscovered
-    ) = alter {
-        super.onConstraint(e)
-        subject = e.subject
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = PATTERN)
+        event: FieldOptionDiscovered
+    ): Just<SimpleRuleAdded> {
+        val patternOption = event.option.value.unpack<PatternOption>()
+        val regex = patternOption.regex
+        val feature = regex {
+            pattern = regex
+            modifier = patternOption.modifier
+        }
+        val customError = patternOption.errorMsg
+        val error = customError.ifEmpty { errorMessage(regex) }
+        val field = event.subject
+        val rule = SimpleRule(
+            field.name,
+            feature,
+            "String should match regex.",
+            error,
+            true
+        )
+        return simpleRuleAdded(field.declaringType, rule)
     }
-
-    override fun saveErrorMessage(errorMessage: String) = alter {
-        this.errorMessage = errorMessage
-    }
-
-    override fun enableValidation() = alter {
-        enabled = true
-    }
-
-    override fun extractErrorMessage(option: Option): String =
-        throw NotImplementedError("`($SET_ONCE)` option does not support custom error messages.")
 }

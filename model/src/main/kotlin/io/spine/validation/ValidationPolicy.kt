@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,20 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Options")
-
 package io.spine.validation
 
-import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import io.spine.protodata.ast.Option
+import io.spine.base.EventMessage
+import io.spine.core.ContractFor
+import io.spine.protodata.plugin.Policy
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.RuleAdded
 
 /**
- * Checks if this option represents the given generated option.
+ * A policy that reacts to an event with a [RuleAdded] event.
  *
- * @return `true` if both option name and number are the same, `false` otherwise
+ * May ignore an event and return [NoReaction] if necessary.
+ *
+ * @param E The type of the event to react to.
  */
-@Suppress("FunctionNaming") // backticked name is necessary here.
-public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
-    return name == generated.descriptor.name
-            && number == generated.number
+public abstract class ValidationPolicy<E : EventMessage> : Policy<E>(), ValidationPluginPart {
+
+    @ContractFor(handler = React::class)
+    protected abstract override fun whenever(event: E): EitherOf2<RuleAdded, NoReaction>
 }

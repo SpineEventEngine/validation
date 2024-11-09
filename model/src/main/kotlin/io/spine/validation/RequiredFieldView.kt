@@ -24,9 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.spine.core.External
+import io.spine.core.Subscribe
+import io.spine.core.Where
+import io.spine.option.IfMissingOption
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.server.entity.alter
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * A view of a field that is marked as `required`.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+internal class RequiredFieldView :
+    BoolFieldOptionView<RequiredField, RequiredField.Builder>(IfMissingOption.getDescriptor()) {
+
+    @Subscribe
+    override fun onConstraint(
+        @External @Where(field = OPTION_NAME, equals = "required")
+        e: FieldOptionDiscovered
+    ) = super.onConstraint(e)
+
+    override fun saveErrorMessage(errorMessage: String) = alter {
+        this.errorMessage = errorMessage
+    }
+
+    override fun enableValidation() = alter {
+        required = true
+    }
+
+    @Subscribe
+    override fun onErrorMessage(
+        @External @Where(field = OPTION_NAME, equals = "if_missing")
+        e: FieldOptionDiscovered
+    ) = super.onErrorMessage(e)
+
+    override fun extractErrorMessage(option: Option): String {
+        val ifMissing = option.value.unpack<IfMissingOption>()
+        return ifMissing.errorMsg
+    }
+}

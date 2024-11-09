@@ -24,9 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import com.google.protobuf.Descriptors.Descriptor
+import io.spine.option.OptionsProto
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * A factory of validation error messages.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+internal object DefaultErrorMessage {
+
+    /**
+     * Obtains the validation error message from the given option descriptor.
+     *
+     * The descriptor should be marked with the `(default_message)` option.
+     * If the option is absent, an empty message is returned.
+     */
+    @JvmStatic
+    fun from(optionDescriptor: Descriptor): String =
+        optionDescriptor.options.getExtension(OptionsProto.defaultMessage)
+}

@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation;
-
-import io.spine.base.EntityState;
-import io.spine.protodata.ast.event.FieldOptionDiscovered;
-import io.spine.protodata.plugin.ViewRepository;
-import io.spine.server.route.EventRouting;
+package io.spine.validation
 
 /**
- * A repository for a view on a field marked with a boolean validation option.
+ * A repository for the [RequiredFieldView]s.
  */
-abstract class BoolFieldOptionRepo<
-        V extends BoolFieldOptionView<FieldId, S, ?>,
-        S extends EntityState<FieldId>>
-        extends ViewRepository<FieldId, V, S> {
-
-    @Override
-    protected void setupEventRouting(EventRouting<FieldId> routing) {
-        super.setupEventRouting(routing);
-        routing.unicast(FieldOptionDiscovered.class,
-                        (e, c) -> FieldId.newBuilder()
-                                .setType(e.getSubject().getDeclaringType())
-                                .setName(e.getSubject().getName())
-                                .build()
-        );
-    }
-}
+internal class RequiredFieldRepository : BoolFieldOptionRepo<RequiredFieldView, RequiredField>()

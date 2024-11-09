@@ -24,9 +24,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.spine.core.External
+import io.spine.core.Subscribe
+import io.spine.core.Where
+import io.spine.option.IfInvalidOption
+import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * A view of a field that is marked with `validate`.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+internal class ValidatedFieldView :
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(IfInvalidOption.getDescriptor()) {
+
+    @Subscribe
+    override fun onConstraint(
+        @External @Where(field = OPTION_NAME, equals = VALIDATE) e: FieldOptionDiscovered
+    ) = super.onConstraint(e)
+
+    override fun saveErrorMessage(errorMessage: String) {
+        builder()!!.setErrorMessage(errorMessage)
+    }
+
+    override fun enableValidation() {
+        builder()!!.setValidate(true)
+    }
+
+    @Subscribe
+    override fun onErrorMessage(
+        @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
+    ) = super.onErrorMessage(e)
+
+    override fun extractErrorMessage(option: Option): String {
+        val value = option.value.unpack<IfInvalidOption>()
+        val errorMessage = value.errorMsg
+        return errorMessage
+    }
+}

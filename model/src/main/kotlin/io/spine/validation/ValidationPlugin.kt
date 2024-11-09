@@ -24,9 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.ViewRepository
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * A ProtoData plugin which attaches validation-related policies and views.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.169")
+public class ValidationPlugin : Plugin(
+    renderers = listOf(),
+    views = setOf(),
+    viewRepositories = setOf<ViewRepository<*, *, *>>(
+        MessageValidationRepository(),
+        RequiredFieldRepository(),
+        ValidatedFieldRepository(),
+        SetOnceFieldRepository()
+    ),
+    policies = setOf<Policy<*>>(
+        RequiredPolicy(),
+        RangePolicy(),
+        MinPolicy(),
+        MaxPolicy(),
+        DistinctPolicy(),
+        ValidatePolicy(),
+        PatternPolicy(),
+        IsRequiredPolicy(),
+        WhenPolicy(),
+        RequiredIdPatternPolicy(),
+        RequiredIdOptionPolicy()
+    )
+)
