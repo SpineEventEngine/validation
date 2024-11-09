@@ -78,7 +78,7 @@ internal object RequiredRule {
      * Singular fields obtain the default error message as a value of the `(default_message)`
      * option set for `IfMissing` option type.
      *
-     * Event if a custom error message is not set by a `(if_missing)` field option,
+     * Even if a custom error message is not set by a `(if_missing)` field option,
      * we want to have a different *default* message for collection fields,
      * so that the user can find an error quicker.
      *
