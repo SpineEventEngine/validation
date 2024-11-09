@@ -43,7 +43,7 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "max") event: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = MAX) event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
         val field = event.subject
         val rules = from(field, event.option, typeSystem!!)

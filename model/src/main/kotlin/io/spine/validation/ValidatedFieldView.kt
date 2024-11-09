@@ -42,7 +42,7 @@ internal class ValidatedFieldView :
 
     @Subscribe
     override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = "validate") e: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = VALIDATE) e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
     override fun saveErrorMessage(errorMessage: String) {
@@ -55,7 +55,7 @@ internal class ValidatedFieldView :
 
     @Subscribe
     override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = "if_invalid") e: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
     ) = super.onErrorMessage(e)
 
     override fun extractErrorMessage(option: Option): String {

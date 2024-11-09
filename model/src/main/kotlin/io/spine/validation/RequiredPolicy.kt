@@ -75,6 +75,6 @@ private fun throwDoesNotSupportRequired(field: Field): Nothing {
     val type: PrimitiveType = field.type.primitive
     error(
         "The field `${typeUrl}.${fieldName}` of the type `${type}`" +
-                " does not support `(required)` validation.",
+                " does not support `($REQUIRED)` validation.",
     )
 }

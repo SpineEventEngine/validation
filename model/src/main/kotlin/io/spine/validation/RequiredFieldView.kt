@@ -38,13 +38,13 @@ import io.spine.server.entity.alter
 /**
  * A view of a field that is marked as `required`.
  */
-internal class RequiredFieldView : BoolFieldOptionView<RequiredField, RequiredField.Builder>(
-    IfMissingOption.getDescriptor()
-) {
+internal class RequiredFieldView :
+    BoolFieldOptionView<RequiredField, RequiredField.Builder>(IfMissingOption.getDescriptor()) {
 
     @Subscribe
     override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = "required") e: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = "required")
+        e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
     override fun saveErrorMessage(errorMessage: String) = alter {
@@ -57,7 +57,8 @@ internal class RequiredFieldView : BoolFieldOptionView<RequiredField, RequiredFi
 
     @Subscribe
     override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = "if_missing") e: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = "if_missing")
+        e: FieldOptionDiscovered
     ) = super.onErrorMessage(e)
 
     override fun extractErrorMessage(option: Option): String {

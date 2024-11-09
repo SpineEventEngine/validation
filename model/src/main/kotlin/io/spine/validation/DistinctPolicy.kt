@@ -51,7 +51,7 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "distinct") event: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = DISTINCT) event: FieldOptionDiscovered
     ): EitherOf2<RuleAdded, NoReaction> {
         if (!event.option.boolValue) {
             return ignore()
@@ -75,11 +75,11 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
         val field = findField(fieldName, typeName, file)
         if (field.type.isSingular) {
             error("The field `${typeName.qualifiedName}.${fieldName.value}` is neither" +
-                    " a `repeated` nor a `map` and therefore cannot be `(distinct)`.",)
+                    " a `repeated` nor a `map` and therefore cannot be `($DISTINCT)`.",)
         }
     }
 
     companion object {
-        private const val ERROR = "A field with `(distinct) = true` must not contain duplicates."
+        private const val ERROR = "A field with `($DISTINCT) = true` must not contain duplicates."
     }
 }

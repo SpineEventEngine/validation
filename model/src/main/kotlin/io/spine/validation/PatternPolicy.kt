@@ -45,7 +45,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "pattern") event: FieldOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = PATTERN) event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
         val patternOption = event.option.value.unpack<PatternOption>()
         val regex = patternOption.regex

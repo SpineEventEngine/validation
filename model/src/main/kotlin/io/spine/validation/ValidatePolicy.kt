@@ -85,7 +85,7 @@ internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
         if (!field.type.refersToMessage()) {
             error(
                 "The field `${typeName.qualifiedName}.${fieldName.value}` does not refer" +
-                        " to a message type and, therefore, cannot have the `validate` option.",
+                        " to a message type and, therefore, cannot have the `$VALIDATE` option.",
             )
         }
     }

@@ -53,7 +53,7 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = "is_required")
+        @External @Where(field = OPTION_NAME, equals = IS_REQUIRED)
         event: OneofOptionDiscovered
     ): EitherOf2<MessageWideRuleAdded, NoReaction> {
         // We have the option defined in the type. But is it set to `true`?

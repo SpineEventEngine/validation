@@ -24,39 +24,67 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("OptionNames")
+
 package io.spine.validation
 
-import io.spine.core.External
-import io.spine.core.Subscribe
-import io.spine.core.Where
-import io.spine.option.IfSetAgainOption
-import io.spine.protodata.ast.Option
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.server.entity.alter
+/**
+ * Path to the name field of the option in
+ * the [io.spine.protodata.ast.event.FieldOptionDiscovered] event.
+ */
+public const val OPTION_NAME: String = "option.name"
 
 /**
- * A view of a field that is marked with `set_once` option.
+ * The name of the `(distinct)` option.
  */
-internal class SetOnceFieldView :
-    BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
+public const val DISTINCT: String = "distinct"
 
-    @Subscribe
-    override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
-        e: FieldOptionDiscovered
-    ) = alter {
-        super.onConstraint(e)
-        subject = e.subject
-    }
+/**
+ * The name of the `(if_invalid)` option.
+ */
+public const val IF_INVALID: String = "if_invalid"
 
-    override fun saveErrorMessage(errorMessage: String) = alter {
-        this.errorMessage = errorMessage
-    }
+/**
+ * The name of the `(is_required)` option.
+ */
+public const val IS_REQUIRED: String = "is_required"
 
-    override fun enableValidation() = alter {
-        enabled = true
-    }
+/**
+ * The name of the `(max)` option.
+ */
+public const val MAX: String = "max"
 
-    override fun extractErrorMessage(option: Option): String =
-        throw NotImplementedError("`($SET_ONCE)` option does not support custom error messages.")
-}
+/**
+ * The name of the `(min)` option.
+ */
+public const val MIN: String = "min"
+
+/**
+ * The name of the `(pattern)` option.
+ */
+public const val PATTERN: String = "pattern"
+
+/**
+ * The name of the `(range)` option.
+ */
+public const val RANGE: String = "range"
+
+/**
+ * The name of the `(required)` option.
+ */
+public const val REQUIRED: String = "required"
+
+/**
+ * The name of the `(set_once)` option.
+ */
+public const val SET_ONCE: String = "set_once"
+
+/**
+ * The name of the `(validate)` option.
+ */
+public const val VALIDATE: String = "validate"
+
+/**
+ * The name of the `(when)` option.
+ */
+public const val WHEN: String = "when"
