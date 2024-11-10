@@ -28,19 +28,19 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
+import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.MessageWithFile
 
 /**
  * Renders Java code to support `(set_once)` option for the given enum [field].
  *
  * @param field The enum field that declared the option.
- * @param declaredIn The message that contains the [field].
+ * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceEnumField(
     field: Field,
-    declaredIn: MessageWithFile
-) : SetOnceJavaConstraints(field, declaredIn) {
+    typeSystem: TypeSystem
+) : SetOnceJavaConstraints(field, typeSystem) {
 
     init {
         check(field.type.isEnum) {

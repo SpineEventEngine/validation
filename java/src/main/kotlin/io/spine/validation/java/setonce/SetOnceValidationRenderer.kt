@@ -33,7 +33,6 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.MessageWithFile
 import io.spine.validation.java.findMessageTypes
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
 
@@ -59,7 +58,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setOnceFields
             .associateWith { compilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
-                val javaConstraints = javaConstraints(protoField.subject, declaredIn)
+                val javaConstraints = javaConstraints(protoField.subject)
                 val sourceFile = sources.javaFileOf(declaredIn.message)
                 javaConstraints.render(sourceFile)
             }
@@ -74,14 +73,16 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaConstraints(field: Field, message: MessageWithFile): SetOnceJavaConstraints =
-        when {
-            field.type.isMessage -> SetOnceMessageField(field, message)
-            field.type.isEnum -> SetOnceEnumField(field, message)
-            field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, message)
+    private fun javaConstraints(field: Field): SetOnceJavaConstraints {
+        val typeSystem = typeSystem!!
+        return when {
+            field.type.isMessage -> SetOnceMessageField(field, typeSystem)
+            field.type.isEnum -> SetOnceEnumField(field, typeSystem)
+            field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, typeSystem)
             else -> error(
                 "Unsupported `(set_once)` field type: `${field.type}`, " +
                         "the declaring message: `${field.declaringType}`."
             )
         }
+    }
 }
