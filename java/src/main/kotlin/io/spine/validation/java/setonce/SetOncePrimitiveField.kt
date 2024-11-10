@@ -46,9 +46,9 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.type.TypeSystem
 import io.spine.string.camelCase
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.MessageWithFile
 
 internal fun interface DefaultOrSamePredicate : (String, String) -> String
 
@@ -56,12 +56,12 @@ internal fun interface DefaultOrSamePredicate : (String, String) -> String
  * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
  * @param field The primitive field that declared the option.
- * @param declaredIn The message that contains the [field].
+ * @param typeSystem The type system to resolve types.
  */
 internal open class SetOncePrimitiveField(
     field: Field,
-    declaredIn: MessageWithFile
-) : SetOnceJavaConstraints(field, declaredIn) {
+    typeSystem: TypeSystem
+) : SetOnceJavaConstraints(field, typeSystem) {
 
     companion object {
         private val CustomFieldReaders = mapOf(
