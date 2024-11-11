@@ -200,7 +200,6 @@ internal sealed class SetOnceJavaConstraints<T>(
      * @param currentValue An expression denoting the current field value.
      * @param newValue An expression denoting the proposed value.
      */
-    // TODO:2024-11-06:yevhenii.nadtochii: Reverse the expression.
     protected abstract fun defaultOrSame(
         currentValue: Expression<T>,
         newValue: Expression<T>
