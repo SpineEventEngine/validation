@@ -35,7 +35,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaElement
-import io.spine.protodata.java.VariableDeclaration
+import io.spine.protodata.java.Variable
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
@@ -162,7 +162,7 @@ internal sealed class SetOnceJavaConstraints<T : Any>(
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
 
-        val previousValue = VariableDeclaration("previous", currentValue)
+        val previousValue = Variable("previous", currentValue)
         fieldProcessing.addBefore(previousValue.toPsi(), fieldReading)
 
         val postcondition = defaultOrSameStatement(
