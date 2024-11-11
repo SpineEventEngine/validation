@@ -88,7 +88,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     protected val rule: SimpleRule = ctx.rule.simple
     private val ignoreIfNotSet  = rule.ignoredIfUnset
     protected val field = ctx.simpleRuleField
-    private val otherValue: Expression? = ctx.otherValueAsCode
+    private val otherValue: Expression<*>? = ctx.otherValueAsCode
 
     override fun code(): CodeBlock {
         val check = super.code()
@@ -120,7 +120,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         return condition
     }
 
-    override fun condition(): Expression {
+    override fun condition(): Expression<*> {
         checkNotNull(otherValue) {
             "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
@@ -145,7 +145,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call("valueOf", listOf(ctx.fieldOrElement!!))
+        val actualValue = ClassName(String::class).call<Any>("valueOf", listOf(ctx.fieldOrElement!!))
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),

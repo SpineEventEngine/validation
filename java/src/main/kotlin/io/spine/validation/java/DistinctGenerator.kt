@@ -51,19 +51,19 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * the original collection is equal to the size of the `ImmutableSet` created as a copy
      * of the checked collection.
      */
-    override fun condition(): Expression {
+    override fun condition(): Expression<*> {
         val map = ctx.simpleRuleField.isMap
         val fieldValue = ctx.fieldOrElement!!
-        val collectionToCount = if (map) MethodCall(fieldValue, "values") else fieldValue
+        val collectionToCount = if (map) MethodCall<Any>(fieldValue, "values") else fieldValue
         return equalityOf(
             MethodCall(fieldValue, "size"),
             ClassName(ImmutableSet::class)
-                .call("copyOf", listOf(collectionToCount))
+                .call<Any>("copyOf", listOf(collectionToCount))
                 .chain("size")
         )
     }
 
-    private fun equalityOf(left: Expression, right: Expression): Expression {
+    private fun equalityOf(left: Expression<Any>, right: Expression<Any>): Expression<Any> {
         return Literal(left.toCode() + " == " + right.toCode())
     }
 }

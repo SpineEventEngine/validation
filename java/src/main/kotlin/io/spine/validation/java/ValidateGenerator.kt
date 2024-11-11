@@ -65,7 +65,7 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * Compose a variable name after the format `prefixOfFieldName`.
      * E.g., `validationErrorOfUserId`.
      */
-    private fun varName(prefix: String, ctx: GenerationContext): Literal {
+    private fun varName(prefix: String, ctx: GenerationContext): Literal<*> {
         val fieldNameSuffix = ctx.simpleRuleField.name.value.titleCase()
         return Literal("${prefix}Of$fieldNameSuffix")
     }
@@ -94,7 +94,7 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * ```
      */
     private fun useGeneratedMethod(): CodeBlock = codeBlock {
-        val violations = MethodCall(ctx.fieldOrElement!!, "validate")
+        val violations = MethodCall<Any>(ctx.fieldOrElement!!, "validate")
         addStatement(
             "\$T<\$T> \$L = \$L",
             Optional::class.java,
@@ -156,15 +156,15 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         )
     }
 
-    override fun condition(): Expression =
-        Literal("!" + MethodCall(validationErrorVar, "isPresent"))
+    override fun condition(): Expression<*> =
+        Literal("!" + MethodCall<Any>(validationErrorVar, "isPresent"))
 
 
     override fun createViolation(): CodeBlock {
-        val validationError = MethodCall(validationErrorVar, "get")
+        val validationError = MethodCall<Any>(validationErrorVar, "get")
         val violations = MessageReference(validationError.toCode())
             .field("constraint_violation", CARDINALITY_LIST)
-            .getter
+            .getter<Any>()
         return error().createParentViolation(ctx, violations)
     }
 }

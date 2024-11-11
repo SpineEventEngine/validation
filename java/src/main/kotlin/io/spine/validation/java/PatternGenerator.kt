@@ -47,15 +47,15 @@ internal class PatternGenerator(
     private val fieldName = ctx.simpleRuleField.name
     private val patternConstantName = "${fieldName.value}_PATTERN"
 
-    override fun condition(): Expression {
+    override fun condition(): Expression<*> {
         val matcher =
-            MethodCall(Literal(patternConstantName), "matcher", listOf(ctx.fieldOrElement!!))
+            MethodCall<Any>(Literal(patternConstantName), "matcher", listOf(ctx.fieldOrElement!!))
         val matchingMethod = if (feature.modifier.partialMatch) {
             "find"
         } else {
             "matches"
         }
-        return matcher.chain(matchingMethod)
+        return matcher.chain<Any>(matchingMethod)
     }
 
     override fun supportingMembers(): CodeBlock {
@@ -93,7 +93,7 @@ private fun PatternOption.Modifier.containsFlags() =
 /**
  * Converts this modifier into a bitwise mask built from `java.util.regex.Pattern` constants.
  */
-private fun PatternOption.Modifier.flagsMask(): Expression {
+private fun PatternOption.Modifier.flagsMask(): Expression<*> {
     var mask = 0
     if (dotAll) mask = mask or Pattern.DOTALL
     if (caseInsensitive) mask = mask or Pattern.CASE_INSENSITIVE

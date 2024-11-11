@@ -86,7 +86,7 @@ internal constructor(
      * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
      * the generated code should add it to this list.
      */
-    val violationList: Expression,
+    val violationList: Expression<*>,
 
     /**
      * A custom reference to an element of a collection field.
@@ -94,7 +94,7 @@ internal constructor(
      * If `null`, the associated field is not a collection or the associated rule
      * does not need to be distributed to collection elements.
      */
-    private val elementReference: Expression? = null
+    private val elementReference: Expression<*>? = null
 ) {
 
     val typeConvention: MessageOrEnumConvention by lazy {
@@ -108,7 +108,7 @@ internal constructor(
         JavaValueConverter(typeConvention)
     }
 
-    val otherValueAsCode: Expression?
+    val otherValueAsCode: Expression<*>?
         get() = if (rule.isSimple && rule.simple.hasOtherValue()) {
             valueConverter.valueToCode(rule.simple.otherValue)
         } else {
@@ -150,13 +150,13 @@ internal constructor(
      *
      * If there is no associated field, this is `null`.
      */
-    val fieldOrElement: Expression?
+    val fieldOrElement: Expression<*>?
         get() = elementReference ?: fieldValue
 
     /**
      * The reference to the associated field, or `null` if there is no such field.
      */
-    val fieldValue: Expression?
+    val fieldValue: Expression<*>?
         get() {
             val protoField = fieldFromSimpleRule ?: return null
             return getterFor(protoField)
@@ -173,8 +173,8 @@ internal constructor(
      *
      * The [field] should be a field of the message referenced in [msg].
      */
-    public fun getterFor(field: Field): Expression =
-        msg.field(field).getter
+    public fun getterFor(field: Field): Expression<*> =
+        msg.field(field).getter<Any>()
 
     /**
      * Finds the field by the given name in the validated type.

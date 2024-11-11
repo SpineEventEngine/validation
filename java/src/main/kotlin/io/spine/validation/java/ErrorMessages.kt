@@ -36,11 +36,12 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
-import io.spine.protodata.java.LiteralString
+import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
 
@@ -61,7 +62,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
  */
 public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
-    childViolations: Expression
+    childViolations: Expression<*>
 ): CodeBlock {
     val field = ctx.simpleRuleField
     val fieldValue = ctx.fieldOrElement!!
@@ -91,9 +92,9 @@ public fun ErrorMessage.createParentViolation(
  */
 public fun ErrorMessage.createCompositeViolation(
     type: TypeName,
-    violationsList: Expression,
+    violationsList: Expression<*>,
     field: Field?,
-    fieldValue: Expression?
+    fieldValue: Expression<*>?
 ): CodeBlock {
     require(field != null && fieldValue != null || field == null && fieldValue == null) {
         "Either both `field` and `fieldValue` must be `null` or both must be not `null`." +
@@ -103,7 +104,7 @@ public fun ErrorMessage.createCompositeViolation(
     return addViolation(violation, violationsList)
 }
 
-private fun addViolation(violation: Expression, violationsList: Expression): CodeBlock =
+private fun addViolation(violation: Expression<*>, violationsList: Expression<*>): CodeBlock =
     CodeBlock
         .builder()
         .addStatement("\$L.add(\$L)", violationsList, violation)
@@ -112,13 +113,13 @@ private fun addViolation(violation: Expression, violationsList: Expression): Cod
 private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
-    fieldValue: Expression?,
-    childViolations: Expression? = null,
+    fieldValue: Expression<*>?,
+    childViolations: Expression<*>? = null,
     ignoreCardinality: Boolean = false
-): Expression {
+): Expression<*> {
     var violationBuilder = ClassName(ConstraintViolation::class.java).newBuilder()
         .chainSet("msg_format", Literal(this))
-        .chainSet("type_name", LiteralString(type.typeUrl))
+        .chainSet("type_name", StringLiteral(type.typeUrl))
     if (field != null) {
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }
@@ -135,12 +136,12 @@ private fun ErrorMessage.buildViolation(
     if (childViolations != null) {
         violationBuilder = violationBuilder.chain("addAllViolation", listOf(childViolations))
     }
-    return violationBuilder.chainBuild()
+    return violationBuilder.chainBuild<Any>()
 }
 
-private fun pathOf(field: Field): Expression {
+private fun pathOf(field: Field): Expression<*> {
     val type = ClassName(FieldPath::class.java)
     return type.newBuilder()
-        .chainAdd("field_name", LiteralString(field.name.value))
-        .chainBuild()
+        .chainAdd("field_name", StringLiteral(field.name.value))
+        .chainBuild<Any>()
 }

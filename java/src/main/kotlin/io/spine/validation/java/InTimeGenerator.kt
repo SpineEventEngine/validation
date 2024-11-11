@@ -63,8 +63,8 @@ private class TimestampInTimeGenerator(
 
     private val time = inTime.time
 
-    override fun condition(): Expression {
-        val compare = MethodCall(
+    override fun condition(): Expression<*> {
+        val compare = MethodCall<Any>(
             ClassName(Timestamps::class), "compare", arguments = listOf(
             ctx.fieldOrElement!!,
             currentTime
@@ -73,8 +73,8 @@ private class TimestampInTimeGenerator(
     }
 }
 
-private val currentTime: Expression =
-    MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
+private val currentTime: Expression<*> =
+    MethodCall<Any>(ClassName(io.spine.base.Time::class), "currentTime")
 
 /**
  * Formats the comparison expression for the time value.
@@ -82,7 +82,7 @@ private val currentTime: Expression =
  * If the current time is being compared to the special [TIME_UNDEFINED] value,
  * the returned result for the formatted expression is always `true`.
  */
-private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
+private fun Time.formatJavaComparison(compareToCall: Expression<*>): Expression<*> {
     val operation = when(this) {
         FUTURE -> "> 0"
         PAST -> "< 0"
@@ -102,8 +102,8 @@ private class InSpineTimeGenerator(
     ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
     private val time = inTime.time
-    override fun condition(): Expression {
-        val compareTo = MethodCall(
+    override fun condition(): Expression<*> {
+        val compareTo = MethodCall<Any>(
             ctx.fieldOrElement!!,
             time.temporalMethod()
         )

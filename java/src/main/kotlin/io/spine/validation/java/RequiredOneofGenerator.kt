@@ -46,11 +46,11 @@ internal class RequiredOneofGenerator(
 
     private val rule = ctx.rule.messageWide
 
-    override fun condition(): Expression {
+    override fun condition(): Expression<*> {
         val casePropertyName = "${name.value}_case"
         val pseudoField = ctx.msg.field(casePropertyName, CARDINALITY_SINGLE)
-        val getter = pseudoField.getter
-        val numberGetter = getter.chain("getNumber")
+        val getter = pseudoField.getter<Any>()
+        val numberGetter = getter.chain<Any>("getNumber")
         return Literal("$numberGetter != 0")
     }
 

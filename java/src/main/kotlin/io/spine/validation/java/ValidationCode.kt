@@ -101,6 +101,6 @@ internal class ValidationCode(
         val OPTIONAL_ERROR: Type = object : TypeToken<Optional<ValidationError>>() {}.type
 
         @JvmField
-        val VIOLATIONS: Expression = Literal("violations")
+        val VIOLATIONS: Expression<*> = Literal("violations")
     }
 }

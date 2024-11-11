@@ -52,3 +52,9 @@ include(
     ":java-tests:validation",
     ":java-tests:validation-gen",
 )
+
+includeBuild("../ProtoData") {
+    dependencySubstitution {
+        substitute(module("io.spine.protodata:protodata-java")).using(project(":java"))
+    }
+}
