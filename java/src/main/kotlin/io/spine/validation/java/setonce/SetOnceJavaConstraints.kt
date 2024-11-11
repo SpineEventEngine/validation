@@ -59,7 +59,7 @@ import io.spine.validation.java.MessageWithFile
  * @property field The field that declared the option.
  * @property declaredIn The message that contains the [field].
  */
-internal sealed class SetOnceJavaConstraints<T : Any>(
+internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
     private val declaredIn: MessageWithFile,
 ) {
