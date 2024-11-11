@@ -112,11 +112,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         val psiClass = psiFile.findClass(messageBuilder)
 
         execute {
-            try {
-                psiClass.renderConstraints()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            psiClass.renderConstraints()
         }
 
         sourceFile.overwrite(psiFile.text)
