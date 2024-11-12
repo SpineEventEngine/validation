@@ -65,7 +65,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
     override val canGenerate: Boolean =
         left.canGenerate && right.canGenerate
 
-    override fun condition(): Expression = with(ctx) {
+    override fun condition(): Expression<*> = with(ctx) {
         val composite = rule.composite
         val left = left.condition()
         val right = right.condition()
@@ -95,7 +95,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
 
     override fun createViolation(): CodeBlock {
         val rule = ctx.rule.composite
-        val accessor: Expression?
+        val accessor: Expression<*>?
         val field: Field?
         if (rule.hasField()) {
             field = ctx.lookUpField(rule.field)

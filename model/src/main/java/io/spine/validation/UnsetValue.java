@@ -38,7 +38,7 @@ import io.spine.protodata.value.Value;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.protodata.ast.FieldTypeExtsKt.getCardinality;
+import static io.spine.protodata.ast.FieldTypes.getCardinality;
 import static io.spine.protodata.ast.Fields.toType;
 import static io.spine.protodata.ast.PrimitiveType.PT_UNKNOWN;
 import static io.spine.protodata.ast.PrimitiveType.TYPE_BYTES;

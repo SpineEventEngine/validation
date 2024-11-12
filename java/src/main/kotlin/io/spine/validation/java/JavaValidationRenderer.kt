@@ -163,7 +163,7 @@ private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
     addStatement(
         "\$T error = \$L",
         OPTIONAL_ERROR,
-        MethodCall(result, VALIDATE)
+        MethodCall<Any>(result, VALIDATE)
     )
     beginControlFlow("if (error.isPresent())")
     addStatement(

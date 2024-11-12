@@ -118,22 +118,22 @@ internal class DistributingGenerator(
         return typeName
     }
 
-    private fun iterableExpression(): Expression {
+    private fun iterableExpression(): Expression<*> {
         val fieldAccessor = ctx.fieldOrElement!!
         return if (field.isMap) {
-            MethodCall(fieldAccessor, "values")
+            MethodCall<Any>(fieldAccessor, "values")
         } else {
             fieldAccessor
         }
     }
 
     override fun prologue(): CodeBlock = codeBlock {
-        val methodCall = MethodCall(This, methodName)
+        val methodCall = MethodCall<Any>(This<Any>(), methodName)
         addStatement("\$T \$L = \$L", violationsType, violationsName, methodCall)
     }
 
-    override fun condition(): Expression {
-        return MethodCall(Literal(violationsName), "isEmpty")
+    override fun condition(): Expression<*> {
+        return MethodCall<Any>(Literal(violationsName), "isEmpty")
     }
 
     override fun error(): ErrorMessage =
@@ -141,7 +141,7 @@ internal class DistributingGenerator(
 
     override fun createViolation(): CodeBlock = codeBlock {
         val violations = Literal(ctx.violationList)
-        val methodCall = MethodCall(violations, "addAll", listOf(Literal(violationsName)))
+        val methodCall = MethodCall<Any>(violations, "addAll", listOf(Literal(violationsName)))
         addStatement(methodCall.toCode())
     }
 }
