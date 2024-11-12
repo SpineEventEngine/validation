@@ -29,7 +29,7 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaElement
+import io.spine.protodata.java.AnElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -53,7 +53,7 @@ internal class SetOnceBooleanField(
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = JavaElement("${fieldName}_ = input.readBool();")
+            readerStartsWith = AnElement("${fieldName}_ = input.readBool();")
         )
     }
 

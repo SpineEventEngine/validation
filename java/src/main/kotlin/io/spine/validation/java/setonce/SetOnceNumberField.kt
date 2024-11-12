@@ -40,8 +40,8 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -80,7 +80,7 @@ internal class SetOnceNumberField(
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = JavaElement("${fieldName}_ = input.$fieldReader();")
+            readerStartsWith = AnElement("${fieldName}_ = input.$fieldReader();")
         )
     }
 

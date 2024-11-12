@@ -28,8 +28,8 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
+import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaElement
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
 
@@ -61,7 +61,7 @@ internal class SetOnceEnumField(
         alterEnumValueSetter()
         alterBytesMerge(
             currentValue = Expression("${fieldName}_"),
-            readerStartsWith = JavaElement("${fieldName}_ = input.readEnum();")
+            readerStartsWith = AnElement("${fieldName}_ = input.readEnum();")
         )
     }
 

@@ -29,8 +29,8 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
+import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaElement
 import io.spine.protodata.java.javaClassName
 import io.spine.tools.psi.java.method
 import io.spine.validation.java.MessageWithFile
@@ -69,8 +69,8 @@ internal class SetOnceMessageField(
         alterFieldMerge()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = JavaElement("input.readMessage"),
-            readerContains = JavaElement("${fieldGetterName}FieldBuilder().getBuilder()"),
+            readerStartsWith = AnElement("input.readMessage"),
+            readerContains = AnElement("${fieldGetterName}FieldBuilder().getBuilder()"),
         )
     }
 
