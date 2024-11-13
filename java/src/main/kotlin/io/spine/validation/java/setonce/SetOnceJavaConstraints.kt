@@ -34,8 +34,8 @@ import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.InitVar
 import io.spine.protodata.java.JavaElement
-import io.spine.protodata.java.VarInit
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
@@ -158,7 +158,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
         val fieldProcessing = fieldReading.parent
 
-        val previousValue = VarInit("previous", currentValue)
+        val previousValue = InitVar("previous", currentValue)
         fieldProcessing.addBefore(previousValue.toPsi(), fieldReading)
 
         val postcondition = defaultOrSameStatement(
