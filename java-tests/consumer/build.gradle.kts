@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.gradle.protobuf.setupDescriptorSetFileCreation
 import io.spine.dependency.local.Spine
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
@@ -36,6 +37,12 @@ protoData {
         "io.spine.validation.java.JavaValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )
+}
+
+protobuf {
+    generateProtoTasks.all().configureEach {
+        setupDescriptorSetFileCreation()
+    }
 }
 
 val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()

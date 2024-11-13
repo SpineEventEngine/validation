@@ -129,7 +129,7 @@ fun GenerateProtoTask.setup() {
  */
 @Suppress(
     "TooGenericExceptionCaught" /* Handling all file-writing failures in the same way.*/)
-private fun GenerateProtoTask.setupDescriptorSetFileCreation() {
+fun GenerateProtoTask.setupDescriptorSetFileCreation() {
     // Tell `protoc` generate descriptor set file.
     // The name of the generated file reflects project's Maven coordinates.
     val ssn = sourceSet.name
