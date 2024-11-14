@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.gradle.protobuf.setupDescriptorSetFileCreation
 import io.spine.dependency.local.Spine
+import io.spine.gradle.protobuf.configureIdea
+import io.spine.gradle.protobuf.setup
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 import io.spine.util.theOnly
@@ -41,7 +42,16 @@ protoData {
 
 protobuf {
     generateProtoTasks.all().configureEach {
-        setupDescriptorSetFileCreation()
+        setup()
+    }
+}
+
+val thisProject = project
+
+gradle.afterProject {
+    // Invoke only for the project of interest.
+    if (thisProject == this@afterProject) {
+        configureIdea()
     }
 }
 
