@@ -28,12 +28,10 @@ import io.spine.dependency.local.Spine
 import io.spine.gradle.protobuf.configureIdea
 import io.spine.gradle.protobuf.excludeProtocOutput
 import io.spine.gradle.protobuf.makeDirsForIdeaModule
-import io.spine.gradle.protobuf.printSourceDirectories
 import io.spine.gradle.protobuf.setupDescriptorSetFileCreation
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 import io.spine.util.theOnly
-import org.gradle.plugins.ide.idea.model.IdeaModel
 
 protoData {
     plugins(
