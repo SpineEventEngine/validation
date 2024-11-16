@@ -25,6 +25,10 @@
  */
 
 import io.spine.dependency.local.Spine
+import io.spine.gradle.protobuf.configureIdea
+import io.spine.gradle.protobuf.excludeProtocOutput
+import io.spine.gradle.protobuf.makeDirsForIdeaModule
+import io.spine.gradle.protobuf.setupDescriptorSetFileCreation
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 import io.spine.util.theOnly
@@ -36,6 +40,23 @@ protoData {
         "io.spine.validation.java.JavaValidationPlugin",
         "io.spine.validation.test.MoneyValidationPlugin"
     )
+}
+
+protobuf {
+    generateProtoTasks.all().configureEach {
+        setupDescriptorSetFileCreation()
+        excludeProtocOutput()
+        makeDirsForIdeaModule()
+    }
+}
+
+val thisProject = project
+
+gradle.afterProject {
+    // Invoke only for the project of interest.
+    if (thisProject == this@afterProject) {
+        configureIdea()
+    }
 }
 
 val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()

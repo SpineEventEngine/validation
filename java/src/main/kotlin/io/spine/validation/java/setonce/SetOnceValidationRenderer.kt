@@ -29,9 +29,12 @@ package io.spine.validation.java.setonce
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
+import io.spine.string.shortly
+import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.findMessageTypes
 import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
@@ -68,8 +71,8 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         .onEach {
             val field = it.subject
             check(!field.isMap && !field.isList) {
-                "The `(set_once)` option is not applicable to repeated fields or maps. " +
-                        "The invalid field: `${field}`."
+                "The `($SET_ONCE)` option is not applicable to repeated fields or maps. " +
+                        "The invalid field: `${field.qualifiedName}`."
             }
         }
 
@@ -80,8 +83,9 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             field.type.isEnum -> SetOnceEnumField(field, typeSystem)
             field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, typeSystem)
             else -> error(
-                "Unsupported `(set_once)` field type: `${field.type}`, " +
-                        "the declaring message: `${field.declaringType}`."
+                "Cannot define constraints for the field `${field.qualifiedName}` which has" +
+                        " the type `${field.type.shortly()}` not supported by" +
+                        " the `($SET_ONCE)` option."
             )
         }
     }
