@@ -44,13 +44,11 @@ include(
     "java-bundle",
     ":java-tests",
     ":java-tests:consumer",
+    ":java-tests:consumer-dependency",
     ":java-tests:extensions",
-    ":java-tests:extra-definitions",
     ":java-tests:runtime",
     ":java-tests:vanilla",
-    ":java-tests:validating-options",
-    ":java-tests:validation",
-    ":java-tests:validation-gen",
+    ":java-tests:validating",
 )
 
 includeBuild("../ProtoData") {

@@ -34,8 +34,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A number that can be compared to another number.
  *
- * <p>Note that for values that are outside {@code Long} range, or when a
- * precision beyond that of {@code Double} is required, instances of this class
+ * <p>Note that for values that are outside {@code Long} range, or when
+ * the precision beyond that of {@code Double} is required, instances of this class
  * yield incorrect comparison results.
  */
 @Immutable

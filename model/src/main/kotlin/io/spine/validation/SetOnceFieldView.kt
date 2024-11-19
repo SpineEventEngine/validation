@@ -32,31 +32,31 @@ import io.spine.core.Where
 import io.spine.option.IfSetAgainOption
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.server.entity.alter
 
 /**
  * A view of a field that is marked with `set_once` option.
  */
 internal class SetOnceFieldView :
-    BoolFieldOptionView<FieldId, SetOnceField, SetOnceField.Builder>(
-        IfSetAgainOption.getDescriptor()
-    ) {
+    BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
 
     @Subscribe
     override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = "set_once") e: FieldOptionDiscovered
-    ) {
+        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
+        e: FieldOptionDiscovered
+    ) = alter {
         super.onConstraint(e)
-        builder().setSubject(e.subject)
+        subject = e.subject
     }
 
-    override fun errorMessage(errorMessage: String) {
-        builder().setErrorMessage(errorMessage)
+    override fun saveErrorMessage(errorMessage: String) = alter {
+        this.errorMessage = errorMessage
     }
 
-    override fun enableValidation() {
-        builder().setEnabled(true)
+    override fun enableValidation() = alter {
+        enabled = true
     }
 
     override fun extractErrorMessage(option: Option): String =
-        throw NotImplementedError("`(set_once)` option doesn't support custom error messages.")
+        throw NotImplementedError("`($SET_ONCE)` option does not support custom error messages.")
 }

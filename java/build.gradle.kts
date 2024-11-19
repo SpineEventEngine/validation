@@ -25,7 +25,6 @@
  */
 
 import io.spine.dependency.lib.JavaPoet
-import io.spine.dependency.test.Kotest
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.ProtoData
 
@@ -43,6 +42,4 @@ dependencies {
     implementation(Roaster.api)
 
     runtimeOnly(Roaster.jdt)
-
-    testImplementation(Kotest.assertions)
 }

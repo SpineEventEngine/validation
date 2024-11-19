@@ -30,6 +30,8 @@ import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.McJava
 import io.spine.dependency.local.ProtoData
 import io.spine.dependency.local.Spine
+import io.spine.dependency.local.Validation.javaBundleModule
+import io.spine.dependency.local.Validation.runtimeModule
 
 buildscript {
     forceCodegenPlugins()
@@ -51,10 +53,9 @@ allprojects {
  */
 val applyMcJava = setOf(
     "extensions",
-    "extra-definitions",
+    "consumer-dependency",
     "runtime",
-    "validation",
-    "validation-gen",
+    "validating"
 )
 
 subprojects {
@@ -75,31 +76,28 @@ subprojects {
 }
 
 fun Project.applyPlugins() {
+    if (project.name in applyMcJava) {
+        apply(plugin = McJava.pluginId)
+    } else {
+        apply(plugin = ProtoData.pluginId)
+    }
+
     val forcedProtoData = listOf(
         ProtoData.fatCli,
         ProtoData.protocPlugin
     )
 
-    if (project.name in applyMcJava) {
-        apply(plugin = McJava.pluginId)
-        configurations.all {
-            resolutionStrategy {
-                dependencySubstitution {
-                    // Use the current version of Java validation code generation instead of
-                    // the version used in `mc-java`.
-                    substitute(
-                        module("io.spine.validation:spine-validation-java-bundle")
-                    ).using(project(":java"))
-                }
-                forcedProtoData.forEach { force(it) }
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                // Use the current version of Java validation code generation instead of
+                // the version used in `mc-java`.
+                substitute(module(javaBundleModule)).using(project(":java"))
+
+                // Use the current version of Java runtime in the generated code of tests.
+                substitute(module(runtimeModule)).using(project(":java-runtime"))
             }
-        }
-    } else {
-        apply(plugin = ProtoData.pluginId)
-        configurations.all {
-            resolutionStrategy {
-                forcedProtoData.forEach { force(it) }
-            }
+            forcedProtoData.forEach { force(it) }
         }
     }
 }

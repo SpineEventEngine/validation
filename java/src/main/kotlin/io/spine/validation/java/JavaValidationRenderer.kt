@@ -44,6 +44,9 @@ import io.spine.validate.ValidationException
 import io.spine.validation.MessageValidation
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
+import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
+import io.spine.validation.java.point.BuildPartialReturnTypeAnnotation
+import io.spine.validation.java.point.ValidateBeforeReturn
 
 /**
  * A [Renderer][io.spine.protodata.render.Renderer] for the validation code in Java.

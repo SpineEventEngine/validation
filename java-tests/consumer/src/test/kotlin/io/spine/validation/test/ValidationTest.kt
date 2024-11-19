@@ -35,6 +35,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
+import io.spine.protobuf.pack
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidationException
 import io.spine.validation.test.money.LocalTime
@@ -45,6 +46,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import com.google.protobuf.Any as ProtoAny
 
 @DisplayName("Generated validation code should")
 internal class ValidationTest {
@@ -298,7 +300,7 @@ internal class ValidationTest {
             fun fail() {
                 val builder = meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
-                    .setLastEvent(AnyPacker.pack(invalidCloud()))
+                    .setLastEvent(invalidCloud().pack())
                 checkInvalid(builder)
             }
 
@@ -307,7 +309,7 @@ internal class ValidationTest {
             fun unknownType() {
                 val builder = meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
-                    .setLastEvent(AnyPacker.pack(invalidRainDrop()))
+                    .setLastEvent(packedUnknown())
                 assertNoException(builder)
             }
         }
@@ -338,7 +340,7 @@ internal class ValidationTest {
             @Test
             @DisplayName(ALLOW_VALID)
             fun pass() {
-                val packedValid = AnyPacker.pack(validRainDrop())
+                val packedValid = validRainDrop().pack()
                 val builder = meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
                     .addPredictedEvent(packedValid)
@@ -349,8 +351,8 @@ internal class ValidationTest {
             @Test
             @DisplayName(PROHIBIT_INVALID)
             fun fail() {
-                val packedValid = AnyPacker.pack(validCloud())
-                val packedInvalid = AnyPacker.pack(invalidCloud())
+                val packedValid = validCloud().pack()
+                val packedInvalid = invalidCloud().pack()
                 val builder = meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
                     .addPredictedEvent(packedValid)
@@ -361,8 +363,8 @@ internal class ValidationTest {
             @Test
             @DisplayName(IGNORE_UNKNOWN_INVALID)
             fun unknownValue() {
-                val packedValid = AnyPacker.pack(validCloud())
-                val packedInvalid = AnyPacker.pack(invalidRainDrop())
+                val packedValid = validCloud().pack()
+                val packedInvalid = packedUnknown()
                 val builder = meteoStatsInEurope()
                     .setAverageDrop(validRainDrop())
                     .addPredictedEvent(packedValid)
@@ -419,10 +421,14 @@ internal class ValidationTest {
     }
 }
 
-private fun meteoStatsInEurope(): MeteoStatistics.Builder {
-    return MeteoStatistics.newBuilder()
+private fun meteoStatsInEurope(): MeteoStatistics.Builder =
+    MeteoStatistics.newBuilder()
         .putIncludedRegions("EU", someRegion())
-}
+
+private fun packedUnknown(): ProtoAny =
+    ProtoAny.newBuilder()
+        .setTypeUrl("unknown.type/foo.bar")
+        .build()
 
 private fun invalidRainDrop(): RainDrop {
     return RainDrop.newBuilder()
@@ -430,21 +436,19 @@ private fun invalidRainDrop(): RainDrop {
         .buildPartial()
 }
 
-private fun validRainDrop(): RainDrop {
-    return RainDrop.newBuilder()
+private fun validRainDrop(): RainDrop =
+    RainDrop.newBuilder()
         .setMassInGrams(1)
         .buildPartial()
-}
 
 private fun validCloud(): Cloud = cloud {
     cubicMeters = 2
 }
 
-private fun invalidCloud(): Cloud {
-    return Cloud.newBuilder()
+private fun invalidCloud(): Cloud =
+    Cloud.newBuilder()
         .setCubicMeters(-2)
         .buildPartial()
-}
 
 private fun someRegion(): Region = region {
     name = "Europe"

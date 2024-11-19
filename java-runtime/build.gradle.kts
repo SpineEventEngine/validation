@@ -27,6 +27,7 @@
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Spine
+import io.spine.gradle.protobuf.setup
 
 buildscript {
     standardSpineSdkRepositories()
@@ -40,7 +41,13 @@ plugins {
     module
 }
 
-apply(plugin = "io.spine.mc-java")
+// This cannot be moved under the `build-proto-model` script. It would not work from there.
+// Please see the documentation for `GenerateProtoTask.setup()` for details.
+protobuf {
+    generateProtoTasks.all().configureEach {
+        setup()
+    }
+}
 
 dependencies {
     annotationProcessor(AutoService.processor)

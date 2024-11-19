@@ -32,6 +32,7 @@ import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.toMessageType
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
@@ -41,11 +42,11 @@ import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.java.toPsi
 import io.spine.protodata.render.SourceFile
+import io.spine.protodata.type.TypeSystem
 import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
-import io.spine.validation.java.MessageWithFile
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -57,11 +58,11 @@ import io.spine.validation.java.MessageWithFile
  * @param T The field data type. See docs to an abstract [defaultOrSame] method for usage details.
  *
  * @property field The field that declared the option.
- * @property declaredIn The message that contains the [field].
+ * @property typeSystem The type system to resolve types.
  */
 internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
-    private val declaredIn: MessageWithFile,
+    protected val typeSystem: TypeSystem
 ) {
 
     private companion object {
@@ -88,7 +89,8 @@ internal sealed class SetOnceJavaConstraints<T>(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage = declaredIn.message.javaClassName(declaredIn.fileHeader)
+    protected val declaringMessage =
+        field.declaringType.toMessageType(typeSystem).javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -122,7 +124,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * Renders Java constraints in this [PsiClass] to make sure the [field] can be assigned
      * only once.
      *
-     * This [PsiClass] represents a Java builder for [declaredIn], which declared
+     * This [PsiClass] represents a Java builder for [field.declaringType], which declared
      * the [field].
      */
     protected abstract fun PsiClass.renderConstraints()
@@ -131,10 +133,10 @@ internal sealed class SetOnceJavaConstraints<T>(
      * Alters [MergeFromBytesSignature] method to make sure that a set-once field
      * is not overridden during the merge from a byte array.
      *
-     * Such a merge is done field-by-field. This method finds a place, where the given [field]
-     * is processed. It adds a statement to remember the current field value, before reading
-     * of a new one. After the reading statement, it adds [defaultOrSameStatement] to check
-     * that the just read value is legal to be assigned.
+     * Such a merge is done field-by-field. This method finds the place, where
+     * the given [field] is processed. It adds a statement to remember the current field value
+     * before reading of a new one. After the reading statement, it adds [defaultOrSameStatement]
+     * to check that the just read value is legal to be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
      * invoke it within [renderConstraints], passing the necessary parameters.

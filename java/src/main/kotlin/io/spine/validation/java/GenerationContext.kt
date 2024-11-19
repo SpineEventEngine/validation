@@ -91,7 +91,7 @@ internal constructor(
     /**
      * A custom reference to an element of a collection field.
      *
-     * If `null`, the associated field is not a collection or the associated rule
+     * If `null`, the associated field is not a collection, or the associated rule
      * does not need to be distributed to collection elements.
      */
     private val elementReference: Expression<*>? = null
@@ -105,7 +105,7 @@ internal constructor(
      * A [JavaValueConverter] for transforming `Value`s into Java expressions.
      */
     val valueConverter: JavaValueConverter by lazy {
-        JavaValueConverter(typeConvention)
+        JavaValueConverter(typeSystem)
     }
 
     val otherValueAsCode: Expression<*>?
