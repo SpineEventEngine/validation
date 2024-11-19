@@ -50,9 +50,3 @@ include(
     ":java-tests:vanilla",
     ":java-tests:validating",
 )
-
-includeBuild("../ProtoData") {
-    dependencySubstitution {
-        substitute(module("io.spine.protodata:protodata-java")).using(project(":java"))
-    }
-}
