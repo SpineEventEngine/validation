@@ -30,6 +30,7 @@ import io.spine.protodata.ast.Cardinality.CARDINALITY_SINGLE
 import io.spine.protodata.ast.OneofName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
+import io.spine.protodata.java.field
 import io.spine.validation.ErrorMessage
 
 /**
