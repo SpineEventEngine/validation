@@ -36,7 +36,7 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.backend.SecureRandomString
-import io.spine.protodata.java.ClassOrEnumName
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
@@ -104,7 +104,7 @@ internal class DistributingGenerator(
             .build()
     }
 
-    private fun typeName(): ClassOrEnumName {
+    private fun typeName(): ClassName {
         val name = field.type.extractTypeName()
         val typeName = if (name != null) {
             ctx.typeConvention.declarationFor(name).name

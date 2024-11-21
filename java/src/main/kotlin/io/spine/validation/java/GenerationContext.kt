@@ -26,6 +26,7 @@
 
 package io.spine.validation.java
 
+import com.google.protobuf.Message
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.File
@@ -35,7 +36,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MessageOrEnumConvention
 import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.MessageReference
+import io.spine.protodata.java.field
 import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
@@ -67,7 +68,7 @@ internal constructor(
     /**
      * A reference to the validated message.
      */
-    val msg: MessageReference,
+    val msg: Expression<Message>,
 
     /**
      * The type of the validated message.
