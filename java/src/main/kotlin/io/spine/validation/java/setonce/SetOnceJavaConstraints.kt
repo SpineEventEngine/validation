@@ -100,7 +100,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * @param sourceFile Protobuf-generated Java source code of the message declared the [field].
      *
      * @see defaultOrSame
-     * @see defaultOrSameStatement
+     * @see throwIfNotDefaultAndNotSame
      */
     fun render(sourceFile: SourceFile<Java>) {
         val messageBuilder = ClassName(
@@ -131,8 +131,8 @@ internal sealed class SetOnceJavaConstraints<T>(
      *
      * Such a merge is done field-by-field. This method finds the place, where
      * the given [field] is processed. It adds a statement to remember the current field value
-     * before reading of a new one. After the reading statement, it adds [defaultOrSameStatement]
-     * to check that the just read value is legal to be assigned.
+     * before reading of a new one. After the reading statement, it adds [throwIfNotDefaultAndNotSame]
+     * check to be sure the read value can be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
      * invoke it within [renderConstraints], passing the necessary parameters.
@@ -159,7 +159,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         val previousValue = InitVar("previous", currentValue)
         fieldProcessing.addBefore(previousValue.toPsi(), fieldReading)
 
-        val postcondition = defaultOrSameStatement(
+        val postcondition = throwIfNotDefaultAndNotSame(
             currentValue = previousValue.read(),
             newValue = currentValue,
         )
@@ -175,25 +175,25 @@ internal sealed class SetOnceJavaConstraints<T>(
      * @param currentValue The current field value.
      * @param newValue The proposed value.
      */
-    protected fun defaultOrSameStatement(
+    protected fun throwIfNotDefaultAndNotSame(
         currentValue: Expression<T>,
         newValue: Expression<T>
     ): PsiStatement = elementFactory.createStatement(
         """
-            if (${defaultOrSame(currentValue, newValue)}) {
+            if (!(${defaultOrSame(currentValue, newValue)})) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
     )
 
     /**
-     * Returns a boolean expression upon [currentValue] and [newValue].
+     * Returns a boolean expression upon the field's [currentValue] and the suggested [newValue].
      *
-     * The provided expression should return `true` if both conditions are met:
+     * The provided expression should return `true` if any of the following conditions is met:
      *
-     * 1. [currentValue] is NOT default for its type.
-     * 2. [newValue] is not equal to [currentValue].
+     * 1. The [currentValue] is default for its type.
+     * 2. The [newValue] is equal to the [currentValue].
      *
-     * In pseudocode: `currentValue != default && currentValue != newValue`.
+     * In pseudocode: `currentValue == default || currentValue == newValue`.
      *
      * @param currentValue An expression denoting the current field value.
      * @param newValue An expression denoting the proposed value.

@@ -74,7 +74,7 @@ internal class SetOnceNumberField(
     override fun defaultOrSame(
         currentValue: Expression<Number>,
         newValue: Expression<Number>
-    ): Expression<Boolean> = Expression("$currentValue != 0 && $currentValue != $newValue")
+    ): Expression<Boolean> = Expression("$currentValue == 0 || $currentValue == $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
@@ -94,7 +94,7 @@ internal class SetOnceNumberField(
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )

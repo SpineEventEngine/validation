@@ -54,7 +54,7 @@ internal class SetOnceEnumField(
     override fun defaultOrSame(
         currentValue: Expression<Int>,
         newValue: Expression<Int>
-    ): Expression<Boolean> = Expression("$currentValue != 0 && $currentValue != $newValue")
+    ): Expression<Boolean> = Expression("$currentValue == 0 || $currentValue == $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
@@ -75,7 +75,7 @@ internal class SetOnceEnumField(
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression("${fieldName}_"),
             newValue = Expression("value.getNumber()"),
         )
@@ -93,7 +93,7 @@ internal class SetOnceEnumField(
      * ```
      */
     private fun PsiClass.alterEnumValueSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression("${fieldName}_"),
             newValue = Expression("value")
         )

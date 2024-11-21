@@ -50,7 +50,7 @@ internal class SetOnceStringField(
         currentValue: Expression<String>,
         newValue: Expression<String>
     ): Expression<Boolean> = Expression(
-        "!$currentValue.isEmpty() && !$currentValue.equals($newValue)"
+        "$currentValue.isEmpty() || $currentValue.equals($newValue)"
     )
 
     override fun PsiClass.renderConstraints() {
@@ -73,7 +73,7 @@ internal class SetOnceStringField(
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )
@@ -91,7 +91,7 @@ internal class SetOnceStringField(
      * ```
      */
     private fun PsiClass.alterStringBytesSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression("${fieldGetterName}Bytes()"),
             newValue = Expression("value")
         )
@@ -107,7 +107,7 @@ internal class SetOnceStringField(
      * So, we have to add a check there.
      */
     private fun PsiClass.alterMessageMerge() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("other.$fieldGetter")
         )

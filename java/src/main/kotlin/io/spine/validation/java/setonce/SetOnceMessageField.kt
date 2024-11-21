@@ -59,7 +59,7 @@ internal class SetOnceMessageField(
     override fun defaultOrSame(
         currentValue: Expression<Message>,
         newValue: Expression<Message>
-    ): Expression<Boolean> = Expression("!$currentValue.equals($fieldTypeClass.getDefaultInstance()) && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression("$currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue)")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
@@ -82,7 +82,7 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )
@@ -102,7 +102,7 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterBuilderSetter() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("builderForValue.build()")
         )
@@ -122,7 +122,7 @@ internal class SetOnceMessageField(
      * ```
      */
     private fun PsiClass.alterFieldMerge() {
-        val precondition = defaultOrSameStatement(
+        val precondition = throwIfNotDefaultAndNotSame(
             currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )
