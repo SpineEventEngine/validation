@@ -29,7 +29,6 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.toMessageType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.javaClassName
@@ -54,9 +53,7 @@ internal class SetOnceMessageField(
         }
     }
 
-    private val fieldTypeClass =
-        field.type.message.toMessageType(typeSystem).javaClassName(typeSystem)
-            .canonical
+    private val fieldTypeClass = field.type.message.javaClassName(typeSystem)
 
     @Suppress("MaxLineLength") // Easier to read.
     override fun defaultOrSame(

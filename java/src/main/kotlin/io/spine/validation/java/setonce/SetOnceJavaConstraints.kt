@@ -32,7 +32,6 @@ import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.toMessageType
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
@@ -62,7 +61,7 @@ import io.spine.tools.psi.java.execute
  */
 internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
-    protected val typeSystem: TypeSystem
+    private val typeSystem: TypeSystem
 ) {
 
     private companion object {
@@ -89,8 +88,7 @@ internal sealed class SetOnceJavaConstraints<T>(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage =
-        field.declaringType.toMessageType(typeSystem).javaClassName(typeSystem)
+    protected val declaringMessage = field.declaringType.javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -99,8 +97,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * The [field] can be assigned a new value only if the current value is default
      * for the field type OR if the assigned value is the same with the current one.
      *
-     * @param sourceFile Protobuf-generated Java source code of the [message][declaredIn]
-     *  that declared the [field].
+     * @param sourceFile Protobuf-generated Java source code of the message declared the [field].
      *
      * @see defaultOrSame
      * @see defaultOrSameStatement
@@ -124,8 +121,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * Renders Java constraints in this [PsiClass] to make sure the [field] can be assigned
      * only once.
      *
-     * This [PsiClass] represents a Java builder for [field.declaringType], which declared
-     * the [field].
+     * This [PsiClass] represents a Java builder for the message declared the [field].
      */
     protected abstract fun PsiClass.renderConstraints()
 

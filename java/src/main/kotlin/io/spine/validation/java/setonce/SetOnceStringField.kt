@@ -32,19 +32,19 @@ import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.MessageWithFile
 
 /**
  * Renders Java code to support `(set_once)` option for the given primitive [field].
  *
  * @param field The primitive field that declared the option.
- * @param declaredIn The message that contains the [field].
+ * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceStringField(
     field: Field,
-    declaredIn: MessageWithFile
-) : SetOnceJavaConstraints<String>(field, declaredIn) {
+    typeSystem: TypeSystem
+) : SetOnceJavaConstraints<String>(field, typeSystem) {
 
     override fun defaultOrSame(
         currentValue: Expression<String>,
