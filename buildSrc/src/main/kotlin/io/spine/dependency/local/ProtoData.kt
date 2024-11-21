@@ -94,7 +94,7 @@ object ProtoData {
      *
      * @see ProtoData
      */
-    fun pluginLib(version: String): String =
+    private fun pluginLib(version: String): String =
         "$group:gradle-plugin:$version"
 
     fun api(version: String): String =
