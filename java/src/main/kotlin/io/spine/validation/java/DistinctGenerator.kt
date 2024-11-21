@@ -29,7 +29,6 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableSet
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.call
 import io.spine.protodata.ast.isMap
@@ -51,7 +50,7 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * the original collection is equal to the size of the `ImmutableSet` created as a copy
      * of the checked collection.
      */
-    override fun condition(): Expression<*> {
+    override fun condition(): Expression<Boolean> {
         val map = ctx.simpleRuleField.isMap
         val fieldValue = ctx.fieldOrElement!!
         val collectionToCount = if (map) MethodCall<Any>(fieldValue, "values") else fieldValue
@@ -63,7 +62,7 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         )
     }
 
-    private fun equalityOf(left: Expression<Any>, right: Expression<Any>): Expression<Any> {
-        return Literal(left.toCode() + " == " + right.toCode())
+    private fun equalityOf(left: Expression<Int>, right: Expression<Int>): Expression<Boolean> {
+        return Expression(left.toCode() + " == " + right.toCode())
     }
 }

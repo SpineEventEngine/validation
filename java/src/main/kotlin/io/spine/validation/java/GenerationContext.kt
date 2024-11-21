@@ -40,6 +40,7 @@ import io.spine.protodata.java.field
 import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validate.ConstraintViolation
 import io.spine.validation.Rule
 import io.spine.validation.isSimple
 
@@ -87,7 +88,7 @@ internal constructor(
      * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
      * the generated code should add it to this list.
      */
-    val violationList: Expression<*>,
+    val violationList: Expression<MutableList<ConstraintViolation>>,
 
     /**
      * A custom reference to an element of a collection field.

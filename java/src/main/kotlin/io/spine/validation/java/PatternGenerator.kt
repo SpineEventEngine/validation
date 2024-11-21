@@ -32,7 +32,9 @@ import io.spine.option.PatternOption
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.ReadVar
 import io.spine.validation.Regex
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.lang.model.element.Modifier
 
@@ -45,24 +47,23 @@ internal class PatternGenerator(
 ) : SimpleRuleGenerator(ctx) {
 
     private val fieldName = ctx.simpleRuleField.name
-    private val patternConstantName = "${fieldName.value}_PATTERN"
+    private val patternConstant = ReadVar<Pattern>("${fieldName.value}_PATTERN")
 
-    override fun condition(): Expression<*> {
-        val matcher =
-            MethodCall<Any>(Literal(patternConstantName), "matcher", listOf(ctx.fieldOrElement!!))
+    override fun condition(): Expression<Boolean> {
+        val matcher = MethodCall<Matcher>(patternConstant, "matcher", ctx.fieldOrElement!!)
         val matchingMethod = if (feature.modifier.partialMatch) {
             "find"
         } else {
             "matches"
         }
-        return matcher.chain<Any>(matchingMethod)
+        return matcher.chain(matchingMethod)
     }
 
     override fun supportingMembers(): CodeBlock {
         val compileModifiers = feature.hasModifier() && feature.modifier.containsFlags()
         val field = FieldSpec.builder(
             Pattern::class.java,
-            patternConstantName,
+            "$patternConstant",
             Modifier.PRIVATE,
             Modifier.STATIC,
             Modifier.FINAL
@@ -93,7 +94,7 @@ private fun PatternOption.Modifier.containsFlags() =
 /**
  * Converts this modifier into a bitwise mask built from `java.util.regex.Pattern` constants.
  */
-private fun PatternOption.Modifier.flagsMask(): Expression<*> {
+private fun PatternOption.Modifier.flagsMask(): Expression<Int> {
     var mask = 0
     if (dotAll) mask = mask or Pattern.DOTALL
     if (caseInsensitive) mask = mask or Pattern.CASE_INSENSITIVE

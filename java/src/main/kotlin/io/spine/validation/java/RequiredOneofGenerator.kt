@@ -29,7 +29,6 @@ package io.spine.validation.java
 import io.spine.protodata.ast.Cardinality.CARDINALITY_SINGLE
 import io.spine.protodata.ast.OneofName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.field
 import io.spine.validation.ErrorMessage
 
@@ -47,12 +46,12 @@ internal class RequiredOneofGenerator(
 
     private val rule = ctx.rule.messageWide
 
-    override fun condition(): Expression<*> {
+    override fun condition(): Expression<Boolean> {
         val casePropertyName = "${name.value}_case"
         val pseudoField = ctx.msg.field(casePropertyName, CARDINALITY_SINGLE)
         val getter = pseudoField.getter<Any>()
         val numberGetter = getter.chain<Any>("getNumber")
-        return Literal("$numberGetter != 0")
+        return Expression("$numberGetter != 0")
     }
 
     override fun error() =

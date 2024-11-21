@@ -32,12 +32,13 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.TypedInsertionPoint
 import io.spine.protodata.render.SourceAtLine
 import io.spine.protodata.render.SourceFile
 import io.spine.text.TextFactory.lineSplitter
 import io.spine.tools.code.Java
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
 import io.spine.validation.MessageValidation
@@ -101,6 +102,6 @@ internal class ValidationCode(
         val OPTIONAL_ERROR: Type = object : TypeToken<Optional<ValidationError>>() {}.type
 
         @JvmField
-        val VIOLATIONS: Expression<*> = Literal("violations")
+        val VIOLATIONS: Expression<MutableList<ConstraintViolation>> = ReadVar("violations")
     }
 }

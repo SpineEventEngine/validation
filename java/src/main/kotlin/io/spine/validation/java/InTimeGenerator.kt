@@ -30,8 +30,8 @@ import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.call
 import io.spine.time.validation.Time
 import io.spine.time.validation.Time.FUTURE
 import io.spine.time.validation.Time.PAST
@@ -63,7 +63,7 @@ private class TimestampInTimeGenerator(
 
     private val time = inTime.time
 
-    override fun condition(): Expression<*> {
+    override fun condition(): Expression<Boolean> {
         val compare = MethodCall<Any>(
             ClassName(Timestamps::class), "compare", arguments = listOf(
             ctx.fieldOrElement!!,
@@ -73,8 +73,8 @@ private class TimestampInTimeGenerator(
     }
 }
 
-private val currentTime: Expression<*> =
-    MethodCall<Any>(ClassName(io.spine.base.Time::class), "currentTime")
+private val currentTime: Expression<*> = ClassName(io.spine.base.Time::class)
+    .call<Timestamp>("currentTime")
 
 /**
  * Formats the comparison expression for the time value.
@@ -82,14 +82,14 @@ private val currentTime: Expression<*> =
  * If the current time is being compared to the special [TIME_UNDEFINED] value,
  * the returned result for the formatted expression is always `true`.
  */
-private fun Time.formatJavaComparison(compareToCall: Expression<*>): Expression<*> {
+private fun Time.formatJavaComparison(compareToCall: Expression<*>): Expression<Boolean> {
     val operation = when(this) {
         FUTURE -> "> 0"
         PAST -> "< 0"
         TIME_UNDEFINED -> " < 32768"
         else -> error("Unexpected time: `$this`.")
     }
-    return Literal("$compareToCall $operation")
+    return Expression("$compareToCall $operation")
 }
 
 /**
@@ -102,7 +102,7 @@ private class InSpineTimeGenerator(
     ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
     private val time = inTime.time
-    override fun condition(): Expression<*> {
+    override fun condition(): Expression<Boolean> {
         val compareTo = MethodCall<Any>(
             ctx.fieldOrElement!!,
             time.temporalMethod()

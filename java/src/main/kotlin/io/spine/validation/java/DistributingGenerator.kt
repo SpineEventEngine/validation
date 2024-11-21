@@ -28,6 +28,7 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
+import com.google.protobuf.Message
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.extractPrimitiveType
@@ -38,8 +39,8 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.toJavaClass
 import io.spine.string.titleCase
@@ -66,13 +67,13 @@ internal class DistributingGenerator(
     delegateCtor: (GenerationContext) -> CodeGenerator
 ) : CodeGenerator(ctx) {
 
-    private val element = Literal("element")
+    private val element = ReadVar<Any>("element")
     private val elementContext = ctx.copy(elementReference = element)
     private val field = ctx.simpleRuleField
     private val delegate = delegateCtor(elementContext)
     private val ruleId = field.ruleId()
     private val methodName = "validate$ruleId"
-    private val violationsName = "violationsOf$ruleId"
+    private val violationsName = ReadVar<ImmutableList<ConstraintViolation>>("violationsOf$ruleId")
     private val violationsType = object : TypeToken<ImmutableList<ConstraintViolation>>() {}.type
 
     override fun supportingMembers(): CodeBlock {
@@ -122,28 +123,27 @@ internal class DistributingGenerator(
     private fun iterableExpression(): Expression<*> {
         val fieldAccessor = ctx.fieldOrElement!!
         return if (field.isMap) {
-            MethodCall<Any>(fieldAccessor, "values")
+            MethodCall<Collection<*>>(fieldAccessor, "values")
         } else {
             fieldAccessor
         }
     }
 
     override fun prologue(): CodeBlock = codeBlock {
-        val methodCall = MethodCall<Any>(This<Any>(), methodName)
-        addStatement("\$T \$L = \$L", violationsType, violationsName, methodCall)
+        val violations = MethodCall<ImmutableList<ConstraintViolation>>(This<Message>(), methodName)
+        addStatement("\$T \$L = \$L", violationsType, violationsName, violations)
     }
 
-    override fun condition(): Expression<*> {
-        return MethodCall<Any>(Literal(violationsName), "isEmpty")
+    override fun condition(): Expression<Boolean> {
+        return MethodCall(violationsName, "isEmpty")
     }
 
     override fun error(): ErrorMessage =
         delegate.error()
 
     override fun createViolation(): CodeBlock = codeBlock {
-        val violations = Literal(ctx.violationList)
-        val methodCall = MethodCall<Any>(violations, "addAll", listOf(Literal(violationsName)))
-        addStatement(methodCall.toCode())
+        val methodCall = MethodCall<Boolean>(ctx.violationList, "addAll", violationsName)
+        addStatement(methodCall.code)
     }
 }
 

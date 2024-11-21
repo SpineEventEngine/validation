@@ -30,7 +30,6 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protobuf.isNotDefault
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
@@ -65,12 +64,12 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
     override val canGenerate: Boolean =
         left.canGenerate && right.canGenerate
 
-    override fun condition(): Expression<*> = with(ctx) {
+    override fun condition(): Expression<Boolean> = with(ctx) {
         val composite = rule.composite
         val left = left.condition()
         val right = right.condition()
         val binaryOp = BOOLEAN_OPS[composite.operator]!!
-        return Literal(binaryOp(left.toCode(), right.toCode()))
+        return Expression(binaryOp(left.toCode(), right.toCode()))
     }
 
     override fun error(): ErrorMessage {

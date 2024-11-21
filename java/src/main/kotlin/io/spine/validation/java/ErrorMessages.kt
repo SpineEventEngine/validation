@@ -62,7 +62,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
  */
 public fun ErrorMessage.createParentViolation(
     ctx: GenerationContext,
-    childViolations: Expression<*>
+    childViolations: Expression<MutableList<ConstraintViolation>>
 ): CodeBlock {
     val field = ctx.simpleRuleField
     val fieldValue = ctx.fieldOrElement!!
@@ -92,7 +92,7 @@ public fun ErrorMessage.createParentViolation(
  */
 public fun ErrorMessage.createCompositeViolation(
     type: TypeName,
-    violationsList: Expression<*>,
+    violationsList: Expression<MutableList<ConstraintViolation>>,
     field: Field?,
     fieldValue: Expression<*>?
 ): CodeBlock {
@@ -104,19 +104,20 @@ public fun ErrorMessage.createCompositeViolation(
     return addViolation(violation, violationsList)
 }
 
-private fun addViolation(violation: Expression<*>, violationsList: Expression<*>): CodeBlock =
-    CodeBlock
-        .builder()
-        .addStatement("\$L.add(\$L)", violationsList, violation)
-        .build()
+private fun addViolation(
+    violation: Expression<ConstraintViolation>,
+    violationsList: Expression<MutableList<ConstraintViolation>>
+): CodeBlock = CodeBlock.builder()
+    .addStatement("\$L.add(\$L)", violationsList, violation)
+    .build()
 
 private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression<*>?,
-    childViolations: Expression<*>? = null,
+    childViolations: Expression<MutableList<ConstraintViolation>>? = null,
     ignoreCardinality: Boolean = false
-): Expression<*> {
+): Expression<ConstraintViolation> {
     var violationBuilder = ClassName(ConstraintViolation::class.java).newBuilder()
         .chainSet("msg_format", Literal(this))
         .chainSet("type_name", StringLiteral(type.typeUrl))
@@ -134,14 +135,14 @@ private fun ErrorMessage.buildViolation(
         violationBuilder = violationBuilder.chainSet("field_value", packingExpression)
     }
     if (childViolations != null) {
-        violationBuilder = violationBuilder.chain("addAllViolation", listOf(childViolations))
+        violationBuilder = violationBuilder.chain("addAllViolation", childViolations)
     }
-    return violationBuilder.chainBuild<Any>()
+    return violationBuilder.chainBuild()
 }
 
-private fun pathOf(field: Field): Expression<*> {
+private fun pathOf(field: Field): Expression<FieldPath> {
     val type = ClassName(FieldPath::class.java)
     return type.newBuilder()
         .chainAdd("field_name", StringLiteral(field.name.value))
-        .chainBuild<Any>()
+        .chainBuild()
 }

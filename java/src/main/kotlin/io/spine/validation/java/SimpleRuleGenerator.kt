@@ -35,7 +35,6 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
 import io.spine.protodata.value.Value
 import io.spine.string.shortly
@@ -119,7 +118,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         return condition
     }
 
-    override fun condition(): Expression<*> {
+    override fun condition(): Expression<Boolean> {
         checkNotNull(otherValue) {
             "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
@@ -131,7 +130,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         checkNotNull(ctx.fieldOrElement) {
             "There is no field value for the rule: `${rule.shortly()}`."
         }
-        return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
+        return Expression(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
     private fun fieldIsJavaObject(): Boolean =
@@ -145,7 +144,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
 
     override fun error(): ErrorMessage {
         val actualValue = ClassName(String::class)
-            .call<Any>("valueOf", listOf(ctx.fieldOrElement!!))
+            .call<String>("valueOf", ctx.fieldOrElement!!)
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),

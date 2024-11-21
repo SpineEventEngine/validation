@@ -31,7 +31,6 @@ import io.spine.protodata.ast.Cardinality.CARDINALITY_LIST
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
@@ -159,14 +158,14 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         )
     }
 
-    override fun condition(): Expression<*> =
-        Literal("!" + MethodCall<Any>(validationError, "isPresent"))
+    override fun condition(): Expression<Boolean> =
+        Expression("!" + MethodCall<Boolean>(validationError, "isPresent"))
 
     override fun createViolation(): CodeBlock {
         val validationError = MethodCall<ValidationError>(validationError, "get")
         val violations = validationError
             .field("constraint_violation", CARDINALITY_LIST)
-            .getter<Any>()
+            .getter<MutableList<ConstraintViolation>>()
         return error().createParentViolation(ctx, violations)
     }
 }
