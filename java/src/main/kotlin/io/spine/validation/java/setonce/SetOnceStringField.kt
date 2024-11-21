@@ -49,7 +49,9 @@ internal class SetOnceStringField(
     override fun defaultOrSame(
         currentValue: Expression<String>,
         newValue: Expression<String>
-    ): Expression<Boolean> = Expression("!$currentValue.isEmpty() && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression(
+        "!$currentValue.isEmpty() && !$currentValue.equals($newValue)"
+    )
 
     override fun PsiClass.renderConstraints() {
         alterSetter()

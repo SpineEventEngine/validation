@@ -48,7 +48,9 @@ internal class SetOnceBytesField(
     override fun defaultOrSame(
         currentValue: Expression<ByteString>,
         newValue: Expression<ByteString>
-    ): Expression<Boolean> = Expression("$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression(
+        "$currentValue != com.google.protobuf.ByteString.EMPTY && !$currentValue.equals($newValue)"
+    )
 
     override fun PsiClass.renderConstraints() {
         alterSetter()

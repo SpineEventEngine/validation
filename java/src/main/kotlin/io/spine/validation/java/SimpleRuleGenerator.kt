@@ -52,7 +52,6 @@ import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
 import io.spine.validation.extractType
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * Java code comparing two objects.
@@ -145,7 +144,8 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call<Any>("valueOf", listOf(ctx.fieldOrElement!!))
+        val actualValue = ClassName(String::class)
+            .call<Any>("valueOf", listOf(ctx.fieldOrElement!!))
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),
