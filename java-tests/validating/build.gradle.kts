@@ -42,6 +42,7 @@ dependencies {
 
     val testFixtureDependencies = listOf(
         Spine.base,
+        Spine.time,
         Logging.lib,
         Validation.runtime,
         Kotest.assertions
