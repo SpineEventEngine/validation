@@ -24,7 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.timewhen
+package io.spine.test.options.`when`
 
-class SpineTimeWhenSpec {
+import com.google.protobuf.Duration
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Durations
+import com.google.protobuf.util.Timestamps
+import org.junit.jupiter.api.DisplayName
+
+@DisplayName("When used with Protobuf time, `(when)` constrain should")
+internal class ProtoTimeWhenSpec : AbstractWhenSpec<Timestamp>() {
+
+    private companion object {
+        val FIFTY_NANOS: Duration = Durations.fromNanos(50)
+    }
+
+    override fun pastTime(): Timestamp {
+        val current = Timestamps.now()
+        val past = Timestamps.subtract(current, FIFTY_NANOS)
+        return past
+    }
+
+    override fun futureTime(): Timestamp {
+        val current = Timestamps.now()
+        val future = Timestamps.add(current, FIFTY_NANOS)
+        return future
+    }
 }

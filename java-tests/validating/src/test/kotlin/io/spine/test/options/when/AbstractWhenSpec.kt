@@ -23,17 +23,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.test.options.timewhen
+package io.spine.test.options.`when`
 
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 // TODO:2024-11-22:yevhenii.nadtochii: Make the difference to be 50 nanoseconds
 //  from the expected, so not to introduce dedicated test cases for this.
 
-@DisplayName("`(when)` constrain should")
-internal class WhenSpec {
+internal abstract class AbstractWhenSpec<T> {
+
+    protected abstract fun pastTime(): T
+
+    protected abstract fun futureTime(): T
 
     @Nested inner class
     `when given a timestamp denoting` {

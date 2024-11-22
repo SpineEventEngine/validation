@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.timewhen
+package io.spine.test.options.`when`
 
-class ProtoTimeWhenSpec {
+internal class SpineTimeWhenSpec {
 }
