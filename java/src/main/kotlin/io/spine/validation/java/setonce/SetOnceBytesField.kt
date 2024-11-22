@@ -29,21 +29,32 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given primitive [field].
+ * Renders Java code to support `(set_once)` option for the given byte array [field].
  *
- * @param field The primitive field that declared the option.
+ * Please note, in the generated Java code, Protobuf uses [ByteString] to represent
+ * an array of bytes.
+ *
+ * @param field The byte array field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceBytesField(
     field: Field,
     typeSystem: TypeSystem
 ) : SetOnceJavaConstraints<ByteString>(field, typeSystem) {
+
+    init {
+        check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
+            "`${javaClass.simpleName}` handles only byte array fields. " +
+                    "The passed field: `$field`."
+        }
+    }
 
     override fun defaultOrSame(
         currentValue: Expression<ByteString>,

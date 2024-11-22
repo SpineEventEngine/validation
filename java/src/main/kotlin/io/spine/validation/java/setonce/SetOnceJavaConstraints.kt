@@ -129,18 +129,22 @@ internal sealed class SetOnceJavaConstraints<T>(
      * Alters [MergeFromBytesSignature] method to make sure that a set-once field
      * is not overridden during the merge from a byte array.
      *
-     * Such a merge is done field-by-field. This method finds the place, where
-     * the given [field] is processed. It adds a statement to remember the current field value
-     * before reading of a new one. After the reading statement, it adds [throwIfNotDefaultAndNotSame]
-     * check to be sure the read value can be assigned.
+     * Such a merge is done field-by-field. In the method body, each field is handled
+     * in a separate `case` block of the `switch` statement. Such a block reads a new value
+     * and assigns it to the field.
+     *
+     * This method finds the place, where the given [field] is processed. It adds a statement
+     * to remember the current field value before reading a new one. After the reading,
+     * it adds [throwIfNotDefaultAndNotSame] statement to be sure the just read value can
+     * be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
      * invoke it within [renderConstraints], passing the necessary parameters.
      *
      * The [currentValue] and [readerStartsWith] are mandatory properties. Pass [readerContains]
      * in cases when [readerStartsWith] is not sufficient. For example, for message fields,
-     * the beginning of the reading block is the same for all fields because it doesn't include
-     * the field name. Differentiation is done way deeper.
+     * the beginning of the reading block is the same for all message fields because it doesn't
+     * include the field name. Differentiation is done way further.
      *
      * @param currentValue The current field value.
      * @param readerStartsWith The beginning of the field reading block.
@@ -154,26 +158,26 @@ internal sealed class SetOnceJavaConstraints<T>(
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
-        val fieldProcessing = fieldReading.parent
+        val fieldCaseBlock = fieldReading.parent
 
         val previousValue = InitVar("previous", currentValue)
-        fieldProcessing.addBefore(previousValue.toPsi(), fieldReading)
+        fieldCaseBlock.addBefore(previousValue.toPsi(), fieldReading)
 
         val postcondition = throwIfNotDefaultAndNotSame(
             currentValue = previousValue.read(),
             newValue = currentValue,
         )
-        fieldProcessing.addAfter(postcondition, fieldReading)
+        fieldCaseBlock.addAfter(postcondition, fieldReading)
     }
 
     /**
      * Creates an `if` statement, which checks that the current field value is default
-     * OR if the proposed value is the same as the current.
+     * OR if the proposed [newValue] is the same as the current.
      *
      * Otherwise, it throws the validation exception.
      *
      * @param currentValue The current field value.
-     * @param newValue The proposed value.
+     * @param newValue The proposed new value.
      */
     protected fun throwIfNotDefaultAndNotSame(
         currentValue: Expression<T>,
@@ -186,9 +190,9 @@ internal sealed class SetOnceJavaConstraints<T>(
     )
 
     /**
-     * Returns a boolean expression upon the field's [currentValue] and the suggested [newValue].
+     * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].
      *
-     * The provided expression should return `true` if any of the following conditions is met:
+     * The provided expression should return `true` if any of the conditions is met:
      *
      * 1. The [currentValue] is default for its type.
      * 2. The [newValue] is equal to the [currentValue].
@@ -196,7 +200,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * In pseudocode: `currentValue == default || currentValue == newValue`.
      *
      * @param currentValue An expression denoting the current field value.
-     * @param newValue An expression denoting the proposed value.
+     * @param newValue An expression denoting the proposed new value.
      */
     protected abstract fun defaultOrSame(
         currentValue: Expression<T>,

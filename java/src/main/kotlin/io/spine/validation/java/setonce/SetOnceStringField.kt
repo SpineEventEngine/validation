@@ -30,21 +30,29 @@ import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given primitive [field].
+ * Renders Java code to support `(set_once)` option for the given string [field].
  *
- * @param field The primitive field that declared the option.
+ * @param field The string field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceStringField(
     field: Field,
     typeSystem: TypeSystem
 ) : SetOnceJavaConstraints<String>(field, typeSystem) {
+
+    init {
+        check(field.type.primitive == PrimitiveType.TYPE_STRING) {
+            "`${javaClass.simpleName}` handles only number fields. " +
+                    "The passed field: `$field`."
+        }
+    }
 
     override fun defaultOrSame(
         currentValue: Expression<String>,

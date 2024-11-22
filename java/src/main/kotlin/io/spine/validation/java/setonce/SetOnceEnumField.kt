@@ -36,6 +36,9 @@ import io.spine.tools.psi.java.method
 /**
  * Renders Java code to support `(set_once)` option for the given enum [field].
  *
+ * Please note, in the generated Java code, Protobuf uses an ordinal number
+ * to represent the currently set enum constant.
+ *
  * @param field The enum field that declared the option.
  * @param typeSystem The type system to resolve types.
  */

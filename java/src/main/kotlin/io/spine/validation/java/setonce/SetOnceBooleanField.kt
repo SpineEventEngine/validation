@@ -28,21 +28,29 @@ package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given primitive [field].
+ * Renders Java code to support `(set_once)` option for the given boolean [field].
  *
- * @param field The primitive field that declared the option.
+ * @param field The boolean field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceBooleanField(
     field: Field,
     typeSystem: TypeSystem
 ) : SetOnceJavaConstraints<Boolean>(field, typeSystem) {
+
+    init {
+        check(field.type.primitive == PrimitiveType.TYPE_BOOL) {
+            "`${javaClass.simpleName}` handles only boolean fields. " +
+                    "The passed field: `$field`."
+        }
+    }
 
     override fun defaultOrSame(
         currentValue: Expression<Boolean>,

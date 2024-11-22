@@ -46,9 +46,9 @@ import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given primitive [field].
+ * Renders Java code to support `(set_once)` option for the given number [field].
  *
- * @param field The primitive field that declared the option.
+ * @param field The number field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
 internal class SetOnceNumberField(
@@ -66,6 +66,13 @@ internal class SetOnceNumberField(
             TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
         )
         val SupportedNumbers = FieldReaders.keys
+    }
+
+    init {
+        check(field.type.primitive in SupportedNumbers) {
+            "`${javaClass.simpleName}` handles only number fields. " +
+                    "The passed field: `$field`."
+        }
     }
 
     private val fieldType = field.type.primitive

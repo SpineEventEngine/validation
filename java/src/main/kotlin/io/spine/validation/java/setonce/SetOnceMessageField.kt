@@ -55,11 +55,13 @@ internal class SetOnceMessageField(
 
     private val fieldTypeClass = field.type.message.javaClassName(typeSystem)
 
-    @Suppress("MaxLineLength") // Easier to read.
+    @Suppress("MaxLineLength") // Easier to read the expression.
     override fun defaultOrSame(
         currentValue: Expression<Message>,
         newValue: Expression<Message>
-    ): Expression<Boolean> = Expression("$currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue)")
+    ): Expression<Boolean> = Expression(
+        "$currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue)"
+    )
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
