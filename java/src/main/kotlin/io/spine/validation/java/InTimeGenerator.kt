@@ -101,14 +101,14 @@ private class InSpineTimeGenerator(
     inTime: InTime,
     ctx: GenerationContext
 ) : SimpleRuleGenerator(ctx) {
+
     private val time = inTime.time
-    override fun condition(): Expression<Boolean> {
-        val compareTo = MethodCall<Boolean>(
+
+    override fun condition(): Expression<Boolean> =
+        MethodCall(
             ctx.fieldOrElement!!,
             time.temporalMethod()
         )
-        return compareTo
-    }
 }
 
 private fun Time.temporalMethod(): String = when(this) {
