@@ -94,7 +94,7 @@ internal class ValidateMethodCode(
             val optionalOf = optional.call<Optional<ValidationError>>("of", errorBuilder)
             addStatement(RETURN_LITERAL, optionalOf)
             nextControlFlow("else")
-            val optionalEmpty = optional.call<Optional<*>>("empty")
+            val optionalEmpty = optional.call<Optional<ValidationError>>("empty")
             addStatement(RETURN_LITERAL, optionalEmpty)
             endControlFlow()
         }

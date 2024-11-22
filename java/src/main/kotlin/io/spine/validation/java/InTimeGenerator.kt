@@ -64,17 +64,17 @@ private class TimestampInTimeGenerator(
     private val time = inTime.time
 
     override fun condition(): Expression<Boolean> {
-        val compare = MethodCall<Any>(
-            ClassName(Timestamps::class), "compare", arguments = listOf(
-            ctx.fieldOrElement!!,
-            currentTime
-        ))
+        val compare = MethodCall<Int>(
+            scope = ClassName(Timestamps::class),
+            name = "compare",
+            arguments = listOf(ctx.fieldOrElement!!, currentTime)
+        )
         return time.formatJavaComparison(compare)
     }
 }
 
-private val currentTime: Expression<*> = ClassName(io.spine.base.Time::class)
-    .call<Timestamp>("currentTime")
+private val currentTime: Expression<Timestamp> = ClassName(io.spine.base.Time::class)
+    .call("currentTime")
 
 /**
  * Formats the comparison expression for the time value.
@@ -82,7 +82,7 @@ private val currentTime: Expression<*> = ClassName(io.spine.base.Time::class)
  * If the current time is being compared to the special [TIME_UNDEFINED] value,
  * the returned result for the formatted expression is always `true`.
  */
-private fun Time.formatJavaComparison(compareToCall: Expression<*>): Expression<Boolean> {
+private fun Time.formatJavaComparison(compareToCall: Expression<Int>): Expression<Boolean> {
     val operation = when(this) {
         FUTURE -> "> 0"
         PAST -> "< 0"
@@ -103,11 +103,11 @@ private class InSpineTimeGenerator(
 ) : SimpleRuleGenerator(ctx) {
     private val time = inTime.time
     override fun condition(): Expression<Boolean> {
-        val compareTo = MethodCall<Any>(
+        val compareTo = MethodCall<Boolean>(
             ctx.fieldOrElement!!,
             time.temporalMethod()
         )
-        return time.formatJavaComparison(compareTo)
+        return compareTo
     }
 }
 

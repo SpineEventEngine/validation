@@ -50,7 +50,7 @@ internal class RequiredOneofGenerator(
         val casePropertyName = "${name.value}_case"
         val pseudoField = ctx.msg.field(casePropertyName, CARDINALITY_SINGLE)
         val getter = pseudoField.getter<Any>()
-        val numberGetter = getter.chain<Any>("getNumber")
+        val numberGetter = getter.chain<Number>("getNumber")
         return Expression("$numberGetter != 0")
     }
 

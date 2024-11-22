@@ -27,11 +27,11 @@
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.call
-import io.spine.protodata.ast.isMap
 
 /**
  * Generates the code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
@@ -51,18 +51,27 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * of the checked collection.
      */
     override fun condition(): Expression<Boolean> {
-        val map = ctx.simpleRuleField.isMap
-        val fieldValue = ctx.fieldOrElement!!
-        val collectionToCount = if (map) MethodCall<Any>(fieldValue, "values") else fieldValue
+        val values = fieldValues()
         return equalityOf(
-            MethodCall(fieldValue, "size"),
+            MethodCall(values, "size"),
             ClassName(ImmutableSet::class)
-                .call<Any>("copyOf", listOf(collectionToCount))
+                .call<ImmutableSet<*>>("copyOf", values)
                 .chain("size")
         )
     }
 
-    private fun equalityOf(left: Expression<Int>, right: Expression<Int>): Expression<Boolean> {
-        return Expression(left.toCode() + " == " + right.toCode())
+    private fun fieldValues(): Expression<Collection<*>> {
+        val fieldIsMap = ctx.simpleRuleField.isMap
+        val fieldValue = ctx.fieldOrElement!!
+        return if (fieldIsMap) {
+            MethodCall(fieldValue, "values")
+        } else {
+            // We know that a `distinct` field is either a map or a `repeated` field.
+            @Suppress("UNCHECKED_CAST")
+            fieldValue as Expression<Collection<*>>
+        }
     }
+
+    private fun equalityOf(left: Expression<Int>, right: Expression<Int>): Expression<Boolean> =
+        Expression(left.toCode() + " == " + right.toCode())
 }

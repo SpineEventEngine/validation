@@ -96,13 +96,13 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * ```
      */
     private fun useGeneratedMethod(): CodeBlock = codeBlock {
-        val violations = MethodCall<Any>(ctx.fieldOrElement!!, "validate")
+        val error = MethodCall<Optional<ValidationError>>(ctx.fieldOrElement!!, "validate")
         addStatement(
             "\$T<\$T> \$L = \$L",
             Optional::class.java,
             ValidationError::class.java,
             validationError,
-            violations
+            error
         )
     }
 

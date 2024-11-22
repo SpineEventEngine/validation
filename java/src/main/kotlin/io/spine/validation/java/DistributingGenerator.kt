@@ -120,12 +120,14 @@ internal class DistributingGenerator(
         return typeName
     }
 
-    private fun iterableExpression(): Expression<*> {
+    private fun iterableExpression(): Expression<Collection<*>> {
         val fieldAccessor = ctx.fieldOrElement!!
         return if (field.isMap) {
-            MethodCall<Collection<*>>(fieldAccessor, "values")
+            MethodCall(fieldAccessor, "values")
         } else {
-            fieldAccessor
+            // This generated is applied only to maps or `repeated` fields.
+            @Suppress("UNCHECKED_CAST")
+            fieldAccessor as Expression<Collection<*>>
         }
     }
 
