@@ -31,8 +31,11 @@ import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Durations
 import com.google.protobuf.util.Timestamps
 import io.spine.test.tools.validate.alreadyHappenedProtoEvent
+import io.spine.test.tools.validate.alreadyHappenedProtoEvents
 import io.spine.test.tools.validate.nonTimedEvent
+import io.spine.test.tools.validate.nonTimedEvents
 import io.spine.test.tools.validate.notYetHappenedProtoEvent
+import io.spine.test.tools.validate.notYetHappenedProtoEvents
 import io.spine.validation.assertions.assertValidationFails
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
@@ -104,76 +107,108 @@ internal class ProtoTimeWhenSpec {
         @Nested
         inner class `containing only past times` {
 
-            @Test
-            fun `throw, if restricted to be in future`() {
+            private val severalPastTimes = listOf(pastTime(), pastTime(), pastTime())
 
+            @Test
+            fun `throw, if restricted to be in future`() = assertValidationFails {
+                notYetHappenedProtoEvents {
+                    whenWillHappen.addAll(severalPastTimes)
+                }
             }
 
             @Test
-            fun `pass, if restricted to be in past`() {
-
+            fun `pass, if restricted to be in past`() = assertValidationPasses {
+                alreadyHappenedProtoEvents {
+                    whenHappened.addAll(severalPastTimes)
+                }
             }
 
             @Test
-            fun `pass, if not restricted at all`() {
-
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvents {
+                    at.addAll(severalPastTimes)
+                }
             }
         }
 
         @Nested
         inner class `containing only future times` {
 
-            @Test
-            fun `throw, if restricted to be in past`() {
+            private val severalFutureTimes = listOf(futureTime(), futureTime(), futureTime())
 
+            @Test
+            fun `throw, if restricted to be in past`() = assertValidationFails {
+                alreadyHappenedProtoEvents {
+                    whenHappened.addAll(severalFutureTimes)
+                }
             }
 
             @Test
-            fun `pass, if restricted to be in future`() {
-
+            fun `pass, if restricted to be in future`() = assertValidationPasses {
+                notYetHappenedProtoEvents {
+                    whenWillHappen.addAll(severalFutureTimes)
+                }
             }
 
             @Test
-            fun `pass, if not restricted at all`() {
-
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvents {
+                    at.addAll(severalFutureTimes)
+                }
             }
         }
 
         @Nested
         inner class `with a single past time within future times` {
 
-            @Test
-            fun `throw, if restricted to be in future`() {
+            private val severalFutureAndPast = listOf(futureTime(), pastTime(), futureTime())
 
+            @Test
+            fun `throw, if restricted to be in future`() = assertValidationFails {
+                notYetHappenedProtoEvents {
+                    whenWillHappen.addAll(severalFutureAndPast)
+                }
             }
 
             @Test
-            fun `throw, if restricted to be in past`() {
-
+            fun `throw, if restricted to be in past`() = assertValidationFails {
+                alreadyHappenedProtoEvents {
+                    whenHappened.addAll(severalFutureAndPast)
+                }
             }
 
             @Test
-            fun `pass, if not restricted at all`() {
-
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvents {
+                    at.addAll(severalFutureAndPast)
+                }
             }
         }
 
         @Nested
         inner class `with a single future time within past times` {
 
-            @Test
-            fun `throw, if restricted to be in future`() {
+            private val severalPastAndFuture = listOf(pastTime(), futureTime(), pastTime())
 
+            @Test
+            fun `throw, if restricted to be in future`() = assertValidationFails {
+                notYetHappenedProtoEvents {
+                    whenWillHappen.addAll(severalPastAndFuture)
+                }
             }
 
             @Test
-            fun `throw, if restricted to be in past`() {
-
+            fun `throw, if restricted to be in past`() = assertValidationFails {
+                alreadyHappenedProtoEvents {
+                    whenHappened.addAll(severalPastAndFuture)
+                }
             }
 
             @Test
-            fun `pass, if not restricted at all`() {
-
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvents {
+                    at.addAll(severalPastAndFuture)
+                }
             }
         }
     }
