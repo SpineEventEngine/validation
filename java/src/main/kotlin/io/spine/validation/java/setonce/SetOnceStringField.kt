@@ -49,7 +49,7 @@ internal class SetOnceStringField(
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_STRING) {
-            "`${javaClass.simpleName}` handles only number fields. " +
+            "`${javaClass.simpleName}` handles only string fields. " +
                     "The passed field: `$field`."
         }
     }
@@ -95,7 +95,7 @@ internal class SetOnceStringField(
      * For example:
      *
      * ```
-     * public Builder setMyStingBytes(com.google.protobuf.ByteString value)
+     * public Builder setMyStringBytes(com.google.protobuf.ByteString value)
      * ```
      */
     private fun PsiClass.alterStringBytesSetter() {
