@@ -47,7 +47,7 @@ object McJava {
     /**
      * The version to be used for integration tests.
      */
-    const val version = "2.0.0-SNAPSHOT.255"
+    const val version = "2.0.0-SNAPSHOT.256"
 
     /**
      * The ID of the Gradle plugin.
