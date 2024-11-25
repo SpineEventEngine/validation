@@ -26,81 +26,66 @@
 
 package io.spine.validation.java.setonce
 
+import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.type.TypeSystem
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given enum [field].
+ * Renders Java code to support `(set_once)` option for the given byte array [field].
  *
- * Please note, in the generated Java code, Protobuf uses an ordinal number
- * to represent the currently set enum constant.
+ * Please note, in the generated Java code, Protobuf uses [ByteString] to represent
+ * an array of bytes.
  *
- * @param field The enum field that declared the option.
+ * @param field The byte array field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
-internal class SetOnceEnumField(
+internal class SetOnceBytesField(
     field: Field,
     typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Int>(field, typeSystem) {
+) : SetOnceJavaConstraints<ByteString>(field, typeSystem) {
 
     init {
-        check(field.type.isEnum) {
-            "`${javaClass.simpleName}` handles only enum fields. " +
+        check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
+            "`${javaClass.simpleName}` handles only byte array fields. " +
                     "The passed field: `$field`."
         }
     }
 
     override fun defaultOrSame(
-        currentValue: Expression<Int>,
-        newValue: Expression<Int>
-    ): Expression<Boolean> = Expression("$currentValue == 0 || $currentValue == $newValue")
+        currentValue: Expression<ByteString>,
+        newValue: Expression<ByteString>
+    ): Expression<Boolean> = Expression(
+        "$currentValue == com.google.protobuf.ByteString.EMPTY || $currentValue.equals($newValue)"
+    )
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
-        alterEnumValueSetter()
         alterBytesMerge(
-            currentValue = Expression("${fieldName}_"),
-            readerStartsWith = AnElement("${fieldName}_ = input.readEnum();")
+            currentValue = Expression(fieldGetter),
+            readerStartsWith = AnElement("${fieldName}_ = input.readBytes();")
         )
     }
 
     /**
-     * Alters a setter that accepts an enum constant.
+     * Alters a setter that accepts a value.
      *
      * For example:
      *
      * ```
-     * public Builder setMyEnum(MyEnum value)
+     * public Builder setMyBytes(ByteString value)
      * ```
      */
     private fun PsiClass.alterSetter() {
         val precondition = throwIfNotDefaultAndNotSame(
-            currentValue = Expression("${fieldName}_"),
-            newValue = Expression("value.getNumber()"),
-        )
-        val setter = method(fieldSetterName).body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
-
-    /**
-     * Alters a setter that accepts an ordinal number.
-     *
-     * For example:
-     *
-     * ```
-     * public Builder setMyEnumValue(int value)
-     * ```
-     */
-    private fun PsiClass.alterEnumValueSetter() {
-        val precondition = throwIfNotDefaultAndNotSame(
-            currentValue = Expression("${fieldName}_"),
+            currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )
-        val setter = method("${fieldSetterName}Value").body!!
+        val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 }

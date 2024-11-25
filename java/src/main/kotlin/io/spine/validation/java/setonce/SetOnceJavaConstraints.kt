@@ -32,11 +32,14 @@ import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.toMessageType
 import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.InitVar
+import io.spine.protodata.java.JavaElement
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.java.toPsi
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.type.TypeSystem
 import io.spine.string.camelCase
@@ -51,12 +54,14 @@ import io.spine.tools.psi.java.execute
  * serves as an abstract base, providing common methods and the skeleton implementation
  * of [render] method. Inheritors should perform actual rendering in [renderConstraints].
  *
+ * @param T The field data type. See docs to an abstract [defaultOrSame] method for usage details.
+ *
  * @property field The field that declared the option.
  * @property typeSystem The type system to resolve types.
  */
-internal sealed class SetOnceJavaConstraints(
+internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
-    protected val typeSystem: TypeSystem
+    private val typeSystem: TypeSystem
 ) {
 
     private companion object {
@@ -83,8 +88,7 @@ internal sealed class SetOnceJavaConstraints(
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage =
-        field.declaringType.toMessageType(typeSystem).javaClassName(typeSystem)
+    protected val declaringMessage = field.declaringType.javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -93,11 +97,10 @@ internal sealed class SetOnceJavaConstraints(
      * The [field] can be assigned a new value only if the current value is default
      * for the field type OR if the assigned value is the same with the current one.
      *
-     * @param sourceFile Protobuf-generated Java source code of the [message][declaredIn]
-     *  that declared the [field].
+     * @param sourceFile Protobuf-generated Java source code of the message declared the [field].
      *
-     * @see defaultOrSamePredicate
-     * @see defaultOrSameStatement
+     * @see defaultOrSame
+     * @see throwIfNotDefaultAndNotSame
      */
     fun render(sourceFile: SourceFile<Java>) {
         val messageBuilder = ClassName(
@@ -118,8 +121,7 @@ internal sealed class SetOnceJavaConstraints(
      * Renders Java constraints in this [PsiClass] to make sure the [field] can be assigned
      * only once.
      *
-     * This [PsiClass] represents a Java builder for [field.declaringType], which declared
-     * the [field].
+     * This [PsiClass] represents a Java builder for the message declared the [field].
      */
     protected abstract fun PsiClass.renderConstraints()
 
@@ -127,89 +129,100 @@ internal sealed class SetOnceJavaConstraints(
      * Alters [MergeFromBytesSignature] method to make sure that a set-once field
      * is not overridden during the merge from a byte array.
      *
-     * Such a merge is done field-by-field. This method finds the place, where
-     * the given [field] is processed. It adds a statement to remember the current field value
-     * before reading of a new one. After the reading statement, it adds [defaultOrSameStatement]
-     * to check that the just read value is legal to be assigned.
+     * Such a merge is done field-by-field. In the method body, each field is handled
+     * in a separate `case` block of the `switch` statement. Such a block reads a new value
+     * and assigns it to the field.
+     *
+     * This method finds the place, where the given [field] is processed. It adds a statement
+     * to remember the current field value before reading a new one. After the reading,
+     * it adds [throwIfNotDefaultAndNotSame] statement to be sure the just read value can
+     * be assigned.
      *
      * Implementation of this method is common for all field types. Inheritors should
      * invoke it within [renderConstraints], passing the necessary parameters.
      *
      * The [currentValue] and [readerStartsWith] are mandatory properties. Pass [readerContains]
      * in cases when [readerStartsWith] is not sufficient. For example, for message fields,
-     * the beginning of the reading block is the same for all fields because it doesn't include
-     * the field name. Differentiation is done way deeper.
+     * the beginning of the reading block is the same for all message fields because it doesn't
+     * include the field name. Differentiation is done way further.
      *
-     * @param currentValue An expression to read the current field value.
-     * @param readerStartsWith An expression representing the beginning of the field reading block.
-     * @param readerContains An arbitrary expression within the field reading block.
+     * @param currentValue The current field value.
+     * @param readerStartsWith The beginning of the field reading block.
+     * @param readerContains An arbitrary code that must be present within the reading block.
      */
     protected fun PsiClass.alterBytesMerge(
-        currentValue: String,
-        readerStartsWith: String,
-        readerContains: String = readerStartsWith,
+        currentValue: Expression<T>,
+        readerStartsWith: JavaElement,
+        readerContains: JavaElement = readerStartsWith,
     ) {
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
         val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
-        val fieldProcessing = fieldReading.parent
+        val fieldCaseBlock = fieldReading.parent
 
-        val rememberCurrent = elementFactory.createStatement("var previous = $currentValue;")
-        fieldProcessing.addBefore(rememberCurrent, fieldReading)
+        val previousValue = InitVar("previous", currentValue)
+        fieldCaseBlock.addBefore(previousValue.toPsi(), fieldReading)
 
-        val postcondition = defaultOrSameStatement(
-            currentValue = "previous",
+        val postcondition = throwIfNotDefaultAndNotSame(
+            currentValue = previousValue.read(),
             newValue = currentValue,
         )
-        fieldProcessing.addAfter(postcondition, fieldReading)
+        fieldCaseBlock.addAfter(postcondition, fieldReading)
     }
 
     /**
      * Creates an `if` statement, which checks that the current field value is default
-     * OR if the proposed value is the same as the current.
+     * OR if the proposed [newValue] is the same as the current.
      *
      * Otherwise, it throws the validation exception.
      *
-     * @param currentValue An expression denoting the current field value.
-     * @param newValue An expression denoting the proposed value.
+     * @param currentValue The current field value.
+     * @param newValue The proposed new value.
      */
-    protected fun defaultOrSameStatement(currentValue: String, newValue: String): PsiStatement =
-        elementFactory.createStatement(
-            """
-            if (${defaultOrSamePredicate(currentValue, newValue)}) {
+    protected fun throwIfNotDefaultAndNotSame(
+        currentValue: Expression<T>,
+        newValue: Expression<T>
+    ): PsiStatement = elementFactory.createStatement(
+        """
+            if (!(${defaultOrSame(currentValue, newValue)})) {
                 $THROW_VALIDATION_EXCEPTION
             }""".trimIndent()
-        )
+    )
 
     /**
-     * Returns an expression representing a predicate upon [currentValue] and [newValue].
+     * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].
      *
-     * The provided predicate should return `true` if [currentValue] is NOT default
-     * for its type AND if [newValue] is not equal to [currentValue].
+     * The provided expression should return `true` if any of the conditions is met:
      *
-     * In pseudocode: `currentValue != default && currentValue != newValue`.
+     * 1. The [currentValue] is default for its type.
+     * 2. The [newValue] is equal to the [currentValue].
+     *
+     * In pseudocode: `currentValue == default || currentValue == newValue`.
      *
      * @param currentValue An expression denoting the current field value.
-     * @param newValue An expression denoting the proposed value.
+     * @param newValue An expression denoting the proposed new value.
      */
-    protected abstract fun defaultOrSamePredicate(currentValue: String, newValue: String): String
+    protected abstract fun defaultOrSame(
+        currentValue: Expression<T>,
+        newValue: Expression<T>
+    ): Expression<Boolean>
 
     /**
      * Looks for the first child of this [PsiElement], the text representation of which
-     * satisfies both [startsWith] and [contains] conditions.
+     * satisfies both [startsWith] and [contains] criteria.
      *
      * This method performs a depth-first search of the PSI hierarchy. So, the second direct
      * child of this [PsiElement] is checked only when the first child and all its descendants
      * are checked.
      */
     protected fun PsiElement.deepSearch(
-        startsWith: String,
-        contains: String = startsWith
+        startsWith: JavaElement,
+        contains: JavaElement = startsWith
     ): PsiStatement = children.firstNotNullOf { element ->
         val text = element.text
         when {
-            !text.contains(contains) -> null
-            text.startsWith(startsWith) -> element
+            !text.contains("$contains") -> null
+            text.startsWith("$startsWith") -> element
             else -> element.deepSearch(startsWith, contains)
         }
     } as PsiStatement

@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.ImmutableList
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import io.spine.protodata.ast.TypeName
@@ -89,12 +88,13 @@ internal class ValidateMethodCode(
         private fun generateValidationError(): CodeBlock = codeBlock {
             beginControlFlow("if (!\$L.isEmpty())", VIOLATIONS)
             val errorBuilder = ClassName(ValidationError::class.java).newBuilder()
-                .chainAddAll("constraint_violation", VIOLATIONS).chainBuild()
+                .chainAddAll("constraint_violation", VIOLATIONS)
+                .chainBuild<ValidationError.Builder>()
             val optional = ClassName(Optional::class.java)
-            val optionalOf = optional.call("of", ImmutableList.of(errorBuilder))
+            val optionalOf = optional.call<Optional<ValidationError>>("of", errorBuilder)
             addStatement(RETURN_LITERAL, optionalOf)
             nextControlFlow("else")
-            val optionalEmpty = optional.call("empty")
+            val optionalEmpty = optional.call<Optional<ValidationError>>("empty")
             addStatement(RETURN_LITERAL, optionalEmpty)
             endControlFlow()
         }

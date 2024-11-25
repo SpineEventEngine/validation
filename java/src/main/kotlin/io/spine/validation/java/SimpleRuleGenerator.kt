@@ -35,7 +35,6 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.call
 import io.spine.protodata.value.Value
 import io.spine.string.shortly
@@ -52,7 +51,6 @@ import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
 import io.spine.validation.extractType
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * Java code comparing two objects.
@@ -88,7 +86,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     protected val rule: SimpleRule = ctx.rule.simple
     private val ignoreIfNotSet  = rule.ignoredIfUnset
     protected val field = ctx.simpleRuleField
-    private val otherValue: Expression? = ctx.otherValueAsCode
+    private val otherValue: Expression<*>? = ctx.otherValueAsCode
 
     override fun code(): CodeBlock {
         val check = super.code()
@@ -120,7 +118,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         return condition
     }
 
-    override fun condition(): Expression {
+    override fun condition(): Expression<Boolean> {
         checkNotNull(otherValue) {
             "Expected the rule to specify `simple.other_value`, but was: $rule"
         }
@@ -132,7 +130,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         checkNotNull(ctx.fieldOrElement) {
             "There is no field value for the rule: `${rule.shortly()}`."
         }
-        return Literal(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
+        return Expression(compare(ctx.fieldOrElement!!.toCode(), otherValue.toCode()))
     }
 
     private fun fieldIsJavaObject(): Boolean =
@@ -145,7 +143,8 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class).call("valueOf", listOf(ctx.fieldOrElement!!))
+        val actualValue = ClassName(String::class)
+            .call<String>("valueOf", ctx.fieldOrElement!!)
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),

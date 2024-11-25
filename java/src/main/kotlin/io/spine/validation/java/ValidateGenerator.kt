@@ -31,9 +31,9 @@ import io.spine.protodata.ast.Cardinality.CARDINALITY_LIST
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
-import io.spine.protodata.java.MessageReference
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.field
 import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.validate.ConstraintViolation
@@ -48,9 +48,11 @@ import java.util.*
  */
 internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
 
-    private val validationErrorVar = varName(prefix = "validationError", ctx)
+    private val validationError =
+        readVar<Optional<ValidationError>>(prefix = "validationError", ctx)
 
-    private val violationListVar = varName(prefix = "violationList", ctx)
+    private val violationList =
+        readVar<List<ConstraintViolation>>(prefix = "violationList", ctx)
 
     init {
         val field = ctx.simpleRuleField
@@ -65,9 +67,9 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * Compose a variable name after the format `prefixOfFieldName`.
      * E.g., `validationErrorOfUserId`.
      */
-    private fun varName(prefix: String, ctx: GenerationContext): Literal {
+    private fun <T> readVar(prefix: String, ctx: GenerationContext): ReadVar<T> {
         val fieldNameSuffix = ctx.simpleRuleField.name.value.titleCase()
-        return Literal("${prefix}Of$fieldNameSuffix")
+        return ReadVar("${prefix}Of$fieldNameSuffix")
     }
 
     override fun prologue(): CodeBlock {
@@ -94,13 +96,13 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * ```
      */
     private fun useGeneratedMethod(): CodeBlock = codeBlock {
-        val violations = MethodCall(ctx.fieldOrElement!!, "validate")
+        val error = MethodCall<Optional<ValidationError>>(ctx.fieldOrElement!!, "validate")
         addStatement(
             "\$T<\$T> \$L = \$L",
             Optional::class.java,
             ValidationError::class.java,
-            validationErrorVar,
-            violations
+            validationError,
+            error
         )
     }
 
@@ -120,14 +122,14 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
             "\$T<\$T> \$L = \$T.violationsOf(\$L)",
             List::class.java,
             ConstraintViolation::class.java,
-            violationListVar,
+            violationList,
             Validate::class.java,
             ctx.fieldOrElement!!
         )
     }
 
     /**
-     * Generates the code wrapping the value of [violationListVar] into
+     * Generates the code wrapping the value of [violationList] into
      * an optional `ValidationError`.
      *
      * Sample output:
@@ -148,23 +150,22 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
                     "\$L.isEmpty() ? null " +
                     ": \$T.newBuilder().addAllConstraintViolation(\$L).build()" +
                     ")",
-            validationErrorVar,
+            validationError,
             Optional::class.java,
-            violationListVar,
+            violationList,
             ValidationError::class.java,
-            violationListVar
+            violationList
         )
     }
 
-    override fun condition(): Expression =
-        Literal("!" + MethodCall(validationErrorVar, "isPresent"))
-
+    override fun condition(): Expression<Boolean> =
+        Expression("!" + MethodCall<Boolean>(validationError, "isPresent"))
 
     override fun createViolation(): CodeBlock {
-        val validationError = MethodCall(validationErrorVar, "get")
-        val violations = MessageReference(validationError.toCode())
+        val validationError = MethodCall<ValidationError>(validationError, "get")
+        val violations = validationError
             .field("constraint_violation", CARDINALITY_LIST)
-            .getter
+            .getter<MutableList<ConstraintViolation>>()
         return error().createParentViolation(ctx, violations)
     }
 }

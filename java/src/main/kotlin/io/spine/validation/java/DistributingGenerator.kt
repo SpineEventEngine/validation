@@ -28,6 +28,7 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
+import com.google.protobuf.Message
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.extractPrimitiveType
@@ -36,10 +37,10 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.backend.SecureRandomString
-import io.spine.protodata.java.ClassOrEnumName
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.toJavaClass
 import io.spine.string.titleCase
@@ -66,13 +67,13 @@ internal class DistributingGenerator(
     delegateCtor: (GenerationContext) -> CodeGenerator
 ) : CodeGenerator(ctx) {
 
-    private val element = Literal("element")
+    private val element = ReadVar<Any>("element")
     private val elementContext = ctx.copy(elementReference = element)
     private val field = ctx.simpleRuleField
     private val delegate = delegateCtor(elementContext)
     private val ruleId = field.ruleId()
     private val methodName = "validate$ruleId"
-    private val violationsName = "violationsOf$ruleId"
+    private val violationsName = ReadVar<ImmutableList<ConstraintViolation>>("violationsOf$ruleId")
     private val violationsType = object : TypeToken<ImmutableList<ConstraintViolation>>() {}.type
 
     override fun supportingMembers(): CodeBlock {
@@ -104,7 +105,7 @@ internal class DistributingGenerator(
             .build()
     }
 
-    private fun typeName(): ClassOrEnumName {
+    private fun typeName(): ClassName {
         val name = field.type.extractTypeName()
         val typeName = if (name != null) {
             ctx.typeConvention.declarationFor(name).name
@@ -119,31 +120,33 @@ internal class DistributingGenerator(
         return typeName
     }
 
-    private fun iterableExpression(): Expression {
+    private fun iterableExpression(): Expression<Collection<*>> {
         val fieldAccessor = ctx.fieldOrElement!!
         return if (field.isMap) {
             MethodCall(fieldAccessor, "values")
         } else {
-            fieldAccessor
+            // `DistributingGenerator` can be instantiated only for repeated fields and maps in
+            // `io.spine.validation.java.generatorForSimple`. So, the cast is safe.
+            @Suppress("UNCHECKED_CAST")
+            fieldAccessor as Expression<Collection<*>>
         }
     }
 
     override fun prologue(): CodeBlock = codeBlock {
-        val methodCall = MethodCall(This, methodName)
-        addStatement("\$T \$L = \$L", violationsType, violationsName, methodCall)
+        val violations = MethodCall<ImmutableList<ConstraintViolation>>(This<Message>(), methodName)
+        addStatement("\$T \$L = \$L", violationsType, violationsName, violations)
     }
 
-    override fun condition(): Expression {
-        return MethodCall(Literal(violationsName), "isEmpty")
+    override fun condition(): Expression<Boolean> {
+        return MethodCall(violationsName, "isEmpty")
     }
 
     override fun error(): ErrorMessage =
         delegate.error()
 
     override fun createViolation(): CodeBlock = codeBlock {
-        val violations = Literal(ctx.violationList)
-        val methodCall = MethodCall(violations, "addAll", listOf(Literal(violationsName)))
-        addStatement(methodCall.toCode())
+        val methodCall = MethodCall<Boolean>(ctx.violationList, "addAll", violationsName)
+        addStatement(methodCall.code)
     }
 }
 

@@ -26,61 +26,58 @@
 
 package io.spine.validation.java.setonce
 
-import com.google.protobuf.Message
+import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given message [field].
+ * Renders Java code to support `(set_once)` option for the given string [field].
  *
- * @param field The message field that declared the option.
+ * @param field The string field that declared the option.
  * @param typeSystem The type system to resolve types.
  */
-internal class SetOnceMessageField(
+internal class SetOnceStringField(
     field: Field,
     typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Message>(field, typeSystem) {
+) : SetOnceJavaConstraints<String>(field, typeSystem) {
 
     init {
-        check(field.type.isMessage) {
-            "`${javaClass.simpleName}` handles only message fields. " +
+        check(field.type.primitive == PrimitiveType.TYPE_STRING) {
+            "`${javaClass.simpleName}` handles only string fields. " +
                     "The passed field: `$field`."
         }
     }
 
-    private val fieldTypeClass = field.type.message.javaClassName(typeSystem)
-
-    @Suppress("MaxLineLength") // Easier to read the expression.
     override fun defaultOrSame(
-        currentValue: Expression<Message>,
-        newValue: Expression<Message>
+        currentValue: Expression<String>,
+        newValue: Expression<String>
     ): Expression<Boolean> = Expression(
-        "$currentValue.equals($fieldTypeClass.getDefaultInstance()) || $currentValue.equals($newValue)"
+        "$currentValue.isEmpty() || $currentValue.equals($newValue)"
     )
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
-        alterBuilderSetter()
-        alterFieldMerge()
+        alterStringBytesSetter()
+        alterMessageMerge()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("input.readMessage"),
-            readerContains = AnElement("${fieldGetterName}FieldBuilder().getBuilder()"),
+            readerStartsWith = AnElement("${fieldName}_ = input.readStringRequireUtf8();")
         )
     }
 
     /**
-     * Alters a setter that accepts a message.
+     * Alters a setter that accepts a value.
      *
      * For example:
      *
      * ```
-     * public Builder setMyMessage(MyMessage value)
+     * public Builder setMyString(String value)
      * ```
      */
     private fun PsiClass.alterSetter() {
@@ -88,47 +85,47 @@ internal class SetOnceMessageField(
             currentValue = Expression(fieldGetter),
             newValue = Expression("value")
         )
-        val setter = methodWithSignature(
-            "public Builder $fieldSetterName($fieldTypeClass value)"
-        ).body!!
+        val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
 
     /**
-     * Alters a setter that accepts a message builder.
+     * Alters a string-specific setter that accepts a `ByteString`.
      *
      * For example:
      *
      * ```
-     * public Builder setMyMessage(MyMessage.Builder builderForValue)
+     * public Builder setMyStringBytes(com.google.protobuf.ByteString value)
      * ```
      */
-    private fun PsiClass.alterBuilderSetter() {
+    private fun PsiClass.alterStringBytesSetter() {
         val precondition = throwIfNotDefaultAndNotSame(
-            currentValue = Expression(fieldGetter),
-            newValue = Expression("builderForValue.build()")
-        )
-        val setter = methodWithSignature(
-            "public Builder $fieldSetterName($fieldTypeClass.Builder builderForValue)"
-        ).body!!
-        setter.addAfter(precondition, setter.lBrace)
-    }
-
-    /**
-     * Alters a field merge method that accepts a message.
-     *
-     * For example:
-     *
-     * ```
-     * public Builder mergeMyMessage(MyMessage value)
-     * ```
-     */
-    private fun PsiClass.alterFieldMerge() {
-        val precondition = throwIfNotDefaultAndNotSame(
-            currentValue = Expression(fieldGetter),
+            currentValue = Expression("${fieldGetterName}Bytes()"),
             newValue = Expression("value")
         )
-        val merge = method("merge$fieldNameCamel").body!!
-        merge.addAfter(precondition, merge.lBrace)
+        val bytesSetter = method("${fieldSetterName}Bytes").body!!
+        bytesSetter.addAfter(precondition, bytesSetter.lBrace)
+    }
+
+    /**
+     * Alters the message-based merge method to modify merging of a string field.
+     *
+     * During the message merge, all primitives delegate updating the field value
+     * to their simple setters. Exception here is `string` type, which does it in-place.
+     * So, we have to add a check there.
+     */
+    private fun PsiClass.alterMessageMerge() {
+        val precondition = throwIfNotDefaultAndNotSame(
+            currentValue = Expression(fieldGetter),
+            newValue = Expression("other.$fieldGetter")
+        )
+        val mergeFromMessage = methodWithSignature(
+            "public Builder mergeFrom(${declaringMessage.canonical} other)"
+        ).body!!
+        val fieldCheck = mergeFromMessage.deepSearch(
+            AnElement("if (!other.$fieldGetter.isEmpty())")
+        ) as PsiIfStatement
+        val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
+        fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 }

@@ -27,9 +27,10 @@
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
+import com.google.protobuf.Message
 import io.spine.protodata.ast.MessageType
-import io.spine.protodata.java.MessageReference
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.javaFile
 import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
@@ -40,6 +41,7 @@ import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
+import io.spine.validate.ValidationError
 import io.spine.validate.ValidationException
 import io.spine.validation.MessageValidation
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
@@ -47,6 +49,7 @@ import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
 import io.spine.validation.java.point.BuildPartialReturnTypeAnnotation
 import io.spine.validation.java.point.ValidateBeforeReturn
+import java.util.*
 
 /**
  * A [Renderer][io.spine.protodata.render.Renderer] for the validation code in Java.
@@ -162,11 +165,11 @@ private fun SourceFile<Java>.insertBeforeBuild() {
 }
 
 private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
-    val result = MessageReference("result")
+    val result = ReadVar<Message>("result")
     addStatement(
         "\$T error = \$L",
         OPTIONAL_ERROR,
-        MethodCall(result, VALIDATE)
+        MethodCall<Optional<ValidationError>>(result, VALIDATE)
     )
     beginControlFlow("if (error.isPresent())")
     addStatement(

@@ -27,6 +27,10 @@
 package io.spine.validation.java.setonce
 
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.qualifiedName
@@ -37,7 +41,7 @@ import io.spine.string.shortly
 import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.findMessageTypes
-import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.SupportedPrimitives
+import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure
@@ -48,6 +52,8 @@ import io.spine.validation.java.setonce.SetOncePrimitiveField.Companion.Supporte
  * Take a look on [SetOnceJavaConstraints] and its inheritors for details.
  */
 internal class SetOnceValidationRenderer : JavaRenderer() {
+
+    override val typeSystem by lazy { super.typeSystem!! }
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
@@ -76,17 +82,26 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaConstraints(field: Field): SetOnceJavaConstraints {
-        val typeSystem = typeSystem!!
-        return when {
+    private fun javaConstraints(field: Field): SetOnceJavaConstraints<*> =
+        when {
             field.type.isMessage -> SetOnceMessageField(field, typeSystem)
             field.type.isEnum -> SetOnceEnumField(field, typeSystem)
-            field.type.primitive in SupportedPrimitives -> SetOncePrimitiveField(field, typeSystem)
-            else -> error(
-                "Cannot define constraints for the field `${field.qualifiedName}` which has" +
-                        " the type `${field.type.shortly()}` not supported by" +
-                        " the `($SET_ONCE)` option."
-            )
+            field.type.isPrimitive -> javaConstraints(field, field.type.primitive)
+            else -> throwUnsupportedType(field)
         }
-    }
+
+    private fun javaConstraints(field: Field, type: PrimitiveType): SetOnceJavaConstraints<*> =
+        when (type) {
+            TYPE_STRING -> SetOnceStringField(field, typeSystem)
+            TYPE_BOOL -> SetOnceBooleanField(field, typeSystem)
+            TYPE_BYTES -> SetOnceBytesField(field, typeSystem)
+            in SupportedNumbers -> SetOnceNumberField(field, typeSystem)
+            else -> throwUnsupportedType(field)
+        }
+
+    private fun throwUnsupportedType(field: Field): Nothing = error(
+        "Cannot define constraints for the field `${field.qualifiedName}`, which has" +
+                " the type `${field.type.shortly()}` not supported by" +
+                " the `($SET_ONCE)` option."
+    )
 }
