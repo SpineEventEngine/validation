@@ -66,7 +66,8 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
         return if (fieldIsMap) {
             MethodCall(fieldValue, "values")
         } else {
-            // We know that a `distinct` field is either a map or a `repeated` field.
+            // `DistinctGenerator` is instantiated only for repeated fields, so the cast is safe.
+            // See `io.spine.validation.java.CustomRuleGeneratorsKt.generatorForCustom`.
             @Suppress("UNCHECKED_CAST")
             fieldValue as Expression<Collection<*>>
         }
