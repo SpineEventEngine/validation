@@ -125,7 +125,8 @@ internal class DistributingGenerator(
         return if (field.isMap) {
             MethodCall(fieldAccessor, "values")
         } else {
-            // This generated is applied only to maps or `repeated` fields.
+            // `DistributingGenerator` can be instantiated only for repeated fields and maps in
+            // `io.spine.validation.java.generatorForSimple`. So, the cast is safe.
             @Suppress("UNCHECKED_CAST")
             fieldAccessor as Expression<Collection<*>>
         }
