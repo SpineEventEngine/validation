@@ -30,24 +30,167 @@ import com.google.protobuf.Duration
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Durations
 import com.google.protobuf.util.Timestamps
+import io.spine.test.tools.validate.alreadyHappenedProtoEvent
+import io.spine.test.tools.validate.nonTimedEvent
+import io.spine.test.tools.validate.notYetHappenedProtoEvent
+import io.spine.validation.assertions.assertValidationFails
+import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-@DisplayName("When used with Protobuf time, `(when)` constrain should")
-internal class ProtoTimeWhenSpec : AbstractWhenSpec<Timestamp>() {
+@DisplayName("If used with Protobuf timestamp, `(when)` constrain should")
+internal class ProtoTimeWhenSpec {
 
-    private companion object {
-        val FIFTY_NANOS: Duration = Durations.fromNanos(50)
+    @Nested
+    inner class
+    `when given a timestamp denoting` {
+
+        @Nested
+        inner class `the past time` {
+
+            @Test
+            fun `throw, if restricted to be in future`() = assertValidationFails {
+                notYetHappenedProtoEvent {
+                    whenWillHappen = pastTime()
+                }
+            }
+
+            @Test
+            fun `pass, if restricted to be in past`() = assertValidationPasses {
+                alreadyHappenedProtoEvent {
+                    whenHappened = pastTime()
+                }
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvent {
+                    at = pastTime()
+                }
+            }
+        }
+
+        @Nested
+        inner class `the future time` {
+
+            @Test
+            fun `throw, if restricted to be in past`() = assertValidationFails {
+                alreadyHappenedProtoEvent {
+                    whenHappened = futureTime()
+                }
+            }
+
+            @Test
+            fun `pass, if restricted to be in future`() = assertValidationPasses {
+                notYetHappenedProtoEvent {
+                    whenWillHappen = futureTime()
+                }
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() = assertValidationPasses {
+                nonTimedEvent {
+                    at = futureTime()
+                }
+            }
+        }
     }
 
-    override fun pastTime(): Timestamp {
-        val current = Timestamps.now()
-        val past = Timestamps.subtract(current, FIFTY_NANOS)
-        return past
-    }
+    @Nested
+    inner class
+    `when given several timestamps` {
 
-    override fun futureTime(): Timestamp {
-        val current = Timestamps.now()
-        val future = Timestamps.add(current, FIFTY_NANOS)
-        return future
+        @Nested
+        inner class `containing only past times` {
+
+            @Test
+            fun `throw, if restricted to be in future`() {
+
+            }
+
+            @Test
+            fun `pass, if restricted to be in past`() {
+
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() {
+
+            }
+        }
+
+        @Nested
+        inner class `containing only future times` {
+
+            @Test
+            fun `throw, if restricted to be in past`() {
+
+            }
+
+            @Test
+            fun `pass, if restricted to be in future`() {
+
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() {
+
+            }
+        }
+
+        @Nested
+        inner class `with a single past time within future times` {
+
+            @Test
+            fun `throw, if restricted to be in future`() {
+
+            }
+
+            @Test
+            fun `throw, if restricted to be in past`() {
+
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() {
+
+            }
+        }
+
+        @Nested
+        inner class `with a single future time within past times` {
+
+            @Test
+            fun `throw, if restricted to be in future`() {
+
+            }
+
+            @Test
+            fun `throw, if restricted to be in past`() {
+
+            }
+
+            @Test
+            fun `pass, if not restricted at all`() {
+
+            }
+        }
     }
 }
+
+private fun pastTime(): Timestamp {
+    val current = Timestamps.now()
+    val past = Timestamps.subtract(current, FIFTY_MILLIS)
+    return past
+}
+
+private fun futureTime(): Timestamp {
+    val current = Timestamps.now()
+    val future = Timestamps.add(current, FIFTY_MILLIS)
+    return future
+}
+
+// By default, `io.spine.base.Time.currentTime()` uses `io.spine.base.Time.SystemTimeProvider`,
+// which has millisecond precision.
+private val FIFTY_MILLIS: Duration = Durations.fromMillis(50)
