@@ -36,16 +36,27 @@ option java_outer_classname = "WhenRepeatedProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
+import "spine/time/time.proto";
 
 // Tests how the option works with `PAST` restriction upon repeated Protobuf timestamp.
-//message AlreadyHappenedEvents {
-//    repeated google.protobuf.Timestamp when_happened = 1 [(when).in = PAST];
-//}
+message AlreadyHappenedProtoEvents {
+    repeated google.protobuf.Timestamp when_happened = 1 [(when).in = PAST];
+}
+
+// Tests how the option works with `PAST` restriction upon repeated Spine timestamp.
+message AlreadyHappenedSpineEvents {
+    repeated spine.time.LocalDateTime when_happened = 1 [(when).in = PAST];
+}
 
 // Tests how the option works with `FUTURE` restriction upon repeated Protobuf timestamp.
-//message NotYetHappenedEvents {
-//    repeated google.protobuf.Timestamp when_will_happen = 1 [(when).in = FUTURE];
-//}
+message NotYetHappenedProtoEvents {
+    repeated google.protobuf.Timestamp when_will_happen = 1 [(when).in = FUTURE];
+}
+
+// Tests how the option works with `FUTURE` restriction upon repeated Spine timestamp.
+message NotYetHappenedSpineEvents {
+    repeated spine.time.LocalDateTime when_will_happen = 1 [(when).in = FUTURE];
+}
 
 // Makes sure that a repeated Protobuf timestamp field is not affected when there's no option.
 message NonTimedEvents {
