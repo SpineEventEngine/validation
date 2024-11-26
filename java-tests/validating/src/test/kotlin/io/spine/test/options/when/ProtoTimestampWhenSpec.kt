@@ -45,12 +45,11 @@ import org.junit.jupiter.api.Test
 @DisplayName("If used with Protobuf `Timestamp`, `(when)` constrain should")
 internal class ProtoTimestampWhenSpec {
 
-    @Nested
-    inner class
+    @Nested inner class
     `when given a timestamp denoting` {
 
-        @Nested
-        inner class `the past` {
+        @Nested inner class
+        `the past` {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
@@ -74,8 +73,8 @@ internal class ProtoTimestampWhenSpec {
             }
         }
 
-        @Nested
-        inner class `the future` {
+        @Nested inner class
+        `the future` {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
@@ -100,12 +99,11 @@ internal class ProtoTimestampWhenSpec {
         }
     }
 
-    @Nested
-    inner class
+    @Nested inner class
     `when given several timestamps` {
 
-        @Nested
-        inner class `denoting only the past` {
+        @Nested inner class
+        `denoting only the past` {
 
             private val severalPastTimes = listOf(pastTime(), pastTime(), pastTime())
 
@@ -131,8 +129,8 @@ internal class ProtoTimestampWhenSpec {
             }
         }
 
-        @Nested
-        inner class `denoting only the future` {
+        @Nested inner class
+        `denoting only the future` {
 
             private val severalFutureTimes = listOf(futureTime(), futureTime(), futureTime())
 
@@ -158,8 +156,8 @@ internal class ProtoTimestampWhenSpec {
             }
         }
 
-        @Nested
-        inner class `with a single past stamp within the future stamps` {
+        @Nested inner class
+        `with a single past stamp within the future stamps` {
 
             private val severalFutureAndPast = listOf(futureTime(), pastTime(), futureTime())
 
@@ -185,8 +183,8 @@ internal class ProtoTimestampWhenSpec {
             }
         }
 
-        @Nested
-        inner class `with a single future stamp within the past stamps` {
+        @Nested inner class
+        `with a single future stamp within the past stamps` {
 
             private val severalPastAndFuture = listOf(pastTime(), futureTime(), pastTime())
 

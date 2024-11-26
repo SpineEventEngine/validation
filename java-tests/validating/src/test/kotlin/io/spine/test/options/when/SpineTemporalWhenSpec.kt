@@ -46,12 +46,11 @@ import io.spine.time.LocalDateTime as SpineTimeLocalDateTime
 @DisplayName("If used with Spine `Temporal`, `(when)` constrain should")
 internal class SpineTemporalWhenSpec {
 
-    @Nested
-    inner class
+    @Nested inner class
     `when given a temporal denoting` {
 
-        @Nested
-        inner class `the past` {
+        @Nested inner class
+        `the past` {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
@@ -75,8 +74,8 @@ internal class SpineTemporalWhenSpec {
             }
         }
 
-        @Nested
-        inner class `the future` {
+        @Nested inner class
+        `the future` {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
@@ -101,12 +100,11 @@ internal class SpineTemporalWhenSpec {
         }
     }
 
-    @Nested
-    inner class
+    @Nested inner class
     `when given several times` {
 
-        @Nested
-        inner class `denoting only the past` {
+        @Nested inner class
+        `denoting only the past` {
 
             private val severalPastTimes = listOf(pastTime(), pastTime(), pastTime())
 
@@ -132,8 +130,8 @@ internal class SpineTemporalWhenSpec {
             }
         }
 
-        @Nested
-        inner class `denoting only the future` {
+        @Nested inner class
+        `denoting only the future` {
 
             private val severalFutureTimes = listOf(futureTime(), futureTime(), futureTime())
 
@@ -159,8 +157,8 @@ internal class SpineTemporalWhenSpec {
             }
         }
 
-        @Nested
-        inner class `with a single past time within the future times` {
+        @Nested inner class
+        `with a single past time within the future times` {
 
             private val severalFutureAndPast = listOf(futureTime(), pastTime(), futureTime())
 
@@ -186,8 +184,8 @@ internal class SpineTemporalWhenSpec {
             }
         }
 
-        @Nested
-        inner class `with a single future time within the past times` {
+        @Nested inner class
+        `with a single future time within the past times` {
 
             private val severalPastAndFuture = listOf(pastTime(), futureTime(), pastTime())
 
