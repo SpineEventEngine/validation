@@ -215,22 +215,22 @@ internal class SpineTemporalWhenSpec {
 
 private fun pastTime(): SpineTimeLocalDateTime {
     val current = Instant.now() // It is a UTC stamp.
-    val past = current.minusMillis(FIFTY_MILLIS)
+    val past = current.minusMillis(HALF_OF_SECOND)
     return LocalDateTimes.of(ofInstant(past, UTC))
 }
 
 private fun futureTime(): SpineTimeLocalDateTime {
     val current = Instant.now() // It is a UTC stamp.
-    val past = current.plusMillis(FIFTY_MILLIS)
+    val past = current.plusMillis(HALF_OF_SECOND)
     return LocalDateTimes.of(ofInstant(past, UTC))
 }
 
 /**
- * Fifty milliseconds.
+ * Five hundred milliseconds.
  *
  * To shift the time into the past or future, we add or subtract a difference of this amount.
  *
- * There are two reasons for choosing fifty milliseconds:
+ * There are two reasons for choosing 500 milliseconds:
  *
  * 1. The generated code uses `io.spine.base.Time.currentTime()` to get the current timestamp
  *    for comparison. In turn, this method relies on `io.spine.base.Time.SystemTimeProvider`
@@ -238,4 +238,4 @@ private fun futureTime(): SpineTimeLocalDateTime {
  * 2. Adding too small amount of time to make the stamp denote "future" might be unreliable.
  *    As it could catch up `now` by the time `Time.currentTime()` is invoked.
  */
-private const val FIFTY_MILLIS: Long = 50
+private const val HALF_OF_SECOND: Long = 500
