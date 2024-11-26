@@ -32,8 +32,8 @@ import com.google.protobuf.util.Durations
 import com.google.protobuf.util.Timestamps
 import io.spine.test.tools.validate.alreadyHappenedProtoEvent
 import io.spine.test.tools.validate.alreadyHappenedProtoEvents
-import io.spine.test.tools.validate.nonTimedEvent
-import io.spine.test.tools.validate.nonTimedEvents
+import io.spine.test.tools.validate.nonTimedProtoEvent
+import io.spine.test.tools.validate.nonTimedProtoEvents
 import io.spine.test.tools.validate.notYetHappenedProtoEvent
 import io.spine.test.tools.validate.notYetHappenedProtoEvents
 import io.spine.validation.assertions.assertValidationFails
@@ -68,7 +68,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvent {
+                nonTimedProtoEvent {
                     at = pastTime()
                 }
             }
@@ -93,7 +93,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvent {
+                nonTimedProtoEvent {
                     at = futureTime()
                 }
             }
@@ -125,7 +125,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvents {
+                nonTimedProtoEvents {
                     at.addAll(severalPastTimes)
                 }
             }
@@ -152,7 +152,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvents {
+                nonTimedProtoEvents {
                     at.addAll(severalFutureTimes)
                 }
             }
@@ -179,7 +179,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvents {
+                nonTimedProtoEvents {
                     at.addAll(severalFutureAndPast)
                 }
             }
@@ -206,7 +206,7 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedEvents {
+                nonTimedProtoEvents {
                     at.addAll(severalPastAndFuture)
                 }
             }

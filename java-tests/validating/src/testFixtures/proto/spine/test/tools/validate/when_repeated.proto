@@ -59,6 +59,11 @@ message NotYetHappenedSpineEvents {
 }
 
 // Makes sure that a repeated Protobuf timestamp field is not affected when there's no option.
-message NonTimedEvents {
+message NonTimedProtoEvents {
     repeated google.protobuf.Timestamp at = 1;
+}
+
+// Makes sure that a repeated Spine timestamp field is not affected when there's no option.
+message NonTimedSpineEvents {
+    repeated spine.time.LocalDateTime at = 1;
 }

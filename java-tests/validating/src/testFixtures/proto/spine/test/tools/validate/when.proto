@@ -58,7 +58,12 @@ message NotYetHappenedSpineEvent {
     spine.time.LocalDateTime when_will_happen = 1 [(when).in = FUTURE];
 }
 
-// Makes sure that a Protobuf timestamp field is not affected when there's no option.
-message NonTimedEvent {
+// Makes sure that Protobuf timestamp field is not affected when there's no option.
+message NonTimedProtoEvent {
     google.protobuf.Timestamp at = 1;
+}
+
+// Makes sure that Spine timestamp field is not affected when there's no option.
+message NonTimedSpineEvent {
+    spine.time.LocalDateTime at = 1;
 }
