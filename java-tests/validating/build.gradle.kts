@@ -42,6 +42,7 @@ dependencies {
 
     val testFixtureDependencies = listOf(
         Spine.base,
+        Spine.time,
         Logging.lib,
         Validation.runtime,
         Kotest.assertions
@@ -52,6 +53,7 @@ dependencies {
     }
 
     testImplementation(Spine.testlib)
+    testImplementation(Spine.time)
 }
 
 testProtoDataRemoteDebug(enabled = false)

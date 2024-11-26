@@ -28,30 +28,42 @@ package io.spine.validation.java
 
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.extractMessageType
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.call
+import io.spine.protodata.java.javaClass
+import io.spine.time.Temporal
 import io.spine.time.validation.Time
 import io.spine.time.validation.Time.FUTURE
 import io.spine.time.validation.Time.PAST
 import io.spine.time.validation.Time.TIME_UNDEFINED
-import io.spine.type.TypeUrl
 import io.spine.validation.InTime
+import io.spine.validation.WHEN
 
 /**
  * Creates a code generator for the [InTime] feature.
  */
 internal fun inTimeGenerator(inTime: InTime, ctx: GenerationContext): CodeGenerator {
-    val fieldType = ctx.simpleRuleField.type
-    return if (fieldType.message.typeUrl == TIMESTAMP_TYPE) {
-        TimestampInTimeGenerator(inTime, ctx)
-    } else {
-        InSpineTimeGenerator(inTime, ctx)
+    val field = ctx.simpleRuleField
+    val fieldClass = field.type.extractMessageType(ctx.typeSystem)
+        ?.javaClass(ctx.typeSystem)
+        ?: unsupportedFieldType(field)
+    return when {
+        fieldClass == Timestamp::class.java -> {
+            TimestampInTimeGenerator(inTime, ctx)
+        }
+
+        Temporal::class.java.isAssignableFrom(fieldClass) -> {
+            InSpineTimeGenerator(inTime, ctx)
+        }
+
+        else -> unsupportedFieldType(field)
     }
 }
-
-private val TIMESTAMP_TYPE = TypeUrl.of(Timestamp::class.java).value()
 
 /**
  * The [InTime] generator for `google.protobuf.Timestamp` fields.
@@ -105,10 +117,7 @@ private class InSpineTimeGenerator(
     private val time = inTime.time
 
     override fun condition(): Expression<Boolean> =
-        MethodCall(
-            ctx.fieldOrElement!!,
-            time.temporalMethod()
-        )
+        MethodCall(ctx.fieldOrElement!!, time.temporalMethod())
 }
 
 private fun Time.temporalMethod(): String = when(this) {
@@ -116,3 +125,9 @@ private fun Time.temporalMethod(): String = when(this) {
         PAST -> "isInPast"
         else -> error("Unexpected time: `$this`.")
 }
+
+private fun unsupportedFieldType(field: Field): Nothing = error(
+    "The `($WHEN)` option is applicable to singular/repeated fields of " +
+            "`${Timestamp::class.qualifiedName}`s and types marked as " +
+            "`${Temporal::class.qualifiedName}`. The invalid field: `${field.qualifiedName}`."
+)
