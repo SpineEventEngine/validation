@@ -53,6 +53,7 @@ dependencies {
     }
 
     testImplementation(Spine.testlib)
+    testImplementation(Spine.time)
 }
 
 testProtoDataRemoteDebug(enabled = false)
