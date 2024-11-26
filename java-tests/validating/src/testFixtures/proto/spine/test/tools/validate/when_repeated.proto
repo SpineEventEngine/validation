@@ -43,7 +43,7 @@ message AlreadyHappenedProtoEvents {
     repeated google.protobuf.Timestamp when_happened = 1 [(when).in = PAST];
 }
 
-// Tests how the option works with `PAST` restriction upon repeated Spine timestamp.
+// Tests how the option works with `PAST` restriction upon repeated Spine time.
 message AlreadyHappenedSpineEvents {
     repeated spine.time.LocalDateTime when_happened = 1 [(when).in = PAST];
 }
@@ -53,7 +53,7 @@ message NotYetHappenedProtoEvents {
     repeated google.protobuf.Timestamp when_will_happen = 1 [(when).in = FUTURE];
 }
 
-// Tests how the option works with `FUTURE` restriction upon repeated Spine timestamp.
+// Tests how the option works with `FUTURE` restriction upon repeated Spine time.
 message NotYetHappenedSpineEvents {
     repeated spine.time.LocalDateTime when_will_happen = 1 [(when).in = FUTURE];
 }
@@ -63,7 +63,7 @@ message NonTimedProtoEvents {
     repeated google.protobuf.Timestamp at = 1;
 }
 
-// Makes sure that a repeated Spine timestamp field is not affected when there's no option.
+// Makes sure that a repeated Spine time field is not affected when there's no option.
 message NonTimedSpineEvents {
     repeated spine.time.LocalDateTime at = 1;
 }
