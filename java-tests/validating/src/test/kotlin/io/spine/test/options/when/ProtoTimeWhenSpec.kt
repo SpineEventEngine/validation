@@ -215,17 +215,19 @@ internal class ProtoTimeWhenSpec {
 }
 
 private fun pastTime(): Timestamp {
-    val current = Timestamps.now()
+    val current = Timestamps.now() // Current UTC
     val past = Timestamps.subtract(current, FIFTY_MILLIS)
     return past
 }
 
 private fun futureTime(): Timestamp {
-    val current = Timestamps.now()
+    val current = Timestamps.now() // Current UTC
     val future = Timestamps.add(current, FIFTY_MILLIS)
     return future
 }
 
-// By default, `io.spine.base.Time.currentTime()` uses `io.spine.base.Time.SystemTimeProvider`,
-// which has millisecond precision.
+// Why not nanos?
+// `io.spine.base.Time.currentTime()` is used by the generated code to get the current time,
+// which in turn relies on `io.spine.base.Time.SystemTimeProvider` by default.
+// `SystemTimeProvider` has millisecond precision.
 private val FIFTY_MILLIS: Duration = Durations.fromMillis(50)
