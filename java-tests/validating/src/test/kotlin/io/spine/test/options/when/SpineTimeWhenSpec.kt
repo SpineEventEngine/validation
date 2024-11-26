@@ -38,18 +38,20 @@ import io.spine.validation.assertions.assertValidationPasses
 import java.time.Instant
 import java.time.LocalDateTime.ofInstant
 import java.time.ZoneOffset.UTC
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import io.spine.time.LocalDateTime as SpineTimeLocalDateTime
 
+@DisplayName("If used with Spine temporal, `(when)` constrain should")
 internal class SpineTimeWhenSpec {
 
     @Nested
     inner class
-    `when given a timestamp denoting` {
+    `when given time denoting` {
 
         @Nested
-        inner class `the past time` {
+        inner class `the past` {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
@@ -74,7 +76,7 @@ internal class SpineTimeWhenSpec {
         }
 
         @Nested
-        inner class `the future time` {
+        inner class `the future` {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
@@ -101,10 +103,10 @@ internal class SpineTimeWhenSpec {
 
     @Nested
     inner class
-    `when given several timestamps` {
+    `when given several times` {
 
         @Nested
-        inner class `containing only past times` {
+        inner class `denoting only the past` {
 
             private val severalPastTimes = listOf(pastTime(), pastTime(), pastTime())
 
@@ -131,7 +133,7 @@ internal class SpineTimeWhenSpec {
         }
 
         @Nested
-        inner class `containing only future times` {
+        inner class `denoting only the future` {
 
             private val severalFutureTimes = listOf(futureTime(), futureTime(), futureTime())
 
@@ -158,7 +160,7 @@ internal class SpineTimeWhenSpec {
         }
 
         @Nested
-        inner class `with a single past time within future times` {
+        inner class `with a single past time within the future times` {
 
             private val severalFutureAndPast = listOf(futureTime(), pastTime(), futureTime())
 
@@ -185,7 +187,7 @@ internal class SpineTimeWhenSpec {
         }
 
         @Nested
-        inner class `with a single future time within past times` {
+        inner class `with a single future time within the past times` {
 
             private val severalPastAndFuture = listOf(pastTime(), futureTime(), pastTime())
 
@@ -214,21 +216,28 @@ internal class SpineTimeWhenSpec {
 }
 
 private fun pastTime(): SpineTimeLocalDateTime {
-    val current = Instant.now() // Current UTC
+    val current = Instant.now() // It is a UTC stamp.
     val past = current.minusMillis(FIFTY_MILLIS)
-    val spinePast = LocalDateTimes.of(ofInstant(past, UTC))
-    return spinePast
+    return LocalDateTimes.of(ofInstant(past, UTC))
 }
 
 private fun futureTime(): SpineTimeLocalDateTime {
-    val current = Instant.now() // Current UTC
+    val current = Instant.now() // It is a UTC stamp.
     val past = current.plusMillis(FIFTY_MILLIS)
-    val spineFuture = LocalDateTimes.of(ofInstant(past, UTC))
-    return spineFuture
+    return LocalDateTimes.of(ofInstant(past, UTC))
 }
 
-// Why not nanos?
-// `io.spine.base.Time.currentTime()` is used by the generated code to get the current time,
-// which in turn relies on `io.spine.base.Time.SystemTimeProvider` by default.
-// `SystemTimeProvider` has millisecond precision.
+/**
+ * Fifty milliseconds.
+ *
+ * To shift the time into the past or future, we add or subtract a difference of this amount.
+ *
+ * There are two reasons for choosing fifty milliseconds:
+ *
+ * 1. The generated code uses `io.spine.base.Time.currentTime()` to get the current timestamp
+ * for comparison. In turn, this method relies on `io.spine.base.Time.SystemTimeProvider`
+ * by default, which has millisecond precision.
+ * 2. Adding too small amount of time to make the stamp denote "future" might be unreliable.
+ * As it could catch up `now` by the time `Time.currentTime()` is invoked.
+ */
 private const val FIFTY_MILLIS: Long = 50

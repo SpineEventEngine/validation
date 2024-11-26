@@ -50,7 +50,7 @@ internal class ProtoTimeWhenSpec {
     `when given a timestamp denoting` {
 
         @Nested
-        inner class `the past time` {
+        inner class `the past` {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
@@ -75,7 +75,7 @@ internal class ProtoTimeWhenSpec {
         }
 
         @Nested
-        inner class `the future time` {
+        inner class `the future` {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
@@ -105,7 +105,7 @@ internal class ProtoTimeWhenSpec {
     `when given several timestamps` {
 
         @Nested
-        inner class `containing only past times` {
+        inner class `denoting only the past` {
 
             private val severalPastTimes = listOf(pastTime(), pastTime(), pastTime())
 
@@ -132,7 +132,7 @@ internal class ProtoTimeWhenSpec {
         }
 
         @Nested
-        inner class `containing only future times` {
+        inner class `denoting only the future` {
 
             private val severalFutureTimes = listOf(futureTime(), futureTime(), futureTime())
 
@@ -159,7 +159,7 @@ internal class ProtoTimeWhenSpec {
         }
 
         @Nested
-        inner class `with a single past time within future times` {
+        inner class `with a single past stamp within the future stamps` {
 
             private val severalFutureAndPast = listOf(futureTime(), pastTime(), futureTime())
 
@@ -186,7 +186,7 @@ internal class ProtoTimeWhenSpec {
         }
 
         @Nested
-        inner class `with a single future time within past times` {
+        inner class `with a single future stamp within the past stamps` {
 
             private val severalPastAndFuture = listOf(pastTime(), futureTime(), pastTime())
 
@@ -215,19 +215,28 @@ internal class ProtoTimeWhenSpec {
 }
 
 private fun pastTime(): Timestamp {
-    val current = Timestamps.now() // Current UTC
+    val current = Timestamps.now()
     val past = Timestamps.subtract(current, FIFTY_MILLIS)
     return past
 }
 
 private fun futureTime(): Timestamp {
-    val current = Timestamps.now() // Current UTC
+    val current = Timestamps.now()
     val future = Timestamps.add(current, FIFTY_MILLIS)
     return future
 }
 
-// Why not nanos?
-// `io.spine.base.Time.currentTime()` is used by the generated code to get the current time,
-// which in turn relies on `io.spine.base.Time.SystemTimeProvider` by default.
-// `SystemTimeProvider` has millisecond precision.
+/**
+ * Protobuf [Duration] of fifty milliseconds.
+ *
+ * To shift the time into the past or future, we add or subtract a difference of this amount.
+ *
+ * There are two reasons for choosing fifty milliseconds:
+ *
+ * 1. The generated code uses `io.spine.base.Time.currentTime()` to get the current timestamp
+ * for comparison. In turn, this method relies on `io.spine.base.Time.SystemTimeProvider`
+ * by default, which has millisecond precision.
+ * 2. Adding too small amount of time to make the stamp denote "future" might be unreliable.
+ * As it could catch up `now` by the time `Time.currentTime()` is invoked.
+ */
 private val FIFTY_MILLIS: Duration = Durations.fromMillis(50)
