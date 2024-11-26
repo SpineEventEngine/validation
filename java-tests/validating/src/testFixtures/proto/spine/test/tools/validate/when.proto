@@ -38,32 +38,32 @@ option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 import "spine/time/time.proto";
 
-// Tests how the option works with `PAST` restriction upon Protobuf timestamp.
-message AlreadyHappenedProtoEvent {
-    google.protobuf.Timestamp when_happened = 1 [(when).in = PAST];
+// Tests `PAST` restriction with a Protobuf timestamp.
+message PastProtoTimestamp {
+    google.protobuf.Timestamp value = 1 [(when).in = PAST];
 }
 
-// Tests how the option works with `PAST` restriction upon Spine time.
-message AlreadyHappenedSpineEvent {
-    spine.time.LocalDateTime when_happened = 1 [(when).in = PAST];
+// Tests `PAST` restriction with a Spine temporal.
+message PastSpineTemporal {
+    spine.time.LocalDateTime value = 1 [(when).in = PAST];
 }
 
-// Tests how the option works with `FUTURE` restriction upon Protobuf timestamp.
-message NotYetHappenedProtoEvent {
-    google.protobuf.Timestamp when_will_happen = 1 [(when).in = FUTURE];
+// Tests `FUTURE` restriction with a Protobuf timestamp.
+message FutureProtoTimestamp {
+    google.protobuf.Timestamp value = 1 [(when).in = FUTURE];
 }
 
-// Tests how the option works with `FUTURE` restriction upon Spine time.
-message NotYetHappenedSpineEvent {
-    spine.time.LocalDateTime when_will_happen = 1 [(when).in = FUTURE];
+// Tests `FUTURE` restriction with a Spine temporal.
+message FutureSpineTemporal {
+    spine.time.LocalDateTime value = 1 [(when).in = FUTURE];
 }
 
-// Makes sure that Protobuf timestamp field is not affected when there's no option.
-message NonTimedProtoEvent {
-    google.protobuf.Timestamp at = 1;
+// Tests that a Protobuf timestamp is not restricted when there's no option.
+message AnyProtoTimestamp {
+    google.protobuf.Timestamp value = 1;
 }
 
-// Makes sure that Spine time field is not affected when there's no option.
-message NonTimedSpineEvent {
-    spine.time.LocalDateTime at = 1;
+// Tests that a Spine temporal is not restricted when there's no option.
+message AnySpineTemporal {
+    spine.time.LocalDateTime value = 1;
 }

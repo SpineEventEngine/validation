@@ -30,20 +30,20 @@ import com.google.protobuf.Duration
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Durations
 import com.google.protobuf.util.Timestamps
-import io.spine.test.tools.validate.alreadyHappenedProtoEvent
-import io.spine.test.tools.validate.alreadyHappenedProtoEvents
-import io.spine.test.tools.validate.nonTimedProtoEvent
-import io.spine.test.tools.validate.nonTimedProtoEvents
-import io.spine.test.tools.validate.notYetHappenedProtoEvent
-import io.spine.test.tools.validate.notYetHappenedProtoEvents
+import io.spine.test.tools.validate.anyProtoTimestamp
+import io.spine.test.tools.validate.anyProtoTimestamps
+import io.spine.test.tools.validate.futureProtoTimestamp
+import io.spine.test.tools.validate.futureProtoTimestamps
+import io.spine.test.tools.validate.pastProtoTimestamp
+import io.spine.test.tools.validate.pastProtoTimestamps
 import io.spine.validation.assertions.assertValidationFails
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@DisplayName("If used with Protobuf timestamp, `(when)` constrain should")
-internal class ProtoTimeWhenSpec {
+@DisplayName("If used with Protobuf `Timestamp`, `(when)` constrain should")
+internal class ProtoTimestampWhenSpec {
 
     @Nested
     inner class
@@ -54,22 +54,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedProtoEvent {
-                    whenWillHappen = pastTime()
+                futureProtoTimestamp {
+                    value = pastTime()
                 }
             }
 
             @Test
             fun `pass, if restricted to be in past`() = assertValidationPasses {
-                alreadyHappenedProtoEvent {
-                    whenHappened = pastTime()
+                pastProtoTimestamp {
+                    value = pastTime()
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvent {
-                    at = pastTime()
+                anyProtoTimestamp {
+                    value = pastTime()
                 }
             }
         }
@@ -79,22 +79,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedProtoEvent {
-                    whenHappened = futureTime()
+                pastProtoTimestamp {
+                    value = futureTime()
                 }
             }
 
             @Test
             fun `pass, if restricted to be in future`() = assertValidationPasses {
-                notYetHappenedProtoEvent {
-                    whenWillHappen = futureTime()
+                futureProtoTimestamp {
+                    value = futureTime()
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvent {
-                    at = futureTime()
+                anyProtoTimestamp {
+                    value = futureTime()
                 }
             }
         }
@@ -111,22 +111,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedProtoEvents {
-                    whenWillHappen.addAll(severalPastTimes)
+                futureProtoTimestamps {
+                    value.addAll(severalPastTimes)
                 }
             }
 
             @Test
             fun `pass, if restricted to be in past`() = assertValidationPasses {
-                alreadyHappenedProtoEvents {
-                    whenHappened.addAll(severalPastTimes)
+                pastProtoTimestamps {
+                    value.addAll(severalPastTimes)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvents {
-                    at.addAll(severalPastTimes)
+                anyProtoTimestamps {
+                    value.addAll(severalPastTimes)
                 }
             }
         }
@@ -138,22 +138,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedProtoEvents {
-                    whenHappened.addAll(severalFutureTimes)
+                pastProtoTimestamps {
+                    value.addAll(severalFutureTimes)
                 }
             }
 
             @Test
             fun `pass, if restricted to be in future`() = assertValidationPasses {
-                notYetHappenedProtoEvents {
-                    whenWillHappen.addAll(severalFutureTimes)
+                futureProtoTimestamps {
+                    value.addAll(severalFutureTimes)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvents {
-                    at.addAll(severalFutureTimes)
+                anyProtoTimestamps {
+                    value.addAll(severalFutureTimes)
                 }
             }
         }
@@ -165,22 +165,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedProtoEvents {
-                    whenWillHappen.addAll(severalFutureAndPast)
+                futureProtoTimestamps {
+                    value.addAll(severalFutureAndPast)
                 }
             }
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedProtoEvents {
-                    whenHappened.addAll(severalFutureAndPast)
+                pastProtoTimestamps {
+                    value.addAll(severalFutureAndPast)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvents {
-                    at.addAll(severalFutureAndPast)
+                anyProtoTimestamps {
+                    value.addAll(severalFutureAndPast)
                 }
             }
         }
@@ -192,22 +192,22 @@ internal class ProtoTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedProtoEvents {
-                    whenWillHappen.addAll(severalPastAndFuture)
+                futureProtoTimestamps {
+                    value.addAll(severalPastAndFuture)
                 }
             }
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedProtoEvents {
-                    whenHappened.addAll(severalPastAndFuture)
+                pastProtoTimestamps {
+                    value.addAll(severalPastAndFuture)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedProtoEvents {
-                    at.addAll(severalPastAndFuture)
+                anyProtoTimestamps {
+                    value.addAll(severalPastAndFuture)
                 }
             }
         }

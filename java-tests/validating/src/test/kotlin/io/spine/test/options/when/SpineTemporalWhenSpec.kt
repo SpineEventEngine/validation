@@ -26,12 +26,12 @@
 
 package io.spine.test.options.`when`
 
-import io.spine.test.tools.validate.alreadyHappenedSpineEvent
-import io.spine.test.tools.validate.alreadyHappenedSpineEvents
-import io.spine.test.tools.validate.nonTimedSpineEvent
-import io.spine.test.tools.validate.nonTimedSpineEvents
-import io.spine.test.tools.validate.notYetHappenedSpineEvent
-import io.spine.test.tools.validate.notYetHappenedSpineEvents
+import io.spine.test.tools.validate.anySpineTemporal
+import io.spine.test.tools.validate.anySpineTemporals
+import io.spine.test.tools.validate.futureSpineTemporal
+import io.spine.test.tools.validate.futureSpineTemporals
+import io.spine.test.tools.validate.pastSpineTemporal
+import io.spine.test.tools.validate.pastSpineTemporals
 import io.spine.time.LocalDateTimes
 import io.spine.validation.assertions.assertValidationFails
 import io.spine.validation.assertions.assertValidationPasses
@@ -43,34 +43,34 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import io.spine.time.LocalDateTime as SpineTimeLocalDateTime
 
-@DisplayName("If used with Spine temporal, `(when)` constrain should")
-internal class SpineTimeWhenSpec {
+@DisplayName("If used with Spine `Temporal`, `(when)` constrain should")
+internal class SpineTemporalWhenSpec {
 
     @Nested
     inner class
-    `when given time denoting` {
+    `when given a temporal denoting` {
 
         @Nested
         inner class `the past` {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedSpineEvent {
-                    whenWillHappen = pastTime()
+                futureSpineTemporal {
+                    value = pastTime()
                 }
             }
 
             @Test
             fun `pass, if restricted to be in past`() = assertValidationPasses {
-                alreadyHappenedSpineEvent {
-                    whenHappened = pastTime()
+                pastSpineTemporal {
+                    value = pastTime()
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvent {
-                    at = pastTime()
+                anySpineTemporal {
+                    value = pastTime()
                 }
             }
         }
@@ -80,22 +80,22 @@ internal class SpineTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedSpineEvent {
-                    whenHappened = futureTime()
+                pastSpineTemporal {
+                    value = futureTime()
                 }
             }
 
             @Test
             fun `pass, if restricted to be in future`() = assertValidationPasses {
-                notYetHappenedSpineEvent {
-                    whenWillHappen = futureTime()
+                futureSpineTemporal {
+                    value = futureTime()
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvent {
-                    at = futureTime()
+                anySpineTemporal {
+                    value = futureTime()
                 }
             }
         }
@@ -112,22 +112,22 @@ internal class SpineTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedSpineEvents {
-                    whenWillHappen.addAll(severalPastTimes)
+                futureSpineTemporals {
+                    value.addAll(severalPastTimes)
                 }
             }
 
             @Test
             fun `pass, if restricted to be in past`() = assertValidationPasses {
-                alreadyHappenedSpineEvents {
-                    whenHappened.addAll(severalPastTimes)
+                pastSpineTemporals {
+                    value.addAll(severalPastTimes)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvents {
-                    at.addAll(severalPastTimes)
+                anySpineTemporals {
+                    value.addAll(severalPastTimes)
                 }
             }
         }
@@ -139,22 +139,22 @@ internal class SpineTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedSpineEvents {
-                    whenHappened.addAll(severalFutureTimes)
+                pastSpineTemporals {
+                    value.addAll(severalFutureTimes)
                 }
             }
 
             @Test
             fun `pass, if restricted to be in future`() = assertValidationPasses {
-                notYetHappenedSpineEvents {
-                    whenWillHappen.addAll(severalFutureTimes)
+                futureSpineTemporals {
+                    value.addAll(severalFutureTimes)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvents {
-                    at.addAll(severalFutureTimes)
+                anySpineTemporals {
+                    value.addAll(severalFutureTimes)
                 }
             }
         }
@@ -166,22 +166,22 @@ internal class SpineTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedSpineEvents {
-                    whenWillHappen.addAll(severalFutureAndPast)
+                futureSpineTemporals {
+                    value.addAll(severalFutureAndPast)
                 }
             }
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedSpineEvents {
-                    whenHappened.addAll(severalFutureAndPast)
+                pastSpineTemporals {
+                    value.addAll(severalFutureAndPast)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvents {
-                    at.addAll(severalFutureAndPast)
+                anySpineTemporals {
+                    value.addAll(severalFutureAndPast)
                 }
             }
         }
@@ -193,22 +193,22 @@ internal class SpineTimeWhenSpec {
 
             @Test
             fun `throw, if restricted to be in future`() = assertValidationFails {
-                notYetHappenedSpineEvents {
-                    whenWillHappen.addAll(severalPastAndFuture)
+                futureSpineTemporals {
+                    value.addAll(severalPastAndFuture)
                 }
             }
 
             @Test
             fun `throw, if restricted to be in past`() = assertValidationFails {
-                alreadyHappenedSpineEvents {
-                    whenHappened.addAll(severalPastAndFuture)
+                pastSpineTemporals {
+                    value.addAll(severalPastAndFuture)
                 }
             }
 
             @Test
             fun `pass, if not restricted at all`() = assertValidationPasses {
-                nonTimedSpineEvents {
-                    at.addAll(severalPastAndFuture)
+                anySpineTemporals {
+                    value.addAll(severalPastAndFuture)
                 }
             }
         }

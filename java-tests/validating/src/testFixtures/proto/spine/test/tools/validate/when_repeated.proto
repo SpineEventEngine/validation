@@ -38,32 +38,32 @@ option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 import "spine/time/time.proto";
 
-// Tests how the option works with `PAST` restriction upon repeated Protobuf timestamp.
-message AlreadyHappenedProtoEvents {
-    repeated google.protobuf.Timestamp when_happened = 1 [(when).in = PAST];
+// Tests `PAST` restriction with a repeated Protobuf timestamp.
+message PastProtoTimestamps {
+    repeated google.protobuf.Timestamp value = 1 [(when).in = PAST];
 }
 
-// Tests how the option works with `PAST` restriction upon repeated Spine time.
-message AlreadyHappenedSpineEvents {
-    repeated spine.time.LocalDateTime when_happened = 1 [(when).in = PAST];
+// Tests `PAST` restriction with a repeated Spine temporal.
+message PastSpineTemporals {
+    repeated spine.time.LocalDateTime value = 1 [(when).in = PAST];
 }
 
-// Tests how the option works with `FUTURE` restriction upon repeated Protobuf timestamp.
-message NotYetHappenedProtoEvents {
-    repeated google.protobuf.Timestamp when_will_happen = 1 [(when).in = FUTURE];
+// Tests `FUTURE` restriction with a repeated Protobuf timestamp.
+message FutureProtoTimestamps {
+    repeated google.protobuf.Timestamp value = 1 [(when).in = FUTURE];
 }
 
-// Tests how the option works with `FUTURE` restriction upon repeated Spine time.
-message NotYetHappenedSpineEvents {
-    repeated spine.time.LocalDateTime when_will_happen = 1 [(when).in = FUTURE];
+// Tests `FUTURE` restriction with a repeated Spine temporal.
+message FutureSpineTemporals {
+    repeated spine.time.LocalDateTime value = 1 [(when).in = FUTURE];
 }
 
-// Makes sure that a repeated Protobuf timestamp field is not affected when there's no option.
-message NonTimedProtoEvents {
-    repeated google.protobuf.Timestamp at = 1;
+// Tests that a repeated Protobuf timestamp is not restricted when there's no option.
+message AnyProtoTimestamps {
+    repeated google.protobuf.Timestamp value = 1;
 }
 
-// Makes sure that a repeated Spine time field is not affected when there's no option.
-message NonTimedSpineEvents {
-    repeated spine.time.LocalDateTime at = 1;
+// Tests that a repeated Spine temporal is not restricted when there's no option.
+message AnySpineTemporals {
+    repeated spine.time.LocalDateTime value = 1;
 }
