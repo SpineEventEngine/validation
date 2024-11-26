@@ -116,7 +116,8 @@ private class InSpineTimeGenerator(
 
     private val time = inTime.time
 
-    override fun condition(): Expression = MethodCall(ctx.fieldOrElement!!, time.temporalMethod())
+    override fun condition(): Expression<Boolean> =
+        MethodCall(ctx.fieldOrElement!!, time.temporalMethod())
 }
 
 private fun Time.temporalMethod(): String = when(this) {
