@@ -232,9 +232,9 @@ private fun futureTime(): Timestamp {
  * There are two reasons for choosing fifty milliseconds:
  *
  * 1. The generated code uses `io.spine.base.Time.currentTime()` to get the current timestamp
- * for comparison. In turn, this method relies on `io.spine.base.Time.SystemTimeProvider`
- * by default, which has millisecond precision.
+ *    for comparison. In turn, this method relies on `io.spine.base.Time.SystemTimeProvider`
+ *    by default, which has millisecond precision.
  * 2. Adding too small amount of time to make the stamp denote "future" might be unreliable.
- * As it could catch up `now` by the time `Time.currentTime()` is invoked.
+ *    As it could catch up `now` by the time `Time.currentTime()` is invoked.
  */
 private val FIFTY_MILLIS: Duration = Durations.fromMillis(50)
