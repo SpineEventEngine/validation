@@ -26,6 +26,7 @@
 
 package io.spine.validation.java
 
+import com.google.protobuf.Message
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.File
@@ -35,10 +36,11 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MessageOrEnumConvention
 import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.MessageReference
+import io.spine.protodata.java.field
 import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validate.ConstraintViolation
 import io.spine.validation.Rule
 import io.spine.validation.isSimple
 
@@ -67,7 +69,7 @@ internal constructor(
     /**
      * A reference to the validated message.
      */
-    val msg: MessageReference,
+    val msg: Expression<Message>,
 
     /**
      * The type of the validated message.
@@ -86,7 +88,7 @@ internal constructor(
      * a list of [io.spine.validate.ConstraintViolation]s. when a new violation is discovered,
      * the generated code should add it to this list.
      */
-    val violationList: Expression,
+    val violationList: Expression<MutableList<ConstraintViolation>>,
 
     /**
      * A custom reference to an element of a collection field.
@@ -94,7 +96,7 @@ internal constructor(
      * If `null`, the associated field is not a collection, or the associated rule
      * does not need to be distributed to collection elements.
      */
-    private val elementReference: Expression? = null
+    private val elementReference: Expression<*>? = null
 ) {
 
     val typeConvention: MessageOrEnumConvention by lazy {
@@ -108,7 +110,7 @@ internal constructor(
         JavaValueConverter(typeSystem)
     }
 
-    val otherValueAsCode: Expression?
+    val otherValueAsCode: Expression<*>?
         get() = if (rule.isSimple && rule.simple.hasOtherValue()) {
             valueConverter.valueToCode(rule.simple.otherValue)
         } else {
@@ -150,13 +152,13 @@ internal constructor(
      *
      * If there is no associated field, this is `null`.
      */
-    val fieldOrElement: Expression?
+    val fieldOrElement: Expression<*>?
         get() = elementReference ?: fieldValue
 
     /**
      * The reference to the associated field, or `null` if there is no such field.
      */
-    val fieldValue: Expression?
+    val fieldValue: Expression<*>?
         get() {
             val protoField = fieldFromSimpleRule ?: return null
             return getterFor(protoField)
@@ -173,8 +175,8 @@ internal constructor(
      *
      * The [field] should be a field of the message referenced in [msg].
      */
-    public fun getterFor(field: Field): Expression =
-        msg.field(field).getter
+    public fun getterFor(field: Field): Expression<*> =
+        msg.field(field).getter<Any>()
 
     /**
      * Finds the field by the given name in the validated type.

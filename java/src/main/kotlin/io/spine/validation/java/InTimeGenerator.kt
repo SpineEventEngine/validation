@@ -33,8 +33,8 @@ import io.spine.protodata.ast.extractMessageType
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.call
 import io.spine.protodata.java.javaClass
 import io.spine.time.Temporal
 import io.spine.time.validation.Time
@@ -75,18 +75,18 @@ private class TimestampInTimeGenerator(
 
     private val time = inTime.time
 
-    override fun condition(): Expression {
-        val compare = MethodCall(
-            ClassName(Timestamps::class), "compare", arguments = listOf(
-            ctx.fieldOrElement!!,
-            currentTime
-        ))
+    override fun condition(): Expression<Boolean> {
+        val compare = MethodCall<Int>(
+            scope = ClassName(Timestamps::class),
+            name = "compare",
+            arguments = listOf(ctx.fieldOrElement!!, currentTime)
+        )
         return time.formatJavaComparison(compare)
     }
 }
 
-private val currentTime: Expression =
-    MethodCall(ClassName(io.spine.base.Time::class), "currentTime")
+private val currentTime: Expression<Timestamp> = ClassName(io.spine.base.Time::class)
+    .call("currentTime")
 
 /**
  * Formats the comparison expression for the time value.
@@ -94,14 +94,14 @@ private val currentTime: Expression =
  * If the current time is being compared to the special [TIME_UNDEFINED] value,
  * the returned result for the formatted expression is always `true`.
  */
-private fun Time.formatJavaComparison(compareToCall: Expression): Expression {
+private fun Time.formatJavaComparison(compareToCall: Expression<Int>): Expression<Boolean> {
     val operation = when(this) {
         FUTURE -> "> 0"
         PAST -> "< 0"
         TIME_UNDEFINED -> " < 32768"
         else -> error("Unexpected time: `$this`.")
     }
-    return Literal("$compareToCall $operation")
+    return Expression("$compareToCall $operation")
 }
 
 /**

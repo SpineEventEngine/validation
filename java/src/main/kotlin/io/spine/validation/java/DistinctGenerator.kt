@@ -27,12 +27,11 @@
 package io.spine.validation.java
 
 import com.google.common.collect.ImmutableSet
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.call
-import io.spine.protodata.ast.isMap
 
 /**
  * Generates the code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
@@ -51,19 +50,29 @@ internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
      * the original collection is equal to the size of the `ImmutableSet` created as a copy
      * of the checked collection.
      */
-    override fun condition(): Expression {
-        val map = ctx.simpleRuleField.isMap
-        val fieldValue = ctx.fieldOrElement!!
-        val collectionToCount = if (map) MethodCall(fieldValue, "values") else fieldValue
+    override fun condition(): Expression<Boolean> {
+        val values = fieldValues()
         return equalityOf(
-            MethodCall(fieldValue, "size"),
+            MethodCall(values, "size"),
             ClassName(ImmutableSet::class)
-                .call("copyOf", listOf(collectionToCount))
+                .call<ImmutableSet<*>>("copyOf", values)
                 .chain("size")
         )
     }
 
-    private fun equalityOf(left: Expression, right: Expression): Expression {
-        return Literal(left.toCode() + " == " + right.toCode())
+    private fun fieldValues(): Expression<Collection<*>> {
+        val fieldIsMap = ctx.simpleRuleField.isMap
+        val fieldValue = ctx.fieldOrElement!!
+        return if (fieldIsMap) {
+            MethodCall(fieldValue, "values")
+        } else {
+            // `DistinctGenerator` can be instantiated only for repeated fields and maps in
+            // `io.spine.validation.java.generatorForCustom`. So, the cast is safe.
+            @Suppress("UNCHECKED_CAST")
+            fieldValue as Expression<Collection<*>>
+        }
     }
+
+    private fun equalityOf(left: Expression<Int>, right: Expression<Int>): Expression<Boolean> =
+        Expression(left.toCode() + " == " + right.toCode())
 }

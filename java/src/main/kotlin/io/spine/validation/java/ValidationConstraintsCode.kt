@@ -28,10 +28,11 @@ package io.spine.validation.java
 
 import com.google.common.base.Splitter
 import com.google.common.collect.ImmutableList
+import com.google.protobuf.Message
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.This.asMessage
+import io.spine.protodata.java.This
 import io.spine.validation.MessageValidation
 import io.spine.validation.Rule
 import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
@@ -66,7 +67,7 @@ internal class ValidationConstraintsCode private constructor(
     /**
      * The expression for referencing the message in the code.
      */
-    private val messageReference = asMessage
+    private val messageReference = This<Message>()
 
     /**
      * The builder of the code which performs validation.

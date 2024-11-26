@@ -93,7 +93,7 @@ internal abstract class CodeGenerator(
      *
      * The expression evaluates to `true` if there is a violation and to `false` otherwise.
      */
-    abstract fun condition(): Expression
+    abstract fun condition(): Expression<Boolean>
 
     /**
      * Forms an error message for the found violation.
