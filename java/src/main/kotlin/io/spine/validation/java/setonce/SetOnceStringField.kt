@@ -41,11 +41,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The string field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceStringField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<String>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<String>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_STRING) {
@@ -120,7 +122,7 @@ internal class SetOnceStringField(
             newValue = Expression("other.$fieldGetter")
         )
         val mergeFromMessage = methodWithSignature(
-            "public Builder mergeFrom(${declaringMessage.canonical} other)"
+            "public Builder mergeFrom(${declaringMessageClass.canonical} other)"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(
             AnElement("if (!other.$fieldGetter.isEmpty())")

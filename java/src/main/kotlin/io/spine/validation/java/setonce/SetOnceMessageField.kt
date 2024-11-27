@@ -40,11 +40,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The message field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceMessageField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Message>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Message>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.isMessage) {

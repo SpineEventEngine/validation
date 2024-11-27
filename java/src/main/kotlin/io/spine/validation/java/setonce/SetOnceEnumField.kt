@@ -41,11 +41,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The enum field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceEnumField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Int>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Int>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.isEnum) {

@@ -50,11 +50,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The number field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceNumberField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Number>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Number>(field, typeSystem, errorMessage) {
 
     companion object {
         private val FieldReaders = mapOf(

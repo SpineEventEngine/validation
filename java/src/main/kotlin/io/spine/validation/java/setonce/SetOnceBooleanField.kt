@@ -39,11 +39,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The boolean field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceBooleanField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Boolean>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Boolean>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_BOOL) {

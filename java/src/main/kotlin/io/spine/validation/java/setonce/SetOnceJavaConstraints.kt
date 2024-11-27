@@ -31,13 +31,20 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
 import io.spine.protodata.java.JavaElement
+import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
+import io.spine.protodata.java.listExpression
+import io.spine.protodata.java.newBuilder
+import io.spine.protodata.java.packToAny
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.java.toPsi
 import io.spine.protodata.render.SourceFile
@@ -46,6 +53,13 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.IF_SET_AGAIN
+import io.spine.validation.java.setonce.SetOnceToken.CURRENT_VALUE
+import io.spine.validation.java.setonce.SetOnceToken.Companion.TokenRegex
+import io.spine.validation.java.setonce.SetOnceToken.Companion.supportedTokens
+import io.spine.validation.java.setonce.SetOnceToken.FIELD_NAME
+import io.spine.validation.java.setonce.SetOnceToken.PROPOSED_VALUE
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -58,16 +72,15 @@ import io.spine.tools.psi.java.execute
  *
  * @property field The field that declared the option.
  * @property typeSystem The type system to resolve types.
+ * @property errorMessage The error message pattern to use in case of the violation.
  */
 internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
-    private val typeSystem: TypeSystem
+    private val typeSystem: TypeSystem,
+    private val errorMessage: String
 ) {
 
     private companion object {
-        const val THROW_VALIDATION_EXCEPTION =
-            "throw new io.spine.validate.ValidationException(" +
-                    "io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
          * The signature of `mergeFrom(CodedInputStream)` method.
@@ -83,12 +96,14 @@ internal sealed class SetOnceJavaConstraints<T>(
             """.trimIndent()
     }
 
+    private val declaringMessage: TypeName = field.declaringType
+
     protected val fieldName = field.name.javaCase()
     protected val fieldNameCamel = fieldName.camelCase()
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage = field.declaringType.javaClassName(typeSystem)
+    protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -104,8 +119,8 @@ internal sealed class SetOnceJavaConstraints<T>(
      */
     fun render(sourceFile: SourceFile<Java>) {
         val messageBuilder = ClassName(
-            packageName = declaringMessage.packageName,
-            simpleNames = declaringMessage.simpleNames + "Builder"
+            packageName = declaringMessageClass.packageName,
+            simpleNames = declaringMessageClass.simpleNames + "Builder"
         )
         val psiFile = sourceFile.psi() as PsiJavaFile
         val psiClass = psiFile.findClass(messageBuilder)
@@ -182,12 +197,56 @@ internal sealed class SetOnceJavaConstraints<T>(
     protected fun throwIfNotDefaultAndNotSame(
         currentValue: Expression<T>,
         newValue: Expression<T>
-    ): PsiStatement = elementFactory.createStatement(
-        """
+    ): PsiStatement {
+        val (format, tokens) = extractTokens(errorMessage)
+        val params = tokens.toParams(currentValue, newValue)
+
+        val fieldPath = ClassName(FieldPath::class).newBuilder()
+            .chainAdd("field_name", StringLiteral(fieldName))
+            .chainBuild<FieldPath>()
+        val violation = ClassName(ConstraintViolation::class).newBuilder()
+            .chainSet("msg_format", StringLiteral(format))
+            .chainAddAll("param", listExpression(params))
+            .chainSet("type_name", StringLiteral(declaringMessage.qualifiedName))
+            .chainSet("field_path", fieldPath)
+            .chainSet("field_value", newValue.packToAny())
+            .chainBuild<ConstraintViolation>()
+
+        return elementFactory.createStatement(
+            """
             if (!(${defaultOrSame(currentValue, newValue)})) {
-                $THROW_VALIDATION_EXCEPTION
+                throw new io.spine.validate.ValidationException($violation);
             }""".trimIndent()
-    )
+        )
+    }
+
+    private fun extractTokens(errorMessage: String): Pair<String, List<SetOnceToken>> {
+        val foundTokens = mutableListOf<SetOnceToken>()
+        val formatted = TokenRegex.replace(errorMessage) { matchResult ->
+            val tokenName = matchResult.groupValues[1]
+            val token = SetOnceToken.forSimpleName(tokenName)
+            if (token != null) {
+                "%s".also { foundTokens.add(token) }
+            } else {
+                throw IllegalArgumentException(
+                    "The `($IF_SET_AGAIN)` option doesn't support the token: `{${tokenName}}`. " +
+                            "The supported tokens: `${supportedTokens()}`. " +
+                            "The declared field: `${field.qualifiedName}`.")
+            }
+        }
+        return formatted to foundTokens
+    }
+
+    private fun List<SetOnceToken>.toParams(
+        currentValue: Expression<T>,
+        newValue: Expression<T>
+    ): List<Expression<String>> = map {
+        when (it) {
+            FIELD_NAME -> StringLiteral(fieldName)
+            CURRENT_VALUE -> StringLiteral("$currentValue")
+            PROPOSED_VALUE -> StringLiteral("$newValue")
+        }
+    }
 
     /**
      * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].
@@ -232,4 +291,22 @@ internal sealed class SetOnceJavaConstraints<T>(
      */
     private fun PsiElementFactory.createStatement(text: String) =
         createStatementFromText(text, null)
+
+}
+
+private enum class SetOnceToken(val simpleName: String) {
+
+    FIELD_NAME("fieldName"),
+    CURRENT_VALUE("currentValue"),
+    PROPOSED_VALUE("proposedValue");
+
+    companion object {
+
+        val TokenRegex = Regex("""\{(.*?)}""")
+
+        fun forSimpleName(simpleName: String): SetOnceToken? =
+            values().firstOrNull { it.simpleName == simpleName }
+
+        fun supportedTokens(): String = values().joinToString { "{${it.simpleName}}" }
+    }
 }

@@ -43,11 +43,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The byte array field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceBytesField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<ByteString>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
