@@ -24,34 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+import io.spine.dependency.lib.Protobuf
+import io.spine.gradle.protobuf.setup
 
-/**
- * Dependencies on Spine Validation SDK.
- *
- * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
- */
-@Suppress("unused", "ConstPropertyName")
-object Validation {
-    /**
-     * The version of the Validation library artifacts.
-     */
-    const val version = "2.0.0-SNAPSHOT.174"
+plugins {
+    id("java-library")
+    id("com.google.protobuf")
+}
 
-    const val group = "io.spine.validation"
-    private const val prefix = "spine-validation"
 
-    const val runtimeModule = "$group:$prefix-java-runtime"
-    const val runtime = "$runtimeModule:$version"
-    const val java = "$group:$prefix-java:$version"
-
-    const val javaBundleModule = "$group:$prefix-java-bundle"
-
-    /** Obtains the artifact for the `java-bundle` artifact of the given version. */
-    fun javaBundle(version: String) = "$javaBundleModule:$version"
-
-    val javaBundle = javaBundle(version)
-
-    const val model = "$group:$prefix-model:$version"
-    const val config = "$group:$prefix-configuration:$version"
+// For generating test fixtures. See `src/test/proto`.
+protobuf {
+    configurations.excludeProtobufLite()
+    protoc {
+        artifact = Protobuf.compiler
+    }
+    generateProtoTasks.all().configureEach {
+        setup()
+    }
 }
