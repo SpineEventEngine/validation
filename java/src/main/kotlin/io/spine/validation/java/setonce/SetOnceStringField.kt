@@ -26,6 +26,7 @@
 
 package io.spine.validation.java.setonce
 
+import com.google.protobuf.ByteString
 import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
@@ -33,6 +34,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
@@ -47,7 +49,7 @@ internal class SetOnceStringField(
     field: Field,
     typeSystem: TypeSystem,
     errorMessage: String
-) : SetOnceJavaConstraints<String>(field, typeSystem, errorMessage) {
+) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_STRING) {
@@ -57,8 +59,8 @@ internal class SetOnceStringField(
     }
 
     override fun defaultOrSame(
-        currentValue: Expression<String>,
-        newValue: Expression<String>
+        currentValue: Expression<ByteString>,
+        newValue: Expression<ByteString>
     ): Expression<Boolean> = Expression(
         "$currentValue.isEmpty() || $currentValue.equals($newValue)"
     )
@@ -131,5 +133,6 @@ internal class SetOnceStringField(
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<String>): Expression<String> = fieldValue
+    override fun toString(fieldValue: Expression<ByteString>): Expression<String> =
+        MethodCall(fieldValue, "toString")
 }
