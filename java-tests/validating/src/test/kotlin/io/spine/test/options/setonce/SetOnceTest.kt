@@ -26,6 +26,7 @@
 
 package io.spine.test.options.setonce
 
+import com.google.protobuf.stringValue
 import com.google.protobuf.util.Timestamps
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
@@ -132,7 +133,7 @@ internal class SetOnceTest {
 
         val violation = violations[0]
         violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
-        violation.paramList shouldBe listOf("message", firstValue, secondValue)
+        violation.paramList shouldBe listOf("message", "$firstValue", "$secondValue")
         violation.fieldPath shouldBe FieldPath("message")
         violation.fieldValue shouldBe secondValue.pack()
         violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
@@ -140,13 +141,13 @@ internal class SetOnceTest {
 
     @Test
     fun `show the default error message for string field`() {
-        val firstValue = Timestamps.now()
-        val secondValue = Timestamps.now()
+        val firstValue = "aaa"
+        val secondValue = "bbb"
 
         val exception = assertThrows<ValidationException> {
             setOnceDefaultErrorMsg {
-                message = firstValue
-                message = secondValue
+                string = firstValue
+                string = secondValue
             }
         }
 
@@ -155,9 +156,9 @@ internal class SetOnceTest {
 
         val violation = violations[0]
         violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
-        violation.paramList shouldBe listOf("message", firstValue, secondValue)
-        violation.fieldPath shouldBe FieldPath("message")
-        violation.fieldValue shouldBe secondValue.pack()
+        violation.paramList shouldBe listOf("string", firstValue, secondValue)
+        violation.fieldPath shouldBe FieldPath("string")
+        violation.fieldValue shouldBe stringValue { value = secondValue }.pack()
         violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
     }
 
