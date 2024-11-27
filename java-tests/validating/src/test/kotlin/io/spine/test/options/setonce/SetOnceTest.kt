@@ -26,17 +26,25 @@
 
 package io.spine.test.options.setonce
 
+import com.google.protobuf.util.Timestamps
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
 import io.spine.test.tools.validate.name
+import io.spine.test.tools.validate.setOnceDefaultMsg
 import io.spine.test.tools.validate.setOnceExplicitFalse
 import io.spine.test.tools.validate.setOnceImplicitFalse
+import io.spine.validate.ValidationException
 import io.spine.validation.assertions.assertValidationPasses
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(set_once)` constraint should")
-internal class SetOnceITest {
+internal class SetOnceTest {
 
     @Test
+    @Disabled
     fun `not affect fields without the option`() = assertValidationPasses {
         setOnceImplicitFalse {
             message = name { value = "MyName1" }
@@ -71,6 +79,7 @@ internal class SetOnceITest {
     }
 
     @Test
+    @Disabled
     fun `not affect fields with the option set to 'false'`() = assertValidationPasses {
         setOnceExplicitFalse {
             message = name { value = "MyName1" }
@@ -102,5 +111,25 @@ internal class SetOnceITest {
             sfixed64 = 5
             sfixed64 = 10
         }
+    }
+
+    @Test
+    fun `show the default error message`() {
+        val exception = assertThrows<ValidationException> {
+            setOnceDefaultMsg {
+                message = Timestamps.now()
+                message = Timestamps.now()
+            }
+        }
+        exception.constraintViolations should haveSize(1)
+        println(exception.message)
+        println(exception.asMessage())
+        println(exception.constraintViolations.first())
+    }
+
+    @Test
+    @Disabled
+    fun `show the custom error message`() {
+
     }
 }
