@@ -98,12 +98,12 @@ internal sealed class SetOnceJavaConstraints<T>(
 
     private val declaringMessage: TypeName = field.declaringType
 
+    protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
     protected val fieldName = field.name.javaCase()
     protected val fieldNameCamel = fieldName.camelCase()
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -243,10 +243,12 @@ internal sealed class SetOnceJavaConstraints<T>(
     ): List<Expression<String>> = map {
         when (it) {
             FIELD_NAME -> StringLiteral(fieldName)
-            CURRENT_VALUE -> StringLiteral("$currentValue")
-            PROPOSED_VALUE -> StringLiteral("$newValue")
+            CURRENT_VALUE -> toString(currentValue)
+            PROPOSED_VALUE -> toString(newValue)
         }
     }
+
+    protected abstract fun toString(fieldValue: Expression<T>): Expression<String>
 
     /**
      * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].

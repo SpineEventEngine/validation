@@ -41,7 +41,9 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.java.AnElement
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
@@ -110,4 +112,7 @@ internal class SetOnceNumberField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
+
+    override fun toString(fieldValue: Expression<Number>): Expression<String> =
+        ClassName(String::class).call("valueOf", fieldValue)
 }

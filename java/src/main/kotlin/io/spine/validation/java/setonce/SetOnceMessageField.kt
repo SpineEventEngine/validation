@@ -31,6 +31,7 @@ import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
@@ -133,4 +134,7 @@ internal class SetOnceMessageField(
         val merge = method("merge$fieldNameCamel").body!!
         merge.addAfter(precondition, merge.lBrace)
     }
+
+    override fun toString(fieldValue: Expression<Message>): Expression<String> =
+        MethodCall(fieldValue, "toString")
 }

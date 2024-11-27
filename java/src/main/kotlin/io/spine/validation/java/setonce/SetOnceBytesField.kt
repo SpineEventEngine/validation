@@ -32,6 +32,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
@@ -90,4 +91,7 @@ internal class SetOnceBytesField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
+
+    override fun toString(fieldValue: Expression<ByteString>): Expression<String> =
+        MethodCall(fieldValue, "toString")
 }

@@ -27,8 +27,10 @@
 package io.spine.test.options.setonce
 
 import com.google.protobuf.util.Timestamps
-import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.spine.base.FieldPath
+import io.spine.protobuf.pack
+import io.spine.test.tools.validate.SetOnceDefaultErrorMsg
 import io.spine.test.tools.validate.name
 import io.spine.test.tools.validate.setOnceDefaultErrorMsg
 import io.spine.test.tools.validate.setOnceExplicitFalse
@@ -114,17 +116,49 @@ internal class SetOnceTest {
     }
 
     @Test
-    fun `show the default error message`() {
+    fun `show the default error message for message field`() {
+        val firstValue = Timestamps.now()
+        val secondValue = Timestamps.now()
+
         val exception = assertThrows<ValidationException> {
             setOnceDefaultErrorMsg {
-                message = Timestamps.now()
-                message = Timestamps.now()
+                message = firstValue
+                message = secondValue
             }
         }
-        exception.constraintViolations should haveSize(1)
-        println(exception.message)
-        println(exception.asMessage())
-        println(exception.constraintViolations.first())
+
+        val violations = exception.constraintViolations
+        violations.size shouldBe 1
+
+        val violation = violations[0]
+        violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
+        violation.paramList shouldBe listOf("message", firstValue, secondValue)
+        violation.fieldPath shouldBe FieldPath("message")
+        violation.fieldValue shouldBe secondValue.pack()
+        violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
+    }
+
+    @Test
+    fun `show the default error message for string field`() {
+        val firstValue = Timestamps.now()
+        val secondValue = Timestamps.now()
+
+        val exception = assertThrows<ValidationException> {
+            setOnceDefaultErrorMsg {
+                message = firstValue
+                message = secondValue
+            }
+        }
+
+        val violations = exception.constraintViolations
+        violations.size shouldBe 1
+
+        val violation = violations[0]
+        violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
+        violation.paramList shouldBe listOf("message", firstValue, secondValue)
+        violation.fieldPath shouldBe FieldPath("message")
+        violation.fieldValue shouldBe secondValue.pack()
+        violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
     }
 
     @Test
@@ -133,3 +167,6 @@ internal class SetOnceTest {
 
     }
 }
+
+private const val DEFAULT_MESSAGE_FORMAT =
+    "The field `%s` already has the value `%s` and cannot be reassigned to `%s`."

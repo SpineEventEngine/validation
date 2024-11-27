@@ -130,4 +130,6 @@ internal class SetOnceStringField(
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
+
+    override fun toString(fieldValue: Expression<String>): Expression<String> = fieldValue
 }
