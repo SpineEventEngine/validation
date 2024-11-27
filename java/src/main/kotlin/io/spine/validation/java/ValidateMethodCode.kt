@@ -63,6 +63,7 @@ internal class ValidateMethodCode(
             add(generateValidationError())
         }
         return methodSpec(VALIDATE) {
+            addAnnotation(Override::class.java)
             returns(OPTIONAL_ERROR)
             addModifiers(PUBLIC)
             addCode(code)
