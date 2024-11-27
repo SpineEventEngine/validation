@@ -30,7 +30,7 @@ import com.google.protobuf.util.Timestamps
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.spine.test.tools.validate.name
-import io.spine.test.tools.validate.setOnceDefaultMsg
+import io.spine.test.tools.validate.setOnceDefaultErrorMsg
 import io.spine.test.tools.validate.setOnceExplicitFalse
 import io.spine.test.tools.validate.setOnceImplicitFalse
 import io.spine.validate.ValidationException
@@ -116,7 +116,7 @@ internal class SetOnceTest {
     @Test
     fun `show the default error message`() {
         val exception = assertThrows<ValidationException> {
-            setOnceDefaultMsg {
+            setOnceDefaultErrorMsg {
                 message = Timestamps.now()
                 message = Timestamps.now()
             }

@@ -37,7 +37,7 @@ option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 
 // Tests that the default error message is shown when there's no custom one.
-message SetOnceDefaultMsg {
+message SetOnceDefaultErrorMsg {
     google.protobuf.Timestamp message = 1 [(set_once) = true];
     string string = 2 [(set_once) = true];
     double double = 3 [(set_once) = true];
@@ -58,7 +58,7 @@ message SetOnceDefaultMsg {
 }
 
 // Tests that the custom error message is shown.
-message SetOnceCustomMsg {
+message SetOnceCustomErrorMsg {
     google.protobuf.Timestamp message = 1 [(set_once) = true, (if_set_again).error_msg = "Field1: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
     string string = 2 [(set_once) = true, (if_set_again).error_msg = "Field2: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
     double double = 3 [(set_once) = true, (if_set_again).error_msg = "Field3: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
