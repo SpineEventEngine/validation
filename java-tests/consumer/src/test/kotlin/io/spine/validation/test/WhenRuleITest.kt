@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test
 internal class WhenRuleITest {
 
     @Test
-    fun `prohibit invalid`() {
+    fun `prohibit invalid timestamp`() {
         val startWhen = Timestamps.fromSeconds(4792687200L) // 15 Nov 2121
         val player = Player.newBuilder()
             .setStartedCareerIn(startWhen)
@@ -42,7 +42,7 @@ internal class WhenRuleITest {
     }
 
     @Test
-    fun `allow valid`() {
+    fun `allow valid timestamp`() {
         val timestamp = Timestamps.fromSeconds(59086800L) // 15 Nov 1971
         val player = Player.newBuilder()
             .setStartedCareerIn(timestamp)

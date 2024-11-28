@@ -36,14 +36,14 @@ import org.junit.jupiter.api.Test
 internal class RequiredRuleITest {
 
     @Test
-    fun `check a string field`() {
+    fun `reject an unset string field`() {
         val builder = Author.newBuilder()
         val violation = assertValidationException(builder)
         violation.msgFormat shouldContain "Author must have a name"
     }
 
     @Test
-    fun `check a message field`() {
+    fun `reject an unset message field`() {
         val builder = Book.newBuilder()
         assertValidationException(builder).also {
             it.msgFormat shouldContain "value must be set"
@@ -83,7 +83,7 @@ internal class RequiredRuleITest {
 
     @Test
     @Disabled("Until we propagate the `validate` option property to collection elements.")
-    fun `throw 'ValidationException' if a list contains at least one default value`() {
+    fun `reject if a list contains at least one default value`() {
         val builder = Blizzard.newBuilder()
             .addSnowflake(
                 Snowflake.newBuilder()

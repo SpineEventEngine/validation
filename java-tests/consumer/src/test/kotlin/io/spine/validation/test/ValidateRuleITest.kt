@@ -39,8 +39,7 @@ import org.junit.jupiter.api.Test
 @DisplayName("`(validate)` rule should")
 internal class ValidateRuleITest {
 
-    @Nested
-    internal inner class
+    @Nested internal inner class
     `on a singular field` {
 
         @Test

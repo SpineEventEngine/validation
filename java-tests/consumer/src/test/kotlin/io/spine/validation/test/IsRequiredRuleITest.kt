@@ -38,7 +38,7 @@ internal class IsRequiredRuleITest {
     }
 
     @Test
-    fun `accept setting an alternative`() = assertNoException(
+    fun `accept if an alternative is set`() = assertNoException(
         Lunch.newBuilder()
             .setHotSoup("Minestrone")
     )
