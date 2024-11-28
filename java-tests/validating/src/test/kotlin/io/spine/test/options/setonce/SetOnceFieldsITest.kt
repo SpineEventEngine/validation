@@ -56,7 +56,7 @@ import org.junit.jupiter.api.Test
  * There are many integer types in Protobuf.
  */
 @DisplayName("`(set_once)` constraint should")
-internal class SetOnceFieldsTest {
+internal class SetOnceFieldsITest {
 
     @Nested inner class
     `prohibit overriding non-default message` {

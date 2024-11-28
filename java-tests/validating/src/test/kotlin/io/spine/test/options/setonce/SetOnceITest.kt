@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(set_once)` constraint should")
-internal class SetOnceTest {
+internal class SetOnceITest {
 
     @Test
     @Disabled
