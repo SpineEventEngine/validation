@@ -24,39 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Spine
-import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
-import io.spine.protodata.gradle.plugin.LaunchProtoData
-import io.spine.util.theOnly
+package io.spine.validation.test
 
-protoData {
-    plugins(
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
-        "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+
+@DisplayName("`(distinct)` rule should")
+internal class DistinctRuleITest {
+
+    @Test
+    fun `reject a list with duplicate entries`() {
+        val flake = snowflake {
+            edges = 6
+            vertices = 6
+        }
+        val builder = Blizzard.newBuilder()
+            .addSnowflake(flake)
+            .addSnowflake(flake)
+
+        assertValidationException(builder)
+    }
+
+    @Test
+    fun `reject a map with duplicate entries`() {
+        val player = player {
+            shirtName = "John Doe"
+        }
+        val builder = Team.newBuilder()
+            .putPlayers(7, player)
+            .putPlayers(10, player)
+        assertValidationException(builder)
+    }
 }
-
-val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()
-
-val copySettings by tasks.registering(Copy::class) {
-    from(project.layout.projectDirectory.file(
-        "io.spine.validation.java.JavaValidationPlugin.pb.json")
-    )
-    into(settingsDirTask.settingsDir.get())
-    dependsOn(settingsDirTask)
-}
-
-tasks.withType<LaunchProtoData>().configureEach {
-    dependsOn(copySettings)
-}
-
-dependencies {
-    protoData(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:consumer-dependency"))
-    implementation(Spine.time)
-}
-
-protoDataRemoteDebug(enabled = false)
