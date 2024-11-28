@@ -97,6 +97,7 @@ internal sealed class SetOnceJavaConstraints<T>(
     }
 
     private val declaringMessage: TypeName = field.declaringType
+    private val protoFieldName = field.name.value
 
     protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
     protected val fieldName = field.name.javaCase()
@@ -202,7 +203,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         val params = tokens.toParams(currentValue, newValue)
 
         val fieldPath = ClassName(FieldPath::class).newBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
+            .chainAdd("field_name", StringLiteral(protoFieldName))
             .chainBuild<FieldPath>()
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("msg_format", StringLiteral(format))
@@ -242,7 +243,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         newValue: Expression<T>
     ): List<Expression<String>> = map {
         when (it) {
-            FIELD_NAME -> StringLiteral(fieldName)
+            FIELD_NAME -> StringLiteral(protoFieldName)
             CURRENT_VALUE -> toString(currentValue)
             PROPOSED_VALUE -> toString(newValue)
         }
