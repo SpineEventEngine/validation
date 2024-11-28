@@ -1,0 +1,79 @@
+/*
+ * Copyright 2024, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "SetOnceMessagesProto";
+option java_multiple_files = true;
+
+import "spine/test/tools/validate/set_once_common.proto";
+
+// Tests the constraint's default error message.
+message StudentDefaultMessage {
+    Name name = 1 [(set_once) = true];
+    string id = 2 [(set_once) = true];
+    double height = 3 [(set_once) = true];
+    float weight = 4 [(set_once) = true];
+    int32 cash_USD = 5 [(set_once) = true];
+    int64 cash_EUR = 6 [(set_once) = true];
+    uint32 cash_JPY = 7 [(set_once) = true];
+    uint64 cash_GBP = 8 [(set_once) = true];
+    sint32 cash_AUD = 9 [(set_once) = true];
+    sint64 cash_CAD = 10 [(set_once) = true];
+    fixed32 cash_CHF = 11 [(set_once) = true];
+    fixed64 cash_CNY = 12 [(set_once) = true];
+    sfixed32 cash_PLN = 13 [(set_once) = true];
+    sfixed64 cash_NZD = 14 [(set_once) = true];
+    bool has_medals = 15 [(set_once) = true];
+    bytes signature = 16 [(set_once) = true];
+    YearOfStudy year_of_study = 17 [(set_once) = true];
+}
+
+// Tests the constraint's custom error message.
+message StudentCustomMessage {
+    Name name = 1 [(set_once) = true, (if_set_again).error_msg = "Field_1: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    string id = 2 [(set_once) = true, (if_set_again).error_msg = "Field_2: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    double height = 3 [(set_once) = true, (if_set_again).error_msg = "Field_3: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    float weight = 4 [(set_once) = true, (if_set_again).error_msg = "Field_4: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    int32 cash_USD = 5 [(set_once) = true, (if_set_again).error_msg = "Field_5: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    int64 cash_EUR = 6 [(set_once) = true, (if_set_again).error_msg = "Field_6: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    uint32 cash_JPY = 7 [(set_once) = true, (if_set_again).error_msg = "Field_7: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    uint64 cash_GBP = 8 [(set_once) = true, (if_set_again).error_msg = "Field_8: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    sint32 cash_AUD = 9 [(set_once) = true, (if_set_again).error_msg = "Field_9: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    sint64 cash_CAD = 10 [(set_once) = true, (if_set_again).error_msg = "Field_10: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    fixed32 cash_CHF = 11 [(set_once) = true, (if_set_again).error_msg = "Field_11: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    fixed64 cash_CNY = 12 [(set_once) = true, (if_set_again).error_msg = "Field_12: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    sfixed32 cash_PLN = 13 [(set_once) = true, (if_set_again).error_msg = "Field_13: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    sfixed64 cash_NZD = 14 [(set_once) = true, (if_set_again).error_msg = "Field_14: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    bool has_medals = 15 [(set_once) = true, (if_set_again).error_msg = "Field_15: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    bytes signature = 16 [(set_once) = true, (if_set_again).error_msg = "Field_16: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+    YearOfStudy year_of_study = 17 [(set_once) = true, (if_set_again).error_msg = "Field_17: `{currentValue}`, `{fieldName}`, `{proposedValue}`."];
+}
