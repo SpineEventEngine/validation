@@ -49,16 +49,12 @@ message Student {
 message Balance {
     int32 USD = 1 [(set_once) = true];
     int64 EUR = 2 [(set_once) = true];
-
     uint32 JPY = 3 [(set_once) = true];
     uint64 GBP = 4 [(set_once) = true];
-
     sint32 AUD = 5 [(set_once) = true];
     sint64 CAD = 6 [(set_once) = true];
-
     fixed32 CHF = 7 [(set_once) = true];
     fixed64 CNY = 8 [(set_once) = true];
-
     sfixed32 PLN = 9 [(set_once) = true];
     sfixed64 NZD = 10 [(set_once) = true];
 }

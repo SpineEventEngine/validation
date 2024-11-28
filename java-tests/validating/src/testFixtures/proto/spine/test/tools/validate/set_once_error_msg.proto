@@ -59,23 +59,23 @@ message SetOnceDefaultErrorMsg {
 
 // Tests that the custom error message is shown.
 message SetOnceCustomErrorMsg {
-    google.protobuf.Timestamp message = 1 [(set_once) = true, (if_set_again).error_msg = "Field1: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    string string = 2 [(set_once) = true, (if_set_again).error_msg = "Field2: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    double double = 3 [(set_once) = true, (if_set_again).error_msg = "Field3: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    float float = 4 [(set_once) = true, (if_set_again).error_msg = "Field4: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    int32 int32 = 5 [(set_once) = true, (if_set_again).error_msg = "Field5: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    int64 int64 = 6 [(set_once) = true, (if_set_again).error_msg = "Field6: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    uint32 uint32 = 7 [(set_once) = true, (if_set_again).error_msg = "Field7: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    uint64 uint64 = 8 [(set_once) = true, (if_set_again).error_msg = "Field8: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    sint32 sint32 = 9 [(set_once) = true, (if_set_again).error_msg = "Field9: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    sint64 sint64 = 10 [(set_once) = true, (if_set_again).error_msg = "Field10: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    fixed32 fixed32 = 11 [(set_once) = true, (if_set_again).error_msg = "Field11: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    fixed64 fixed64 = 12 [(set_once) = true, (if_set_again).error_msg = "Field12: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    sfixed32 sfixed32 = 13 [(set_once) = true, (if_set_again).error_msg = "Field13: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    sfixed64 sfixed64 = 14 [(set_once) = true, (if_set_again).error_msg = "Field14: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    bool bool = 15 [(set_once) = true, (if_set_again).error_msg = "Field15: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    bytes bytes = 16 [(set_once) = true, (if_set_again).error_msg = "Field16: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
-    Accommodation enum = 17 [(set_once) = true, (if_set_again).error_msg = "Field17: `{fieldName}`; current value: `{currentValue}`; the proposed value: `{proposedValue}`."];
+    google.protobuf.Timestamp message = 1 [(set_once) = true, (if_set_again).error_msg = "Field_1: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    string string = 2 [(set_once) = true, (if_set_again).error_msg = "Field_2: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    double double = 3 [(set_once) = true, (if_set_again).error_msg = "Field_3: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    float float = 4 [(set_once) = true, (if_set_again).error_msg = "Field_4: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    int32 int32 = 5 [(set_once) = true, (if_set_again).error_msg = "Field_5: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    int64 int64 = 6 [(set_once) = true, (if_set_again).error_msg = "Field_6: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    uint32 uint32 = 7 [(set_once) = true, (if_set_again).error_msg = "Field_7: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    uint64 uint64 = 8 [(set_once) = true, (if_set_again).error_msg = "Field_8: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    sint32 sint32 = 9 [(set_once) = true, (if_set_again).error_msg = "Field_9: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    sint64 sint64 = 10 [(set_once) = true, (if_set_again).error_msg = "Field_10: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    fixed32 fixed32 = 11 [(set_once) = true, (if_set_again).error_msg = "Field_11: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    fixed64 fixed64 = 12 [(set_once) = true, (if_set_again).error_msg = "Field_12: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    sfixed32 sfixed32 = 13 [(set_once) = true, (if_set_again).error_msg = "Field_13: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    sfixed64 sfixed64 = 14 [(set_once) = true, (if_set_again).error_msg = "Field_14: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    bool bool = 15 [(set_once) = true, (if_set_again).error_msg = "Field_15: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    bytes bytes = 16 [(set_once) = true, (if_set_again).error_msg = "Field_16: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
+    Accommodation enum = 17 [(set_once) = true, (if_set_again).error_msg = "Field_17: `{fieldName}`; the proposed value: `{proposedValue}`; current value: `{currentValue}`."];
 }
 
 enum Accommodation {
