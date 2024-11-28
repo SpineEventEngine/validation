@@ -55,7 +55,7 @@ import org.junit.jupiter.api.Test
  * Please note, integer fields are covered in a separate file – [SetOnceIntegerITest].
  * There are many integer types in Protobuf.
  */
-@DisplayName("`(set_once)` should")
+@DisplayName("`(set_once)` constraint should")
 internal class SetOnceFieldsITest {
 
     @Nested inner class

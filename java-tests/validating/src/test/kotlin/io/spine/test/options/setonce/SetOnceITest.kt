@@ -50,7 +50,7 @@ import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(set_once)` should")
+@DisplayName("`(set_once)` constraint should")
 internal class SetOnceITest {
 
     @Test

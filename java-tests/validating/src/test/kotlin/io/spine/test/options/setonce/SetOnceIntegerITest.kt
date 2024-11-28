@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test
 /**
  * Tests `(set_once)` constraint for integer fields.
  */
-@DisplayName("`(set_once)` should")
+@DisplayName("`(set_once)` constraint should")
 internal class SetOnceIntegerITest {
 
     @Nested inner class
