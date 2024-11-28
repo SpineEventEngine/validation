@@ -30,8 +30,8 @@ import io.spine.test.options.setonce.TestEnv.EIGHTEEN
 import io.spine.test.options.setonce.TestEnv.EIGHTY
 import io.spine.test.options.setonce.TestEnv.SIXTEEN
 import io.spine.test.options.setonce.TestEnv.SIXTY
-import io.spine.test.tools.validate.Balance
-import io.spine.test.tools.validate.balance
+import io.spine.test.tools.validate.StudentSetOnce
+import io.spine.test.tools.validate.studentSetOnce
 import io.spine.validation.assertions.assertValidationFails
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
@@ -41,25 +41,25 @@ import org.junit.jupiter.api.Test
 /**
  * Tests `(set_once)` constraint for integer fields.
  */
-@DisplayName("`(set_once)` constraint should")
+@DisplayName("`(set_once)` should")
 internal class SetOnceIntegerITest {
 
     @Nested inner class
     `prohibit overriding non-default 'int32'` {
 
-        private val currentBalance = balance { uSD = SIXTY }
-        private val newBalance = balance { uSD = SIXTEEN }
+        private val currentBalance = studentSetOnce { cashUSD = SIXTY }
+        private val newBalance = studentSetOnce { cashUSD = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setUSD(SIXTEEN)
+                .setCashUSD(SIXTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("USD"), SIXTEEN)
+                .setField(field("cash_USD"), SIXTEEN)
         }
 
         @Test
@@ -78,22 +78,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'int32'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { uSD = SIXTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashUSD = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setUSD(SIXTEEN)
-                .setUSD(SIXTEEN)
+                .setCashUSD(SIXTEEN)
+                .setCashUSD(SIXTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("USD"), SIXTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("USD"), SIXTEEN)
+                .setField(field("cash_USD"), SIXTEEN)
+                .setField(field("cash_USD"), SIXTEEN)
                 .build()
         }
 
@@ -116,8 +116,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearUSD()
-                .setUSD(SIXTEEN)
+                .clearCashUSD()
+                .setCashUSD(SIXTEEN)
                 .build()
         }
     }
@@ -125,19 +125,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'int64'` {
 
-        private val currentBalance = balance { eUR = EIGHTY }
-        private val newBalance = balance { eUR = EIGHTEEN }
+        private val currentBalance = studentSetOnce { cashEUR = EIGHTY }
+        private val newBalance = studentSetOnce { cashEUR = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setEUR(EIGHTEEN)
+                .setCashEUR(EIGHTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("EUR"), EIGHTEEN)
+                .setField(field("cash_EUR"), EIGHTEEN)
         }
 
         @Test
@@ -156,22 +156,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'int64'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { eUR = EIGHTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashEUR = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setEUR(EIGHTEEN)
-                .setEUR(EIGHTEEN)
+                .setCashEUR(EIGHTEEN)
+                .setCashEUR(EIGHTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("EUR"), EIGHTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("EUR"), EIGHTEEN)
+                .setField(field("cash_EUR"), EIGHTEEN)
+                .setField(field("cash_EUR"), EIGHTEEN)
                 .build()
         }
 
@@ -194,8 +194,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearEUR()
-                .setEUR(EIGHTEEN)
+                .clearCashEUR()
+                .setCashEUR(EIGHTEEN)
                 .build()
         }
     }
@@ -203,19 +203,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'uint32'` {
 
-        private val currentBalance = balance { jPY = SIXTY }
-        private val newBalance = balance { jPY = SIXTEEN }
+        private val currentBalance = studentSetOnce { cashJPY = SIXTY }
+        private val newBalance = studentSetOnce { cashJPY = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setJPY(SIXTEEN)
+                .setCashJPY(SIXTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("JPY"), SIXTEEN)
+                .setField(field("cash_JPY"), SIXTEEN)
         }
 
         @Test
@@ -234,22 +234,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'uint32'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { jPY = SIXTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashJPY = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setJPY(SIXTEEN)
-                .setJPY(SIXTEEN)
+                .setCashJPY(SIXTEEN)
+                .setCashJPY(SIXTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("JPY"), SIXTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("JPY"), SIXTEEN)
+                .setField(field("cash_JPY"), SIXTEEN)
+                .setField(field("cash_JPY"), SIXTEEN)
                 .build()
         }
 
@@ -272,8 +272,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearJPY()
-                .setJPY(SIXTEEN)
+                .clearCashJPY()
+                .setCashJPY(SIXTEEN)
                 .build()
         }
     }
@@ -281,19 +281,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'uint64'` {
 
-        private val currentBalance = balance { gBP = EIGHTY }
-        private val newBalance = balance { gBP = EIGHTEEN }
+        private val currentBalance = studentSetOnce { cashGBP = EIGHTY }
+        private val newBalance = studentSetOnce { cashGBP = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setGBP(EIGHTEEN)
+                .setCashGBP(EIGHTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("GBP"), EIGHTEEN)
+                .setField(field("cash_GBP"), EIGHTEEN)
         }
 
         @Test
@@ -312,22 +312,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'uint64'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { gBP = EIGHTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashGBP = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setGBP(EIGHTEEN)
-                .setGBP(EIGHTEEN)
+                .setCashGBP(EIGHTEEN)
+                .setCashGBP(EIGHTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("GBP"), EIGHTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("GBP"), EIGHTEEN)
+                .setField(field("cash_GBP"), EIGHTEEN)
+                .setField(field("cash_GBP"), EIGHTEEN)
                 .build()
         }
 
@@ -350,8 +350,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearGBP()
-                .setGBP(EIGHTEEN)
+                .clearCashGBP()
+                .setCashGBP(EIGHTEEN)
                 .build()
         }
     }
@@ -359,19 +359,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'sint32'` {
 
-        private val currentBalance = balance { aUD = SIXTY }
-        private val newBalance = balance { aUD = SIXTEEN }
+        private val currentBalance = studentSetOnce { cashAUD = SIXTY }
+        private val newBalance = studentSetOnce { cashAUD = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setAUD(SIXTEEN)
+                .setCashAUD(SIXTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("AUD"), SIXTEEN)
+                .setField(field("cash_AUD"), SIXTEEN)
         }
 
         @Test
@@ -390,22 +390,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'sint32'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { aUD = SIXTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashAUD = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setAUD(SIXTEEN)
-                .setAUD(SIXTEEN)
+                .setCashAUD(SIXTEEN)
+                .setCashAUD(SIXTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("AUD"), SIXTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("AUD"), SIXTEEN)
+                .setField(field("cash_AUD"), SIXTEEN)
+                .setField(field("cash_AUD"), SIXTEEN)
                 .build()
         }
 
@@ -428,8 +428,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearAUD()
-                .setAUD(SIXTEEN)
+                .clearCashAUD()
+                .setCashAUD(SIXTEEN)
                 .build()
         }
     }
@@ -437,19 +437,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'sint64'` {
 
-        private val currentBalance = balance { cAD = EIGHTY }
-        private val newBalance = balance { cAD = EIGHTEEN }
+        private val currentBalance = studentSetOnce { cashCAD = EIGHTY }
+        private val newBalance = studentSetOnce { cashCAD = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setCAD(EIGHTEEN)
+                .setCashCAD(EIGHTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CAD"), EIGHTEEN)
+                .setField(field("cash_CAD"), EIGHTEEN)
         }
 
         @Test
@@ -468,22 +468,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'sint64'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { cAD = EIGHTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashCAD = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setCAD(EIGHTEEN)
-                .setCAD(EIGHTEEN)
+                .setCashCAD(EIGHTEEN)
+                .setCashCAD(EIGHTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CAD"), EIGHTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("CAD"), EIGHTEEN)
+                .setField(field("cash_CAD"), EIGHTEEN)
+                .setField(field("cash_CAD"), EIGHTEEN)
                 .build()
         }
 
@@ -506,8 +506,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearCAD()
-                .setCAD(EIGHTEEN)
+                .clearCashCAD()
+                .setCashCAD(EIGHTEEN)
                 .build()
         }
     }
@@ -515,19 +515,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'fixed32'` {
 
-        private val currentBalance = balance { cHF = SIXTY }
-        private val newBalance = balance { cHF = SIXTEEN }
+        private val currentBalance = studentSetOnce { cashCHF = SIXTY }
+        private val newBalance = studentSetOnce { cashCHF = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setCHF(SIXTEEN)
+                .setCashCHF(SIXTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CHF"), SIXTEEN)
+                .setField(field("cash_CHF"), SIXTEEN)
         }
 
         @Test
@@ -546,22 +546,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'fixed32'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { cHF = SIXTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashCHF = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setCHF(SIXTEEN)
-                .setCHF(SIXTEEN)
+                .setCashCHF(SIXTEEN)
+                .setCashCHF(SIXTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CHF"), SIXTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("CHF"), SIXTEEN)
+                .setField(field("cash_CHF"), SIXTEEN)
+                .setField(field("cash_CHF"), SIXTEEN)
                 .build()
         }
 
@@ -584,8 +584,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearCHF()
-                .setCHF(SIXTEEN)
+                .clearCashCHF()
+                .setCashCHF(SIXTEEN)
                 .build()
         }
     }
@@ -593,19 +593,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'fixed64'` {
 
-        private val currentBalance = balance { cNY = EIGHTY }
-        private val newBalance = balance { cNY = EIGHTEEN }
+        private val currentBalance = studentSetOnce { cashCNY = EIGHTY }
+        private val newBalance = studentSetOnce { cashCNY = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setCNY(EIGHTEEN)
+                .setCashCNY(EIGHTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CNY"), EIGHTEEN)
+                .setField(field("cash_CNY"), EIGHTEEN)
         }
 
         @Test
@@ -624,22 +624,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'fixed64'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { cNY = EIGHTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashCNY = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setCNY(EIGHTEEN)
-                .setCNY(EIGHTEEN)
+                .setCashCNY(EIGHTEEN)
+                .setCashCNY(EIGHTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("CNY"), EIGHTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("CNY"), EIGHTEEN)
+                .setField(field("cash_CNY"), EIGHTEEN)
+                .setField(field("cash_CNY"), EIGHTEEN)
                 .build()
         }
 
@@ -662,8 +662,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearCNY()
-                .setCNY(EIGHTEEN)
+                .clearCashCNY()
+                .setCashCNY(EIGHTEEN)
                 .build()
         }
     }
@@ -671,22 +671,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'sfixed32'` {
 
-        private val currentBalance = balance { pLN = SIXTY }
-        private val newBalance = balance { pLN = SIXTEEN }
+        private val currentBalance = studentSetOnce { cashPLN = SIXTY }
+        private val newBalance = studentSetOnce { cashPLN = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setPLN(SIXTEEN)
+                .setCashPLN(SIXTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(
-                    Balance.getDescriptor().findFieldByName("PLN"),
-                    SIXTEEN
-                )
+                .setField(field("cash_PLN"), SIXTEEN)
         }
 
         @Test
@@ -705,22 +702,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'sfixed32'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { pLN = SIXTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashPLN = SIXTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setPLN(SIXTEEN)
-                .setPLN(SIXTEEN)
+                .setCashPLN(SIXTEEN)
+                .setCashPLN(SIXTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("PLN"), SIXTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("PLN"), SIXTEEN)
+                .setField(field("cash_PLN"), SIXTEEN)
+                .setField(field("cash_PLN"), SIXTEEN)
                 .build()
         }
 
@@ -743,8 +740,8 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearPLN()
-                .setPLN(SIXTEEN)
+                .clearCashPLN()
+                .setCashPLN(SIXTEEN)
                 .build()
         }
     }
@@ -752,19 +749,19 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `prohibit overriding non-default 'sfixed64'` {
 
-        private val currentBalance = balance { nZD = EIGHTY }
-        private val newBalance = balance { nZD = EIGHTEEN }
+        private val currentBalance = studentSetOnce { cashNZD = EIGHTY }
+        private val newBalance = studentSetOnce { cashNZD = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setNZD(EIGHTEEN)
+                .setCashNZD(EIGHTEEN)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             currentBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("NZD"), EIGHTEEN)
+                .setField(field("cash_NZD"), EIGHTEEN)
         }
 
         @Test
@@ -783,22 +780,22 @@ internal class SetOnceIntegerITest {
     @Nested inner class
     `allow overriding default and same-value 'sfixed64'` {
 
-        private val unknownBalance = balance {  }
-        private val newBalance = balance { nZD = EIGHTEEN }
+        private val unknownBalance = studentSetOnce {  }
+        private val newBalance = studentSetOnce { cashNZD = EIGHTEEN }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setNZD(EIGHTEEN)
-                .setNZD(EIGHTEEN)
+                .setCashNZD(EIGHTEEN)
+                .setCashNZD(EIGHTEEN)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownBalance.toBuilder()
-                .setField(Balance.getDescriptor().findFieldByName("NZD"), EIGHTEEN)
-                .setField(Balance.getDescriptor().findFieldByName("NZD"), EIGHTEEN)
+                .setField(field("cash_NZD"), EIGHTEEN)
+                .setField(field("cash_NZD"), EIGHTEEN)
                 .build()
         }
 
@@ -821,9 +818,11 @@ internal class SetOnceIntegerITest {
         @Test
         fun `after clearing`() = assertValidationPasses {
             newBalance.toBuilder()
-                .clearNZD()
-                .setNZD(EIGHTEEN)
+                .clearCashNZD()
+                .setCashNZD(EIGHTEEN)
                 .build()
         }
     }
 }
+
+private fun field(fieldName: String) = StudentSetOnce.getDescriptor().findFieldByName(fieldName)

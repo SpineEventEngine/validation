@@ -26,8 +26,8 @@
 
 package io.spine.test.options.setonce
 
+import com.google.protobuf.Descriptors.EnumValueDescriptor
 import com.google.protobuf.Message
-import com.google.protobuf.util.Timestamps.now
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
@@ -36,113 +36,127 @@ import io.spine.test.options.setonce.TestEnv.EIGHTEEN
 import io.spine.test.options.setonce.TestEnv.EIGHTY
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
-import io.spine.test.options.setonce.TestEnv.FULL_SIGNATURE
-import io.spine.test.options.setonce.TestEnv.METER_AND_EIGHT
-import io.spine.test.options.setonce.TestEnv.METER_AND_HALF
+import io.spine.test.options.setonce.TestEnv.CERF1
+import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
+import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
 import io.spine.test.options.setonce.TestEnv.NO
-import io.spine.test.options.setonce.TestEnv.SHORT_SIGNATURE
+import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.DONALD
+import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
+import io.spine.test.options.setonce.TestEnv.JACK
 import io.spine.test.options.setonce.TestEnv.SIXTEEN
 import io.spine.test.options.setonce.TestEnv.SIXTY
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
+import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
 import io.spine.test.options.setonce.TestEnv.YES
-import io.spine.test.tools.validate.Accommodation.ACM_APARTMENT
-import io.spine.test.tools.validate.Accommodation.ACM_HOSTEL
-import io.spine.test.tools.validate.SetOnceCustomErrorMsg
-import io.spine.test.tools.validate.SetOnceDefaultErrorMsg
+import io.spine.test.tools.validate.StudentCustomMessage
+import io.spine.test.tools.validate.StudentDefaultMessage
+import io.spine.test.tools.validate.YearOfStudy
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`(set_once)` should show")
+@DisplayName("`(set_once)` should")
 internal class SetOnceErrorMessageITest {
 
-    companion object {
+    private companion object {
 
         @JvmStatic
-        fun fields() = listOf(
-            arguments("message", now(), now()),
-            arguments("string", STUDENT1, STUDENT2),
-            arguments("double", METER_AND_HALF, METER_AND_EIGHT),
-            arguments("float", FIFTY_KG, EIGHTY_KG),
-            arguments("int32", SIXTEEN, SIXTY),
-            arguments("int64", EIGHTEEN, EIGHTY),
-            arguments("uint32", SIXTEEN, SIXTY),
-            arguments("uint64", EIGHTEEN, EIGHTY),
-            arguments("sint32", SIXTEEN, SIXTY),
-            arguments("sint64", EIGHTEEN, EIGHTY),
-            arguments("fixed32", SIXTEEN, SIXTY),
-            arguments("fixed64", EIGHTEEN, EIGHTY),
-            arguments("sfixed32", SIXTEEN, SIXTY),
-            arguments("sfixed64", EIGHTEEN, EIGHTY),
-            arguments("bool", YES, NO),
-            arguments("bytes", FULL_SIGNATURE, SHORT_SIGNATURE),
+        fun allFieldTypesWithTwoDistinctValues() = listOf(
+            arguments(named("message", "name"), JACK, DONALD),
+            arguments(named("string", "id"), STUDENT1, STUDENT2),
+            arguments(named("double", "height"), SHORT_HEIGHT, TALL_HEIGHT),
+            arguments(named("float", "weight"), FIFTY_KG, EIGHTY_KG),
+            arguments(named("int32", "cash_USD"), SIXTEEN, SIXTY),
+            arguments(named("int64", "cash_EUR"), EIGHTEEN, EIGHTY),
+            arguments(named("uint32", "cash_JPY"), SIXTEEN, SIXTY),
+            arguments(named("uint64", "cash_GBP"), EIGHTEEN, EIGHTY),
+            arguments(named("sint32", "cash_AUD"), SIXTEEN, SIXTY),
+            arguments(named("sint64", "cash_CAD"), EIGHTEEN, EIGHTY),
+            arguments(named("fixed32", "cash_CHF"), SIXTEEN, SIXTY),
+            arguments(named("fixed64", "cash_CNY"), EIGHTEEN, EIGHTY),
+            arguments(named("sfixed32", "cash_PLN"), SIXTEEN, SIXTY),
+            arguments(named("sfixed64", "cash_NZD"), EIGHTEEN, EIGHTY),
+            arguments(named("bool", "has_medals"), YES, NO),
+            arguments(named("enum", "signature"), CERF1, CERF2),
+
+            // For some reason, for enums, `Message.Builder.setField()` expects value
+            // descriptors instead of constants or their ordinal numbers.
+            arguments("year_of_study", FIRST_YEAR.valueDescriptor, THIRD_YEAR.valueDescriptor)
         )
     }
 
-    @ParameterizedTest(name = "the default error message for `{0}` fields")
-    @MethodSource("fields")
-    fun <T> defaultErrorMessage(fieldName: String, value: T, nextValue: T & Any) =
+    @ParameterizedTest(name = "show the default error message for `{0}` fields")
+    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    fun <T : Any> defaultErrorMessage(fieldName: String, value: T, nextValue: T) =
         assertDefaultMessage(fieldName, value, nextValue)
 
-    // TODO:2024-11-28:yevhenii.nadtochii: Document two nuances with enums.
-    @Test
-    fun `the default error message for enum fields`() = assertDefaultMessage(
-        fieldName = "enum",
-        value = ACM_HOSTEL.valueDescriptor,
-        nextValue = ACM_APARTMENT.valueDescriptor,
-        violatedValue = ACM_APARTMENT
-    )
-
-    @ParameterizedTest(name = "the custom error message for `{0}` fields")
-    @MethodSource("fields")
-    fun <T> customErrorMessage(fieldName: String, value: T, nextValue: T & Any) =
+    @ParameterizedTest(name = "show the custom error message for `{0}` fields")
+    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    fun <T : Any> customErrorMessage(fieldName: String, value: T, nextValue: T) =
         assertCustomMessage(fieldName, value, nextValue)
-
-    // TODO:2024-11-28:yevhenii.nadtochii: Document two nuances with enums.
-    @Test
-    fun `the custom error message for enum fields`() = assertCustomMessage(
-        fieldName = "enum",
-        value = ACM_HOSTEL.valueDescriptor,
-        nextValue = ACM_APARTMENT.valueDescriptor,
-        violatedValue = ACM_APARTMENT
-    )
 }
 
-private fun <T> assertDefaultMessage(
+private fun <T : Any> assertDefaultMessage(
     fieldName: String,
     value: T,
-    nextValue: T & Any,
-    violatedValue: T & Any = nextValue
-) = assertErrorMessage(fieldName, value, nextValue, violatedValue, SetOnceDefaultErrorMsg.newBuilder(), listOf(fieldName, "$value", "$nextValue")) { DEFAULT_MESSAGE_FORMAT }
+    nextValue: T,
+) = assertErrorMessage(
+    fieldName,
+    value,
+    nextValue,
+    StudentDefaultMessage.newBuilder(),
+    listOf(fieldName, "$value", "$nextValue")
+) { DEFAULT_MESSAGE_FORMAT }
 
-private fun <T> assertCustomMessage(
+private fun <T : Any> assertCustomMessage(
     fieldName: String,
     value: T,
-    nextValue: T & Any,
-    violatedValue: T & Any = nextValue
-) = assertErrorMessage(fieldName, value, nextValue, violatedValue, SetOnceCustomErrorMsg.newBuilder(), listOf(fieldName, "$nextValue", "$value"), ::customMessageFormat)
+    nextValue: T,
+) = assertErrorMessage(
+    fieldName,
+    value,
+    nextValue,
+    StudentCustomMessage.newBuilder(),
+    listOf("$value", fieldName, "$nextValue"),
+    ::customMessageFormat
+)
 
-private fun <T> assertErrorMessage(
+/**
+ * Asserts that the given [messageBuilder] throws [ValidationException] with
+ * the expected parameters when [fieldName] is set twice.
+ *
+ * Please note, this method treats enums differently when asserts the violated value.
+ * We have to pass enums as value descriptors (see [SetOnceErrorMessageITest.allFieldTypesWithTwoDistinctValues]),
+ * so we also have to take this into account because in `ConstraintViolation` they still
+ * arrive as constants.
+ *
+ * @param fieldName The field to set.
+ * @param value The first [fieldName] value.
+ * @param nextValue The seconds [fieldName] value to trigger the exception.
+ * @param messageBuilder The message builder containing [fieldName].
+ * @param expectedParams The list of params to check `ConstraintViolation.param`.
+ * @param expectedFormat The format string to check `ConstraintViolation.msg_format`.
+ */
+private fun <T : Any> assertErrorMessage(
     fieldName: String,
     value: T,
-    nextValue: T & Any,
-    violatedValue: T & Any = nextValue,
-    messageFixture: Message.Builder,
+    nextValue: T,
+    messageBuilder: Message.Builder,
     expectedParams: List<String>,
-    expectedFormat: (Int) -> String // Document it is a field index.
+    expectedFormat: (Int) -> String
 ) {
-    // `(set_once)` doesn't throw if the new value equals to the current one.
     check(value != nextValue)
 
-    val messageDescriptor = messageFixture.descriptorForType
+    val messageDescriptor = messageBuilder.descriptorForType
     val field = messageDescriptor.field(fieldName)!!
     val exception = assertThrows<ValidationException> {
-        messageFixture
+        messageBuilder
             .setField(field, value)
             .setField(field, nextValue)
     }
@@ -153,14 +167,21 @@ private fun <T> assertErrorMessage(
         msgFormat shouldBe expectedFormat(field.index + 1)
         paramList shouldBe expectedParams
         fieldPath shouldBe FieldPath(fieldName)
-        fieldValue shouldBe toAny(violatedValue)
         typeName shouldBe messageDescriptor.fullName
+
+        // Enums are a bit special. See the method docs for details.
+        if (nextValue is EnumValueDescriptor) {
+            // Any enum in this test suite is `YearOfStudy`, so it is safe.
+            val enumConstant = YearOfStudy.forNumber(nextValue.number)
+            fieldValue shouldBe toAny(enumConstant)
+        } else {
+            fieldValue shouldBe toAny(nextValue)
+        }
     }
 }
 
 private const val DEFAULT_MESSAGE_FORMAT =
     "The field `%s` already has the value `%s` and cannot be reassigned to `%s`."
 
-// document `i+1`
-private fun customMessageFormat(i: Int) =
-    "Field_$i: `%s`; the proposed value: `%s`; current value: `%s`."
+private fun customMessageFormat(fieldNumber: Int) =
+    "Field_$fieldNumber: `%s`, `%s`, `%s`."

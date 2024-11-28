@@ -26,81 +26,110 @@
 
 package io.spine.test.options.setonce
 
-import io.spine.test.tools.validate.name
-import io.spine.test.tools.validate.setOnceExplicitFalse
-import io.spine.test.tools.validate.setOnceImplicitFalse
+import io.spine.test.options.setonce.TestEnv.CERF1
+import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.DONALD
+import io.spine.test.options.setonce.TestEnv.EIGHTEEN
+import io.spine.test.options.setonce.TestEnv.EIGHTY
+import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
+import io.spine.test.options.setonce.TestEnv.FIFTY_KG
+import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
+import io.spine.test.options.setonce.TestEnv.JACK
+import io.spine.test.options.setonce.TestEnv.NO
+import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
+import io.spine.test.options.setonce.TestEnv.SIXTEEN
+import io.spine.test.options.setonce.TestEnv.SIXTY
+import io.spine.test.options.setonce.TestEnv.STUDENT1
+import io.spine.test.options.setonce.TestEnv.STUDENT2
+import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
+import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
+import io.spine.test.options.setonce.TestEnv.YES
+import io.spine.test.tools.validate.studentSetOnceFalse
+import io.spine.test.tools.validate.studentUnconstrained
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(set_once)` constraint should")
+@DisplayName("`(set_once)` should")
 internal class SetOnceITest {
 
     @Test
     fun `not affect fields without the option`() = assertValidationPasses {
-        setOnceImplicitFalse {
-            message = name { value = "MyName1" }
-            message = name { value = "MyName2" }
-            string = "string-1"
-            string = "string-2"
-            double = 0.25
-            double = 0.75
-            float = 0.25f
-            float = 0.75f
-            int32 = 5
-            int32 = 10
-            int64 = 5
-            int64 = 10
-            uint32 = 5
-            uint32 = 10
-            uint64 = 5
-            uint64 = 10
-            sint32 = 5
-            sint32 = 10
-            sint64 = 5
-            sint64 = 10
-            fixed32 = 5
-            fixed32 = 10
-            fixed64 = 5
-            fixed64 = 10
-            sfixed32 = 5
-            sfixed32 = 10
-            sfixed64 = 5
-            sfixed64 = 10
+        studentUnconstrained {
+            name = JACK
+            name = DONALD
+            id = STUDENT1
+            id = STUDENT2
+            height = SHORT_HEIGHT
+            height = TALL_HEIGHT
+            weight = FIFTY_KG
+            weight = EIGHTY_KG
+            cashUSD = SIXTEEN
+            cashUSD = SIXTY
+            cashEUR = EIGHTEEN
+            cashEUR = EIGHTY
+            cashJPY = SIXTEEN
+            cashJPY = SIXTY
+            cashGBP = EIGHTEEN
+            cashGBP = EIGHTY
+            cashAUD = SIXTEEN
+            cashAUD = SIXTY
+            cashCAD = EIGHTEEN
+            cashCAD = EIGHTY
+            cashCHF = SIXTEEN
+            cashCHF = SIXTY
+            cashCNY = EIGHTEEN
+            cashCNY = EIGHTY
+            cashPLN = SIXTEEN
+            cashPLN = SIXTY
+            cashNZD = EIGHTEEN
+            cashNZD = EIGHTY
+            hasMedals = YES
+            hasMedals = NO
+            signature = CERF1
+            signature = CERF2
+            yearOfStudy = FIRST_YEAR
+            yearOfStudy = THIRD_YEAR
         }
     }
 
     @Test
     fun `not affect fields with the option set to 'false'`() = assertValidationPasses {
-        setOnceExplicitFalse {
-            message = name { value = "MyName1" }
-            message = name { value = "MyName2" }
-            string = "string-1"
-            string = "string-2"
-            double = 0.25
-            double = 0.75
-            float = 0.25f
-            float = 0.75f
-            int32 = 5
-            int32 = 10
-            int64 = 5
-            int64 = 10
-            uint32 = 5
-            uint32 = 10
-            uint64 = 5
-            uint64 = 10
-            sint32 = 5
-            sint32 = 10
-            sint64 = 5
-            sint64 = 10
-            fixed32 = 5
-            fixed32 = 10
-            fixed64 = 5
-            fixed64 = 10
-            sfixed32 = 5
-            sfixed32 = 10
-            sfixed64 = 5
-            sfixed64 = 10
+        studentSetOnceFalse {
+            name = JACK
+            name = DONALD
+            id = STUDENT1
+            id = STUDENT2
+            height = SHORT_HEIGHT
+            height = TALL_HEIGHT
+            weight = FIFTY_KG
+            weight = EIGHTY_KG
+            cashUSD = SIXTEEN
+            cashUSD = SIXTY
+            cashEUR = EIGHTEEN
+            cashEUR = EIGHTY
+            cashJPY = SIXTEEN
+            cashJPY = SIXTY
+            cashGBP = EIGHTEEN
+            cashGBP = EIGHTY
+            cashAUD = SIXTEEN
+            cashAUD = SIXTY
+            cashCAD = EIGHTEEN
+            cashCAD = EIGHTY
+            cashCHF = SIXTEEN
+            cashCHF = SIXTY
+            cashCNY = EIGHTEEN
+            cashCNY = EIGHTY
+            cashPLN = SIXTEEN
+            cashPLN = SIXTY
+            cashNZD = EIGHTEEN
+            cashNZD = EIGHTY
+            hasMedals = YES
+            hasMedals = NO
+            signature = CERF1
+            signature = CERF2
+            yearOfStudy = FIRST_YEAR
+            yearOfStudy = THIRD_YEAR
         }
     }
 }

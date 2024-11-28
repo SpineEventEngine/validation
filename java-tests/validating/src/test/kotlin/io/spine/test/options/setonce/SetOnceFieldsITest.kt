@@ -31,18 +31,18 @@ import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
 import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
-import io.spine.test.options.setonce.TestEnv.FULL_SIGNATURE
+import io.spine.test.options.setonce.TestEnv.CERF1
 import io.spine.test.options.setonce.TestEnv.JACK
-import io.spine.test.options.setonce.TestEnv.METER_AND_EIGHT
-import io.spine.test.options.setonce.TestEnv.METER_AND_HALF
+import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
+import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
 import io.spine.test.options.setonce.TestEnv.NO
-import io.spine.test.options.setonce.TestEnv.SHORT_SIGNATURE
+import io.spine.test.options.setonce.TestEnv.CERF2
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
 import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
 import io.spine.test.options.setonce.TestEnv.YES
-import io.spine.test.tools.validate.Student
-import io.spine.test.tools.validate.student
+import io.spine.test.tools.validate.StudentSetOnce
+import io.spine.test.tools.validate.studentSetOnce
 import io.spine.validation.assertions.assertValidationFails
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
@@ -55,14 +55,14 @@ import org.junit.jupiter.api.Test
  * Please note, integer fields are covered in a separate file – [SetOnceIntegerITest].
  * There are many integer types in Protobuf.
  */
-@DisplayName("`(set_once)` constraint should")
+@DisplayName("`(set_once)` should")
 internal class SetOnceFieldsITest {
 
     @Nested inner class
     `prohibit overriding non-default message` {
 
-        private val studentJack = student { name = JACK }
-        private val studentDonald = student { name = DONALD }
+        private val studentJack = studentSetOnce { name = JACK }
+        private val studentDonald = studentSetOnce { name = DONALD }
 
         @Test
         fun `by value`() = assertValidationFails {
@@ -79,7 +79,7 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationFails {
             studentJack.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("name"), DONALD)
+                .setField(field("name"), DONALD)
         }
 
         @Test
@@ -104,8 +104,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding default and same-value message` {
 
-        private val unnamedStudent = student {  }
-        private val studentDonald = student { name = DONALD }
+        private val unnamedStudent = studentSetOnce {  }
+        private val studentDonald = studentSetOnce { name = DONALD }
 
         @Test
         fun `by value`() = assertValidationPasses {
@@ -126,8 +126,8 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationPasses {
             unnamedStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("name"), DONALD)
-                .setField(Student.getDescriptor().findFieldByName("name"), DONALD)
+                .setField(field("name"), DONALD)
+                .setField(field("name"), DONALD)
                 .build()
         }
 
@@ -167,8 +167,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'string'` {
 
-        private val student1 = student { id = STUDENT1 }
-        private val student2 = student { id = STUDENT2 }
+        private val student1 = studentSetOnce { id = STUDENT1 }
+        private val student2 = studentSetOnce { id = STUDENT2 }
 
         @Test
         fun `by value`() = assertValidationFails {
@@ -185,7 +185,7 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationFails {
             student1.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
+                .setField(field("id"), STUDENT2)
         }
 
         @Test
@@ -204,8 +204,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding default and same-value 'string'` {
 
-        private val unidentifiedStudent = student {  }
-        private val student2 = student { id = STUDENT2 }
+        private val unidentifiedStudent = studentSetOnce {  }
+        private val student2 = studentSetOnce { id = STUDENT2 }
 
         @Test
         fun `by value`() = assertValidationPasses {
@@ -226,8 +226,8 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationPasses {
             unidentifiedStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
-                .setField(Student.getDescriptor().findFieldByName("id"), STUDENT2)
+                .setField(field("id"), STUDENT2)
+                .setField(field("id"), STUDENT2)
                 .build()
         }
 
@@ -259,19 +259,19 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'double'` {
 
-        private val tallStudent = student { height = METER_AND_EIGHT }
-        private val shortStudent = student { height = METER_AND_HALF }
+        private val tallStudent = studentSetOnce { height = TALL_HEIGHT }
+        private val shortStudent = studentSetOnce { height = SHORT_HEIGHT }
 
         @Test
         fun `by value`() = assertValidationFails {
             tallStudent.toBuilder()
-                .setHeight(METER_AND_HALF)
+                .setHeight(SHORT_HEIGHT)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             tallStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF)
+                .setField(field("height"), SHORT_HEIGHT)
         }
 
         @Test
@@ -290,22 +290,22 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding default and same-value 'double'` {
 
-        private val unmeasuredStudent = student {  }
-        private val shortStudent = student { height = METER_AND_HALF }
+        private val unmeasuredStudent = studentSetOnce {  }
+        private val shortStudent = studentSetOnce { height = SHORT_HEIGHT }
 
         @Test
         fun `by value`() = assertValidationPasses {
             unmeasuredStudent.toBuilder()
-                .setHeight(METER_AND_HALF)
-                .setHeight(METER_AND_HALF)
+                .setHeight(SHORT_HEIGHT)
+                .setHeight(SHORT_HEIGHT)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             unmeasuredStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF)
-                .setField(Student.getDescriptor().findFieldByName("height"), METER_AND_HALF)
+                .setField(field("height"), SHORT_HEIGHT)
+                .setField(field("height"), SHORT_HEIGHT)
                 .build()
         }
 
@@ -329,7 +329,7 @@ internal class SetOnceFieldsITest {
         fun `after clearing`() = assertValidationPasses {
             shortStudent.toBuilder()
                 .clearHeight()
-                .setHeight(METER_AND_HALF)
+                .setHeight(SHORT_HEIGHT)
                 .build()
         }
     }
@@ -337,8 +337,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'float'` {
 
-        private val heavyStudent = student { weight = EIGHTY_KG }
-        private val thinStudent = student { weight = FIFTY_KG }
+        private val heavyStudent = studentSetOnce { weight = EIGHTY_KG }
+        private val thinStudent = studentSetOnce { weight = FIFTY_KG }
 
         @Test
         fun `by value`() = assertValidationFails {
@@ -349,7 +349,7 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationFails {
             heavyStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG)
+                .setField(field("weight"), FIFTY_KG)
         }
 
         @Test
@@ -368,8 +368,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding default and same-value 'float'` {
 
-        private val unweightedStudent = student {  }
-        private val thinStudent = student { weight = FIFTY_KG }
+        private val unweightedStudent = studentSetOnce {  }
+        private val thinStudent = studentSetOnce { weight = FIFTY_KG }
 
         @Test
         fun `by value`() = assertValidationPasses {
@@ -382,8 +382,8 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationPasses {
             unweightedStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG)
-                .setField(Student.getDescriptor().findFieldByName("weight"), FIFTY_KG)
+                .setField(field("weight"), FIFTY_KG)
+                .setField(field("weight"), FIFTY_KG)
                 .build()
         }
 
@@ -428,7 +428,7 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'bool'` {
 
-        private val awardedStudent = student { hasMedals = YES }
+        private val awardedStudent = studentSetOnce { hasMedals = YES }
 
         @Test
         fun `by value`() = assertValidationFails {
@@ -439,15 +439,15 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationFails {
             awardedStudent.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("has_medals"), NO)
+                .setField(field("has_medals"), NO)
         }
     }
 
     @Nested inner class
     `allow overriding default and same-value 'bool'` {
 
-        private val studentWithoutMedals = student { }
-        private val awardedStudent = student { hasMedals = YES }
+        private val studentWithoutMedals = studentSetOnce { }
+        private val awardedStudent = studentSetOnce { hasMedals = YES }
 
         @Test
         fun `by value`() = assertValidationPasses {
@@ -460,8 +460,8 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationPasses {
             studentWithoutMedals.toBuilder()
-                .setField(Student.getDescriptor().findFieldByName("has_medals"), YES)
-                .setField(Student.getDescriptor().findFieldByName("has_medals"), YES)
+                .setField(field("has_medals"), YES)
+                .setField(field("has_medals"), YES)
                 .build()
         }
 
@@ -493,22 +493,19 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'bytes'` {
 
-        private val studentShortSignature = student { signature = SHORT_SIGNATURE }
-        private val studentFullSignature = student { signature = FULL_SIGNATURE }
+        private val studentShortSignature = studentSetOnce { signature = CERF2 }
+        private val studentFullSignature = studentSetOnce { signature = CERF1 }
 
         @Test
         fun `by value`() = assertValidationFails {
             studentShortSignature.toBuilder()
-                .setSignature(FULL_SIGNATURE)
+                .setSignature(CERF1)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             studentShortSignature.toBuilder()
-                .setField(
-                    Student.getDescriptor().findFieldByName("signature"),
-                    FULL_SIGNATURE
-                )
+                .setField(field("signature"), CERF1)
         }
 
         @Test
@@ -527,28 +524,22 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding empty and same-value 'bytes'` {
 
-        private val studentNoSignature = student {  }
-        private val studentFullSignature = student { signature = FULL_SIGNATURE}
+        private val studentNoSignature = studentSetOnce {  }
+        private val studentFullSignature = studentSetOnce { signature = CERF1}
 
         @Test
         fun `by value`() = assertValidationPasses {
             studentNoSignature.toBuilder()
-                .setSignature(FULL_SIGNATURE)
-                .setSignature(FULL_SIGNATURE)
+                .setSignature(CERF1)
+                .setSignature(CERF1)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             studentNoSignature.toBuilder()
-                .setField(
-                    Student.getDescriptor().findFieldByName("signature"),
-                    FULL_SIGNATURE
-                )
-                .setField(
-                    Student.getDescriptor().findFieldByName("signature"),
-                    FULL_SIGNATURE
-                )
+                .setField(field("signature"), CERF1)
+                .setField(field("signature"), CERF1)
                 .build()
         }
 
@@ -572,7 +563,7 @@ internal class SetOnceFieldsITest {
         fun `after clearing`() = assertValidationPasses {
             studentFullSignature.toBuilder()
                 .clearSignature()
-                .setSignature(FULL_SIGNATURE)
+                .setSignature(CERF1)
                 .build()
         }
     }
@@ -580,8 +571,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default enum` {
 
-        private val firstYearStudent = student { yearOfStudy = FIRST_YEAR }
-        private val thirdYearStudent = student { yearOfStudy = THIRD_YEAR }
+        private val firstYearStudent = studentSetOnce { yearOfStudy = FIRST_YEAR }
+        private val thirdYearStudent = studentSetOnce { yearOfStudy = THIRD_YEAR }
 
         @Test
         fun `by value`() = assertValidationFails {
@@ -598,10 +589,7 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationFails {
             firstYearStudent.toBuilder()
-                .setField(
-                    Student.getDescriptor().findFieldByName("year_of_study"),
-                    THIRD_YEAR.valueDescriptor
-                )
+                .setField(field("year_of_study"), THIRD_YEAR.valueDescriptor)
         }
 
         @Test
@@ -620,8 +608,8 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `allow overriding default and same-value enum` {
 
-        private val unknownYearStudent = student {  }
-        private val thirdYearStudent = student { yearOfStudy = THIRD_YEAR }
+        private val unknownYearStudent = studentSetOnce {  }
+        private val thirdYearStudent = studentSetOnce { yearOfStudy = THIRD_YEAR }
 
         @Test
         fun `by value`() = assertValidationPasses {
@@ -642,14 +630,8 @@ internal class SetOnceFieldsITest {
         @Test
         fun `by reflection`() = assertValidationPasses {
             unknownYearStudent.toBuilder()
-                .setField(
-                    Student.getDescriptor().findFieldByName("year_of_study"),
-                    THIRD_YEAR.valueDescriptor
-                )
-                .setField(
-                    Student.getDescriptor().findFieldByName("year_of_study"),
-                    THIRD_YEAR.valueDescriptor
-                )
+                .setField(field("year_of_study"), THIRD_YEAR.valueDescriptor)
+                .setField(field("year_of_study"), THIRD_YEAR.valueDescriptor)
                 .build()
         }
 
@@ -678,3 +660,5 @@ internal class SetOnceFieldsITest {
         }
     }
 }
+
+private fun field(fieldName: String) = StudentSetOnce.getDescriptor().findFieldByName(fieldName)
