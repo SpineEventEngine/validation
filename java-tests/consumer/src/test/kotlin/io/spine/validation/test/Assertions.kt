@@ -33,6 +33,7 @@ import io.kotest.matchers.shouldNotBe
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
 @CanIgnoreReturnValue
@@ -47,8 +48,10 @@ internal fun assertValidationException(builder: Message.Builder): ConstraintViol
 
 internal fun assertNoException(builder: Message.Builder) {
     try {
-        val result = builder.build()
-        result shouldNotBe null
+        assertDoesNotThrow {
+            val result = builder.build()
+            result shouldNotBe null
+        }
     } catch (e: ValidationException) {
         fail<Any>("Unexpected constraint violation: " + e.constraintViolations, e)
     }
