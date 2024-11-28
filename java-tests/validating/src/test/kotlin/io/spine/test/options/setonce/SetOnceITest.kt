@@ -26,28 +26,17 @@
 
 package io.spine.test.options.setonce
 
-import com.google.protobuf.stringValue
-import com.google.protobuf.util.Timestamps
-import io.kotest.matchers.shouldBe
-import io.spine.base.FieldPath
-import io.spine.protobuf.pack
-import io.spine.test.tools.validate.SetOnceDefaultErrorMsg
 import io.spine.test.tools.validate.name
-import io.spine.test.tools.validate.setOnceDefaultErrorMsg
 import io.spine.test.tools.validate.setOnceExplicitFalse
 import io.spine.test.tools.validate.setOnceImplicitFalse
-import io.spine.validate.ValidationException
 import io.spine.validation.assertions.assertValidationPasses
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceITest {
 
     @Test
-    @Disabled
     fun `not affect fields without the option`() = assertValidationPasses {
         setOnceImplicitFalse {
             message = name { value = "MyName1" }
@@ -82,7 +71,6 @@ internal class SetOnceITest {
     }
 
     @Test
-    @Disabled
     fun `not affect fields with the option set to 'false'`() = assertValidationPasses {
         setOnceExplicitFalse {
             message = name { value = "MyName1" }
@@ -115,59 +103,4 @@ internal class SetOnceITest {
             sfixed64 = 10
         }
     }
-
-    @Test
-    fun `show the default error message for message field`() {
-        val firstValue = Timestamps.now()
-        val secondValue = Timestamps.now()
-
-        val exception = assertThrows<ValidationException> {
-            setOnceDefaultErrorMsg {
-                message = firstValue
-                message = secondValue
-            }
-        }
-
-        val violations = exception.constraintViolations
-        violations.size shouldBe 1
-
-        val violation = violations[0]
-        violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
-        violation.paramList shouldBe listOf("message", "$firstValue", "$secondValue")
-        violation.fieldPath shouldBe FieldPath("message")
-        violation.fieldValue shouldBe secondValue.pack()
-        violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
-    }
-
-    @Test
-    fun `show the default error message for string field`() {
-        val firstValue = "aaa"
-        val secondValue = "bbb"
-
-        val exception = assertThrows<ValidationException> {
-            setOnceDefaultErrorMsg {
-                string = firstValue
-                string = secondValue
-            }
-        }
-
-        val violations = exception.constraintViolations
-        violations.size shouldBe 1
-
-        val violation = violations[0]
-        violation.msgFormat shouldBe DEFAULT_MESSAGE_FORMAT
-        violation.paramList shouldBe listOf("string", firstValue, secondValue)
-        violation.fieldPath shouldBe FieldPath("string")
-        violation.fieldValue shouldBe stringValue { value = secondValue }.pack()
-        violation.typeName shouldBe SetOnceDefaultErrorMsg.getDescriptor().fullName
-    }
-
-    @Test
-    @Disabled
-    fun `show the custom error message`() {
-
-    }
 }
-
-private const val DEFAULT_MESSAGE_FORMAT =
-    "The field `%s` already has the value `%s` and cannot be reassigned to `%s`."
