@@ -209,7 +209,7 @@ internal sealed class SetOnceJavaConstraints<T>(
             .chainAddAll("param", listExpression(params))
             .chainSet("type_name", StringLiteral(declaringMessage.qualifiedName))
             .chainSet("field_path", fieldPath)
-            .chainSet("field_value", newValue.packToAny())
+            .chainSet("field_value", violatedValue(newValue).packToAny())
             .chainBuild<ConstraintViolation>()
 
         return elementFactory.createStatement(
@@ -249,6 +249,8 @@ internal sealed class SetOnceJavaConstraints<T>(
     }
 
     protected abstract fun toString(fieldValue: Expression<T>): Expression<String>
+
+    protected open fun violatedValue(fieldValue: Expression<T>): Expression<*> = fieldValue
 
     /**
      * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].

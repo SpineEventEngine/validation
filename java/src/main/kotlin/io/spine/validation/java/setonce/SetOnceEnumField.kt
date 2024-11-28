@@ -26,6 +26,7 @@
 
 package io.spine.validation.java.setonce
 
+import com.google.protobuf.Enum
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.type.TypeSystem
@@ -110,8 +111,11 @@ internal class SetOnceEnumField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
+    override fun violatedValue(fieldValue: Expression<Int>): Expression<*> =
+        fieldTypeClass.call<Enum>("forNumber", fieldValue)
+
     override fun toString(fieldValue: Expression<Int>): Expression<String> =
         fieldTypeClass
-            .call<String>("forNumber", fieldValue)
+            .call<Enum>("forNumber", fieldValue)
             .chain("toString")
 }
