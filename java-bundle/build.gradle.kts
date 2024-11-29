@@ -25,13 +25,22 @@
  */
 
 import io.spine.dependency.build.ErrorProne
+import io.spine.dependency.lib.Asm
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Guava
 import io.spine.dependency.lib.JavaPoet
 import io.spine.dependency.lib.JavaX
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.lib.Roaster
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.BaseTypes
+import io.spine.dependency.local.Change
+import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Reflect
+import io.spine.dependency.local.Text
+import io.spine.dependency.local.Time
 
 plugins {
     `fat-jar`
@@ -39,16 +48,36 @@ plugins {
 
 dependencies {
     implementation(project(":java")) {
-        exclude(group = ProtoData.group)
-        exclude(group = Guava.group)
-        exclude(group = JavaX.annotationGroup)
-        exclude(group = Protobuf.group)
-        exclude(group = ErrorProne.group)
-        exclude(group = Grpc.group)
-            .because("Available via ProtoData backend.")
-        exclude(group = JavaPoet.group, module = JavaPoet.artifact)
-            .because("Available via `tool-base`")
-        exclude(group = Roaster.group)
-            .because("Available via `tool-base`")
+        arrayOf(
+            Asm.group,
+            ProtoData.group,
+            Guava.group,
+            JavaX.annotationGroup,
+            Protobuf.group,
+            ErrorProne.group,
+            Grpc.group /* Available via ProtoData backend. */,
+            Roaster.group /* Available via `tool-base`. */,
+        ).forEach {
+            exclude(group = it)
+        }
+
+        mapOf(
+            JavaPoet.group to JavaPoet.artifact /* Available via `tool-base` */,
+
+            // Local dependencies.
+            Base.group to Base.artifact,
+            BaseTypes.group to BaseTypes.artifact,
+            CoreJava.group to CoreJava.coreArtifact,
+            CoreJava.group to CoreJava.clientArtifact,
+            CoreJava.group to CoreJava.serverArtifact,
+            Change.version to Change.artifact,
+            Logging.group to Logging.loggingArtifact,
+            Reflect.group to Reflect.artifact,
+            Text.group to Text.artifact,
+            Time.group to Time.artifact,
+
+        ).forEach { (group, artifact) ->
+            exclude(group = group, module = artifact)
+        }
     }
 }

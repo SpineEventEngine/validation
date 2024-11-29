@@ -31,7 +31,7 @@ package io.spine.dependency.local
  *
  * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
  */
-@Suppress("unused", "ConstPropertyName")
+@Suppress("ConstPropertyName")
 object Validation {
     /**
      * The version of the Validation library artifacts.

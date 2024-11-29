@@ -27,29 +27,17 @@
 package io.spine.dependency.local
 
 /**
- * Dependencies on the artifacts of the Spine Logging library.
+ * Spine Time library.
  *
- * @see <a href="https://github.com/SpineEventEngine/logging">spine-logging</a>
+ * @see <a href="https://github.com/SpineEventEngine/time">spine-time</a>
  */
-@Suppress("ConstPropertyName", "unused")
-object Logging {
-    const val version = "2.0.0-SNAPSHOT.242"
+@Suppress("ConstPropertyName")
+object Time {
+    const val version = "2.0.0-SNAPSHOT.135"
     const val group = Spine.group
+    const val artifact = "spine-time"
+    const val lib = "$group:$artifact:$version"
 
-    const val loggingArtifact = "spine-logging"
-
-    const val lib = "$group:$loggingArtifact:$version"
-    const val libJvm = "$group:spine-logging-jvm:$version"
-
-    const val log4j2Backend = "$group:spine-logging-log4j2-backend:$version"
-    const val stdContext = "$group:spine-logging-std-context:$version"
-    const val grpcContext = "$group:spine-logging-grpc-context:$version"
-    const val smokeTest = "$group:spine-logging-smoke-test:$version"
-
-    // Transitive dependencies.
-    // Make `public` and use them to force a version in a particular repository, if needed.
-    internal const val julBackend = "$group:spine-logging-jul-backend:$version"
-    internal const val middleware = "$group:spine-logging-middleware:$version"
-    internal const val platformGenerator = "$group:spine-logging-platform-generator:$version"
-    internal const val jvmDefaultPlatform = "$group:spine-logging-jvm-default-platform:$version"
+    //TODO:2024-11-29:alexander.yevsyukov: Change the artifact name to `spine-time-testlib`.
+    const val testLib = "${Spine.toolsGroup}:spine-testutil-time:$version"
 }
