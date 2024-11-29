@@ -26,8 +26,6 @@
 
 package io.spine.dependency.local
 
-
-
 /**
  * Dependencies on `core-java` modules.
  *
