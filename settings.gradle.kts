@@ -40,7 +40,6 @@ include(
     "java",
     "model",
     "java-runtime",
-    "java-runtime-bundle",
     "java-bundle",
     ":java-tests",
     ":java-tests:consumer",
