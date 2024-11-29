@@ -39,7 +39,7 @@ message Name {
     string value = 1;
 }
 
-// An enum message stub to be used in `(set_once)` tests.
+// An enum stub to be used in `(set_once)` tests.
 enum YearOfStudy {
     YOS_UNSPECIFIED = 0;
     YOS_FIRST = 1;

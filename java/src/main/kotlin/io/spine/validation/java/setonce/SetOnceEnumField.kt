@@ -27,6 +27,7 @@
 package io.spine.validation.java.setonce
 
 import com.google.protobuf.Enum
+import com.google.protobuf.ProtocolMessageEnum
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.type.TypeSystem
@@ -111,11 +112,26 @@ internal class SetOnceEnumField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun asPayload(fieldValue: Expression<Int>): Expression<*> =
-        fieldTypeClass.call<Enum>("forNumber", fieldValue)
+    /**
+     * Returns the corresponding Java enum constant for the given ordinal number.
+     */
+    override fun asPayload(fieldValue: Expression<Int>): Expression<ProtocolMessageEnum> =
+        asEnumConstant(fieldValue)
 
+    /**
+     * Returns a string representation of the corresponding Java enum constant.
+     */
     override fun asString(fieldValue: Expression<Int>): Expression<String> =
         fieldTypeClass
             .call<Enum>("forNumber", fieldValue)
             .chain("toString")
+
+    /**
+     * Converts an enum ordinal number to the corresponding constant.
+     *
+     * Enums are represented with numbers within message builders, but enum constants
+     * seem more useful in diagnostics messages.
+     */
+    private fun asEnumConstant(fieldValue: Expression<Int>): Expression<ProtocolMessageEnum> =
+        fieldTypeClass.call("forNumber", fieldValue)
 }

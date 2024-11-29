@@ -238,12 +238,12 @@ internal sealed class SetOnceJavaConstraints<T>(
     } as PsiStatement
 
     /**
-     * Converts the given [fieldValue] to string for a diagnostic message.
+     * Converts the given [fieldValue] to string for a diagnostics message.
      */
     protected abstract fun asString(fieldValue: Expression<T>): Expression<String>
 
     /**
-     * Prepares the given [fieldValue] to be used as a payload for a constraint violation.
+     * Prepares the given [fieldValue] to be used as a payload for [SetOnceConstraintViolation].
      */
     protected open fun asPayload(fieldValue: Expression<T>): Expression<*> = fieldValue
 }

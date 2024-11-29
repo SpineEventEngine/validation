@@ -46,10 +46,10 @@ import io.spine.validation.java.setonce.MessageToken.PROPOSED_VALUE
 import io.spine.validation.java.setonce.MessageToken.values
 
 /**
- * Builds [ConstraintViolation] instance for the given field.
+ * Builds a [ConstraintViolation] instance for the given field.
  *
  * @param errorMessage The error message pattern.
- * @param field The violation subject.
+ * @param field The field, which was attempted to set twice.
  */
 internal class SetOnceConstraintViolation(
     private val errorMessage: String,
@@ -66,16 +66,17 @@ internal class SetOnceConstraintViolation(
      *
      * @param currentValue The current field value as string.
      * @param newValue The proposed new value as string.
-     * @param payload The violated value to be packed as Protobuf `Any`, and set for
-     *  [ConstraintViolation.getFieldValue] property.
+     * @param payload The violated value to be packed as Protobuf `Any` and set for
+     *  [ConstraintViolation.getFieldValue] property. Usually, it is just [newValue].
+     *  But for some field types, some conversion may take place.
      */
     fun withValues(
         currentValue: Expression<String>,
         newValue: Expression<String>,
-        payload: Expression<*>
+        payload: Expression<*> = newValue
     ): Expression<ConstraintViolation> {
         val tokenValues = tokenValues(currentValue, newValue)
-        val (format, params) = extractTokens(errorMessage, tokenValues)
+        val (format, params) = toPrintfString(errorMessage, tokenValues)
         val fieldPath = ClassName(FieldPath::class).newBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild<FieldPath>()
@@ -89,6 +90,9 @@ internal class SetOnceConstraintViolation(
         return violation
     }
 
+    /**
+     * Determines the value for each of the supported tokens.
+     */
     private fun tokenValues(currentValue: Expression<String>, newValue: Expression<String>) =
         MessageToken.values().associateWith {
             when (it) {
@@ -99,15 +103,15 @@ internal class SetOnceConstraintViolation(
         }
 
     /**
-     * Prepares `printf` format string and its parameters.
+     * Prepares `printf`-style format string and its parameters.
      *
      * This method does the following:
      *
      * 1. Finds all [MessageToken]s in the given [errorMessage] and replaces them with `%s`.
-     * 2. For each found token, it finds a [value][tokenValues] to use instead, and puts it
-     *    to the list parameters.
+     * 2. For each found token, it finds its corresponding [value][tokenValues], and puts it
+     *    to the list of parameters.
      */
-    private fun extractTokens(
+    private fun toPrintfString(
         errorMessage: String,
         tokenValues: Map<MessageToken, Expression<String>>
     ): Pair<String, List<Expression<String>>> {
@@ -131,10 +135,10 @@ internal class SetOnceConstraintViolation(
 }
 
 /**
- * Defines error message tokens, which can be used in the error message pattern.
+ * Defines error message tokens that can be used in the error message pattern.
  *
- * These tokens are replaced at runtime with the actual values when the error
- * instance is constructed.
+ * These tokens are replaced with the actual values when the error instance
+ * is constructed.
  *
  * The list of the supported tokens can be found in the option specification.
  * Take a look at `IfSetAgainOption` in `options.proto`.
