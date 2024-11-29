@@ -25,9 +25,12 @@
  */
 
 import io.spine.dependency.build.ErrorProne
+import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Guava
+import io.spine.dependency.lib.JavaPoet
 import io.spine.dependency.lib.JavaX
 import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.ProtoData
 
 plugins {
@@ -41,5 +44,11 @@ dependencies {
         exclude(group = JavaX.annotationGroup)
         exclude(group = Protobuf.group)
         exclude(group = ErrorProne.group)
+        exclude(group = Grpc.group)
+            .because("Available via ProtoData backend.")
+        exclude(group = JavaPoet.group, module = JavaPoet.artifact)
+            .because("Available via `tool-base`")
+        exclude(group = Roaster.group)
+            .because("Available via `tool-base`")
     }
 }

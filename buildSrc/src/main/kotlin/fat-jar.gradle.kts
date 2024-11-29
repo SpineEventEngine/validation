@@ -100,7 +100,11 @@ tasks.shadowJar {
 
         // Kotlin runtime. It's going to be provided.
         "kotlin/**",
-        "kotlinx/**"
+        "kotlinx/**",
+
+        // Annotations available via ProtoData classpath.
+        "android/annotation/**",
+        "javax/annotation/**",
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
