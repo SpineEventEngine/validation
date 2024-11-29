@@ -96,7 +96,11 @@ tasks.shadowJar {
         "src/**",
 
         // Java source code files of the package `org.osgi`.
-        "OSGI-OPT/**"
+        "OSGI-OPT/**",
+
+        // Kotlin runtime. It's going to be provided.
+        "kotlin/**",
+        "kotlinx/**"
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
