@@ -24,39 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Spine
-import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
-import io.spine.protodata.gradle.plugin.LaunchProtoData
-import io.spine.util.theOnly
+package io.spine.validation.test
 
-protoData {
-    plugins(
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
-        "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
-    )
+import com.google.errorprone.annotations.CanIgnoreReturnValue
+import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldNotBe
+import io.spine.validate.ConstraintViolation
+import io.spine.validate.ValidationException
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+
+@CanIgnoreReturnValue
+internal fun assertValidationException(builder: Message.Builder): ConstraintViolation {
+    val exception = assertThrows<ValidationException> {
+        builder.build()
+    }
+    val error = exception.asMessage()
+    error.constraintViolationList shouldHaveSize 1
+    return error.constraintViolationList[0]
 }
 
-val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()
-
-val copySettings by tasks.registering(Copy::class) {
-    from(project.layout.projectDirectory.file(
-        "io.spine.validation.java.JavaValidationPlugin.pb.json")
-    )
-    into(settingsDirTask.settingsDir.get())
-    dependsOn(settingsDirTask)
+internal fun assertNoException(builder: Message.Builder) {
+    try {
+        assertDoesNotThrow {
+            val result = builder.build()
+            result shouldNotBe null
+        }
+    } catch (e: ValidationException) {
+        fail<Any>("Unexpected constraint violation: " + e.constraintViolations, e)
+    }
 }
-
-tasks.withType<LaunchProtoData>().configureEach {
-    dependsOn(copySettings)
-}
-
-dependencies {
-    protoData(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:consumer-dependency"))
-    implementation(Spine.time)
-}
-
-protoDataRemoteDebug(enabled = false)

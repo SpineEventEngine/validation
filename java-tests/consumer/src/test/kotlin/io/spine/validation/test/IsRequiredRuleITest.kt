@@ -24,39 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Spine
-import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
-import io.spine.protodata.gradle.plugin.LaunchProtoData
-import io.spine.util.theOnly
+package io.spine.validation.test
 
-protoData {
-    plugins(
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
-        "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+
+@DisplayName("`(is_required)` rule for `oneof` fields should")
+internal class IsRequiredRuleITest {
+
+    @Test
+    fun `reject if none of the alternatives is set`() {
+        assertValidationException(Lunch.newBuilder())
+    }
+
+    @Test
+    fun `accept if an alternative is set`() = assertNoException(
+        Lunch.newBuilder()
+            .setHotSoup("Minestrone")
     )
 }
-
-val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()
-
-val copySettings by tasks.registering(Copy::class) {
-    from(project.layout.projectDirectory.file(
-        "io.spine.validation.java.JavaValidationPlugin.pb.json")
-    )
-    into(settingsDirTask.settingsDir.get())
-    dependsOn(settingsDirTask)
-}
-
-tasks.withType<LaunchProtoData>().configureEach {
-    dependsOn(copySettings)
-}
-
-dependencies {
-    protoData(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:consumer-dependency"))
-    implementation(Spine.time)
-}
-
-protoDataRemoteDebug(enabled = false)
