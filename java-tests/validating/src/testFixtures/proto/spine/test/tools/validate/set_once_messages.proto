@@ -34,7 +34,7 @@ option java_package = "io.spine.test.tools.validate";
 option java_outer_classname = "SetOnceMessagesProto";
 option java_multiple_files = true;
 
-import "spine/test/tools/validate/set_once_common.proto";
+import "spine/test/tools/validate/set_once_values.proto";
 
 // Tests the constraint's default error message.
 message StudentDefaultMessage {
