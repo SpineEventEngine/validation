@@ -105,32 +105,32 @@ internal class SetOnceErrorMessageITest {
 
 private fun <T : Any> assertDefaultMessage(fieldName: String, value1: T, value2: T) {
     val builder = StudentDefaultMessage.newBuilder()
-    val params = listOf(fieldName, "$value1", "$value2")
-    val format = { _: Int -> DEFAULT_MESSAGE_FORMAT }
-    return builder.assertErrorMessage(fieldName, value1, value2, params, format)
+    val expectedParams = listOf(fieldName, "$value1", "$value2")
+    val expectedFormat = { _: Int -> DEFAULT_MESSAGE_FORMAT }
+    return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
 
 private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: T) {
     val builder = StudentCustomMessage.newBuilder()
-    val params = listOf("$value1", fieldName, "$value2")
-    val format = ::customMessageFormat
-    return builder.assertErrorMessage(fieldName, value1, value2, params, format)
+    val expectedParams = listOf("$value1", fieldName, "$value2")
+    val expectedFormat = ::customMessageFormat
+    return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
 
 /**
  * Asserts that this [GeneratedMessage] throws [ValidationException] with
  * the expected parameters when [fieldName] is set twice.
  *
- * Please note, this method treats enums differently when asserts the violated value.
- * We have to pass enums as value descriptors (see [SetOnceErrorMessageITest.allFieldTypesWithTwoDistinctValues]),
- * so we also have to take this into account because in `ConstraintViolation` they still
- * arrive as constants.
+ * Notice on enum fields: we have to pass enums as value descriptors
+ * (see [SetOnceErrorMessageITest.allFieldTypesWithTwoDistinctValues]),
+ * so we also have to take this into account during assertions because
+ * in `ConstraintViolation` they still arrive as Java enum constants.
  *
  * @param fieldName The field to set.
- * @param value1 The first value to set for [fieldName].
- * @param value2 The second value for [fieldName] to trigger the exception.
- * @param expectedParams The list of params to check `ConstraintViolation.param`.
- * @param expectedFormat The format string to check `ConstraintViolation.msg_format`.
+ * @param value1 The first field value to set.
+ * @param value2 The second field value to set for triggering the exception.
+ * @param expectedParams The list of params to check upon `ConstraintViolation.param`.
+ * @param expectedFormat The format string to check upon `ConstraintViolation.msg_format`.
  */
 private fun <T : Any> GeneratedMessageV3.Builder<*>.assertErrorMessage(
     fieldName: String,
@@ -157,7 +157,7 @@ private fun <T : Any> GeneratedMessageV3.Builder<*>.assertErrorMessage(
 
         // Enums are a bit special. See the method docs for details.
         if (value2 is EnumValueDescriptor) {
-            // Any enum in this test suite is `YearOfStudy`, so it is safe.
+            // Any enum in `(set_once)` tests is `YearOfStudy`, so it is safe.
             val enumConstant = YearOfStudy.forNumber(value2.number)
             fieldValue shouldBe toAny(enumConstant)
         } else {
