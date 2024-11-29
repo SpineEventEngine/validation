@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.SpinePublishing
 
 plugins {
@@ -102,11 +103,18 @@ tasks.shadowJar {
         "kotlin/**",
         "kotlinx/**",
 
+        // Kotlin module files for Kotlin Stdlib artifacts.
+        "META-INF/kotlin-stdlib**",
+
         // Annotations available via ProtoData classpath.
         "android/annotation/**",
         "javax/annotation/**",
         "org/intellij/**",
-        "org/jetbrains/**"
+        "org/jetbrains/**",
+
+        // Exclude the descriptor set file which comes from `spine-validation-java-runtime`
+        // used to build Validation itself.
+        "io.spine.validation_java-runtime_main_${Validation.version}.desc",
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */

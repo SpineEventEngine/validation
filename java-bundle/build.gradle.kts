@@ -47,35 +47,41 @@ plugins {
 }
 
 dependencies {
+
     implementation(project(":java")) {
         arrayOf(
             Asm.group,
-            ProtoData.group,
             Guava.group,
             JavaX.annotationGroup,
             Protobuf.group,
             ErrorProne.group,
             Grpc.group /* Available via ProtoData backend. */,
             Roaster.group /* Available via `tool-base`. */,
+
+            // Local dependencies.
+            ProtoData.group,
         ).forEach {
             exclude(group = it)
         }
 
-        mapOf(
+        listOf(
             JavaPoet.group to JavaPoet.artifact /* Available via `tool-base` */,
 
             // Local dependencies.
             Base.group to Base.artifact,
             BaseTypes.group to BaseTypes.artifact,
+
             CoreJava.group to CoreJava.coreArtifact,
             CoreJava.group to CoreJava.clientArtifact,
             CoreJava.group to CoreJava.serverArtifact,
-            Change.version to Change.artifact,
+
+            Change.group to Change.artifact,
             Logging.group to Logging.loggingArtifact,
             Reflect.group to Reflect.artifact,
             Text.group to Text.artifact,
             Time.group to Time.artifact,
 
+            CoreJava.group to CoreJava.serverArtifact,
         ).forEach { (group, artifact) ->
             exclude(group = group, module = artifact)
         }
