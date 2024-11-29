@@ -27,8 +27,7 @@
 package io.spine.test.options.setonce
 
 import com.google.protobuf.Descriptors.EnumValueDescriptor
-import com.google.protobuf.GeneratedMessage
-import com.google.protobuf.GeneratedMessageV3
+import com.google.protobuf.Message.Builder
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
@@ -118,7 +117,7 @@ private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: 
 }
 
 /**
- * Asserts that this [GeneratedMessage] throws [ValidationException] with
+ * Asserts that this message [Builder] throws [ValidationException] with
  * the expected parameters when [fieldName] is set twice.
  *
  * Notice on enum fields: we have to pass enums as value descriptors
@@ -132,7 +131,7 @@ private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: 
  * @param expectedParams The list of params to check upon `ConstraintViolation.param`.
  * @param expectedFormat The format string to check upon `ConstraintViolation.msg_format`.
  */
-private fun <T : Any> GeneratedMessageV3.Builder<*>.assertErrorMessage(
+private fun <T : Any> Builder.assertErrorMessage(
     fieldName: String,
     value1: T,
     value2: T,
