@@ -53,10 +53,15 @@ import org.junit.jupiter.api.Test
 /**
  * Tests for `(set_once)` constraint.
  *
- * Notice on a number of negative tests: they rely a bit on an implementation detail.
- * The decision whether the option constraints are added is taken at a "higher level".
- * So, we only verify the direct field setters in negative tests. We suppose that
- * if they allow re-assignment, the other kinds of setters allow them too.
+ * Notice on the coverage of negative tests: they do not cover all types of setters
+ * for each field type intentionally. Take a look on positive [SetOnceFieldsITest] and [SetOnceIntegerITest].
+ * For each field type, they have tests for each kind of setter (direct, reflective,
+ * merging, etc.) In order not to write the same extensive tests for negative cases,
+ * we rely a bit on the implementation detail. The decision whether the option constraints
+ * are added is taken at a "higher level": [io.spine.validation.java.setonce.SetOnceValidationRenderer].
+ * So, it is always all setters altered or none. Thus, we only verify the direct field
+ * setters in negative tests. We suppose that if it allows re-assignment, the other kinds
+ * of setters allow it too.
  */
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceITest {
