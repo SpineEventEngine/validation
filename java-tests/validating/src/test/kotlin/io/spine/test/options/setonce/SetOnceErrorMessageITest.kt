@@ -27,27 +27,28 @@
 package io.spine.test.options.setonce
 
 import com.google.protobuf.Descriptors.EnumValueDescriptor
-import com.google.protobuf.Message
+import com.google.protobuf.GeneratedMessage
+import com.google.protobuf.GeneratedMessageV3
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
+import io.spine.test.options.setonce.TestEnv.CERF1
+import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.EIGHTEEN
 import io.spine.test.options.setonce.TestEnv.EIGHTY
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
-import io.spine.test.options.setonce.TestEnv.CERF1
-import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
-import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
-import io.spine.test.options.setonce.TestEnv.NO
-import io.spine.test.options.setonce.TestEnv.CERF2
-import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
 import io.spine.test.options.setonce.TestEnv.JACK
+import io.spine.test.options.setonce.TestEnv.NO
+import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
 import io.spine.test.options.setonce.TestEnv.SIXTEEN
 import io.spine.test.options.setonce.TestEnv.SIXTY
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
+import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
 import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
 import io.spine.test.options.setonce.TestEnv.YES
 import io.spine.test.tools.validate.StudentCustomMessage
@@ -63,6 +64,16 @@ import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceErrorMessageITest {
+
+    @ParameterizedTest(name = "show the default error message for `{0}` field")
+    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T) =
+        assertDefaultMessage(fieldName, value1, value2)
+
+    @ParameterizedTest(name = "show the custom error message for `{0}` field")
+    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T) =
+        assertCustomMessage(fieldName, value1, value2)
 
     private companion object {
 
@@ -90,45 +101,24 @@ internal class SetOnceErrorMessageITest {
             arguments("year_of_study", FIRST_YEAR.valueDescriptor, THIRD_YEAR.valueDescriptor)
         )
     }
-
-    @ParameterizedTest(name = "show the default error message for `{0}` fields")
-    @MethodSource("allFieldTypesWithTwoDistinctValues")
-    fun <T : Any> defaultErrorMessage(fieldName: String, value: T, nextValue: T) =
-        assertDefaultMessage(fieldName, value, nextValue)
-
-    @ParameterizedTest(name = "show the custom error message for `{0}` fields")
-    @MethodSource("allFieldTypesWithTwoDistinctValues")
-    fun <T : Any> customErrorMessage(fieldName: String, value: T, nextValue: T) =
-        assertCustomMessage(fieldName, value, nextValue)
 }
 
-private fun <T : Any> assertDefaultMessage(
-    fieldName: String,
-    value: T,
-    nextValue: T,
-) = assertErrorMessage(
-    fieldName,
-    value,
-    nextValue,
-    StudentDefaultMessage.newBuilder(),
-    listOf(fieldName, "$value", "$nextValue")
-) { DEFAULT_MESSAGE_FORMAT }
+private fun <T : Any> assertDefaultMessage(fieldName: String, value1: T, value2: T) {
+    val builder = StudentDefaultMessage.newBuilder()
+    val params = listOf(fieldName, "$value1", "$value2")
+    val format = { _: Int -> DEFAULT_MESSAGE_FORMAT }
+    return builder.assertErrorMessage(fieldName, value1, value2, params, format)
+}
 
-private fun <T : Any> assertCustomMessage(
-    fieldName: String,
-    value: T,
-    nextValue: T,
-) = assertErrorMessage(
-    fieldName,
-    value,
-    nextValue,
-    StudentCustomMessage.newBuilder(),
-    listOf("$value", fieldName, "$nextValue"),
-    ::customMessageFormat
-)
+private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: T) {
+    val builder = StudentCustomMessage.newBuilder()
+    val params = listOf("$value1", fieldName, "$value2")
+    val format = ::customMessageFormat
+    return builder.assertErrorMessage(fieldName, value1, value2, params, format)
+}
 
 /**
- * Asserts that the given [messageBuilder] throws [ValidationException] with
+ * Asserts that this [GeneratedMessage] throws [ValidationException] with
  * the expected parameters when [fieldName] is set twice.
  *
  * Please note, this method treats enums differently when asserts the violated value.
@@ -137,28 +127,24 @@ private fun <T : Any> assertCustomMessage(
  * arrive as constants.
  *
  * @param fieldName The field to set.
- * @param value The first [fieldName] value.
- * @param nextValue The seconds [fieldName] value to trigger the exception.
- * @param messageBuilder The message builder containing [fieldName].
+ * @param value1 The first value to set for [fieldName].
+ * @param value2 The second value for [fieldName] to trigger the exception.
  * @param expectedParams The list of params to check `ConstraintViolation.param`.
  * @param expectedFormat The format string to check `ConstraintViolation.msg_format`.
  */
-private fun <T : Any> assertErrorMessage(
+private fun <T : Any> GeneratedMessageV3.Builder<*>.assertErrorMessage(
     fieldName: String,
-    value: T,
-    nextValue: T,
-    messageBuilder: Message.Builder,
+    value1: T,
+    value2: T,
     expectedParams: List<String>,
     expectedFormat: (Int) -> String
 ) {
-    check(value != nextValue)
+    check(value1 != value2)
 
-    val messageDescriptor = messageBuilder.descriptorForType
-    val field = messageDescriptor.field(fieldName)!!
+    val field = descriptorForType.field(fieldName)!!
     val exception = assertThrows<ValidationException> {
-        messageBuilder
-            .setField(field, value)
-            .setField(field, nextValue)
+        setField(field, value1)
+        setField(field, value2)
     }
 
     val violations = exception.constraintViolations.also { it.size shouldBe 1 }
@@ -167,15 +153,15 @@ private fun <T : Any> assertErrorMessage(
         msgFormat shouldBe expectedFormat(field.index + 1)
         paramList shouldBe expectedParams
         fieldPath shouldBe FieldPath(fieldName)
-        typeName shouldBe messageDescriptor.fullName
+        typeName shouldBe  this@assertErrorMessage.descriptorForType.fullName
 
         // Enums are a bit special. See the method docs for details.
-        if (nextValue is EnumValueDescriptor) {
+        if (value2 is EnumValueDescriptor) {
             // Any enum in this test suite is `YearOfStudy`, so it is safe.
-            val enumConstant = YearOfStudy.forNumber(nextValue.number)
+            val enumConstant = YearOfStudy.forNumber(value2.number)
             fieldValue shouldBe toAny(enumConstant)
         } else {
-            fieldValue shouldBe toAny(nextValue)
+            fieldValue shouldBe toAny(value2)
         }
     }
 }
