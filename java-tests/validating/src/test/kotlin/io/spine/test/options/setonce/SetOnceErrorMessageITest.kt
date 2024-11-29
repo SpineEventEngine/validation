@@ -65,13 +65,13 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceErrorMessageITest {
 
-    @ParameterizedTest(name = "show the default error message for `{0}` field")
     @MethodSource("allFieldTypesWithTwoDistinctValues")
+    @ParameterizedTest(name = "show the default error message for `{0}` field")
     fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T) =
         assertDefaultMessage(fieldName, value1, value2)
 
-    @ParameterizedTest(name = "show the custom error message for `{0}` field")
     @MethodSource("allFieldTypesWithTwoDistinctValues")
+    @ParameterizedTest(name = "show the custom error message for `{0}` field")
     fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T) =
         assertCustomMessage(fieldName, value1, value2)
 
