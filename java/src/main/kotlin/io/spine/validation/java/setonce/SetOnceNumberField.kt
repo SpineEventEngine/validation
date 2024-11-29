@@ -113,6 +113,6 @@ internal class SetOnceNumberField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<Number>): Expression<String> =
+    override fun asString(fieldValue: Expression<Number>): Expression<String> =
         ClassName(String::class).call("valueOf", fieldValue)
 }

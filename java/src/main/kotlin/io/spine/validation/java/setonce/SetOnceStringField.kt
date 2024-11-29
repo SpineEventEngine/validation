@@ -133,6 +133,6 @@ internal class SetOnceStringField(
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<ByteString>): Expression<String> =
+    override fun asString(fieldValue: Expression<ByteString>): Expression<String> =
         MethodCall(fieldValue, "toString")
 }

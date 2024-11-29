@@ -87,6 +87,6 @@ internal class SetOnceBooleanField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<Boolean>): Expression<String> =
+    override fun asString(fieldValue: Expression<Boolean>): Expression<String> =
         ClassName(String::class).call("valueOf", fieldValue)
 }

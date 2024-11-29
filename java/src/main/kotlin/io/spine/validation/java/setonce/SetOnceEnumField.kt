@@ -111,10 +111,10 @@ internal class SetOnceEnumField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun violatedValue(fieldValue: Expression<Int>): Expression<*> =
+    override fun asPayload(fieldValue: Expression<Int>): Expression<*> =
         fieldTypeClass.call<Enum>("forNumber", fieldValue)
 
-    override fun toString(fieldValue: Expression<Int>): Expression<String> =
+    override fun asString(fieldValue: Expression<Int>): Expression<String> =
         fieldTypeClass
             .call<Enum>("forNumber", fieldValue)
             .chain("toString")

@@ -92,6 +92,6 @@ internal class SetOnceBytesField(
         setter.addAfter(precondition, setter.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<ByteString>): Expression<String> =
+    override fun asString(fieldValue: Expression<ByteString>): Expression<String> =
         MethodCall(fieldValue, "toString")
 }

@@ -135,6 +135,6 @@ internal class SetOnceMessageField(
         merge.addAfter(precondition, merge.lBrace)
     }
 
-    override fun toString(fieldValue: Expression<Message>): Expression<String> =
+    override fun asString(fieldValue: Expression<Message>): Expression<String> =
         MethodCall(fieldValue, "toString")
 }
