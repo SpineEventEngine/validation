@@ -58,7 +58,7 @@ tasks.shadowJar {
          *
          * Locating this type in its own `io:spine:protodata` artifact is crucial
          * for obtaining proper version values from the manifest file.
-         * This file is only present in `io:spine:protodata` artifact.
+         * This file is only present in the `io:spine:protodata` artifact.
          */
         "io/spine/protodata/gradle/plugin/Plugin.class",
         "META-INF/gradle-plugins/io.spine.protodata.properties",
@@ -105,6 +105,8 @@ tasks.shadowJar {
         // Annotations available via ProtoData classpath.
         "android/annotation/**",
         "javax/annotation/**",
+        "org/intellij/**",
+        "org/jetbrains/**"
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
