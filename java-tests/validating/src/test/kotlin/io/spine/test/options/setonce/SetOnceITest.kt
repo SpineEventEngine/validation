@@ -50,6 +50,14 @@ import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+/**
+ * Tests for `(set_once)` constraint.
+ *
+ * Notice on a number of negative tests: they rely a bit on an implementation detail.
+ * The decision whether the option constraints are added is taken at a "higher level".
+ * So, we only verify the direct field setters in negative tests. We suppose that
+ * if they allow re-assignment, the other kinds of setters allow them too.
+ */
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceITest {
 
