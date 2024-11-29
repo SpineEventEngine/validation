@@ -35,16 +35,16 @@ import io.spine.protobuf.field
 import io.spine.test.options.setonce.TestEnv.CERF1
 import io.spine.test.options.setonce.TestEnv.CERF2
 import io.spine.test.options.setonce.TestEnv.DONALD
-import io.spine.test.options.setonce.TestEnv.EIGHTEEN
-import io.spine.test.options.setonce.TestEnv.EIGHTY
+import io.spine.test.options.setonce.TestEnv.TWENTY
+import io.spine.test.options.setonce.TestEnv.SEVENTY
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
 import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
 import io.spine.test.options.setonce.TestEnv.JACK
 import io.spine.test.options.setonce.TestEnv.NO
 import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
-import io.spine.test.options.setonce.TestEnv.SIXTEEN
-import io.spine.test.options.setonce.TestEnv.SIXTY
+import io.spine.test.options.setonce.TestEnv.TWO
+import io.spine.test.options.setonce.TestEnv.EIGHT
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
 import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
@@ -82,16 +82,16 @@ internal class SetOnceErrorMessageITest {
             arguments(named("string", "id"), STUDENT1, STUDENT2),
             arguments(named("double", "height"), SHORT_HEIGHT, TALL_HEIGHT),
             arguments(named("float", "weight"), FIFTY_KG, EIGHTY_KG),
-            arguments(named("int32", "cash_USD"), SIXTEEN, SIXTY),
-            arguments(named("int64", "cash_EUR"), EIGHTEEN, EIGHTY),
-            arguments(named("uint32", "cash_JPY"), SIXTEEN, SIXTY),
-            arguments(named("uint64", "cash_GBP"), EIGHTEEN, EIGHTY),
-            arguments(named("sint32", "cash_AUD"), SIXTEEN, SIXTY),
-            arguments(named("sint64", "cash_CAD"), EIGHTEEN, EIGHTY),
-            arguments(named("fixed32", "cash_CHF"), SIXTEEN, SIXTY),
-            arguments(named("fixed64", "cash_CNY"), EIGHTEEN, EIGHTY),
-            arguments(named("sfixed32", "cash_PLN"), SIXTEEN, SIXTY),
-            arguments(named("sfixed64", "cash_NZD"), EIGHTEEN, EIGHTY),
+            arguments(named("int32", "cash_USD"), TWO, EIGHT),
+            arguments(named("int64", "cash_EUR"), TWENTY, SEVENTY),
+            arguments(named("uint32", "cash_JPY"), TWO, EIGHT),
+            arguments(named("uint64", "cash_GBP"), TWENTY, SEVENTY),
+            arguments(named("sint32", "cash_AUD"), TWO, EIGHT),
+            arguments(named("sint64", "cash_CAD"), TWENTY, SEVENTY),
+            arguments(named("fixed32", "cash_CHF"), TWO, EIGHT),
+            arguments(named("fixed64", "cash_CNY"), TWENTY, SEVENTY),
+            arguments(named("sfixed32", "cash_PLN"), TWO, EIGHT),
+            arguments(named("sfixed64", "cash_NZD"), TWENTY, SEVENTY),
             arguments(named("bool", "has_medals"), YES, NO),
             arguments(named("enum", "signature"), CERF1, CERF2),
 

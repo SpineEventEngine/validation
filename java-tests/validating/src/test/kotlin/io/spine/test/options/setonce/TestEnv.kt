@@ -65,9 +65,9 @@ internal object TestEnv {
     val FIRST_YEAR: YearOfStudy = YearOfStudy.YOS_FIRST
     val THIRD_YEAR: YearOfStudy = YearOfStudy.YOS_THIRD
 
-    const val SIXTEEN: Int = 16
-    const val SIXTY: Int = 60
+    const val TWO: Int = 2
+    const val EIGHT: Int = 8
 
-    const val EIGHTEEN: Long = 18
-    const val EIGHTY: Long = 80
+    const val TWENTY: Long = 20
+    const val SEVENTY: Long = 80
 }

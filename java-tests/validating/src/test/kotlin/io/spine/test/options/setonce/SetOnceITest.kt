@@ -29,16 +29,16 @@ package io.spine.test.options.setonce
 import io.spine.test.options.setonce.TestEnv.CERF1
 import io.spine.test.options.setonce.TestEnv.CERF2
 import io.spine.test.options.setonce.TestEnv.DONALD
-import io.spine.test.options.setonce.TestEnv.EIGHTEEN
-import io.spine.test.options.setonce.TestEnv.EIGHTY
+import io.spine.test.options.setonce.TestEnv.TWENTY
+import io.spine.test.options.setonce.TestEnv.SEVENTY
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
 import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
 import io.spine.test.options.setonce.TestEnv.JACK
 import io.spine.test.options.setonce.TestEnv.NO
 import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
-import io.spine.test.options.setonce.TestEnv.SIXTEEN
-import io.spine.test.options.setonce.TestEnv.SIXTY
+import io.spine.test.options.setonce.TestEnv.TWO
+import io.spine.test.options.setonce.TestEnv.EIGHT
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
 import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
@@ -77,26 +77,26 @@ internal class SetOnceITest {
             height = TALL_HEIGHT
             weight = FIFTY_KG
             weight = EIGHTY_KG
-            cashUSD = SIXTEEN
-            cashUSD = SIXTY
-            cashEUR = EIGHTEEN
-            cashEUR = EIGHTY
-            cashJPY = SIXTEEN
-            cashJPY = SIXTY
-            cashGBP = EIGHTEEN
-            cashGBP = EIGHTY
-            cashAUD = SIXTEEN
-            cashAUD = SIXTY
-            cashCAD = EIGHTEEN
-            cashCAD = EIGHTY
-            cashCHF = SIXTEEN
-            cashCHF = SIXTY
-            cashCNY = EIGHTEEN
-            cashCNY = EIGHTY
-            cashPLN = SIXTEEN
-            cashPLN = SIXTY
-            cashNZD = EIGHTEEN
-            cashNZD = EIGHTY
+            cashUSD = TWO
+            cashUSD = EIGHT
+            cashEUR = TWENTY
+            cashEUR = SEVENTY
+            cashJPY = TWO
+            cashJPY = EIGHT
+            cashGBP = TWENTY
+            cashGBP = SEVENTY
+            cashAUD = TWO
+            cashAUD = EIGHT
+            cashCAD = TWENTY
+            cashCAD = SEVENTY
+            cashCHF = TWO
+            cashCHF = EIGHT
+            cashCNY = TWENTY
+            cashCNY = SEVENTY
+            cashPLN = TWO
+            cashPLN = EIGHT
+            cashNZD = TWENTY
+            cashNZD = SEVENTY
             hasMedals = YES
             hasMedals = NO
             signature = CERF1
@@ -117,26 +117,26 @@ internal class SetOnceITest {
             height = TALL_HEIGHT
             weight = FIFTY_KG
             weight = EIGHTY_KG
-            cashUSD = SIXTEEN
-            cashUSD = SIXTY
-            cashEUR = EIGHTEEN
-            cashEUR = EIGHTY
-            cashJPY = SIXTEEN
-            cashJPY = SIXTY
-            cashGBP = EIGHTEEN
-            cashGBP = EIGHTY
-            cashAUD = SIXTEEN
-            cashAUD = SIXTY
-            cashCAD = EIGHTEEN
-            cashCAD = EIGHTY
-            cashCHF = SIXTEEN
-            cashCHF = SIXTY
-            cashCNY = EIGHTEEN
-            cashCNY = EIGHTY
-            cashPLN = SIXTEEN
-            cashPLN = SIXTY
-            cashNZD = EIGHTEEN
-            cashNZD = EIGHTY
+            cashUSD = TWO
+            cashUSD = EIGHT
+            cashEUR = TWENTY
+            cashEUR = SEVENTY
+            cashJPY = TWO
+            cashJPY = EIGHT
+            cashGBP = TWENTY
+            cashGBP = SEVENTY
+            cashAUD = TWO
+            cashAUD = EIGHT
+            cashCAD = TWENTY
+            cashCAD = SEVENTY
+            cashCHF = TWO
+            cashCHF = EIGHT
+            cashCNY = TWENTY
+            cashCNY = SEVENTY
+            cashPLN = TWO
+            cashPLN = EIGHT
+            cashNZD = TWENTY
+            cashNZD = SEVENTY
             hasMedals = YES
             hasMedals = NO
             signature = CERF1
