@@ -31,12 +31,12 @@ import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.TestEnv.FIFTY_KG
 import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
-import io.spine.test.options.setonce.TestEnv.CERF1
+import io.spine.test.options.setonce.TestEnv.CERT1
 import io.spine.test.options.setonce.TestEnv.JACK
 import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
 import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
 import io.spine.test.options.setonce.TestEnv.NO
-import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.CERT2
 import io.spine.test.options.setonce.TestEnv.STUDENT1
 import io.spine.test.options.setonce.TestEnv.STUDENT2
 import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
@@ -493,19 +493,19 @@ internal class SetOnceFieldsITest {
     @Nested inner class
     `prohibit overriding non-default 'bytes'` {
 
-        private val studentShortSignature = studentSetOnce { signature = CERF2 }
-        private val studentFullSignature = studentSetOnce { signature = CERF1 }
+        private val studentShortSignature = studentSetOnce { signature = CERT2 }
+        private val studentFullSignature = studentSetOnce { signature = CERT1 }
 
         @Test
         fun `by value`() = assertValidationFails {
             studentShortSignature.toBuilder()
-                .setSignature(CERF1)
+                .setSignature(CERT1)
         }
 
         @Test
         fun `by reflection`() = assertValidationFails {
             studentShortSignature.toBuilder()
-                .setField(field("signature"), CERF1)
+                .setField(field("signature"), CERT1)
         }
 
         @Test
@@ -525,21 +525,21 @@ internal class SetOnceFieldsITest {
     `allow overriding empty and same-value 'bytes'` {
 
         private val studentNoSignature = studentSetOnce {  }
-        private val studentFullSignature = studentSetOnce { signature = CERF1}
+        private val studentFullSignature = studentSetOnce { signature = CERT1}
 
         @Test
         fun `by value`() = assertValidationPasses {
             studentNoSignature.toBuilder()
-                .setSignature(CERF1)
-                .setSignature(CERF1)
+                .setSignature(CERT1)
+                .setSignature(CERT1)
                 .build()
         }
 
         @Test
         fun `by reflection`() = assertValidationPasses {
             studentNoSignature.toBuilder()
-                .setField(field("signature"), CERF1)
-                .setField(field("signature"), CERF1)
+                .setField(field("signature"), CERT1)
+                .setField(field("signature"), CERT1)
                 .build()
         }
 
@@ -563,7 +563,7 @@ internal class SetOnceFieldsITest {
         fun `after clearing`() = assertValidationPasses {
             studentFullSignature.toBuilder()
                 .clearSignature()
-                .setSignature(CERF1)
+                .setSignature(CERT1)
                 .build()
         }
     }

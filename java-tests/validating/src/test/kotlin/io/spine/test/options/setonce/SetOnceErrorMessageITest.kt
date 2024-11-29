@@ -32,8 +32,8 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
-import io.spine.test.options.setonce.TestEnv.CERF1
-import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.CERT1
+import io.spine.test.options.setonce.TestEnv.CERT2
 import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.TWENTY
 import io.spine.test.options.setonce.TestEnv.SEVENTY
@@ -93,7 +93,7 @@ internal class SetOnceErrorMessageITest {
             arguments(named("sfixed32", "cash_PLN"), TWO, EIGHT),
             arguments(named("sfixed64", "cash_NZD"), TWENTY, SEVENTY),
             arguments(named("bool", "has_medals"), YES, NO),
-            arguments(named("enum", "signature"), CERF1, CERF2),
+            arguments(named("enum", "signature"), CERT1, CERT2),
 
             // For some reason, for enums, `Message.Builder.setField()` expects value
             // descriptors instead of constants or their ordinal numbers.

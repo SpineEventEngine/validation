@@ -59,8 +59,8 @@ internal object TestEnv {
     const val NO: Boolean = false
     const val YES: Boolean = true
 
-    val CERF1: ByteString = ByteString.copyFromUtf8("certificate_1")
-    val CERF2: ByteString = ByteString.copyFromUtf8("certificate_2")
+    val CERT1: ByteString = ByteString.copyFromUtf8("certificate_1")
+    val CERT2: ByteString = ByteString.copyFromUtf8("certificate_2")
 
     val FIRST_YEAR: YearOfStudy = YearOfStudy.YOS_FIRST
     val THIRD_YEAR: YearOfStudy = YearOfStudy.YOS_THIRD

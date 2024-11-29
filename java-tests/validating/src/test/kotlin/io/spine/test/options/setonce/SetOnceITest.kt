@@ -26,8 +26,8 @@
 
 package io.spine.test.options.setonce
 
-import io.spine.test.options.setonce.TestEnv.CERF1
-import io.spine.test.options.setonce.TestEnv.CERF2
+import io.spine.test.options.setonce.TestEnv.CERT1
+import io.spine.test.options.setonce.TestEnv.CERT2
 import io.spine.test.options.setonce.TestEnv.DONALD
 import io.spine.test.options.setonce.TestEnv.TWENTY
 import io.spine.test.options.setonce.TestEnv.SEVENTY
@@ -99,8 +99,8 @@ internal class SetOnceITest {
             cashNZD = SEVENTY
             hasMedals = YES
             hasMedals = NO
-            signature = CERF1
-            signature = CERF2
+            signature = CERT1
+            signature = CERT2
             yearOfStudy = FIRST_YEAR
             yearOfStudy = THIRD_YEAR
         }
@@ -139,8 +139,8 @@ internal class SetOnceITest {
             cashNZD = SEVENTY
             hasMedals = YES
             hasMedals = NO
-            signature = CERF1
-            signature = CERF2
+            signature = CERT1
+            signature = CERT2
             yearOfStudy = FIRST_YEAR
             yearOfStudy = THIRD_YEAR
         }
