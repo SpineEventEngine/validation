@@ -24,10 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.build.ErrorProne
+import io.spine.dependency.lib.Guava
+import io.spine.dependency.lib.JavaX
+import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.ProtoData
+
 plugins {
     `fat-jar`
 }
 
 dependencies {
-    implementation(project(":java"))
+    implementation(project(":java")) {
+        exclude(group = ProtoData.group)
+        exclude(group = Guava.group)
+        exclude(group = JavaX.annotationGroup)
+        exclude(group = Protobuf.group)
+        exclude(group = ErrorProne.group)
+    }
 }

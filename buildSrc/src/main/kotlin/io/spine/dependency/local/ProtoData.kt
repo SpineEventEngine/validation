@@ -115,8 +115,10 @@ object ProtoData {
     val cliApi
         get() = "$group:protodata-cli-api:$version"
 
+    val javaModule = "$group:protodata-java"
+
     fun java(version: String): String =
-        "$group:protodata-java:$version"
+        "$javaModule:$version"
 
     val java
         get() = java(version)
