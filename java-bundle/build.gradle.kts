@@ -24,10 +24,66 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.build.ErrorProne
+import io.spine.dependency.lib.Asm
+import io.spine.dependency.lib.Grpc
+import io.spine.dependency.lib.Guava
+import io.spine.dependency.lib.JavaPoet
+import io.spine.dependency.lib.JavaX
+import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.lib.Roaster
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.BaseTypes
+import io.spine.dependency.local.Change
+import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.Logging
+import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Reflect
+import io.spine.dependency.local.Text
+import io.spine.dependency.local.Time
+
 plugins {
     `fat-jar`
 }
 
 dependencies {
-    implementation(project(":java"))
+
+    implementation(project(":java")) {
+        arrayOf(
+            Asm.group,
+            Guava.group,
+            JavaX.annotationGroup,
+            Protobuf.group,
+            ErrorProne.group,
+            Grpc.group /* Available via ProtoData backend. */,
+            Roaster.group /* Available via `tool-base`. */,
+
+            // Local dependencies.
+            ProtoData.group,
+        ).forEach {
+            exclude(group = it)
+        }
+
+        listOf(
+            JavaPoet.group to JavaPoet.artifact /* Available via `tool-base` */,
+
+            // Local dependencies.
+            Base.group to Base.artifact,
+            BaseTypes.group to BaseTypes.artifact,
+
+            CoreJava.group to CoreJava.coreArtifact,
+            CoreJava.group to CoreJava.clientArtifact,
+            CoreJava.group to CoreJava.serverArtifact,
+
+            Change.group to Change.artifact,
+            Logging.group to Logging.loggingArtifact,
+            Reflect.group to Reflect.artifact,
+            Text.group to Text.artifact,
+            Time.group to Time.artifact,
+
+            CoreJava.group to CoreJava.serverArtifact,
+        ).forEach { (group, artifact) ->
+            exclude(group = group, module = artifact)
+        }
+    }
 }

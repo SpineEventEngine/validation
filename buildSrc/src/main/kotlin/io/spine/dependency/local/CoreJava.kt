@@ -35,8 +35,14 @@ package io.spine.dependency.local
 object CoreJava {
     const val group = Spine.group
     const val version = "2.0.0-SNAPSHOT.182"
-    const val core = "$group:spine-core:$version"
-    const val client = "$group:spine-client:$version"
-    const val server = "$group:spine-server:$version"
+
+    const val coreArtifact = "spine-core"
+    const val clientArtifact = "spine-client"
+    const val serverArtifact = "spine-server"
+
+    const val core = "$group:$coreArtifact:$version"
+    const val client = "$group:$clientArtifact:$version"
+    const val server = "$group:$serverArtifact:$version"
+
     const val testUtilServer = "${Spine.toolsGroup}:spine-testutil-server:$version"
 }

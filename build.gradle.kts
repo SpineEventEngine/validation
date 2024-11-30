@@ -57,11 +57,9 @@ spinePublishing {
         "java",
         "java-bundle",
         "java-runtime",
-        "java-runtime-bundle",
     )
     modulesWithCustomPublishing = setOf(
         "java-bundle",
-        "java-runtime-bundle"
     )
     destinations = with(PublishingRepos) {
         setOf(
