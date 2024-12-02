@@ -67,7 +67,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setOnceFields
             .associateWith { compilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
-                val javaConstraints = javaConstraints(protoField.subject)
+                val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
                 val sourceFile = sources.javaFileOf(declaredIn.message)
                 javaConstraints.render(sourceFile)
             }
@@ -82,20 +82,24 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaConstraints(field: Field): SetOnceJavaConstraints<*> =
+    private fun javaConstraints(field: Field, errorMessage: String): SetOnceJavaConstraints<*> =
         when {
-            field.type.isMessage -> SetOnceMessageField(field, typeSystem)
-            field.type.isEnum -> SetOnceEnumField(field, typeSystem)
-            field.type.isPrimitive -> javaConstraints(field, field.type.primitive)
+            field.type.isMessage -> SetOnceMessageField(field, typeSystem, errorMessage)
+            field.type.isEnum -> SetOnceEnumField(field, typeSystem, errorMessage)
+            field.type.isPrimitive -> javaConstraints(field, field.type.primitive, errorMessage)
             else -> throwUnsupportedType(field)
         }
 
-    private fun javaConstraints(field: Field, type: PrimitiveType): SetOnceJavaConstraints<*> =
+    private fun javaConstraints(
+        field: Field,
+        type: PrimitiveType,
+        errorMessage: String
+    ): SetOnceJavaConstraints<*> =
         when (type) {
-            TYPE_STRING -> SetOnceStringField(field, typeSystem)
-            TYPE_BOOL -> SetOnceBooleanField(field, typeSystem)
-            TYPE_BYTES -> SetOnceBytesField(field, typeSystem)
-            in SupportedNumbers -> SetOnceNumberField(field, typeSystem)
+            TYPE_STRING -> SetOnceStringField(field, typeSystem, errorMessage)
+            TYPE_BOOL -> SetOnceBooleanField(field, typeSystem, errorMessage)
+            TYPE_BYTES -> SetOnceBytesField(field, typeSystem, errorMessage)
+            in SupportedNumbers -> SetOnceNumberField(field, typeSystem, errorMessage)
             else -> throwUnsupportedType(field)
         }
 

@@ -52,6 +52,7 @@ dependencies {
         testFixturesImplementation(it)
     }
 
+    testImplementation(JUnit.params)
     testImplementation(Spine.testlib)
     testImplementation(Spine.time)
 }

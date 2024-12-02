@@ -1,0 +1,100 @@
+/*
+ * Copyright 2024, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "SetOnceFieldsProto";
+option java_multiple_files = true;
+
+import "spine/test/tools/validate/set_once_values.proto";
+
+// Tests that the constraint works with all supported field types.
+message StudentSetOnce {
+    Name name = 1 [(set_once) = true];
+    string id = 2 [(set_once) = true];
+    double height = 3 [(set_once) = true];
+    float weight = 4 [(set_once) = true];
+    int32 cash_USD = 5 [(set_once) = true];
+    int64 cash_EUR = 6 [(set_once) = true];
+    uint32 cash_JPY = 7 [(set_once) = true];
+    uint64 cash_GBP = 8 [(set_once) = true];
+    sint32 cash_AUD = 9 [(set_once) = true];
+    sint64 cash_CAD = 10 [(set_once) = true];
+    fixed32 cash_CHF = 11 [(set_once) = true];
+    fixed64 cash_CNY = 12 [(set_once) = true];
+    sfixed32 cash_PLN = 13 [(set_once) = true];
+    sfixed64 cash_NZD = 14 [(set_once) = true];
+    bool has_medals = 15 [(set_once) = true];
+    bytes signature = 16 [(set_once) = true];
+    YearOfStudy year_of_study = 17 [(set_once) = true];
+}
+
+// Tests that the constraint is not applied by default.
+message StudentUnconstrained {
+    Name name = 1;
+    string id = 2;
+    double height = 3;
+    float weight = 4;
+    int32 cash_USD = 5;
+    int64 cash_EUR = 6;
+    uint32 cash_JPY = 7;
+    uint64 cash_GBP = 8;
+    sint32 cash_AUD = 9;
+    sint64 cash_CAD = 10;
+    fixed32 cash_CHF = 11;
+    fixed64 cash_CNY = 12;
+    sfixed32 cash_PLN = 13;
+    sfixed64 cash_NZD = 14;
+    bool has_medals = 15;
+    bytes signature = 16;
+    YearOfStudy year_of_study = 17;
+}
+
+// Tests that the constraint is not applied when the flag is `false`.
+message StudentSetOnceFalse {
+    Name name = 1 [(set_once) = false];
+    string id = 2 [(set_once) = false];
+    double height = 3 [(set_once) = false];
+    float weight = 4 [(set_once) = false];
+    int32 cash_USD = 5 [(set_once) = false];
+    int64 cash_EUR = 6 [(set_once) = false];
+    uint32 cash_JPY = 7 [(set_once) = false];
+    uint64 cash_GBP = 8 [(set_once) = false];
+    sint32 cash_AUD = 9 [(set_once) = false];
+    sint64 cash_CAD = 10 [(set_once) = false];
+    fixed32 cash_CHF = 11 [(set_once) = false];
+    fixed64 cash_CNY = 12 [(set_once) = false];
+    sfixed32 cash_PLN = 13 [(set_once) = false];
+    sfixed64 cash_NZD = 14 [(set_once) = false];
+    bool has_medals = 15 [(set_once) = false];
+    bytes signature = 16 [(set_once) = false];
+    YearOfStudy year_of_study = 17 [(set_once) = false];
+}

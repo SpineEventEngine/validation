@@ -26,6 +26,7 @@
 
 package io.spine.validation.java.setonce
 
+import com.google.protobuf.ByteString
 import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
@@ -33,19 +34,36 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+
+/**
+ * A type that can be either [String] or [ByteString].
+ *
+ * In the generated Java code, Protobuf uses [ByteString] to represent strings.
+ * Though, it has setters, which accept just a [String]. For example, the field's
+ * direct setter accepts exactly [String], but we have to compare it with [ByteString]
+ * because the internal representation of the current value is [ByteString].
+ *
+ * It doesn't lead to compiler or runtime errors because `isEmpty()`, `equals()` and
+ * `toString()` methods are present in both, and equality check between [String]
+ * and [ByteString] doesn't take into account the class, only the content it holds.
+ */
+internal object StringOrByteString
 
 /**
  * Renders Java code to support `(set_once)` option for the given string [field].
  *
  * @param field The string field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceStringField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<String>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<StringOrByteString>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_STRING) {
@@ -55,8 +73,8 @@ internal class SetOnceStringField(
     }
 
     override fun defaultOrSame(
-        currentValue: Expression<String>,
-        newValue: Expression<String>
+        currentValue: Expression<StringOrByteString>,
+        newValue: Expression<StringOrByteString>
     ): Expression<Boolean> = Expression(
         "$currentValue.isEmpty() || $currentValue.equals($newValue)"
     )
@@ -120,7 +138,7 @@ internal class SetOnceStringField(
             newValue = Expression("other.$fieldGetter")
         )
         val mergeFromMessage = methodWithSignature(
-            "public Builder mergeFrom(${declaringMessage.canonical} other)"
+            "public Builder mergeFrom(${declaringMessageClass.canonical} other)"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(
             AnElement("if (!other.$fieldGetter.isEmpty())")
@@ -128,4 +146,7 @@ internal class SetOnceStringField(
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
+
+    override fun asString(fieldValue: Expression<StringOrByteString>): Expression<String> =
+        MethodCall(fieldValue, "toString")
 }

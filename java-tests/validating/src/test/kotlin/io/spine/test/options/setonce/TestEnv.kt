@@ -38,8 +38,9 @@ import io.spine.test.tools.validate.name
  * Tests use them to verify whether a field with a non-default value can be
  * overridden by another non-default value.
  *
- * Although Protobuf has 10 integer types, in Java, all 32-bit numbers are
- * mapped to `int`, and all 64bit numbers are mapped to `long`.
+ * Please note, in Java, there are only two integer types, which are used
+ * to cover ten Protobuf integer types. All 32-bit numbers are mapped to `int`
+ * and all 64bit numbers are mapped to `long`.
  */
 internal object TestEnv {
 
@@ -49,8 +50,8 @@ internal object TestEnv {
     val JACK: Name = name { value = "Jack" }
     val DONALD: Name = name { value = "Donald" }
 
-    const val METER_AND_HALF: Double = 1.55
-    const val METER_AND_EIGHT: Double = 1.88
+    const val SHORT_HEIGHT: Double = 1.55
+    const val TALL_HEIGHT: Double = 1.88
 
     const val FIFTY_KG: Float = 55.5f
     const val EIGHTY_KG: Float = 88.8f
@@ -58,15 +59,15 @@ internal object TestEnv {
     const val NO: Boolean = false
     const val YES: Boolean = true
 
-    val FULL_SIGNATURE: ByteString = ByteString.copyFromUtf8("full")
-    val SHORT_SIGNATURE: ByteString = ByteString.copyFromUtf8("short")
+    val CERT1: ByteString = ByteString.copyFromUtf8("certificate_1")
+    val CERT2: ByteString = ByteString.copyFromUtf8("certificate_2")
 
     val FIRST_YEAR: YearOfStudy = YearOfStudy.YOS_FIRST
     val THIRD_YEAR: YearOfStudy = YearOfStudy.YOS_THIRD
 
-    const val SIXTEEN: Int = 16
-    const val SIXTY: Int = 60
+    const val TWO: Int = 2
+    const val EIGHT: Int = 8
 
-    const val EIGHTEEN: Long = 18
-    const val EIGHTY: Long = 80
+    const val TWENTY: Long = 20
+    const val SEVENTY: Long = 80
 }

@@ -32,6 +32,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
@@ -43,11 +44,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The byte array field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceBytesField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<ByteString>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
@@ -88,4 +91,7 @@ internal class SetOnceBytesField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
+
+    override fun asString(fieldValue: Expression<ByteString>): Expression<String> =
+        MethodCall(fieldValue, "toString")
 }

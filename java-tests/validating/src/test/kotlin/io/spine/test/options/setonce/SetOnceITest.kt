@@ -26,81 +26,123 @@
 
 package io.spine.test.options.setonce
 
-import io.spine.test.tools.validate.name
-import io.spine.test.tools.validate.setOnceExplicitFalse
-import io.spine.test.tools.validate.setOnceImplicitFalse
+import io.spine.test.options.setonce.TestEnv.CERT1
+import io.spine.test.options.setonce.TestEnv.CERT2
+import io.spine.test.options.setonce.TestEnv.DONALD
+import io.spine.test.options.setonce.TestEnv.TWENTY
+import io.spine.test.options.setonce.TestEnv.SEVENTY
+import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
+import io.spine.test.options.setonce.TestEnv.FIFTY_KG
+import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
+import io.spine.test.options.setonce.TestEnv.JACK
+import io.spine.test.options.setonce.TestEnv.NO
+import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
+import io.spine.test.options.setonce.TestEnv.TWO
+import io.spine.test.options.setonce.TestEnv.EIGHT
+import io.spine.test.options.setonce.TestEnv.STUDENT1
+import io.spine.test.options.setonce.TestEnv.STUDENT2
+import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
+import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
+import io.spine.test.options.setonce.TestEnv.YES
+import io.spine.test.tools.validate.studentSetOnceFalse
+import io.spine.test.tools.validate.studentUnconstrained
 import io.spine.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+/**
+ * Tests for `(set_once)` constraint.
+ *
+ * Notice on the coverage of negative tests: they do not cover all types of setters
+ * for each field type intentionally. Take a look on positive [SetOnceFieldsITest] and [SetOnceIntegerITest].
+ * For each field type, they have tests for each kind of setter (direct, reflective,
+ * merging, etc.) In order not to write the same extensive tests for negative cases,
+ * we rely a bit on the implementation detail. The decision whether the option constraints
+ * are added is taken at a "higher level": [io.spine.validation.java.setonce.SetOnceValidationRenderer].
+ * So, it is always all setters altered or none. Thus, we only verify the direct field
+ * setters in negative tests. We suppose that if it allows re-assignment, the other kinds
+ * of setters allow it too.
+ */
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceITest {
 
     @Test
     fun `not affect fields without the option`() = assertValidationPasses {
-        setOnceImplicitFalse {
-            message = name { value = "MyName1" }
-            message = name { value = "MyName2" }
-            string = "string-1"
-            string = "string-2"
-            double = 0.25
-            double = 0.75
-            float = 0.25f
-            float = 0.75f
-            int32 = 5
-            int32 = 10
-            int64 = 5
-            int64 = 10
-            uint32 = 5
-            uint32 = 10
-            uint64 = 5
-            uint64 = 10
-            sint32 = 5
-            sint32 = 10
-            sint64 = 5
-            sint64 = 10
-            fixed32 = 5
-            fixed32 = 10
-            fixed64 = 5
-            fixed64 = 10
-            sfixed32 = 5
-            sfixed32 = 10
-            sfixed64 = 5
-            sfixed64 = 10
+        studentUnconstrained {
+            name = JACK
+            name = DONALD
+            id = STUDENT1
+            id = STUDENT2
+            height = SHORT_HEIGHT
+            height = TALL_HEIGHT
+            weight = FIFTY_KG
+            weight = EIGHTY_KG
+            cashUSD = TWO
+            cashUSD = EIGHT
+            cashEUR = TWENTY
+            cashEUR = SEVENTY
+            cashJPY = TWO
+            cashJPY = EIGHT
+            cashGBP = TWENTY
+            cashGBP = SEVENTY
+            cashAUD = TWO
+            cashAUD = EIGHT
+            cashCAD = TWENTY
+            cashCAD = SEVENTY
+            cashCHF = TWO
+            cashCHF = EIGHT
+            cashCNY = TWENTY
+            cashCNY = SEVENTY
+            cashPLN = TWO
+            cashPLN = EIGHT
+            cashNZD = TWENTY
+            cashNZD = SEVENTY
+            hasMedals = YES
+            hasMedals = NO
+            signature = CERT1
+            signature = CERT2
+            yearOfStudy = FIRST_YEAR
+            yearOfStudy = THIRD_YEAR
         }
     }
 
     @Test
     fun `not affect fields with the option set to 'false'`() = assertValidationPasses {
-        setOnceExplicitFalse {
-            message = name { value = "MyName1" }
-            message = name { value = "MyName2" }
-            string = "string-1"
-            string = "string-2"
-            double = 0.25
-            double = 0.75
-            float = 0.25f
-            float = 0.75f
-            int32 = 5
-            int32 = 10
-            int64 = 5
-            int64 = 10
-            uint32 = 5
-            uint32 = 10
-            uint64 = 5
-            uint64 = 10
-            sint32 = 5
-            sint32 = 10
-            sint64 = 5
-            sint64 = 10
-            fixed32 = 5
-            fixed32 = 10
-            fixed64 = 5
-            fixed64 = 10
-            sfixed32 = 5
-            sfixed32 = 10
-            sfixed64 = 5
-            sfixed64 = 10
+        studentSetOnceFalse {
+            name = JACK
+            name = DONALD
+            id = STUDENT1
+            id = STUDENT2
+            height = SHORT_HEIGHT
+            height = TALL_HEIGHT
+            weight = FIFTY_KG
+            weight = EIGHTY_KG
+            cashUSD = TWO
+            cashUSD = EIGHT
+            cashEUR = TWENTY
+            cashEUR = SEVENTY
+            cashJPY = TWO
+            cashJPY = EIGHT
+            cashGBP = TWENTY
+            cashGBP = SEVENTY
+            cashAUD = TWO
+            cashAUD = EIGHT
+            cashCAD = TWENTY
+            cashCAD = SEVENTY
+            cashCHF = TWO
+            cashCHF = EIGHT
+            cashCNY = TWENTY
+            cashCNY = SEVENTY
+            cashPLN = TWO
+            cashPLN = EIGHT
+            cashNZD = TWENTY
+            cashNZD = SEVENTY
+            hasMedals = YES
+            hasMedals = NO
+            signature = CERT1
+            signature = CERT2
+            yearOfStudy = FIRST_YEAR
+            yearOfStudy = THIRD_YEAR
         }
     }
 }

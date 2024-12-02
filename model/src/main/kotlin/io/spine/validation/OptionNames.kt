@@ -80,6 +80,11 @@ public const val REQUIRED: String = "required"
 public const val SET_ONCE: String = "set_once"
 
 /**
+ * The name of `(if_set_again)` option.
+ */
+public const val IF_SET_AGAIN: String = "if_set_again"
+
+/**
  * The name of the `(validate)` option.
  */
 public const val VALIDATE: String = "validate"

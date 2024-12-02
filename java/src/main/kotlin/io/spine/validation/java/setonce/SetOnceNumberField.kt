@@ -41,7 +41,9 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.java.AnElement
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
@@ -50,11 +52,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The number field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceNumberField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Number>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Number>(field, typeSystem, errorMessage) {
 
     companion object {
         private val FieldReaders = mapOf(
@@ -108,4 +112,7 @@ internal class SetOnceNumberField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
+
+    override fun asString(fieldValue: Expression<Number>): Expression<String> =
+        ClassName(String::class).call("valueOf", fieldValue)
 }

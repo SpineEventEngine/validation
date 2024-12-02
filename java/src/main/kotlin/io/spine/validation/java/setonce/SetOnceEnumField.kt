@@ -26,11 +26,15 @@
 
 package io.spine.validation.java.setonce
 
+import com.google.protobuf.Enum
+import com.google.protobuf.ProtocolMessageEnum
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.type.TypeSystem
 import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
+import io.spine.protodata.java.javaClassName
 import io.spine.tools.psi.java.method
 
 /**
@@ -41,11 +45,13 @@ import io.spine.tools.psi.java.method
  *
  * @param field The enum field that declared the option.
  * @param typeSystem The type system to resolve types.
+ * @param errorMessage The error message pattern to use in case of the violation.
  */
 internal class SetOnceEnumField(
     field: Field,
-    typeSystem: TypeSystem
-) : SetOnceJavaConstraints<Int>(field, typeSystem) {
+    typeSystem: TypeSystem,
+    errorMessage: String
+) : SetOnceJavaConstraints<Int>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.isEnum) {
@@ -53,6 +59,8 @@ internal class SetOnceEnumField(
                     "The passed field: `$field`."
         }
     }
+
+    private val fieldTypeClass = field.type.enumeration.javaClassName(typeSystem)
 
     override fun defaultOrSame(
         currentValue: Expression<Int>,
@@ -103,4 +111,27 @@ internal class SetOnceEnumField(
         val setter = method("${fieldSetterName}Value").body!!
         setter.addAfter(precondition, setter.lBrace)
     }
+
+    /**
+     * Returns the corresponding Java enum constant for the given ordinal number.
+     */
+    override fun asPayload(fieldValue: Expression<Int>): Expression<ProtocolMessageEnum> =
+        asEnumConstant(fieldValue)
+
+    /**
+     * Returns a string representation of the corresponding Java enum constant.
+     */
+    override fun asString(fieldValue: Expression<Int>): Expression<String> =
+        fieldTypeClass
+            .call<Enum>("forNumber", fieldValue)
+            .chain("toString")
+
+    /**
+     * Converts an enum ordinal number to the corresponding constant.
+     *
+     * Enums are represented with numbers within message builders, but enum constants
+     * seem more useful in diagnostics messages.
+     */
+    private fun asEnumConstant(fieldValue: Expression<Int>): Expression<ProtocolMessageEnum> =
+        fieldTypeClass.call("forNumber", fieldValue)
 }

@@ -32,6 +32,7 @@ import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
@@ -58,16 +59,15 @@ import io.spine.tools.psi.java.execute
  *
  * @property field The field that declared the option.
  * @property typeSystem The type system to resolve types.
+ * @property errorMessage The error message pattern to use in case of the violation.
  */
 internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
-    private val typeSystem: TypeSystem
+    private val typeSystem: TypeSystem,
+    private val errorMessage: String
 ) {
 
     private companion object {
-        const val THROW_VALIDATION_EXCEPTION =
-            "throw new io.spine.validate.ValidationException(" +
-                    "io.spine.validate.ConstraintViolation.getDefaultInstance());"
 
         /**
          * The signature of `mergeFrom(CodedInputStream)` method.
@@ -83,12 +83,15 @@ internal sealed class SetOnceJavaConstraints<T>(
             """.trimIndent()
     }
 
+    private val declaringMessage: TypeName = field.declaringType
+    private val constraintViolation by lazy { SetOnceConstraintViolation(errorMessage, field) }
+
+    protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
     protected val fieldName = field.name.javaCase()
     protected val fieldNameCamel = fieldName.camelCase()
     protected val fieldGetterName = "get$fieldNameCamel"
     protected val fieldSetterName = "set$fieldNameCamel"
     protected val fieldGetter = "$fieldGetterName()"
-    protected val declaringMessage = field.declaringType.javaClassName(typeSystem)
 
     /**
      * Renders Java constraints in the given [sourceFile] to make sure that the [field]
@@ -104,8 +107,8 @@ internal sealed class SetOnceJavaConstraints<T>(
      */
     fun render(sourceFile: SourceFile<Java>) {
         val messageBuilder = ClassName(
-            packageName = declaringMessage.packageName,
-            simpleNames = declaringMessage.simpleNames + "Builder"
+            packageName = declaringMessageClass.packageName,
+            simpleNames = declaringMessageClass.simpleNames + "Builder"
         )
         val psiFile = sourceFile.psi() as PsiJavaFile
         val psiClass = psiFile.findClass(messageBuilder)
@@ -182,12 +185,19 @@ internal sealed class SetOnceJavaConstraints<T>(
     protected fun throwIfNotDefaultAndNotSame(
         currentValue: Expression<T>,
         newValue: Expression<T>
-    ): PsiStatement = elementFactory.createStatement(
-        """
+    ): PsiStatement {
+        val violation = constraintViolation.withValues(
+            asString(currentValue),
+            asString(newValue),
+            asPayload(newValue)
+        )
+        return elementFactory.createStatement(
+            """
             if (!(${defaultOrSame(currentValue, newValue)})) {
-                $THROW_VALIDATION_EXCEPTION
+                throw new io.spine.validate.ValidationException($violation);
             }""".trimIndent()
-    )
+        )
+    }
 
     /**
      * Returns a boolean expression upon the field's [currentValue] and the proposed [newValue].
@@ -228,8 +238,18 @@ internal sealed class SetOnceJavaConstraints<T>(
     } as PsiStatement
 
     /**
-     * Creates a new [PsiStatement] from the given [text].
+     * Converts the given [fieldValue] to string for a diagnostics message.
      */
-    private fun PsiElementFactory.createStatement(text: String) =
-        createStatementFromText(text, null)
+    protected abstract fun asString(fieldValue: Expression<T>): Expression<String>
+
+    /**
+     * Prepares the given [fieldValue] to be used as a payload for [SetOnceConstraintViolation].
+     */
+    protected open fun asPayload(fieldValue: Expression<T>): Expression<*> = fieldValue
 }
+
+/**
+ * Creates a new [PsiStatement] from the given [text].
+ */
+private fun PsiElementFactory.createStatement(text: String) =
+    createStatementFromText(text, null)

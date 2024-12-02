@@ -140,9 +140,7 @@ private fun ErrorMessage.buildViolation(
     return violationBuilder.chainBuild()
 }
 
-private fun pathOf(field: Field): Expression<FieldPath> {
-    val type = ClassName(FieldPath::class.java)
-    return type.newBuilder()
+private fun pathOf(field: Field): Expression<FieldPath> =
+    ClassName(FieldPath::class.java).newBuilder()
         .chainAdd("field_name", StringLiteral(field.name.value))
         .chainBuild()
-}

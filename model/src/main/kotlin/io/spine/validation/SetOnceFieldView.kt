@@ -30,6 +30,7 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfSetAgainOption
+import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.server.entity.alter
@@ -49,6 +50,17 @@ internal class SetOnceFieldView :
         subject = e.subject
     }
 
+    @Subscribe
+    override fun onErrorMessage(
+        @External @Where(field = OPTION_NAME, equals = IF_SET_AGAIN)
+        e: FieldOptionDiscovered
+    ) = super.onErrorMessage(e)
+
+    override fun extractErrorMessage(option: Option): String {
+        val ifSetAgain = option.value.unpack<IfSetAgainOption>()
+        return ifSetAgain.errorMsg
+    }
+
     override fun saveErrorMessage(errorMessage: String) = alter {
         this.errorMessage = errorMessage
     }
@@ -56,7 +68,4 @@ internal class SetOnceFieldView :
     override fun enableValidation() = alter {
         enabled = true
     }
-
-    override fun extractErrorMessage(option: Option): String =
-        throw NotImplementedError("`($SET_ONCE)` option does not support custom error messages.")
 }
