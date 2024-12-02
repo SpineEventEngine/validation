@@ -39,6 +39,20 @@ import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
+ * A type that can be either [String] or [ByteString].
+ *
+ * In the generated Java code, Protobuf uses [ByteString] to represent strings.
+ * Though, it has setters, which accept just a [String]. For example, the field's
+ * direct setter accepts exactly [String], but we have to compare it with [ByteString]
+ * because the internal representation of the current value is [ByteString].
+ *
+ * It doesn't lead to compiler or runtime errors because `isEmpty()`, `equals()` and
+ * `toString()` methods are present in both, and equality check between [String]
+ * and [ByteString] doesn't take into account the class, only the content it holds.
+ */
+internal object StringOrByteString
+
+/**
  * Renders Java code to support `(set_once)` option for the given string [field].
  *
  * @param field The string field that declared the option.
@@ -49,7 +63,7 @@ internal class SetOnceStringField(
     field: Field,
     typeSystem: TypeSystem,
     errorMessage: String
-) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
+) : SetOnceJavaConstraints<StringOrByteString>(field, typeSystem, errorMessage) {
 
     init {
         check(field.type.primitive == PrimitiveType.TYPE_STRING) {
@@ -59,8 +73,8 @@ internal class SetOnceStringField(
     }
 
     override fun defaultOrSame(
-        currentValue: Expression<ByteString>,
-        newValue: Expression<ByteString>
+        currentValue: Expression<StringOrByteString>,
+        newValue: Expression<StringOrByteString>
     ): Expression<Boolean> = Expression(
         "$currentValue.isEmpty() || $currentValue.equals($newValue)"
     )
@@ -133,6 +147,6 @@ internal class SetOnceStringField(
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 
-    override fun asString(fieldValue: Expression<ByteString>): Expression<String> =
+    override fun asString(fieldValue: Expression<StringOrByteString>): Expression<String> =
         MethodCall(fieldValue, "toString")
 }
