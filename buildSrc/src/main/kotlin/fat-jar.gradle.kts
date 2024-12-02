@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.SpinePublishing
 
 plugins {
@@ -58,7 +59,7 @@ tasks.shadowJar {
          *
          * Locating this type in its own `io:spine:protodata` artifact is crucial
          * for obtaining proper version values from the manifest file.
-         * This file is only present in `io:spine:protodata` artifact.
+         * This file is only present in the `io:spine:protodata` artifact.
          */
         "io/spine/protodata/gradle/plugin/Plugin.class",
         "META-INF/gradle-plugins/io.spine.protodata.properties",
@@ -96,7 +97,24 @@ tasks.shadowJar {
         "src/**",
 
         // Java source code files of the package `org.osgi`.
-        "OSGI-OPT/**"
+        "OSGI-OPT/**",
+
+        // Kotlin runtime. It's going to be provided.
+        "kotlin/**",
+        "kotlinx/**",
+
+        // Kotlin module files for Kotlin Stdlib artifacts.
+        "META-INF/kotlin-stdlib**",
+
+        // Annotations available via ProtoData classpath.
+        "android/annotation/**",
+        "javax/annotation/**",
+        "org/intellij/**",
+        "org/jetbrains/**",
+
+        // Exclude the descriptor set file which comes from `spine-validation-java-runtime`
+        // used to build Validation itself.
+        "io.spine.validation_java-runtime_main_${Validation.version}.desc",
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */

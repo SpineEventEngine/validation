@@ -24,13 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import Module_gradle.Module
 import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.lib.Jackson
 import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.Reflect
+import io.spine.dependency.local.TestLib
+import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
 import io.spine.dependency.test.JUnit
@@ -146,21 +150,18 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
-                /* Use the default version of Validation, not those coming with Spine because
-                   it would use `validationVersion` extension property of the project. */
-                val validationVersion = Validation.version
                 force(
                     JUnit.runner,
 
-                    Spine.reflect,
-                    Spine.base,
-                    Spine.time,
-                    Spine.testlib,
+                    Reflect.lib,
+                    Base.lib,
+                    Time.lib,
+                    TestLib.lib,
                     ToolBase.lib,
                     Logging.libJvm,
                     Logging.middleware,
                     CoreJava.server,
-                    "io.spine.validation:spine-validation-java-runtime:$validationVersion",
+                    Validation.runtime,
 
                     Jackson.core,
                     Jackson.moduleKotlin,
