@@ -62,3 +62,13 @@ message SetOnceField {
     // The field in which the option was discovered.
     protodata.Field subject = 4;
 }
+
+message GoesField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    GoesOption option = 2;
+
+    // TODO:2024-12-03:yevhenii.nadtochii: Do I need a subject here?
+}
