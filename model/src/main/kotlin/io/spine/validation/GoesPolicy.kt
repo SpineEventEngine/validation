@@ -62,12 +62,13 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
         val companionFieldName = FieldPath(option.with)
         val companionField = typeSystem!!.resolve(companionFieldName, declaringMessage)
-        val companionFieldShouldBeSet = RequiredRule.forField(companionField, option.errorMessage())!!
+        val companionFieldShouldBeSet = RequiredRule.forField(companionField, "Left side")!!
 
         val rule = compositeRule {
             left = thisFieldShouldBeUnset
             operator = LogicalOperator.OR
             right = companionFieldShouldBeSet
+            errorMessage = option.errorMessage()
         }.wrap()
 
         return just(rule.toEvent(thisField.declaringType))
