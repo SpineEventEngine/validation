@@ -26,78 +26,198 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
-import io.kotest.matchers.optional.shouldBeEmpty
-import io.kotest.matchers.optional.shouldBePresent
-import io.kotest.matchers.shouldBe
-import io.spine.base.Time
-import io.spine.base.fieldPath
-import io.spine.test.tools.validate.ArchiveId
-import io.spine.test.tools.validate.Paper
-import io.spine.test.tools.validate.paper
-import io.spine.type.TypeName
-import io.spine.validate.constraintViolation
-import org.junit.jupiter.api.Disabled
+import com.google.protobuf.ByteString.copyFromUtf8
+import com.google.protobuf.Descriptors.Descriptor
+import com.google.protobuf.Descriptors.EnumValueDescriptor
+import com.google.protobuf.DynamicMessage
+import com.google.protobuf.Message
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
+import io.spine.test.tools.validate.BytesCompanion
+import io.spine.test.tools.validate.EnumCompanion
+import io.spine.test.tools.validate.EnumForGoes.EFG_ITEM1
+import io.spine.test.tools.validate.MapCompanion
+import io.spine.test.tools.validate.MessageCompanion
+import io.spine.test.tools.validate.RepeatedCompanion
+import io.spine.test.tools.validate.StringCompanion
+import io.spine.test.tools.validate.bytesCompanion
+import io.spine.test.tools.validate.enumCompanion
+import io.spine.test.tools.validate.mapCompanion
+import io.spine.test.tools.validate.messageCompanion
+import io.spine.test.tools.validate.repeatedCompanion
+import io.spine.test.tools.validate.stringCompanion
+import io.spine.validate.ValidationException
+import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`(goes)` option should be compiled so that")
+
+@DisplayName("`(goes)` constraint should")
 internal class GoesITest {
 
-    @Test
-    @Disabled("https://github.com/SpineEventEngine/mc-java/issues/119")
-    fun `it indicates violation if the associated field is not set and the target field is set`() {
-        val paper = Paper.newBuilder()
-            .setWhenArchived(Time.currentTime())
-            .buildPartial()
-        val error = paper.validate()
-        error.shouldBePresent()
-
-        val violations = error.get().constraintViolationList
-        violations.size shouldBe 1
-
-        val expected = constraintViolation {
-            typeName = TypeName.of(paper).value()
-            fieldPath = fieldPath { fieldName.add("when_archived") }
-        }
-
-        assertThat(violations[0])
-            .comparingExpectedFieldsOnly()
-            .isEqualTo(expected)
+    private object FieldValues {
+        val message = Timestamps.now()
+        val enum: EnumValueDescriptor = EFG_ITEM1.valueDescriptor
+        val string = "some companion text"
+        val bytes = copyFromUtf8("some companion data")
+        val repeated = listOf(1L, 2L, 3L)
+        val map = mapOf("key" to 32)
     }
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `message` field required when it is requested by another `{0}` field")
+    fun makeMessageCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(MessageCompanion::class, fieldName, fieldValue, FieldValues.message)
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `enum` field required when it is requested by another `{0}` field")
+    fun makeEnumCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(EnumCompanion::class, fieldName, fieldValue, FieldValues.enum)
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `string` field required when it is requested by another `{0}` field")
+    fun makeStringCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(StringCompanion::class, fieldName, fieldValue, FieldValues.string)
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `bytes` field required when it is requested by another `{0}` field")
+    fun makeBytesCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(BytesCompanion::class, fieldName, fieldValue, FieldValues.bytes)
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `repeated` field required when it is requested by another `{0}` field")
+    fun makeRepeatedCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(RepeatedCompanion::class, fieldName, fieldValue, FieldValues.repeated)
+
+    @MethodSource("fieldsWithCompanion")
+    @ParameterizedTest(name = "make a companion `map` field required when it is requested by another `{0}` field")
+    fun makeMapCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
+        assertCompanion(MapCompanion::class, fieldName, fieldValue, FieldValues.map)
 
     @Nested inner class
-    `it indicates no violation if` {
+    `do nothing if a companion field is set when it is` {
 
         @Test
-        fun `both fields are set`() {
-            val paper = assertDoesNotThrow {
-                paper {
-                    archiveId = ArchiveId.generate()
-                    whenArchived = Time.currentTime()
+        fun `a message field`() {
+            assertDoesNotThrow {
+                messageCompanion {
+                    companion = FieldValues.message
                 }
             }
-            paper.validate().shouldBeEmpty()
         }
 
         @Test
-        fun `neither field is set`() {
-            val paper = assertDoesNotThrow {
-                paper { }
+        fun `an enum field`() {
+            assertDoesNotThrow {
+                enumCompanion {
+                    companionValue = FieldValues.enum.number
+                }
             }
-            paper.validate().shouldBeEmpty()
+        }
+
+        @Test
+        fun `a string field`() {
+            assertDoesNotThrow {
+                stringCompanion {
+                    companion = FieldValues.string
+                }
+            }
+        }
+
+        @Test
+        fun `a bytes field`() {
+            assertDoesNotThrow {
+                bytesCompanion {
+                    companion = FieldValues.bytes
+                }
+            }
+        }
+
+        @Test
+        fun `a repeated field`() {
+            assertDoesNotThrow {
+                repeatedCompanion {
+                    companion.addAll(FieldValues.repeated)
+                }
+            }
+        }
+
+        @Test
+        fun `a map field`() {
+            assertDoesNotThrow {
+                mapCompanion {
+                    companion.putAll(FieldValues.map)
+                }
+            }
         }
     }
 
-    @Test
-    fun `there is no violation if the associated field is set and target is not set`() {
-        val paper = assertDoesNotThrow {
-            paper {
-                archiveId = ArchiveId.generate()
-            }
-        }
-        paper.validate().shouldBeEmpty()
+    private companion object {
+
+        @JvmStatic
+        fun fieldsWithCompanion() = listOf(
+            arguments(named("message", "message_field"), FieldValues.message),
+            arguments(named("enum", "enum_field"), FieldValues.enum),
+            arguments(named("string", "string_field"), FieldValues.string),
+            arguments(named("bytes", "bytes_field"), FieldValues.bytes),
+            arguments(named("repeated", "repeated_field"), FieldValues.repeated),
+            arguments(named("map", "map_field"), FieldValues.map),
+        )
     }
 }
+
+private fun <M : Message> assertCompanion(
+    message: KClass<M>,
+    targetField: String,
+    fieldValue: Any,
+    companionValue: Any
+) {
+    val companionClass = message.java
+    val descriptor = companionClass.getDeclaredMethod("getDescriptor")
+        .invoke(null) as Descriptor
+    val field = descriptor.findFieldByName(targetField)!!
+    val builder = companionClass.getDeclaredMethod("newBuilder")
+        .invoke(null) as Message.Builder
+    val safeFieldValue = if (fieldValue is Map<*, *>) protoField(descriptor, fieldValue) else fieldValue
+    val safeCompanionValue = if (companionValue is Map<*, *>) protoCompanion(descriptor, companionValue) else companionValue
+    assertThrows<ValidationException> {
+        builder.setField(field, safeFieldValue)
+            .build()
+    }
+    assertDoesNotThrow {
+        builder
+            .setField(descriptor.findFieldByName("companion")!!, safeCompanionValue)
+            .setField(field, safeFieldValue)
+            .build()
+    }
+}
+
+private fun protoCompanion(companion: Descriptor, map: Map<*, *>): Any =
+    protoMap("companion", companion, map)
+
+private fun protoField(companion: Descriptor, map: Map<*, *>): Any =
+    protoMap("map_field", companion, map)
+
+private fun protoMap(fieldName: String, companion: Descriptor, map: Map<*, *>): Any {
+    val mapField = companion.findFieldByName(fieldName)!!
+    val mapEntryDescriptor = mapField.messageType
+    val protoEntries = mutableListOf<DynamicMessage>()
+    map.forEach { entry ->
+        protoEntries.add(
+            DynamicMessage.newBuilder(mapEntryDescriptor)
+                .setField(mapEntryDescriptor.findFieldByName("key"), entry.key)
+                .setField(mapEntryDescriptor.findFieldByName("value"), entry.value)
+                .build()
+        )
+    }
+    return protoEntries
+}
+
+
