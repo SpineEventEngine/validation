@@ -57,10 +57,10 @@ internal object TestData {
     )
 
     /**
-     * Test data for [GoesITest.throwIfOnlyPrimaryFieldSet].
+     * Test data for [GoesITest.throwIfOnlyTargetFieldSet].
      */
     @JvmStatic
-    fun onlyPrimaryFields() = fieldValues.map { (messageClass, fieldValue) ->
+    fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
         val fieldType = messageClass.typeUnderTest()
         val fieldName = messageClass.fieldName()
         arguments(named(fieldType, messageClass.java), fieldName, fieldValue)
@@ -76,10 +76,10 @@ internal object TestData {
     }
 
     /**
-     * Test data for [GoesITest.notThrowIfBothPrimaryAndCompanionFieldsSet].
+     * Test data for [GoesITest.notThrowIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
-    fun bothPrimaryAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
+    fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
         fieldValues.map { (fieldClass, fieldValue) ->
             arguments(
                 named(messageClass.typeUnderTest(), messageClass.java),
@@ -93,11 +93,10 @@ internal object TestData {
 }
 
 /**
- * Extracts a simple name of the type-under-test from this [KClass].
+ * Extracts a simple name of the field type, which is under test from this [KClass].
  *
- * This extension relies on naming consistency within `goes.proto`
- * message stubs. So, the message prefix represents a data type of
- * the companion field.
+ * This extension relies on naming consistency within `goes.proto` message stubs.
+ * So, the message prefix shows a data type of the companion field.
  *
  * For example, `StringCompanion` becomes just `string`.
  */
@@ -106,12 +105,11 @@ private fun KClass<out Message>.typeUnderTest() = simpleName!!
     .lowercase()
 
 /**
- * Extracts a simple field name of the field, which declared a dependency
- * on another field.
+ * Extracts a simple field name of the field, which declares a dependency
+ * on another field (companion).
  *
- * This extension relies on naming consistency within `goes.proto`
- * message stubs. So, each primary field (which declares dependency)
- * is strictly named as following: `{data_type}_field`.
+ * This extension relies on naming consistency within `goes.proto` message stubs.
+ * So, each target field (with the option) is named as following: `{data_type}_field`.
  *
  * For example, `StringCompanion` becomes `string_field`.
  */

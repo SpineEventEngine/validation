@@ -40,9 +40,9 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesITest {
 
-    @MethodSource("io.spine.test.options.goes.TestData#onlyPrimaryFields")
-    @ParameterizedTest(name = "throw if only the primary `{0}` field is set")
-    fun throwIfOnlyPrimaryFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
+    @MethodSource("io.spine.test.options.goes.TestData#onlyTargetFields")
+    @ParameterizedTest(name = "throw if only the target `{0}` field is set")
+    fun throwIfOnlyTargetFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
         val descriptor = message.protoDescriptor()
         val field = descriptor.findFieldByName(fieldName)!!
         val protoValue = protoValue(field, fieldValue)
@@ -57,12 +57,12 @@ internal class GoesITest {
     @ParameterizedTest(name = "not throw if only the companion `{0}` field is set")
     fun notThrowIfOnlyCompanionFieldSet(
         message: Class<out Message>,
-        companionName: String,
-        companionValue: Any
+        fieldName: String,
+        fieldValue: Any
     ) {
         val descriptor = message.protoDescriptor()
-        val companionField = descriptor.findFieldByName(companionName)!!
-        val companionProtoValue = protoValue(companionField, companionValue)
+        val companionField = descriptor.findFieldByName(fieldName)!!
+        val companionProtoValue = protoValue(companionField, fieldValue)
         assertDoesNotThrow {
             message.newBuilder()
                 .setField(companionField, companionProtoValue)
@@ -70,9 +70,9 @@ internal class GoesITest {
         }
     }
 
-    @MethodSource("io.spine.test.options.goes.TestData#bothPrimaryAndCompanionFields")
-    @ParameterizedTest(name = "not throw if both the primary `{0}` and its companion `{3}` fields are set")
-    fun notThrowIfBothPrimaryAndCompanionFieldsSet(
+    @MethodSource("io.spine.test.options.goes.TestData#bothTargetAndCompanionFields")
+    @ParameterizedTest(name = "not throw if both the target `{0}` and its companion `{3}` fields are set")
+    fun notThrowIfBothTargetAndCompanionFieldsSet(
         message: Class<out Message>,
         companionName: String,
         companionValue: Any,
