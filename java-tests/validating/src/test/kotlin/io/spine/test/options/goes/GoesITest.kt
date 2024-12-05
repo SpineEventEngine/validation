@@ -26,160 +26,97 @@
 
 package io.spine.test.options.goes
 
-import com.google.protobuf.ByteString.copyFromUtf8
 import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Descriptors.EnumValueDescriptor
+import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
-import com.google.protobuf.util.Timestamps
-import io.spine.test.tools.validate.BytesCompanion
-import io.spine.test.tools.validate.EnumCompanion
-import io.spine.test.tools.validate.EnumForGoes.EFG_ITEM1
-import io.spine.test.tools.validate.MapCompanion
-import io.spine.test.tools.validate.MessageCompanion
-import io.spine.test.tools.validate.RepeatedCompanion
-import io.spine.test.tools.validate.StringCompanion
 import io.spine.validate.ValidationException
-import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-
 
 @DisplayName("`(goes)` constraint should")
 internal class GoesITest {
 
-    private object FieldValues {
-        val message = Timestamps.now()
-        val enum: EnumValueDescriptor = EFG_ITEM1.valueDescriptor
-        val string = "some companion text"
-        val bytes = copyFromUtf8("some companion data")
-        val repeated = listOf(1L, 2L, 3L)
-        val map = mapOf("key" to 32)
-    }
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `message` field required when it is requested by `{0}` field")
-    fun makeMessageCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(MessageCompanion::class, fieldName, fieldValue, FieldValues.message)
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `enum` field required when it is requested by `{0}` field")
-    fun makeEnumCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(EnumCompanion::class, fieldName, fieldValue, FieldValues.enum)
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `string` field required when it is requested by `{0}` field")
-    fun makeStringCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(StringCompanion::class, fieldName, fieldValue, FieldValues.string)
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `bytes` field required when it is requested by `{0}` field")
-    fun makeBytesCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(BytesCompanion::class, fieldName, fieldValue, FieldValues.bytes)
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `repeated` field required when it is requested by `{0}` field")
-    fun makeRepeatedCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(RepeatedCompanion::class, fieldName, fieldValue, FieldValues.repeated)
-
-    @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `map` field required when it is requested by `{0}` field")
-    fun makeMapCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanionIsRequired(MapCompanion::class, fieldName, fieldValue, FieldValues.map)
-
-    @MethodSource("companionFields")
-    @ParameterizedTest(name = "do nothing if a `{0}` companion field is set on its on")
-    fun  <M : Message> doNothingWhenCompanionSetOnItsOn(message: KClass<M>, value: Any) =
-        assertStandaloneCompanion(message, value)
-
-    private companion object {
-
-        @JvmStatic
-        fun fieldsWithCompanion() = listOf(
-            arguments(named("message", "message_field"), FieldValues.message),
-            arguments(named("enum", "enum_field"), FieldValues.enum),
-            arguments(named("string", "string_field"), FieldValues.string),
-            arguments(named("bytes", "bytes_field"), FieldValues.bytes),
-            arguments(named("repeated", "repeated_field"), FieldValues.repeated),
-            arguments(named("map", "map_field"), FieldValues.map),
-        )
-
-        @JvmStatic
-        fun companionFields() = listOf(
-            arguments(named("message", MessageCompanion::class), FieldValues.message),
-            arguments(named("enum", EnumCompanion::class), FieldValues.enum),
-            arguments(named("string", StringCompanion::class), FieldValues.string),
-            arguments(named("bytes", BytesCompanion::class), FieldValues.bytes),
-            arguments(named("repeated", RepeatedCompanion::class), FieldValues.repeated),
-            arguments(named("map", MapCompanion::class), FieldValues.map),
-        )
-    }
-}
-
-private fun <M : Message> assertStandaloneCompanion(
-    message: KClass<M>,
-    companionValue: Any
-) {
-    val companionClass = message.java
-    val descriptor = companionClass.getDeclaredMethod("getDescriptor")
-        .invoke(null) as Descriptor
-    val builder = companionClass.getDeclaredMethod("newBuilder")
-        .invoke(null) as Message.Builder
-    val companionField = descriptor.findFieldByName("companion")!!
-    val safeCompanionValue = if (companionValue is Map<*, *>) protoCompanion(descriptor, companionValue) else companionValue
-    assertDoesNotThrow {
-        builder.setField(companionField, safeCompanionValue)
-    }
-}
-
-private fun <M : Message> assertCompanionIsRequired(
-    message: KClass<M>,
-    targetField: String,
-    fieldValue: Any,
-    companionValue: Any
-) {
-    val companionClass = message.java
-    val descriptor = companionClass.getDeclaredMethod("getDescriptor")
-        .invoke(null) as Descriptor
-    val field = descriptor.findFieldByName(targetField)!!
-    val builder = companionClass.getDeclaredMethod("newBuilder")
-        .invoke(null) as Message.Builder
-    val safeFieldValue = if (fieldValue is Map<*, *>) protoField(descriptor, fieldValue) else fieldValue
-    val safeCompanionValue = if (companionValue is Map<*, *>) protoCompanion(descriptor, companionValue) else companionValue
-    assertThrows<ValidationException> {
-        builder.setField(field, safeFieldValue)
-            .build()
-    }
-    assertDoesNotThrow {
-        builder
-            .setField(descriptor.findFieldByName("companion")!!, safeCompanionValue)
-            .setField(field, safeFieldValue)
-            .build()
-    }
-}
-
-private fun protoCompanion(companion: Descriptor, map: Map<*, *>): Any =
-    protoMap("companion", companion, map)
-
-private fun protoField(companion: Descriptor, map: Map<*, *>): Any =
-    protoMap("map_field", companion, map)
-
-private fun protoMap(fieldName: String, companion: Descriptor, map: Map<*, *>): Any {
-    val mapField = companion.findFieldByName(fieldName)!!
-    val mapEntryDescriptor = mapField.messageType
-    val protoEntries = mutableListOf<DynamicMessage>()
-    map.forEach { entry ->
-        protoEntries.add(
-            DynamicMessage.newBuilder(mapEntryDescriptor)
-                .setField(mapEntryDescriptor.findFieldByName("key"), entry.key)
-                .setField(mapEntryDescriptor.findFieldByName("value"), entry.value)
+    @MethodSource("io.spine.test.options.goes.TestData#onlyPrimaryFields")
+    @ParameterizedTest(name = "throw if only the primary `{0}` field is set")
+    fun throwIfOnlyPrimaryFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
+        val descriptor = message.protoDescriptor()
+        val field = descriptor.findFieldByName(fieldName)!!
+        val protoValue = protoValue(field, fieldValue)
+        assertThrows<ValidationException> {
+            message.newBuilder()
+                .setField(field, protoValue)
                 .build()
-        )
+        }
     }
-    return protoEntries
+
+    @MethodSource("io.spine.test.options.goes.TestData#onlyCompanionFields")
+    @ParameterizedTest(name = "not throw if only the companion `{0}` field is set")
+    fun notThrowIfOnlyCompanionFieldSet(
+        message: Class<out Message>,
+        companionName: String,
+        companionValue: Any
+    ) {
+        val descriptor = message.protoDescriptor()
+        val companionField = descriptor.findFieldByName(companionName)!!
+        val companionProtoValue = protoValue(companionField, companionValue)
+        assertDoesNotThrow {
+            message.newBuilder()
+                .setField(companionField, companionProtoValue)
+                .build()
+        }
+    }
+
+    @MethodSource("io.spine.test.options.goes.TestData#bothPrimaryAndCompanionFields")
+    @ParameterizedTest(name = "not throw if both the primary `{0}` and its companion `{3}` fields are set")
+    fun notThrowIfBothPrimaryAndCompanionFieldsSet(
+        message: Class<out Message>,
+        companionName: String,
+        companionValue: Any,
+        fieldName: String,
+        fieldValue: Any
+    ) {
+        val descriptor = message.protoDescriptor()
+        val field = descriptor.findFieldByName(fieldName)!!
+        val protoValue = protoValue(field, fieldValue)
+        val companionField = descriptor.findFieldByName(companionName)!!
+        val companionProtoValue = protoValue(companionField, companionValue)
+        assertDoesNotThrow {
+            message.newBuilder()
+                .setField(field, protoValue)
+                .setField(companionField, companionProtoValue)
+                .build()
+        }
+    }
 }
+
+private fun Class<out Message>.protoDescriptor() =
+    getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
+
+private fun Class<out Message>.newBuilder() =
+    getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
+
+/**
+ * Converts the given [value] to Protobuf equivalent, if needed.
+ *
+ * The method makes the given value compatible with [Message.Builder.setField] method.
+ *
+ * Kotlin's [Map] is converted to Protobuf map entries, which are message-specific.
+ * Other values are passed "as is".
+ */
+private fun protoValue(field: FieldDescriptor, value: Any): Any =
+    if (value is Map<*, *>) {
+        val descriptor = field.messageType
+        value.map { descriptor.newMapEntry(it.key, it.value) }
+    } else {
+        value
+    }
+
+private fun Descriptor.newMapEntry(key: Any?, value: Any?) =
+    DynamicMessage.newBuilder(this)
+        .setField(this.findFieldByName("key"), key)
+        .setField(this.findFieldByName("value"), value)
+        .build()
