@@ -39,18 +39,10 @@ import io.spine.test.tools.validate.MapCompanion
 import io.spine.test.tools.validate.MessageCompanion
 import io.spine.test.tools.validate.RepeatedCompanion
 import io.spine.test.tools.validate.StringCompanion
-import io.spine.test.tools.validate.bytesCompanion
-import io.spine.test.tools.validate.enumCompanion
-import io.spine.test.tools.validate.mapCompanion
-import io.spine.test.tools.validate.messageCompanion
-import io.spine.test.tools.validate.repeatedCompanion
-import io.spine.test.tools.validate.stringCompanion
 import io.spine.validate.ValidationException
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Named.named
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -100,63 +92,10 @@ internal class GoesITest {
     fun makeMapCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
         assertCompanionIsRequired(MapCompanion::class, fieldName, fieldValue, FieldValues.map)
 
-    @Nested inner class
-    `do nothing if a companion field is set when it is` {
-
-        @Test
-        fun `a message field`() {
-            assertDoesNotThrow {
-                messageCompanion {
-                    companion = FieldValues.message
-                }
-            }
-        }
-
-        @Test
-        fun `an enum field`() {
-            assertDoesNotThrow {
-                enumCompanion {
-                    companionValue = FieldValues.enum.number
-                }
-            }
-        }
-
-        @Test
-        fun `a string field`() {
-            assertDoesNotThrow {
-                stringCompanion {
-                    companion = FieldValues.string
-                }
-            }
-        }
-
-        @Test
-        fun `a bytes field`() {
-            assertDoesNotThrow {
-                bytesCompanion {
-                    companion = FieldValues.bytes
-                }
-            }
-        }
-
-        @Test
-        fun `a repeated field`() {
-            assertDoesNotThrow {
-                repeatedCompanion {
-                    companion.addAll(FieldValues.repeated)
-                }
-            }
-        }
-
-        @Test
-        fun `a map field`() {
-            assertDoesNotThrow {
-                mapCompanion {
-                    companion.putAll(FieldValues.map)
-                }
-            }
-        }
-    }
+    @MethodSource("companionFields")
+    @ParameterizedTest(name = "do nothing if a `{0}` companion field is set on its on")
+    fun  <M : Message> doNothingWhenCompanionSetOnItsOn(message: KClass<M>, value: Any) =
+        assertStandaloneCompanion(message, value)
 
     private companion object {
 
@@ -169,6 +108,32 @@ internal class GoesITest {
             arguments(named("repeated", "repeated_field"), FieldValues.repeated),
             arguments(named("map", "map_field"), FieldValues.map),
         )
+
+        @JvmStatic
+        fun companionFields() = listOf(
+            arguments(named("message", MessageCompanion::class), FieldValues.message),
+            arguments(named("enum", EnumCompanion::class), FieldValues.enum),
+            arguments(named("string", StringCompanion::class), FieldValues.string),
+            arguments(named("bytes", BytesCompanion::class), FieldValues.bytes),
+            arguments(named("repeated", RepeatedCompanion::class), FieldValues.repeated),
+            arguments(named("map", MapCompanion::class), FieldValues.map),
+        )
+    }
+}
+
+private fun <M : Message> assertStandaloneCompanion(
+    message: KClass<M>,
+    companionValue: Any
+) {
+    val companionClass = message.java
+    val descriptor = companionClass.getDeclaredMethod("getDescriptor")
+        .invoke(null) as Descriptor
+    val builder = companionClass.getDeclaredMethod("newBuilder")
+        .invoke(null) as Message.Builder
+    val companionField = descriptor.findFieldByName("companion")!!
+    val safeCompanionValue = if (companionValue is Map<*, *>) protoCompanion(descriptor, companionValue) else companionValue
+    assertDoesNotThrow {
+        builder.setField(companionField, safeCompanionValue)
     }
 }
 
@@ -218,5 +183,3 @@ private fun protoMap(fieldName: String, companion: Descriptor, map: Map<*, *>): 
     }
     return protoEntries
 }
-
-
