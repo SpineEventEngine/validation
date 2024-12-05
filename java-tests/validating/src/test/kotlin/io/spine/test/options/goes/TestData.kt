@@ -63,7 +63,7 @@ internal object TestData {
     fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
         val fieldType = messageClass.typeUnderTest()
         val fieldName = messageClass.fieldName()
-        arguments(named(fieldType, messageClass.java), fieldName, fieldValue)
+        arguments(messageClass.java, named(fieldType, fieldName), fieldValue)
     }
 
     /**
@@ -72,7 +72,7 @@ internal object TestData {
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
         val fieldType = messageCLass.typeUnderTest()
-        arguments(named(fieldType, messageCLass.java), COMPANION_FIELD_NAME, companionValue)
+        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD_NAME), companionValue)
     }
 
     /**
@@ -81,11 +81,13 @@ internal object TestData {
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
         fieldValues.map { (fieldClass, fieldValue) ->
+            val companionType = messageClass.typeUnderTest()
+            val fieldType = fieldClass.typeUnderTest()
             arguments(
-                named(messageClass.typeUnderTest(), messageClass.java),
-                COMPANION_FIELD_NAME,
+                messageClass.java,
+                named(companionType, COMPANION_FIELD_NAME),
                 companionValue,
-                fieldClass.fieldName(),
+                named(fieldType, fieldClass.fieldName()),
                 fieldValue
             )
         }

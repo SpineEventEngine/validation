@@ -26,9 +26,6 @@
 
 package io.spine.test.options.goes
 
-import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Descriptors.FieldDescriptor
-import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
@@ -41,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource
 internal class GoesITest {
 
     @MethodSource("io.spine.test.options.goes.TestData#onlyTargetFields")
-    @ParameterizedTest(name = "throw if only the target `{0}` field is set")
+    @ParameterizedTest(name = "throw if only the target `{1}` field is set")
     fun throwIfOnlyTargetFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
         val descriptor = message.protoDescriptor()
         val field = descriptor.findFieldByName(fieldName)!!
@@ -54,7 +51,7 @@ internal class GoesITest {
     }
 
     @MethodSource("io.spine.test.options.goes.TestData#onlyCompanionFields")
-    @ParameterizedTest(name = "not throw if only the companion `{0}` field is set")
+    @ParameterizedTest(name = "not throw if only the companion `{1}` field is set")
     fun notThrowIfOnlyCompanionFieldSet(
         message: Class<out Message>,
         fieldName: String,
@@ -71,7 +68,7 @@ internal class GoesITest {
     }
 
     @MethodSource("io.spine.test.options.goes.TestData#bothTargetAndCompanionFields")
-    @ParameterizedTest(name = "not throw if both the target `{0}` and its companion `{3}` fields are set")
+    @ParameterizedTest(name = "not throw if both the target `{1}` and its companion `{3}` fields are set")
     fun notThrowIfBothTargetAndCompanionFieldsSet(
         message: Class<out Message>,
         companionName: String,
