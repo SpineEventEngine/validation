@@ -26,67 +26,54 @@
 
 package io.spine.test.options.goes
 
-import com.google.protobuf.ByteString.copyFromUtf8
+import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import com.google.protobuf.util.Timestamps
-import io.spine.test.tools.validate.BytesCompanion
-import io.spine.test.tools.validate.EnumCompanion
-import io.spine.test.tools.validate.EnumForGoes.*
-import io.spine.test.tools.validate.MapCompanion
-import io.spine.test.tools.validate.MessageCompanion
-import io.spine.test.tools.validate.RepeatedCompanion
-import io.spine.test.tools.validate.StringCompanion
+import io.spine.test.tools.validate.EnumForGoes
+import io.spine.test.tools.validate.MutualBytesCompanion
+import io.spine.test.tools.validate.MutualEnumCompanion
+import io.spine.test.tools.validate.MutualMapCompanion
+import io.spine.test.tools.validate.MutualMessageCompanion
+import io.spine.test.tools.validate.MutualRepeatedCompanion
+import io.spine.test.tools.validate.MutualStringCompanion
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesITest].
+ * Provides data for parameterized [GoesMutualITest].
  */
 @Suppress("unused")
-internal object TestData {
+internal object TestDataMutual {
 
-    private const val COMPANION_FIELD_NAME = "companion"
     private val fieldValues = listOf(
-        MessageCompanion::class to Timestamps.now(),
-        EnumCompanion::class to EFG_ITEM1.valueDescriptor,
-        StringCompanion::class to "some companion text",
-        BytesCompanion::class to copyFromUtf8("some companion data"),
-        RepeatedCompanion::class to listOf(1L, 2L, 3L),
-        MapCompanion::class to mapOf("key" to 32),
+        MutualMessageCompanion::class to Timestamps.now(),
+        MutualEnumCompanion::class to EnumForGoes.EFG_ITEM1.valueDescriptor,
+        MutualStringCompanion::class to "some companion text",
+        MutualBytesCompanion::class to ByteString.copyFromUtf8("some companion data"),
+        MutualRepeatedCompanion::class to listOf(1L, 2L, 3L),
+        MutualMapCompanion::class to mapOf("key" to 32),
     )
-
-    /**
-     * Test data for [GoesITest.throwIfOnlyTargetFieldSet].
-     */
-    @JvmStatic
-    fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
-        val fieldType = messageClass.typeUnderTest()
-        val fieldName = messageClass.fieldName()
-        arguments(messageClass.java, named(fieldType, fieldName), fieldValue)
-    }
 
     /**
      * Test data for [GoesITest.notThrowIfOnlyCompanionFieldSet].
      */
     @JvmStatic
-    fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
-        val fieldType = messageCLass.typeUnderTest()
-        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD_NAME), companionValue)
-    }
+    fun messagesWithInterdependentFields() = fieldValues.map { it.first.java }
 
     /**
      * Test data for [GoesITest.notThrowIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
-    fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
+    fun interdependentFields() = fieldValues.flatMap { (messageClass, companionValue) ->
         val companionType = messageClass.typeUnderTest()
         fieldValues.map { (fieldClass, fieldValue) ->
+            val companionName = fieldClass.companionName()
             val fieldType = fieldClass.typeUnderTest()
             val fieldName = fieldClass.fieldName()
             arguments(
                 messageClass.java,
-                named(companionType, COMPANION_FIELD_NAME),
+                named(companionType, companionName),
                 companionValue,
                 named(fieldType, fieldName),
                 fieldValue
@@ -98,12 +85,13 @@ internal object TestData {
 /**
  * Extracts a simple name of the field type, which is under test from this [KClass].
  *
- * This extension relies on naming consistency within `goes.proto` message stubs.
- * So, the message prefix shows a data type of the companion field.
+ * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
+ * So, the message name shows a data type of the companion field.
  *
- * For example, `StringCompanion` becomes just `string`.
+ * For example, `MutualStringCompanion` becomes just `string`.
  */
 private fun KClass<out Message>.typeUnderTest() = simpleName!!
+    .substringAfter("Mutual")
     .substringBefore("Companion")
     .lowercase()
 
@@ -111,9 +99,20 @@ private fun KClass<out Message>.typeUnderTest() = simpleName!!
  * Extracts a simple field name of the field, which declares a dependency
  * on another field (companion).
  *
- * This extension relies on naming consistency within `goes.proto` message stubs.
+ * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
  * So, each target field (with the option) is named as following: `{data_type}_field`.
  *
- * For example, `StringCompanion` becomes `string_field`.
+ * For example, `MutualStringCompanion` becomes `string_field`.
  */
 private fun KClass<out Message>.fieldName() = "${typeUnderTest()}_field"
+
+/**
+ * Extracts a simple companion field name of the field, which declares a dependency
+ * on another field.
+ *
+ * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
+ * So, each target field (with the option) is named as following: `{data_type}_companion`.
+ *
+ * For example, `MutualStringCompanion` becomes `string_companion`.
+ */
+private fun KClass<out Message>.companionName() = "${typeUnderTest()}_companion"
