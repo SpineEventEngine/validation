@@ -67,6 +67,7 @@ internal class GoesITest {
         }
     }
 
+    @Suppress("MaxLineLength") // So, not to wrap the test name.
     @MethodSource("io.spine.test.options.goes.TestData#bothTargetAndCompanionFields")
     @ParameterizedTest(name = "not throw if both the target `{1}` and its companion `{3}` fields are set")
     fun notThrowIfBothTargetAndCompanionFieldsSet(

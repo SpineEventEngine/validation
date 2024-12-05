@@ -31,7 +31,7 @@ import com.google.protobuf.Message
 import com.google.protobuf.util.Timestamps
 import io.spine.test.tools.validate.BytesCompanion
 import io.spine.test.tools.validate.EnumCompanion
-import io.spine.test.tools.validate.EnumForGoes.*
+import io.spine.test.tools.validate.EnumForGoes.EFG_ITEM1
 import io.spine.test.tools.validate.MapCompanion
 import io.spine.test.tools.validate.MessageCompanion
 import io.spine.test.tools.validate.RepeatedCompanion

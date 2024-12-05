@@ -27,12 +27,8 @@
 package io.spine.test.options.goes
 
 import com.google.protobuf.Message
-import com.google.protobuf.util.Timestamps
-import io.spine.test.tools.validate.EnumForGoes
-import io.spine.test.tools.validate.MutualMessageCompanion
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -41,6 +37,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesMutualITest {
 
+    @Suppress("MaxLineLength") // So, not to wrap the test name.
     @MethodSource("io.spine.test.options.goes.TestDataMutual#interdependentFields")
     @ParameterizedTest(name = "throw if one of mutually dependent `{1}` and `{3}` fields is not set")
     fun throwIfOneOfMutuallyDependentFieldsNotSet(
