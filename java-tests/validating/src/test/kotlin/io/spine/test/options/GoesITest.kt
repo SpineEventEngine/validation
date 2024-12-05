@@ -31,7 +31,6 @@ import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.EnumValueDescriptor
 import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
-import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
 import io.spine.test.tools.validate.BytesCompanion
 import io.spine.test.tools.validate.EnumCompanion
@@ -72,34 +71,34 @@ internal class GoesITest {
     }
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `message` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `message` field required when it is requested by `{0}` field")
     fun makeMessageCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(MessageCompanion::class, fieldName, fieldValue, FieldValues.message)
+        assertCompanionIsRequired(MessageCompanion::class, fieldName, fieldValue, FieldValues.message)
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `enum` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `enum` field required when it is requested by `{0}` field")
     fun makeEnumCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(EnumCompanion::class, fieldName, fieldValue, FieldValues.enum)
+        assertCompanionIsRequired(EnumCompanion::class, fieldName, fieldValue, FieldValues.enum)
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `string` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `string` field required when it is requested by `{0}` field")
     fun makeStringCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(StringCompanion::class, fieldName, fieldValue, FieldValues.string)
+        assertCompanionIsRequired(StringCompanion::class, fieldName, fieldValue, FieldValues.string)
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `bytes` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `bytes` field required when it is requested by `{0}` field")
     fun makeBytesCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(BytesCompanion::class, fieldName, fieldValue, FieldValues.bytes)
+        assertCompanionIsRequired(BytesCompanion::class, fieldName, fieldValue, FieldValues.bytes)
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `repeated` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `repeated` field required when it is requested by `{0}` field")
     fun makeRepeatedCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(RepeatedCompanion::class, fieldName, fieldValue, FieldValues.repeated)
+        assertCompanionIsRequired(RepeatedCompanion::class, fieldName, fieldValue, FieldValues.repeated)
 
     @MethodSource("fieldsWithCompanion")
-    @ParameterizedTest(name = "make a companion `map` field required when it is requested by another `{0}` field")
+    @ParameterizedTest(name = "make a companion `map` field required when it is requested by `{0}` field")
     fun makeMapCompanionFieldsRequired(fieldName: String, fieldValue: Any) =
-        assertCompanion(MapCompanion::class, fieldName, fieldValue, FieldValues.map)
+        assertCompanionIsRequired(MapCompanion::class, fieldName, fieldValue, FieldValues.map)
 
     @Nested inner class
     `do nothing if a companion field is set when it is` {
@@ -173,7 +172,7 @@ internal class GoesITest {
     }
 }
 
-private fun <M : Message> assertCompanion(
+private fun <M : Message> assertCompanionIsRequired(
     message: KClass<M>,
     targetField: String,
     fieldValue: Any,
