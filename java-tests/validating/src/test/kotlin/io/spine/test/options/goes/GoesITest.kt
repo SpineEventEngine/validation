@@ -89,31 +89,3 @@ internal class GoesITest {
         }
     }
 }
-
-private fun Class<out Message>.protoDescriptor() =
-    getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
-
-private fun Class<out Message>.newBuilder() =
-    getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
-
-/**
- * Converts the given [value] to Protobuf equivalent, if needed.
- *
- * The method makes the given value compatible with [Message.Builder.setField] method.
- *
- * Kotlin's [Map] is converted to Protobuf map entries, which are message-specific.
- * Other values are passed "as is".
- */
-private fun protoValue(field: FieldDescriptor, value: Any): Any =
-    if (value is Map<*, *>) {
-        val descriptor = field.messageType
-        value.map { descriptor.newMapEntry(it.key, it.value) }
-    } else {
-        value
-    }
-
-private fun Descriptor.newMapEntry(key: Any?, value: Any?) =
-    DynamicMessage.newBuilder(this)
-        .setField(this.findFieldByName("key"), key)
-        .setField(this.findFieldByName("value"), value)
-        .build()
