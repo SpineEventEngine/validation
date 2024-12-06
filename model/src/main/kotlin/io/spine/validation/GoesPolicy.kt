@@ -52,8 +52,6 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         // TODO:2024-12-03:yevhenii.nadtochii: Create an overload for `resolve` with `TypeName`.
         val declaringMessage = typeSystem!!.findMessage(thisField.declaringType)!!.first
 
-        // TODO:2024-12-03:yevhenii.nadtochii: Should we follow required conventions regarding
-        //  emptiness or setonce-like ones?
         val thisFieldShouldBeUnset = RequiredRule.forField(thisField, option.errorMessage())!!
             .simple.toBuilder()
             .setOperator(ComparisonOperator.EQUAL)
@@ -69,6 +67,7 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
             operator = LogicalOperator.OR
             right = companionFieldShouldBeSet
             errorMessage = option.errorMessage()
+            field = thisField.name
         }.wrap()
 
         return just(rule.toEvent(thisField.declaringType))
