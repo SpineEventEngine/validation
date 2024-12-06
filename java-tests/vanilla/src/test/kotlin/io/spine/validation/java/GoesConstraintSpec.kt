@@ -28,8 +28,13 @@ package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.optional.shouldBePresent
+import io.spine.base.FieldPath
 import io.spine.base.Identifier
 import io.spine.base.Time.currentTime
+import io.spine.type.TypeName
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validation.java.given.ArchiveId
 import io.spine.validation.java.given.Paper
@@ -38,10 +43,6 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("`(goes)` option should be compiled so that")
 internal class GoesConstraintSpec {
-
-    companion object {
-        const val UNTIL = "Until code rendering for (goes) is migrated to ProtoData"
-    }
 
     private fun assertValid(m: ValidatableMessage) = assertThat(m.validate()).isEmpty()
 
@@ -54,22 +55,22 @@ internal class GoesConstraintSpec {
             .buildPartial()
 
         val error = paper.validate()
-        assertThat(error).isPresent()
+        error.shouldBePresent()
 
         val violations = error.get().constraintViolationList
-        assertThat(violations)
-            .hasSize(1)
+        violations shouldHaveSize 1
 
-        // TODO:2024-12-03:yevhenii.nadtochii: Weirdly assembled and event more weirdly printed
-        //   constraint violation instance.
-        val violation = violations[0]
-        println("Constraint violation: $violation")
-        println("Type: ${violation.javaClass.name}")
-        println("msgFormat: ${violation.msgFormat}")
-        println("paramList: ${violation.paramList}")
-        println("fieldPath: ${violation.fieldPath}")
-        println("fieldValue: ${violation.fieldValue}")
-        println("typeName: ${violation.typeName}")
+        assertThat(violations[0])
+            .comparingExpectedFieldsOnly()
+            .isEqualTo(
+                ConstraintViolation.newBuilder()
+                    .setTypeName(TypeName.of(paper).toUrl().value())
+                    .setFieldPath(
+                        FieldPath.newBuilder()
+                            .addFieldName("when_archived")
+                    )
+                    .build()
+            )
     }
 
     @Test
