@@ -1,0 +1,137 @@
+/*
+ * Copyright 2024, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "GoesMutualProto";
+option java_multiple_files = true;
+
+import "spine/test/tools/validate/goes_values.proto";
+import "google/protobuf/timestamp.proto";
+
+// This file declares messages with different combinations
+// of mutually-dependent fields.
+
+message MutualMessageCompanion {
+    google.protobuf.Timestamp message_companion = 1 [(goes).with = "message_field"];
+    google.protobuf.Timestamp enum_companion = 2 [(goes).with = "enum_field"];
+    google.protobuf.Timestamp string_companion = 3 [(goes).with = "string_field"];
+    google.protobuf.Timestamp bytes_companion = 4 [(goes).with = "bytes_field"];
+    google.protobuf.Timestamp repeated_companion = 5 [(goes).with = "repeated_field"];
+    google.protobuf.Timestamp map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
+
+message MutualEnumCompanion {
+    EnumForGoes message_companion = 1 [(goes).with = "message_field"];
+    EnumForGoes enum_companion = 2 [(goes).with = "enum_field"];
+    EnumForGoes string_companion = 3 [(goes).with = "string_field"];
+    EnumForGoes bytes_companion = 4 [(goes).with = "bytes_field"];
+    EnumForGoes repeated_companion = 5 [(goes).with = "repeated_field"];
+    EnumForGoes map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
+
+message MutualStringCompanion {
+    string message_companion = 1 [(goes).with = "message_field"];
+    string enum_companion = 2 [(goes).with = "enum_field"];
+    string string_companion = 3 [(goes).with = "string_field"];
+    string bytes_companion = 4 [(goes).with = "bytes_field"];
+    string repeated_companion = 5 [(goes).with = "repeated_field"];
+    string map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
+
+message MutualBytesCompanion {
+    bytes message_companion = 1 [(goes).with = "message_field"];
+    bytes enum_companion = 2 [(goes).with = "enum_field"];
+    bytes string_companion = 3 [(goes).with = "string_field"];
+    bytes bytes_companion = 4 [(goes).with = "bytes_field"];
+    bytes repeated_companion = 5 [(goes).with = "repeated_field"];
+    bytes map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
+
+message MutualRepeatedCompanion {
+    repeated int64 message_companion = 1 [(goes).with = "message_field"];
+    repeated int64 enum_companion = 2 [(goes).with = "enum_field"];
+    repeated int64 string_companion = 3 [(goes).with = "string_field"];
+    repeated int64 bytes_companion = 4 [(goes).with = "bytes_field"];
+    repeated int64 repeated_companion = 5 [(goes).with = "repeated_field"];
+    repeated int64 map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
+
+message MutualMapCompanion {
+    map<string, int32> message_companion = 1 [(goes).with = "message_field"];
+    map<string, int32> enum_companion = 2 [(goes).with = "enum_field"];
+    map<string, int32> string_companion = 3 [(goes).with = "string_field"];
+    map<string, int32> bytes_companion = 4 [(goes).with = "bytes_field"];
+    map<string, int32> repeated_companion = 5 [(goes).with = "repeated_field"];
+    map<string, int32> map_companion = 6 [(goes).with = "map_field"];
+
+    google.protobuf.Timestamp message_field = 7 [(goes).with = "message_companion"];
+    EnumForGoes enum_field = 8 [(goes).with = "enum_companion"];
+    string string_field = 9 [(goes).with = "string_companion"];
+    bytes bytes_field = 10 [(goes).with = "bytes_companion"];
+    repeated int64 repeated_field = 11 [(goes).with = "repeated_companion"];
+    map<string, int32> map_field = 12 [(goes).with = "map_companion"];
+}
