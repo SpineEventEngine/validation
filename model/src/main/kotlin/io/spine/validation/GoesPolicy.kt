@@ -33,6 +33,7 @@ import io.spine.core.Where
 import io.spine.option.GoesOption
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.type.resolve
 import io.spine.server.event.Just
@@ -71,17 +72,32 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         val target = event.subject
         val option = event.option.value.unpack<GoesOption>()
         val declaringMessage = typeSystem.findMessage(target.declaringType)!!.first
-        val companionFieldName = FieldPath(option.with)
-        val companionField = typeSystem.resolve(companionFieldName, declaringMessage)
+        val companionName = FieldPath(option.with)
+        val companion = typeSystem.resolve(companionName, declaringMessage)
+        checkDistinct(target, companion)
         val rule = compositeRule {
             left = targetFieldShouldBeUnset(target)
             operator = LogicalOperator.OR
-            right = companionFieldShouldBeSet(companionField)
+            right = companionFieldShouldBeSet(companion)
             errorMessage = option.errorMessage()
             field = target.name
         }.wrap()
         return just(rule.toEvent(target.declaringType))
     }
+
+    /**
+     * Checks that the given [target] and [companion] fields are distinct.
+     *
+     * Please note, this method does not use `==` comparison between two objects
+     * because the field returned from [FieldOptionDiscovered] event has an empty
+     * [options list][Field.getOptionList].
+     */
+    private fun checkDistinct(target: Field, companion: Field) =
+        check(target.qualifiedName != companion.qualifiedName) {
+            "The `($GOES)` option can not use the target field as its own companion. " +
+                    "Self-referencing is prohibited. Please specify another field. " +
+                    "The invalid field: `${target.qualifiedName}`."
+        }
 
     /**
      * Creates a simple rule that makes sure the given [target] field is NOT set.
