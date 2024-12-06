@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes
+package io.spine.test.options.goes.given
 
 import com.google.protobuf.ByteString.copyFromUtf8
 import com.google.protobuf.Message
@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
  * Provides data for parameterized [GoesOneWayITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
-internal object TestDataOneWay {
+internal object GoesOneWayTestEnv {
 
     private const val COMPANION_FIELD_NAME = "companion"
     private val fieldValues = listOf(

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes
+package io.spine.test.options.goes.given
 
 import com.google.protobuf.ByteString
 import com.google.protobuf.Message
@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
  * Provides data for parameterized [GoesMutualITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
-internal object TestDataMutual {
+internal object GoesMutualTestEnv {
 
     private val fieldValues = listOf(
         MutualMessageCompanion::class to Timestamps.now(),
