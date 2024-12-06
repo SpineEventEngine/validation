@@ -99,6 +99,7 @@ internal class GoesMutualITest {
         }
     }
 
+    @Suppress("MaxLineLength") // Due to a long method source.
     @MethodSource("io.spine.test.options.goes.given.GoesMutualTestEnv#messagesWithInterdependentFields")
     @ParameterizedTest(name = "pass if both mutually dependent fields are not set")
     fun passIfBothMutuallyDependentFieldsNotSet(message: Class<out Message>) {
