@@ -37,6 +37,9 @@ option java_multiple_files = true;
 import "spine/test/tools/validate/goes_values.proto";
 import "google/protobuf/timestamp.proto";
 
+// This file declares messages with different combinations
+// of mutually-dependent fields.
+
 message MutualMessageCompanion {
     google.protobuf.Timestamp message_companion = 1 [(goes).with = "message_field"];
     google.protobuf.Timestamp enum_companion = 2 [(goes).with = "enum_field"];
