@@ -67,7 +67,7 @@ internal object TestDataOneWay {
     }
 
     /**
-     * Test data for [GoesOneWayITest.notThrowIfOnlyCompanionFieldSet].
+     * Test data for [GoesOneWayITest.passIfOnlyCompanionFieldSet].
      */
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
@@ -76,7 +76,7 @@ internal object TestDataOneWay {
     }
 
     /**
-     * Test data for [GoesOneWayITest.notThrowIfBothTargetAndCompanionFieldsSet].
+     * Test data for [GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->

@@ -51,8 +51,8 @@ internal class GoesOneWayITest {
     }
 
     @MethodSource("io.spine.test.options.goes.TestDataOneWay#onlyCompanionFields")
-    @ParameterizedTest(name = "not throw if only the companion `{1}` field is set")
-    fun notThrowIfOnlyCompanionFieldSet(
+    @ParameterizedTest(name = "pass if only the companion `{1}` field is set")
+    fun passIfOnlyCompanionFieldSet(
         message: Class<out Message>,
         fieldName: String,
         fieldValue: Any
@@ -67,10 +67,10 @@ internal class GoesOneWayITest {
         }
     }
 
-    @Suppress("MaxLineLength") // So, not to wrap the test name.
+    @Suppress("MaxLineLength") // So not to wrap the test name.
     @MethodSource("io.spine.test.options.goes.TestDataOneWay#bothTargetAndCompanionFields")
-    @ParameterizedTest(name = "not throw if both the target `{1}` and its companion `{3}` fields are set")
-    fun notThrowIfBothTargetAndCompanionFieldsSet(
+    @ParameterizedTest(name = "pass if both the target `{1}` and its companion `{3}` fields are set")
+    fun passIfBothTargetAndCompanionFieldsSet(
         message: Class<out Message>,
         companionName: String,
         companionValue: Any,

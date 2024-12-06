@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesMutualITest {
 
-    @Suppress("MaxLineLength") // So, not to wrap the test name.
+    @Suppress("MaxLineLength") // So not to wrap the test display name.
     @MethodSource("io.spine.test.options.goes.TestDataMutual#interdependentFields")
     @ParameterizedTest(name = "throw if one of mutually dependent `{1}` and `{3}` fields is not set")
     fun throwIfOneOfMutuallyDependentFieldsNotSet(
@@ -65,8 +65,8 @@ internal class GoesMutualITest {
     }
 
     @MethodSource("io.spine.test.options.goes.TestDataMutual#interdependentFields")
-    @ParameterizedTest(name = "not throw if both mutually dependent `{1}` and `{3}` fields are set")
-    fun notThrowIfBothMutuallyDependentFieldsSet(
+    @ParameterizedTest(name = "pass if both mutually dependent `{1}` and `{3}` fields are set")
+    fun passIfBothMutuallyDependentFieldsSet(
         message: Class<out Message>,
         fieldName1: String,
         fieldValue1: Any,
@@ -87,8 +87,8 @@ internal class GoesMutualITest {
     }
 
     @MethodSource("io.spine.test.options.goes.TestDataMutual#messagesWithInterdependentFields")
-    @ParameterizedTest(name = "not throw if both mutually dependent fields are not set")
-    fun notThrowIfBothMutuallyDependentFieldsNotSet(message: Class<out Message>) {
+    @ParameterizedTest(name = "pass if both mutually dependent fields are not set")
+    fun passIfBothMutuallyDependentFieldsNotSet(message: Class<out Message>) {
         assertDoesNotThrow {
             message.newBuilder()
                 .build()
