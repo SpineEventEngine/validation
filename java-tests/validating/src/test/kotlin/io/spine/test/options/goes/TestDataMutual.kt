@@ -43,7 +43,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 /**
  * Provides data for parameterized [GoesMutualITest].
  */
-@Suppress("unused")
+@Suppress("unused") // Data provider for parameterized test.
 internal object TestDataMutual {
 
     private val fieldValues = listOf(
@@ -84,10 +84,10 @@ internal object TestDataMutual {
 }
 
 /**
- * Extracts a simple name of the field type, which is under test from this [KClass].
+ * Extracts name of the field type, which is under test from this [KClass].
  *
  * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
- * So, the message name shows a data type of the companion field.
+ * The message name shows the tested data type.
  *
  * For example, `MutualStringCompanion` becomes just `string`.
  */
@@ -97,22 +97,20 @@ private fun KClass<out Message>.typeUnderTest() = simpleName!!
     .lowercase()
 
 /**
- * Extracts a simple field name of the field, which declares a dependency
- * on another field (companion).
+ * Returns a simple field name of the target field under the test.
  *
  * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
- * So, each target field (with the option) is named as following: `{data_type}_field`.
+ * Each target field is named after the following pattern: `{data_type}_field`.
  *
  * For example, `MutualStringCompanion` becomes `string_field`.
  */
 private fun KClass<out Message>.fieldName() = "${typeUnderTest()}_field"
 
 /**
- * Extracts a simple companion field name of the field, which declares a dependency
- * on another field.
+ * Returns a simple field name of the companion field under the test.
  *
  * This extension relies on naming consistency within `goes_mutual.proto` message stubs.
- * So, each target field (with the option) is named as following: `{data_type}_companion`.
+ * Each companion field is named after the following pattern: `{data_type}_companion`.
  *
  * For example, `MutualStringCompanion` becomes `string_companion`.
  */

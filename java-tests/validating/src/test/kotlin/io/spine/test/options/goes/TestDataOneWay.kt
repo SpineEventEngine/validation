@@ -43,7 +43,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 /**
  * Provides data for parameterized [GoesOneWayITest].
  */
-@Suppress("unused")
+@Suppress("unused") // Data provider for parameterized test.
 internal object TestDataOneWay {
 
     private const val COMPANION_FIELD_NAME = "companion"
@@ -96,24 +96,23 @@ internal object TestDataOneWay {
 }
 
 /**
- * Extracts a simple name of the field type, which is under test from this [KClass].
+ * Extracts name of the field type, which is under the test from this [KClass].
  *
  * This extension relies on naming consistency within `goes_one_way.proto` message stubs.
- * So, the message prefix shows a data type of the companion field.
+ * A prefix of the message name shows the tested data type.
  *
- * For example, `StringCompanion` becomes just `string`.
+ * For example, for `StringCompanion` the method returns `string`.
  */
 private fun KClass<out Message>.typeUnderTest() = simpleName!!
     .substringBefore("Companion")
     .lowercase()
 
 /**
- * Extracts a simple field name of the field, which declares a dependency
- * on another field (companion).
+ * Returns a simple field name of the target field under the test.
  *
  * This extension relies on naming consistency within `goes_one_way.proto` message stubs.
- * So, each target field (with the option) is named as following: `{data_type}_field`.
+ * Each target field is named after the following pattern: `{data_type}_field`.
  *
- * For example, `StringCompanion` becomes `string_field`.
+ * For example, for `StringCompanion` the method returns `string_field`.
  */
 private fun KClass<out Message>.fieldName() = "${typeUnderTest()}_field"
