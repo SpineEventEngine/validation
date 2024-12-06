@@ -41,10 +41,10 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesITest].
+ * Provides data for parameterized [GoesOneWayITest].
  */
 @Suppress("unused")
-internal object TestData {
+internal object TestDataOneWay {
 
     private const val COMPANION_FIELD_NAME = "companion"
     private val fieldValues = listOf(
@@ -57,7 +57,7 @@ internal object TestData {
     )
 
     /**
-     * Test data for [GoesITest.throwIfOnlyTargetFieldSet].
+     * Test data for [GoesOneWayITest.throwIfOnlyTargetFieldSet].
      */
     @JvmStatic
     fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
@@ -67,7 +67,7 @@ internal object TestData {
     }
 
     /**
-     * Test data for [GoesITest.notThrowIfOnlyCompanionFieldSet].
+     * Test data for [GoesOneWayITest.notThrowIfOnlyCompanionFieldSet].
      */
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
@@ -76,7 +76,7 @@ internal object TestData {
     }
 
     /**
-     * Test data for [GoesITest.notThrowIfBothTargetAndCompanionFieldsSet].
+     * Test data for [GoesOneWayITest.notThrowIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
@@ -98,7 +98,7 @@ internal object TestData {
 /**
  * Extracts a simple name of the field type, which is under test from this [KClass].
  *
- * This extension relies on naming consistency within `goes.proto` message stubs.
+ * This extension relies on naming consistency within `goes_one_way.proto` message stubs.
  * So, the message prefix shows a data type of the companion field.
  *
  * For example, `StringCompanion` becomes just `string`.
@@ -111,7 +111,7 @@ private fun KClass<out Message>.typeUnderTest() = simpleName!!
  * Extracts a simple field name of the field, which declares a dependency
  * on another field (companion).
  *
- * This extension relies on naming consistency within `goes.proto` message stubs.
+ * This extension relies on naming consistency within `goes_one_way.proto` message stubs.
  * So, each target field (with the option) is named as following: `{data_type}_field`.
  *
  * For example, `StringCompanion` becomes `string_field`.

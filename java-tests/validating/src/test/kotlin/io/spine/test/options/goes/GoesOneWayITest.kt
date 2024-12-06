@@ -35,9 +35,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`(goes)` constraint should")
-internal class GoesITest {
+internal class GoesOneWayITest {
 
-    @MethodSource("io.spine.test.options.goes.TestData#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.TestDataOneWay#onlyTargetFields")
     @ParameterizedTest(name = "throw if only the target `{1}` field is set")
     fun throwIfOnlyTargetFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
         val descriptor = message.protoDescriptor()
@@ -50,7 +50,7 @@ internal class GoesITest {
         }
     }
 
-    @MethodSource("io.spine.test.options.goes.TestData#onlyCompanionFields")
+    @MethodSource("io.spine.test.options.goes.TestDataOneWay#onlyCompanionFields")
     @ParameterizedTest(name = "not throw if only the companion `{1}` field is set")
     fun notThrowIfOnlyCompanionFieldSet(
         message: Class<out Message>,
@@ -68,7 +68,7 @@ internal class GoesITest {
     }
 
     @Suppress("MaxLineLength") // So, not to wrap the test name.
-    @MethodSource("io.spine.test.options.goes.TestData#bothTargetAndCompanionFields")
+    @MethodSource("io.spine.test.options.goes.TestDataOneWay#bothTargetAndCompanionFields")
     @ParameterizedTest(name = "not throw if both the target `{1}` and its companion `{3}` fields are set")
     fun notThrowIfBothTargetAndCompanionFieldsSet(
         message: Class<out Message>,

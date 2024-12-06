@@ -48,7 +48,6 @@ internal class GoesMutualITest {
         fieldValue2: Any
     ) {
         val descriptor = message.protoDescriptor()
-
         val field1 = descriptor.findFieldByName(fieldName1)!!
         val protoValue1 = protoValue(field1, fieldValue1)
         assertThrows<ValidationException> {
@@ -56,7 +55,6 @@ internal class GoesMutualITest {
                 .setField(field1, protoValue1)
                 .build()
         }
-
         val field2 = descriptor.findFieldByName(fieldName2)!!
         val protoValue2 = protoValue(field2, fieldValue2)
         assertThrows<ValidationException> {

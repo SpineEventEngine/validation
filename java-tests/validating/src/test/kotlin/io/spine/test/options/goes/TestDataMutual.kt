@@ -56,13 +56,14 @@ internal object TestDataMutual {
     )
 
     /**
-     * Test data for [GoesITest.notThrowIfOnlyCompanionFieldSet].
+     * Test data for [GoesMutualITest.notThrowIfBothMutuallyDependentFieldsNotSet].
      */
     @JvmStatic
     fun messagesWithInterdependentFields() = fieldValues.map { it.first.java }
 
     /**
-     * Test data for [GoesITest.notThrowIfBothTargetAndCompanionFieldsSet].
+     * Test data for [GoesMutualITest.throwIfOneOfMutuallyDependentFieldsNotSet] and
+     * [GoesMutualITest.notThrowIfBothMutuallyDependentFieldsSet] tests.
      */
     @JvmStatic
     fun interdependentFields() = fieldValues.flatMap { (messageClass, companionValue) ->
