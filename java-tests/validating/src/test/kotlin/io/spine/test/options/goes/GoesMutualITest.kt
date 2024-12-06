@@ -34,6 +34,16 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Tests how `(goes)` option sets up a mutual dependency between two fields.
+ *
+ * For example:
+ *
+ * ```
+ * string title = 1 [(goes].with = "text"];
+ * bytes text = 2 [(goes).with = "title"];
+ * ```
+ */
 @DisplayName("`(goes)` constraint should")
 internal class GoesMutualITest {
 
