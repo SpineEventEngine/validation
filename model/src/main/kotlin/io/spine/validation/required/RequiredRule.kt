@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.required
 
 import io.spine.option.IfMissingOption
 import io.spine.option.OptionsProto
@@ -34,7 +34,16 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.value.Value
 import io.spine.validate.Diags.Required.collectionErrorMsg
 import io.spine.validate.Diags.Required.singularErrorMsg
+import io.spine.validation.ComparisonOperator
 import io.spine.validation.DefaultErrorMessage.from
+import io.spine.validation.Rule
+import io.spine.validation.SimpleRule
+import io.spine.validation.UnsetValue
+import io.spine.validation.boolValue
+import io.spine.validation.extractType
+import io.spine.validation.`is`
+import io.spine.validation.simpleRule
+import io.spine.validation.wrap
 
 /**
  * A factory of [SimpleRule]s which represent the `(required)` constraint.
@@ -42,14 +51,30 @@ import io.spine.validation.DefaultErrorMessage.from
 internal object RequiredRule {
 
     /**
+     * Checks if the given field is required by inspecting its options.
+     *
+     * Some fields such as entity state IDs or command message IDs are assumed to be present.
+     * For such fields pass the parameter [assumed] set to `true`.
+     * In such a case, only setting `(required) = false` for the field would cancel the assumption.
+     *
+     * @param field The field.
+     * @param assumed If set to `true`, the method returns `false` only if the field has
+     *  the `(required)` option explicitly set to `false`.
+     * @return `true` if the field is required or assumed required.
+     */
+    fun isRequired(field: Field, assumed: Boolean): Boolean =
+        field.optionList
+            .firstOrNull { it.`is`(OptionsProto.required) }
+            ?.boolValue
+            ?: assumed
+
+    /**
      * Creates a rule for the given field to be required.
      */
     @Suppress("ReturnCount")
     fun forField(field: Field, errorMessage: String): Rule? {
         val unsetValue = UnsetValue.forField(field)
-        if (unsetValue == null) {
-            return null
-        }
+            ?: return null
         val integratedRule = rule(
             field, unsetValue, errorMessage, singularErrorMsg, false
         )
@@ -115,18 +140,4 @@ internal object RequiredRule {
             this.distribute = distibute
         }
     }
-
-    /**
-     * Checks if the given field is required.
-     *
-     * @param field The field.
-     * @param byDefault The default value
-     * @return `true` if the field is marked with `(required) = true` or if
-     *  the `byDefault` is `true`, `false` otherwise.
-     */
-    fun isRequired(field: Field, byDefault: Boolean): Boolean =
-        field.optionList
-            .firstOrNull { it.`is`(OptionsProto.required) }
-            ?.boolValue
-            ?: byDefault
 }

@@ -23,7 +23,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.validation
+
+package io.spine.validation.required
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeDiscovered
@@ -31,8 +32,11 @@ import io.spine.protodata.settings.loadSettings
 import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.RequiredRule.isRequired
+import io.spine.validation.ValidationConfig
+import io.spine.validation.ValidationPolicy
+import io.spine.validation.required.RequiredRule.isRequired
 import io.spine.validation.event.RuleAdded
+import io.spine.validation.toEvent
 
 /**
  * A policy which defines validation rules for ID fields.

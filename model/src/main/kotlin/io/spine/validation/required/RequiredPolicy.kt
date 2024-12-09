@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.required
 
 import io.spine.core.External
 import io.spine.protodata.ast.Field
@@ -34,7 +34,13 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.REQUIRED
+import io.spine.validation.RequiredField
+import io.spine.validation.ValidationPolicy
 import io.spine.validation.event.RuleAdded
+import io.spine.validation.fieldId
+import io.spine.validation.findField
+import io.spine.validation.toEvent
 
 /**
  * A [ValidationPolicy] which controls whether a field should be validated as `required`.

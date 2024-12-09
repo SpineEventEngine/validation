@@ -24,7 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.required
+
+import io.spine.validation.BoolFieldOptionRepo
+import io.spine.validation.RequiredField
 
 /**
  * A repository for the [RequiredFieldView]s.
