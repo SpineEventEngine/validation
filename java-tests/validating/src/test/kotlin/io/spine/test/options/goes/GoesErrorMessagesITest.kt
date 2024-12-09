@@ -48,17 +48,25 @@ internal class GoesErrorMessagesITest {
 
     @MethodSource("io.spine.test.options.goes.given.GoesMessagesTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "show the default error message for `{0}` field")
-    fun showDefaultErrorMessage(field: String, value: Any) = GoesDefaultMessage.newBuilder()
-        .assertErrorMessage(field, value, listOf(field, COMPANION_FIELD_NAME)) { _: Int ->
-            "The field `%s` can only be set when the field `%s` is defined."
-        }
+    fun showDefaultErrorMessage(fieldName: String, fieldValue: Any) =
+        GoesDefaultMessage.newBuilder()
+            .assertErrorMessage(
+                fieldName,
+                fieldValue,
+                listOf(fieldName, COMPANION_FIELD_NAME)
+            ) { _: Int ->
+                DEFAULT_MESSAGE_FORMAT
+            }
 
     @MethodSource("io.spine.test.options.goes.given.GoesMessagesTestEnv#onlyTargetFields")
-    @ParameterizedTest(name = "show the custom error messages for `{0}` field")
-    fun showCustomErrorMessage(field: String, value: Any) = GoesCustomMessage.newBuilder()
-        .assertErrorMessage(field, value, listOf(COMPANION_FIELD_NAME, field)) { number ->
-            "Field_$number: `%s`, `%s`."
-        }
+    @ParameterizedTest(name = "show the custom error message for `{0}` field")
+    fun showCustomErrorMessage(fieldName: String, fieldValue: Any) = GoesCustomMessage.newBuilder()
+        .assertErrorMessage(
+            fieldName,
+            fieldValue,
+            listOf(COMPANION_FIELD_NAME, fieldName),
+            ::customMessageFormat
+        )
 }
 
 private fun Builder.assertErrorMessage(
@@ -71,8 +79,8 @@ private fun Builder.assertErrorMessage(
     val field = descriptor.findFieldByName(fieldName)!!
     val protoValue = protoValue(field, fieldValue)
     val exception = assertThrows<ValidationException> {
-            setField(field, protoValue)
-                .build()
+        setField(field, protoValue)
+            .build()
     }
 
     val violations = exception.constraintViolations.also { it.size shouldBe 1 }
@@ -84,3 +92,8 @@ private fun Builder.assertErrorMessage(
         typeName shouldBe "${TypeUrl.from(descriptor)}"
     }
 }
+
+private const val DEFAULT_MESSAGE_FORMAT =
+    "The field `%s` can only be set when the field `%s` is defined."
+
+private fun customMessageFormat(fieldNumber: Int) = "Field_$fieldNumber: `%s`, `%s`."
