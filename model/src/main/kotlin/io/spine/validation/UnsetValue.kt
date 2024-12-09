@@ -64,8 +64,8 @@ public object UnsetValue {
      *
      * If a field is a number or a `bool`, it is impossible to tell if it's set or not.
      * In the binary representation, the `0` and `false` values may either be explicitly
-     * set or just be the default values. For these cases, and only for these cases, the method
-     * returns `Optional.empty()`.
+     * set or just be the default values.
+     * For these cases, and only for these cases, the method returns `null`.
      *
      * @return a [Value] with the field's default value or `null` if
      *   the field does not have an easily distinguished not-set value
