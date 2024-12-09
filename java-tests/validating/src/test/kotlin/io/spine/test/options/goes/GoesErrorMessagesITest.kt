@@ -27,6 +27,7 @@
 package io.spine.test.options.goes
 
 import com.google.protobuf.Message.Builder
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.test.options.goes.given.GoesMessagesTestEnv.COMPANION_FIELD_NAME
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import com.google.protobuf.Any as ProtobufAny
 
 /**
  * Tests error messages of `(goes)` option.
@@ -88,8 +90,10 @@ private fun Builder.assertErrorMessage(
     with(violation) {
         msgFormat shouldBe expectedFormat(field.index + 1)
         paramList shouldBe expectedParams
-        fieldPath shouldBe FieldPath(fieldName)
         typeName shouldBe "${TypeUrl.from(descriptor)}"
+        fieldPath shouldBe FieldPath(fieldName)
+        this.fieldValue shouldBe ProtobufAny.getDefaultInstance()
+        violationList.shouldBeEmpty()
     }
 }
 
