@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.required
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -34,6 +34,9 @@ import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.server.entity.alter
+import io.spine.validation.BoolFieldOptionView
+import io.spine.validation.OPTION_NAME
+import io.spine.validation.RequiredField
 
 /**
  * A view of a field that is marked as `required`.

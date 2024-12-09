@@ -24,52 +24,67 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.required
 
+import com.google.common.collect.ImmutableList
 import io.spine.core.External
-import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.FilePattern
 import io.spine.protodata.ast.event.TypeDiscovered
 import io.spine.protodata.ast.firstField
+import io.spine.protodata.ast.matches
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.MessageMarkers
 import io.spine.validation.event.RuleAdded
 
 /**
- * A policy that marks ID fields in entity state messages as required.
+ * A policy that marks ID fields in entity state messages and signal messages as required.
  *
- * The entity state messages are discovered via the options, specified in [ValidationConfig].
+ * The messages are discovered via the file patterns, specified in [ValidationConfig].
  * If ProtoData runs with no config, this policy never produces any validation rules.
  *
- * @see RequiredIdPatternPolicy
+ * @see RequiredIdOptionPolicy
  */
-internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
+internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
 
-    private val options: Set<String> by lazy {
+    private val filePatterns: Set<FilePattern> by lazy {
         if (config == null) {
             emptySet()
         } else {
-            config!!.messageMarkers.entityOptionNameList.toSet()
+            val markers = config!!.messageMarkers
+            markers.allPatterns().toSet()
         }
     }
 
     @React
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
     override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
-        if (options.isEmpty()) {
+        if (filePatterns.isEmpty()) {
+            return ignore()
+        }
+        if (!event.file.matchesPatterns()) {
             return ignore()
         }
         val type = event.type
-        if (!type.isEntityState()) {
-            return ignore()
-        }
         val field = type.firstField
         return withField(field)
     }
 
-    private fun MessageType.isEntityState(): Boolean {
-        val typeOptions = optionList.map { it.name }
-        val result = typeOptions.any { it in options }
-        return result
-    }
+    private fun File.matchesPatterns(): Boolean =
+        filePatterns.any {
+            it.matches(this)
+        }
+}
+
+/**
+ * Obtains all the file patterns that mark different types of Protobuf files.
+ */
+private fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
+    return ImmutableList.builder<FilePattern>()
+        .addAll(eventPatternList)
+        .addAll(commandPatternList)
+        .addAll(rejectionPatternList)
+        .build()
 }
