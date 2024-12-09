@@ -53,6 +53,7 @@ public class ValidationPlugin : Plugin(
         IsRequiredPolicy(),
         WhenPolicy(),
         RequiredIdPatternPolicy(),
-        RequiredIdOptionPolicy()
+        RequiredIdOptionPolicy(),
+        GoesPolicy()
     )
 )
