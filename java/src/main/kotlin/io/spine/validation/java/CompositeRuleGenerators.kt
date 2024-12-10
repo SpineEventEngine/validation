@@ -107,6 +107,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             ctx.validatedType, ctx.violationList, field, accessor
         )
     }
+
     override fun supportingMembers(): CodeBlock = codeBlock {
         add(left.supportingMembers())
         add(right.supportingMembers())
