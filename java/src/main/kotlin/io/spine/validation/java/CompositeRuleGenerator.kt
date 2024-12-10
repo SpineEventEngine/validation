@@ -120,7 +120,8 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             field = null
             accessor = null
         }
-        val params = if (rule.errorMessageFormat == EM_PLACEHOLDERS) printfMessage.second else emptyList()
+        val params =
+            if (rule.errorMessageFormat == EM_PLACEHOLDERS) printfMessage.second else emptyList()
         val message = error()
         return message.createCompositeViolation(
             ctx.validatedType,

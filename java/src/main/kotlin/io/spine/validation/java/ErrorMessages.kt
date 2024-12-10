@@ -114,6 +114,7 @@ private fun addViolation(
     .addStatement("\$L.add(\$L)", violationsList, violation)
     .build()
 
+@Suppress("LongParameterList")
 private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
