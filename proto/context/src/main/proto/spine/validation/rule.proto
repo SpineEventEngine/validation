@@ -169,6 +169,18 @@ message Rule {
     }
 }
 
+// Describes a format string for `ConstraintViolation` message.
+enum ErrorMessageFormat {
+    EM_UNDEFINED = 0;
+    EM_PRINTF = 1;
+    EM_PLACEHOLDERS = 2;
+}
+
+enum RuntimePlaceholder {
+    RP_UNDEFINED = 0;
+    RP_VALUE = 1;
+}
+
 // A validation rule which is a combination of two or more rules.
 //
 // For example, if a value must be less than 100 and greater than 0, the two simple rules are
@@ -203,6 +215,16 @@ message CompositeRule {
     // If `left` and `right` do not describe constraints of the same field, this value is empty.
     //
     protodata.FieldName field = 5;
+
+    // The expected format of the error message string.
+    ErrorMessageFormat error_message_format = 6;
+
+    // The list of the supported placeholders.
+    map<string, string> option_placeholders = 7;
+
+    map<string, RuntimePlaceholder> runtime_placeholders = 8;
+
+    bool passFieldValue = 9;
 }
 
 // A boolean operator.
