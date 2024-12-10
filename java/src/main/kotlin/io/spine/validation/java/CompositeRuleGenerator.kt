@@ -30,11 +30,20 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protobuf.isNotDefault
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
 import io.spine.tools.java.codeBlock
 import io.spine.validation.ErrorMessage
+import io.spine.validation.ErrorMessageFormat.EM_PLACEHOLDERS
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
+import io.spine.validation.RuntimePlaceholder
+import io.spine.validation.RuntimePlaceholder.RP_UNDEFINED
+import io.spine.validation.RuntimePlaceholder.RP_VALUE
+import io.spine.validation.RuntimePlaceholder.UNRECOGNIZED
+import io.spine.validation.java.placeholder.PlaceholderParser
+import io.spine.validation.java.placeholder.PlaceholderValue
+import io.spine.validation.java.placeholder.PrintfString
 
 /**
  * Java code comparing two boolean values.
@@ -61,6 +70,10 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
     private fun GenerationContext.left() = copy(rule = rule.composite.left)
     private fun GenerationContext.right() = copy(rule = rule.composite.right)
 
+    private val printfMessage: Pair<PrintfString, List<PlaceholderValue>> by lazy {
+        placeholderParser().toPrintfString(ctx.rule.composite.errorMessage)
+    }
+
     override val canGenerate: Boolean =
         left.canGenerate && right.canGenerate
 
@@ -74,6 +87,10 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
 
     override fun error(): ErrorMessage {
         val composite = ctx.rule.composite
+        if (composite.errorMessageFormat == EM_PLACEHOLDERS) {
+            return ErrorMessage("\"${printfMessage.first}\"")
+        }
+
         val format = composite.errorMessage
         val operation = composite.operator
         val commonField = composite.field
@@ -103,8 +120,14 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             field = null
             accessor = null
         }
-        return error().createCompositeViolation(
-            ctx.validatedType, ctx.violationList, field, accessor
+        val params = if (rule.errorMessageFormat == EM_PLACEHOLDERS) printfMessage.second else emptyList()
+        val message = error()
+        return message.createCompositeViolation(
+            ctx.validatedType,
+            ctx.violationList,
+            field,
+            fieldValue = if (rule.passFieldValue) accessor else null,
+            params
         )
     }
 
@@ -116,5 +139,23 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
     override fun prologue(): CodeBlock = codeBlock {
         add(left.prologue())
         add(right.prologue())
+    }
+
+    private fun placeholderParser(): PlaceholderParser {
+        val composite = ctx.rule.composite
+        val optionPlaceholders = composite.optionPlaceholdersMap
+            .mapValues { StringLiteral(it.value) }
+        val runtimePlaceholders = composite.runtimePlaceholdersMap
+            .mapValues { it.value.runtimeExpression() }
+        val placeholders = optionPlaceholders + runtimePlaceholders
+        return PlaceholderParser(placeholders) { _, _ ->
+            error("Unsupported placeholder.")
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST") // TODO:2024-12-10:yevhenii.nadtochii: Resolve it.
+    private fun RuntimePlaceholder.runtimeExpression() = when (this) {
+        RP_VALUE -> ctx.fieldValue as Expression<String>
+        RP_UNDEFINED, UNRECOGNIZED -> error("Undefined runtime placeholder.")
     }
 }

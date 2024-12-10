@@ -39,6 +39,7 @@ import io.spine.protodata.type.resolve
 import io.spine.server.event.Just
 import io.spine.server.event.Just.Companion.just
 import io.spine.server.event.React
+import io.spine.validation.ErrorMessageFormat.EM_PLACEHOLDERS
 import io.spine.validation.event.RuleAdded
 
 /**
@@ -75,13 +76,20 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         val companionName = FieldPath(option.with)
         val companion = typeSystem.resolve(companionName, declaringMessage)
         checkDistinct(target, companion)
-        val rule = compositeRule {
-            left = targetFieldShouldBeUnset(target)
-            operator = LogicalOperator.OR
-            right = companionFieldShouldBeSet(companion)
-            errorMessage = option.errorMessage()
-            field = target.name
-        }.wrap()
+        val rule = rule {
+            composite = compositeRule {
+                left = targetFieldShouldBeUnset(target)
+                operator = LogicalOperator.OR
+                right = companionFieldShouldBeSet(companion)
+                errorMessage = option.errorMessage()
+                field = target.name
+                errorMessageFormat = EM_PLACEHOLDERS
+                optionPlaceholders.putAll(mapOf(
+                    "fieldName" to target.name.value,
+                    "companionName" to companion.name.value
+                ))
+            }
+        }
         return just(rule.toEvent(target.declaringType))
     }
 

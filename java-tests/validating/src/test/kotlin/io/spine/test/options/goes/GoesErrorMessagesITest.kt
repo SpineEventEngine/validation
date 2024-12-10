@@ -98,6 +98,6 @@ private fun Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE_FORMAT =
-    "The field `%s` can only be set when the field `%s` is defined."
+    "The field `%s` can only be set when `%s` field is defined."
 
 private fun customMessageFormat(fieldNumber: Int) = "Field_$fieldNumber: `%s`, `%s`."

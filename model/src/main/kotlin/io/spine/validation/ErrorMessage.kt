@@ -47,8 +47,7 @@ import io.spine.validation.Placeholder.VALUE
  * renderers for such a language must not use this class and instead compile the error message on
  * their own.
  */
-public class ErrorMessage
-private constructor(private val expression: String) {
+public class ErrorMessage(private val expression: String) {
 
     public companion object {
 
