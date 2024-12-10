@@ -38,7 +38,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.UNRECOGNIZED
 import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.Type.KindCase.ENUMERATION
-import io.spine.protodata.ast.Type.KindCase.KIND_NOT_SET
 import io.spine.protodata.ast.Type.KindCase.MESSAGE
 import io.spine.protodata.ast.Type.KindCase.PRIMITIVE
 import io.spine.protodata.ast.cardinality
@@ -95,7 +94,6 @@ public object UnsetValue {
             MESSAGE -> messageValue(type)
             ENUMERATION -> enumValue(type)
             PRIMITIVE -> primitiveValue(type)
-            KIND_NOT_SET -> error("Cannot create `Value` for the type of kind `$kind`.")
             else -> error("Cannot create `Value` for the type of kind `$kind`.")
         }
     }
