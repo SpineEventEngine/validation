@@ -42,7 +42,7 @@ import io.spine.validation.RuntimePlaceholder.RP_UNDEFINED
 import io.spine.validation.RuntimePlaceholder.RP_VALUE
 import io.spine.validation.RuntimePlaceholder.UNRECOGNIZED
 import io.spine.validation.java.placeholder.PlaceholderParser
-import io.spine.validation.java.placeholder.PlaceholderValue
+import io.spine.validation.java.placeholder.PrintfParam
 import io.spine.validation.java.placeholder.PrintfString
 
 /**
@@ -70,7 +70,7 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
     private fun GenerationContext.left() = copy(rule = rule.composite.left)
     private fun GenerationContext.right() = copy(rule = rule.composite.right)
 
-    private val printfMessage: Pair<PrintfString, List<PlaceholderValue>> by lazy {
+    private val printfMessage: Pair<PrintfString, List<PrintfParam>> by lazy {
         placeholderParser().toPrintfString(ctx.rule.composite.errorMessage)
     }
 

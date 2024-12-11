@@ -29,19 +29,18 @@ package io.spine.validation.java.placeholder
 import io.spine.protodata.java.Expression
 
 internal typealias Placeholder = String
-internal typealias PlaceholderValue = Expression<String>
+internal typealias PrintfParam = Expression<String>
 internal typealias PrintfString = String
-internal typealias PlaceholderString = String
 
 internal class PlaceholderParser(
-    private val placeholders: Map<Placeholder, PlaceholderValue>,
+    private val placeholders: Map<Placeholder, PrintfParam>,
     private val onUnsupportedPlaceholder: (Placeholder, Set<Placeholder>) -> Nothing,
 ) {
 
     private companion object {
 
         /**
-         * A Regex pattern to find all present tokens in the message.
+         * A Regex pattern for placeholders.
          */
         val PlaceholderSearch = Regex("""\{(.*?)}""")
     }
@@ -53,10 +52,10 @@ internal class PlaceholderParser(
      * This method does the following:
      *
      * 1. Finds all placeholders in the given [message] and replaces them with `%s`.
-     * 2. For each found token, it finds its corresponding [value][placeholders], and puts it
-     *    to the list of parameters.
+     * 2. For each found placeholder, it finds its corresponding [value][placeholders],
+     *    and puts it to the list of parameters.
      */
-    fun toPrintfString(message: PlaceholderString): Pair<PrintfString, List<PlaceholderValue>> {
+    fun toPrintfString(message: String): Pair<PrintfString, List<PrintfParam>> {
         val params = mutableListOf<Expression<String>>()
         val format = PlaceholderSearch.replace(message) { matchResult ->
             val name = matchResult.groupValues[1]
