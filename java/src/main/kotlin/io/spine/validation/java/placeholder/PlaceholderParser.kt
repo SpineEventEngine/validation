@@ -32,6 +32,16 @@ internal typealias Placeholder = String
 internal typealias PrintfParam = Expression<String>
 internal typealias PrintfString = String
 
+/**
+ * Parses the given string, which may contain one or more placeholders
+ * to a `printf`-style format string.
+ *
+ * @param placeholders The supported placeholders and their values.
+ * @param onUnsupportedPlaceholder This method is invoked when the parser encounters
+ *  a placeholder, which is not present in [placeholders]. It accepts the unsupported placeholder
+ *  itself along with the set of the supported ones. The method is supposed to throw an exception
+ *  with a reasonable message.
+ */
 internal class PlaceholderParser(
     private val placeholders: Map<Placeholder, PrintfParam>,
     private val onUnsupportedPlaceholder: (Placeholder, Set<Placeholder>) -> Nothing,
