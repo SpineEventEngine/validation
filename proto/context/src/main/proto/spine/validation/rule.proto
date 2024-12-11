@@ -74,11 +74,7 @@ message SimpleRule {
     protodata.Value other_value = 4;
 
     // A human-readable message explaining the error.
-    //
-    // May include tokens `{value}` and `{other}`, which will be replaced with the runtime values
-    // when the error is constructed.
-    //
-    string error_message = 5;
+    ErrorMessage error_message = 5;
 
     // If `true`, this rule is ignored when the field is not set.
     //
@@ -169,18 +165,6 @@ message Rule {
     }
 }
 
-// Describes a format string for `ConstraintViolation` message.
-enum ErrorMessageFormat {
-    EM_UNDEFINED = 0;
-    EM_PRINTF = 1;
-    EM_PLACEHOLDERS = 2;
-}
-
-enum RuntimePlaceholder {
-    RP_UNDEFINED = 0;
-    RP_VALUE = 1;
-}
-
 // A validation rule which is a combination of two or more rules.
 //
 // For example, if a value must be less than 100 and greater than 0, the two simple rules are
@@ -198,14 +182,7 @@ message CompositeRule {
     Rule right = 3;
 
     // A human-readable message explaining the error.
-    //
-    // May include tokens `{left}`, `{right}`, and `{operator}`, which will be replaced with at
-    // runtime with the error messages of the `left` and `right` rules and the words "and" or "or"
-    // or "xor".
-    //
-    // May also include the token `{value}`, but only if the `field` is also set.
-    //
-    string error_message = 4;
+    ErrorMessage error_message = 4;
 
     // If this rule describes several constraints of the same field, this is the name of the field.
     //
@@ -215,16 +192,6 @@ message CompositeRule {
     // If `left` and `right` do not describe constraints of the same field, this value is empty.
     //
     protodata.FieldName field = 5;
-
-    // The expected format of the error message string.
-    ErrorMessageFormat error_message_format = 6;
-
-    // The list of the supported placeholders.
-    map<string, string> option_placeholders = 7;
-
-    map<string, RuntimePlaceholder> runtime_placeholders = 8;
-
-    bool passFieldValue = 9;
 }
 
 // A boolean operator.
@@ -253,4 +220,54 @@ enum LogicalOperator {
     // Lazy evaluation of "exclusive or" is impossible, so both operands will always be evaluated.
     //
     XOR = 3;
+}
+
+// TODO:2024-12-11:yevhenii.nadtochii: Remove.
+// Describes a format string for `ConstraintViolation` message.
+enum ErrorMessageFormat {
+    EM_UNDEFINED = 0;
+    EM_PRINTF = 1;
+    EM_PLACEHOLDERS = 2;
+}
+
+// A placeholder-based error message.
+//
+// Such a message may contain zero, one or more placeholders like `{fieldName}`,
+// `{currentValue}`, `{pattern}`, etc. It is up to an option to define the supported placeholder
+// and their values.
+//
+message ErrorMessage {
+
+    // An error message string which may contain placeholders.
+    string placeholder_format = 1;
+
+    // Associates the supported buildtime placeholders with their `string` values.
+    //
+    // Values for such placeholders are known during the code generation. For example, `{fieldName}`
+    // placeholder is already known during the build phase and can be provided immediately.
+    //
+    map<string, string> buildtime = 2;
+
+    // Associates the supported runtime placeholders with their values.
+    //
+    // Values for such placeholders are known in runtime. For example, `{fieldValue}` can NOT
+    // be provided during the build phase. The generated code should provide it.
+    //
+    // A set of such placeholders is restricted by `PlaceholderValue` enum. Tough, the option can
+    // introduce its own names for them, accordingly to the option's context.
+    //
+    map<string, PlaceholderValue> runtime = 3;
+}
+
+// Known runtime values associated with the field rule.
+//
+// The actual values will be substituted by the generated code in runtime.
+//
+enum PlaceholderValue {
+
+    // Undefined placeholder value.
+    RP_UNDEFINED = 0;
+
+    // The field value.
+    RP_VALUE = 1;
 }
