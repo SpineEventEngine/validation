@@ -39,7 +39,6 @@ import io.spine.protodata.type.resolve
 import io.spine.server.event.Just
 import io.spine.server.event.Just.Companion.just
 import io.spine.server.event.React
-import io.spine.validation.ErrorMessageFormat.EM_PLACEHOLDERS
 import io.spine.validation.event.RuleAdded
 
 /**
@@ -81,16 +80,21 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
                 left = targetFieldShouldBeUnset(target)
                 operator = LogicalOperator.OR
                 right = companionFieldShouldBeSet(companion)
-                errorMessage = option.errorMessage()
                 field = target.name
-                errorMessageFormat = EM_PLACEHOLDERS
-                optionPlaceholders.putAll(mapOf(
-                    "fieldName" to target.name.value,
-                    "companionName" to companion.name.value
-                ))
+                errorMessage = errorMessage(option, target, companion)
             }
         }
         return just(rule.toEvent(target.declaringType))
+    }
+
+    private fun errorMessage(option: GoesOption, target: Field, companion: Field) = errorMessage {
+        value = option.errorMessage()
+        buildtimePlaceholders.putAll(
+            mapOf(
+                "fieldName" to target.name.value,
+                "companionName" to companion.name.value
+            )
+        )
     }
 
     /**

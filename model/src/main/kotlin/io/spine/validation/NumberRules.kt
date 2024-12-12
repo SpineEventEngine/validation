@@ -94,7 +94,7 @@ internal constructor(
         field = this@toRule
         operator = if (inclusive) inclusiveOperator else exclusiveOperator
         otherValue = threshold
-        errorMessage = compileErrorMessage(adjective, inclusive)
+        errorMessage = errorMessage { value = compileErrorMessage(adjective, inclusive) }
         distribute = true
     }
 
@@ -111,7 +111,7 @@ internal constructor(
         right = toMaxRule().wrap()
         operator = AND
         field = this@toRangeRule
-        errorMessage = rangeErrorMessage
+        errorMessage = errorMessage { value = rangeErrorMessage }
     }
 
     private val rangeErrorMessage: String by lazy {

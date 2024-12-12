@@ -46,18 +46,17 @@ public fun SimpleRule(
     field: FieldName,
     customFeature: Message,
     description: String,
-    errorMessage: String,
+    errorMessage: ErrorMessage,
     distribute: Boolean
 ): SimpleRule {
-    require(description.isNotEmpty())
-    require(errorMessage.isNotEmpty())
     require(description.isNotBlank())
-    require(errorMessage.isNotBlank())
+    require(errorMessage.value.isNotBlank())
 
     val operator = customOperator {
         this.description = description
         feature = customFeature.pack()
     }
+
     return simpleRule {
         customOperator = operator
         this.errorMessage = errorMessage

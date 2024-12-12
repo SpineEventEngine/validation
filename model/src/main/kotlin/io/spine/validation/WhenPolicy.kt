@@ -59,7 +59,7 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
             field.name,
             feature,
             errorMessage,
-            errorMessage,
+            errorMessage { value = errorMessage },
             true
         )
         return simpleRuleAdded(field.declaringType, newRule)

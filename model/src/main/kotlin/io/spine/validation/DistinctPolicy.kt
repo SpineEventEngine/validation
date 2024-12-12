@@ -63,8 +63,13 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
         checkCollection(fieldName, declaringType, event.file)
 
         val rule = SimpleRule(
-            fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
+            fieldName,
+            DistinctCollection.getDefaultInstance(),
+            DESCRIPTION,
+            errorMessage { value= ERROR },
+            false
         )
+
         return simpleRuleAdded {
             type = declaringType
             this@simpleRuleAdded.rule = rule
@@ -81,5 +86,6 @@ internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
 
     companion object {
         private const val ERROR = "A field with `($DISTINCT) = true` must not contain duplicates."
+        private const val DESCRIPTION = "The option to mark a `repeated` field as a collection of unique elements."
     }
 }
