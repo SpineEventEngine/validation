@@ -230,15 +230,15 @@ enum LogicalOperator {
 //
 message ErrorMessage {
 
-    // An error message string which may contain placeholders.
-    string placeholder_format = 1;
+    // An error message text which may contain placeholders.
+    string value = 1;
 
     // Associates the supported build-time placeholders with their `string` values.
     //
     // Values for such placeholders are known during the code generation. For example,
     // `{field.name}` is already known during the build phase and can be provided immediately.
     //
-    map<string, string> buildtime = 2;
+    map<string, string> buildtimePlaceholders = 2;
 
     // Associates the supported runtime placeholders with their runtime values.
     //
@@ -248,7 +248,7 @@ message ErrorMessage {
     // A set of such placeholders is restricted by `PlaceholderValue` enum. Though, the option can
     // introduce its own names for them, in accordance with the option's context.
     //
-    map<string, PlaceholderValue> runtime = 3;
+    map<string, PlaceholderValue> runtimePlaceholders = 3;
 }
 
 // Known runtime values associated with the field rule.
