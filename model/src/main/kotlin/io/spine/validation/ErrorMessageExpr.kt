@@ -47,7 +47,7 @@ import io.spine.validation.Placeholder.VALUE
  * renderers for such a language must not use this class and instead compile the error message on
  * their own.
  */
-public class ErrorMessage(private val expression: String) {
+public class ErrorMessageExpr(private val expression: String) {
 
     public companion object {
 
@@ -67,12 +67,12 @@ public class ErrorMessage(private val expression: String) {
             format: String,
             value: String = "",
             other: String? = null
-        ): ErrorMessage {
+        ): ErrorMessageExpr {
             val msg = Template(format).apply {
                 formatDynamic(VALUE, value)
                 formatStatic(OTHER, other ?: "")
             }
-            return ErrorMessage(msg.joinExpression())
+            return ErrorMessageExpr(msg.joinExpression())
         }
 
         /**
@@ -91,11 +91,11 @@ public class ErrorMessage(private val expression: String) {
         @JvmOverloads
         public fun forComposite(
             format: String,
-            left: ErrorMessage,
-            right: ErrorMessage,
+            left: ErrorMessageExpr,
+            right: ErrorMessageExpr,
             operation: LogicalOperator = LO_UNKNOWN,
             accessor: String = ""
-        ): ErrorMessage {
+        ): ErrorMessageExpr {
             val msg = Template(format).apply {
                 formatStatic(OPERATOR, operation.printableString())
                 formatDynamic(LEFT, left.expression)
@@ -104,7 +104,7 @@ public class ErrorMessage(private val expression: String) {
                     formatDynamic(VALUE, accessor)
                 }
             }
-            return ErrorMessage(msg.joinExpression())
+            return ErrorMessageExpr(msg.joinExpression())
         }
     }
 

@@ -44,13 +44,13 @@ import io.spine.protodata.java.Literal
 import io.spine.protodata.java.listExpression
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.ErrorMessage
+import io.spine.validation.ErrorMessageExpr
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the mutable list of violations from the given [ctx].
  */
-public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
+public fun ErrorMessageExpr.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
     val violation = buildViolation(
         validatedType, fieldFromSimpleRule, fieldOrElement,
         ignoreCardinality = isElement, params = emptyList()
@@ -62,7 +62,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
  * Constructs code which creates a [ConstraintViolation] with child violations and adds it
  * to the mutable list of violations from the passed [ctx].
  */
-public fun ErrorMessage.createParentViolation(
+public fun ErrorMessageExpr.createParentViolation(
     ctx: GenerationContext,
     childViolations: Expression<MutableList<ConstraintViolation>>
 ): CodeBlock {
@@ -93,7 +93,7 @@ public fun ErrorMessage.createParentViolation(
  *         if there is no common field.
  *         If this parameter is `null`, `field` must also be `null`.
  */
-public fun ErrorMessage.createCompositeViolation(
+public fun ErrorMessageExpr.createCompositeViolation(
     type: TypeName,
     violationsList: Expression<MutableList<ConstraintViolation>>,
     field: Field?,
@@ -115,7 +115,7 @@ private fun addViolation(
     .build()
 
 @Suppress("LongParameterList")
-private fun ErrorMessage.buildViolation(
+private fun ErrorMessageExpr.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression<*>?,
