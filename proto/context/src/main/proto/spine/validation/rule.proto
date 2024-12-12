@@ -222,14 +222,6 @@ enum LogicalOperator {
     XOR = 3;
 }
 
-// TODO:2024-12-11:yevhenii.nadtochii: Remove.
-// Describes a format string for `ConstraintViolation` message.
-enum ErrorMessageFormat {
-    EM_UNDEFINED = 0;
-    EM_PRINTF = 1;
-    EM_PLACEHOLDERS = 2;
-}
-
 // A placeholder-based error message.
 //
 // Such a message may contain zero, one or more placeholders like `{fieldName}`,
