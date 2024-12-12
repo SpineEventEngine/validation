@@ -224,36 +224,36 @@ enum LogicalOperator {
 
 // A placeholder-based error message.
 //
-// Such a message may contain zero, one or more placeholders like `{fieldName}`,
-// `{currentValue}`, `{pattern}`, etc. It is up to an option to define the supported placeholder
-// and their values.
+// Such a message may contain one or more placeholders like `{field.name}`, `{field.value}`, etc.
+// There is no a universal, pre-defined set of placeholders. It is up to an option to define
+// the supported placeholders and their values.
 //
 message ErrorMessage {
 
     // An error message string which may contain placeholders.
     string placeholder_format = 1;
 
-    // Associates the supported buildtime placeholders with their `string` values.
+    // Associates the supported build-time placeholders with their `string` values.
     //
-    // Values for such placeholders are known during the code generation. For example, `{fieldName}`
-    // placeholder is already known during the build phase and can be provided immediately.
+    // Values for such placeholders are known during the code generation. For example,
+    // `{field.name}` is already known during the build phase and can be provided immediately.
     //
     map<string, string> buildtime = 2;
 
-    // Associates the supported runtime placeholders with their values.
+    // Associates the supported runtime placeholders with their runtime values.
     //
-    // Values for such placeholders are known in runtime. For example, `{fieldValue}` can NOT
+    // Values for such placeholders are known in runtime. For example, `{field.value}` can NOT
     // be provided during the build phase. The generated code should provide it.
     //
-    // A set of such placeholders is restricted by `PlaceholderValue` enum. Tough, the option can
-    // introduce its own names for them, accordingly to the option's context.
+    // A set of such placeholders is restricted by `PlaceholderValue` enum. Though, the option can
+    // introduce its own names for them, in accordance with the option's context.
     //
     map<string, PlaceholderValue> runtime = 3;
 }
 
 // Known runtime values associated with the field rule.
 //
-// The actual values will be substituted by the generated code in runtime.
+// The actual values will be provided by the generated code in runtime.
 //
 enum PlaceholderValue {
 
