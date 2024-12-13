@@ -27,6 +27,13 @@
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.ProtoData
 
+plugins {
+    java
+    protobuf
+    `java-test-fixtures`
+    prototap
+}
+
 dependencies {
     api(CoreJava.server)
     api(ProtoData.java)
@@ -37,4 +44,5 @@ dependencies {
     implementation(project(":java-runtime"))
 
     testImplementation(CoreJava.testUtilServer)
+    testImplementation(ProtoData.testlib)
 }
