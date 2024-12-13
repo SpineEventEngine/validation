@@ -27,12 +27,16 @@
 package io.spine.validation.required
 
 import io.spine.core.External
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.declaringFile
 import io.spine.protodata.ast.event.FieldExited
+import io.spine.protodata.ast.qualifiedName
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
+import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.REQUIRED
 import io.spine.validation.RequiredField
@@ -45,9 +49,13 @@ import io.spine.validation.toEvent
 /**
  * A [ValidationPolicy] which controls whether a field should be validated as `required`.
  *
- * Whenever a field option is discovered, if that option is the `required` option, and
- * the value is `true`, and the field type supports such a validation, the validation rule
- * is added. If any of these conditions are not met, nothing happens.
+ * Whenever a field traversal is finished, add the validation rule if
+ * all of these conditions are met:
+ *   1. The field has the `(required)` option.
+ *   2. The value of the option is `true`.
+ *   2. The field type allows checking if a value is set or not.
+ *
+ * If any of these conditions are not met, nothing happens.
  */
 internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
 
@@ -59,7 +67,7 @@ internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
             name = fieldName
             type = declaringType
         }
-        val field = select(RequiredField::class.java).findById(id)
+        val field = select<RequiredField>().findById(id)
         if (field != null && field.required) {
             val declaration = findField(fieldName, declaringType, event.file)
             val rule = requiredRule(declaration, field)
@@ -67,20 +75,24 @@ internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
         }
         return ignore()
     }
+
+    private fun requiredRule(declaration: Field, field: RequiredField): RuleAdded {
+        val rule = RequiredRule.forField(declaration, field.errorMessage)
+            ?: throwDoesNotSupportRequired(declaration)
+        return rule.toEvent(declaration.declaringType)
+    }
+
+    private fun throwDoesNotSupportRequired(field: Field): Nothing {
+        val file = field.declaringFile(typeSystem!!)
+        val fieldName = field.name.value
+        val declaringType = field.declaringType.qualifiedName
+        val type: PrimitiveType = field.type.primitive
+        Compilation.error(
+            file,
+            field.span.startLine, field.span.startColumn,
+            "The field `${declaringType}.${fieldName}` of the type `${type}`" +
+                    " does not support `($REQUIRED)` validation.",
+        )
+    }
 }
 
-private fun requiredRule(declaration: Field, field: RequiredField): RuleAdded {
-    val rule = RequiredRule.forField(declaration, field.errorMessage)
-        ?: throwDoesNotSupportRequired(declaration)
-    return rule.toEvent(declaration.declaringType)
-}
-
-private fun throwDoesNotSupportRequired(field: Field): Nothing {
-    val fieldName = field.name.value
-    val typeUrl = field.declaringType.typeUrl
-    val type: PrimitiveType = field.type.primitive
-    error(
-        "The field `${typeUrl}.${fieldName}` of the type `${type}`" +
-                " does not support `($REQUIRED)` validation.",
-    )
-}
