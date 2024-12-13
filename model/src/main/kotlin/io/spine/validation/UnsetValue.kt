@@ -66,8 +66,7 @@ public object UnsetValue {
      * set or just be the default values.
      * For these cases, and only for these cases, the method returns `null`.
      *
-     * @return a [Value] with the field's default value or `null` if
-     *   the field does not have an easily distinguished not-set value
+     * @return a default field value or `null`, if the field type does not assume a not-set value.
      */
     public fun forField(field: Field): Value? =
         when (val cardinality = field.type.cardinality) {
@@ -75,7 +74,7 @@ public object UnsetValue {
             CARDINALITY_MAP ->  value { mapValue = MapValue.getDefaultInstance() }
             CARDINALITY_SINGLE ->  singular(field.toType())
             else -> error(
-                "Cannot create `Value` for the field `${field.shortly()}`." +
+                "Cannot create unset `Value` for the field `${field.shortly()}`." +
                         " Unexpected cardinality encountered: `$cardinality`."
             )
         }
@@ -85,8 +84,7 @@ public object UnsetValue {
      *
      * Behaves similarly to [forField], but never returns an empty list or an empty map.
      *
-     * @return a [Value] with the field's default value or `Optional.empty()` if
-     *   the field does not have an easily distinguished not-set value
+     * @return a default field value or `null`, if the field type does not assume a not-set value.
      */
     public fun singular(type: Type): Value? {
         val kind = type.kindCase
