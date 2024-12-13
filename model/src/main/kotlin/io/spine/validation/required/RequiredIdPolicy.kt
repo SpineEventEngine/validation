@@ -64,7 +64,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
      *
      * If the field is marked with `(required) = false`, no rule is generated.
      *
-     * @param field ID field.
+     * @param field The ID field.
      * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
