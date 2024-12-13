@@ -45,4 +45,9 @@ dependencies {
 
     testImplementation(CoreJava.testUtilServer)
     testImplementation(ProtoData.testlib)
+
+    testFixturesImplementation(project(":proto:configuration"))
+    testFixturesImplementation(CoreJava.testUtilServer)
+    testFixturesImplementation(ProtoData.api)
+    testFixturesImplementation(ProtoData.testlib)
 }
