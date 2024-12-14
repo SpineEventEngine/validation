@@ -161,6 +161,7 @@ fun Module.forceConfigurations() {
                     Logging.libJvm,
                     Logging.middleware,
                     CoreJava.server,
+                    CoreJava.testUtilServer,
                     Validation.runtime,
 
                     Jackson.core,
