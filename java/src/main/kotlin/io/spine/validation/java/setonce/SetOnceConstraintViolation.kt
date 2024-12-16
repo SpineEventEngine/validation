@@ -28,6 +28,7 @@ package io.spine.validation.java.setonce
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
@@ -35,13 +36,14 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.listExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
-import io.spine.string.lowerCamelCase
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_SET_AGAIN
 import io.spine.validation.java.setonce.MessageToken.CURRENT_VALUE
 import io.spine.validation.java.setonce.MessageToken.Companion.TokenRegex
-import io.spine.validation.java.setonce.MessageToken.Companion.forCamelName
+import io.spine.validation.java.setonce.MessageToken.Companion.forPlaceholder
 import io.spine.validation.java.setonce.MessageToken.FIELD_NAME
+import io.spine.validation.java.setonce.MessageToken.FIELD_TYPE
+import io.spine.validation.java.setonce.MessageToken.PARENT_TYPE
 import io.spine.validation.java.setonce.MessageToken.PROPOSED_VALUE
 import io.spine.validation.java.setonce.MessageToken.values
 
@@ -57,8 +59,9 @@ internal class SetOnceConstraintViolation(
 ) {
 
     private val fieldName = field.name.value
+    private val fieldType = field.type.name
     private val qualifiedName = field.qualifiedName
-    private val declaringMessage = field.declaringType
+    private val declaringMessage = field.declaringType.qualifiedName
 
     /**
      * Builds an expression that returns a new instance of [ConstraintViolation]
@@ -83,7 +86,7 @@ internal class SetOnceConstraintViolation(
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("msg_format", StringLiteral(format))
             .chainAddAll("param", listExpression(params))
-            .chainSet("type_name", StringLiteral(declaringMessage.qualifiedName))
+            .chainSet("type_name", StringLiteral(declaringMessage))
             .chainSet("field_path", fieldPath)
             .chainSet("field_value", payload.packToAny())
             .chainBuild<ConstraintViolation>()
@@ -97,8 +100,10 @@ internal class SetOnceConstraintViolation(
         MessageToken.values().associateWith {
             when (it) {
                 FIELD_NAME -> StringLiteral(fieldName)
+                FIELD_TYPE -> StringLiteral(fieldType)
                 CURRENT_VALUE -> currentValue
                 PROPOSED_VALUE -> newValue
+                PARENT_TYPE -> StringLiteral(declaringMessage)
             }
         }
 
@@ -118,7 +123,7 @@ internal class SetOnceConstraintViolation(
         val params = mutableListOf<Expression<String>>()
         val format = TokenRegex.replace(errorMessage) { matchResult ->
             val tokenName = matchResult.groupValues[1]
-            val token = forCamelName(tokenName) ?: throwUnsupportedToken(tokenName)
+            val token = forPlaceholder(tokenName) ?: throwUnsupportedToken(tokenName)
             val param = tokenValues[token]!!
             "%s".also { params.add(param) }
         }
@@ -131,7 +136,7 @@ internal class SetOnceConstraintViolation(
                 "The declared field: `${qualifiedName}`."
     )
 
-    private fun supportedTokens(): String = values().joinToString { "{${it.camelName}}" }
+    private fun supportedTokens(): String = values().joinToString { "{${it.placeholder}}" }
 }
 
 /**
@@ -143,13 +148,13 @@ internal class SetOnceConstraintViolation(
  * The list of the supported tokens can be found in the option specification.
  * Take a look at `IfSetAgainOption` in `options.proto`.
  */
-private enum class MessageToken {
+private enum class MessageToken(val placeholder: String) {
 
-    FIELD_NAME,
-    CURRENT_VALUE,
-    PROPOSED_VALUE;
-
-    val camelName = name.lowercase().lowerCamelCase()
+    FIELD_NAME("field.name"),
+    FIELD_TYPE("field.type"),
+    CURRENT_VALUE("field.value"),
+    PROPOSED_VALUE("field.proposed_value"),
+    PARENT_TYPE("parent.type");
 
     companion object {
 
@@ -159,9 +164,9 @@ private enum class MessageToken {
         val TokenRegex = Regex("""\{(.*?)}""")
 
         /**
-         * Returns a [MessageToken] for the given [simpleName], if any.
+         * Returns a [MessageToken] for the given [placeholder], if any.
          */
-        fun forCamelName(simpleName: String): MessageToken? =
-            values().firstOrNull { it.camelName == simpleName }
+        fun forPlaceholder(placeholder: String): MessageToken? =
+            values().firstOrNull { it.placeholder == placeholder }
     }
 }

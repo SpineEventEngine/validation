@@ -32,86 +32,40 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
-import io.spine.test.options.setonce.TestEnv.CERT1
-import io.spine.test.options.setonce.TestEnv.CERT2
-import io.spine.test.options.setonce.TestEnv.DONALD
-import io.spine.test.options.setonce.TestEnv.TWENTY
-import io.spine.test.options.setonce.TestEnv.SEVENTY
-import io.spine.test.options.setonce.TestEnv.EIGHTY_KG
-import io.spine.test.options.setonce.TestEnv.FIFTY_KG
-import io.spine.test.options.setonce.TestEnv.FIRST_YEAR
-import io.spine.test.options.setonce.TestEnv.JACK
-import io.spine.test.options.setonce.TestEnv.NO
-import io.spine.test.options.setonce.TestEnv.SHORT_HEIGHT
-import io.spine.test.options.setonce.TestEnv.TWO
-import io.spine.test.options.setonce.TestEnv.EIGHT
-import io.spine.test.options.setonce.TestEnv.STUDENT1
-import io.spine.test.options.setonce.TestEnv.STUDENT2
-import io.spine.test.options.setonce.TestEnv.TALL_HEIGHT
-import io.spine.test.options.setonce.TestEnv.THIRD_YEAR
-import io.spine.test.options.setonce.TestEnv.YES
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.test.tools.validate.YearOfStudy
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceErrorMessageITest {
 
-    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the default error message for `{0}` field")
-    fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T) =
-        assertDefaultMessage(fieldName, value1, value2)
+    fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
+        assertDefaultMessage(fieldName, value1, value2, type)
 
-    @MethodSource("allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the custom error message for `{0}` field")
-    fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T) =
-        assertCustomMessage(fieldName, value1, value2)
-
-    private companion object {
-
-        @JvmStatic
-        fun allFieldTypesWithTwoDistinctValues() = listOf(
-            arguments(named("message", "name"), JACK, DONALD),
-            arguments(named("string", "id"), STUDENT1, STUDENT2),
-            arguments(named("double", "height"), SHORT_HEIGHT, TALL_HEIGHT),
-            arguments(named("float", "weight"), FIFTY_KG, EIGHTY_KG),
-            arguments(named("int32", "cash_USD"), TWO, EIGHT),
-            arguments(named("int64", "cash_EUR"), TWENTY, SEVENTY),
-            arguments(named("uint32", "cash_JPY"), TWO, EIGHT),
-            arguments(named("uint64", "cash_GBP"), TWENTY, SEVENTY),
-            arguments(named("sint32", "cash_AUD"), TWO, EIGHT),
-            arguments(named("sint64", "cash_CAD"), TWENTY, SEVENTY),
-            arguments(named("fixed32", "cash_CHF"), TWO, EIGHT),
-            arguments(named("fixed64", "cash_CNY"), TWENTY, SEVENTY),
-            arguments(named("sfixed32", "cash_PLN"), TWO, EIGHT),
-            arguments(named("sfixed64", "cash_NZD"), TWENTY, SEVENTY),
-            arguments(named("bool", "has_medals"), YES, NO),
-            arguments(named("enum", "signature"), CERT1, CERT2),
-
-            // For some reason, for enums, `Message.Builder.setField()` expects value
-            // descriptors instead of constants or their ordinal numbers.
-            arguments("year_of_study", FIRST_YEAR.valueDescriptor, THIRD_YEAR.valueDescriptor)
-        )
-    }
+    fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
+        assertCustomMessage(fieldName, value1, value2, type)
 }
 
-private fun <T : Any> assertDefaultMessage(fieldName: String, value1: T, value2: T) {
+private fun <T : Any> assertDefaultMessage(fieldName: String, value1: T, value2: T, type: String) {
     val builder = StudentDefaultMessage.newBuilder()
-    val expectedParams = listOf(fieldName, "$value1", "$value2")
+    val descriptor = StudentDefaultMessage.getDescriptor()
+    val expectedParams = listOf(descriptor.fullName, fieldName, type, "$value1", "$value2")
     val expectedFormat = { _: Int -> DEFAULT_MESSAGE_FORMAT }
     return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
 
-private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: T) {
+private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: T, type: String) {
     val builder = StudentCustomMessage.newBuilder()
-    val expectedParams = listOf("$value1", fieldName, "$value2")
+    val expectedParams = listOf("$value1", fieldName, "$value2", type)
     val expectedFormat = ::customMessageFormat
     return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
@@ -121,7 +75,7 @@ private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: 
  * the expected parameters when [fieldName] is set twice.
  *
  * Notice on enum fields: we have to pass enums as value descriptors
- * (see [SetOnceErrorMessageITest.allFieldTypesWithTwoDistinctValues]),
+ * (see [io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv.allFieldTypesWithTwoDistinctValues]),
  * so we also have to take this into account during assertions because
  * in `ConstraintViolation` they still arrive as Java enum constants.
  *
@@ -166,7 +120,7 @@ private fun <T : Any> Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE_FORMAT =
-    "The field `%s` already has the value `%s` and cannot be reassigned to `%s`."
+    "The field `%s.%s` of the type `%s` already has the value `%s` and cannot be reassigned to `%s`."
 
 private fun customMessageFormat(fieldNumber: Int) =
-    "Field_$fieldNumber: `%s`, `%s`, `%s`."
+    "Field_$fieldNumber: `%s`, `%s`, `%s`, `%s`."
