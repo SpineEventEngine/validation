@@ -25,9 +25,9 @@
  */
 
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.TestLib
 
 dependencies {
     testImplementation(Logging.lib)
-    testImplementation(Spine.testlib)
+    testImplementation(TestLib.lib)
 }

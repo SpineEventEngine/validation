@@ -26,8 +26,8 @@
 
 package io.spine.validation
 
-import com.google.protobuf.StringValue
 import io.spine.option.OptionsProto
+import io.spine.option.rangeOption
 import io.spine.protobuf.pack
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
@@ -124,7 +124,7 @@ class PolicySpec {
         val rangeOption = option {
             name = "range"
             number = OptionsProto.range.number
-            value = StringValue.of("[0..100]").pack()
+            value = rangeOption { value = "[0..100]" }.pack()
             type = type {
                 primitive = TYPE_STRING
             }

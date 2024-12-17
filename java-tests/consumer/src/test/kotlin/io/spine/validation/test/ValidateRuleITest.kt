@@ -144,7 +144,7 @@ internal class ValidateRuleITest {
 
 private fun checkInvalid(
     builder: Message.Builder,
-    errorPart: String = "message must have valid properties"
+    errorPart: String = "is invalid"
 ) {
     assertValidationException(builder).run {
         msgFormat shouldContain errorPart

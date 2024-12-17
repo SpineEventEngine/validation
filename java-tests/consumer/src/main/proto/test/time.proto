@@ -21,7 +21,7 @@ message LocalTime {
         (max).value = "23"
     ];
 
-    int32 minutes = 2 [(range) = "[0..60)"];
+    int32 minutes = 2 [(range).value = "[0..60)"];
 
     float seconds = 3 [(min).value = "0.0", (max).value = "59.999"];
 }

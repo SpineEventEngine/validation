@@ -30,6 +30,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Range;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldDeclaration;
+import io.spine.option.RangeOption;
 import io.spine.validate.ComparableNumber;
 import io.spine.validate.ConstraintTranslator;
 
@@ -37,20 +38,21 @@ import static java.lang.String.format;
 
 /**
  * A constraint that checks whether a value fits the ranged described by expressions such as
- * {@code int32 value = 5 [(range) = "[3..5)]}, describing a value that is at least 3 and less
- * than 5.
+ * {@code int32 value = 5 [(range).value = "[3..5)]}, describing a value that is at least 3
+ * and less than 5.
  */
 @Immutable
-public final class RangeConstraint extends RangedConstraint<String> {
+public final class RangeConstraint extends RangedConstraint<RangeOption> {
 
-    RangeConstraint(String optionValue, FieldDeclaration field) {
-        super(optionValue, rangeFromOption(optionValue, field), field);
+    RangeConstraint(RangeOption option, FieldDeclaration field) {
+        super(option, rangeFromOption(option, field), field);
     }
 
     @VisibleForTesting
-    static Range<ComparableNumber> rangeFromOption(String rangeOption, FieldDeclaration field) {
-        return !rangeOption.isEmpty()
-               ? RangeDecl.compile(rangeOption, field)
+    static Range<ComparableNumber> rangeFromOption(RangeOption option, FieldDeclaration field) {
+        var value = option.getValue();
+        return !value.isEmpty()
+               ? RangeDecl.compile(value, field)
                : Range.all();
     }
 
