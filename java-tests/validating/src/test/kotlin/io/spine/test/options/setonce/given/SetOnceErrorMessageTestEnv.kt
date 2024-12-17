@@ -36,25 +36,30 @@ import org.junit.jupiter.params.provider.Arguments.arguments
  */
 internal object SetOnceErrorMessageTestEnv {
 
+    /**
+     * Test data for [io.spine.test.options.setonce.SetOnceErrorMessageITest.defaultErrorMessage]
+     * and [io.spine.test.options.setonce.SetOnceErrorMessageITest.customErrorMessage].
+     */
     @JvmStatic
-    fun allFieldTypesWithTwoDistinctValues() = listOf(
+    fun allFieldTypesWithTwoDistinctValues() =
+        primitiveFieldsAndTwoDistinctValues() + messageFieldsAndTwoDistinctValues()
+
+    private fun messageFieldsAndTwoDistinctValues() = listOf(
         // For some reason, for enums, `Message.Builder.setField()` expects value
         // descriptors instead of constants or their ordinal numbers.
         arguments(
             named("enum", "year_of_study"),
-            TestEnv.FIRST_YEAR.valueDescriptor, TestEnv.THIRD_YEAR.valueDescriptor,
-            YearOfStudy.getDescriptor().fullName // Expected a specific enum type.
+            YearOfStudy.getDescriptor().fullName, // A specific enum type is expected.
+            TestEnv.FIRST_YEAR.valueDescriptor, TestEnv.THIRD_YEAR.valueDescriptor
         ),
         arguments(
             named("message", "name"),
-            TestEnv.JACK, TestEnv.DONALD,
-            Name.getDescriptor().fullName // Expected a specific message type.
+            Name.getDescriptor().fullName, // A specific message type is expected.
+            TestEnv.JACK, TestEnv.DONALD
         )
-    ) + primitiveFieldTypesWithTwoDistinctValues().map {
-        arguments(named(it.type, it.field), it.value1, it.value2, it.type)
-    }
+    )
 
-    private fun primitiveFieldTypesWithTwoDistinctValues() = listOf(
+    private fun primitiveFieldsAndTwoDistinctValues() = listOf(
         Primitive("double", "height", TestEnv.SHORT_HEIGHT, TestEnv.TALL_HEIGHT),
         Primitive("float", "weight", TestEnv.FIFTY_KG, TestEnv.EIGHTY_KG),
         Primitive("int32", "cash_USD", TestEnv.TWO, TestEnv.EIGHT),
@@ -69,7 +74,7 @@ internal object SetOnceErrorMessageTestEnv {
         Primitive("sfixed64", "cash_NZD", TestEnv.TWENTY, TestEnv.SEVENTY),
         Primitive("bool", "has_medals", TestEnv.YES, TestEnv.NO),
         Primitive("bytes", "signature", TestEnv.CERT1, TestEnv.CERT2),
-    )
+    ).map { arguments(named(it.type, it.field), it.type, it.value1, it.value2) }
 }
 
 private class Primitive(

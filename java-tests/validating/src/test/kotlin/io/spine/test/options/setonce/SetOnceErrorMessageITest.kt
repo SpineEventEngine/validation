@@ -47,27 +47,27 @@ internal class SetOnceErrorMessageITest {
     @Suppress("MaxLineLength") // Long method source.
     @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the default error message for `{0}` field")
-    fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
-        assertDefaultMessage(fieldName, value1, value2, type)
+    fun <T : Any> defaultErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
+        assertDefault(fieldName, fieldType, value1, value2)
 
     @Suppress("MaxLineLength") // Long method source.
     @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the custom error message for `{0}` field")
-    fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
-        assertCustomMessage(fieldName, value1, value2, type)
+    fun <T : Any> customErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
+        assertCustom(fieldName, fieldType, value1, value2)
 }
 
-private fun <T : Any> assertDefaultMessage(fieldName: String, value1: T, value2: T, type: String) {
+private fun <T : Any> assertDefault(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentDefaultMessage.newBuilder()
     val descriptor = StudentDefaultMessage.getDescriptor()
-    val expectedParams = listOf(descriptor.fullName, fieldName, type, "$value1", "$value2")
+    val expectedParams = listOf(descriptor.fullName, fieldName, fieldType, "$value1", "$value2")
     val expectedFormat = { _: Int -> DEFAULT_MESSAGE_FORMAT }
     return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
 
-private fun <T : Any> assertCustomMessage(fieldName: String, value1: T, value2: T, type: String) {
+private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentCustomMessage.newBuilder()
-    val expectedParams = listOf("$value1", fieldName, "$value2", type)
+    val expectedParams = listOf("$value1", fieldName, "$value2", fieldType)
     val expectedFormat = ::customMessageFormat
     return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
 }
