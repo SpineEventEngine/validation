@@ -31,7 +31,6 @@ import io.spine.protodata.Compilation
 import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
 import java.nio.file.Path
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -41,7 +40,6 @@ import org.junit.jupiter.api.io.TempDir
 internal class RequiredPolicySpec {
 
     @Test
-    @Disabled("Until throwing `Compilation.Error` is propagated")
     @Suppress("UnusedParameter")
     fun `reject option on a boolean field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
         val fixture = ValidationTestFixture(
@@ -55,7 +53,7 @@ internal class RequiredPolicySpec {
         }
         error.message.let {
             it shouldContain "The field `spine.validation.given.required.WithBoolField.really`"
-            it shouldContain "of the type `boolean`"
+            it shouldContain "of the type `bool`"
             it shouldContain "does not support `(required)` validation."
         }
     }

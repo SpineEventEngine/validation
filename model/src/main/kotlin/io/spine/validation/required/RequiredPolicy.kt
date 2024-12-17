@@ -29,9 +29,9 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.declaringFile
 import io.spine.protodata.ast.event.FieldExited
+import io.spine.protodata.ast.protoName
 import io.spine.protodata.ast.qualifiedName
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -86,7 +86,7 @@ internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
         val file = field.declaringFile(typeSystem!!)
         val fieldName = field.name.value
         val declaringType = field.declaringType.qualifiedName
-        val type: PrimitiveType = field.type.primitive
+        val type = field.type.primitive.protoName
         Compilation.error(
             file,
             field.span.startLine, field.span.startColumn,
