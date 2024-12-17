@@ -44,11 +44,13 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceErrorMessageITest {
 
+    @Suppress("MaxLineLength") // Long method source.
     @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the default error message for `{0}` field")
     fun <T : Any> defaultErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
         assertDefaultMessage(fieldName, value1, value2, type)
 
+    @Suppress("MaxLineLength") // Long method source.
     @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the custom error message for `{0}` field")
     fun <T : Any> customErrorMessage(fieldName: String, value1: T, value2: T, type: String) =
@@ -120,7 +122,8 @@ private fun <T : Any> Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE_FORMAT =
-    "The field `%s.%s` of the type `%s` already has the value `%s` and cannot be reassigned to `%s`."
+    "The field `%s.%s` of the type `%s` already has the value `%s` " +
+            "and cannot be reassigned to `%s`."
 
 private fun customMessageFormat(fieldNumber: Int) =
     "Field_$fieldNumber: `%s`, `%s`, `%s`, `%s`."
