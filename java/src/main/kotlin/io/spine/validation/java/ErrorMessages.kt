@@ -35,23 +35,25 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.listExpression
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.ErrorMessage
+import io.spine.validation.ErrorMessageExpr
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the mutable list of violations from the given [ctx].
  */
-public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
+public fun ErrorMessageExpr.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
     val violation = buildViolation(
-        validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
+        validatedType, fieldFromSimpleRule, fieldOrElement,
+        ignoreCardinality = isElement, params = emptyList()
     )
     return addViolation(violation, violationList)
 }
@@ -60,7 +62,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
  * Constructs code which creates a [ConstraintViolation] with child violations and adds it
  * to the mutable list of violations from the passed [ctx].
  */
-public fun ErrorMessage.createParentViolation(
+public fun ErrorMessageExpr.createParentViolation(
     ctx: GenerationContext,
     childViolations: Expression<MutableList<ConstraintViolation>>
 ): CodeBlock {
@@ -68,7 +70,8 @@ public fun ErrorMessage.createParentViolation(
     val fieldValue = ctx.fieldOrElement!!
     val type = field.declaringType
     val violation = buildViolation(
-        type, field, fieldValue, childViolations, ignoreCardinality = ctx.isElement
+        type, field, fieldValue, childViolations,
+        ignoreCardinality = ctx.isElement, params = emptyList()
     )
     return addViolation(violation, ctx.violationList)
 }
@@ -90,17 +93,17 @@ public fun ErrorMessage.createParentViolation(
  *         if there is no common field.
  *         If this parameter is `null`, `field` must also be `null`.
  */
-public fun ErrorMessage.createCompositeViolation(
+public fun ErrorMessageExpr.createCompositeViolation(
     type: TypeName,
     violationsList: Expression<MutableList<ConstraintViolation>>,
     field: Field?,
-    fieldValue: Expression<*>?
+    fieldValue: Expression<*>?,
+    params: List<Expression<String>>
 ): CodeBlock {
-    require(field != null && fieldValue != null || field == null && fieldValue == null) {
-        "Either both `field` and `fieldValue` must be `null` or both must be not `null`." +
-                "Got `field` = `$field` and `fieldValue` = `$fieldValue`."
+    require(fieldValue == null || field != null) {
+        "`field` must not be `null` when `fieldValue` is not `null`."
     }
-    val violation = buildViolation(type, field, fieldValue)
+    val violation = buildViolation(type, field, fieldValue, params = params)
     return addViolation(violation, violationsList)
 }
 
@@ -111,16 +114,19 @@ private fun addViolation(
     .addStatement("\$L.add(\$L)", violationsList, violation)
     .build()
 
-private fun ErrorMessage.buildViolation(
+@Suppress("LongParameterList")
+private fun ErrorMessageExpr.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression<*>?,
     childViolations: Expression<MutableList<ConstraintViolation>>? = null,
-    ignoreCardinality: Boolean = false
+    ignoreCardinality: Boolean = false,
+    params: List<Expression<String>>
 ): Expression<ConstraintViolation> {
     var violationBuilder = ClassName(ConstraintViolation::class.java).newBuilder()
-        .chainSet("msg_format", Literal(this))
+        .chainSet("msg_format", Literal(this.toString())) // Should be `StringLiteral`.
         .chainSet("type_name", StringLiteral(type.typeUrl))
+        .chainAddAll("param", listExpression(params))
     if (field != null) {
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
     }

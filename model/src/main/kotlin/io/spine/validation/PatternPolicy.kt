@@ -61,7 +61,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
             field.name,
             feature,
             "String should match regex.",
-            error,
+            errorMessage { value = error },
             true
         )
         return simpleRuleAdded(field.declaringType, rule)

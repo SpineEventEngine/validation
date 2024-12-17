@@ -38,14 +38,8 @@ import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_SET_AGAIN
-import io.spine.validation.java.setonce.MessageToken.CURRENT_VALUE
-import io.spine.validation.java.setonce.MessageToken.Companion.TokenRegex
-import io.spine.validation.java.setonce.MessageToken.Companion.forPlaceholder
-import io.spine.validation.java.setonce.MessageToken.FIELD_NAME
-import io.spine.validation.java.setonce.MessageToken.FIELD_TYPE
-import io.spine.validation.java.setonce.MessageToken.PARENT_TYPE
-import io.spine.validation.java.setonce.MessageToken.PROPOSED_VALUE
-import io.spine.validation.java.setonce.MessageToken.values
+import io.spine.validation.java.placeholder.Placeholder
+import io.spine.validation.java.placeholder.PlaceholderParser
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.
@@ -78,8 +72,8 @@ internal class SetOnceConstraintViolation(
         newValue: Expression<String>,
         payload: Expression<*> = newValue
     ): Expression<ConstraintViolation> {
-        val tokenValues = tokenValues(currentValue, newValue)
-        val (format, params) = toPrintfString(errorMessage, tokenValues)
+        val parser = placeholderParser(currentValue, newValue)
+        val (format, params) = parser.toPrintfString(errorMessage)
         val fieldPath = ClassName(FieldPath::class).newBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild<FieldPath>()
@@ -96,77 +90,26 @@ internal class SetOnceConstraintViolation(
     /**
      * Determines the value for each of the supported tokens.
      */
-    private fun tokenValues(currentValue: Expression<String>, newValue: Expression<String>) =
-        MessageToken.values().associateWith {
-            when (it) {
-                FIELD_NAME -> StringLiteral(fieldName)
-                FIELD_TYPE -> StringLiteral(fieldType)
-                CURRENT_VALUE -> currentValue
-                PROPOSED_VALUE -> newValue
-                PARENT_TYPE -> StringLiteral(declaringMessage)
-            }
-        }
+    private fun placeholderParser(currentValue: Expression<String>, newValue: Expression<String>) =
+        PlaceholderParser(
+            mapOf(
+                "field.name" to StringLiteral(fieldName),
+                "field.type" to StringLiteral(fieldType),
+                "field.value" to currentValue,
+                "field.proposed_value" to newValue,
+                "parent.type" to StringLiteral(declaringMessage)
+            ), ::onUnsupportedPlaceholder
+        )
 
-    /**
-     * Prepares `printf`-style format string and its parameters.
-     *
-     * This method does the following:
-     *
-     * 1. Finds all [MessageToken]s in the given [errorMessage] and replaces them with `%s`.
-     * 2. For each found token, it finds its corresponding [value][tokenValues], and puts it
-     *    to the list of parameters.
-     */
-    private fun toPrintfString(
-        errorMessage: String,
-        tokenValues: Map<MessageToken, Expression<String>>
-    ): Pair<String, List<Expression<String>>> {
-        val params = mutableListOf<Expression<String>>()
-        val format = TokenRegex.replace(errorMessage) { matchResult ->
-            val tokenName = matchResult.groupValues[1]
-            val token = forPlaceholder(tokenName) ?: throwUnsupportedToken(tokenName)
-            val param = tokenValues[token]!!
-            "%s".also { params.add(param) }
-        }
-        return format to params
-    }
-
-    private fun throwUnsupportedToken(name: String): Nothing = throw IllegalArgumentException(
-        "The `($IF_SET_AGAIN)` option doesn't support the token: `{$name}`. " +
-                "The supported tokens: `${supportedTokens()}`. " +
-                "The declared field: `${qualifiedName}`."
-    )
-
-    private fun supportedTokens(): String = values().joinToString { "{${it.placeholder}}" }
-}
-
-/**
- * Defines error message tokens that can be used in the error message pattern.
- *
- * These tokens are replaced with the actual values when the error instance
- * is constructed.
- *
- * The list of the supported tokens can be found in the option specification.
- * Take a look at `IfSetAgainOption` in `options.proto`.
- */
-private enum class MessageToken(val placeholder: String) {
-
-    FIELD_NAME("field.name"),
-    FIELD_TYPE("field.type"),
-    CURRENT_VALUE("field.value"),
-    PROPOSED_VALUE("field.proposed_value"),
-    PARENT_TYPE("parent.type");
-
-    companion object {
-
-        /**
-         * A Regex pattern to find all present tokens in the message.
-         */
-        val TokenRegex = Regex("""\{(.*?)}""")
-
-        /**
-         * Returns a [MessageToken] for the given [placeholder], if any.
-         */
-        fun forPlaceholder(placeholder: String): MessageToken? =
-            values().firstOrNull { it.placeholder == placeholder }
+    private fun onUnsupportedPlaceholder(
+        name: Placeholder,
+        supported: Set<Placeholder>
+    ): Nothing {
+        val supportedPlaceholders = supported.joinToString { "{$it}" }
+        throw IllegalArgumentException(
+            "The `($IF_SET_AGAIN)` option doesn't support the token: `{$name}`. " +
+                    "The supported tokens: `$supportedPlaceholders`. " +
+                    "The declared field: `$qualifiedName`."
+        )
     }
 }

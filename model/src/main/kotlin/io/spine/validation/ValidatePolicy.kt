@@ -71,7 +71,7 @@ internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
             RecursiveValidation.getDefaultInstance(),
             "A message field is validated by its validation rules. " +
                     "If the field is invalid, the container message is invalid as well.",
-            field!!.errorMessage,
+            errorMessage { field!!.errorMessage },
             true
         )
         return simpleRuleAdded {

@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesOneWayITest].
+ * Provides data for parameterized [GoesOneWayITest][io.spine.test.options.goes.GoesOneWayITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesOneWayTestEnv {
@@ -57,7 +57,7 @@ internal object GoesOneWayTestEnv {
     )
 
     /**
-     * Test data for [GoesOneWayITest.throwIfOnlyTargetFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.throwIfOnlyTargetFieldSet].
      */
     @JvmStatic
     fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
@@ -67,7 +67,7 @@ internal object GoesOneWayTestEnv {
     }
 
     /**
-     * Test data for [GoesOneWayITest.passIfOnlyCompanionFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfOnlyCompanionFieldSet].
      */
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
@@ -76,7 +76,7 @@ internal object GoesOneWayTestEnv {
     }
 
     /**
-     * Test data for [GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->

@@ -75,14 +75,26 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         val companionName = FieldPath(option.with)
         val companion = typeSystem.resolve(companionName, declaringMessage)
         checkDistinct(target, companion)
-        val rule = compositeRule {
-            left = targetFieldShouldBeUnset(target)
-            operator = LogicalOperator.OR
-            right = companionFieldShouldBeSet(companion)
-            errorMessage = option.errorMessage()
-            field = target.name
-        }.wrap()
+        val rule = rule {
+            composite = compositeRule {
+                left = targetFieldShouldBeUnset(target)
+                operator = LogicalOperator.OR
+                right = companionFieldShouldBeSet(companion)
+                field = target.name
+                errorMessage = errorMessage(option, target, companion)
+            }
+        }
         return just(rule.toEvent(target.declaringType))
+    }
+
+    private fun errorMessage(option: GoesOption, target: Field, companion: Field) = errorMessage {
+        value = option.errorMessage()
+        buildtimePlaceholders.putAll(
+            mapOf(
+                "fieldName" to target.name.value,
+                "companionName" to companion.name.value
+            )
+        )
     }
 
     /**

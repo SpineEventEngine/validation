@@ -29,7 +29,7 @@ package io.spine.validation
 /**
  * A template of an error message.
  *
- * @see ErrorMessage
+ * @see ErrorMessageExpr
  */
 internal class Template(template: String) {
 

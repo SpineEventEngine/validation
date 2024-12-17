@@ -46,10 +46,7 @@ internal object RequiredRule {
      */
     @Suppress("ReturnCount")
     fun forField(field: Field, errorMessage: String): Rule? {
-        val unsetValue = UnsetValue.forField(field)
-        if (unsetValue == null) {
-            return null
-        }
+        val unsetValue = UnsetValue.forField(field) ?: return null
         val integratedRule = rule(
             field, unsetValue, errorMessage, singularErrorMsg, false
         )
@@ -63,7 +60,7 @@ internal object RequiredRule {
     }
 
     private fun collectionRule(integratedRule: SimpleRule, errorMessage: String): Rule {
-        val msg = collectionErrorMessage(errorMessage)
+        val msg = errorMessage { value = collectionErrorMessage(errorMessage) }
         val withCustomErrorMessage = integratedRule.toBuilder()
             .setErrorMessage(msg)
             .build()
@@ -108,7 +105,7 @@ internal object RequiredRule {
     ): SimpleRule {
         val msg = errorMessage.ifEmpty { defaultErrorMessage }
         return simpleRule {
-            this.errorMessage = msg
+            this.errorMessage = errorMessage { this.value = msg }
             this.field = field.name
             operator = ComparisonOperator.NOT_EQUAL
             otherValue = value
