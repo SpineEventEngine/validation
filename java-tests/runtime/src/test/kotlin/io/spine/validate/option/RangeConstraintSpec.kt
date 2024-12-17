@@ -31,6 +31,7 @@ import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Sets
 import io.kotest.matchers.shouldBe
 import io.spine.code.proto.FieldDeclaration
+import io.spine.option.rangeOption
 import io.spine.test.type.Url
 import io.spine.validate.option.RangeConstraint.rangeFromOption
 import java.util.stream.Stream
@@ -46,8 +47,8 @@ internal class RangeConstraintSpec {
     @ParameterizedTest
     @MethodSource("validRanges")
     fun `be able to parse valid range strings`(range: String, expected: BoundType) {
-        val result = rangeFromOption(range, fieldDecl())
-
+        val option = toOption(range)
+        val result = rangeFromOption(option, fieldDecl())
         result.upperBoundType() shouldBe expected
     }
 
@@ -55,16 +56,18 @@ internal class RangeConstraintSpec {
     @MethodSource("badRanges")
     fun `throw on incorrectly defined ranges`(badRange: String) {
         // Exceptions would be `NumberFormatException` or `IllegalStateException`.
+        val option = toOption(badRange)
         assertThrows<Exception> {
-            rangeFromOption(badRange, fieldDecl())
+            rangeFromOption(option, fieldDecl())
         }
     }
 
     @ParameterizedTest
     @MethodSource("emptyRanges")
     fun `throw on empty ranges`(emptyRange: String) {
+        val option = toOption(emptyRange)
         assertThrows<IllegalArgumentException> {
-            rangeFromOption(emptyRange, fieldDecl())
+            rangeFromOption(option, fieldDecl())
         }
     }
 
@@ -145,3 +148,7 @@ private fun argumentsFrom(vararg elements: Any): ImmutableSet<Arguments> {
 private fun fieldDecl(): FieldDeclaration = FieldDeclaration(
     Url.getDescriptor().fields[0]
 )
+
+private fun toOption(range: String) = rangeOption {
+    value = range
+}

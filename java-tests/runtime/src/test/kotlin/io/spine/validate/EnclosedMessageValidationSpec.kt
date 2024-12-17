@@ -29,6 +29,7 @@ package io.spine.validate
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldStartWith
 import io.spine.test.validate.NotValidateWithCustomMessage
 import io.spine.test.validate.PatternStringFieldValue
@@ -97,7 +98,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-        violation.msgFormat shouldBe "The message must have valid properties."
+        violation.msgFormat shouldContain "is invalid"
         assertFieldPathIs(
             violation,
             ENCLOSED_FIELD_NAME

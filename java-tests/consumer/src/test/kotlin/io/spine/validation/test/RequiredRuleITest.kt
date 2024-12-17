@@ -46,7 +46,7 @@ internal class RequiredRuleITest {
     fun `reject an unset message field`() {
         val builder = Book.newBuilder()
         assertValidationException(builder).also {
-            it.msgFormat shouldContain "value must be set"
+            it.msgFormat shouldContain "must have a value"
             it.fieldPath.getFieldName(0) shouldBe "author"
         }
     }

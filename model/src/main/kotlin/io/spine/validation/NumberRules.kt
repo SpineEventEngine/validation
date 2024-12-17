@@ -28,12 +28,12 @@ package io.spine.validation
 
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.Message
-import com.google.protobuf.StringValue
 import io.spine.option.MaxOption
 import io.spine.option.MinOption
 import io.spine.option.OptionsProto.max
 import io.spine.option.OptionsProto.min
 import io.spine.option.OptionsProto.range
+import io.spine.option.RangeOption
 import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldName
@@ -182,7 +182,7 @@ private fun Option.forMax(field: Field, typeSystem: TypeSystem): NumberRules {
 }
 
 private fun Option.forRange(): NumberRules {
-    val optionValue = value<StringValue>().value
+    val optionValue = value<RangeOption>().value
     val notation = RangeNotation.parse(optionValue)
     return NumberRules(
         upperBound = notation.max,

@@ -172,21 +172,21 @@ message RequiredBooleanField {
 
 // A number between 0 and 9 inclusive.
 message DecimalDigit {
-    int32 value = 1 [(range) = "[0..10)"];
+    int32 value = 1 [(range).value = "[0..10)"];
 }
 
 // A bet that has below 50% chance to win.
 message UnsafeBet {
-    double odds = 1 [(range) = "[0.0..0.5)"];
+    double odds = 1 [(range).value = "[0.0..0.5)"];
 }
 
 // A bet that has at least 50% chance to win.
 message SafeBet {
-    double odds = 1 [(range) = "[0.5..1.0]"];
+    double odds = 1 [(range).value = "[0.5..1.0]"];
 }
 
 message FrostyWeather {
-    double celcius = 1 [(range) = "(-10.0..-5.5]"];
+    double celcius = 1 [(range).value = "(-10.0..-5.5]"];
 }
 
 // This message declares a field that has a value with boundary types inconsistent
@@ -195,20 +195,20 @@ message FrostyWeatherButInWholeNumber {
 
     // Since `celcius` is of type `double`, the boundaries cannot be of a whole
     // number type.
-    double celcius = 1 [(range) = "[-10..-4)"];
+    double celcius = 1 [(range).value = "[-10..-4)"];
 }
 
 message InconsistentBoundaries {
 
     // Inconsistent boundary types should result in an error.
-    double value = 1 [(range) = "[0..4.2)"];
+    double value = 1 [(range).value = "[0..4.2)"];
 }
 
 // This message declares a field the ranges of which have whitespaces.
 message SpacedOutBoundaries {
 
     // The spaces in the range definition should not break the validation.
-    int32 value = 1 [(range) = " [  31..32 ) "];
+    int32 value = 1 [(range).value = " [  31..32 ) "];
 }
 
 // A snowflake is represented by a polygon. Two snowflakes are equal if they
