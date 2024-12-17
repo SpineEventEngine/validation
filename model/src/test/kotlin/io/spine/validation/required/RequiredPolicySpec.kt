@@ -26,10 +26,14 @@
 
 package io.spine.validation.required
 
+import com.google.protobuf.Descriptors.Descriptor
 import io.kotest.matchers.string.shouldContain
+import io.spine.logging.testing.tapConsole
 import io.spine.protodata.Compilation
+import io.spine.testing.logging.mute.MuteLogging
 import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
+import io.spine.validation.given.required.WithIntField
 import java.nio.file.Path
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -39,22 +43,48 @@ import org.junit.jupiter.api.io.TempDir
 @DisplayName("`RequiredPolicy` should")
 internal class RequiredPolicySpec {
 
+    private val doesNotSupportRequired = "does not support `(required)` validation."
+
+    private lateinit var error: Compilation.Error
+
     @Test
-    @Suppress("UnusedParameter")
     fun `reject option on a boolean field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
-        val fixture = ValidationTestFixture(
-            WithBoolField.getDescriptor(),
-            outputDir,
-            settingsDir
-        )
-        val pipeline = fixture.setup.createPipeline()
-        val error = assertThrows<Compilation.Error> {
-            pipeline()
-        }
+        createAndRunPipeline(WithBoolField.getDescriptor(), outputDir, settingsDir)
+
         error.message.let {
             it shouldContain "The field `spine.validation.given.required.WithBoolField.really`"
             it shouldContain "of the type `bool`"
-            it shouldContain "does not support `(required)` validation."
+            it shouldContain doesNotSupportRequired
+        }
+    }
+
+    @Test
+    @MuteLogging
+    fun `reject option on an integer field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
+        createAndRunPipeline(WithIntField.getDescriptor(), outputDir, settingsDir)
+
+        error.message.let {
+            it shouldContain "The field `spine.validation.given.required.WithIntField.zero`"
+            it shouldContain "of the type `int32`"
+            it shouldContain doesNotSupportRequired
+        }
+    }
+
+    /**
+     * Creates and runs a pipeline which handles only the proto type with the given [descriptor].
+     */
+    private fun createAndRunPipeline(
+        descriptor: Descriptor,
+        outputDir: Path,
+        settingsDir: Path
+    ) {
+        val fixture = ValidationTestFixture(descriptor, outputDir, settingsDir)
+        val pipeline = fixture.setup.createPipeline()
+        error = assertThrows<Compilation.Error> {
+            // Redirect console output so that we don't print errors during the build.
+            tapConsole {
+                pipeline()
+            }
         }
     }
 }
