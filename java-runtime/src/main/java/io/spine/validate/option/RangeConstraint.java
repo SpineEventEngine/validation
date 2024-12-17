@@ -45,13 +45,14 @@ import static java.lang.String.format;
 public final class RangeConstraint extends RangedConstraint<RangeOption> {
 
     RangeConstraint(RangeOption option, FieldDeclaration field) {
-        super(option, rangeFromOption(option.getValue(), field), field);
+        super(option, rangeFromOption(option, field), field);
     }
 
     @VisibleForTesting
-    static Range<ComparableNumber> rangeFromOption(String optionValue, FieldDeclaration field) {
-        return !optionValue.isEmpty()
-               ? RangeDecl.compile(optionValue, field)
+    static Range<ComparableNumber> rangeFromOption(RangeOption option, FieldDeclaration field) {
+        var value = option.getValue();
+        return !value.isEmpty()
+               ? RangeDecl.compile(value, field)
                : Range.all();
     }
 
