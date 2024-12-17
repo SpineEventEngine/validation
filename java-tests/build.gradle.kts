@@ -27,9 +27,9 @@
 @file:Suppress("RemoveRedundantQualifierName")
 
 import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.McJava
 import io.spine.dependency.local.ProtoData
-import io.spine.dependency.local.Spine
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 
@@ -62,7 +62,7 @@ subprojects {
     applyPlugins()
 
     dependencies {
-        implementation(Spine.base)
+        implementation(Base.lib)
         implementation(project(":java-runtime"))
     }
 

@@ -26,10 +26,10 @@
 
 package io.spine.test.options.setonce
 
-import io.spine.test.options.setonce.TestEnv.TWENTY
-import io.spine.test.options.setonce.TestEnv.SEVENTY
-import io.spine.test.options.setonce.TestEnv.TWO
-import io.spine.test.options.setonce.TestEnv.EIGHT
+import io.spine.test.options.setonce.given.TestEnv.TWENTY
+import io.spine.test.options.setonce.given.TestEnv.SEVENTY
+import io.spine.test.options.setonce.given.TestEnv.TWO
+import io.spine.test.options.setonce.given.TestEnv.EIGHT
 import io.spine.test.tools.validate.StudentSetOnce
 import io.spine.test.tools.validate.studentSetOnce
 import io.spine.validation.assertions.assertValidationFails

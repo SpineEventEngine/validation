@@ -29,13 +29,14 @@ package io.spine.validate.option;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.option.OptionsProto;
+import io.spine.option.RangeOption;
 import io.spine.validate.Constraint;
 
 /**
  * A validating option that limits a numeric field to be in the specified range.
  */
 @Immutable
-final class Range extends FieldValidatingOption<String> {
+final class Range extends FieldValidatingOption<RangeOption> {
 
     private Range() {
         super(OptionsProto.range);

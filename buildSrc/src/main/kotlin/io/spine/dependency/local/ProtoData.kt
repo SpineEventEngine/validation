@@ -73,7 +73,7 @@ object ProtoData {
      * The version of ProtoData dependencies.
      */
     val version: String
-    private const val fallbackVersion = "0.70.1"
+    private const val fallbackVersion = "0.80.3"
 
     /**
      * The distinct version of ProtoData used by other build tools.
@@ -82,7 +82,7 @@ object ProtoData {
      * transitional dependencies, this is the version used to build the project itself.
      */
     val dogfoodingVersion: String
-    private const val fallbackDfVersion = "0.70.1"
+    private const val fallbackDfVersion = "0.80.3"
 
     /**
      * The artifact for the ProtoData Gradle plugin.
@@ -115,7 +115,7 @@ object ProtoData {
     val cliApi
         get() = "$group:protodata-cli-api:$version"
 
-    val javaModule = "$group:protodata-java"
+    const val javaModule = "$group:protodata-java"
 
     fun java(version: String): String =
         "$javaModule:$version"

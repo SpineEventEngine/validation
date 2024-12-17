@@ -28,6 +28,7 @@ package io.spine.validation.java.setonce
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
@@ -52,8 +53,9 @@ internal class SetOnceConstraintViolation(
 ) {
 
     private val fieldName = field.name.value
-    private val declaringMessage = field.declaringType
+    private val fieldType = field.type.name
     private val qualifiedName = field.qualifiedName
+    private val declaringMessage = field.declaringType.qualifiedName
 
     /**
      * Builds an expression that returns a new instance of [ConstraintViolation]
@@ -78,7 +80,7 @@ internal class SetOnceConstraintViolation(
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("msg_format", StringLiteral(format))
             .chainAddAll("param", listExpression(params))
-            .chainSet("type_name", StringLiteral(declaringMessage.qualifiedName))
+            .chainSet("type_name", StringLiteral(declaringMessage))
             .chainSet("field_path", fieldPath)
             .chainSet("field_value", payload.packToAny())
             .chainBuild<ConstraintViolation>()
@@ -91,9 +93,11 @@ internal class SetOnceConstraintViolation(
     private fun placeholderParser(currentValue: Expression<String>, newValue: Expression<String>) =
         PlaceholderParser(
             mapOf(
-                "fieldName" to StringLiteral(fieldName),
-                "currentValue" to currentValue,
-                "proposedValue" to newValue,
+                "field.name" to StringLiteral(fieldName),
+                "field.type" to StringLiteral(fieldType),
+                "field.value" to currentValue,
+                "field.proposed_value" to newValue,
+                "parent.type" to StringLiteral(declaringMessage)
             ), ::onUnsupportedPlaceholder
         )
 
