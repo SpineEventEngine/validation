@@ -38,7 +38,7 @@ import "google/protobuf/empty.proto";
 
 message Singulars {
 
-    int32 required_numbers_are_not_validated = 1 [(required) = true];
+    int32 required_numbers_are_not_validated = 1;
 
     string not_empty_string = 2 [(required) = true];
 
