@@ -38,15 +38,13 @@ import "google/protobuf/empty.proto";
 
 message Singulars {
 
-    int32 required_numbers_are_not_validated = 1;
+    string not_empty_string = 1 [(required) = true];
 
-    string not_empty_string = 2 [(required) = true];
+    bytes one_or_more_bytes = 2 [(required) = true];
 
-    bytes one_or_more_bytes = 3 [(required) = true];
+    UltimateChoice not_vegetable = 3 [(required) = true];
 
-    UltimateChoice not_vegetable = 4 [(required) = true];
-
-    Enclosed not_default = 5 [(required) = true];
+    Enclosed not_default = 4 [(required) = true];
 }
 
 message Collections {
