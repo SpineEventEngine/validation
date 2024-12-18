@@ -54,7 +54,7 @@ import io.spine.validation.toEvent
  * all of these conditions are met:
  *   1. The field has the `(required)` option.
  *   2. The value of the option is `true`.
- *   2. The field type allows checking if a value is set or not.
+ *   3. The field type allows checking if a value is set or not.
  *
  * If any of these conditions are not met, nothing happens.
  */
