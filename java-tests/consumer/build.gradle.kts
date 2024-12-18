@@ -24,7 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.TestLib
+import io.spine.dependency.local.Time
 import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
 import io.spine.util.theOnly
@@ -56,7 +57,8 @@ dependencies {
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:consumer-dependency"))
-    implementation(Spine.time)
+    implementation(Time.lib)
+    testImplementation(TestLib.lib)
 }
 
 protoDataRemoteDebug(enabled = false)

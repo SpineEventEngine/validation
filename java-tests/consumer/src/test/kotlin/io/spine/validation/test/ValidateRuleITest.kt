@@ -32,6 +32,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.protobuf.pack
+import io.spine.testing.logging.mute.MuteLogging
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -77,6 +78,7 @@ internal class ValidateRuleITest {
         }
 
         @Test
+        @MuteLogging
         fun `ignore unknown packed type`() {
             val builder = meteoStatsInEurope()
                 .setAverageDrop(validRainDrop())
@@ -130,6 +132,7 @@ internal class ValidateRuleITest {
         }
 
         @Test
+        @MuteLogging
         fun `ignore unknown packed type`() {
             val packedValid = validCloud().pack()
             val packedInvalid = packedUnknown()
