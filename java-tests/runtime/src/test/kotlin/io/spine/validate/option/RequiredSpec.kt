@@ -31,7 +31,6 @@ import io.spine.base.Identifier
 import io.spine.test.validate.CustomMessageWithNoRequiredOption
 import io.spine.test.validate.Planet
 import io.spine.test.validate.RepeatedRequiredStringValue
-import io.spine.test.validate.RequiredBoolean
 import io.spine.test.validate.RequiredBytes
 import io.spine.test.validate.RequiredEnum
 import io.spine.test.validate.RequiredString
@@ -39,7 +38,6 @@ import io.spine.test.validate.RequiredStringValue
 import io.spine.test.validate.repeatedRequiredStringValue
 import io.spine.test.validate.requiredBytes
 import io.spine.test.validate.requiredStringValue
-import io.spine.testing.logging.mute.MuteLogging
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv
@@ -103,12 +101,6 @@ internal class RequiredSpec : ValidationOfConstraintTest() {
     @Test
     fun `find out that required 'Enum' field is NOT set`() = assertNotValid(
         RequiredEnum.getDefaultInstance()
-    )
-
-    @MuteLogging
-    @Test
-    fun `find out that required NON-SET 'Boolean' field passes validation`() = assertValid(
-        RequiredBoolean.getDefaultInstance()
     )
 
     @Test

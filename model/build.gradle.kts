@@ -25,7 +25,15 @@
  */
 
 import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
+
+plugins {
+    java
+    protobuf
+    `java-test-fixtures`
+    prototap
+}
 
 dependencies {
     api(CoreJava.server)
@@ -36,5 +44,10 @@ dependencies {
     implementation(project(":proto:context"))
     implementation(project(":java-runtime"))
 
-    testImplementation(CoreJava.testUtilServer)
+    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
+    testImplementation(ProtoData.testlib)
+
+    testFixturesImplementation(project(":proto:configuration"))
+    testFixturesImplementation(ProtoData.api)
+    testFixturesImplementation(ProtoData.testlib)
 }

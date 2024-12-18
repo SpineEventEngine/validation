@@ -38,7 +38,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.PrimitiveType.UNRECOGNIZED
 import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.Type.KindCase.ENUMERATION
-import io.spine.protodata.ast.Type.KindCase.KIND_NOT_SET
 import io.spine.protodata.ast.Type.KindCase.MESSAGE
 import io.spine.protodata.ast.Type.KindCase.PRIMITIVE
 import io.spine.protodata.ast.cardinality
@@ -64,11 +63,10 @@ public object UnsetValue {
      *
      * If a field is a number or a `bool`, it is impossible to tell if it's set or not.
      * In the binary representation, the `0` and `false` values may either be explicitly
-     * set or just be the default values. For these cases, and only for these cases, the method
-     * returns `Optional.empty()`.
+     * set or just be the default values.
+     * For these cases, and only for these cases, the method returns `null`.
      *
-     * @return a [Value] with the field's default value or `null` if
-     *   the field does not have an easily distinguished not-set value
+     * @return a default field value or `null`, if the field type does not assume a not-set value.
      */
     public fun forField(field: Field): Value? =
         when (val cardinality = field.type.cardinality) {
@@ -76,7 +74,7 @@ public object UnsetValue {
             CARDINALITY_MAP ->  value { mapValue = MapValue.getDefaultInstance() }
             CARDINALITY_SINGLE ->  singular(field.toType())
             else -> error(
-                "Cannot create `Value` for the field `${field.shortly()}`." +
+                "Cannot create unset `Value` for the field `${field.shortly()}`." +
                         " Unexpected cardinality encountered: `$cardinality`."
             )
         }
@@ -86,8 +84,7 @@ public object UnsetValue {
      *
      * Behaves similarly to [forField], but never returns an empty list or an empty map.
      *
-     * @return a [Value] with the field's default value or `Optional.empty()` if
-     *   the field does not have an easily distinguished not-set value
+     * @return a default field value or `null`, if the field type does not assume a not-set value.
      */
     public fun singular(type: Type): Value? {
         val kind = type.kindCase
@@ -95,7 +92,6 @@ public object UnsetValue {
             MESSAGE -> messageValue(type)
             ENUMERATION -> enumValue(type)
             PRIMITIVE -> primitiveValue(type)
-            KIND_NOT_SET -> error("Cannot create `Value` for the type of kind `$kind`.")
             else -> error("Cannot create `Value` for the type of kind `$kind`.")
         }
     }

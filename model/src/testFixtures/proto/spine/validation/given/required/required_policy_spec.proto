@@ -24,45 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
 
-import io.spine.core.External
-import io.spine.core.Subscribe
-import io.spine.core.Where
-import io.spine.option.IfMissingOption
-import io.spine.protobuf.unpack
-import io.spine.protodata.ast.Option
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.server.entity.alter
+syntax = "proto3";
 
-/**
- * A view of a field that is marked as `required`.
- */
-internal class RequiredFieldView :
-    BoolFieldOptionView<RequiredField, RequiredField.Builder>(IfMissingOption.getDescriptor()) {
+package spine.validation.given.required;
 
-    @Subscribe
-    override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = "required")
-        e: FieldOptionDiscovered
-    ) = super.onConstraint(e)
+import "spine/options.proto";
 
-    override fun saveErrorMessage(errorMessage: String) = alter {
-        this.errorMessage = errorMessage
-    }
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.given.required";
+option java_outer_classname = "RequiredPolicySpecProto";
+option java_multiple_files = true;
 
-    override fun enableValidation() = alter {
-        required = true
-    }
+// Provides a boolean field with the inapplicable `(required)` option.
+message WithBoolField {
+    bool really = 1 [(.required) = true];
+}
 
-    @Subscribe
-    override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = "if_missing")
-        e: FieldOptionDiscovered
-    ) = super.onErrorMessage(e)
+// Provides an `int32` field with the inapplicable `(required)` option.
+message WithIntField {
+    int32 zero = 1 [(.required) = true];
+}
 
-    override fun extractErrorMessage(option: Option): String {
-        val ifMissing = option.value.unpack<IfMissingOption>()
-        return ifMissing.errorMsg
-    }
+// Provides a `sint64` field with the inapplicable `(required)` option.
+message WithSignedInt {
+    sint64 signed = 1 [(.required) = true];
+}
+
+// Provides a `double` field with the inapplicable `(required)` option.
+message WithDoubleField {
+    double temperature = 1 [(.required) = true];
 }

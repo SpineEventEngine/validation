@@ -40,6 +40,7 @@ import io.spine.server.event.Just
 import io.spine.server.event.Just.Companion.just
 import io.spine.server.event.React
 import io.spine.validation.event.RuleAdded
+import io.spine.validation.required.RequiredRule
 
 /**
  * A policy to add a validation rule to a type whenever the `(goes)` field option

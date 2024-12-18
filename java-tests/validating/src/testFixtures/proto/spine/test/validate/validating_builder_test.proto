@@ -164,12 +164,6 @@ message Menu {
     }
 }
 
-message RequiredBooleanField {
-
-    // should produce a warning
-    bool value = 1 [(required) = true];
-}
-
 // A number between 0 and 9 inclusive.
 message DecimalDigit {
     int32 value = 1 [(range).value = "[0..10)"];

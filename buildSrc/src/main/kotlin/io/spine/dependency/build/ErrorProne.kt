@@ -26,7 +26,6 @@
 
 package io.spine.dependency.build
 
-
 // https://errorprone.info/
 @Suppress("unused", "ConstPropertyName")
 object ErrorProne {

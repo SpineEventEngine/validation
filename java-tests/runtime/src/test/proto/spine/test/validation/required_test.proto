@@ -69,23 +69,3 @@ enum Planet {
     URANUS = 7;
     NEPTUNE = 8;
 }
-
-message RequiredBoolean {
-    bool value = 1 [(required) = true];
-}
-
-message RequiredInt32 {
-    int32 value = 1 [(required) = true];
-}
-
-message RequiredLongFieldValue {
-    int64 value = 1 [(required) = true];
-}
-
-message RequiredFloat {
-    float value = 1 [(required) = true];
-}
-
-message RequiredDouble {
-    double value = 1 [(required) = true];
-}

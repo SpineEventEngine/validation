@@ -25,8 +25,9 @@
  */
 
 import io.spine.dependency.lib.AutoService
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.TestLib
 import io.spine.gradle.protobuf.setup
 
 buildscript {
@@ -53,8 +54,10 @@ dependencies {
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
-    implementation(Spine.base)
+    implementation(Base.lib)
     implementation(Logging.lib)
 
-    testImplementation(Spine.testlib)
+    testImplementation(TestLib.lib)
 }
+
+forceSpineBase()

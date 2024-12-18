@@ -37,6 +37,8 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
+import io.spine.server.query.Querying
+import io.spine.server.query.select
 import io.spine.string.shortly
 import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
@@ -73,7 +75,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
     }
 
-    private fun setOnceFields() = select<SetOnceField>().all()
+    private fun setOnceFields() = (this as Querying).select<SetOnceField>().all()
         .onEach {
             val field = it.subject
             check(!field.isMap && !field.isList) {
