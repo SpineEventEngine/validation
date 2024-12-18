@@ -26,6 +26,7 @@
 
 package io.spine.validation.required
 
+import com.google.common.annotations.VisibleForTesting
 import io.spine.core.External
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
@@ -84,15 +85,24 @@ internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
 
     private fun throwDoesNotSupportRequired(field: Field): Nothing {
         val file = field.declaringFile(typeSystem!!)
-        val fieldName = field.name.value
-        val declaringType = field.declaringType.qualifiedName
-        val type = field.type.primitive.protoName
+        val msg = fieldDoesNotSupportRequired(field)
         Compilation.error(
             file,
             field.span.startLine, field.span.startColumn,
-            "The field `${declaringType}.${fieldName}` of the type `${type}`" +
-                    " does not support `($REQUIRED)` validation.",
+            msg
         )
     }
 }
 
+/**
+ * Composes an error message for the field which cannot have the `(required)` option
+ * because it cannot be used for the type of the field.
+ */
+@VisibleForTesting
+internal fun fieldDoesNotSupportRequired(field: Field): String {
+    val fieldName = field.name.value
+    val declaringType = field.declaringType.qualifiedName
+    val type = field.type.primitive.protoName
+    return "The field `${declaringType}.${fieldName}` of the type `${type}`" +
+            " does not support `($REQUIRED)` constraint."
+}

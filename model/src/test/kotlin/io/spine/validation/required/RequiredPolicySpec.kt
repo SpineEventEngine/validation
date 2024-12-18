@@ -30,10 +30,12 @@ import com.google.protobuf.Descriptors.Descriptor
 import io.kotest.matchers.string.shouldContain
 import io.spine.logging.testing.tapConsole
 import io.spine.protodata.Compilation
-import io.spine.testing.logging.mute.MuteLogging
+import io.spine.protodata.protobuf.field
 import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
+import io.spine.validation.given.required.WithDoubleField
 import io.spine.validation.given.required.WithIntField
+import io.spine.validation.given.required.WithSignedInt
 import java.nio.file.Path
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -43,49 +45,68 @@ import org.junit.jupiter.api.io.TempDir
 @DisplayName("`RequiredPolicy` should")
 internal class RequiredPolicySpec {
 
-    private val doesNotSupportRequired = "does not support `(required)` validation."
-
-    private lateinit var error: Compilation.Error
-
     @Test
     fun `reject option on a boolean field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
-        createAndRunPipeline(WithBoolField.getDescriptor(), outputDir, settingsDir)
+        val message = WithBoolField.getDescriptor()
+        val error = compile(message, outputDir, settingsDir)
 
-        error.message.let {
-            it shouldContain "The field `spine.validation.given.required.WithBoolField.really`"
-            it shouldContain "of the type `bool`"
-            it shouldContain doesNotSupportRequired
-        }
+        val field = message.field("really")
+        val expected = fieldDoesNotSupportRequired(field)
+        error.message shouldContain expected
     }
 
     @Test
-    @MuteLogging
     fun `reject option on an integer field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
-        createAndRunPipeline(WithIntField.getDescriptor(), outputDir, settingsDir)
+        val message = WithIntField.getDescriptor()
+        val error = compile(message, outputDir, settingsDir)
 
-        error.message.let {
-            it shouldContain "The field `spine.validation.given.required.WithIntField.zero`"
-            it shouldContain "of the type `int32`"
-            it shouldContain doesNotSupportRequired
-        }
+        val field = message.field("zero")
+        val expected = fieldDoesNotSupportRequired(field)
+        error.message shouldContain expected
+    }
+
+    @Test
+    fun `reject option on a signed integer field`(
+        @TempDir outputDir: Path,
+        @TempDir settingsDir: Path
+    ) {
+        val message = WithSignedInt.getDescriptor()
+        val error = compile(message, outputDir, settingsDir)
+
+        val field = message.field("signed")
+        val expected = fieldDoesNotSupportRequired(field)
+        error.message shouldContain expected
+    }
+
+    @Test
+    fun `reject option on a double field`(
+        @TempDir outputDir: Path,
+        @TempDir settingsDir: Path
+    ) {
+        val message = WithDoubleField.getDescriptor()
+        val error = compile(message, outputDir, settingsDir)
+
+        val field = message.field("temperature")
+        val expected = fieldDoesNotSupportRequired(field)
+        error.message shouldContain expected
     }
 
     /**
      * Creates and runs a pipeline which handles only the proto type with the given [descriptor].
      */
-    private fun createAndRunPipeline(
+    private fun compile(
         descriptor: Descriptor,
         outputDir: Path,
         settingsDir: Path
-    ) {
+    ): Compilation.Error {
         val fixture = ValidationTestFixture(descriptor, outputDir, settingsDir)
         val pipeline = fixture.setup.createPipeline()
-        error = assertThrows<Compilation.Error> {
+        val error = assertThrows<Compilation.Error> {
             // Redirect console output so that we don't print errors during the build.
             tapConsole {
                 pipeline()
             }
         }
+        return error
     }
 }
-
