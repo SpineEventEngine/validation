@@ -79,3 +79,23 @@ message ConstraintViolation {
     //
     repeated ConstraintViolation violation = 5;
 }
+
+// A template string with placeholders and their corresponding values.
+message TemplateString {
+
+    // A string that may contain one or more placeholders in the format `${key}`.
+    //
+    // For example, "My dog's name is ${dog.name}" or "My dog's name is `${dogName}`.
+    //
+    // The placeholders in this string can be replaced with corresponding values
+    // provided in the `placeholder_value` map.
+    //
+    string with_placeholders = 1;
+
+    // A map where each key corresponds to a placeholder in the `with_placeholders` string.
+    //
+    // This map should provide values for all placeholders used within the template,
+    // otherwise such a template is not valid.
+    //
+    map<string, string> placeholder_value = 2;
+}
