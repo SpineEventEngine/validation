@@ -33,11 +33,9 @@ import io.spine.option.OptionsProto;
 import io.spine.validate.ConstraintViolation;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.string.Diags.backtick;
-import static java.lang.String.format;
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.joining;
 
@@ -91,10 +89,7 @@ public final class ViolationText {
         var fieldPath = path.getFieldNameCount() == 0
                 ? ""
                 : Field.withPath(path).toString();
-        var format = violation.getMsgFormat();
-        List<String> params = violation.getParamList();
-        var formattedMessage = format(format, params.toArray());
-
+        var formattedMessage = violation.getMessage();
         var result = new StringBuilder();
         appendPrefix(result, typeName);
         appendPrefix(result, fieldPath);
