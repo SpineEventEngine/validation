@@ -132,10 +132,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
                   .filter(value -> partialMatch
                                    ? noPartialMatch(compiledPattern, (String) value)
                                    : noCompleteMatch(compiledPattern, (String) value))
-                  .map(value -> violation(constraint, fieldValue, value)
-                          .toBuilder()
-                          .addParam(regex)
-                          .build())
+                  .map(value -> violation(constraint, fieldValue, value))
                   .forEach(violations::add);
     }
 
@@ -176,11 +173,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         );
         var withField = declaration.get();
         if (!value.isDefault() && fieldValueNotSet(withField)) {
-            var withFieldNotSet = violation(constraint, value).toBuilder()
-                    .addParam(field.name().value())
-                    .addParam(withFieldName)
-                    .build();
-            violations.add(withFieldNotSet);
+            violations.add(violation(constraint, value));
         }
     }
 
@@ -226,7 +219,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
             var oneofField = Field.named(oneofName.value());
             var targetType = constraint.targetType();
             var violation = ConstraintViolation.newBuilder()
-                    .setMsgFormat(constraint.errorMessage(message.context()))
+                    .setMessage(toTemplate(constraint.errorMessage(message.context())))
                     .setFieldPath(oneofField.path())
                     .setTypeName(targetType.name().value())
                     .build();
@@ -347,7 +340,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         var fieldPath = context.fieldPath();
         var typeName = constraint.targetType().name();
         var violation = ConstraintViolation.newBuilder()
-                .setMsgFormat(constraint.errorMessage(context))
+                .setMessage(toTemplate(constraint.errorMessage(context)))
                 .setFieldPath(fieldPath)
                 .setTypeName(typeName.value());
         if (violatingValue != null) {
@@ -368,5 +361,13 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
                     ((Descriptors.EnumValueDescriptor) violatingValue).toProto());
         }
         return TypeConverter.toAny(violatingValue);
+    }
+
+    // Old error messages are incompatible with new ones.
+    // They will have not processed `%s` placeholders.
+    private static TemplateString toTemplate(String printfString) {
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(printfString)
+                .build();
     }
 }

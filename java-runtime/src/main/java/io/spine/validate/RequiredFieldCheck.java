@@ -41,7 +41,7 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 final class RequiredFieldCheck {
 
     private static final String ERROR_MESSAGE =
-            "Message must have all the required fields set according to the rule: `%s`.";
+            "Message must have all the required fields set according to the rule: `${rule}`.";
 
     private final MessageValue message;
     private final ImmutableSet<Alternative> alternatives;
@@ -58,16 +58,21 @@ final class RequiredFieldCheck {
     Optional<ConstraintViolation> perform() {
         var matches = alternatives.stream()
                 .anyMatch(this::allPresent);
+        var message = TemplateString.newBuilder()
+                .setWithPlaceholders(ERROR_MESSAGE)
+                .putPlaceholderValue("rule", optionValue)
+                .build();
         return matches
                ? Optional.empty()
                : Optional.of(ConstraintViolation.newBuilder()
-                                     .setMsgFormat(ERROR_MESSAGE)
+                                     .setMessage(message)
                                      .setFieldPath(fieldPath())
                                      .setTypeName(typeName())
-                                     .addParam(optionValue)
                                      .build()
                );
     }
+
+
 
     private boolean allPresent(Alternative alternative) {
         for (var declaration : alternative.fields()) {
