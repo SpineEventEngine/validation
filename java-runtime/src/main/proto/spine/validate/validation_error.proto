@@ -53,10 +53,10 @@ message ConstraintViolation {
     //
     // Contains `%s` format specifiers if the violation has one or more parameters.
     //
-    string msg_format = 1;
+    string msg_format = 1 [deprecated = true];
 
     // Parameters referenced by the format specifiers in the message format string.
-    repeated string param = 2;
+    repeated string param = 2 [deprecated = true];
 
     // An error message for this violation.
     TemplateString message = 8;
