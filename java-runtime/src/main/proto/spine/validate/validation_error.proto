@@ -58,6 +58,9 @@ message ConstraintViolation {
     // Parameters referenced by the format specifiers in the message format string.
     repeated string param = 2;
 
+    // An error message for this violation.
+    TemplateString message = 8;
+
     // The name of the validated message type.
     string type_name = 7;
 
