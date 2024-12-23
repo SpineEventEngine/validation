@@ -51,7 +51,7 @@ public final class AllRequiredConstraint
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
+    public String formattedErrorMessage(FieldContext field) {
         return format("Field `%s` cannot contain default values.", field.targetDeclaration());
     }
 
@@ -63,9 +63,8 @@ public final class AllRequiredConstraint
         var context = value.context();
         return count > countOfNonDefault
                ? ImmutableList.of(
-                ConstraintViolation
-                        .newBuilder()
-                        .setMsgFormat(errorMessage(context))
+                ConstraintViolation.newBuilder()
+                        .setMessage(errorMessage(context))
                         .setTypeName(containingMessage.declaration().name().value())
                         .setFieldPath(context.fieldPath())
                         .build())

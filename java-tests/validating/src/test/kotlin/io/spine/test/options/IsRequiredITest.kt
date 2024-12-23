@@ -38,6 +38,7 @@ import io.spine.test.tools.validate.Sauce
 import io.spine.test.tools.validate.fish
 import io.spine.testing.TestValues.randomString
 import io.spine.validate.Validate.violationsOf
+import io.spine.validate.text.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -54,7 +55,7 @@ internal class IsRequiredITest {
 
         violations.size shouldBe 1
         violations[0] shouldNotBe null
-        violations[0]!!.msgFormat shouldContain "choice"
+        violations[0]!!.message.format() shouldContain "choice"
     }
 
     @Test

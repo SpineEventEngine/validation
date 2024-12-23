@@ -32,8 +32,6 @@ import io.spine.validate.ConstraintTranslator;
 import io.spine.validate.option.FieldConstraint;
 import io.spine.validate.option.FieldValidatingOption;
 
-import static io.spine.test.options.BytesDirectionOptionProto.direction;
-
 /**
  * A custom validation option for {@code bytes}.
  *
@@ -52,7 +50,7 @@ public final class Direction extends FieldValidatingOption<BytesDirection> {
         var optionValue = optionValue(field);
         return new FieldConstraint<>(optionValue, declaration) {
             @Override
-            public String errorMessage(FieldContext field) {
+            public String formattedErrorMessage(FieldContext field) {
                 return "";
             }
 
