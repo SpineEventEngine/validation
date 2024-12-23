@@ -36,6 +36,7 @@ import java.util.Collection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.string.Diags.backtick;
+import static io.spine.validate.text.TemplateStringExtsKt.format;
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.joining;
 
@@ -89,7 +90,7 @@ public final class ViolationText {
         var fieldPath = path.getFieldNameCount() == 0
                 ? ""
                 : Field.withPath(path).toString();
-        var formattedMessage = violation.getMessage();
+        var formattedMessage = format(violation.getMessage());
         var result = new StringBuilder();
         appendPrefix(result, typeName);
         appendPrefix(result, fieldPath);

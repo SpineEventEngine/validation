@@ -43,7 +43,6 @@ import io.spine.validate.CustomConstraint
 import io.spine.validate.FieldValue
 import io.spine.validate.MessageValue
 import io.spine.validate.constraintViolation
-import io.spine.validate.templateString
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -127,9 +126,8 @@ private class MaxLengthConstraint(
     field: FieldContext
 ) : FieldConstraint<Int>(optionValue, field.targetDeclaration()), CustomConstraint {
 
-    override fun errorMessage(field: FieldContext) = templateString {
-        withPlaceholders =
-            "Value of `${field.targetDeclaration()}` must not be longer than `${optionValue()}`."
+    override fun formattedErrorMessage(field: FieldContext): String {
+        return "Value of `${field.targetDeclaration()}` must not be longer than `${optionValue()}`."
     }
 
     override fun validate(containingMessage: MessageValue): ImmutableList<ConstraintViolation> {

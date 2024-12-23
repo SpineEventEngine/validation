@@ -52,7 +52,14 @@ public interface Constraint {
      * @param field
      *         the validated field
      */
-    TemplateString errorMessage(FieldContext field);
+    default TemplateString errorMessage(FieldContext field) {
+        var formatted = formattedErrorMessage(field);
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(formatted)
+                .build();
+    }
+
+    String formattedErrorMessage(FieldContext field);
 
     /**
      * Accepts the given {@link ConstraintTranslator}.

@@ -33,7 +33,6 @@ import io.spine.option.MinOption;
 import io.spine.validate.ComparableNumber;
 import io.spine.validate.ConstraintTranslator;
 import io.spine.validate.NumberText;
-import io.spine.validate.TemplateString;
 import io.spine.validate.diags.ViolationText;
 
 import static java.lang.String.format;
@@ -59,13 +58,10 @@ public final class MinConstraint extends RangedConstraint<MinOption> {
 
     @Override
     @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    protected TemplateString compileErrorMessage(Range<ComparableNumber> range) {
+    protected String compileErrorMessage(Range<ComparableNumber> range) {
         var min = optionValue();
         var template = ViolationText.errorMessage(min, min.getMsgFormat());
-        var formatted = format(template, orEqualTo(range.lowerBoundType()), range.lowerEndpoint());
-        return TemplateString.newBuilder()
-                .setWithPlaceholders(formatted)
-                .build();
+        return format(template, orEqualTo(range.lowerBoundType()), range.lowerEndpoint());
     }
 
     @Override

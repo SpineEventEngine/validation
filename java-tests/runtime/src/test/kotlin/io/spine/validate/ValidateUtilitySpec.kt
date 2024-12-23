@@ -69,6 +69,7 @@ internal class ValidateUtilitySpec : UtilityClassTest<Validate>(Validate::class.
         }
         val violation = constraintViolation { message = template }
         val formatted = ViolationText.of(violation).toString()
+        
         formatted shouldBe "test 1 test 2"
     }
 }

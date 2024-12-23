@@ -46,7 +46,7 @@ public final class RequiredConstraint extends FieldConstraint<Boolean> {
 
     @Override
     @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    public String errorMessage(FieldContext field) {
+    public String formattedErrorMessage(FieldContext field) {
         var ifMissing = new IfMissing();
         var option = ifMissing.valueOrDefault(field.target());
         return ViolationText.errorMessage(option, option.getMsgFormat());

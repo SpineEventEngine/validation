@@ -31,7 +31,6 @@ import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.PatternOption;
 import io.spine.validate.ConstraintTranslator;
-import io.spine.validate.TemplateString;
 import io.spine.validate.diags.ViolationText;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -52,12 +51,9 @@ public final class PatternConstraint extends FieldConstraint<PatternOption> {
 
     @Override
     @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    public TemplateString errorMessage(FieldContext field) {
+    public String formattedErrorMessage(FieldContext field) {
         var option = optionValue();
-        var message = ViolationText.errorMessage(option, option.getMsgFormat());
-        return TemplateString.newBuilder()
-                .setWithPlaceholders(message)
-                .build();
+        return ViolationText.errorMessage(option, option.getMsgFormat());
     }
 
     @Override

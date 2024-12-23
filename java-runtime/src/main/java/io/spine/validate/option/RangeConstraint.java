@@ -33,7 +33,6 @@ import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.RangeOption;
 import io.spine.validate.ComparableNumber;
 import io.spine.validate.ConstraintTranslator;
-import io.spine.validate.TemplateString;
 
 import static java.lang.String.format;
 
@@ -58,14 +57,11 @@ public final class RangeConstraint extends RangedConstraint<RangeOption> {
     }
 
     @Override
-    protected TemplateString compileErrorMessage(Range<ComparableNumber> range) {
-        var formatted = format("The value of the field `%s` is out of range. Must be %s%s and %s%s.",
-                               field(),
-                               forLowerBound(range), range.lowerEndpoint(),
-                               forUpperBound(range), range.upperEndpoint());
-        return TemplateString.newBuilder()
-                .setWithPlaceholders(formatted)
-                .build();
+    protected String compileErrorMessage(Range<ComparableNumber> range) {
+        return format("The value of the field `%s` is out of range. Must be %s%s and %s%s.",
+                      field(),
+                      forLowerBound(range), range.lowerEndpoint(),
+                      forUpperBound(range), range.upperEndpoint());
     }
 
     private static String forLowerBound(Range<?> range) {
