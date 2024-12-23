@@ -98,7 +98,10 @@ internal class DistributingGenerator(
             addModifiers(Modifier.PRIVATE)
             returns(violationsType)
             addCode(body)
-        }.toString()
+        }
+            .toString() // `MethodSpec` cannot be directly added to `CodeBloc`.
+            .replace("$", "$$") // We need to escape `$` symbols,
+                                                  // which can be present in error templates.
 
         return otherMembers.toBuilder()
             .add(groupingMethod)
