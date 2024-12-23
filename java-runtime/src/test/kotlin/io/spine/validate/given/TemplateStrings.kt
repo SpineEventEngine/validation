@@ -24,38 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validate.given
 
-import io.kotest.matchers.shouldBe
-import io.spine.base.Errors
-import io.spine.protobuf.unpackGuessingType
-import io.spine.validate.given.withoutPlaceholders
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import io.spine.validate.TemplateString
+import io.spine.validate.templateString
 
-@DisplayName("`ValidationException` should")
-internal class ValidationExceptionSpec {
-
-    @Test
-    fun `provide 'ValidationError'`() {
-        val violations = listOf(
-                constraintViolation {
-                    typeName = "example.org/example.Type"
-                    message = withoutPlaceholders("Test error")
-                }
-            )
-        val exception = ValidationException(violations)
-        val expected = validationError { constraintViolation.addAll(violations) }
-
-        exception.asMessage() shouldBe expected
-    }
-
-    @Test
-    fun `convert 'ValidationException' into an error`() {
-        val violation = ConstraintViolation.newBuilder().build()
-        val exception = ValidationException(violation)
-        val error = Errors.fromThrowable(exception)
-
-        error.details.unpackGuessingType() shouldBe exception.asMessage()
-    }
+/**
+ * Creates a new [TemplateString] with the given [value], which doesn't
+ * contain placeholders.
+ */
+internal fun withoutPlaceholders(value: String): TemplateString = templateString {
+    withPlaceholders = value
 }
