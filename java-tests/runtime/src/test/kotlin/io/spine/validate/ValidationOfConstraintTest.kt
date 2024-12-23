@@ -63,20 +63,9 @@ abstract class ValidationOfConstraintTest {
     }
 
     /**
-     * Asserts that calling the `build()` method of the passed builder throws `ValidationException`.
-     */
-    private fun assertDoesNotBuild(builder: Message.Builder) {
-        assertThrows<ValidationException> {
-            builder.build()
-        }
-    }
-
-    /**
      * Asserts that the creation of the message fails when the [setup] function is invoked.
      *
      * The most common use case is when the message is created via a Kotlin DSL block.
-     *
-     * @see assertDoesNotBuild
      */
     protected fun assertDoesNotBuild(setup: () -> Message) {
         assertThrows<ValidationException> {

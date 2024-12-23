@@ -132,4 +132,5 @@ private const val DEFAULT_MESSAGE_FORMAT =
             "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
 private fun customMessageFormat(fieldNumber: Int) =
-    "Field_$fieldNumber: `\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."
+    "Field_$fieldNumber: " +
+            "`\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."
