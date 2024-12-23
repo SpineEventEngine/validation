@@ -62,13 +62,13 @@ internal class ValidateUtilitySpec : UtilityClassTest<Validate>(Validate::class.
 
     @Test
     fun `format message from constraint violation`() {
-        val violation = ConstraintViolation.newBuilder()
-            .setMsgFormat("test %s test %s")
-            .addParam("1")
-            .addParam("2")
-            .build()
+        val template = templateString {
+            withPlaceholders = "test \${val1} test \${val2}"
+            placeholderValue.put("val1", "1")
+            placeholderValue.put("val2", "2")
+        }
+        val violation = constraintViolation { message = template }
         val formatted = ViolationText.of(violation).toString()
-
         formatted shouldBe "test 1 test 2"
     }
 }

@@ -46,7 +46,7 @@ internal class PatternRuleITest {
         val player = Player.newBuilder()
             .setShirtName("R")
         val violation = assertValidationException(player)
-        assertThat(violation.msgFormat)
+        assertThat(violation.message.withPlaceholders)
             .contains("Invalid T-Shirt name")
     }
 

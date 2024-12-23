@@ -36,6 +36,7 @@ import io.spine.test.validate.CustomMessageRequiredMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredRepeatedMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredStringFieldValue
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.text.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -80,7 +81,8 @@ internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
 
         private fun checkErrorMessage(expectedMessage: String) {
             val constraintViolation = firstViolation()
-            constraintViolation.msgFormat shouldBe expectedMessage
+            val message = constraintViolation.message.format()
+            message shouldBe expectedMessage
         }
     }
 
@@ -122,8 +124,8 @@ internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
                 builder.build()
             }
             val violation = exception.constraintViolations.first()
-            violation.msgFormat shouldBe customErrorMessageFrom(
-                defaultInstance.descriptorForType)
+            val message = violation.message.format()
+            message shouldBe customErrorMessageFrom(defaultInstance.descriptorForType)
         }
     }
 }

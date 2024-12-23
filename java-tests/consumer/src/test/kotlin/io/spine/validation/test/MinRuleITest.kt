@@ -39,7 +39,8 @@ internal class MinRuleITest {
         val violation = assertValidationException(
             LocalTime.newBuilder().setHours(-1)
         )
-        violation.msgFormat shouldContain "cannot be negative"
+        val message = violation.message.withPlaceholders
+        message shouldContain "cannot be negative"
     }
 
     @Test

@@ -150,7 +150,7 @@ private fun checkInvalid(
     errorPart: String = "is invalid"
 ) {
     assertValidationException(builder).run {
-        msgFormat shouldContain errorPart
+        message.withPlaceholders shouldContain errorPart
         violationList shouldHaveSize 1
     }
 }

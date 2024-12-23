@@ -39,14 +39,14 @@ internal class RequiredRuleITest {
     fun `reject an unset string field`() {
         val builder = Author.newBuilder()
         val violation = assertValidationException(builder)
-        violation.msgFormat shouldContain "Author must have a name"
+        violation.message.withPlaceholders shouldContain "Author must have a name"
     }
 
     @Test
     fun `reject an unset message field`() {
         val builder = Book.newBuilder()
         assertValidationException(builder).also {
-            it.msgFormat shouldContain "must have a value"
+            it.message.withPlaceholders shouldContain "must have a value"
             it.fieldPath.getFieldName(0) shouldBe "author"
         }
     }

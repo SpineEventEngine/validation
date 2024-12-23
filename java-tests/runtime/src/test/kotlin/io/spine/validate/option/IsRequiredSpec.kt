@@ -53,7 +53,8 @@ internal class IsRequiredSpec : ValidationOfConstraintTest() {
         // We here check the value of the `msgFormat`, and not the `fieldPath` because
         // `oneof` is not a field. As such, it does not have a `fieldPath`, and is not
         // added to validation constraint by the code generation.
-        violation.msgFormat shouldBe "One of the fields in the `choice` group must be set."
+        val message = violation.message.withPlaceholders
+        message shouldBe "One of the fields in the `choice` group must be set."
     }
 
     @Test

@@ -52,7 +52,7 @@ public interface Constraint {
      * @param field
      *         the validated field
      */
-    String errorMessage(FieldContext field);
+    TemplateString errorMessage(FieldContext field);
 
     /**
      * Accepts the given {@link ConstraintTranslator}.
