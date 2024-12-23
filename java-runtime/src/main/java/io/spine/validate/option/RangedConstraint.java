@@ -33,6 +33,7 @@ import com.google.errorprone.annotations.ImmutableTypeParameter;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.ComparableNumber;
+import io.spine.validate.TemplateString;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.BoundType.CLOSED;
@@ -91,11 +92,11 @@ public abstract class RangedConstraint<@ImmutableTypeParameter T> extends FieldC
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
+    public TemplateString errorMessage(FieldContext field) {
         return compileErrorMessage(range);
     }
 
-    protected abstract String compileErrorMessage(Range<ComparableNumber> range);
+    protected abstract TemplateString compileErrorMessage(Range<ComparableNumber> range);
 
     static String orEqualTo(BoundType type) {
         return type == CLOSED ? OR_EQUAL_TO : "";

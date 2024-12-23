@@ -29,6 +29,7 @@ package io.spine.validate.option;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.ConstraintTranslator;
+import io.spine.validate.TemplateString;
 import io.spine.validate.diags.ViolationText;
 
 /**
@@ -43,10 +44,13 @@ public final class ValidateConstraint extends FieldConstraint<Boolean> {
 
     @Override
     @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    public String errorMessage(FieldContext field) {
+    public TemplateString errorMessage(FieldContext field) {
         var option = new IfInvalid();
         var ifInvalid = option.valueOrDefault(field.target());
-        return ViolationText.errorMessage(ifInvalid, ifInvalid.getMsgFormat());
+        var message = ViolationText.errorMessage(ifInvalid, ifInvalid.getMsgFormat());
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(message)
+                .build();
     }
 
     @Override

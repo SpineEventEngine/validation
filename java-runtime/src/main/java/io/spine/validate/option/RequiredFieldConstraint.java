@@ -33,6 +33,7 @@ import io.spine.type.MessageType;
 import io.spine.validate.Alternative;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintTranslator;
+import io.spine.validate.TemplateString;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
@@ -61,8 +62,11 @@ public final class RequiredFieldConstraint implements Constraint {
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
-        return format("Field named `%s` is not found.", field.targetDeclaration());
+    public TemplateString errorMessage(FieldContext field) {
+        var formatted = format("Field named `%s` is not found.", field.targetDeclaration());
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(formatted)
+                .build();
     }
 
     @Override

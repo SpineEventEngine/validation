@@ -219,7 +219,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
             var oneofField = Field.named(oneofName.value());
             var targetType = constraint.targetType();
             var violation = ConstraintViolation.newBuilder()
-                    .setMessage(toTemplate(constraint.errorMessage(message.context())))
+                    .setMessage(constraint.errorMessage(message.context()))
                     .setFieldPath(oneofField.path())
                     .setTypeName(targetType.name().value())
                     .build();
@@ -340,7 +340,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         var fieldPath = context.fieldPath();
         var typeName = constraint.targetType().name();
         var violation = ConstraintViolation.newBuilder()
-                .setMessage(toTemplate(constraint.errorMessage(context)))
+                .setMessage(constraint.errorMessage(context))
                 .setFieldPath(fieldPath)
                 .setTypeName(typeName.value());
         if (violatingValue != null) {
@@ -361,13 +361,5 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
                     ((Descriptors.EnumValueDescriptor) violatingValue).toProto());
         }
         return TypeConverter.toAny(violatingValue);
-    }
-
-    // Old error messages are incompatible with new ones.
-    // They will have not processed `%s` placeholders.
-    private static TemplateString toTemplate(String printfString) {
-        return TemplateString.newBuilder()
-                .setWithPlaceholders(printfString)
-                .build();
     }
 }

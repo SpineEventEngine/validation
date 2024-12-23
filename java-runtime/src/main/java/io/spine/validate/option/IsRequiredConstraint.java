@@ -33,6 +33,7 @@ import io.spine.code.proto.OneofDeclaration;
 import io.spine.type.MessageType;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintTranslator;
+import io.spine.validate.TemplateString;
 
 import static java.lang.String.format;
 
@@ -54,8 +55,11 @@ public final class IsRequiredConstraint implements Constraint {
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
-        return format("One of fields in group `%s` must be set.", declaration.name());
+    public TemplateString errorMessage(FieldContext field) {
+        var formatted = format("One of fields in group `%s` must be set.", declaration.name());
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(formatted)
+                .build();
     }
 
     @Override
