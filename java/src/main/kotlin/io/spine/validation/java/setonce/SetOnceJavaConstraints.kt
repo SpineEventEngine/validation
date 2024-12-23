@@ -59,12 +59,12 @@ import io.spine.tools.psi.java.execute
  *
  * @property field The field that declared the option.
  * @property typeSystem The type system to resolve types.
- * @property errorMessage The error message pattern to use in case of the violation.
+ * @property errorTemplate The error message template to use in case of the violation.
  */
 internal sealed class SetOnceJavaConstraints<T>(
     private val field: Field,
     private val typeSystem: TypeSystem,
-    private val errorMessage: String
+    private val errorTemplate: String
 ) {
 
     private companion object {
@@ -84,7 +84,7 @@ internal sealed class SetOnceJavaConstraints<T>(
     }
 
     private val declaringMessage: TypeName = field.declaringType
-    private val constraintViolation by lazy { SetOnceConstraintViolation(errorMessage, field) }
+    private val constraintViolation by lazy { SetOnceConstraintViolation(errorTemplate, field) }
 
     protected val declaringMessageClass = declaringMessage.javaClassName(typeSystem)
     protected val fieldName = field.name.javaCase()

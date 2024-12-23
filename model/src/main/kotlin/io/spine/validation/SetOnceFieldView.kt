@@ -62,7 +62,7 @@ internal class SetOnceFieldView :
     }
 
     override fun saveErrorMessage(errorMessage: String) = alter {
-        this.errorMessage = errorMessage
+        this.errorTemplate = errorMessage
     }
 
     override fun enableValidation() = alter {

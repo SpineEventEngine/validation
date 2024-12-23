@@ -28,6 +28,7 @@ package io.spine.test.options.setonce
 
 import com.google.protobuf.Descriptors.EnumValueDescriptor
 import com.google.protobuf.Message.Builder
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
@@ -59,17 +60,14 @@ internal class SetOnceErrorMessageITest {
 
 private fun <T : Any> assertDefault(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentDefaultMessage.newBuilder()
-    val descriptor = StudentDefaultMessage.getDescriptor()
-    val expectedParams = listOf(descriptor.fullName, fieldName, fieldType, "$value1", "$value2")
-    val expectedFormat = { _: Int -> DEFAULT_MESSAGE_FORMAT }
-    return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
+    val template = { _: Int -> DEFAULT_MESSAGE_FORMAT }
+    return builder.assertErrorMessage(fieldName, fieldType, template, value1, value2)
 }
 
 private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentCustomMessage.newBuilder()
-    val expectedParams = listOf("$value1", fieldName, "$value2", fieldType)
-    val expectedFormat = ::customMessageFormat
-    return builder.assertErrorMessage(fieldName, value1, value2, expectedParams, expectedFormat)
+    val template = ::customMessageFormat
+    return builder.assertErrorMessage(fieldName, fieldType, template, value1, value2)
 }
 
 /**
@@ -84,19 +82,19 @@ private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1:
  * @param fieldName The field to set.
  * @param value1 The first field value to set.
  * @param value2 The second field value to set for triggering the exception.
- * @param expectedParams The list of params to check upon `ConstraintViolation.param`.
- * @param expectedFormat The format string to check upon `ConstraintViolation.msg_format`.
+ * @param template The error message template to check.
  */
 private fun <T : Any> Builder.assertErrorMessage(
     fieldName: String,
+    fieldType: String,
+    template: (Int) -> String,
     value1: T,
     value2: T,
-    expectedParams: List<String>,
-    expectedFormat: (Int) -> String
 ) {
     check(value1 != value2)
 
     val field = descriptorForType.field(fieldName)!!
+    val parentType = descriptorForType.fullName
     val exception = assertThrows<ValidationException> {
         setField(field, value1)
         setField(field, value2)
@@ -104,11 +102,19 @@ private fun <T : Any> Builder.assertErrorMessage(
 
     val violations = exception.constraintViolations.also { it.size shouldBe 1 }
     val violation = violations.first()
+
     with(violation) {
-        msgFormat shouldBe expectedFormat(field.index + 1)
-        paramList shouldBe expectedParams
+        message.withPlaceholders shouldBe template(field.index + 1)
+        message.placeholderValueMap shouldContainExactly mapOf(
+            "field.name" to fieldName,
+            "field.type" to fieldType,
+            "field.value" to "$value1",
+            "field.proposed_value" to "$value2",
+            "parent.type" to parentType
+        )
+
         fieldPath shouldBe FieldPath(fieldName)
-        typeName shouldBe  this@assertErrorMessage.descriptorForType.fullName
+        typeName shouldBe parentType
 
         // Enums are a bit special. See the method docs for details.
         if (value2 is EnumValueDescriptor) {
@@ -122,8 +128,8 @@ private fun <T : Any> Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE_FORMAT =
-    "The field `%s.%s` of the type `%s` already has the value `%s` " +
-            "and cannot be reassigned to `%s`."
+    "The field `\${parent.type}.\${field.name}` of the type `\${field.type}` already has " +
+            "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
 private fun customMessageFormat(fieldNumber: Int) =
-    "Field_$fieldNumber: `%s`, `%s`, `%s`, `%s`."
+    "Field_$fieldNumber: `\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."

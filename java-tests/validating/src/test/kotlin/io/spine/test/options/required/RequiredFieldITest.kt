@@ -27,13 +27,14 @@
 package io.spine.test.options.required
 
 import com.google.common.base.Charsets
-import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import com.google.protobuf.ByteString
 import com.google.protobuf.Message
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.Combination
 import io.spine.test.tools.validate.Due
 import io.spine.type.TypeName
-import io.spine.validate.constraintViolation
+import io.spine.validate.text.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
 import org.junit.jupiter.api.Disabled
@@ -81,11 +82,7 @@ internal class RequiredFieldITest {
 private fun assertInvalidWithParam(message: Message.Builder, violationParam: String) {
     val violations = assertInvalid(message)
     val partial = message.buildPartial()
-    val expected = constraintViolation {
-        typeName = TypeName.of(partial).value()
-        param.add(violationParam)
-    }
-    assertThat(violations)
-        .comparingExpectedFieldsOnly()
-        .containsExactly(expected)
+    violations.size shouldBe 1
+    violations[0].message.format() shouldContain violationParam
+    violations[0].typeName shouldBe TypeName.of(partial).value()
 }
