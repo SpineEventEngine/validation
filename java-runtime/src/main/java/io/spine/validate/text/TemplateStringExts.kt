@@ -42,7 +42,10 @@ import io.spine.validate.TemplateString
  * This method will return "My dog's name is Fido".
  */
 public fun TemplateString.format(): String {
-    checkAllPlaceholdersHasValue()
+    checkPlaceholdersHasValue(withPlaceholders, placeholderValueMap) {
+        "Can not format the given `TemplateString`: `$withPlaceholders`." +
+                "Missing value for the following placeholders: `$it`."
+    }
     var result = withPlaceholders
     for ((key, value) in placeholderValueMap) {
         result = result.replace("\${$key}", value)
@@ -51,26 +54,35 @@ public fun TemplateString.format(): String {
 }
 
 /**
- * Makes sure that every placeholder found within the template string has a value
- * in [TemplateString.getPlaceholderValueMap].
+ * Makes sure that each placeholder within the [template] string has a value
+ * in [placeholders] map.
+ *
+ * @param template The template with placeholders like `${something}`.
+ * @param placeholders The map containing placeholder values.
+ * @param lazyMessage The message to use in [IllegalArgumentException] if the check fails.
  */
-private fun TemplateString.checkAllPlaceholdersHasValue() {
-    val placeholders = templatePlaceholders()
-    for (placeholder in placeholders) {
-        if (!placeholderValueMap.containsKey(placeholder)) {
-            throw IllegalArgumentException(
-                "Can not format the given `TemplateString`: `$withPlaceholders`." +
-                        "Missing value for placeholder: `\${$placeholder}`."
-            )
+public fun checkPlaceholdersHasValue(
+    template: String,
+    placeholders: Map<String, Any>,
+    lazyMessage: (List<String>) -> String
+) {
+    val neededPlaceholders = extractPlaceholders(template)
+    val missing = mutableListOf<String>()
+    for (placeholder in neededPlaceholders) {
+        if (!placeholders.containsKey(placeholder)) {
+            missing.add("\${$placeholder}")
         }
+    }
+    if (missing.isNotEmpty()) {
+        throw IllegalArgumentException(lazyMessage(missing))
     }
 }
 
 /**
- * Extracts all placeholders used within the template string.
+ * Extracts all placeholders used within this [template] string.
  */
-private fun TemplateString.templatePlaceholders(): Set<String> =
-    PLACEHOLDERS.findAll(withPlaceholders)
+private fun extractPlaceholders(template: String): Set<String> =
+    PLACEHOLDERS.findAll(template)
         .map { it.groupValues[1] }
         .toSet()
 
