@@ -54,7 +54,7 @@ message SetOnceField {
     FieldId id = 1;
 
     // Message appearing when this required field is not set.
-    string error_template = 2;
+    string error_message = 2;
 
     // Value of `set_once` boolean option.
     bool enabled = 3;

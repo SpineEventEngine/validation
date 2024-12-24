@@ -69,7 +69,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         setOnceFields
             .associateWith { compilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
-                val javaConstraints = javaConstraints(protoField.subject, protoField.errorTemplate)
+                val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
                 val sourceFile = sources.javaFileOf(declaredIn.message)
                 javaConstraints.render(sourceFile)
             }
