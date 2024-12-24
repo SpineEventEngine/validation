@@ -132,8 +132,19 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
                   .filter(value -> partialMatch
                                    ? noPartialMatch(compiledPattern, (String) value)
                                    : noCompleteMatch(compiledPattern, (String) value))
-                  .map(value -> violation(constraint, fieldValue, value))
+                  .map(value -> {
+                      var violation = violation(constraint, fieldValue, value);
+                      return withRegex(violation, regex);
+                  })
                   .forEach(violations::add);
+    }
+
+    private static ConstraintViolation withRegex(ConstraintViolation violation, String regex) {
+        var template = violation.getMessage().toBuilder()
+                .putPlaceholderValue("regex.pattern", regex);
+        return violation.toBuilder()
+                .setMessage(template)
+                .build();
     }
 
     private static boolean noCompleteMatch(Pattern pattern, String value) {
@@ -173,7 +184,17 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
         );
         var withField = declaration.get();
         if (!value.isDefault() && fieldValueNotSet(withField)) {
-            violations.add(violation(constraint, value));
+            var violation = violation(constraint, value);
+            var template = violation.getMessage()
+                    .toBuilder()
+                    .putPlaceholderValue("field.name", field.name().value())
+                    .putPlaceholderValue("goes.companion", withFieldName)
+                    .build();
+            violations.add(
+                    violation.toBuilder()
+                            .setMessage(template)
+                            .build()
+            );
         }
     }
 
