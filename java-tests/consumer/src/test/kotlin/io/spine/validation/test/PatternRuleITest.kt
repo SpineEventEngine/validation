@@ -28,6 +28,7 @@ package io.spine.validation.test
 
 import com.google.common.truth.Truth.assertThat
 import io.kotest.matchers.shouldBe
+import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -46,7 +47,7 @@ internal class PatternRuleITest {
         val player = Player.newBuilder()
             .setShirtName("R")
         val violation = assertValidationException(player)
-        assertThat(violation.message.withPlaceholders)
+        assertThat(violation.message.format())
             .contains("Invalid T-Shirt name")
     }
 

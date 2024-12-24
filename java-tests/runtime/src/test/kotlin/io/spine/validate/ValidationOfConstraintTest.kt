@@ -32,7 +32,6 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.spine.validate.Validate.violationsOf
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
@@ -152,8 +151,12 @@ abstract class ValidationOfConstraintTest {
         }
 
         private fun assertHasCorrectFormat(violation: ConstraintViolation?) {
-            val format = violation!!.message.withPlaceholders
-            Assertions.assertFalse(format.isEmpty())
+            val template = violation!!.message.withPlaceholders
+            val placeholders = violation.message.placeholderValueMap
+            assertThat(template).isNotEmpty()
+            assertDoesNotThrow {
+                checkPlaceholdersHasValue(template, placeholders)
+            }
         }
 
         private fun assertHasFieldPath(violation: ConstraintViolation?) {

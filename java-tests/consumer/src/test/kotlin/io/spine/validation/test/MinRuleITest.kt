@@ -27,6 +27,7 @@
 package io.spine.validation.test
 
 import io.kotest.matchers.string.shouldContain
+import io.spine.validate.format
 import io.spine.validation.test.money.LocalTime
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -39,7 +40,7 @@ internal class MinRuleITest {
         val violation = assertValidationException(
             LocalTime.newBuilder().setHours(-1)
         )
-        val message = violation.message.withPlaceholders
+        val message = violation.message.format()
         message shouldContain "cannot be negative"
     }
 

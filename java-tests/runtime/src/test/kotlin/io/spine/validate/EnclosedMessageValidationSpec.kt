@@ -98,7 +98,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-        violation.message.withPlaceholders shouldContain "is invalid"
+        violation.message.format() shouldContain "is invalid"
         assertFieldPathIs(
             violation,
             ENCLOSED_FIELD_NAME
@@ -107,7 +107,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         val innerViolations = violation.violationList
         innerViolations shouldHaveSize  1
         val innerViolation = innerViolations[0]
-        innerViolation.message.withPlaceholders shouldStartWith Diags.Regex.prefix
+        innerViolation.message.format() shouldStartWith Diags.Regex.prefix
 
         assertFieldPathIs(
             innerViolation,

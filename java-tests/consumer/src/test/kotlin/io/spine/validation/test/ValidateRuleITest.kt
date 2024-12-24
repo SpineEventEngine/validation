@@ -33,6 +33,7 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.protobuf.pack
 import io.spine.testing.logging.mute.MuteLogging
+import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -150,7 +151,7 @@ private fun checkInvalid(
     errorPart: String = "is invalid"
 ) {
     assertValidationException(builder).run {
-        message.withPlaceholders shouldContain errorPart
+        message.format() shouldContain errorPart
         violationList shouldHaveSize 1
     }
 }

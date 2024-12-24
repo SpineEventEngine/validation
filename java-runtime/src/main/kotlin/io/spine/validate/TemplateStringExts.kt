@@ -62,7 +62,8 @@ public fun TemplateString.format(): String {
 public fun checkPlaceholdersHasValue(
     template: String,
     placeholders: Map<String, Any>,
-    lazyMessage: (List<String>) -> String
+    lazyMessage: (List<String>) -> String =
+        { "Missing value for the following template placeholders: `$it`." }
 ) {
     val neededPlaceholders = extractPlaceholders(template)
     val missing = mutableListOf<String>()
