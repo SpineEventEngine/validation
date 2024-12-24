@@ -99,9 +99,11 @@ internal class DistributingGenerator(
             returns(violationsType)
             addCode(body)
         }
-            .toString() // `MethodSpec` cannot be directly added to `CodeBloc`.
-            .replace("$", "$$") // We need to escape `$` symbols,
-                                                  // which can be present in error templates.
+            // `MethodSpec` cannot be added to `CodeBlock`, so we have to convert it to `String`.
+            // We also need to escape `$` symbols because they are part of JavaPoet templates.
+            // These symbols can be present in our own error message templates.
+            .toString()
+            .replace("$", "$$")
 
         return otherMembers.toBuilder()
             .add(groupingMethod)
