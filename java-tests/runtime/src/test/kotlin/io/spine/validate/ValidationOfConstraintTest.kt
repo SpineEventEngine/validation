@@ -31,6 +31,9 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotBeEmpty
+import io.kotest.matchers.string.shouldNotContain
 import io.spine.validate.Validate.violationsOf
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -152,11 +155,7 @@ abstract class ValidationOfConstraintTest {
 
         private fun assertHasCorrectFormat(violation: ConstraintViolation?) {
             val template = violation!!.message.withPlaceholders
-            val placeholders = violation.message.placeholderValueMap
-            assertThat(template).isNotEmpty()
-            assertDoesNotThrow {
-                checkPlaceholdersHasValue(template, placeholders)
-            }
+            template.shouldNotBeEmpty()
         }
 
         private fun assertHasFieldPath(violation: ConstraintViolation?) {

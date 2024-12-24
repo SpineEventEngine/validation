@@ -98,7 +98,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-        violation.message.format() shouldContain "is invalid"
+        violation.message.formatUnsafe() shouldContain "is invalid"
         assertFieldPathIs(
             violation,
             ENCLOSED_FIELD_NAME
