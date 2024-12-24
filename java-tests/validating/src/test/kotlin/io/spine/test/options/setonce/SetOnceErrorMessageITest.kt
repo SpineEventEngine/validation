@@ -60,14 +60,14 @@ internal class SetOnceErrorMessageITest {
 
 private fun <T : Any> assertDefault(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentDefaultMessage.newBuilder()
-    val template = { _: Int -> DEFAULT_MESSAGE_FORMAT }
-    return builder.assertErrorMessage(fieldName, fieldType, template, value1, value2)
+    val template = { _: Int -> DEFAULT_MESSAGE }
+    return builder.assertErrorMessage(template, fieldName, fieldType, value1, value2)
 }
 
 private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1: T, value2: T) {
     val builder = StudentCustomMessage.newBuilder()
-    val template = ::customMessageFormat
-    return builder.assertErrorMessage(fieldName, fieldType, template, value1, value2)
+    val template = ::customErrorMessage
+    return builder.assertErrorMessage(template, fieldName, fieldType, value1, value2)
 }
 
 /**
@@ -79,15 +79,15 @@ private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1:
  * so we also have to take this into account during assertions because
  * in `ConstraintViolation` they still arrive as Java enum constants.
  *
+ * @param template The error message template to check.
  * @param fieldName The field to set.
  * @param value1 The first field value to set.
  * @param value2 The second field value to set for triggering the exception.
- * @param template The error message template to check.
  */
 private fun <T : Any> Builder.assertErrorMessage(
+    template: (Int) -> String,
     fieldName: String,
     fieldType: String,
-    template: (Int) -> String,
     value1: T,
     value2: T,
 ) {
@@ -127,10 +127,10 @@ private fun <T : Any> Builder.assertErrorMessage(
     }
 }
 
-private const val DEFAULT_MESSAGE_FORMAT =
+private const val DEFAULT_MESSAGE =
     "The field `\${parent.type}.\${field.name}` of the type `\${field.type}` already has " +
             "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
-private fun customMessageFormat(fieldNumber: Int) =
+private fun customErrorMessage(fieldNumber: Int) =
     "Field_$fieldNumber: " +
             "`\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."
