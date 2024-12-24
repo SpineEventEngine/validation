@@ -41,7 +41,7 @@ package io.spine.validate
  */
 public fun TemplateString.format(): String {
     checkPlaceholdersHasValue(withPlaceholders, placeholderValueMap) {
-        "Can not format the given `TemplateString`: `$withPlaceholders`." +
+        "Can not format the given `TemplateString`: `$withPlaceholders`. " +
                 "Missing value for the following placeholders: `$it`."
     }
     return formatUnsafe()
