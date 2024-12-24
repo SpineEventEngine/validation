@@ -44,6 +44,28 @@ public fun TemplateString.format(): String {
         "Can not format the given `TemplateString`: `$withPlaceholders`." +
                 "Missing value for the following placeholders: `$it`."
     }
+    return formatUnsafe()
+}
+
+/**
+ * Returns a template string with all placeholders substituted with
+ * their actual values, without validating that all placeholders have
+ * corresponding values.
+ *
+ * This method does not check whether every placeholder in the template has a matching value
+ * in the placeholder map. Any placeholders without a corresponding value will remain
+ * unchanged in the resulting string.
+ *
+ * For example, for a template string with the following values:
+ *
+ * ```
+ * withPlaceholders = "My dog's name is ${dog.name} and its breed is ${dog.breed}."
+ * placeholderValue = { "dog.name": "Fido" }
+ * ```
+ *
+ * This method will return "My dog's name is Fido and its breed is ${dog.breed}.".
+ */
+public fun TemplateString.formatUnsafe(): String {
     var result = withPlaceholders
     for ((key, value) in placeholderValueMap) {
         result = result.replace("\${$key}", value)

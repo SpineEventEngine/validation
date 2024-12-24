@@ -99,4 +99,13 @@ internal class TemplateStringExtsSpec {
             }
         }
     }
+
+    @Test
+    fun `format with missing placeholders`() {
+        val template = templateString {
+            withPlaceholders = "My dog's name is \${dog.name} and its breed is \${dog.breed}."
+            placeholderValue["dog.name"] = "Fido"
+        }
+        template.formatUnsafe() shouldBe "My dog's name is Fido and its breed is \${dog.breed}."
+    }
 }
