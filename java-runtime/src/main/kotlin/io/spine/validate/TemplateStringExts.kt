@@ -24,9 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.text
-
-import io.spine.validate.TemplateString
+package io.spine.validate
 
 /**
  * Returns a template string with all placeholders substituted with

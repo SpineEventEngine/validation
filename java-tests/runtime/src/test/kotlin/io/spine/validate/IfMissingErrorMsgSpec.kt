@@ -36,7 +36,6 @@ import io.spine.test.validate.CustomMessageRequiredMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredRepeatedMsgFieldValue
 import io.spine.test.validate.CustomMessageRequiredStringFieldValue
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import io.spine.validate.text.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

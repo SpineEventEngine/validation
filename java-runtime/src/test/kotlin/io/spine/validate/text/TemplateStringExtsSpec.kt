@@ -28,6 +28,7 @@ package io.spine.validate.text
 
 import io.kotest.matchers.shouldBe
 import io.spine.validate.TemplateString
+import io.spine.validate.format
 import io.spine.validate.templateString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

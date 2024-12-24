@@ -32,7 +32,6 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.spine.validate.Validate.violationsOf
-import io.spine.validate.text.format
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

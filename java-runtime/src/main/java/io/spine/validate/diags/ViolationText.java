@@ -36,7 +36,7 @@ import java.util.Collection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.string.Diags.backtick;
-import static io.spine.validate.text.TemplateStringExtsKt.format;
+import static io.spine.validate.TemplateStringExtsKt.format;
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.joining;
 

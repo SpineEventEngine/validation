@@ -37,7 +37,7 @@ import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
-import io.spine.validate.text.checkPlaceholdersHasValue
+import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.IF_SET_AGAIN
 
 /**
