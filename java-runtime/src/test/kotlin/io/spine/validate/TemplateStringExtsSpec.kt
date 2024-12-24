@@ -24,12 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.text
+package io.spine.validate
 
 import io.kotest.matchers.shouldBe
-import io.spine.validate.TemplateString
-import io.spine.validate.format
-import io.spine.validate.templateString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -52,7 +49,7 @@ internal class TemplateStringExtsSpec {
         }
 
         @Test
-        fun `returning an empty string if given empty template`() {
+        fun `returning an empty string if given an empty template`() {
             TemplateString.getDefaultInstance().format() shouldBe ""
         }
 
@@ -67,13 +64,38 @@ internal class TemplateStringExtsSpec {
         }
 
         @Test
-        fun `ignore when a placeholder with value is not used`() {
+        fun `ignore when a placeholder with a value is not used`() {
             assertDoesNotThrow {
                 val template = templateString {
                     withPlaceholders = "My dog's name is Fido."
                     placeholderValue["dog.name"] = "Fido"
                 }
                 template.format()
+            }
+        }
+    }
+
+    @Nested inner class
+    `validate the template against placeholders` {
+
+        private val message = { missingPlaceholders: List<String> -> "$missingPlaceholders" }
+        private val template = "\${val1}, \${val2}, \${val3}, \${val4}, \${val5}"
+        private val fooPlaceholders = mapOf("val1" to "Foo", "val2" to "Foo", "val3" to "Foo")
+        private val barPlaceholders = mapOf("val4" to "Bar", "val5" to "Bar")
+
+        @Test
+        fun `failing if the template has non-presentable placeholder`() {
+            val exception = assertThrows<IllegalArgumentException> {
+                checkPlaceholdersHasValue(template, fooPlaceholders, message)
+            }
+            exception.message shouldBe message(listOf("\${val4}", "\${val5}"))
+        }
+
+        @Test
+        fun `bypassing the template if all placeholders are present`() {
+            val placeholders = fooPlaceholders + barPlaceholders
+            assertDoesNotThrow {
+                checkPlaceholdersHasValue(template, placeholders, message)
             }
         }
     }
