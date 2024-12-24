@@ -33,6 +33,7 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
@@ -94,21 +95,18 @@ internal class SetOnceConstraintViolation(
                     "The supported placeholders: `${placeholders.keys}`. " +
                     "The declared field: `${qualifiedName}`."
         }
-
-        var message = ClassName(TemplateString::class).newBuilder()
+        val placeholderEntries = mapExpression(
+            ClassName(String::class), ClassName(String::class),
+            placeholders.mapKeys { StringLiteral(it.key) }
+        )
+        return ClassName(TemplateString::class).newBuilder()
             .chainSet("withPlaceholders", StringLiteral(errorTemplate))
-
-        // TODO:2024-12-23:yevhenii.nadtochii: Add a shortcut to ProtoData.
-        placeholders.forEach { (placeholder, value) ->
-            val key = StringLiteral(placeholder)
-            message = message.chain("putPlaceholderValue", listOf(key, value))
-        }
-
-        return message.chainBuild()
+            .chainPutAll("placeholderValue", placeholderEntries)
+            .chainBuild()
     }
 
     /**
-     * Determines the value for each of the supported placeholders.
+     * Determines the value for each of the supported `(set_once)` placeholders.
      */
     private fun supportedPlaceholders(
         currentValue: Expression<String>,
