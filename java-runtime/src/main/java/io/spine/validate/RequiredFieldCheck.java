@@ -72,8 +72,6 @@ final class RequiredFieldCheck {
                );
     }
 
-
-
     private boolean allPresent(Alternative alternative) {
         for (var declaration : alternative.fields()) {
             var fieldName = declaration.name().value();
