@@ -26,7 +26,6 @@
 
 package io.spine.validate
 
-import com.google.common.base.Preconditions
 import com.google.common.collect.Range
 import com.google.protobuf.Descriptors
 import com.google.protobuf.Message
@@ -37,9 +36,6 @@ import io.spine.code.proto.FieldName
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.ensureUnpacked
 import io.spine.type.MessageType
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
-import io.spine.validate.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validate.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.validate.MessageValue.atTopLevel
 import io.spine.validate.MessageValue.nestedIn
 import io.spine.validate.option.DistinctConstraint
@@ -63,11 +59,10 @@ import kotlin.streams.toList
  * The class uses [Optional] to keep its compatibility with the remaining Java code.
  */
 @Suppress("TooManyFunctions") // Covers almost all runtime validation.
-internal class MessageValidator private constructor(message: MessageValue) :
+internal class MessageValidator private constructor(private val validatedMessage: MessageValue) :
     ConstraintTranslator<Optional<ValidationError>> {
 
-    private val validatedMessage: MessageValue = Preconditions.checkNotNull(message)
-    private val violations: MutableList<ConstraintViolation> = ArrayList()
+    private val violations = mutableListOf<ConstraintViolation>()
 
     /**
      * Creates a new validator for the [top-level][MessageValue.atTopLevel] [message].
@@ -117,7 +112,12 @@ internal class MessageValidator private constructor(message: MessageValue) :
             }
             .map { value: Any ->
                 val violation = violation(constraint, fieldValue, value)
-                withRegex(violation, regex)
+                val withRegex = violation.message.toBuilder()
+                    .withRegex(regex)
+                    .build()
+                violation.copy {
+                    message = withRegex
+                }
             }
             .forEach { e: ConstraintViolation -> violations.add(e) }
     }
@@ -142,13 +142,12 @@ internal class MessageValidator private constructor(message: MessageValue) :
         val withField = declaration.get()
         if (!value.isDefault && fieldValueNotSet(withField)) {
             val violation = violation(constraint, value)
-            val template = violation.message.copy {
-                placeholderValue.put(FIELD_NAME.toString(), field.name().value())
-                placeholderValue.put(GOES_COMPANION.toString(), withFieldName)
-            }
+            val template = violation.message.toBuilder()
+                .withField(field)
+                .withCompanion(withField)
             violations.add(
                 violation.copy {
-                    message = template
+                    message = template.build()
                 }
             )
         }
@@ -287,15 +286,6 @@ private fun toFieldValue(violatingValue: Any): com.google.protobuf.Any =
     } else {
         toAny(violatingValue)
     }
-
-private fun withRegex(violation: ConstraintViolation, regex: String): ConstraintViolation {
-    val template = violation.message.copy {
-        placeholderValue.put(REGEX_PATTERN.toString(), regex)
-    }
-    return violation.copy {
-        message = template
-    }
-}
 
 private fun checkTypeConsistency(range: Range<ComparableNumber>, value: FieldValue) {
     if (range.hasLowerBound() && range.hasUpperBound()) {
