@@ -65,8 +65,34 @@ message ConstraintViolation {
     // The name of the validated message type.
     string type_name = 7;
 
-    // A path to the field in an invalid value.
-    base.FieldPath field_path = 3;
+    // A field that violates the validation constraint.
+    oneof field {
+
+        // The field path.
+        //
+        // This field can be populated if the nested field validation is used (`(validate)` option),
+        // and one of the the nested fields violates its constraint.
+        //
+        // Consider the following example:
+        //
+        // ```
+        // message Student {
+        //     Email email = 1 [(validate) = true];
+        // }
+        // message Email {
+        //     string value = 1 [(pattern).regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"];
+        // }
+        // ```
+        //
+        // If an invalid instance of `Email` is passed to `Student`, this `field_path` will contain
+        // `email.value`.
+        //
+        base.FieldPath field_path = 3;
+
+        // The field name.
+        //
+        string field_name = 9;
+    }
 
     // The value of the field which violates the validation constraint.
     //
