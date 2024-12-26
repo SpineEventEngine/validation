@@ -37,6 +37,12 @@ import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.ErrorPlaceholder
+import io.spine.validate.ErrorPlaceholder.FIELD_NAME
+import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.IF_SET_AGAIN
@@ -88,16 +94,16 @@ internal class SetOnceConstraintViolation(
 
     private fun templateString(
         template: String,
-        placeholders: Map<String, Expression<String>>
+        placeholders: Map<ErrorPlaceholder, Expression<String>>
     ): Expression<TemplateString> {
-        checkPlaceholdersHasValue(template, placeholders) {
-            "The `($IF_SET_AGAIN)` option doesn't support the following placeholders: `{$it}`. " +
+        checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
+            "The `($IF_SET_AGAIN)` option doesn't support the following placeholders: `$it`. " +
                     "The supported placeholders: `${placeholders.keys}`. " +
                     "The declared field: `${qualifiedName}`."
         }
         val placeholderEntries = mapExpression(
             ClassName(String::class), ClassName(String::class),
-            placeholders.mapKeys { StringLiteral(it.key) }
+            placeholders.mapKeys { StringLiteral(it.key.toString()) }
         )
         return ClassName(TemplateString::class).newBuilder()
             .chainSet("withPlaceholders", StringLiteral(errorTemplate))
@@ -112,10 +118,10 @@ internal class SetOnceConstraintViolation(
         currentValue: Expression<String>,
         newValue: Expression<String>
     ) = mapOf(
-        "field.name" to StringLiteral(fieldName),
-        "field.type" to StringLiteral(fieldType),
-        "field.value" to currentValue,
-        "field.proposed_value" to newValue,
-        "parent.type" to StringLiteral(declaringMessage)
+        FIELD_NAME to StringLiteral(fieldName),
+        FIELD_TYPE to StringLiteral(fieldType),
+        FIELD_VALUE to currentValue,
+        FIELD_PROPOSED_VALUE to newValue,
+        PARENT_TYPE to StringLiteral(declaringMessage)
     )
 }

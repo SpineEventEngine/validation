@@ -40,8 +40,9 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
  */
 final class RequiredFieldCheck {
 
+    private static final String RULE_VALUE = "rule";
     private static final String ERROR_MESSAGE =
-            "Message must have all the required fields set according to the rule: `${rule}`.";
+            "Message must have all the required fields set according to the rule: `${" + RULE_VALUE + "}`.";
 
     private final MessageValue message;
     private final ImmutableSet<Alternative> alternatives;
@@ -60,7 +61,7 @@ final class RequiredFieldCheck {
                 .anyMatch(this::allPresent);
         var message = TemplateString.newBuilder()
                 .setWithPlaceholders(ERROR_MESSAGE)
-                .putPlaceholderValue("rule", optionValue)
+                .putPlaceholderValue(RULE_VALUE, optionValue)
                 .build();
         return matches
                ? Optional.empty()

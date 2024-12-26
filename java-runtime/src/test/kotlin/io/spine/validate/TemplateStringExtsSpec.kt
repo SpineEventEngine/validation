@@ -88,7 +88,7 @@ internal class TemplateStringExtsSpec {
             val exception = assertThrows<IllegalArgumentException> {
                 checkPlaceholdersHasValue(template, fooPlaceholders, message)
             }
-            exception.message shouldBe message(listOf("\${val4}", "\${val5}"))
+            exception.message shouldBe message(listOf("val4", "val5"))
         }
 
         @Test

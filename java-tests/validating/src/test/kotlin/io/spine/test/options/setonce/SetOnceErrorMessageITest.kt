@@ -36,6 +36,7 @@ import io.spine.protobuf.field
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.test.tools.validate.YearOfStudy
+import io.spine.validate.ErrorPlaceholder.*
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
@@ -106,12 +107,12 @@ private fun <T : Any> Builder.assertErrorMessage(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            "field.name" to fieldName,
-            "field.type" to fieldType,
-            "field.value" to "$value1",
-            "field.proposed_value" to "$value2",
-            "parent.type" to parentType
-        )
+            FIELD_NAME to fieldName,
+            FIELD_TYPE to fieldType,
+            FIELD_VALUE to "$value1",
+            FIELD_PROPOSED_VALUE to "$value2",
+            PARENT_TYPE to parentType
+        ).mapKeys { it.key.toString() }
 
         fieldPath shouldBe FieldPath(fieldName)
         typeName shouldBe parentType

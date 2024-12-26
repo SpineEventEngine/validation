@@ -60,6 +60,9 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.protobuf.Messages.ensureUnpacked;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.validate.ErrorPlaceholder.FIELD_NAME;
+import static io.spine.validate.ErrorPlaceholder.GOES_COMPANION;
+import static io.spine.validate.ErrorPlaceholder.REGEX_PATTERN;
 import static io.spine.validate.MessageValue.atTopLevel;
 import static io.spine.validate.MessageValue.nestedIn;
 import static java.util.stream.Collectors.toList;
@@ -141,7 +144,7 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
 
     private static ConstraintViolation withRegex(ConstraintViolation violation, String regex) {
         var template = violation.getMessage().toBuilder()
-                .putPlaceholderValue("regex.pattern", regex);
+                .putPlaceholderValue(REGEX_PATTERN.toString(), regex);
         return violation.toBuilder()
                 .setMessage(template)
                 .build();
@@ -187,8 +190,8 @@ final class MessageValidator implements ConstraintTranslator<Optional<Validation
             var violation = violation(constraint, value);
             var template = violation.getMessage()
                     .toBuilder()
-                    .putPlaceholderValue("field.name", field.name().value())
-                    .putPlaceholderValue("goes.companion", withFieldName)
+                    .putPlaceholderValue(FIELD_NAME.toString(), field.name().value())
+                    .putPlaceholderValue(GOES_COMPANION.toString(), withFieldName)
                     .build();
             violations.add(
                     violation.toBuilder()
