@@ -33,6 +33,6 @@ import io.spine.validate.templateString
  * Creates a new [TemplateString] with the given [value], which doesn't
  * contain placeholders.
  */
-internal fun withoutPlaceholders(value: String): TemplateString = templateString {
+internal fun plainString(value: String): TemplateString = templateString {
     withPlaceholders = value
 }

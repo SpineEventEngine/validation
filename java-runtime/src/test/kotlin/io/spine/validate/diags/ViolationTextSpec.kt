@@ -32,7 +32,7 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.base.Field
 import io.spine.type.TypeName
 import io.spine.validate.constraintViolation
-import io.spine.validate.given.withoutPlaceholders
+import io.spine.validate.given.plainString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -62,8 +62,8 @@ internal class ViolationTextSpec {
 
     @Test
     fun `compile tests for many violations into one`() {
-        val first = constraintViolation { message = withoutPlaceholders("Errored with a message") }
-        val second = constraintViolation { message = withoutPlaceholders("Messaged with an error") }
+        val first = constraintViolation { message = plainString("Errored with a message") }
+        val second = constraintViolation { message = plainString("Messaged with an error") }
         val text = ViolationText.ofAll(listOf(first, second))
 
         text shouldContain ViolationText.of(first).toString()
