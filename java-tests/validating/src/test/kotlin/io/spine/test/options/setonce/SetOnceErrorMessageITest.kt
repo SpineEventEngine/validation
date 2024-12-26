@@ -36,7 +36,11 @@ import io.spine.protobuf.field
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.test.tools.validate.YearOfStudy
-import io.spine.validate.ErrorPlaceholder.*
+import io.spine.validate.ErrorPlaceholder.FIELD_NAME
+import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
