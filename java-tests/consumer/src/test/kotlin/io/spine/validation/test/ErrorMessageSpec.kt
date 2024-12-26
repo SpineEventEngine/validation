@@ -48,6 +48,7 @@ internal class ErrorMessageSpec {
         error.constraintViolationList.size shouldBe 1
         val violation = error.getConstraintViolation(0)
         val message = violation.message.format()
-        message shouldBe "Expected less than 100 Cents per one Dollar, but got 101."
+        message shouldBe "Expected `cents` field to have less than `100` per one unit in " +
+                "`dollars` field, but got `101`."
     }
 }

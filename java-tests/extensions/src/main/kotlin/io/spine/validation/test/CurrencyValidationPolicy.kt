@@ -72,12 +72,10 @@ public class CurrencyValidationPolicy : Policy<TypeExited>() {
 
     private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule =
         simpleRule {
-            errorMessage = "Expected less than {other} ${minorUnits.prettyName()} per one " +
-                    "${majorUnits.prettyName()}, but got {value}."
+            errorMessage = "Expected `${minorUnits.name.value}` field to have less than `{other}`" +
+                    " per one unit in `${majorUnits.name.value}` field, but got `{value}`."
             field = minorUnits.name
             operator = LESS_THAN
             this.otherValue = otherValue
         }
 }
-
-private fun Field.prettyName() = name.value.replaceFirstChar { it.uppercase() }
