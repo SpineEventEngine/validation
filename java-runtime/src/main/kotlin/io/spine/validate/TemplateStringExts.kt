@@ -37,11 +37,11 @@ package io.spine.validate
  * placeholder_value = { "dog.name": "Fido" }
  * ```
  *
- * This method will return "My dog's name is Fido".
+ * This method will return "My dog's name is Fido."
  */
 public fun TemplateString.format(): String {
     checkPlaceholdersHasValue(withPlaceholders, placeholderValueMap) {
-        "Can not format the given `TemplateString`: `$withPlaceholders`. " +
+        "Cannot format the given `TemplateString`: `$withPlaceholders`. " +
                 "Missing value for the following placeholders: `$it`."
     }
     return formatUnsafe()
