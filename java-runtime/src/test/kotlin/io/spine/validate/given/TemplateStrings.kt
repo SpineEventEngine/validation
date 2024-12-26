@@ -30,7 +30,7 @@ import io.spine.validate.TemplateString
 import io.spine.validate.templateString
 
 /**
- * Creates a new [TemplateString] with the given [value], which doesn't
+ * Creates a new [TemplateString] with the given [value], which does not
  * contain placeholders.
  */
 internal fun plainString(value: String): TemplateString = templateString {
