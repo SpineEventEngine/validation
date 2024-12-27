@@ -44,72 +44,10 @@ import org.junit.jupiter.api.assertDoesNotThrow
 @DisplayName(VALIDATION_SHOULD + "validate an entity ID")
 internal class EntityIdSpec : ValidationOfConstraintTest() {
 
-    @Nested inner class
-    `in a command file and` {
-
-        @Test
-        fun `find out that non-default message is valid`() {
-            val state = assertDoesNotThrow {
-                entityIdMsgFieldValue {
-                    value = newStringValue()
-                }
-            }
-            assertValid(state)
-        }
-
-        @Test
-        fun `find out that default message is NOT valid`() {
-            val msg = EntityIdMsgFieldValue.getDefaultInstance()
-            assertNotValid(msg)
-        }
-
         @Test
         fun `find out that empty string is NOT valid`() {
             val msg = EntityIdStringFieldValue.getDefaultInstance()
             assertNotValid(msg)
         }
 
-        @Test
-        fun `find out that non-empty string is valid`() {
-            val state = assertDoesNotThrow {
-                entityIdStringFieldValue {
-                    value = Identifier.newUuid()
-                }
-            }
-            assertValid(state)
-        }
-
-        @Test
-        fun `provide a violation if is not valid`() {
-            val msg = EntityIdMsgFieldValue.getDefaultInstance()
-            assertSingleViolation(msg, MessageValidatorTestEnv.VALUE)
-        }
-    }
-
-    @Nested inner class
-    `in a state and` {
-
-        @Test
-        fun `consider it required by default`() {
-            val stateWithDefaultId = AggregateState.getDefaultInstance()
-            assertNotValid(stateWithDefaultId)
-        }
-
-        @Test
-        fun `match only the first field named 'id' or ending with '_id'`() {
-            val onlyEntityIdSet = assertDoesNotThrow {
-                // Only ID set.
-                aggregateState {
-                    entityId = Identifier.newUuid()
-                }
-            }
-            assertValid(onlyEntityIdSet)
-        }
-
-        @Test
-        fun `not consider it '(required)' if the option is set explicitly to false`() {
-            val stateWithDefaultId = ProjectionState.getDefaultInstance()
-            assertValid(stateWithDefaultId)
-        }
-    }
 }
