@@ -70,8 +70,8 @@ message ConstraintViolation {
 
         // The field path.
         //
-        // This field can be populated if the nested field validation is used (`(validate)` option),
-        // and one of the the nested fields violates its constraint.
+        // This field is populated when this violation is nested in another constraint violation.
+        // In-depth validation of fields is performed when the `(validate)` option is applied.
         //
         // Consider the following example:
         //
@@ -84,12 +84,21 @@ message ConstraintViolation {
         // }
         // ```
         //
-        // If an invalid instance of `Email` is passed to `Student`, this `field_path` will contain
-        // `email.value`.
+        // In this case, each time `Student` message is built, its nested `email` message is
+        // also fully validated according to its own constraints. If an invalid `Email` instance
+        // is passed to `Student`, two constraint violations will be created:
+        //
+        // 1. The parental violation, which has `field_name` set to `email`, and no `field_path`.
+        //    The error message indicates an invalid field, but without any specifics.
+        // 2. The nested violation (see `violation` field), which has `field_name` set to `value`
+        //    AND `field_path` set to `email.value`. The error message will contain more details
+        //    about what exactly gone wrong.
         //
         base.FieldPath field_path = 3;
 
         // The field name.
+        //
+        // Represents a simple name of the field that violates the validation constraint.
         //
         string field_name = 9;
     }
