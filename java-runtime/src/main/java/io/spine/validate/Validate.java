@@ -297,7 +297,7 @@ public final class Validate {
                 .build();
         var violation = ConstraintViolation.newBuilder()
                 .setMessage(message)
-                .setFieldPath(declaration.name().asPath())
+                .setFieldName(declaration.name().value())
                 .setTypeName(declaration.declaringType().name().value())
                 .build();
         return violation;

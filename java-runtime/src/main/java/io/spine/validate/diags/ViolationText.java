@@ -28,13 +28,13 @@ package io.spine.validate.diags;
 
 import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
-import io.spine.base.Field;
 import io.spine.option.OptionsProto;
 import io.spine.validate.ConstraintViolation;
 
 import java.util.Collection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.base.FieldPaths.getJoined;
 import static io.spine.string.Diags.backtick;
 import static io.spine.validate.TemplateStringExtsKt.format;
 import static java.lang.System.lineSeparator;
@@ -86,14 +86,12 @@ public final class ViolationText {
 
     private StringBuilder buildMessage() {
         var typeName = violation.getTypeName();
-        var path = violation.getFieldPath();
-        var fieldPath = path.getFieldNameCount() == 0
-                ? ""
-                : Field.withPath(path).toString();
+        var field = violation.hasFieldName() ? violation.getFieldName()
+                                             : getJoined(violation.getFieldPath());
         var formattedMessage = format(violation.getMessage());
         var result = new StringBuilder();
         appendPrefix(result, typeName);
-        appendPrefix(result, fieldPath);
+        appendPrefix(result, field);
         result.append(formattedMessage);
         return result;
     }

@@ -29,7 +29,6 @@ package io.spine.validate
 import com.google.common.collect.Range
 import com.google.protobuf.Descriptors
 import com.google.protobuf.Message
-import io.spine.base.Field.named
 import io.spine.code.proto.FieldContext
 import io.spine.code.proto.FieldDeclaration
 import io.spine.code.proto.FieldName
@@ -185,12 +184,11 @@ internal class MessageValidator private constructor(private val validatedMessage
         val noneSet = fieldValue.isEmpty
         if (noneSet) {
             val oneofName = constraint.oneofName()
-            val oneofField = named(oneofName.value())
             val targetType = constraint.targetType()
             violations.add(
                 constraintViolation {
                     message = constraint.errorMessage(validatedMessage.context())
-                    fieldPath = oneofField.path()
+                    fieldName = oneofName.value
                     typeName = targetType.name().value
                 }
             )
@@ -266,8 +264,12 @@ private fun violation(
     val typeName = constraint.targetType().name()
     val violation = ConstraintViolation.newBuilder()
         .setMessage(constraint.errorMessage(context))
-        .setFieldPath(fieldPath)
         .setTypeName(typeName.value())
+    if (fieldPath.fieldNameCount == 1) {
+        violation.setFieldName(fieldPath.getFieldName(0))
+    } else {
+        violation.setFieldPath(fieldPath)
+    }
     if (violatingValue != null) {
         violation.setFieldValue(toFieldValue(violatingValue))
     }

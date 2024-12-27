@@ -59,18 +59,26 @@ final class RequiredFieldCheck {
     Optional<ConstraintViolation> perform() {
         var matches = alternatives.stream()
                 .anyMatch(this::allPresent);
+        if (matches) {
+            return Optional.empty();
+        }
+
         var message = TemplateString.newBuilder()
                 .setWithPlaceholders(ERROR_MESSAGE)
                 .putPlaceholderValue(RULE_VALUE, optionValue)
                 .build();
-        return matches
-               ? Optional.empty()
-               : Optional.of(ConstraintViolation.newBuilder()
-                                     .setMessage(message)
-                                     .setFieldPath(fieldPath())
-                                     .setTypeName(typeName())
-                                     .build()
-               );
+        var fieldPath = fieldPath();
+        var violation = ConstraintViolation.newBuilder()
+                .setMessage(message)
+                .setTypeName(typeName());
+
+        if (fieldPath.getFieldNameCount() == 1) {
+            violation.setFieldName(fieldPath.getFieldName(0));
+        } else {
+            violation.setFieldPath(fieldPath);
+        }
+
+        return Optional.of(violation.build());
     }
 
     private boolean allPresent(Alternative alternative) {
