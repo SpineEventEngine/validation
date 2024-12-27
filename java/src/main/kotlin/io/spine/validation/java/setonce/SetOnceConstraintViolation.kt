@@ -26,7 +26,6 @@
 
 package io.spine.validation.java.setonce
 
-import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -80,13 +79,10 @@ internal class SetOnceConstraintViolation(
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(currentValue, newValue)
         val message = templateString(errorTemplate, placeholders)
-        val fieldPath = ClassName(FieldPath::class).newBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
-            .chainBuild<FieldPath>()
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("message", message)
             .chainSet("type_name", StringLiteral(declaringMessage))
-            .chainSet("field_path", fieldPath)
+            .chainSet("field_name", StringLiteral(fieldName))
             .chainSet("field_value", payload.packToAny())
             .chainBuild<ConstraintViolation>()
         return violation
