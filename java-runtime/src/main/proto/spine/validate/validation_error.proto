@@ -88,11 +88,12 @@ message ConstraintViolation {
         // also fully validated according to its own constraints. If an invalid `Email` instance
         // is passed to `Student`, two constraint violations will be created:
         //
-        // 1. The parental violation, which has `field_name` set to `email`, and no `field_path`.
-        //    The error message indicates an invalid field, but without any specifics.
-        // 2. The nested violation (see `violation` field), which has `field_name` set to `value`
-        //    AND `field_path` set to `email.value`. The error message will contain more details
-        //    about what exactly gone wrong.
+        // 1. The parental violation, which has `field_name` set to `email`. The error message
+        //    indicates an invalid field, but without any specifics.
+        // 2. The nested violation which has `field_path` set to `email.value`. The error message
+        //    contains more details about what exactly gone wrong.
+        //
+        // The nested violation will be in `violation` list of the parental one.
         //
         base.FieldPath field_path = 3;
 
