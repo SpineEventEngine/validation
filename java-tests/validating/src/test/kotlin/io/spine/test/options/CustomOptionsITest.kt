@@ -30,7 +30,6 @@ import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import com.google.protobuf.ByteString
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
-import io.spine.base.fieldPath
 import io.spine.test.tools.validate.ByteMatrix
 import io.spine.tools.validate.rule.BytesAllRequiredFactory
 import io.spine.validate.constraintViolation
@@ -61,7 +60,7 @@ internal class CustomOptionsITest {
         error.shouldBePresent()
 
         val violations = error.get().constraintViolationList
-        val expected = constraintViolation { fieldPath = fieldPath { fieldName.add("value") } }
+        val expected = constraintViolation { fieldName = "value" }
         assertThat(violations)
             .comparingExpectedFieldsOnly()
             .containsExactly(expected)
