@@ -48,6 +48,8 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
+import static io.spine.validate.ErrorPlaceholder.FIELD_NAME;
+import static io.spine.validate.ErrorPlaceholder.PARENT_TYPE;
 import static io.spine.validate.WorkaroundKt.requiresRuntimeValidation;
 import static java.lang.String.format;
 
@@ -56,6 +58,10 @@ import static java.lang.String.format;
  */
 public final class Validate {
 
+    private static final String SET_ONCE_ERROR_MESSAGE =
+            "Attempted to change the value of the field " +
+                    "`${" + PARENT_TYPE + "}.${" + FIELD_NAME + "}` which has " +
+                    "`(set_once) = true` and already has a non-default value.";
     private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
@@ -284,11 +290,13 @@ public final class Validate {
     private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {
         var declaringTypeName = declaration.declaringType().name().value();
         var fieldName = declaration.name().value();
+        var message = TemplateString.newBuilder()
+                .setWithPlaceholders(SET_ONCE_ERROR_MESSAGE)
+                .putPlaceholderValue(PARENT_TYPE.toString(), declaringTypeName)
+                .putPlaceholderValue(FIELD_NAME.toString(), fieldName)
+                .build();
         var violation = ConstraintViolation.newBuilder()
-                .setMsgFormat("Attempted to change the value of the field `%s.%s` which has " +
-                                      "`(set_once) = true` and is already set.")
-                .addParam(declaringTypeName)
-                .addParam(fieldName)
+                .setMessage(message)
                 .setFieldPath(declaration.name().asPath())
                 .setTypeName(declaration.declaringType().name().value())
                 .build();

@@ -29,6 +29,7 @@ package io.spine.validate
 import io.kotest.matchers.shouldBe
 import io.spine.base.Errors
 import io.spine.protobuf.unpackGuessingType
+import io.spine.validate.given.plainString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -40,7 +41,7 @@ internal class ValidationExceptionSpec {
         val violations = listOf(
                 constraintViolation {
                     typeName = "example.org/example.Type"
-                    msgFormat = "Test error"
+                    message = plainString("Test error")
                 }
             )
         val exception = ValidationException(violations)

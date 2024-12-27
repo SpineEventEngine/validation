@@ -34,6 +34,7 @@ import io.spine.testing.TestValues.randomString
 import io.spine.validate.ValidationException
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
+import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -50,10 +51,11 @@ internal class IsRequiredSpec : ValidationOfConstraintTest() {
         }
         val violation = exception.constraintViolations[0]
 
-        // We here check the value of the `msgFormat`, and not the `fieldPath` because
+        // We here check the value of the `message`, and not the `fieldPath` because
         // `oneof` is not a field. As such, it does not have a `fieldPath`, and is not
         // added to validation constraint by the code generation.
-        violation.msgFormat shouldBe "One of the fields in the `choice` group must be set."
+        val message = violation.message.format()
+        message shouldBe "One of the fields in the `choice` group must be set."
     }
 
     @Test

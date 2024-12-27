@@ -28,6 +28,7 @@ package io.spine.validation.test
 
 import io.kotest.matchers.shouldBe
 import io.spine.validate.ValidationException
+import io.spine.validate.format
 import io.spine.validation.test.money.Usd
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -46,6 +47,8 @@ internal class ErrorMessageSpec {
         val error = exception.asMessage()
         error.constraintViolationList.size shouldBe 1
         val violation = error.getConstraintViolation(0)
-        violation.msgFormat shouldBe "Expected less than 100 Cents per one Dollars, but got 101."
+        val message = violation.message.format()
+        message shouldBe "Expected `cents` field to have less than `100` per one unit in " +
+                "`dollars` field, but got `101`."
     }
 }

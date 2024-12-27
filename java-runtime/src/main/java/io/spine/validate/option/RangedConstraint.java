@@ -91,7 +91,7 @@ public abstract class RangedConstraint<@ImmutableTypeParameter T> extends FieldC
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
+    public String formattedErrorMessage(FieldContext field) {
         return compileErrorMessage(range);
     }
 

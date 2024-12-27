@@ -126,7 +126,7 @@ private class MaxLengthConstraint(
     field: FieldContext
 ) : FieldConstraint<Int>(optionValue, field.targetDeclaration()), CustomConstraint {
 
-    override fun errorMessage(field: FieldContext): String {
+    override fun formattedErrorMessage(field: FieldContext): String {
         return "Value of `${field.targetDeclaration()}` must not be longer than `${optionValue()}`."
     }
 
@@ -137,7 +137,7 @@ private class MaxLengthConstraint(
         val violation = constraintViolation {
             fieldPath = context.fieldPath()
             typeName = containingMessage.declaration().name().value()
-            msgFormat = errorMessage(context)
+            message = errorMessage(context)
         }
         return value.nonDefault()
             .filter { it.toString().length > maxLength }

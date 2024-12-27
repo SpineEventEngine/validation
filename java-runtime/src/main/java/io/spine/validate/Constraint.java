@@ -44,6 +44,24 @@ public interface Constraint {
     MessageType targetType();
 
     /**
+     * Produces an error message template for the given field validation context.
+     *
+     * <p>Please note, the full support of {@link TemplateString} is not implemented yet
+     * for the runtime validation. This method was created to keep compatibility with
+     * the updated {@link ConstraintViolation} structure, which now expects a template string
+     * for error messages. The inheritors are not supposed to use or override this method.
+     *
+     * @param field
+     *         the validated field
+     */
+    default TemplateString errorMessage(FieldContext field) {
+        var formatted = formattedErrorMessage(field);
+        return TemplateString.newBuilder()
+                .setWithPlaceholders(formatted)
+                .build();
+    }
+
+    /**
      * Produces an error message for the given field validation context.
      *
      * <p>Implementations may choose to ignore the field context or to embed its parts into
@@ -52,7 +70,7 @@ public interface Constraint {
      * @param field
      *         the validated field
      */
-    String errorMessage(FieldContext field);
+    String formattedErrorMessage(FieldContext field);
 
     /**
      * Accepts the given {@link ConstraintTranslator}.

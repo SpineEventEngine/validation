@@ -43,7 +43,9 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
+import org.apache.velocity.Template
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -118,8 +120,11 @@ private fun ErrorMessage.buildViolation(
     childViolations: Expression<MutableList<ConstraintViolation>>? = null,
     ignoreCardinality: Boolean = false
 ): Expression<ConstraintViolation> {
-    var violationBuilder = ClassName(ConstraintViolation::class.java).newBuilder()
-        .chainSet("msg_format", Literal(this))
+    val message = ClassName(TemplateString::class).newBuilder()
+        .chainSet("withPlaceholders", Literal(this))
+        .chainBuild<TemplateString>()
+    var violationBuilder = ClassName(ConstraintViolation::class).newBuilder()
+        .chainSet("message", message)
         .chainSet("type_name", StringLiteral(type.typeUrl))
     if (field != null) {
         violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))

@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,33 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.option;
+package io.spine.validate.given
 
-import io.spine.code.proto.FieldContext;
-import io.spine.code.proto.FieldDeclaration;
-import io.spine.validate.ConstraintTranslator;
-import io.spine.validate.diags.ViolationText;
+import io.spine.validate.TemplateString
+import io.spine.validate.templateString
 
 /**
- * A constraint that, when applied to a message field, signifies that the message should have valid
- * properties.
+ * Creates a new [TemplateString] with the given [value], which does not
+ * contain placeholders.
  */
-public final class ValidateConstraint extends FieldConstraint<Boolean> {
-
-    ValidateConstraint(Boolean optionValue, FieldDeclaration field) {
-        super(optionValue, field);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    public String formattedErrorMessage(FieldContext field) {
-        var option = new IfInvalid();
-        var ifInvalid = option.valueOrDefault(field.target());
-        return ViolationText.errorMessage(ifInvalid, ifInvalid.getMsgFormat());
-    }
-
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitValidate(this);
-    }
+internal fun plainString(value: String): TemplateString = templateString {
+    withPlaceholders = value
 }

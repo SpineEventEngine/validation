@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,33 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.option;
-
-import io.spine.code.proto.FieldContext;
-import io.spine.code.proto.FieldDeclaration;
-import io.spine.validate.ConstraintTranslator;
-import io.spine.validate.diags.ViolationText;
+package io.spine.validate
 
 /**
- * A constraint that, when applied to a message field, signifies that the message should have valid
- * properties.
+ * A template placeholder that can be used in error messages.
+ *
+ * Enumerates placeholder names that can be used within Protobuf definitions.
+ * Each validation option declares the supported placeholders within `options.proto`.
+ *
+ * @see TemplateString
  */
-public final class ValidateConstraint extends FieldConstraint<Boolean> {
+public enum class ErrorPlaceholder(public val value: String) {
 
-    ValidateConstraint(Boolean optionValue, FieldDeclaration field) {
-        super(optionValue, field);
-    }
+    // Common placeholders.
+    FIELD_NAME("field.name"),
+    FIELD_VALUE("field.value"),
+    FIELD_TYPE("field.type"),
+    PARENT_TYPE("parent.type"),
 
-    @Override
-    @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
-    public String formattedErrorMessage(FieldContext field) {
-        var option = new IfInvalid();
-        var ifInvalid = option.valueOrDefault(field.target());
-        return ViolationText.errorMessage(ifInvalid, ifInvalid.getMsgFormat());
-    }
+    // Option-specific placeholders.
+    REGEX_PATTERN("regex.pattern"),
+    GOES_COMPANION("goes.companion"),
+    FIELD_PROPOSED_VALUE("field.proposed_value");
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitValidate(this);
-    }
+    override fun toString(): String = value
 }

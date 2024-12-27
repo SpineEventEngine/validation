@@ -31,6 +31,7 @@ import com.google.protobuf.Message
 import io.spine.testing.TestValues.randomString
 import io.spine.validate.NonValidated
 import io.spine.validate.Validate.violationsOf
+import io.spine.validate.format
 import io.spine.validation.java.given.Fish
 import io.spine.validation.java.given.Meal
 import io.spine.validation.java.given.Sauce
@@ -50,7 +51,7 @@ internal class IsRequiredSpec {
         val violations = violationsOf(message)
         assertThat(violations)
             .hasSize(1)
-        assertThat(violations[0]!!.msgFormat)
+        assertThat(violations[0]!!.message.format())
             .contains("choice")
     }
 

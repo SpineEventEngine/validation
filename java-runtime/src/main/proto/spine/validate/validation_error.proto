@@ -36,6 +36,7 @@ option java_package = "io.spine.validate";
 
 import "google/protobuf/any.proto";
 
+import "spine/validate/error_message.proto";
 import "spine/base/field_path.proto";
 
 // An error indicating that a message did not pass validation.
@@ -53,10 +54,13 @@ message ConstraintViolation {
     //
     // Contains `%s` format specifiers if the violation has one or more parameters.
     //
-    string msg_format = 1;
+    string msg_format = 1 [deprecated = true];
 
     // Parameters referenced by the format specifiers in the message format string.
-    repeated string param = 2;
+    repeated string param = 2 [deprecated = true];
+
+    // An error message for this violation.
+    spine.validate.TemplateString message = 8;
 
     // The name of the validated message type.
     string type_name = 7;

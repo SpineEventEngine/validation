@@ -31,8 +31,10 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotBeEmpty
+import io.kotest.matchers.string.shouldNotContain
 import io.spine.validate.Validate.violationsOf
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
@@ -62,20 +64,9 @@ abstract class ValidationOfConstraintTest {
     }
 
     /**
-     * Asserts that calling the `build()` method of the passed builder throws `ValidationException`.
-     */
-    protected fun assertDoesNotBuild(builder: Message.Builder) {
-        assertThrows<ValidationException> {
-            builder.build()
-        }
-    }
-
-    /**
      * Asserts that the creation of the message fails when the [setup] function is invoked.
      *
      * The most common use case is when the message is created via a Kotlin DSL block.
-     *
-     * @see assertDoesNotBuild
      */
     protected fun assertDoesNotBuild(setup: () -> Message) {
         assertThrows<ValidationException> {
@@ -132,9 +123,7 @@ abstract class ValidationOfConstraintTest {
     /** Checks that a message is not valid and has a single violation.  */
     protected fun assertSingleViolation(expectedErrMsg: String, invalidFieldName: String) {
         val violation = firstViolation()
-        val actualErrorMessage = String.format(
-            violation.msgFormat, *violation.paramList.toTypedArray()
-        )
+        val actualErrorMessage = violation.message.format()
         actualErrorMessage shouldBe expectedErrMsg
         assertFieldPathIs(violation, invalidFieldName)
         violation.violationList.shouldBeEmpty()
@@ -165,16 +154,8 @@ abstract class ValidationOfConstraintTest {
         }
 
         private fun assertHasCorrectFormat(violation: ConstraintViolation?) {
-            val format = violation!!.msgFormat
-            Assertions.assertFalse(format.isEmpty())
-            val noParams = violation.paramList.isEmpty()
-            if (noParams) {
-                assertThat(format)
-                    .doesNotContain("%s")
-            } else {
-                assertThat(format)
-                    .contains("%s")
-            }
+            val template = violation!!.message.withPlaceholders
+            template.shouldNotBeEmpty()
         }
 
         private fun assertHasFieldPath(violation: ConstraintViolation?) {

@@ -84,24 +84,24 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             }
         }
 
-    private fun javaConstraints(field: Field, errorMessage: String): SetOnceJavaConstraints<*> =
+    private fun javaConstraints(field: Field, errorTemplate: String): SetOnceJavaConstraints<*> =
         when {
-            field.type.isMessage -> SetOnceMessageField(field, typeSystem, errorMessage)
-            field.type.isEnum -> SetOnceEnumField(field, typeSystem, errorMessage)
-            field.type.isPrimitive -> javaConstraints(field, field.type.primitive, errorMessage)
+            field.type.isMessage -> SetOnceMessageField(field, typeSystem, errorTemplate)
+            field.type.isEnum -> SetOnceEnumField(field, typeSystem, errorTemplate)
+            field.type.isPrimitive -> javaConstraints(field, field.type.primitive, errorTemplate)
             else -> throwUnsupportedType(field)
         }
 
     private fun javaConstraints(
         field: Field,
         type: PrimitiveType,
-        errorMessage: String
+        errorTemplate: String
     ): SetOnceJavaConstraints<*> =
         when (type) {
-            TYPE_STRING -> SetOnceStringField(field, typeSystem, errorMessage)
-            TYPE_BOOL -> SetOnceBooleanField(field, typeSystem, errorMessage)
-            TYPE_BYTES -> SetOnceBytesField(field, typeSystem, errorMessage)
-            in SupportedNumbers -> SetOnceNumberField(field, typeSystem, errorMessage)
+            TYPE_STRING -> SetOnceStringField(field, typeSystem, errorTemplate)
+            TYPE_BOOL -> SetOnceBooleanField(field, typeSystem, errorTemplate)
+            TYPE_BYTES -> SetOnceBytesField(field, typeSystem, errorTemplate)
+            in SupportedNumbers -> SetOnceNumberField(field, typeSystem, errorTemplate)
             else -> throwUnsupportedType(field)
         }
 

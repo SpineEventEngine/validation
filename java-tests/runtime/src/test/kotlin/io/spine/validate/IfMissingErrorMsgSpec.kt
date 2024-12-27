@@ -80,7 +80,8 @@ internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
 
         private fun checkErrorMessage(expectedMessage: String) {
             val constraintViolation = firstViolation()
-            constraintViolation.msgFormat shouldBe expectedMessage
+            val message = constraintViolation.message.format()
+            message shouldBe expectedMessage
         }
     }
 
@@ -122,8 +123,8 @@ internal class IfMissingErrorMsgSpec : ValidationOfConstraintTest() {
                 builder.build()
             }
             val violation = exception.constraintViolations.first()
-            violation.msgFormat shouldBe customErrorMessageFrom(
-                defaultInstance.descriptorForType)
+            val message = violation.message.format()
+            message shouldBe customErrorMessageFrom(defaultInstance.descriptorForType)
         }
     }
 }

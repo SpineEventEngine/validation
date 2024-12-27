@@ -54,7 +54,7 @@ public final class IsRequiredConstraint implements Constraint {
     }
 
     @Override
-    public String errorMessage(FieldContext field) {
+    public String formattedErrorMessage(FieldContext field) {
         return format("One of fields in group `%s` must be set.", declaration.name());
     }
 
