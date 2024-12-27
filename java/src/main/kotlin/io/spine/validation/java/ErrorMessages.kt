@@ -29,7 +29,6 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
-import io.spine.base.FieldPath
 import io.spine.protobuf.CollectionsConverter
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
@@ -45,7 +44,6 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
-import org.apache.velocity.Template
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -127,7 +125,8 @@ private fun ErrorMessage.buildViolation(
         .chainSet("message", message)
         .chainSet("type_name", StringLiteral(type.typeUrl))
     if (field != null) {
-        violationBuilder = violationBuilder.chainSet("field_path", pathOf(field))
+        val fieldName = StringLiteral(field.name.value)
+        violationBuilder = violationBuilder.chainSet("field_name", fieldName)
     }
     if (fieldValue != null) {
         checkNotNull(field) { "The field value (`$fieldValue`) is set without the field." }
@@ -144,8 +143,3 @@ private fun ErrorMessage.buildViolation(
     }
     return violationBuilder.chainBuild()
 }
-
-private fun pathOf(field: Field): Expression<FieldPath> =
-    ClassName(FieldPath::class.java).newBuilder()
-        .chainAdd("field_name", StringLiteral(field.name.value))
-        .chainBuild()
