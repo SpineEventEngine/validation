@@ -26,6 +26,13 @@
 
 package io.spine.validate
 
+import io.spine.code.proto.FieldDeclaration
+import io.spine.validate.ErrorPlaceholder.FIELD_NAME
+import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validate.ErrorPlaceholder.REGEX_PATTERN
+
 /**
  * Returns a template string with all placeholders substituted with
  * their actual values.
@@ -37,11 +44,11 @@ package io.spine.validate
  * placeholder_value = { "dog.name": "Fido" }
  * ```
  *
- * This method will return "My dog's name is Fido".
+ * This method will return "My dog's name is Fido."
  */
 public fun TemplateString.format(): String {
     checkPlaceholdersHasValue(withPlaceholders, placeholderValueMap) {
-        "Can not format the given `TemplateString`: `$withPlaceholders`. " +
+        "Cannot format the given `TemplateString`: `$withPlaceholders`. " +
                 "Missing value for the following placeholders: `$it`."
     }
     return formatUnsafe()
@@ -114,6 +121,32 @@ public fun checkPlaceholdersHasValue(
     lazyMessage: (List<String>) -> String =
         { "Missing value for the following template placeholders: `$it`." }
 ): Unit = checkPlaceholdersHasValue(template, placeholders.keys, lazyMessage)
+
+/**
+ * Fills in the fields-related placeholders from the given [field] declaration.
+ *
+ * This method sets the values for the following placeholders:
+ *
+ * 1. [FIELD_NAME].
+ * 2. [FIELD_TYPE].
+ * 3. [PARENT_TYPE].
+ */
+public fun TemplateString.Builder.withField(field: FieldDeclaration): TemplateString.Builder =
+    putPlaceholderValue(FIELD_NAME.value, field.name().value)
+        .putPlaceholderValue(FIELD_TYPE.value, field.javaTypeName())
+        .putPlaceholderValue(PARENT_TYPE.value, field.declaringType().name().value)
+
+/**
+ * Fills in the value for [GOES_COMPANION] placeholder.
+ */
+public fun TemplateString.Builder.withCompanion(field: FieldDeclaration): TemplateString.Builder =
+    putPlaceholderValue(GOES_COMPANION.value, field.name().value)
+
+/**
+ * Fills in the value for [REGEX_PATTERN] placeholder.
+ */
+public fun TemplateString.Builder.withRegex(regex: String): TemplateString.Builder =
+    putPlaceholderValue(REGEX_PATTERN.value, regex)
 
 /**
  * Extracts all placeholders used within this [template] string.
