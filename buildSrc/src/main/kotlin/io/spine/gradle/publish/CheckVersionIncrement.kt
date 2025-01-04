@@ -108,7 +108,7 @@ open class CheckVersionIncrement : DefaultTask() {
      */
     private fun Project.artifactPrefix(): String {
         val ext = rootProject.extensions.findByType(SpinePublishing::class.java)
-        val result = ext?.artifactPrefix ?: "spine-"
+        val result = ext?.artifactPrefix ?: SpinePublishing.DEFAULT_PREFIX
         return result
     }
 }
