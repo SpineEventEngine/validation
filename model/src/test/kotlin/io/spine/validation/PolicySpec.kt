@@ -51,6 +51,7 @@ import io.spine.protodata.ast.typeName
 import io.spine.protodata.backend.CodeGenerationContext
 import io.spine.protodata.backend.Pipeline
 import io.spine.protodata.plugin.applyTo
+import io.spine.protodata.protobuf.ProtoFileList
 import io.spine.protodata.type.TypeSystem
 import io.spine.testing.server.blackbox.BlackBox
 import io.spine.validation.ComparisonOperator.GREATER_OR_EQUAL
@@ -82,7 +83,10 @@ class PolicySpec {
 
     @BeforeEach
     fun prepareBlackBox() {
-        val typeSystem = TypeSystem(emptySet())
+        val typeSystem = TypeSystem(
+            ProtoFileList(emptyList()),
+            emptySet()
+        )
         val plugin = ValidationPlugin()
         codegenContext = CodeGenerationContext(Pipeline.generateId(), typeSystem) {
             // Mimic what a `Pipeline` does to its plugins.
