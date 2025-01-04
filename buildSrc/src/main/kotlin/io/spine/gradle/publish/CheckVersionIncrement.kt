@@ -70,7 +70,8 @@ open class CheckVersionIncrement : DefaultTask() {
         val versions = metadata?.versioning?.versions
         val versionExists = versions?.contains(version) ?: false
         if (versionExists) {
-            throw GradleException("""
+            throw GradleException(
+                """
                     Version `$version` is already published to maven repository `$repoUrl`.
                     Try incrementing the library version.
                     All available versions are: ${versions?.joinToString(separator = ", ")}. 
@@ -88,12 +89,27 @@ open class CheckVersionIncrement : DefaultTask() {
 
     private fun Project.artifactPath(): String {
         val group = this.group as String
-        val name = "spine-${this.name}"
+        val name = "${artifactPrefix()}${this.name}"
 
         val pathElements = ArrayList(group.split('.'))
         pathElements.add(name)
         val path = pathElements.joinToString(separator = "/")
         return path
+    }
+
+    /**
+     * Returns the artifact prefix used for the publishing of this project.
+     *
+     * All current Spine modules should be using `SpinePublishing`.
+     * Therefore, the corresponding extension should be present in the root project.
+     * However, just in case, we define the "standard" prefix here as well.
+     *
+     * This value MUST be the same as defined by the defaults in `SpinePublishing`.
+     */
+    private fun Project.artifactPrefix(): String {
+        val ext = rootProject.extensions.findByType(SpinePublishing::class.java)
+        val result = ext?.artifactPrefix ?: "spine-"
+        return result
     }
 }
 
