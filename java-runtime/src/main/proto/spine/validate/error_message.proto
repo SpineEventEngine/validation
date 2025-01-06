@@ -58,7 +58,7 @@ message TemplateString {
     // A map that provides values for each placeholder referenced in `with_placeholders`.
     //
     // The keys in this map should match the placeholder keys inside `with_placeholders` without
-    // the `${}` prefix.
+    // the `${}` placeholder delimiter.
     //
     // All placeholders present in `with_placeholders` must have corresponding entries in this map,
     // otherwise the template is considered invalid.
