@@ -49,7 +49,7 @@ internal class RequiredRuleITest {
         val builder = Book.newBuilder()
         assertValidationException(builder).also {
             it.message.formatUnsafe() shouldContain "must have a value"
-            it.fieldName shouldBe "author"
+            it.fieldPath.getFieldName(0) shouldBe "author"
         }
     }
 

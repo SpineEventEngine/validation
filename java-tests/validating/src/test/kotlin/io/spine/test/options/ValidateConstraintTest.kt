@@ -68,13 +68,13 @@ internal class ValidateConstraintTest {
         // See https://github.com/SpineEventEngine/validation/issues/148
         violations.size shouldBe 1
 
-        val receiverViolation = violations.first()
-        receiverViolation.fieldName shouldBe "address"
+        val receiverViolation = violations[0]
+        receiverViolation!!.fieldPath.getFieldName(0) shouldBe "address"
 
         val nestedViolations = receiverViolation.violationList
         nestedViolations.size shouldBe 2
-        nestedViolations[0].fieldName shouldBe "first_line"
-        nestedViolations[1].fieldName shouldBe "town"
+        nestedViolations[0].fieldPath.getFieldName(0) shouldBe "first_line"
+        nestedViolations[1].fieldPath.getFieldName(0) shouldBe "town"
     }
 
     @Test
@@ -108,7 +108,7 @@ internal class ValidateConstraintTest {
 
         for (violation in violations) {
             violation.violationList.size shouldBe 1
-            violation.fieldName shouldBe "contact"
+            violation.fieldPath.getFieldName(0) shouldBe "contact"
         }
     }
 

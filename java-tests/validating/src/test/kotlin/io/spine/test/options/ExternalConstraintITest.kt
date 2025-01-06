@@ -53,7 +53,7 @@ internal class ExternalConstraintITest {
         val violations = error.get().constraintViolationList
 
         violations.size shouldBe 2
-        violations[0].fieldName shouldBe "contact"
+        violations[0].fieldPath.fieldNameList[0] shouldBe "contact"
     }
 
     @Test
@@ -71,7 +71,7 @@ internal class ExternalConstraintITest {
         val violations = error.get().constraintViolationList
 
         violations.size shouldBe 1
-        violations[0].fieldName shouldBe "shipping_address"
+        violations[0].fieldPath.fieldNameList[0] shouldBe "shipping_address"
     }
 
     @Test

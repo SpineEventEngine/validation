@@ -27,12 +27,13 @@
 package io.spine.validation.java
 
 import com.google.common.truth.Truth8.assertThat
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
+import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
+import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
+import io.spine.validate.constraintViolation
 import io.spine.validation.java.given.ProtoSet
 import java.util.*
 import org.junit.jupiter.api.DisplayName
@@ -50,9 +51,13 @@ internal class DistinctConstraintSpec {
         assertThat(error)
             .isPresent()
 
+        val expected = constraintViolation {
+            fieldPath { fieldName.add("element") }
+        }
         val violations = error.get().constraintViolationList
-        violations shouldHaveSize 1
-        violations[0].fieldName shouldBe "element"
+        assertThat(violations)
+            .comparingExpectedFieldsOnly()
+            .containsExactly(expected)
     }
 
     @Test

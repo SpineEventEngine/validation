@@ -71,7 +71,7 @@ fun assertInvalid(builder: Message.Builder): List<ConstraintViolation> {
 
 private val fieldName: Correspondence<ConstraintViolation, String> =
     Correspondence.transforming(
-        { it.fieldName },
+        { it.fieldPath.getFieldName(0) },
         "field name"
     )
 
@@ -97,7 +97,7 @@ fun assertViolation(
  * Obtains a violation for the field with the given name.
  */
 fun List<ConstraintViolation>.atField(fieldName: String): ConstraintViolation {
-    return find { it.fieldName == fieldName }
+    return find { it.fieldPath.fieldNameList[0] == fieldName }
         ?: fail("Cannot find a violation for the field `$fieldName`. Violations: `$this`.")
 }
 

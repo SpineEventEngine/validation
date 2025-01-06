@@ -30,6 +30,7 @@ import com.google.common.truth.Truth8.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.optional.shouldBePresent
+import io.spine.base.FieldPath
 import io.spine.base.Identifier
 import io.spine.base.Time.currentTime
 import io.spine.type.TypeName
@@ -64,7 +65,10 @@ internal class GoesConstraintSpec {
             .isEqualTo(
                 ConstraintViolation.newBuilder()
                     .setTypeName(TypeName.of(paper).toUrl().value())
-                    .setFieldName("when_archived")
+                    .setFieldPath(
+                        FieldPath.newBuilder()
+                            .addFieldName("when_archived")
+                    )
                     .build()
             )
     }

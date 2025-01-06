@@ -73,7 +73,7 @@ internal class PatternRuleITest {
             .setAuthor(validAuthor())
             .setContent("something else")
         val violation = assertValidationException(msg)
-        violation.fieldName shouldBe "content"
+        violation.fieldPath.getFieldName(0) shouldBe "content"
     }
 
     @Test

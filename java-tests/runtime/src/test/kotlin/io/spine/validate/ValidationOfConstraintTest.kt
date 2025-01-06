@@ -31,7 +31,9 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotBeEmpty
+import io.kotest.matchers.string.shouldNotContain
 import io.spine.validate.Validate.violationsOf
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -94,17 +96,17 @@ abstract class ValidationOfConstraintTest {
         assertIsValid(false)
     }
 
-    protected fun assertNotValid(msg: Message, checkFieldName: Boolean) {
+    protected fun assertNotValid(msg: Message, checkFieldPath: Boolean) {
         validate(msg)
-        assertIsValid(false, checkFieldName)
+        assertIsValid(false, checkFieldPath)
     }
 
     @JvmOverloads
-    protected fun assertIsValid(isValid: Boolean, checkFieldName: Boolean = true) {
+    protected fun assertIsValid(isValid: Boolean, checkFieldPath: Boolean = true) {
         if (isValid) {
             assertThat(violations).isEmpty()
         } else {
-            assertViolations(violations, checkFieldName)
+            assertViolations(violations, checkFieldPath)
         }
     }
 
@@ -123,14 +125,14 @@ abstract class ValidationOfConstraintTest {
         val violation = firstViolation()
         val actualErrorMessage = violation.message.format()
         actualErrorMessage shouldBe expectedErrMsg
-        violation.fieldName shouldBe invalidFieldName
+        assertFieldPathIs(violation, invalidFieldName)
         violation.violationList.shouldBeEmpty()
     }
 
     protected fun assertSingleViolation(message: Message, invalidFieldName: String) {
         assertNotValid(message)
         assertThat(violations).hasSize(1)
-        firstViolation().fieldName shouldBe invalidFieldName
+        assertFieldPathIs(firstViolation(), invalidFieldName)
     }
 
     companion object {
@@ -138,25 +140,27 @@ abstract class ValidationOfConstraintTest {
         const val VALIDATION_SHOULD: String = "Validation should "
 
         private fun assertViolations(
-            violations: List<ConstraintViolation>?,
-            checkFieldName: Boolean
+            violations: List<ConstraintViolation?>?,
+            checkFieldPath: Boolean
         ) {
             assertThat(violations)
                 .isNotEmpty()
             for (violation in violations!!) {
                 assertHasCorrectFormat(violation)
-                if (checkFieldName) {
-                    if (violation.fieldName.isEmpty()) {
-                        println(violation)
-                    }
-                    violation.fieldName.shouldNotBeEmpty()
+                if (checkFieldPath) {
+                    assertHasFieldPath(violation)
                 }
             }
         }
 
-        private fun assertHasCorrectFormat(violation: ConstraintViolation) {
-            val template = violation.message.withPlaceholders
+        private fun assertHasCorrectFormat(violation: ConstraintViolation?) {
+            val template = violation!!.message.withPlaceholders
             template.shouldNotBeEmpty()
+        }
+
+        private fun assertHasFieldPath(violation: ConstraintViolation?) {
+            assertThat(violation!!.fieldPath.fieldNameList)
+                .isNotEmpty()
         }
     }
 }

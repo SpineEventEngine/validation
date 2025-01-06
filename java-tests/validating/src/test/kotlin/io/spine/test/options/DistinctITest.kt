@@ -29,6 +29,7 @@ package io.spine.test.options
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.test.tools.validate.ProtoSet
 import io.spine.test.tools.validate.protoSet
@@ -53,7 +54,7 @@ internal class DistinctITest {
 
         val violations = error.get().constraintViolationList
         val expected = constraintViolation {
-            fieldName = "element"
+            fieldPath = fieldPath { fieldName.add("element") }
         }
 
         assertThat(violations)
