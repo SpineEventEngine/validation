@@ -30,12 +30,17 @@ import com.google.protobuf.Descriptors.GenericDescriptor
 import io.spine.option.OptionsProto
 import io.spine.protodata.ast.filePattern
 import io.spine.protodata.backend.DescriptorFilter
+import io.spine.protodata.params.WorkingDirectory
 import io.spine.protodata.plugin.Plugin
-import io.spine.protodata.settings.Format
+import io.spine.protodata.util.Format
 import io.spine.protodata.settings.SettingsDirectory
 import io.spine.protodata.settings.defaultConsumerId
 import io.spine.protodata.testing.PipelineSetup
 import io.spine.protodata.testing.PipelineSetup.Companion.byResources
+import io.spine.protodata.testing.pipelineParams
+import io.spine.protodata.testing.withRequestFile
+import io.spine.protodata.testing.withSettingsDir
+import io.spine.tools.code.SourceSetName
 import java.nio.file.Path
 
 /**
@@ -44,14 +49,28 @@ import java.nio.file.Path
  */
 class ValidationTestFixture(
     descriptor: GenericDescriptor,
-    outputDir: Path,
-    settingsDir: Path,
+    workingDir: Path,
     plugin: Plugin = ValidationPlugin()
 ) {
-    val setup: PipelineSetup =
-        byResources(listOf(plugin), outputDir, settingsDir, acceptingOnly(descriptor)) {
+    val setup: PipelineSetup
+
+    init {
+        val wd = WorkingDirectory(workingDir)
+        val outputDir = workingDir.resolve("output")
+        outputDir.toFile().mkdirs()
+        val params = pipelineParams {
+            withRequestFile(wd.requestDirectory.file(SourceSetName("testFixtures")))
+            withSettingsDir(wd.settingsDirectory.path)
+        }
+        setup = byResources(
+            params,
+            listOf(plugin),
+            outputDir,
+            acceptingOnly(descriptor)) {
             writeSettings(it)
         }
+    }
+
 
     private fun acceptingOnly(descriptor: GenericDescriptor): DescriptorFilter =
         { it.fullName == descriptor.fullName }

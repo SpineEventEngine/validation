@@ -137,6 +137,14 @@ fun Project.spinePublishing(block: SpinePublishing.() -> Unit) {
  */
 open class SpinePublishing(private val project: Project) {
 
+    companion object {
+
+        /**
+         * The default prefix added before a module name when publishing artifacts.
+         */
+        const val DEFAULT_PREFIX = "spine-"
+    }
+
     private val protoJar = ProtoJar()
     private val testJar = TestJar()
     private val dokkaJar = DokkaJar()

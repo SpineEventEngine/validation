@@ -26,9 +26,7 @@
 
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
-import io.spine.protodata.gradle.plugin.CreateSettingsDirectory
 import io.spine.protodata.gradle.plugin.LaunchProtoData
-import io.spine.util.theOnly
 
 protoData {
     plugins(
@@ -39,14 +37,11 @@ protoData {
     )
 }
 
-val settingsDirTask: CreateSettingsDirectory = tasks.withType<CreateSettingsDirectory>().theOnly()
-
 val copySettings by tasks.registering(Copy::class) {
     from(project.layout.projectDirectory.file(
         "io.spine.validation.java.JavaValidationPlugin.pb.json")
     )
-    into(settingsDirTask.settingsDir.get())
-    dependsOn(settingsDirTask)
+    into(project.layout.buildDirectory.dir("protodata/settings"))
 }
 
 tasks.withType<LaunchProtoData>().configureEach {

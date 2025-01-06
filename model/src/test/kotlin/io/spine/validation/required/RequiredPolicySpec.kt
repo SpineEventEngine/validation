@@ -46,9 +46,9 @@ import org.junit.jupiter.api.io.TempDir
 internal class RequiredPolicySpec {
 
     @Test
-    fun `reject option on a boolean field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
+    fun `reject option on a boolean field`(@TempDir workingDir: Path) {
         val message = WithBoolField.getDescriptor()
-        val error = compile(message, outputDir, settingsDir)
+        val error = compile(message, workingDir)
 
         val field = message.field("really")
         val expected = fieldDoesNotSupportRequired(field)
@@ -56,9 +56,9 @@ internal class RequiredPolicySpec {
     }
 
     @Test
-    fun `reject option on an integer field`(@TempDir outputDir: Path, @TempDir settingsDir: Path) {
+    fun `reject option on an integer field`(@TempDir workingDir: Path) {
         val message = WithIntField.getDescriptor()
-        val error = compile(message, outputDir, settingsDir)
+        val error = compile(message, workingDir)
 
         val field = message.field("zero")
         val expected = fieldDoesNotSupportRequired(field)
@@ -66,12 +66,9 @@ internal class RequiredPolicySpec {
     }
 
     @Test
-    fun `reject option on a signed integer field`(
-        @TempDir outputDir: Path,
-        @TempDir settingsDir: Path
-    ) {
+    fun `reject option on a signed integer field`(@TempDir workingDir: Path) {
         val message = WithSignedInt.getDescriptor()
-        val error = compile(message, outputDir, settingsDir)
+        val error = compile(message, workingDir)
 
         val field = message.field("signed")
         val expected = fieldDoesNotSupportRequired(field)
@@ -79,12 +76,9 @@ internal class RequiredPolicySpec {
     }
 
     @Test
-    fun `reject option on a double field`(
-        @TempDir outputDir: Path,
-        @TempDir settingsDir: Path
-    ) {
+    fun `reject option on a double field`(@TempDir workingDir: Path) {
         val message = WithDoubleField.getDescriptor()
-        val error = compile(message, outputDir, settingsDir)
+        val error = compile(message, workingDir)
 
         val field = message.field("temperature")
         val expected = fieldDoesNotSupportRequired(field)
@@ -96,10 +90,9 @@ internal class RequiredPolicySpec {
      */
     private fun compile(
         descriptor: Descriptor,
-        outputDir: Path,
-        settingsDir: Path
+        workingDir: Path
     ): Compilation.Error {
-        val fixture = ValidationTestFixture(descriptor, outputDir, settingsDir)
+        val fixture = ValidationTestFixture(descriptor, workingDir)
         val pipeline = fixture.setup.createPipeline()
         val error = assertThrows<Compilation.Error> {
             // Redirect console output so that we don't print errors during the build.
