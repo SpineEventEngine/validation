@@ -66,9 +66,9 @@ message ConstraintViolation {
 
     // A path to the field containing an invalid value.
     //
-    // When the `(validate)` option is applied and a nested field contains an invalid value,
-    // this property holds the path leading to the invalid field. If there is no nesting,
-    // the path consists only of the field name.
+    // If the `(validate)` option is applied and a nested field contains an invalid value,
+    // this property holds the path to the invalid field. If there is no nesting, the path
+    // consists only of the field name.
     //
     // Example:
     //
@@ -84,7 +84,7 @@ message ConstraintViolation {
     // }
     // ```
     //
-    // If the `Student` message is validated and the `value` field in the nested `Email` message
+    // When the `Student` message is validated and the `value` field in the nested `Email` message
     // is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
     // However, if the `Email` message is validated independently (not as part of `Student`),
     // the path will consist only of the field name: `value`.
