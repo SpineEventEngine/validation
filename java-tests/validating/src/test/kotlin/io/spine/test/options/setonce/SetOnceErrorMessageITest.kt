@@ -30,6 +30,7 @@ import com.google.protobuf.Descriptors.EnumValueDescriptor
 import com.google.protobuf.Message.Builder
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
 import io.spine.test.tools.validate.StudentCustomMessage
@@ -117,7 +118,7 @@ private fun <T : Any> Builder.assertErrorMessage(
             PARENT_TYPE to parentType
         ).mapKeys { it.key.toString() }
 
-        fieldName shouldBe fieldName
+        fieldPath shouldBe FieldPath(fieldName)
         typeName shouldBe parentType
 
         // Enums are a bit special. See the method docs for details.
