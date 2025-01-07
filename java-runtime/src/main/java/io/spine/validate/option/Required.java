@@ -29,6 +29,8 @@ package io.spine.validate.option;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
+import io.spine.base.CommandMessage;
+import io.spine.base.EntityState;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.logging.WithLogging;
@@ -101,6 +103,18 @@ public class Required extends FieldValidatingOption<Boolean> implements WithLogg
     void checkUsage(FieldDeclaration field) {
         var type = field.javaType();
         if (!CAN_BE_REQUIRED.contains(type) && field.isNotCollection()) {
+            var isTheFirstField = field.descriptor().getIndex() == 0;
+            if (isTheFirstField) {
+                // The first field declared in a message type could be assumed as required
+                // because by convention it is an ID field of the message.
+                // If so, do not log the warning message for this field because ID fields
+                // could be of any reasonable type.
+                var messageClass = field.messageType().javaClass();
+                if (CommandMessage.class.isAssignableFrom(messageClass)
+                        || EntityState.class.isAssignableFrom(messageClass)) {
+                    return;
+                }
+            }
             var typeName = field.descriptor().getType().name();
             logger().atWarning().log(() -> format(
                     "The field `%s.%s` has the type %s and" +
