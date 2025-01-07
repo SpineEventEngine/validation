@@ -48,20 +48,23 @@ option java_package = "io.spine.validate";
 // After substitution, the final output would be:
 //     "My dog's name is Fido."
 //
-// Each placeholder `key` should have a corresponding entry in `placeholder_value`.
+// Each placeholder `key` referenced in the template string must have a corresponding entry
+// in the `placeholder_value` map. However, the `placeholder_value` map is not restricted to
+// containing only the placeholders used in the template. Additional entries in the map
+// that do not correspond to placeholders in the template string are permitted.
 //
 message TemplateString {
 
     // The template string that may contain one or more placeholders.
     string with_placeholders = 1;
 
-    // A map that provides values for each placeholder referenced in `with_placeholders`.
+    // A map that provides values for placeholders referenced in `with_placeholders`.
     //
-    // The keys in this map should match the placeholder keys inside `with_placeholders` without
-    // the `${}` prefix.
+    // The keys in this map should match the placeholder keys inside `with_placeholders`
+    // excluding the `${}` placeholder markers.
     //
-    // All placeholders present in `with_placeholders` must have corresponding entries in this map,
-    // otherwise the template is considered invalid.
+    // All placeholders present in `with_placeholders` must have corresponding entries
+    // in this map. Otherwise, the template is considered invalid.
     //
     map<string, string> placeholder_value = 2;
 }

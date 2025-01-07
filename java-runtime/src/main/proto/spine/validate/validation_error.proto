@@ -47,7 +47,6 @@ message ValidationError {
 }
 
 // Describes violation of a validation constraint found in a field of a message.
-//
 message ConstraintViolation {
 
     // An error message format string for this constraint violation.
@@ -65,7 +64,31 @@ message ConstraintViolation {
     // The name of the validated message type.
     string type_name = 7;
 
-    // A path to the field in an invalid value.
+    // A path to the field containing an invalid value.
+    //
+    // If the `(validate)` option is applied and a nested field contains an invalid value,
+    // this property holds the path to the invalid field. If there is no nesting, the path
+    // consists only of the field name.
+    //
+    // Example:
+    //
+    // ```
+    // message Student {
+    //     Contacts contacts = 1 [(validate) = true];
+    // }
+    // message Contacts {
+    //     Email email = 1 [(validate) = true];
+    // }
+    // message Email {
+    //     string value = 1 [(pattern).regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"];
+    // }
+    // ```
+    //
+    // When the `Student` message is validated and the `value` field in the nested `Email` message
+    // is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+    // However, if the `Email` message is validated independently (not as part of `Student`),
+    // the path will consist only of the field name: `value`.
+    //
     base.FieldPath field_path = 3;
 
     // The value of the field which violates the validation constraint.
