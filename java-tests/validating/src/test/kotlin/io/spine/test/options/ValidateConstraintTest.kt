@@ -63,24 +63,19 @@ internal class ValidateConstraintTest {
 
         val violations = error.get().constraintViolationList
 
-        // We should have 2 violations instead of 1.
+        // We should have 3 violations instead of 1.
         // But we do not handle the `(required_field)` option.
         // See https://github.com/SpineEventEngine/validation/issues/148
-        violations.size shouldBe 1
+        violations.size shouldBe 2
 
-        val receiverViolation = violations[0]
-        receiverViolation!!.fieldPath.getFieldName(0) shouldBe "address"
-
-        val nestedViolations = receiverViolation.violationList
-        nestedViolations.size shouldBe 2
-        nestedViolations[0].fieldPath.getFieldName(0) shouldBe "first_line"
-        nestedViolations[1].fieldPath.getFieldName(0) shouldBe "town"
+        violations[0].fieldPath.getFieldName(0) shouldBe "first_line"
+        violations[1].fieldPath.getFieldName(0) shouldBe "town"
     }
 
     @Test
     fun `repeated message fields are validated and violations are stored separately`() {
         val name = PersonName.newBuilder().setGivenName("Eve")
-        val invalidNumbers = arrayOf(
+        val invalidNumbers = listOf(
             PhoneNumber.getDefaultInstance(),
             PhoneNumber.newBuilder().setDigits("not a number").buildPartial(),
             PhoneNumber.newBuilder().setDigits("definitely not a number").buildPartial()
@@ -94,9 +89,7 @@ internal class ValidateConstraintTest {
         val msg = DeliveryReceiver.newBuilder()
             .setName(name)
             .setAddress(address)
-            .addContact(invalidNumbers[0])
-            .addContact(invalidNumbers[1])
-            .addContact(invalidNumbers[2])
+            .addAllContact(invalidNumbers)
             .buildPartial()
 
         val error = msg.validate()
@@ -107,8 +100,7 @@ internal class ValidateConstraintTest {
         violations.size shouldBe 2
 
         for (violation in violations) {
-            violation.violationList.size shouldBe 1
-            violation.fieldPath.getFieldName(0) shouldBe "contact"
+            violation.fieldPath.getFieldName(0) shouldBe "digits"
         }
     }
 

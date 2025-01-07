@@ -28,12 +28,9 @@ package io.spine.validate
 
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotBeEmpty
-import io.kotest.matchers.string.shouldNotContain
 import io.spine.validate.Validate.violationsOf
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -126,7 +123,6 @@ abstract class ValidationOfConstraintTest {
         val actualErrorMessage = violation.message.format()
         actualErrorMessage shouldBe expectedErrMsg
         assertFieldPathIs(violation, invalidFieldName)
-        violation.violationList.shouldBeEmpty()
     }
 
     protected fun assertSingleViolation(message: Message, invalidFieldName: String) {

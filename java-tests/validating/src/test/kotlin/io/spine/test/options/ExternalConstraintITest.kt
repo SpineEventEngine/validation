@@ -71,7 +71,7 @@ internal class ExternalConstraintITest {
         val violations = error.get().constraintViolationList
 
         violations.size shouldBe 1
-        violations[0].fieldPath.fieldNameList[0] shouldBe "shipping_address"
+        violations[0].fieldPath.fieldNameList[0] shouldBe "first_line"
     }
 
     @Test

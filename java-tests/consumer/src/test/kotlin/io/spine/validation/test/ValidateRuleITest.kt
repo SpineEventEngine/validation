@@ -28,7 +28,6 @@ package io.spine.validation.test
 
 import com.google.protobuf.Any
 import com.google.protobuf.Message
-import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.protobuf.pack
@@ -54,7 +53,7 @@ internal class ValidateRuleITest {
         fun `prohibit non-valid field values`() {
             val builder = meteoStatsInEurope()
                 .setAverageDrop(invalidRainDrop())
-            checkInvalid(builder)
+            checkInvalid(builder, "Bad rain drop!")
         }
     }
 
@@ -75,7 +74,7 @@ internal class ValidateRuleITest {
             val builder = meteoStatsInEurope()
                 .setAverageDrop(validRainDrop())
                 .setLastEvent(invalidCloud().pack())
-            checkInvalid(builder)
+            checkInvalid(builder, "Bad cloud!")
         }
 
         @Test
@@ -103,7 +102,7 @@ internal class ValidateRuleITest {
         fun `reject an invalid item`() {
             val builder = Rain.newBuilder()
                 .addRainDrop(invalidRainDrop())
-            checkInvalid(builder, "Bad rain drop")
+            checkInvalid(builder, "Bad rain drop!")
         }
     }
 
@@ -129,7 +128,7 @@ internal class ValidateRuleITest {
                 .setAverageDrop(validRainDrop())
                 .addPredictedEvent(packedValid)
                 .addPredictedEvent(packedInvalid)
-            checkInvalid(builder)
+            checkInvalid(builder, "Bad cloud!")
         }
 
         @Test
@@ -146,15 +145,10 @@ internal class ValidateRuleITest {
     }
 }
 
-private fun checkInvalid(
-    builder: Message.Builder,
-    errorPart: String = "is invalid"
-) {
+private fun checkInvalid(builder: Message.Builder, errorPart: String) =
     assertValidationException(builder).run {
         message.formatUnsafe() shouldContain errorPart
-        violationList shouldHaveSize 1
     }
-}
 
 private fun meteoStatsInEurope(): MeteoStatistics.Builder =
     MeteoStatistics.newBuilder()

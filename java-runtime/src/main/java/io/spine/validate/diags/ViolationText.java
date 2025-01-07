@@ -75,27 +75,17 @@ public final class ViolationText {
 
     @Override
     public String toString() {
-        var builder = buildMessage();
-        for (var violation : this.violation.getViolationList()) {
-            builder.append(lineSeparator());
-            var nested = of(violation);
-            builder.append(nested);
-        }
-        return builder.toString();
-    }
-
-    private StringBuilder buildMessage() {
         var typeName = violation.getTypeName();
         var path = violation.getFieldPath();
         var fieldPath = path.getFieldNameCount() == 0
-                ? ""
-                : Field.withPath(path).toString();
+                        ? ""
+                        : Field.withPath(path).toString();
         var formattedMessage = format(violation.getMessage());
         var result = new StringBuilder();
         appendPrefix(result, typeName);
         appendPrefix(result, fieldPath);
         result.append(formattedMessage);
-        return result;
+        return result.toString();
     }
 
     private static void appendPrefix(StringBuilder target, String prefix) {

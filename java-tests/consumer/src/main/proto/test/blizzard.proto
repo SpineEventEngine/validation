@@ -13,8 +13,8 @@ import "google/protobuf/any.proto";
 import "spine/validation/test/weather.proto";
 
 message Snowflake {
-    int32 edges = 1 [(min).value = "3"];
-    int32 vertices = 2 [(min).value = "3"];
+    int32 edges = 1 [(min) = { value: "3", error_msg: "Bad snow flake!" }];
+    int32 vertices = 2 [(min) = { value: "3", error_msg: "Bad snow flake!" }];
 }
 
 message Blizzard {
@@ -24,16 +24,12 @@ message Blizzard {
 
 message RainDrop {
 
-    int32 mass_in_grams = 1 [(min) = { value: "1", exclusive: false}];
+    int32 mass_in_grams = 1 [(min) = { value: "1" error_msg: "Bad rain drop!" }];
 }
 
 message Rain {
 
-    repeated RainDrop rain_drop = 1 [
-        (required) = true,
-        (validate) = true,
-        (if_invalid).error_msg = "Bad rain drop!"
-    ];
+    repeated RainDrop rain_drop = 1 [(required) = true, (validate) = true];
 }
 
 message Region {

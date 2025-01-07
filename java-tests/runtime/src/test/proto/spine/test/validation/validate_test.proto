@@ -50,17 +50,8 @@ message NotValidateEnclosed {
     PatternStringFieldValue enclosed = 1;
 }
 
-message ValidateWithCustomMessage {
-    PatternStringFieldValue enclosed = 1 [
-        (validate) = true,
-        (if_invalid).error_msg = "Custom error"
-    ];
-}
-
 message NotValidateWithCustomMessage {
-    PatternStringFieldValue enclosed = 1 [
-        (if_invalid).error_msg = "Custom error is redundant in this case"
-    ];
+    PatternStringFieldValue enclosed = 1;
 }
 
 message ValidateWithRequiredString {
