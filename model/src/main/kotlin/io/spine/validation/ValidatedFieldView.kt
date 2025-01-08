@@ -29,16 +29,14 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfInvalidOption
-import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 
 /**
- * A view of a field that is marked with `validate`.
+ * A view of a field that is marked with `(validate)`.
  */
 internal class ValidatedFieldView :
-    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(IfInvalidOption.getDescriptor()) {
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
 
     @Subscribe
     override fun onConstraint(
@@ -58,9 +56,11 @@ internal class ValidatedFieldView :
         @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
     ) = super.onErrorMessage(e)
 
-    override fun extractErrorMessage(option: Option): String {
-        val value = option.value.unpack<IfInvalidOption>()
-        val errorMessage = value.errorMsg
-        return errorMessage
-    }
+    override fun extractErrorMessage(option: Option): String = NO_ERROR_MESSAGE
 }
+
+/**
+ * `(validate)` does not have its own error message because it never
+ * creates violations on its own.
+ */
+private const val NO_ERROR_MESSAGE = ""

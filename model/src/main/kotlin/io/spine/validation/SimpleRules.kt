@@ -49,11 +49,7 @@ public fun SimpleRule(
     errorMessage: String,
     distribute: Boolean
 ): SimpleRule {
-    require(description.isNotEmpty())
-    require(errorMessage.isNotEmpty())
     require(description.isNotBlank())
-    require(errorMessage.isNotBlank())
-
     val operator = customOperator {
         this.description = description
         feature = customFeature.pack()
