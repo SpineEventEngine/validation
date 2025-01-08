@@ -109,7 +109,7 @@ public class Required extends FieldValidatingOption<Boolean> implements WithLogg
                 // because by convention it is an ID field of the message.
                 // If so, do not log the warning message for this field because ID fields
                 // could be of any reasonable type.
-                var messageClass = field.messageType().javaClass();
+                var messageClass = field.declaringType().javaClass();
                 if (CommandMessage.class.isAssignableFrom(messageClass)
                         || EntityState.class.isAssignableFrom(messageClass)) {
                     return;
