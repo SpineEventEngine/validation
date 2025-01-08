@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,9 @@ object ProtoData {
     val backend
         get() = "$group:protodata-backend:$version"
 
+    val params
+        get() = "$group:protodata-params:$version"
+
     val protocPlugin
         get() = "$group:protodata-protoc:$version"
 
@@ -115,7 +118,7 @@ object ProtoData {
     val cliApi
         get() = "$group:protodata-cli-api:$version"
 
-    const val javaModule = "$group:protodata-java"
+    val javaModule = "$group:protodata-java"
 
     fun java(version: String): String =
         "$javaModule:$version"
