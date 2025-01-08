@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,8 +71,8 @@ open class CheckVersionIncrement : DefaultTask() {
         val versionExists = versions?.contains(version) ?: false
         if (versionExists) {
             throw GradleException(
-                """
-                    Version `$version` is already published to maven repository `$repoUrl`.
+                    """
+                    The version `$version` is already published to the Maven repository `$repoUrl`.
                     Try incrementing the library version.
                     All available versions are: ${versions?.joinToString(separator = ", ")}. 
                     
