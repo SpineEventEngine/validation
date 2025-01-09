@@ -51,8 +51,8 @@ internal class ValidatedFieldView :
     }
 
     override fun extractErrorMessage(option: Option): String = error(
-        "Can not extract custom error message for `($VALIDATE)` option using `$option`. " +
-                "`($VALIDATE)` does not support custom error message."
+        "Cannot extract custom error message for `($VALIDATE)` option using `$option`. " +
+                "`($VALIDATE)` does not support custom error messages."
     )
 
     override fun saveErrorMessage(errorMessage: String) {
