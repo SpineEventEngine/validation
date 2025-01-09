@@ -28,7 +28,6 @@ package io.spine.validation
 
 import io.kotest.matchers.shouldBe
 import io.spine.option.OptionsProto.distinct
-import io.spine.option.OptionsProto.ifInvalid
 import io.spine.option.OptionsProto.isRequired
 import io.spine.option.OptionsProto.max
 import io.spine.option.OptionsProto.min
@@ -47,11 +46,6 @@ internal class OptionNamesSpec {
     @Test
     fun distinct() {
         DISTINCT shouldBe distinct.descriptor.name
-    }
-
-    @Test
-    fun if_invalid() {
-        IF_INVALID shouldBe ifInvalid.descriptor.name
     }
 
     @Test

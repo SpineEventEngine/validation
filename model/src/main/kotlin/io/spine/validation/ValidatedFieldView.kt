@@ -35,11 +35,11 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 /**
  * A view of a field that is marked with `(validate)`.
  *
- * Note: this option [does not have][EMPTY_ERROR_MESSAGE] an error message. It triggers
+ * Note: this option [does not have][NO_ERROR_MESSAGE] an error message. It triggers
  * in-depth validation and, in case of errors, propagates only the initial cause.
  */
 internal class ValidatedFieldView :
-    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(EMPTY_ERROR_MESSAGE) {
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
 
     @Subscribe
     override fun onConstraint(
@@ -50,11 +50,14 @@ internal class ValidatedFieldView :
         builder()!!.setValidate(true)
     }
 
-    override fun extractErrorMessage(option: Option): String = EMPTY_ERROR_MESSAGE
+    override fun extractErrorMessage(option: Option): String = error(
+        "Can not extract custom error message for `($VALIDATE)` option using `$option`. " +
+                "`($VALIDATE)` does not support custom error message."
+    )
 
     override fun saveErrorMessage(errorMessage: String) {
-        builder()!!.setErrorMessage(errorMessage)
+        // No op.
     }
 }
 
-private const val EMPTY_ERROR_MESSAGE = ""
+private const val NO_ERROR_MESSAGE = ""
