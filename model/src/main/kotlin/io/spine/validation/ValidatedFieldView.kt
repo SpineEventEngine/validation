@@ -33,10 +33,10 @@ import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 
 /**
- * A view of a field that is marked with `(validate)`.
+ * A view of a field marked with `(validate)`.
  *
  * Note: this option [does not have][NO_ERROR_MESSAGE] an error message. It triggers
- * in-depth validation and, in case of errors, propagates only the initial cause.
+ * in-depth validation and directly propagates the occurred errors.
  */
 internal class ValidatedFieldView :
     BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
