@@ -53,7 +53,7 @@ internal class ValidateRuleITest {
         fun `prohibit non-valid field values`() {
             val builder = meteoStatsInEurope()
                 .setAverageDrop(invalidRainDrop())
-            checkInvalid(builder, "Bad rain drop!")
+            checkInvalid(builder, BAD_RAIN_DROP)
         }
     }
 
@@ -74,7 +74,7 @@ internal class ValidateRuleITest {
             val builder = meteoStatsInEurope()
                 .setAverageDrop(validRainDrop())
                 .setLastEvent(invalidCloud().pack())
-            checkInvalid(builder, "Bad cloud!")
+            checkInvalid(builder, BAD_CLOUD)
         }
 
         @Test
@@ -102,7 +102,7 @@ internal class ValidateRuleITest {
         fun `reject an invalid item`() {
             val builder = Rain.newBuilder()
                 .addRainDrop(invalidRainDrop())
-            checkInvalid(builder, "Bad rain drop!")
+            checkInvalid(builder, BAD_RAIN_DROP)
         }
     }
 
@@ -128,7 +128,7 @@ internal class ValidateRuleITest {
                 .setAverageDrop(validRainDrop())
                 .addPredictedEvent(packedValid)
                 .addPredictedEvent(packedInvalid)
-            checkInvalid(builder, "Bad cloud!")
+            checkInvalid(builder, BAD_CLOUD)
         }
 
         @Test
@@ -144,6 +144,9 @@ internal class ValidateRuleITest {
         }
     }
 }
+
+private const val BAD_CLOUD = "Bad cloud!"
+private const val BAD_RAIN_DROP = "Bad rain drop!"
 
 private fun checkInvalid(builder: Message.Builder, errorPart: String) =
     assertValidationException(builder).run {
