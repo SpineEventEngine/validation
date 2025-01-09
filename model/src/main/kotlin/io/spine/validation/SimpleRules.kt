@@ -39,8 +39,8 @@ import io.spine.protodata.ast.FieldName
  * @param field The target field.
  * @param customFeature The feature message describing the custom operator.
  * @param description The human-readable text description of the feature.
- * @param errorMessage The error message for the case of violation.
- * @return a new rule.
+ * @param errorMessage The error message for the case of violation. Can be empty for options
+ *   that delegate validation to other options instead of performing it themselves.
  */
 public fun SimpleRule(
     field: FieldName,
