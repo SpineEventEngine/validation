@@ -46,7 +46,7 @@ public fun SimpleRule(
     field: FieldName,
     customFeature: Message,
     description: String,
-    errorMessage: String = "",
+    errorMessage: String,
     distribute: Boolean
 ): SimpleRule {
     require(description.isNotBlank())
