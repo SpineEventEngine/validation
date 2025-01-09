@@ -27,7 +27,6 @@
 package io.spine.validate
 
 import io.kotest.matchers.string.shouldStartWith
-import io.spine.test.validate.NotValidateWithCustomMessage
 import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.ValidateEnclosed
 import io.spine.test.validate.ValidateWithRequiredString
@@ -36,7 +35,6 @@ import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import io.spine.validate.given.MessageValidatorTestEnv.EMAIL
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName(VALIDATION_SHOULD + "validate enclosed messages and")
 internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
@@ -94,15 +92,5 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         val violation = singleViolation()
         violation.message.formatUnsafe() shouldStartWith Diags.Regex.prefix
         assertFieldPathIs(violation, EMAIL)
-    }
-
-    /**
-     * This method tests that setting only a custom message for a validation constraint
-     * does not cause validation, neither runtime, nor on `build()`.
-     */
-    @Test
-    fun `ignore custom invalid field message if validation is disabled`() {
-        assertValid(NotValidateWithCustomMessage.getDefaultInstance())
-        assertDoesNotThrow { NotValidateWithCustomMessage.newBuilder().build() }
     }
 }

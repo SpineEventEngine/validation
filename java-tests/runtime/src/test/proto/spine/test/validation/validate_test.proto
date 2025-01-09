@@ -50,10 +50,6 @@ message NotValidateEnclosed {
     PatternStringFieldValue enclosed = 1;
 }
 
-message NotValidateWithCustomMessage {
-    PatternStringFieldValue enclosed = 1;
-}
-
 message ValidateWithRequiredString {
     RequiredString enclosed = 1 [(validate) = true];
 }
