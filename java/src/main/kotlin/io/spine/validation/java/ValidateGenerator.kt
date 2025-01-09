@@ -167,7 +167,7 @@ internal class ValidateGenerator(ctx: GenerationContext) : SimpleRuleGenerator(c
             .field("constraint_violation", CARDINALITY_LIST)
             .getter<MutableList<ConstraintViolation>>()
         return codeBlock {
-            add("\$L.addAll(\$L)", ctx.violationList, violations)
+            addStatement("\$L.addAll(\$L)", ctx.violationList, violations)
         }
     }
 }
