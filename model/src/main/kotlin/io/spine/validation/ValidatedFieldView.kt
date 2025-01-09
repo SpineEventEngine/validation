@@ -46,20 +46,15 @@ internal class ValidatedFieldView :
         @External @Where(field = OPTION_NAME, equals = VALIDATE) e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
-    override fun saveErrorMessage(errorMessage: String) {
-        builder()!!.setErrorMessage(errorMessage)
-    }
-
     override fun enableValidation() {
         builder()!!.setValidate(true)
     }
 
-    @Subscribe
-    override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
-    ) = super.onErrorMessage(e)
-
     override fun extractErrorMessage(option: Option): String = EMPTY_ERROR_MESSAGE
+
+    override fun saveErrorMessage(errorMessage: String) {
+        builder()!!.setErrorMessage(errorMessage)
+    }
 }
 
 private const val EMPTY_ERROR_MESSAGE = ""
