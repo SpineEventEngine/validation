@@ -29,8 +29,6 @@ package io.spine.validate
 import com.google.protobuf.DescriptorProtos.MessageOptions
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import com.google.protobuf.Message
-import io.spine.base.CommandMessage
-import io.spine.base.EntityState
 import io.spine.option.OptionsProto.requiredField
 
 /**
@@ -41,9 +39,7 @@ import io.spine.option.OptionsProto.requiredField
 private const val ABOUT = ""
 
 internal fun Message.requiresRuntimeValidation(): Boolean =
-    (this is EntityState<*>)
-            || (this is CommandMessage)
-            || hasTypeOption(requiredField)
+    hasTypeOption(requiredField)
 
 private fun Message.hasTypeOption(option: GeneratedExtension<MessageOptions, *>): Boolean {
     val result = descriptorForType.options.hasExtension(option)
