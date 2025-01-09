@@ -61,13 +61,12 @@ internal class ValidateConstraintTest {
 
         error.shouldBePresent()
 
-        val violations = error.get().constraintViolationList
-
-        // We should have 3 violations instead of 1.
+        // We should have 3 violations instead of 2.
         // But we do not handle the `(required_field)` option.
         // See https://github.com/SpineEventEngine/validation/issues/148
-        violations.size shouldBe 2
+        val violations = error.get().constraintViolationList
 
+        violations.size shouldBe 2
         violations[0].fieldPath.getFieldName(0) shouldBe "first_line"
         violations[1].fieldPath.getFieldName(0) shouldBe "town"
     }
