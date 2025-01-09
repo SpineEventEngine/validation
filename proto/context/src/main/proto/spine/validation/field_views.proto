@@ -30,8 +30,11 @@ message ValidatedField {
 
     FieldId id = 1;
 
+    // Deprecated: this option does not have its own error message.
+    string error_message = 2 [deprecated = true];
+
     // `true` if the field is marked with `(validate) = true`, `false` otherwise.
-    bool validate = 2;
+    bool validate = 3;
 }
 
 // Uniquely identifies a message field.
