@@ -49,18 +49,18 @@ internal abstract class BoolFieldOptionView<
         >(private val defaultMessage: String) : View<FieldId, S, B>() {
 
     /**
-     * Creates a new instance using the given [companion]'s descriptor.
+     * Creates a new instance using the descriptor of the [companion] option.
      *
-     * The given descriptor should describe a companion option used for configuring
-     * error messages for boolean options.
+     * The provided descriptor should correspond to a companion option used
+     * for configuring error messages of standalone boolean options.
      *
-     * For example, `(required)` is a boolean option, but it has `(if_missing)` companion
-     * option represented by `IfMissingOption` message type. This constructor expects
-     * the descriptor of `IfMissingOption` to extract the default error message.
+     * For example, `(required)` is a boolean option with `(if_missing)` companion,
+     * represented by `IfMissingOption` message option. This constructor expects
+     * the descriptor of `IfMissingOption`.
      *
-     * Please note, custom error message specified in `IfMissingOption` is configured
-     * in [extractErrorMessage]. This method should extract it from the option declaration
-     * and override the default value.
+     * Note: this constructor extracts only the default message. The custom one,
+     * if present, is handled by [extractErrorMessage], which may override
+     * the default message set by the constructor.
      */
     constructor(companion: Descriptor) : this(DefaultErrorMessage.from(companion))
 

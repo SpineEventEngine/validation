@@ -34,9 +34,12 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 
 /**
  * A view of a field that is marked with `(validate)`.
+ *
+ * Note: this option [does not have][EMPTY_ERROR_MESSAGE] an error message. It triggers
+ * in-depth validation and, in case of errors, propagates only the initial cause.
  */
 internal class ValidatedFieldView :
-    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(EMPTY_ERROR_MESSAGE) {
 
     @Subscribe
     override fun onConstraint(
@@ -56,11 +59,7 @@ internal class ValidatedFieldView :
         @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
     ) = super.onErrorMessage(e)
 
-    override fun extractErrorMessage(option: Option): String = NO_ERROR_MESSAGE
+    override fun extractErrorMessage(option: Option): String = EMPTY_ERROR_MESSAGE
 }
 
-/**
- * `(validate)` does not have its own error message because it never
- * creates violations on its own.
- */
-private const val NO_ERROR_MESSAGE = ""
+private const val EMPTY_ERROR_MESSAGE = ""
