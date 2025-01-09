@@ -58,6 +58,8 @@ internal class ValidatedFieldView :
     override fun saveErrorMessage(errorMessage: String) {
         // No op.
     }
-}
 
-private const val NO_ERROR_MESSAGE = ""
+    private companion object {
+        const val NO_ERROR_MESSAGE = ""
+    }
+}
