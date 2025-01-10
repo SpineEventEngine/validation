@@ -67,12 +67,12 @@ internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
             return ignore()
         }
         val rule = SimpleRule(
-            event.field,
-            RecursiveValidation.getDefaultInstance(),
-            "A message field is validated by its validation rules. " +
+            field = event.field,
+            customFeature = RecursiveValidation.getDefaultInstance(),
+            description = "A message field is validated by its validation rules. " +
                     "If the field is invalid, the container message is invalid as well.",
-            field!!.errorMessage,
-            true
+            errorMessage = "", // `(validate)` doesn't create an error on its own.
+            distribute = true
         )
         return simpleRuleAdded {
             type = event.type

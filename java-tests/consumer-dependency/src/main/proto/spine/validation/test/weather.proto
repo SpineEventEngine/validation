@@ -11,5 +11,5 @@ option java_multiple_files = true;
 
 message Cloud {
 
-    int32 cubic_meters = 1 [(min).value = "1", (min).exclusive = true];
+    int32 cubic_meters = 1 [(min) = { value: "1", exclusive: true, error_msg: "Bad cloud!" }];
 }

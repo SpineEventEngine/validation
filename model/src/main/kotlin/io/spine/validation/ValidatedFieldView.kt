@@ -29,38 +29,37 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfInvalidOption
-import io.spine.protobuf.unpack
 import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 
 /**
- * A view of a field that is marked with `validate`.
+ * A view of a field marked with `(validate)`.
+ *
+ * Note: this option [does not have][NO_ERROR_MESSAGE] an error message. It triggers
+ * in-depth validation and directly propagates the occurred errors.
  */
 internal class ValidatedFieldView :
-    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(IfInvalidOption.getDescriptor()) {
+    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
 
     @Subscribe
     override fun onConstraint(
         @External @Where(field = OPTION_NAME, equals = VALIDATE) e: FieldOptionDiscovered
     ) = super.onConstraint(e)
 
-    override fun saveErrorMessage(errorMessage: String) {
-        builder()!!.setErrorMessage(errorMessage)
-    }
-
     override fun enableValidation() {
         builder()!!.setValidate(true)
     }
 
-    @Subscribe
-    override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = IF_INVALID) e: FieldOptionDiscovered
-    ) = super.onErrorMessage(e)
+    override fun extractErrorMessage(option: Option): String = error(
+        "Cannot extract custom error message for `($VALIDATE)` option using `$option`. " +
+                "`($VALIDATE)` does not support custom error messages."
+    )
 
-    override fun extractErrorMessage(option: Option): String {
-        val value = option.value.unpack<IfInvalidOption>()
-        val errorMessage = value.errorMsg
-        return errorMessage
+    override fun saveErrorMessage(errorMessage: String) {
+        // No op.
+    }
+
+    private companion object {
+        const val NO_ERROR_MESSAGE = ""
     }
 }

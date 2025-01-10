@@ -31,5 +31,4 @@ object MessageValidatorTestEnv {
     const val VALUE: String = "value"
     const val EMAIL: String = "email"
     const val ENCLOSED_FIELD_NAME: String = "enclosed"
-
 }

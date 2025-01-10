@@ -161,12 +161,7 @@ internal class MessageValidator private constructor(private val validatedMessage
                 .map { msg -> childViolations(fieldValue.context(), msg) }
                 .flatMap { violations -> violations.stream() }
                 .collect(toList())
-            if (childViolations.isNotEmpty()) {
-                val parentViolation = violation(constraint, fieldValue).copy {
-                    violation += childViolations
-                }
-                violations.add(parentViolation)
-            }
+            violations.addAll(childViolations)
         }
     }
 

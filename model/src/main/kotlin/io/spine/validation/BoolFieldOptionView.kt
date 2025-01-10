@@ -39,14 +39,30 @@ import io.spine.validate.ValidatingBuilder
  * A view on a field marked with a boolean validation option.
  *
  * @param S The type of the view entity state.
- * @param B The type of the validating builder of the state.
+ * @param B The type of the entity state builder.
+ *
+ * @param defaultMessage The default error message for the option.
  */
 internal abstract class BoolFieldOptionView<
         S : EntityState<FieldId>,
         B : ValidatingBuilder<S>
-        >(optionDescriptor: Descriptor) : View<FieldId, S, B>() {
+        >(private val defaultMessage: String) : View<FieldId, S, B>() {
 
-    private val defaultMessage: String = DefaultErrorMessage.from(optionDescriptor)
+    /**
+     * Creates a new instance using the descriptor of the [companion] option.
+     *
+     * The provided descriptor should correspond to a companion option used
+     * for configuring error messages of standalone boolean options.
+     *
+     * For example, `(required)` is a boolean option with `(if_missing)` companion,
+     * represented by `IfMissingOption` message option. This constructor expects
+     * the descriptor of `IfMissingOption`.
+     *
+     * Note: this constructor extracts only the default message. The custom one,
+     * if present, is handled by [extractErrorMessage], which may override
+     * the default message set by the constructor.
+     */
+    constructor(companion: Descriptor) : this(DefaultErrorMessage.from(companion))
 
     @ContractFor(handler = Subscribe::class)
     open fun onConstraint(e: FieldOptionDiscovered) {

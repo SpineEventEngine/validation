@@ -45,7 +45,6 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
-import org.apache.velocity.Template
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
@@ -56,23 +55,6 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
         validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
     )
     return addViolation(violation, violationList)
-}
-
-/**
- * Constructs code which creates a [ConstraintViolation] with child violations and adds it
- * to the mutable list of violations from the passed [ctx].
- */
-public fun ErrorMessage.createParentViolation(
-    ctx: GenerationContext,
-    childViolations: Expression<MutableList<ConstraintViolation>>
-): CodeBlock {
-    val field = ctx.simpleRuleField
-    val fieldValue = ctx.fieldOrElement!!
-    val type = field.declaringType
-    val violation = buildViolation(
-        type, field, fieldValue, childViolations, ignoreCardinality = ctx.isElement
-    )
-    return addViolation(violation, ctx.violationList)
 }
 
 /**
@@ -88,7 +70,7 @@ public fun ErrorMessage.createParentViolation(
  *         composite rule, or `null` if no such field exists.
  *         If this param is `null`, `fieldValue` must also be `null`.
  * @param fieldValue
- *         the expression to obtain the value of the common field, or `null`,
+ *         the expression to get the value of the common field, or `null`,
  *         if there is no common field.
  *         If this parameter is `null`, `field` must also be `null`.
  */
@@ -117,7 +99,6 @@ private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression<*>?,
-    childViolations: Expression<MutableList<ConstraintViolation>>? = null,
     ignoreCardinality: Boolean = false
 ): Expression<ConstraintViolation> {
     val message = ClassName(TemplateString::class).newBuilder()
@@ -138,9 +119,6 @@ private fun ErrorMessage.buildViolation(
             else -> fieldValue.packToAny()
         }
         violationBuilder = violationBuilder.chainSet("field_value", packingExpression)
-    }
-    if (childViolations != null) {
-        violationBuilder = violationBuilder.chain("addAllViolation", childViolations)
     }
     return violationBuilder.chainBuild()
 }

@@ -98,11 +98,7 @@ message ConstraintViolation {
     //
     google.protobuf.Any field_value = 4;
 
-    // If the field type is message (not scalar type or enum), its fields may violate
-    // one or more validation constraints.
-    //
-    // This field is not populated, if fields of the corresponding message type do not have
-    // validation constraints, and simply non-default value was required in the parent message.
-    //
-    repeated ConstraintViolation violation = 5;
+    // Deprecated: all violations are top-level now. Their nesting is reflected in the value
+    // of `field_path` field.
+    repeated ConstraintViolation violation = 5 [deprecated = true];
 }

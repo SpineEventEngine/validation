@@ -40,11 +40,6 @@ public const val OPTION_NAME: String = "option.name"
 public const val DISTINCT: String = "distinct"
 
 /**
- * The name of the `(if_invalid)` option.
- */
-public const val IF_INVALID: String = "if_invalid"
-
-/**
  * The name of the `(is_required)` option.
  */
 public const val IS_REQUIRED: String = "is_required"
