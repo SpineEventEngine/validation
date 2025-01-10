@@ -33,8 +33,11 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.typeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.value.Value
 import io.spine.string.shortly
@@ -45,7 +48,6 @@ import io.spine.validation.ComparisonOperator.GREATER_THAN
 import io.spine.validation.ComparisonOperator.LESS_OR_EQUAL
 import io.spine.validation.ComparisonOperator.LESS_THAN
 import io.spine.validation.ComparisonOperator.NOT_EQUAL
-import io.spine.validation.ErrorMessage
 import io.spine.validation.SimpleRule
 import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
@@ -142,18 +144,32 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
         PRIMITIVE_COMPARISON_OPS
     }
 
-    override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class)
+    override fun error(): Pair<String, Map<Expression<*>, Expression<*>>> {
+        val fieldValue = ClassName(String::class)
             .call<String>("valueOf", ctx.fieldOrElement!!)
-        return ErrorMessage.forRule(
-            rule.errorMessage,
-            actualValue.toCode(),
-            otherValue?.toCode()
+        val fieldPath = rule.field.value
+        val fieldType = ctx.simpleRuleField.type.typeName.qualifiedName
+        val parentType = ctx.validatedType.qualifiedName
+        return rule.errorMessage to mapOf(
+            StringLiteral("field.path") to StringLiteral(fieldPath),
+            StringLiteral("parent.type") to StringLiteral(parentType),
+            StringLiteral("field.type") to StringLiteral(fieldType),
+            StringLiteral("field.value") to fieldValue
         )
     }
 
-    override fun createViolation(): CodeBlock =
-        error().createViolation(ctx)
+    override fun createViolation(): CodeBlock {
+        val error = error()
+        val violation = buildViolation(
+            error.first,
+            ctx.validatedType,
+            ctx.fieldFromSimpleRule,
+            ctx.fieldOrElement,
+            ignoreCardinality = ctx.isElement,
+            error.second
+        )
+        return addViolation(violation, ctx.violationList)
+    }
 }
 
 internal fun generatorForSimple(ctx: GenerationContext): CodeGenerator {

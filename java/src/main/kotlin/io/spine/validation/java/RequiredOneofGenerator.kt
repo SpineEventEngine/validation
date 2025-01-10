@@ -26,11 +26,11 @@
 
 package io.spine.validation.java
 
+import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Cardinality.CARDINALITY_SINGLE
 import io.spine.protodata.ast.OneofName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.field
-import io.spine.validation.ErrorMessage
 
 /**
  * A code generator for the `(is_required)` constraint.
@@ -54,9 +54,18 @@ internal class RequiredOneofGenerator(
         return Expression("$numberGetter != 0")
     }
 
-    override fun error() =
-        ErrorMessage.forRule(rule.errorMessage)
+    override fun error() = rule.errorMessage to emptyMap<Expression<*>, Expression<*>>()
 
-    override fun createViolation() =
-        error().createViolation(ctx)
+    override fun createViolation(): CodeBlock {
+        val error = error()
+        val violation = buildViolation(
+            error.first,
+            ctx.validatedType,
+            ctx.fieldFromSimpleRule,
+            ctx.fieldOrElement,
+            ignoreCardinality = ctx.isElement,
+            error.second
+        )
+        return addViolation(violation, ctx.violationList)
+    }
 }

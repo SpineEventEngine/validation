@@ -47,7 +47,6 @@ import io.spine.string.titleCase
 import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.ErrorMessage
 import javax.lang.model.element.Modifier
 
 /**
@@ -146,7 +145,7 @@ internal class DistributingGenerator(
         return MethodCall(violationsName, "isEmpty")
     }
 
-    override fun error(): ErrorMessage =
+    override fun error(): Pair<String, Map<Expression<*>, Expression<*>>> =
         delegate.error()
 
     override fun createViolation(): CodeBlock = codeBlock {

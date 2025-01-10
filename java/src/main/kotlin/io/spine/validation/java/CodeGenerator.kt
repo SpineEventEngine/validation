@@ -32,7 +32,6 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.logging.WithLogging
 import io.spine.protodata.java.Expression
 import io.spine.tools.java.codeBlock
-import io.spine.validation.ErrorMessage
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.MESSAGE_WIDE
 import io.spine.validation.Rule.KindCase.SIMPLE
@@ -98,7 +97,7 @@ internal abstract class CodeGenerator(
     /**
      * Forms an error message for the found violation.
      */
-    abstract fun error(): ErrorMessage
+    abstract fun error(): Pair<String, Map<Expression<*>, Expression<*>>>
 
     /**
      * Constructs code which creates a `ConstrainViolation` and puts it into a list of violations.

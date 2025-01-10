@@ -41,6 +41,7 @@ import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
@@ -88,7 +89,7 @@ public fun ErrorMessage.createCompositeViolation(
     return addViolation(violation, violationsList)
 }
 
-private fun addViolation(
+public fun addViolation(
     violation: Expression<ConstraintViolation>,
     violationsList: Expression<MutableList<ConstraintViolation>>
 ): CodeBlock = CodeBlock.builder()
@@ -100,9 +101,19 @@ private fun ErrorMessage.buildViolation(
     field: Field?,
     fieldValue: Expression<*>?,
     ignoreCardinality: Boolean = false
+) = buildViolation(this.toString(), type, field, fieldValue, ignoreCardinality)
+
+public fun buildViolation(
+    errorMessage: String,
+    type: TypeName,
+    field: Field?,
+    fieldValue: Expression<*>?,
+    ignoreCardinality: Boolean = false,
+    placeholders: Map<Expression<*>, Expression<*>> = emptyMap() // TODO: Fix in ProtoData.
 ): Expression<ConstraintViolation> {
     val message = ClassName(TemplateString::class).newBuilder()
-        .chainSet("withPlaceholders", Literal(this))
+        .chainSet("withPlaceholders", Literal(errorMessage))
+        .chainPutAll("placeholderValue", mapExpression(ClassName(String::class), ClassName(String::class), placeholders))
         .chainBuild<TemplateString>()
     var violationBuilder = ClassName(ConstraintViolation::class).newBuilder()
         .chainSet("message", message)
