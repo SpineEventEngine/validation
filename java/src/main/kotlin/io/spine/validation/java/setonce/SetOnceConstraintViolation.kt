@@ -38,7 +38,7 @@ import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ErrorPlaceholder
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
+import io.spine.validate.ErrorPlaceholder.FIELD_PATH
 import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
@@ -106,7 +106,7 @@ internal class SetOnceConstraintViolation(
             placeholders.mapKeys { StringLiteral(it.key.toString()) }
         )
         return ClassName(TemplateString::class).newBuilder()
-            .chainSet("withPlaceholders", StringLiteral(errorTemplate))
+            .chainSet("withPlaceholders", StringLiteral(template))
             .chainPutAll("placeholderValue", placeholderEntries)
             .chainBuild()
     }
@@ -118,7 +118,7 @@ internal class SetOnceConstraintViolation(
         currentValue: Expression<String>,
         newValue: Expression<String>
     ) = mapOf(
-        FIELD_NAME to StringLiteral(fieldName),
+        FIELD_PATH to StringLiteral(fieldName),
         FIELD_TYPE to StringLiteral(fieldType),
         FIELD_VALUE to currentValue,
         FIELD_PROPOSED_VALUE to newValue,

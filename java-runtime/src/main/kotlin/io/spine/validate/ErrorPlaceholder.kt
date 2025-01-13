@@ -37,7 +37,7 @@ package io.spine.validate
 public enum class ErrorPlaceholder(public val value: String) {
 
     // Common placeholders.
-    FIELD_NAME("field.name"),
+    FIELD_PATH("field.path"),
     FIELD_VALUE("field.value"),
     FIELD_TYPE("field.type"),
     PARENT_TYPE("parent.type"),

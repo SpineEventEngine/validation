@@ -36,7 +36,7 @@ import io.spine.protobuf.field
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.test.tools.validate.YearOfStudy
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
+import io.spine.validate.ErrorPlaceholder.FIELD_PATH
 import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
@@ -111,7 +111,7 @@ private fun <T : Any> Builder.assertErrorMessage(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            FIELD_NAME to fieldName,
+            FIELD_PATH to fieldName,
             FIELD_TYPE to fieldType,
             FIELD_VALUE to "$value1",
             FIELD_PROPOSED_VALUE to "$value2",
