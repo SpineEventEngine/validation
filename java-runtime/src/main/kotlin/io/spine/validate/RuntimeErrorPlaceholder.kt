@@ -34,7 +34,7 @@ package io.spine.validate
  *
  * @see TemplateString
  */
-public enum class ErrorPlaceholder(public val value: String) {
+public enum class RuntimeErrorPlaceholder(public val value: String) {
 
     // Common placeholders.
     FIELD_PATH("field.path"),

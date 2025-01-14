@@ -48,8 +48,8 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validate.ErrorPlaceholder.FIELD_PATH;
-import static io.spine.validate.ErrorPlaceholder.PARENT_TYPE;
+import static io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH;
+import static io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE;
 import static io.spine.validate.WorkaroundKt.requiresRuntimeValidation;
 import static java.lang.String.format;
 

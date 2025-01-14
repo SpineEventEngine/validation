@@ -27,11 +27,11 @@
 package io.spine.validate
 
 import io.spine.code.proto.FieldDeclaration
-import io.spine.validate.ErrorPlaceholder.FIELD_PATH
-import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validate.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.GOES_COMPANION
+import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.REGEX_PATTERN
 
 /**
  * Returns a template string with all placeholders substituted with
