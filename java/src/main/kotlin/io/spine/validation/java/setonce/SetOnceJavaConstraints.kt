@@ -47,7 +47,6 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
-import kotlin.system.exitProcess
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -115,12 +114,7 @@ internal sealed class SetOnceJavaConstraints<T>(
         val psiClass = psiFile.findClass(messageBuilder)
 
         execute {
-            try {
-                psiClass.renderConstraints()
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                exitProcess(500)
-            }
+            psiClass.renderConstraints()
         }
 
         sourceFile.overwrite(psiFile.text)
