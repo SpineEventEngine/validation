@@ -36,11 +36,11 @@ import io.spine.protobuf.field
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.test.tools.validate.YearOfStudy
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
-import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_VALUE
+import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
@@ -111,7 +111,7 @@ private fun <T : Any> Builder.assertErrorMessage(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            FIELD_NAME to fieldName,
+            FIELD_PATH to fieldName,
             FIELD_TYPE to fieldType,
             FIELD_VALUE to "$value1",
             FIELD_PROPOSED_VALUE to "$value2",
@@ -133,9 +133,9 @@ private fun <T : Any> Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE =
-    "The field `\${parent.type}.\${field.name}` of the type `\${field.type}` already has " +
+    "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has " +
             "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
 private fun customErrorMessage(fieldNumber: Int) =
     "Field_$fieldNumber: " +
-            "`\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."
+            "`\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."

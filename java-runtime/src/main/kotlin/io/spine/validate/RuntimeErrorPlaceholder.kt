@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,30 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate.option;
-
-import com.google.errorprone.annotations.Immutable;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.spine.code.proto.FieldOption;
-import io.spine.option.IfInvalidOption;
-import io.spine.option.OptionsProto;
+package io.spine.validate
 
 /**
- * An option which provides custom error messages if applied to a field being validated.
+ * A template placeholder that can be used in error messages.
+ *
+ * Enumerates placeholder names that can be used within Protobuf definitions.
+ * Each validation option declares the supported placeholders within `options.proto`.
+ *
+ * Important Note: this enum is an exact copy of `io.spine.validation.java.ErrorPlaceholder`.
+ * Please keep them in sync. Take a look at docs to the original enum for details.
+ *
+ * @see TemplateString
  */
-@Immutable
-public final class IfInvalid extends FieldOption<IfInvalidOption> {
+public enum class RuntimeErrorPlaceholder(public val value: String) {
 
-    /** Creates a new instance of this option. */
-    public IfInvalid() {
-        super(OptionsProto.ifInvalid);
-    }
+    // Common placeholders.
+    FIELD_PATH("field.path"),
+    FIELD_VALUE("field.value"),
+    FIELD_TYPE("field.type"),
+    PARENT_TYPE("parent.type"),
 
-    /**
-     * Returns the option value from the specified field or a default value, if the field does not
-     * have its own option value.
-     */
-    public IfInvalidOption valueOrDefault(FieldDescriptor field){
-        return valueFrom(field).orElse(IfInvalidOption.getDefaultInstance());
-    }
+    // Option-specific placeholders.
+    REGEX_PATTERN("regex.pattern"),
+    GOES_COMPANION("goes.companion"),
+    FIELD_PROPOSED_VALUE("field.proposed_value");
+
+    override fun toString(): String = value
 }

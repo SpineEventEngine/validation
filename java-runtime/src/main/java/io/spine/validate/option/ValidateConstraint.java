@@ -42,11 +42,9 @@ public final class ValidateConstraint extends FieldConstraint<Boolean> {
     }
 
     @Override
-    @SuppressWarnings("deprecation") /* Old validation won't migrate to the new error messages. */
     public String formattedErrorMessage(FieldContext field) {
-        var option = new IfInvalid();
-        var ifInvalid = option.valueOrDefault(field.target());
-        return ViolationText.errorMessage(ifInvalid, ifInvalid.getMsgFormat());
+        // This option does not have an error message anymore.
+        return "";
     }
 
     @Override

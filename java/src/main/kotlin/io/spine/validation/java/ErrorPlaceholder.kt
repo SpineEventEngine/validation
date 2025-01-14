@@ -24,20 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.java
 
 /**
  * A template placeholder that can be used in error messages.
  *
  * Enumerates placeholder names that can be used within Protobuf definitions.
- * Each validation option declares the supported placeholders within `options.proto`.
+ * Each validation option declares the supported placeholders. Take a look at
+ * `options.proto` for examples.
  *
- * @see TemplateString
+ * Important Note: we have the same [enum][io.spine.validate.RuntimeErrorPlaceholder] in the runtime
+ * library, which is exactly as this one. Please keep them in sync. This duplication
+ * is done intentionally to prevent clash between the runtime library, which is added
+ * to the classpath of ProtoData and the runtime library, which is part of ProtoData itself
+ * because it is a part of Spine. As we complete our migration of validation to codegen,
+ * the runtime library will either be significantly simplified, or even its content may
+ * be moved to `base`. Then, the duplicate enum should be removed.
+ *
+ * @see io.spine.validate.TemplateString
+ * @see io.spine.validate.RuntimeErrorPlaceholder
  */
 public enum class ErrorPlaceholder(public val value: String) {
 
     // Common placeholders.
-    FIELD_NAME("field.name"),
+    FIELD_PATH("field.path"),
     FIELD_VALUE("field.value"),
     FIELD_TYPE("field.type"),
     PARENT_TYPE("parent.type"),

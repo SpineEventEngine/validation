@@ -59,21 +59,21 @@ message StudentDefaultMessage {
 
 // Tests the constraint's custom error message.
 message StudentCustomMessage {
-    Name name = 1 [(set_once) = true, (if_set_again).error_msg = "Field_1: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    string id = 2 [(set_once) = true, (if_set_again).error_msg = "Field_2: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    double height = 3 [(set_once) = true, (if_set_again).error_msg = "Field_3: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    float weight = 4 [(set_once) = true, (if_set_again).error_msg = "Field_4: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    int32 cash_USD = 5 [(set_once) = true, (if_set_again).error_msg = "Field_5: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    int64 cash_EUR = 6 [(set_once) = true, (if_set_again).error_msg = "Field_6: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    uint32 cash_JPY = 7 [(set_once) = true, (if_set_again).error_msg = "Field_7: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    uint64 cash_GBP = 8 [(set_once) = true, (if_set_again).error_msg = "Field_8: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    sint32 cash_AUD = 9 [(set_once) = true, (if_set_again).error_msg = "Field_9: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    sint64 cash_CAD = 10 [(set_once) = true, (if_set_again).error_msg = "Field_10: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    fixed32 cash_CHF = 11 [(set_once) = true, (if_set_again).error_msg = "Field_11: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    fixed64 cash_CNY = 12 [(set_once) = true, (if_set_again).error_msg = "Field_12: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    sfixed32 cash_PLN = 13 [(set_once) = true, (if_set_again).error_msg = "Field_13: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    sfixed64 cash_NZD = 14 [(set_once) = true, (if_set_again).error_msg = "Field_14: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    bool has_medals = 15 [(set_once) = true, (if_set_again).error_msg = "Field_15: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    bytes signature = 16 [(set_once) = true, (if_set_again).error_msg = "Field_16: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
-    YearOfStudy year_of_study = 17 [(set_once) = true, (if_set_again).error_msg = "Field_17: `${field.value}`, `${field.name}`, `${field.proposed_value}`, `${field.type}`."];
+    Name name = 1 [(set_once) = true, (if_set_again).error_msg = "Field_1: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    string id = 2 [(set_once) = true, (if_set_again).error_msg = "Field_2: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    double height = 3 [(set_once) = true, (if_set_again).error_msg = "Field_3: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    float weight = 4 [(set_once) = true, (if_set_again).error_msg = "Field_4: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    int32 cash_USD = 5 [(set_once) = true, (if_set_again).error_msg = "Field_5: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    int64 cash_EUR = 6 [(set_once) = true, (if_set_again).error_msg = "Field_6: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    uint32 cash_JPY = 7 [(set_once) = true, (if_set_again).error_msg = "Field_7: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    uint64 cash_GBP = 8 [(set_once) = true, (if_set_again).error_msg = "Field_8: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    sint32 cash_AUD = 9 [(set_once) = true, (if_set_again).error_msg = "Field_9: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    sint64 cash_CAD = 10 [(set_once) = true, (if_set_again).error_msg = "Field_10: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    fixed32 cash_CHF = 11 [(set_once) = true, (if_set_again).error_msg = "Field_11: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    fixed64 cash_CNY = 12 [(set_once) = true, (if_set_again).error_msg = "Field_12: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    sfixed32 cash_PLN = 13 [(set_once) = true, (if_set_again).error_msg = "Field_13: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    sfixed64 cash_NZD = 14 [(set_once) = true, (if_set_again).error_msg = "Field_14: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    bool has_medals = 15 [(set_once) = true, (if_set_again).error_msg = "Field_15: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    bytes signature = 16 [(set_once) = true, (if_set_again).error_msg = "Field_16: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
+    YearOfStudy year_of_study = 17 [(set_once) = true, (if_set_again).error_msg = "Field_17: `${field.value}`, `${field.path}`, `${field.proposed_value}`, `${field.type}`."];
 }

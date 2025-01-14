@@ -27,11 +27,11 @@
 package io.spine.validate
 
 import io.spine.code.proto.FieldDeclaration
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
-import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validate.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
+import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.GOES_COMPANION
+import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validate.RuntimeErrorPlaceholder.REGEX_PATTERN
 
 /**
  * Returns a template string with all placeholders substituted with
@@ -127,12 +127,12 @@ public fun checkPlaceholdersHasValue(
  *
  * This method sets the values for the following placeholders:
  *
- * 1. [FIELD_NAME].
+ * 1. [FIELD_PATH].
  * 2. [FIELD_TYPE].
  * 3. [PARENT_TYPE].
  */
 public fun TemplateString.Builder.withField(field: FieldDeclaration): TemplateString.Builder =
-    putPlaceholderValue(FIELD_NAME.value, field.name().value)
+    putPlaceholderValue(FIELD_PATH.value, field.name().value)
         .putPlaceholderValue(FIELD_TYPE.value, field.javaTypeName())
         .putPlaceholderValue(PARENT_TYPE.value, field.declaringType().name().value)
 

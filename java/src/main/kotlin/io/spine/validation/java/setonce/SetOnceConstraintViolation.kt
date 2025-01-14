@@ -37,15 +37,15 @@ import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
-import io.spine.validate.ErrorPlaceholder
-import io.spine.validate.ErrorPlaceholder.FIELD_NAME
-import io.spine.validate.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validate.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validate.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.IF_SET_AGAIN
+import io.spine.validation.java.ErrorPlaceholder
+import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.
@@ -106,7 +106,7 @@ internal class SetOnceConstraintViolation(
             placeholders.mapKeys { StringLiteral(it.key.toString()) }
         )
         return ClassName(TemplateString::class).newBuilder()
-            .chainSet("withPlaceholders", StringLiteral(errorTemplate))
+            .chainSet("withPlaceholders", StringLiteral(template))
             .chainPutAll("placeholderValue", placeholderEntries)
             .chainBuild()
     }
@@ -118,7 +118,7 @@ internal class SetOnceConstraintViolation(
         currentValue: Expression<String>,
         newValue: Expression<String>
     ) = mapOf(
-        FIELD_NAME to StringLiteral(fieldName),
+        FIELD_PATH to StringLiteral(fieldName),
         FIELD_TYPE to StringLiteral(fieldType),
         FIELD_VALUE to currentValue,
         FIELD_PROPOSED_VALUE to newValue,

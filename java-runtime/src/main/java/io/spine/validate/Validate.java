@@ -48,8 +48,8 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validate.ErrorPlaceholder.FIELD_NAME;
-import static io.spine.validate.ErrorPlaceholder.PARENT_TYPE;
+import static io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH;
+import static io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE;
 import static io.spine.validate.WorkaroundKt.requiresRuntimeValidation;
 import static java.lang.String.format;
 
@@ -60,7 +60,7 @@ public final class Validate {
 
     private static final String SET_ONCE_ERROR_MESSAGE =
             "Attempted to change the value of the field " +
-                    "`${" + PARENT_TYPE + "}.${" + FIELD_NAME + "}` which has " +
+                    "`${" + PARENT_TYPE + "}.${" + FIELD_PATH + "}` which has " +
                     "`(set_once) = true` and already has a non-default value.";
     private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
 
@@ -293,7 +293,7 @@ public final class Validate {
         var message = TemplateString.newBuilder()
                 .setWithPlaceholders(SET_ONCE_ERROR_MESSAGE)
                 .putPlaceholderValue(PARENT_TYPE.toString(), declaringTypeName)
-                .putPlaceholderValue(FIELD_NAME.toString(), fieldName)
+                .putPlaceholderValue(FIELD_PATH.toString(), fieldName)
                 .build();
         var violation = ConstraintViolation.newBuilder()
                 .setMessage(message)
