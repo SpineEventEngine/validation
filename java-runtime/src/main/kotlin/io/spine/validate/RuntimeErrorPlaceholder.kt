@@ -32,6 +32,9 @@ package io.spine.validate
  * Enumerates placeholder names that can be used within Protobuf definitions.
  * Each validation option declares the supported placeholders within `options.proto`.
  *
+ * Important Note: this enum is an exact copy of `io.spine.validation.java.ErrorPlaceholder`.
+ * Please keep them in sync. Take a look at docs to the original enum for details.
+ *
  * @see TemplateString
  */
 public enum class RuntimeErrorPlaceholder(public val value: String) {
