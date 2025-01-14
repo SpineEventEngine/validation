@@ -133,9 +133,9 @@ private fun <T : Any> Builder.assertErrorMessage(
 }
 
 private const val DEFAULT_MESSAGE =
-    "The field `\${parent.type}.\${field.name}` of the type `\${field.type}` already has " +
+    "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has " +
             "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
 private fun customErrorMessage(fieldNumber: Int) =
     "Field_$fieldNumber: " +
-            "`\${field.value}`, `\${field.name}`, `\${field.proposed_value}`, `\${field.type}`."
+            "`\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."
