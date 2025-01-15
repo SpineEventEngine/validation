@@ -73,7 +73,7 @@ public class JavaValidationRenderer : JavaRenderer() {
 
     public fun typeSystem(): TypeSystem = typeSystem!!
 
-    protected override fun render(sources: SourceFileSet) {
+    override fun render(sources: SourceFileSet) {
         this.sources = sources
         this.validations = findValidations()
         val messageTypes = findMessageTypes()
