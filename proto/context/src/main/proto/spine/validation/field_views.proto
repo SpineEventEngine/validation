@@ -32,6 +32,9 @@ message RequiredField {
 
     // `true` if the field is marked with `(required) = true`, `false` otherwise.
     bool enabled = 3;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 4;
 }
 
 // A view on a field that is marked with `(validate)`.
