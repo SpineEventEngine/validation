@@ -55,7 +55,7 @@ internal class RequiredFieldView :
     }
 
     override fun enableValidation() = alter {
-        required = true
+        enabled = true
     }
 
     @Subscribe

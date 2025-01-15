@@ -69,7 +69,7 @@ internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
             type = declaringType
         }
         val field = select<RequiredField>().findById(id)
-        if (field != null && field.required) {
+        if (field != null && field.enabled) {
             val declaration = findField(fieldName, declaringType, event.file)
             val rule = requiredRule(declaration, field)
             return rule.asA()

@@ -11,17 +11,27 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
+// Uniquely identifies a message field.
+message FieldId {
+
+    // Name of the containing type.
+    protodata.TypeName type = 1;
+
+    // Short name of the field.
+    protodata.FieldName name = 2;
+}
+
 // A view on a field that is marked `(required)`.
 message RequiredField {
     option (entity).kind = PROJECTION;
 
     FieldId id = 1;
 
-    // Message appearing when this required field is not set.
+    // The error message template.
     string error_message = 2;
 
     // `true` if the field is marked with `(required) = true`, `false` otherwise.
-    bool required = 3;
+    bool enabled = 3;
 }
 
 // A view on a field that is marked with `(validate)`.
@@ -37,26 +47,16 @@ message ValidatedField {
     bool validate = 3;
 }
 
-// Uniquely identifies a message field.
-message FieldId {
-
-    // Name of the containing type.
-    protodata.TypeName type = 1;
-
-    // Short name of the field.
-    protodata.FieldName name = 2;
-}
-
 // A view of a field that is marked with `set_once` option.
 message SetOnceField {
     option (entity).kind = PROJECTION;
 
     FieldId id = 1;
 
-    // Message appearing when this required field is not set.
+    // The error message template.
     string error_message = 2;
 
-    // Value of `set_once` boolean option.
+    // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
     bool enabled = 3;
 
     // The field in which the option was discovered.
