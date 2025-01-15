@@ -70,6 +70,11 @@ public const val RANGE: String = "range"
 public const val REQUIRED: String = "required"
 
 /**
+ * The name of `(if_missing)` option.
+ */
+public const val IF_MISSING: String = "if_missing"
+
+/**
  * The name of the `(set_once)` option.
  */
 public const val SET_ONCE: String = "set_once"

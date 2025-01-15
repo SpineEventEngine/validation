@@ -36,7 +36,7 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.server.entity.alter
 
 /**
- * A view of a field that is marked with `set_once` option.
+ * A view of a field that is marked with `(set_once)` option.
  */
 internal class SetOnceFieldView :
     BoolFieldOptionView<SetOnceField, SetOnceField.Builder>(IfSetAgainOption.getDescriptor()) {
@@ -45,9 +45,11 @@ internal class SetOnceFieldView :
     override fun onConstraint(
         @External @Where(field = OPTION_NAME, equals = SET_ONCE)
         e: FieldOptionDiscovered
-    ) = alter {
+    ) {
         super.onConstraint(e)
-        subject = e.subject
+        alter {
+            subject = e.subject
+        }
     }
 
     @Subscribe
