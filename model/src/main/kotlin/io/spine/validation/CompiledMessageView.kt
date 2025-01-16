@@ -42,7 +42,7 @@ import io.spine.validation.event.SimpleRuleAdded
  * This view provides information about the compiled messages and their
  * validation constraints, if any.
  *
- * To add one or more validation constraints to the message, emit [SimpleRuleAdded]
+ * To add one or more validation constraint to the message, emit [SimpleRuleAdded]
  * or [CompositeRuleAdded] events.
  */
 internal class CompiledMessageView :

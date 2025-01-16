@@ -47,10 +47,10 @@ import java.lang.reflect.Type
 import java.util.*
 
 /**
- * Generates validation code for a given message type specified via
- * [CompiledMessage] instance.
+ * Generates validation code for the given [CompiledMessage].
  *
- * Serves as a method object for the [JavaValidationRenderer] passed to the constructor.
+ * Serves as a method object for the [JavaValidationRenderer]
+ * passed to the constructor.
  */
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,

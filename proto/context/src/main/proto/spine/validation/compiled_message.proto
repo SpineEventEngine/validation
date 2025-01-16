@@ -38,7 +38,7 @@ option java_multiple_files = true;
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
-// A message compiled by the validation library with its validation constraints.
+// A message compiled by the validation library with its constraints, if any.
 message CompiledMessage {
     option (entity).kind = PROJECTION;
 
