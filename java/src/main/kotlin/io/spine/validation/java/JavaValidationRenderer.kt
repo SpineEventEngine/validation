@@ -28,10 +28,9 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
-import io.spine.protodata.ast.MessageType
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.javaFile
+import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFile
@@ -68,70 +67,47 @@ import java.util.*
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
-    private lateinit var sources: SourceFileSet
-    private lateinit var validations: Validations
-
     // TODO:2025-01-16:yevhenii.nadtochii: Can we make it non-nullable in `Member`?
     //  It is probably third time I make such an override. Anyway, we always use
     //  `typeSystem` and `context` within `render()` invocation.
     public override val typeSystem: TypeSystem by lazy { super.typeSystem!! }
 
     override fun render(sources: SourceFileSet) {
-        this.sources = sources
-        this.validations = findValidations()
-        val messageTypes = findMessageTypes()
-        messageTypes.forEach {
-            generateCode(it)
+        // We receive `grpc` and `kotlin` output sources roots here as well.
+        // As for now, we modify only `java` sources.
+        if (!sources.hasJavaRoot) {
+            return
         }
-        sources.forEachSourceFile(messageTypes) {
-            annotateGeneratedMessages()
-            plugValidationIntoBuild()
+
+        // Runs for each compiled message no matter whether it has validation constrains or not.
+        val validations = select(MessageValidation::class.java).all()
+
+        // Adds `validate()` and `implements ValidatableMessage`.
+        val validationsWithFiles = validations.associateWith { sources.javaFileOf(it.type) }
+        validationsWithFiles.forEach { (constraints, file) ->
+            file.addValidationCode(constraints)
         }
+
+        // Annotates `build()`, `buildPartial()`. Adds invocation of `validate()` in `build()`.
+        validationsWithFiles.values.distinct()
+            .forEach {
+                // Though, it seems logical to do it along with adding `validate()`
+                // in the `forEach` above; we cannot do that. Insertion points used
+                // for the codegen below do not contain the type, while insertion points
+                // for `validate()` contain. Moving these calls to `forEach` above leads
+                // to annotations being applied several times if a compiled message has
+                // one or more nested messages.
+                it.annotateBuildMethod()
+                it.annotateBuildPartialMethod()
+                it.plugValidationIntoBuild()
+            }
     }
 
-    private fun findValidations(): Validations {
-        val client = select(MessageValidation::class.java)
-        return Validations(client)
-    }
-
-    private fun generateCode(type: MessageWithFile) {
-        val message = type.message
-        val javaFile = message.javaFile(type.fileHeader)
-        sources.find(javaFile)?.let {
-            @Suppress("UNCHECKED_CAST")
-            (it as SourceFile<Java>).addValidationCode(message)
-        }
-    }
-
-    private fun SourceFile<Java>.addValidationCode(type: MessageType) {
-        val validation = validations[type]
-        val validationCode = ValidationCode(this@JavaValidationRenderer, validation, this)
+    private fun SourceFile<Java>.addValidationCode(validation: MessageValidation) {
+        val rendered = this@JavaValidationRenderer
+        val validationCode = ValidationCode(rendered, validation, this)
         validationCode.generate()
     }
-}
-
-/**
- * Locates source files for the given message types and
- * performs the given action for each file.
- */
-private fun SourceFileSet.forEachSourceFile(
-    messageTypes: Set<MessageWithFile>,
-    action: SourceFile<Java>.() -> Unit
-) {
-    messageTypes
-        .map { m -> m.message.javaFile(m.fileHeader) }
-        .mapNotNull { path -> find(path) }
-        .distinct()
-        .map {
-            @Suppress("UNCHECKED_CAST") // Safe as we look for Java files.
-            it as SourceFile<Java>
-        }
-        .forEach(action)
-}
-
-private fun SourceFile<Java>.annotateGeneratedMessages() {
-    annotateBuildMethod()
-    annotateBuildPartialMethod()
 }
 
 private fun SourceFile<Java>.annotateBuildMethod() {
@@ -153,9 +129,7 @@ private fun SourceFile<Java>.annotateBuildPartialMethod() {
  *  1) the annotation is visible better,
  *  2) two or more annotations are separated.
  */
-private fun annotation(annotationClass: Class<out Annotation>): String {
-    return " @" + annotationClass.name
-}
+private fun annotation(annotationClass: Class<out Annotation>) = " @" + annotationClass.name
 
 private fun SourceFile<Java>.plugValidationIntoBuild() {
     at(ValidateBeforeReturn())
