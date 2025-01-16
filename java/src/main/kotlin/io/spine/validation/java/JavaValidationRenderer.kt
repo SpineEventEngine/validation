@@ -71,7 +71,10 @@ public class JavaValidationRenderer : JavaRenderer() {
     private lateinit var sources: SourceFileSet
     private lateinit var validations: Validations
 
-    public fun typeSystem(): TypeSystem = typeSystem!!
+    // TODO:2025-01-16:yevhenii.nadtochii: Can we make it non-nullable in `Member`?
+    //  It is probably third time I make such an override. Anyway, we always use
+    //  `typeSystem` and `context` within `render()` invocation.
+    public override val typeSystem: TypeSystem by lazy { super.typeSystem!! }
 
     override fun render(sources: SourceFileSet) {
         this.sources = sources

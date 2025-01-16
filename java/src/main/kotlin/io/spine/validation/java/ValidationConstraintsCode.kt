@@ -111,7 +111,7 @@ internal class ValidationConstraintsCode private constructor(
 
     private fun newContext(rule: Rule): GenerationContext = GenerationContext(
         client = renderer,
-        typeSystem = renderer.typeSystem(),
+        typeSystem = renderer.typeSystem,
         rule,
         msg = messageReference,
         validatedType = messageType,
