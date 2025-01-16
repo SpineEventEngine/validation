@@ -51,25 +51,30 @@ import io.spine.validation.java.point.ValidateBeforeReturn
 import java.util.*
 
 /**
- * A [Renderer][io.spine.protodata.render.Renderer] for the validation code in Java.
+ * The main Java renderer of the validation library.
  *
- * Inserts code into the [ValidateBeforeReturn] insertion point.
+ * This rendered is applied to every compiled [Message], even if the message does not
+ * have any constraints applied.
  *
- * The generated code assumes there is a variable called `result`.
- * Its type is the type of the validated message.
- * The variable holds the value of the message to validate.
+ * In particular, the renderer does the following:
  *
- * The generated code is a number of code lines.
- * It does not contain declarations (classes, methods, etc.).
+ * 1. Makes [Message] implement [io.spine.validate.ValidatableMessage].
+ * 2. Declares `validate()` method in [Message] containing the constraints, if any.
+ * 3. Declares [supporting members][CodeGenerator.supportingMembers] in [Message], if any,
+ * 4. Inserts invocation of `validate()` into [Message.Builder.build] method.
  *
- * If the validation rules are broken,
- * throws a [ValidationException][io.spine.validate.ValidationException].
+ * Also, it puts the following annotations:
+ *
+ * 1. [Validated] for [Message.Builder.build] method.
+ * 2. [NonValidated] for [Message.Builder.buildPartial] method.
+ *
+ * Note: there is also [ImplementValidatingBuilder] renderer that makes [Message.Builder]
+ * implement [io.spine.validate.ValidatingBuilder] interface. Logically, it is a part
+ * of this renderer, but as for now, it is a standalone renderer before this class
+ * migrates to PSI.
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
-    // TODO:2025-01-16:yevhenii.nadtochii: Can we make it non-nullable in `Member`?
-    //  It is probably third time I make such an override. Anyway, we always use
-    //  `typeSystem` and `context` within `render()` invocation.
     public override val typeSystem: TypeSystem by lazy { super.typeSystem!! }
 
     override fun render(sources: SourceFileSet) {
@@ -79,24 +84,35 @@ public class JavaValidationRenderer : JavaRenderer() {
             return
         }
 
-        // Runs for each compiled message no matter whether it has validation constrains or not.
+        // `MessageValidation` is created for every message, no matter it has constraints or not.
         val validations = select(MessageValidation::class.java).all()
+            .associateWith { sources.javaFileOf(it.type) }
 
         // Adds `validate()` and `implements ValidatableMessage`.
-        val validationsWithFiles = validations.associateWith { sources.javaFileOf(it.type) }
-        validationsWithFiles.forEach { (constraints, file) ->
+        validations.forEach { (constraints, file) ->
             file.addValidationCode(constraints)
         }
 
-        // Annotates `build()`, `buildPartial()`. Adds invocation of `validate()` in `build()`.
-        validationsWithFiles.values.distinct()
+        // Annotates `build()` and `buildPartial()` methods.
+        // Adds invocation of `validate()` in `build()`.
+        validations.values.distinct()
             .forEach {
-                // Though, it seems logical to do it along with adding `validate()`
+                // Though, it seems logical to do this along with adding `validate()`
                 // in the `forEach` above; we cannot do that. Insertion points used
-                // for the codegen below do not contain the type, while insertion points
-                // for `validate()` contain. Moving these calls to `forEach` above leads
-                // to annotations being applied several times if a compiled message has
-                // one or more nested messages.
+                // for the codegen here do not contain the type name, while insertion
+                // points for the codegen above contain them.
+                //
+                // Moving these calls to `forEach` above leads to generation of
+                // the same annotations and "plugging code" several times if a compiled
+                // message has one or more nested messages (so, several `Builder` classes)
+                // within one Java file.
+                //
+                // Notice usage if `distinct()` before `forEach`. Several `MessageType`s
+                // point to the same Java file if a root message declares nested messages.
+                //
+                // We are not going to address this inconsistency here.
+                // This issue will not exist when the class migrates to PSI.
+                //
                 it.annotateBuildMethod()
                 it.annotateBuildPartialMethod()
                 it.plugValidationIntoBuild()
@@ -126,7 +142,7 @@ private fun SourceFile<Java>.annotateBuildPartialMethod() {
  * Creates a string to be used in the code when using the given annotation class.
  *
  * Adds space before `@` so that when the type is fully qualified:
- *  1) the annotation is visible better,
+ *  1) the annotation is visible better;
  *  2) two or more annotations are separated.
  */
 private fun annotation(annotationClass: Class<out Annotation>) = " @" + annotationClass.name
@@ -137,6 +153,16 @@ private fun SourceFile<Java>.plugValidationIntoBuild() {
         .add(validateBeforeBuild())
 }
 
+/**
+ * Java code to insert into [Message.Builder.build] method.
+ *
+ * The generated code invokes `validate()` assuming there is a variable called `result`.
+ * The variable type is the type of the validated message, holding the value of
+ * the message to validate.
+ *
+ * If the validation constraints do not pass, the generated code would throw
+ * a [ValidationException][io.spine.validate.ValidationException].
+ */
 private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
     val result = ReadVar<Message>("result")
     addStatement(
