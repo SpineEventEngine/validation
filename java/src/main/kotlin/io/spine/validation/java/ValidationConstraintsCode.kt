@@ -33,7 +33,7 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.This
-import io.spine.validation.MessageValidation
+import io.spine.validation.CompiledMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
 import java.lang.System.lineSeparator
@@ -49,20 +49,20 @@ internal class ValidationConstraintsCode private constructor(
     private val renderer: JavaValidationRenderer,
 
     /**
-     * The validation rule for which to generate the code.
+     * The compiled message to generate the code for.
      */
-    private val validation: MessageValidation
+    private val message: CompiledMessage
 ) {
 
     /**
      * The name of the message type for which to generate the code.
      */
-    private val messageType: TypeName = validation.name
+    private val messageType: TypeName = message.name
 
     /**
      * The file which declares the message type.
      */
-    private val declaringFile: File = validation.type.file
+    private val declaringFile: File = message.type.file
 
     /**
      * The expression for referencing the message in the code.
@@ -96,7 +96,7 @@ internal class ValidationConstraintsCode private constructor(
     }
 
     private fun generate() {
-        for (rule in validation.ruleList) {
+        for (rule in message.ruleList) {
             addRule(rule)
         }
     }
@@ -126,7 +126,7 @@ internal class ValidationConstraintsCode private constructor(
         /**
          * Creates a new instance with the generated validation constraints code.
          */
-        fun generate(r: JavaValidationRenderer, v: MessageValidation): ValidationConstraintsCode {
+        fun generate(r: JavaValidationRenderer, v: CompiledMessage): ValidationConstraintsCode {
             val result = ValidationConstraintsCode(r, v)
             result.generate()
             return result

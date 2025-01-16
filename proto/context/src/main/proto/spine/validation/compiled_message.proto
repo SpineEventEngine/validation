@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,25 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+syntax = "proto3";
 
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.event.TypeDiscovered
-import io.spine.protodata.plugin.ViewRepository
-import io.spine.server.route.EventRouting
+package spine.validation;
 
-/**
- * A repository for the [MessageValidationView].
- *
- * Routes the [TypeDiscovered] events to the view by the type name.
- */
-internal class MessageValidationRepository :
-    ViewRepository<TypeName, MessageValidationView, MessageValidation>() {
+import "spine/options.proto";
 
-    override fun setupEventRouting(routing: EventRouting<TypeName>) {
-        super.setupEventRouting(routing)
-        routing.unicast<TypeDiscovered> { e, _ ->
-            e.type.name
-        }
-    }
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "CompiledMessageProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/rule.proto";
+
+// A message compiled by the validation library with its validation constraints.
+message CompiledMessage {
+    option (entity).kind = PROJECTION;
+
+    // The name of the message type.
+    protodata.TypeName name = 1;
+
+    // Partial information about the type.
+    //
+    // May contain only the type's own data, such as docs, declaring file, etc.
+    //
+    // Does not contain information about nested elements, such as fields and options.
+    //
+    protodata.MessageType type = 2;
+
+    // Validation rules.
+    //
+    // All these rules must be met in order for a message to be valid.
+    //
+    repeated Rule rule = 3;
 }

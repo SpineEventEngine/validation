@@ -41,7 +41,7 @@ public class ValidationPlugin : Plugin(
     renderers = listOf(),
     views = setOf(),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
-        MessageValidationRepository(),
+        CompiledMessageRepository(),
         RequiredFieldRepository(),
         ValidatedFieldRepository(),
         SetOnceFieldRepository()

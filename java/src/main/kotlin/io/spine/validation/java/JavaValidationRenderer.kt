@@ -42,7 +42,7 @@ import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
 import io.spine.validate.ValidationException
-import io.spine.validation.MessageValidation
+import io.spine.validation.CompiledMessage
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
@@ -84,18 +84,18 @@ public class JavaValidationRenderer : JavaRenderer() {
             return
         }
 
-        // `MessageValidation` is created for every message, no matter it has constraints or not.
-        val validations = select(MessageValidation::class.java).all()
+        val allCompiledMessages = select(CompiledMessage::class.java).all()
             .associateWith { sources.javaFileOf(it.type) }
 
         // Adds `validate()` and `implements ValidatableMessage`.
-        validations.forEach { (constraints, file) ->
-            file.addValidationCode(constraints)
+        allCompiledMessages.forEach { (message, file) ->
+            val validationCode = ValidationCode(renderer = this, message, file)
+            validationCode.generate()
         }
 
         // Annotates `build()` and `buildPartial()` methods.
         // Adds invocation of `validate()` in `build()`.
-        validations.values.distinct()
+        allCompiledMessages.values.distinct()
             .forEach {
                 // Though, it seems logical to do this along with adding `validate()`
                 // in the `forEach` above; we cannot do that. Insertion points used
@@ -117,12 +117,6 @@ public class JavaValidationRenderer : JavaRenderer() {
                 it.annotateBuildPartialMethod()
                 it.plugValidationIntoBuild()
             }
-    }
-
-    private fun SourceFile<Java>.addValidationCode(validation: MessageValidation) {
-        val rendered = this@JavaValidationRenderer
-        val validationCode = ValidationCode(rendered, validation, this)
-        validationCode.generate()
     }
 }
 
@@ -154,14 +148,14 @@ private fun SourceFile<Java>.plugValidationIntoBuild() {
 }
 
 /**
- * Java code to insert into [Message.Builder.build] method.
+ * Java code to insert into the end of [Message.Builder.build] method.
  *
- * The generated code invokes `validate()` assuming there is a variable called `result`.
- * The variable type is the type of the validated message, holding the value of
- * the message to validate.
+ * The generated code invokes `validate()` method. This code assumes there
+ * is a variable called `result`. The variable type is the type of the validated message,
+ * holding the instance of the message to validate.
  *
- * If the validation constraints do not pass, the generated code would throw
- * a [ValidationException][io.spine.validate.ValidationException].
+ * If one or more validation constraints do not pass, the generated code throws
+ * the [ValidationException][io.spine.validate.ValidationException].
  */
 private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
     val result = ReadVar<Message>("result")
