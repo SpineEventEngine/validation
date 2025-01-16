@@ -80,8 +80,10 @@ public class JavaValidationRenderer : JavaRenderer() {
         messageTypes.forEach {
             generateCode(it)
         }
-        sources.annotateGeneratedMessages(messageTypes)
-        sources.plugValidationIntoBuild(messageTypes)
+        sources.forEachSourceFile(messageTypes) {
+            annotateGeneratedMessages()
+            plugValidationIntoBuild()
+        }
     }
 
     private fun findValidations(): Validations {
@@ -124,10 +126,7 @@ private fun SourceFileSet.forEachSourceFile(
         .forEach(action)
 }
 
-private fun SourceFileSet.annotateGeneratedMessages(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile<Java>::addAnnotations)
-
-private fun SourceFile<Java>.addAnnotations() {
+private fun SourceFile<Java>.annotateGeneratedMessages() {
     annotateBuildMethod()
     annotateBuildPartialMethod()
 }
@@ -155,10 +154,7 @@ private fun annotation(annotationClass: Class<out Annotation>): String {
     return " @" + annotationClass.name
 }
 
-private fun SourceFileSet.plugValidationIntoBuild(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile<Java>::insertBeforeBuild)
-
-private fun SourceFile<Java>.insertBeforeBuild() {
+private fun SourceFile<Java>.plugValidationIntoBuild() {
     at(ValidateBeforeReturn())
         .withExtraIndentation(2)
         .add(validateBeforeBuild())
