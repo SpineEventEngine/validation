@@ -41,6 +41,11 @@ import io.spine.validation.event.SimpleRuleAdded
  *
  * To add more rules to the message validation, emit [SimpleRuleAdded] or
  * [CompositeRuleAdded] events.
+ *
+ * Please note, an instance of [MessageValidation] is created as long
+ * as a new message is discovered. Thus, [MessageValidation] is always present
+ * for all discovered types, even if the discovered type does not have any
+ * validation constraints.
  */
 internal class MessageValidationView :
     View<TypeName, MessageValidation, MessageValidation.Builder>() {
