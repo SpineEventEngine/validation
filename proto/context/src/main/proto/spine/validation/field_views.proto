@@ -14,10 +14,10 @@ import "spine/protodata/ast.proto";
 // Uniquely identifies a message field.
 message FieldId {
 
-    // Name of the containing type.
+    // The name of the containing type.
     protodata.TypeName type = 1;
 
-    // Short name of the field.
+    // The name of the field.
     protodata.FieldName name = 2;
 }
 
@@ -50,7 +50,7 @@ message ValidatedField {
     bool validate = 3;
 }
 
-// A view of a field that is marked with `set_once` option.
+// A view of a field that is marked with `(set_once)` option.
 message SetOnceField {
     option (entity).kind = PROJECTION;
 
@@ -60,7 +60,7 @@ message SetOnceField {
     string error_message = 2;
 
     // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
-    bool enabled = 3;
+    bool set_once = 3;
 
     // The field in which the option was discovered.
     protodata.Field subject = 4;

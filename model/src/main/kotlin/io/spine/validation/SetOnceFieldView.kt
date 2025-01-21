@@ -68,6 +68,6 @@ internal class SetOnceFieldView :
     }
 
     override fun enableValidation() = alter {
-        enabled = true
+        setOnce = true
     }
 }

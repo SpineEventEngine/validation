@@ -65,7 +65,7 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
         }
 
         val allCompiledMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceFields = setOnceFields().filter { it.enabled }
+        val setOnceFields = setOnceFields().filter { it.setOnce }
         setOnceFields
             .associateWith { allCompiledMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
