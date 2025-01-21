@@ -35,6 +35,7 @@ import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
+import io.spine.protodata.type.TypeSystem
 import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
 import io.spine.validate.NonValidated
@@ -73,6 +74,12 @@ import java.util.*
  * migrates to PSI.
  */
 public class JavaValidationRenderer : JavaRenderer() {
+
+    /**
+     * Exposes [typeSystem] property, so that [ValidationConstraintsCode] could use it.
+     */
+    public override val typeSystem: TypeSystem
+        get() = super.typeSystem
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
