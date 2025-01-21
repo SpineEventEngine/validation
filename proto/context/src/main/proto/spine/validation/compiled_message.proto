@@ -55,7 +55,7 @@ message CompiledMessage {
 
     // Validation rules.
     //
-    // All these rules must be met in order for a message to be valid.
+    // All these rules must be met in order for a message to be regarded as valid.
     //
     repeated Rule rule = 3;
 }
