@@ -126,8 +126,8 @@ internal class ValidationConstraintsCode private constructor(
         /**
          * Creates a new instance with the generated validation constraints code.
          */
-        fun generate(r: JavaValidationRenderer, v: CompiledMessage): ValidationConstraintsCode {
-            val result = ValidationConstraintsCode(r, v)
+        fun generate(r: JavaValidationRenderer, m: CompiledMessage): ValidationConstraintsCode {
+            val result = ValidationConstraintsCode(r, m)
             result.generate()
             return result
         }
