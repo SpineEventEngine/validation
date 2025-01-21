@@ -33,7 +33,7 @@ import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.This
-import io.spine.validation.CompiledMessage
+import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
 import java.lang.System.lineSeparator
@@ -49,9 +49,9 @@ internal class ValidationConstraintsCode private constructor(
     private val renderer: JavaValidationRenderer,
 
     /**
-     * The compiled message to generate the code for.
+     * The message to generate the code for.
      */
-    private val message: CompiledMessage
+    private val message: CompilationMessage
 ) {
 
     /**
@@ -126,7 +126,7 @@ internal class ValidationConstraintsCode private constructor(
         /**
          * Creates a new instance with the generated validation constraints code.
          */
-        fun generate(r: JavaValidationRenderer, m: CompiledMessage): ValidationConstraintsCode {
+        fun generate(r: JavaValidationRenderer, m: CompilationMessage): ValidationConstraintsCode {
             val result = ValidationConstraintsCode(r, m)
             result.generate()
             return result

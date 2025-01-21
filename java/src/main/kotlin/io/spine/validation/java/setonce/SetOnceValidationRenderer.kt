@@ -62,10 +62,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        val allCompiledMessages = findMessageTypes().associateBy { it.message.name }
+        val allCompilationMessages = findMessageTypes().associateBy { it.message.name }
         val setOnceFields = setOnceFields().filter { it.setOnce }
         setOnceFields
-            .associateWith { allCompiledMessages[it.id.type]!! }
+            .associateWith { allCompilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
                 val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
                 val sourceFile = sources.javaFileOf(declaredIn.message)

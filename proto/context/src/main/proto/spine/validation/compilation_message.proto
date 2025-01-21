@@ -32,14 +32,17 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "CompiledMessageProto";
+option java_outer_classname = "CompilationMessageProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
-// A message compiled by the validation library with its constraints, if any.
-message CompiledMessage {
+// A message from the current compilation process.
+//
+// May contain one or more validation rules.
+//
+message CompilationMessage {
     option (entity).kind = PROJECTION;
 
     // The name of the message type.

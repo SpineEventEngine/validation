@@ -42,7 +42,7 @@ import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
 import io.spine.validate.ValidationException
-import io.spine.validation.CompiledMessage
+import io.spine.validation.CompilationMessage
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
@@ -88,18 +88,18 @@ public class JavaValidationRenderer : JavaRenderer() {
             return
         }
 
-        val allCompiledMessages = select(CompiledMessage::class.java).all()
+        val allCompilationMessages = select(CompilationMessage::class.java).all()
             .associateWith { sources.javaFileOf(it.type) }
 
         // Adds `validate()` and `implements ValidatableMessage`.
-        allCompiledMessages.forEach { (message, file) ->
+        allCompilationMessages.forEach { (message, file) ->
             val validationCode = ValidationCode(renderer = this, message, file)
             validationCode.generate()
         }
 
         // Annotates `build()` and `buildPartial()` methods.
         // Adds invocation of `validate()` in `build()`.
-        allCompiledMessages.values.distinct()
+        allCompilationMessages.values.distinct()
             .forEach {
                 // Though, it seems logical to do this along with adding `validate()`
                 // in the `forEach` above; we cannot do that. Insertion points used

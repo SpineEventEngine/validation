@@ -32,12 +32,12 @@ import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.route.EventRouting
 
 /**
- * A repository for the [CompiledMessageView].
+ * A repository for the [CompilationMessageView].
  *
  * Routes the [TypeDiscovered] events to the view by the type name.
  */
 internal class CompiledMessageRepository :
-    ViewRepository<TypeName, CompiledMessageView, CompiledMessage>() {
+    ViewRepository<TypeName, CompilationMessageView, CompilationMessage>() {
 
     override fun setupEventRouting(routing: EventRouting<TypeName>) {
         super.setupEventRouting(routing)

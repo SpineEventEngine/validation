@@ -41,20 +41,20 @@ import io.spine.tools.code.Java
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
-import io.spine.validation.CompiledMessage
+import io.spine.validation.CompilationMessage
 import java.lang.System.lineSeparator
 import java.lang.reflect.Type
 import java.util.*
 
 /**
- * Generates validation code for the given [CompiledMessage].
+ * Generates validation code for the given [CompilationMessage].
  *
  * Serves as a method object for the [JavaValidationRenderer]
  * passed to the constructor.
  */
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,
-    private val message: CompiledMessage,
+    private val message: CompilationMessage,
     private val sourceFile: SourceFile<Java>
 ) {
     private val messageType: TypeName = message.name
