@@ -31,7 +31,7 @@ message RequiredField {
     string error_message = 2;
 
     // `true` if the field is marked with `(required) = true`, `false` otherwise.
-    bool enabled = 3;
+    bool required = 3;
 
     // The field in which the option was discovered.
     protodata.Field subject = 4;
