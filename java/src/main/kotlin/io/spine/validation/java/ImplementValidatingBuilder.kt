@@ -57,7 +57,7 @@ internal class ImplementValidatingBuilder : JavaRenderer(), WithLogging {
         val types = findMessageTypes()
         types.forEach {
             val type = it.message
-            val messageClass = type.javaClassName(typeSystem!!)
+            val messageClass = type.javaClassName(typeSystem)
             val file = sources.javaFileOf(type)
             execute {
                 file.extendBuilderClass(messageClass, ::logError)

@@ -55,8 +55,6 @@ import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNu
  */
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
-    override val typeSystem by lazy { super.typeSystem!! }
-
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
         // As for now, we modify only `java` sources.
