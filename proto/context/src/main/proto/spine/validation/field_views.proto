@@ -11,7 +11,7 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
-// Uniquely identifies a message field.
+// Uniquely identifies a field declaration within the compilation messages.
 message FieldId {
 
     // The name of the containing type.
