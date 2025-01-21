@@ -54,13 +54,13 @@ import java.util.*
  * The main Java renderer of the validation library.
  *
  * This rendered is applied to every compiled [Message], even if the message does not
- * have any constraints applied.
+ * have any declared constraints.
  *
  * In particular, the renderer does the following:
  *
- * 1. Makes [Message] implement [io.spine.validate.ValidatableMessage].
+ * 1. Makes [Message] implement [io.spine.validate.ValidatableMessage] interface.
  * 2. Declares `validate()` method in [Message] containing the constraints, if any.
- * 3. Declares [supporting members][CodeGenerator.supportingMembers] in [Message], if any,
+ * 3. Declares [supporting members][CodeGenerator.supportingMembers] in [Message], if any.
  * 4. Inserts invocation of `validate()` into [Message.Builder.build] method.
  *
  * Also, it puts the following annotations:
@@ -91,7 +91,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         val allCompilationMessages = select(CompilationMessage::class.java).all()
             .associateWith { sources.javaFileOf(it.type) }
 
-        // Adds `validate()` and `implements ValidatableMessage`.
+        // Adds `implements ValidatableMessage`, `validate()` and supporting members.
         allCompilationMessages.forEach { (message, file) ->
             val validationCode = ValidationCode(renderer = this, message, file)
             validationCode.generate()

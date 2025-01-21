@@ -49,8 +49,14 @@ import java.util.*
 /**
  * Generates validation code for the given [CompilationMessage].
  *
- * Serves as a method object for the [JavaValidationRenderer]
- * passed to the constructor.
+ * Serves as a method object for the [JavaValidationRenderer] passed
+ * to the constructor.
+ *
+ * In particular, this class does the following:
+ *
+ * 1. Makes the [message] implement [ValidatableMessage] interface.
+ * 2. Adds implementation of [ValidatableMessage.validate] method.
+ * 3. Adds declarations of supporting members, if any.
  */
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,
