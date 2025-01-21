@@ -28,10 +28,9 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
-import io.spine.protodata.ast.MessageType
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.javaFile
+import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFile
@@ -43,7 +42,7 @@ import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
 import io.spine.validate.ValidationException
-import io.spine.validation.MessageValidation
+import io.spine.validation.CompilationMessage
 import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
 import io.spine.validation.java.ValidationCode.Companion.VALIDATE
 import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
@@ -52,84 +51,77 @@ import io.spine.validation.java.point.ValidateBeforeReturn
 import java.util.*
 
 /**
- * A [Renderer][io.spine.protodata.render.Renderer] for the validation code in Java.
+ * The main Java renderer of the validation library.
  *
- * Inserts code into the [ValidateBeforeReturn] insertion point.
+ * This rendered is applied to every compiled [Message], even if the message does not
+ * have any constraints applied.
  *
- * The generated code assumes there is a variable called `result`.
- * Its type is the type of the validated message.
- * The variable holds the value of the message to validate.
+ * In particular, the renderer does the following:
  *
- * The generated code is a number of code lines.
- * It does not contain declarations (classes, methods, etc.).
+ * 1. Makes [Message] implement [io.spine.validate.ValidatableMessage].
+ * 2. Declares `validate()` method in [Message] containing the constraints, if any.
+ * 3. Declares [supporting members][CodeGenerator.supportingMembers] in [Message], if any,
+ * 4. Inserts invocation of `validate()` into [Message.Builder.build] method.
  *
- * If the validation rules are broken,
- * throws a [ValidationException][io.spine.validate.ValidationException].
+ * Also, it puts the following annotations:
+ *
+ * 1. [Validated] for [Message.Builder.build] method.
+ * 2. [NonValidated] for [Message.Builder.buildPartial] method.
+ *
+ * Note: there is also [ImplementValidatingBuilder] renderer that makes [Message.Builder]
+ * implement [io.spine.validate.ValidatingBuilder] interface. Logically, it is a part
+ * of this renderer, but as for now, it is a standalone renderer before this class
+ * migrates to PSI.
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
-    private lateinit var sources: SourceFileSet
-    private lateinit var validations: Validations
+    /**
+     * Exposes [typeSystem] property, so that [ValidationConstraintsCode] could use it.
+     */
+    public override val typeSystem: TypeSystem
+        get() = super.typeSystem
 
-    public fun typeSystem(): TypeSystem = typeSystem!!
-
-    protected override fun render(sources: SourceFileSet) {
-        this.sources = sources
-        this.validations = findValidations()
-        val messageTypes = findMessageTypes()
-        messageTypes.forEach {
-            generateCode(it)
+    override fun render(sources: SourceFileSet) {
+        // We receive `grpc` and `kotlin` output sources roots here as well.
+        // As for now, we modify only `java` sources.
+        if (!sources.hasJavaRoot) {
+            return
         }
-        sources.annotateGeneratedMessages(messageTypes)
-        sources.plugValidationIntoBuild(messageTypes)
-    }
 
-    private fun findValidations(): Validations {
-        val client = select(MessageValidation::class.java)
-        return Validations(client)
-    }
+        val allCompilationMessages = select(CompilationMessage::class.java).all()
+            .associateWith { sources.javaFileOf(it.type) }
 
-    private fun generateCode(type: MessageWithFile) {
-        val message = type.message
-        val javaFile = message.javaFile(type.fileHeader)
-        sources.find(javaFile)?.let {
-            @Suppress("UNCHECKED_CAST")
-            (it as SourceFile<Java>).addValidationCode(message)
+        // Adds `validate()` and `implements ValidatableMessage`.
+        allCompilationMessages.forEach { (message, file) ->
+            val validationCode = ValidationCode(renderer = this, message, file)
+            validationCode.generate()
         }
+
+        // Annotates `build()` and `buildPartial()` methods.
+        // Adds invocation of `validate()` in `build()`.
+        allCompilationMessages.values.distinct()
+            .forEach {
+                // Though, it seems logical to do this along with adding `validate()`
+                // in the `forEach` above; we cannot do that. Insertion points used
+                // for the codegen here do not contain the type name, while insertion
+                // points for the codegen above contain them.
+                //
+                // Moving these calls to `forEach` above leads to generation of
+                // the same annotations and "plugging code" several times if a compiled
+                // message has one or more nested messages (so, several `Builder` classes)
+                // within one Java file.
+                //
+                // Notice usage if `distinct()` before `forEach`. Several `MessageType`s
+                // point to the same Java file if a root message declares nested messages.
+                //
+                // We are not going to address this inconsistency here.
+                // This issue will not exist when the class migrates to PSI.
+                //
+                it.annotateBuildMethod()
+                it.annotateBuildPartialMethod()
+                it.plugValidationIntoBuild()
+            }
     }
-
-    private fun SourceFile<Java>.addValidationCode(type: MessageType) {
-        val validation = validations[type]
-        val validationCode = ValidationCode(this@JavaValidationRenderer, validation, this)
-        validationCode.generate()
-    }
-}
-
-/**
- * Locates source files for the given message types and
- * performs the given action for each file.
- */
-private fun SourceFileSet.forEachSourceFile(
-    messageTypes: Set<MessageWithFile>,
-    action: SourceFile<Java>.() -> Unit
-) {
-    messageTypes
-        .map { m -> m.message.javaFile(m.fileHeader) }
-        .mapNotNull { path -> find(path) }
-        .distinct()
-        .map {
-            @Suppress("UNCHECKED_CAST") // Safe as we look for Java files.
-            it as SourceFile<Java>
-        }
-        .forEach(action)
-}
-
-private fun SourceFileSet.annotateGeneratedMessages(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile<Java>::addAnnotations)
-
-private fun SourceFile<Java>.addAnnotations() {
-    annotateBuildMethod()
-    annotateBuildPartialMethod()
 }
 
 private fun SourceFile<Java>.annotateBuildMethod() {
@@ -148,22 +140,27 @@ private fun SourceFile<Java>.annotateBuildPartialMethod() {
  * Creates a string to be used in the code when using the given annotation class.
  *
  * Adds space before `@` so that when the type is fully qualified:
- *  1) the annotation is visible better,
+ *  1) the annotation is visible better;
  *  2) two or more annotations are separated.
  */
-private fun annotation(annotationClass: Class<out Annotation>): String {
-    return " @" + annotationClass.name
-}
+private fun annotation(annotationClass: Class<out Annotation>) = " @" + annotationClass.name
 
-private fun SourceFileSet.plugValidationIntoBuild(messageTypes: Set<MessageWithFile>) =
-    forEachSourceFile(messageTypes, SourceFile<Java>::insertBeforeBuild)
-
-private fun SourceFile<Java>.insertBeforeBuild() {
+private fun SourceFile<Java>.plugValidationIntoBuild() {
     at(ValidateBeforeReturn())
         .withExtraIndentation(2)
         .add(validateBeforeBuild())
 }
 
+/**
+ * Java code to insert into the end of [Message.Builder.build] method.
+ *
+ * The generated code invokes `validate()` method. This code assumes there
+ * is a variable called `result`. The variable type is the type of the validated message,
+ * holding the instance of the message to validate.
+ *
+ * If one or more validation constraints do not pass, the generated code throws
+ * the [ValidationException][io.spine.validate.ValidationException].
+ */
 private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
     val result = ReadVar<Message>("result")
     addStatement(

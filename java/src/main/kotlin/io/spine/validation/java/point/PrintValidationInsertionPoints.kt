@@ -32,7 +32,7 @@ import io.spine.tools.code.Java
 /**
  * An [InsertionPointPrinter] which adds the [ValidateBeforeReturn] point
  * to all the message types which have an associated
- * [MessageValidation][io.spine.validation.MessageValidation] view.
+ * [CompilationMessage][io.spine.validation.CompilationMessage] view.
  */
 @Suppress("unused") // Accessed via reflection by ProtoData API.
 public class PrintValidationInsertionPoints : InsertionPointPrinter<Java>(

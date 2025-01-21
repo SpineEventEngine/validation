@@ -41,23 +41,23 @@ import io.spine.tools.code.Java
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
-import io.spine.validation.MessageValidation
+import io.spine.validation.CompilationMessage
 import java.lang.System.lineSeparator
 import java.lang.reflect.Type
 import java.util.*
 
 /**
- * Generates validation code for a given message type specified via
- * [MessageValidation] instance.
+ * Generates validation code for the given [CompilationMessage].
  *
- * Serves as a method object for the [JavaValidationRenderer] passed to the constructor.
+ * Serves as a method object for the [JavaValidationRenderer]
+ * passed to the constructor.
  */
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,
-    private val validation: MessageValidation,
+    private val message: CompilationMessage,
     private val sourceFile: SourceFile<Java>
 ) {
-    private val messageType: TypeName = validation.name
+    private val messageType: TypeName = message.name
 
     /**
      * Generates the code in the linked source file.
@@ -76,7 +76,7 @@ internal class ValidationCode(
 
     private fun handleConstraints() {
         classScope().apply {
-            val constraints = ValidationConstraintsCode.generate(renderer, validation)
+            val constraints = ValidationConstraintsCode.generate(renderer, message)
             add(validateMethod(constraints.codeBlock()))
             add(constraints.supportingMembersCode())
         }

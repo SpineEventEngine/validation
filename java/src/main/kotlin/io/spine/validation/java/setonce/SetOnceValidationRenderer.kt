@@ -55,8 +55,6 @@ import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNu
  */
 internal class SetOnceValidationRenderer : JavaRenderer() {
 
-    override val typeSystem by lazy { super.typeSystem!! }
-
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
         // As for now, we modify only `java` sources.
@@ -64,10 +62,10 @@ internal class SetOnceValidationRenderer : JavaRenderer() {
             return
         }
 
-        val compilationMessages = findMessageTypes().associateBy { it.message.name }
-        val setOnceFields = setOnceFields().filter { it.enabled }
+        val allCompilationMessages = findMessageTypes().associateBy { it.message.name }
+        val setOnceFields = setOnceFields().filter { it.setOnce }
         setOnceFields
-            .associateWith { compilationMessages[it.id.type]!! }
+            .associateWith { allCompilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
                 val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
                 val sourceFile = sources.javaFileOf(declaredIn.message)

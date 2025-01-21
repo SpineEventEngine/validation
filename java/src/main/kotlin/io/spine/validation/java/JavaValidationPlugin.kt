@@ -36,7 +36,7 @@ import io.spine.validation.java.setonce.SetOnceValidationRenderer
 /**
  * A plugin that sets up everything needed to generate Java validation code.
  *
- * This plugin uses a delegate plugin to set up some on the components needed for
+ * This plugin uses a delegate plugin to set up some of the components needed for
  * code generation. By default, a [ValidationPlugin] is used. However, API users may
  * extend this plugin's behavior and supply a more rich base plugin.
  *

@@ -35,20 +35,38 @@ import io.spine.protodata.ast.Option
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.server.entity.alter
 import io.spine.validation.BoolFieldOptionView
+import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
+import io.spine.validation.REQUIRED
 import io.spine.validation.RequiredField
 
 /**
- * A view of a field that is marked as `required`.
+ * A view of a field that is marked as `(required)` option.
  */
 internal class RequiredFieldView :
     BoolFieldOptionView<RequiredField, RequiredField.Builder>(IfMissingOption.getDescriptor()) {
 
     @Subscribe
     override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = "required")
+        @External @Where(field = OPTION_NAME, equals = REQUIRED)
         e: FieldOptionDiscovered
-    ) = super.onConstraint(e)
+    ) {
+        super.onConstraint(e)
+        alter {
+            subject = e.subject
+        }
+    }
+
+    @Subscribe
+    override fun onErrorMessage(
+        @External @Where(field = OPTION_NAME, equals = IF_MISSING)
+        e: FieldOptionDiscovered
+    ) = super.onErrorMessage(e)
+
+    override fun extractErrorMessage(option: Option): String {
+        val ifMissing = option.value.unpack<IfMissingOption>()
+        return ifMissing.errorMsg
+    }
 
     override fun saveErrorMessage(errorMessage: String) = alter {
         this.errorMessage = errorMessage
@@ -56,16 +74,5 @@ internal class RequiredFieldView :
 
     override fun enableValidation() = alter {
         required = true
-    }
-
-    @Subscribe
-    override fun onErrorMessage(
-        @External @Where(field = OPTION_NAME, equals = "if_missing")
-        e: FieldOptionDiscovered
-    ) = super.onErrorMessage(e)
-
-    override fun extractErrorMessage(option: Option): String {
-        val ifMissing = option.value.unpack<IfMissingOption>()
-        return ifMissing.errorMsg
     }
 }

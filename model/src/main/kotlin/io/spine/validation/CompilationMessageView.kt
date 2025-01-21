@@ -37,13 +37,16 @@ import io.spine.validation.event.MessageWideRuleAdded
 import io.spine.validation.event.SimpleRuleAdded
 
 /**
- * A view which accumulates validation data for a message type.
+ * A view of messages processed by the validation library.
  *
- * To add more rules to the message validation, emit [SimpleRuleAdded] or
- * [CompositeRuleAdded] events.
+ * This view provides information about the messages being compiled and their
+ * validation constraints, if any.
+ *
+ * To add one or more validation constraints to the message, emit [SimpleRuleAdded]
+ * or [CompositeRuleAdded] events.
  */
-internal class MessageValidationView :
-    View<TypeName, MessageValidation, MessageValidation.Builder>() {
+internal class CompilationMessageView :
+    View<TypeName, CompilationMessage, CompilationMessage.Builder>() {
 
     @Subscribe
     fun on(@External event: TypeDiscovered) = alter {
