@@ -28,16 +28,20 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
+import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.file.hasJavaRoot
+import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.code.Java
 import io.spine.tools.java.codeBlock
+import io.spine.tools.psi.java.execute
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
@@ -95,6 +99,14 @@ public class JavaValidationRenderer : JavaRenderer() {
         allCompilationMessages.forEach { (message, file) ->
             val validationCode = ValidationCode(renderer = this, message, file)
             validationCode.generate()
+
+            val messageClass = message.type.javaClassName(typeSystem)
+            val psiFile = file.psi() as PsiJavaFile
+            val psiClass = psiFile.findClass(messageClass)
+            execute {
+                validationCode.generate(psiClass)
+            }
+            file.overwrite(psiFile.text)
         }
 
         // Annotates `build()` and `buildPartial()` methods.

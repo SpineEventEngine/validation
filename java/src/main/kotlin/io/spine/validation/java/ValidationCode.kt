@@ -28,9 +28,9 @@ package io.spine.validation.java
 
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
+import com.intellij.psi.PsiClass
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.TypedInsertionPoint
@@ -38,6 +38,9 @@ import io.spine.protodata.render.SourceAtLine
 import io.spine.protodata.render.SourceFile
 import io.spine.text.TextFactory.lineSplitter
 import io.spine.tools.code.Java
+import io.spine.tools.psi.java.Environment.elementFactory
+import io.spine.tools.psi.java.createInterfaceReference
+import io.spine.tools.psi.java.implement
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
@@ -69,15 +72,17 @@ internal class ValidationCode(
      * Generates the code in the linked source file.
      */
     fun generate() {
-        implementValidatableMessage()
         handleConstraints()
     }
 
-    private fun implementValidatableMessage() {
-        val atMessageImplements =
-            sourceFile.at(TypedInsertionPoint.MESSAGE_IMPLEMENTS.forType(messageType))
-                .withExtraIndentation(1)
-        atMessageImplements.add(ClassName(ValidatableMessage::class.java).toString() + ",")
+    fun generate(psiClass: PsiClass) = with(psiClass) {
+        implementInterface()
+    }
+
+    private fun PsiClass.implementInterface() {
+        val qualifiedName = ValidatableMessage::class.java.canonicalName
+        val reference = elementFactory.createInterfaceReference(qualifiedName)
+        implement(reference)
     }
 
     private fun handleConstraints() {
