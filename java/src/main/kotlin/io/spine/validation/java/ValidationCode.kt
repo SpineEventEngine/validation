@@ -26,26 +26,24 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.intellij.psi.PsiClass
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.TypedInsertionPoint
-import io.spine.protodata.render.SourceAtLine
-import io.spine.protodata.render.SourceFile
-import io.spine.text.TextFactory.lineSplitter
-import io.spine.tools.code.Java
+import io.spine.protodata.java.This
 import io.spine.tools.psi.java.Environment.elementFactory
+import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.createInterfaceReference
 import io.spine.tools.psi.java.implement
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
 import io.spine.validation.CompilationMessage
-import java.lang.System.lineSeparator
+import io.spine.validation.Rule
 import java.lang.reflect.Type
 import java.util.*
 
@@ -59,24 +57,25 @@ import java.util.*
  *
  * 1. Makes the [message] implement [ValidatableMessage] interface.
  * 2. Adds implementation of [ValidatableMessage.validate] method.
- * 3. Adds declarations of supporting members, if any.
+ * 3. Declares supporting members, if any.
  */
 internal class ValidationCode(
     private val renderer: JavaValidationRenderer,
     private val message: CompilationMessage,
-    private val sourceFile: SourceFile<Java>
 ) {
     private val messageType: TypeName = message.name
+    private val constraints = mutableListOf<CodeBlock>()
+    private val supportingFields = mutableListOf<FieldSpec>()
+    private val supportingMethods = mutableListOf<MethodSpec>()
 
-    /**
-     * Generates the code in the linked source file.
-     */
-    fun generate() {
-        handleConstraints()
-    }
-
-    fun generate(psiClass: PsiClass) = with(psiClass) {
-        implementInterface()
+    fun generate(psiClass: PsiClass) {
+        message.ruleList.forEach(::generateRule)
+        with(psiClass) {
+            implementInterface()
+            implementMethod()
+            declareSupportingFields()
+            declareSupportingMethods()
+        }
     }
 
     private fun PsiClass.implementInterface() {
@@ -85,25 +84,41 @@ internal class ValidationCode(
         implement(reference)
     }
 
-    private fun handleConstraints() {
-        classScope().apply {
-            val constraints = ValidationConstraintsCode.generate(renderer, message)
-            add(validateMethod(constraints.codeBlock()))
-            add(constraints.supportingMembersCode())
-        }
-    }
-
-    private fun classScope(): SourceAtLine =
-        sourceFile.at(TypedInsertionPoint.CLASS_SCOPE.forType(this.messageType))
-
-    private fun validateMethod(constraintsCode: CodeBlock): ImmutableList<String> {
-        val validateMethod = ValidateMethodCode(messageType, constraintsCode)
+    private fun PsiClass.implementMethod() {
+        val validateMethod = ValidateMethodCode(messageType, constraints)
         val methodSpec = validateMethod.generate()
-        val lines = ImmutableList.builder<String>()
-        lines.addAll(lineSplitter().split(methodSpec.toString()))
-            .add(lineSeparator())
-        return lines.build()
+        val psiMethod = elementFactory.createMethodFromText(methodSpec.toString(), this)
+        addLast(psiMethod)
     }
+
+    private fun PsiClass.declareSupportingFields() =
+        supportingFields.forEach {
+            addLast(elementFactory.createFieldFromText(it.toString(), this))
+        }
+
+    private fun PsiClass.declareSupportingMethods() =
+        supportingMethods.forEach {
+            addLast(elementFactory.createMethodFromText(it.toString(), this))
+        }
+
+    private fun generateRule(rule: Rule) {
+        val context = newContext(rule, message)
+        val generator = generatorFor(context)
+        constraints.add(generator.code())
+        supportingFields.addAll(generator.supportingFields())
+        supportingMethods.addAll(generator.supportingMethods())
+    }
+
+    private fun newContext(rule: Rule, message: CompilationMessage) =
+        GenerationContext(
+            client = renderer,
+            typeSystem = renderer.typeSystem,
+            rule = rule,
+            msg = This(),
+            validatedType = messageType,
+            protoFile = message.type.file,
+            violationList = VIOLATIONS
+        )
 
     companion object {
 

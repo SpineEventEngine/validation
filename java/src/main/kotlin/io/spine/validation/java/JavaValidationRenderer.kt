@@ -64,7 +64,7 @@ import java.util.*
  *
  * 1. Makes [Message] implement [io.spine.validate.ValidatableMessage] interface.
  * 2. Declares `validate()` method in [Message] containing the constraints, if any.
- * 3. Declares [supporting members][CodeGenerator.supportingMembers] in [Message], if any.
+ * 3. Declares supporting fields and methods in [Message], if any.
  * 4. Inserts invocation of `validate()` into [Message.Builder.build] method.
  *
  * Also, it puts the following annotations:
@@ -80,7 +80,7 @@ import java.util.*
 public class JavaValidationRenderer : JavaRenderer() {
 
     /**
-     * Exposes [typeSystem] property, so that [ValidationConstraintsCode] could use it.
+     * Exposes [typeSystem] property, so that the code generation context could use it.
      */
     public override val typeSystem: TypeSystem
         get() = super.typeSystem
@@ -97,9 +97,7 @@ public class JavaValidationRenderer : JavaRenderer() {
 
         // Adds `implements ValidatableMessage`, `validate()` and supporting members.
         allCompilationMessages.forEach { (message, file) ->
-            val validationCode = ValidationCode(renderer = this, message, file)
-            validationCode.generate()
-
+            val validationCode = ValidationCode(renderer = this, message)
             val messageClass = message.type.javaClassName(typeSystem)
             val psiFile = file.psi() as PsiJavaFile
             val psiClass = psiFile.findClass(messageClass)

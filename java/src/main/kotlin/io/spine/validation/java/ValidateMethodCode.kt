@@ -52,13 +52,13 @@ import javax.lang.model.element.Modifier.PUBLIC
  */
 internal class ValidateMethodCode(
     private val messageType: TypeName,
-    private val constraintsCode: CodeBlock
+    private val constraintsCode: List<CodeBlock>
 ) {
 
     fun generate(): MethodSpec {
         val code = codeBlock {
             addStatement(newAccumulator())
-            add(constraintsCode)
+            constraintsCode.forEach { add(it) }
             add(extraInsertionPoint())
             add(generateValidationError())
         }
