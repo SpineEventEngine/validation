@@ -26,33 +26,22 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
-import io.spine.protodata.java.MethodCall
-import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
-import io.spine.protodata.java.lines
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
-import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.protodata.type.TypeSystem
-import io.spine.tools.code.Java
-import io.spine.tools.java.codeBlock
+import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
+import io.spine.tools.psi.java.method
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
-import io.spine.validate.ValidationError
-import io.spine.validate.ValidationException
 import io.spine.validation.CompilationMessage
-import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
-import io.spine.validation.java.ValidationCode.Companion.VALIDATE
-import io.spine.validation.java.point.BuildMethodReturnTypeAnnotation
-import io.spine.validation.java.point.BuildPartialReturnTypeAnnotation
-import io.spine.validation.java.point.ValidateBeforeReturn
-import java.util.*
 
 /**
  * The main Java renderer of the validation library.
@@ -97,91 +86,42 @@ public class JavaValidationRenderer : JavaRenderer() {
 
         // Adds `implements ValidatableMessage`, `validate()` and supporting members.
         allCompilationMessages.forEach { (message, file) ->
+            val psiFile = file.psi() as PsiJavaFile
+
             val validationCode = ValidationCode(renderer = this, message)
             val messageClass = message.type.javaClassName(typeSystem)
-            val psiFile = file.psi() as PsiJavaFile
-            val psiClass = psiFile.findClass(messageClass)
+            val psiMessageClass = psiFile.findClass(messageClass)
             execute {
-                validationCode.generate(psiClass)
+                validationCode.generate(psiMessageClass)
             }
+
+            val builderClass = ClassName(
+                packageName = messageClass.packageName,
+                simpleNames = messageClass.simpleNames + "Builder"
+            )
+            val psiBuilderClass = psiFile.findClass(builderClass)
+            execute {
+                psiBuilderClass.method("build").run {
+                    returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
+                    // body!!.addBefore(runValidation(this),)
+                }
+                psiBuilderClass.method("buildPartial").run {
+                    returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!)
+                }
+            }
+
             file.overwrite(psiFile.text)
         }
-
-        // Annotates `build()` and `buildPartial()` methods.
-        // Adds invocation of `validate()` in `build()`.
-        allCompilationMessages.values.distinct()
-            .forEach {
-                // Though, it seems logical to do this along with adding `validate()`
-                // in the `forEach` above; we cannot do that. Insertion points used
-                // for the codegen here do not contain the type name, while insertion
-                // points for the codegen above contain them.
-                //
-                // Moving these calls to `forEach` above leads to generation of
-                // the same annotations and "plugging code" several times if a compiled
-                // message has one or more nested messages (so, several `Builder` classes)
-                // within one Java file.
-                //
-                // Notice usage if `distinct()` before `forEach`. Several `MessageType`s
-                // point to the same Java file if a root message declares nested messages.
-                //
-                // We are not going to address this inconsistency here.
-                // This issue will not exist when the class migrates to PSI.
-                //
-                it.annotateBuildMethod()
-                it.annotateBuildPartialMethod()
-                it.plugValidationIntoBuild()
-            }
     }
 }
 
-private fun SourceFile<Java>.annotateBuildMethod() {
-    val buildMethod = BuildMethodReturnTypeAnnotation()
-    atInline(buildMethod)
-        .add(annotation(Validated::class.java))
-}
-
-private fun SourceFile<Java>.annotateBuildPartialMethod() {
-    val buildPartialMethod = BuildPartialReturnTypeAnnotation()
-    atInline(buildPartialMethod)
-        .add(annotation(NonValidated::class.java))
-}
-
-/**
- * Creates a string to be used in the code when using the given annotation class.
- *
- * Adds space before `@` so that when the type is fully qualified:
- *  1) the annotation is visible better;
- *  2) two or more annotations are separated.
- */
-private fun annotation(annotationClass: Class<out Annotation>) = " @" + annotationClass.name
-
-private fun SourceFile<Java>.plugValidationIntoBuild() {
-    at(ValidateBeforeReturn())
-        .withExtraIndentation(2)
-        .add(validateBeforeBuild())
-}
-
-/**
- * Java code to insert into the end of [Message.Builder.build] method.
- *
- * The generated code invokes `validate()` method. This code assumes there
- * is a variable called `result`. The variable type is the type of the validated message,
- * holding the instance of the message to validate.
- *
- * If one or more validation constraints do not pass, the generated code throws
- * the [ValidationException][io.spine.validate.ValidationException].
- */
-private fun validateBeforeBuild(): ImmutableList<String> = codeBlock {
-    val result = ReadVar<Message>("result")
-    addStatement(
-        "\$T error = \$L",
-        OPTIONAL_ERROR,
-        MethodCall<Optional<ValidationError>>(result, VALIDATE)
-    )
-    beginControlFlow("if (error.isPresent())")
-    addStatement(
-        "throw new \$T(error.get().getConstraintViolationList())",
-        ValidationException::class.java
-    )
-    endControlFlow()
-}.lines()
+private fun runValidation(psiElement: PsiElement) = elementFactory.createCodeBlockFromText(
+    """
+    |{
+    |    java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+    |    if (error.isPresent()) {
+    |        throw new io.spine.validate.ValidationException(error.get().getConstraintViolationList());
+    |    }
+    |}
+    """.trimMargin(), psiElement
+)
