@@ -85,10 +85,8 @@ internal class ValidationCode(
     }
 
     private fun PsiClass.implementMethod() {
-        val validateMethod = ValidateMethodCode(messageType, constraints)
-        val methodSpec = validateMethod.generate()
-        val psiMethod = elementFactory.createMethodFromText(methodSpec.toString(), this)
-        addLast(psiMethod)
+        val validateMethod = ValidateMethodCode(constraints)
+        addLast(validateMethod.generate(this))
     }
 
     private fun PsiClass.declareSupportingFields() =

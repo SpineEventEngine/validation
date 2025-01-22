@@ -26,78 +26,34 @@
 
 package io.spine.validation.java
 
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiMethod
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.call
-import io.spine.protodata.java.newBuilder
-import io.spine.protodata.render.InsertionPoint
-import io.spine.protodata.render.codeLine
-import io.spine.tools.code.Java
-import io.spine.tools.java.codeBlock
-import io.spine.tools.java.methodSpec
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.ValidationError
-import io.spine.validation.java.ValidationCode.Companion.OPTIONAL_ERROR
-import io.spine.validation.java.ValidationCode.Companion.VALIDATE
-import io.spine.validation.java.ValidationCode.Companion.VIOLATIONS
-import io.spine.validation.java.point.ExtraValidation
-import java.lang.System.lineSeparator
-import java.util.*
-import javax.lang.model.element.Modifier.PUBLIC
+import io.spine.string.joinByLines
+import io.spine.tools.psi.java.Environment.elementFactory
 
 /**
  * Wraps the passed constraints code into a method.
  */
 internal class ValidateMethodCode(
-    private val messageType: TypeName,
-    private val constraintsCode: List<CodeBlock>
+    private val constraints: List<CodeBlock>
 ) {
 
-    fun generate(): MethodSpec {
-        val code = codeBlock {
-            addStatement(newAccumulator())
-            constraintsCode.forEach { add(it) }
-            add(extraInsertionPoint())
-            add(generateValidationError())
-        }
-        return methodSpec(VALIDATE) {
-            addAnnotation(Override::class.java)
-            returns(OPTIONAL_ERROR)
-            addModifiers(PUBLIC)
-            addCode(code)
-        }
-    }
-
-    private fun extraInsertionPoint(): CodeBlock {
-        val insertionPoint: InsertionPoint = ExtraValidation(messageType)
-        val line = Java.comment(insertionPoint.codeLine) + lineSeparator()
-        return CodeBlock.of(line)
-    }
-
-    companion object {
-        private const val RETURN_LITERAL = "return \$L"
-
-        private fun newAccumulator(): CodeBlock = CodeBlock.of(
-            "var \$L = new \$T<\$T>()",
-            VIOLATIONS,
-            ArrayList::class.java,
-            ConstraintViolation::class.java
+    fun generate(psiClass: PsiClass): PsiMethod {
+        return elementFactory.createMethodFromText(
+            """
+            |public java.util.Optional<io.spine.validate.ValidationError> validate() {
+            |    var violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+            |    
+            |    ${constraints.joinByLines()}
+            |    
+            |    if (!violations.isEmpty()) {
+            |        return java.util.Optional.of(io.spine.validate.ValidationError.newBuilder().addAllConstraintViolation(violations).build());
+            |    } else {
+            |        return java.util.Optional.empty();
+            |     }
+            |}
+            """.trimMargin(), psiClass
         )
-
-        private fun generateValidationError(): CodeBlock = codeBlock {
-            beginControlFlow("if (!\$L.isEmpty())", VIOLATIONS)
-            val errorBuilder = ClassName(ValidationError::class.java).newBuilder()
-                .chainAddAll("constraint_violation", VIOLATIONS)
-                .chainBuild<ValidationError.Builder>()
-            val optional = ClassName(Optional::class.java)
-            val optionalOf = optional.call<Optional<ValidationError>>("of", errorBuilder)
-            addStatement(RETURN_LITERAL, optionalOf)
-            nextControlFlow("else")
-            val optionalEmpty = optional.call<Optional<ValidationError>>("empty")
-            addStatement(RETURN_LITERAL, optionalEmpty)
-            endControlFlow()
-        }
     }
 }

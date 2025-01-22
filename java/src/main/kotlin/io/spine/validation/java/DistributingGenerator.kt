@@ -95,19 +95,13 @@ internal class DistributingGenerator(
             addStatement("return \$L.build()", elementContext.violationList)
         }
 
-        val otherMembers = delegate.supportingMethods()
-
         val groupingMethod = methodSpec(methodName) {
             addModifiers(Modifier.PRIVATE)
             returns(violationsType)
             addCode(body)
         }
-            // `MethodSpec` cannot be wrapped to `CodeBlock` directly, so we have to convert
-            // it to `String`. We also need to escape `$` symbols because they are part of JavaPoet templates.
-            // These symbols can be present in our own error message templates.
-            // .toString()
-            // .replace("$", "$$")
 
+        val otherMembers = delegate.supportingMethods()
         return otherMembers + groupingMethod
     }
 
