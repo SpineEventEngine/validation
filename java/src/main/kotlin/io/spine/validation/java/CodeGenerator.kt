@@ -29,6 +29,8 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
 import io.spine.logging.WithLogging
 import io.spine.protodata.java.Expression
 import io.spine.tools.java.codeBlock
@@ -77,11 +79,18 @@ internal abstract class CodeGenerator(
     }
 
     /**
-     * The code which is inserted into the message class scope.
+     * Fields inserted into the message class scope.
      *
-     * Such code may maintain caches for intermediate validation results, etc.
+     * Such fields may cache intermediate validation results, etc.
      */
-    open fun supportingMembers(): CodeBlock = noCode()
+    open fun supportingFields(): List<FieldSpec> = emptyList()
+
+    /**
+     * Methods inserted into the message class scope.
+     *
+     * Such methods may contain validation subroutines, etc.
+     */
+    open fun supportingMethods(): List<MethodSpec> = emptyList()
 
     /**
      * Generated code which does preparations before the validation checks can be performed.

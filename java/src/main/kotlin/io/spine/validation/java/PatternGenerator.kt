@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import io.spine.option.PatternOption
 import io.spine.protodata.java.Expression
@@ -59,7 +58,7 @@ internal class PatternGenerator(
         return matcher.chain(matchingMethod)
     }
 
-    override fun supportingMembers(): CodeBlock {
+    override fun supportingFields(): List<FieldSpec> {
         val compileModifiers = feature.hasModifier() && feature.modifier.containsFlags()
         val field = FieldSpec.builder(
             Pattern::class.java,
@@ -78,10 +77,7 @@ internal class PatternGenerator(
         } else {
             field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
         }
-        return super.supportingMembers()
-            .toBuilder()
-            .add("\$L", field.build())
-            .build()
+        return super.supportingFields() + field.build()
     }
 }
 

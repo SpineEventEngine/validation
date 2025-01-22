@@ -27,6 +27,8 @@
 package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
 import io.spine.protobuf.isNotDefault
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.Expression
@@ -107,10 +109,12 @@ internal class CompositeRuleGenerator(ctx: GenerationContext) : CodeGenerator(ct
             ctx.validatedType, ctx.violationList, field, accessor
         )
     }
-    override fun supportingMembers(): CodeBlock = codeBlock {
-        add(left.supportingMembers())
-        add(right.supportingMembers())
-    }
+
+    override fun supportingFields(): List<FieldSpec> =
+        left.supportingFields() + right.supportingFields()
+
+    override fun supportingMethods(): List<MethodSpec> =
+        left.supportingMethods() + right.supportingMethods()
 
     override fun prologue(): CodeBlock = codeBlock {
         add(left.prologue())
