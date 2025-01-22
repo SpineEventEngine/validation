@@ -32,11 +32,11 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addLast
+import io.spine.tools.psi.java.annotate
 import io.spine.tools.psi.java.createInterfaceReference
 import io.spine.tools.psi.java.implement
 import io.spine.validate.ConstraintViolation
@@ -85,8 +85,40 @@ internal class ValidationCode(
     }
 
     private fun PsiClass.implementMethod() {
-        val validateMethod = ValidateMethodCode(constraints)
-        addLast(validateMethod.generate(this))
+        val psiMethod = elementFactory.createMethodFromText(
+            """
+            |public java.util.Optional<io.spine.validate.ValidationError> validate() {
+            |    ${methodBody()}
+            |}
+            """.trimMargin(), this
+        )
+        psiMethod.annotate(Override::class.java)
+        addLast(psiMethod)
+    }
+
+    private fun methodBody(): String {
+        if (constraints.isEmpty()) {
+            return "return java.util.Optional.empty();"
+        }
+
+        // `CodeBlock` is printed with a new line in the end, so no need to call `joinByLine()`.
+        // We are trimming because we don't need a trailing empty line.
+        val formattedConstraints = constraints.joinToString(separator = "").trim()
+
+        return """
+        var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+        
+        $formattedConstraints
+        
+        if (!$violations.isEmpty()) {
+            var error = io.spine.validate.ValidationError.newBuilder()
+                .addAllConstraintViolation($violations)
+                .build();
+            return java.util.Optional.of(error);
+        } else {
+            return java.util.Optional.empty();
+        }
+        """.trimIndent()
     }
 
     private fun PsiClass.declareSupportingFields() =
@@ -115,17 +147,15 @@ internal class ValidationCode(
             msg = This(),
             validatedType = messageType,
             protoFile = message.type.file,
-            violationList = VIOLATIONS
+            violationList = violations
         )
 
     companion object {
 
-        const val VALIDATE: String = "validate"
+        private val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
 
         @JvmField
         val OPTIONAL_ERROR: Type = object : TypeToken<Optional<ValidationError>>() {}.type
-
-        @JvmField
-        val VIOLATIONS: Expression<MutableList<ConstraintViolation>> = ReadVar("violations")
+        const val VALIDATE: String = "validate"
     }
 }
