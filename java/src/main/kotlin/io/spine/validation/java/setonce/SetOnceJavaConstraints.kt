@@ -218,26 +218,6 @@ internal sealed class SetOnceJavaConstraints<T>(
     ): Expression<Boolean>
 
     /**
-     * Looks for the first child of this [PsiElement], the text representation of which
-     * satisfies both [startsWith] and [contains] criteria.
-     *
-     * This method performs a depth-first search of the PSI hierarchy. So, the second direct
-     * child of this [PsiElement] is checked only when the first child and all its descendants
-     * are checked.
-     */
-    protected fun PsiElement.deepSearch(
-        startsWith: JavaElement,
-        contains: JavaElement = startsWith
-    ): PsiStatement = children.firstNotNullOf { element ->
-        val text = element.text
-        when {
-            !text.contains("$contains") -> null
-            text.startsWith("$startsWith") -> element
-            else -> element.deepSearch(startsWith, contains)
-        }
-    } as PsiStatement
-
-    /**
      * Converts the given [fieldValue] to string for a diagnostics message.
      */
     protected abstract fun asString(fieldValue: Expression<T>): Expression<String>
@@ -253,3 +233,36 @@ internal sealed class SetOnceJavaConstraints<T>(
  */
 private fun PsiElementFactory.createStatement(text: String) =
     createStatementFromText(text, null)
+
+/**
+ * Looks for the first child of this [PsiElement], the text representation of which
+ * satisfies both [startsWith] and [contains] criteria.
+ *
+ * This method performs a depth-first search of the PSI hierarchy. So, the second direct
+ * child of this [PsiElement] is checked only when the first child and all its descendants
+ * are checked.
+ */
+internal fun PsiElement.deepSearch(
+    startsWith: JavaElement,
+    contains: JavaElement = startsWith
+): PsiStatement = deepSearch("$startsWith", "$contains")
+
+/**
+ * Looks for the first child of this [PsiElement], the text representation of which
+ * satisfies both [startsWith] and [contains] criteria.
+ *
+ * This method performs a depth-first search of the PSI hierarchy. So, the second direct
+ * child of this [PsiElement] is checked only when the first child and all its descendants
+ * are checked.
+ */
+internal fun PsiElement.deepSearch(
+    startsWith: String,
+    contains: String = startsWith
+): PsiStatement = children.firstNotNullOf { element ->
+    val text = element.text
+    when {
+        !text.contains(contains) -> null
+        text.startsWith(startsWith) -> element
+        else -> element.deepSearch(startsWith, contains)
+    }
+} as PsiStatement

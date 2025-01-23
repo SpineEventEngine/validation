@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import com.google.protobuf.Message
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.file.hasJavaRoot
@@ -42,6 +41,8 @@ import io.spine.tools.psi.java.method
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validation.CompilationMessage
+import io.spine.validation.java.setonce.deepSearch
+
 
 /**
  * The main Java renderer of the validation library.
@@ -103,7 +104,11 @@ public class JavaValidationRenderer : JavaRenderer() {
             execute {
                 psiBuilderClass.method("build").run {
                     returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
-                    // body!!.addBefore(runValidation(this),)
+                    val returnResult = deepSearch("return result;")
+                    val runValidation = elementFactory.createCodeBlockFromText("{${runValidation()}}", this)
+                    val first = runValidation.lBrace!!.nextSibling
+                    val last = runValidation.rBrace!!.prevSibling
+                    body!!.addRangeBefore(first, last, returnResult)
                 }
                 psiBuilderClass.method("buildPartial").run {
                     returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!)
@@ -115,13 +120,10 @@ public class JavaValidationRenderer : JavaRenderer() {
     }
 }
 
-private fun runValidation(psiElement: PsiElement) = elementFactory.createCodeBlockFromText(
+private fun runValidation() =
     """
-    |{
-    |    java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
-    |    if (error.isPresent()) {
-    |        throw new io.spine.validate.ValidationException(error.get().getConstraintViolationList());
-    |    }
-    |}
-    """.trimMargin(), psiElement
-)
+    java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+    if (error.isPresent()) {
+        throw new io.spine.validate.ValidationException(error.get().getConstraintViolationList());
+    }
+    """.trimIndent()
