@@ -30,7 +30,6 @@ import io.spine.protodata.plugin.Plugin
 import io.spine.protodata.render.Renderer
 import io.spine.server.BoundedContextBuilder
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.java.point.PrintValidationInsertionPoints
 import io.spine.validation.java.setonce.SetOnceValidationRenderer
 
 /**
@@ -64,7 +63,6 @@ public class JavaValidationPlugin(private val base: Plugin) :
          */
         private fun mergeRenderers(base: Plugin): List<Renderer<*>> = buildList {
             addAll(base.renderers)
-            add(PrintValidationInsertionPoints())
             add(JavaValidationRenderer())
             add(ImplementValidatingBuilder())
             add(SetOnceValidationRenderer())

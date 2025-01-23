@@ -105,7 +105,9 @@ public class JavaValidationRenderer : JavaRenderer() {
                 psiBuilderClass.method("build").run {
                     returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
                     val returnResult = deepSearch("return result;")
-                    val runValidation = elementFactory.createCodeBlockFromText("{${runValidation()}}", this)
+                    val runValidation = elementFactory.createCodeBlockFromText(
+                        "{${runValidation()}}", this
+                    )
                     val first = runValidation.lBrace!!.nextSibling
                     val last = runValidation.rBrace!!.prevSibling
                     body!!.addRangeBefore(first, last, returnResult)
