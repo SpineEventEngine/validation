@@ -45,6 +45,7 @@ import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.java.psi.addBefore
 import io.spine.validation.java.psi.createStatementsFromText
+import io.spine.validation.java.psi.nested
 import io.spine.validation.java.setonce.deepSearch
 
 /**
@@ -99,7 +100,7 @@ public class JavaValidationRenderer : JavaRenderer() {
                 validationCode.generate(psiMessageClass)
             }
 
-            val psiBuilderClass = psiMessageClass.innerClasses.first { it.name == "Builder" }
+            val psiBuilderClass = psiMessageClass.nested("Builder")
             execute {
                 val validatingBuilder = ValidatingBuilder::class.java.canonicalName
                 val reference = elementFactory.createInterfaceReference(
