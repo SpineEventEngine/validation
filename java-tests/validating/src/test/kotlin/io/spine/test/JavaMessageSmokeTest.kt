@@ -27,12 +27,18 @@
 package io.spine.test
 
 import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldNotBe
 import io.spine.test.protobuf.CardNumber
 import io.spine.validate.NonValidated
+import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validate.check
+import io.spine.validate.Validated
+import io.spine.validate.ValidatingBuilder
 import io.spine.validate.ValidationException
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -76,5 +82,31 @@ internal class JavaMessageSmokeTest {
         assertThrows<ValidationException> {
             check(number)
         }
+    }
+
+    @Test
+    @Disabled // TODO:2025-01-23:yevhenii.nadtochii: Should preserve them in runtime?
+    fun `annotate the return type of 'build()' with '@Validated'`() {
+        val buildMethod = CardNumber.Builder::class.java.getDeclaredMethod("build")
+        val annotation = buildMethod.returnType.getAnnotation(Validated::class.java)
+        annotation.shouldNotBeNull()
+    }
+
+    @Test
+    @Disabled // TODO:2025-01-23:yevhenii.nadtochii: Should preserve them in runtime?
+    fun `annotate the return type of 'buildPartial()' with '@NonValidated'`() {
+        val buildMethod = CardNumber.Builder::class.java.getDeclaredMethod("buildPartial")
+        val annotation = buildMethod.returnType.getAnnotation(NonValidated::class.java)
+        annotation.shouldNotBeNull()
+    }
+
+    @Test
+    fun `make the message implement 'ValidatableMessage'`() {
+        CardNumber::class.java.interfaces shouldContain ValidatableMessage::class.java
+    }
+
+    @Test
+    fun `make the message builder implement 'ValidatingBuilder'`() {
+        CardNumber.Builder::class.java.interfaces shouldContain ValidatingBuilder::class.java
     }
 }

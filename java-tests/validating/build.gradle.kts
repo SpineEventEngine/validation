@@ -25,8 +25,10 @@
  */
 
 import io.spine.dependency.lib.AutoService
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.TestLib
+import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
 import io.spine.dependency.test.JUnit
 import io.spine.dependency.test.Kotest
@@ -41,8 +43,8 @@ dependencies {
     testFixturesCompileOnly(AutoService.annotations)
 
     val testFixtureDependencies = listOf(
-        Spine.base,
-        Spine.time,
+        Base.lib,
+        Time.lib,
         Logging.lib,
         Validation.runtime,
         Kotest.assertions
@@ -53,8 +55,8 @@ dependencies {
     }
 
     testImplementation(JUnit.params)
-    testImplementation(Spine.testlib)
-    testImplementation(Spine.time)
+    testImplementation(TestLib.lib)
+    testImplementation(Time.lib)
 }
 
 testProtoDataRemoteDebug(enabled = false)
