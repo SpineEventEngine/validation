@@ -58,7 +58,7 @@ import io.spine.validation.java.psi.nested
  * 1. [Validated] for [Message.Builder.build] method.
  * 2. [NonValidated] for [Message.Builder.buildPartial] method.
  */
-public class JavaValidationRenderer : JavaRenderer() {
+public class JavaMessageRenderer : JavaRenderer() {
 
     /**
      * Exposes [typeSystem] property, so that the code generation context could use it.

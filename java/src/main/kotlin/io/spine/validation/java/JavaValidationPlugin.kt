@@ -27,7 +27,7 @@
 package io.spine.validation.java
 
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.java.setonce.SetOnceValidationRenderer
+import io.spine.validation.java.setonce.SetOnceRenderer
 
 /**
  * A plugin that sets up everything needed to generate Java validation code.
@@ -39,7 +39,7 @@ import io.spine.validation.java.setonce.SetOnceValidationRenderer
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(),
-        SetOnceValidationRenderer()
+        JavaMessageRenderer(),
+        SetOnceRenderer()
     )
 )

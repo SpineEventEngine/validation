@@ -53,7 +53,7 @@ import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNu
  * to enforce the constraint. For different field types, different methods are modified.
  * Take a look on [SetOnceJavaConstraints] and its inheritors for details.
  */
-internal class SetOnceValidationRenderer : JavaRenderer() {
+internal class SetOnceRenderer : JavaRenderer() {
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.

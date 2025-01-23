@@ -46,7 +46,7 @@ import io.spine.validation.Rule
 /**
  * Generates validation code for the given [CompilationMessage].
  *
- * Serves as a method object for the [JavaValidationRenderer] passed
+ * Serves as a method object for the [JavaMessageRenderer] passed
  * to the constructor.
  *
  * In particular, this class does the following:
@@ -56,7 +56,7 @@ import io.spine.validation.Rule
  * 3. Declares supporting members, if any.
  */
 internal class MessageValidationCode(
-    private val renderer: JavaValidationRenderer,
+    private val renderer: JavaMessageRenderer,
     private val message: CompilationMessage,
 ) {
     private val messageType: TypeName = message.name
