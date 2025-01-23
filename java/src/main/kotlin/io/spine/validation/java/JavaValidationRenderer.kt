@@ -36,10 +36,13 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFileSet
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.Environment.elementFactory
+import io.spine.tools.psi.java.createInterfaceReference
 import io.spine.tools.psi.java.execute
+import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
+import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.java.setonce.deepSearch
 
@@ -89,7 +92,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         allCompilationMessages.forEach { (message, file) ->
             val psiFile = file.psi() as PsiJavaFile
 
-            val validationCode = ValidationCode(renderer = this, message)
+            val validationCode = MessageValidationCode(renderer = this, message)
             val messageClass = message.type.javaClassName(typeSystem)
             val psiMessageClass = psiFile.findClass(messageClass)
             execute {
@@ -102,6 +105,11 @@ public class JavaValidationRenderer : JavaRenderer() {
             )
             val psiBuilderClass = psiFile.findClass(builderClass)
             execute {
+                val validatingBuilder = ValidatingBuilder::class.java.canonicalName
+                val reference = elementFactory.createInterfaceReference(
+                    validatingBuilder, messageClass.canonical)
+                psiBuilderClass.implement(reference)
+
                 psiBuilderClass.method("build").run {
                     returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
                     val returnResult = deepSearch("return result;")
@@ -112,6 +120,7 @@ public class JavaValidationRenderer : JavaRenderer() {
                     val last = runValidation.rBrace!!.prevSibling
                     body!!.addRangeBefore(first, last, returnResult)
                 }
+
                 psiBuilderClass.method("buildPartial").run {
                     returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!)
                 }

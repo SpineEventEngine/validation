@@ -44,7 +44,7 @@ import io.spine.validation.java.setonce.SetOnceValidationRenderer
  */
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin(private val base: Plugin) :
-    Plugin(mergeRenderers(base), base.views, base.viewRepositories, base.policies) {
+    Plugin(mergeRenderers(), base.views, base.viewRepositories, base.policies) {
 
     /**
      * The constructor to be invoked reflectively by ProtoData.
@@ -61,10 +61,8 @@ public class JavaValidationPlugin(private val base: Plugin) :
          * Orders the renderers in such a way that the renderers of
          * the `base` plugin always come before its own renderers.
          */
-        private fun mergeRenderers(base: Plugin): List<Renderer<*>> = buildList {
-            addAll(base.renderers)
+        private fun mergeRenderers(): List<Renderer<*>> = buildList {
             add(JavaValidationRenderer())
-            add(ImplementValidatingBuilder())
             add(SetOnceValidationRenderer())
         }
     }

@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.google.common.reflect.TypeToken
 import com.intellij.psi.PsiClass
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -41,11 +40,8 @@ import io.spine.tools.psi.java.createInterfaceReference
 import io.spine.tools.psi.java.implement
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
-import io.spine.validate.ValidationError
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
-import java.lang.reflect.Type
-import java.util.*
 
 /**
  * Generates validation code for the given [CompilationMessage].
@@ -59,7 +55,7 @@ import java.util.*
  * 2. Adds implementation of [ValidatableMessage.validate] method.
  * 3. Declares supporting members, if any.
  */
-internal class ValidationCode(
+internal class MessageValidationCode(
     private val renderer: JavaValidationRenderer,
     private val message: CompilationMessage,
 ) {
@@ -151,11 +147,6 @@ internal class ValidationCode(
         )
 
     companion object {
-
         private val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-
-        @JvmField
-        val OPTIONAL_ERROR: Type = object : TypeToken<Optional<ValidationError>>() {}.type
-        const val VALIDATE: String = "validate"
     }
 }
