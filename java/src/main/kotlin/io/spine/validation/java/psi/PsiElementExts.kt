@@ -27,7 +27,6 @@
 package io.spine.validation.java.psi
 
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiStatement
 
 /**
  * Looks for the first child of this [PsiElement], the text representation
@@ -40,11 +39,11 @@ import com.intellij.psi.PsiStatement
 internal fun PsiElement.deepSearch(
     startsWith: String,
     contains: String = startsWith
-): PsiStatement = children.firstNotNullOf { element ->
+): PsiElement = children.firstNotNullOf { element ->
     val text = element.text
     when {
         !text.contains(contains) -> null
         text.startsWith(startsWith) -> element
         else -> element.deepSearch(startsWith, contains)
     }
-} as PsiStatement
+}

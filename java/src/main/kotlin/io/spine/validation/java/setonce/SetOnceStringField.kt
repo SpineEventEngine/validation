@@ -37,6 +37,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.psi.deepSearch
 
 /**
  * A type that can be either [String] or [ByteString].
@@ -141,7 +142,7 @@ internal class SetOnceStringField(
             "public Builder mergeFrom(${declaringMessageClass.canonical} other)"
         ).body!!
         val fieldCheck = mergeFromMessage.deepSearch(
-            AnElement("if (!other.$fieldGetter.isEmpty())")
+            "if (!other.$fieldGetter.isEmpty())"
         ) as PsiIfStatement
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)

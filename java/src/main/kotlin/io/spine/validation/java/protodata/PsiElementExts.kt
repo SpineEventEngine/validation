@@ -27,7 +27,6 @@
 package io.spine.validation.java.protodata
 
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiStatement
 import io.spine.protodata.java.JavaElement
 import io.spine.validation.java.psi.deepSearch
 
@@ -40,4 +39,4 @@ import io.spine.validation.java.psi.deepSearch
 internal fun PsiElement.deepSearch(
     startsWith: JavaElement,
     contains: JavaElement = startsWith
-): PsiStatement = deepSearch("$startsWith", "$contains")
+): PsiElement = deepSearch("$startsWith", "$contains")
