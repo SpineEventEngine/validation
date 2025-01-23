@@ -27,13 +27,11 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
 import io.spine.protodata.java.JavaElement
@@ -47,6 +45,7 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
+import io.spine.validation.java.protodata.deepSearch
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -106,10 +105,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * @see throwIfNotDefaultAndNotSame
      */
     fun render(sourceFile: SourceFile<Java>) {
-        val messageBuilder = ClassName(
-            packageName = declaringMessageClass.packageName,
-            simpleNames = declaringMessageClass.simpleNames + "Builder"
-        )
+        val messageBuilder = declaringMessageClass.nested("Builder")
         val psiFile = sourceFile.psi() as PsiJavaFile
         val psiClass = psiFile.findClass(messageBuilder)
 
@@ -233,36 +229,3 @@ internal sealed class SetOnceJavaConstraints<T>(
  */
 private fun PsiElementFactory.createStatement(text: String) =
     createStatementFromText(text, null)
-
-/**
- * Looks for the first child of this [PsiElement], the text representation of which
- * satisfies both [startsWith] and [contains] criteria.
- *
- * This method performs a depth-first search of the PSI hierarchy. So, the second direct
- * child of this [PsiElement] is checked only when the first child and all its descendants
- * are checked.
- */
-internal fun PsiElement.deepSearch(
-    startsWith: JavaElement,
-    contains: JavaElement = startsWith
-): PsiStatement = deepSearch("$startsWith", "$contains")
-
-/**
- * Looks for the first child of this [PsiElement], the text representation of which
- * satisfies both [startsWith] and [contains] criteria.
- *
- * This method performs a depth-first search of the PSI hierarchy. So, the second direct
- * child of this [PsiElement] is checked only when the first child and all its descendants
- * are checked.
- */
-internal fun PsiElement.deepSearch(
-    startsWith: String,
-    contains: String = startsWith
-): PsiStatement = children.firstNotNullOf { element ->
-    val text = element.text
-    when {
-        !text.contains(contains) -> null
-        text.startsWith(startsWith) -> element
-        else -> element.deepSearch(startsWith, contains)
-    }
-} as PsiStatement

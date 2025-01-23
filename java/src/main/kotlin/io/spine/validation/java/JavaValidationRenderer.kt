@@ -45,8 +45,8 @@ import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.java.psi.addBefore
 import io.spine.validation.java.psi.createStatementsFromText
+import io.spine.validation.java.psi.deepSearch
 import io.spine.validation.java.psi.nested
-import io.spine.validation.java.setonce.deepSearch
 
 /**
  * The main Java renderer of the validation library.
