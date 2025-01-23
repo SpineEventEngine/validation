@@ -28,7 +28,6 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
@@ -44,8 +43,9 @@ import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
+import io.spine.validation.java.psi.addBefore
+import io.spine.validation.java.psi.createStatementsFromText
 import io.spine.validation.java.setonce.deepSearch
-
 
 /**
  * The main Java renderer of the validation library.
@@ -99,11 +99,7 @@ public class JavaValidationRenderer : JavaRenderer() {
                 validationCode.generate(psiMessageClass)
             }
 
-            val builderClass = ClassName(
-                packageName = messageClass.packageName,
-                simpleNames = messageClass.simpleNames + "Builder"
-            )
-            val psiBuilderClass = psiFile.findClass(builderClass)
+            val psiBuilderClass = psiMessageClass.innerClasses.first { it.name == "Builder" }
             execute {
                 val validatingBuilder = ValidatingBuilder::class.java.canonicalName
                 val reference = elementFactory.createInterfaceReference(
@@ -113,12 +109,8 @@ public class JavaValidationRenderer : JavaRenderer() {
                 psiBuilderClass.method("build").run {
                     returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
                     val returnResult = deepSearch("return result;")
-                    val runValidation = elementFactory.createCodeBlockFromText(
-                        "{${runValidation()}}", this
-                    )
-                    val first = runValidation.lBrace!!.nextSibling
-                    val last = runValidation.rBrace!!.prevSibling
-                    body!!.addRangeBefore(first, last, returnResult)
+                    val runValidation = runValidation()
+                    body!!.addBefore(runValidation, returnResult)
                 }
 
                 psiBuilderClass.method("buildPartial").run {
@@ -131,10 +123,11 @@ public class JavaValidationRenderer : JavaRenderer() {
     }
 }
 
-private fun runValidation() =
+private fun runValidation() = elementFactory.createStatementsFromText(
     """
     java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
     if (error.isPresent()) {
         throw new io.spine.validate.ValidationException(error.get().getConstraintViolationList());
     }
-    """.trimIndent()
+""".trimIndent(), null
+)
