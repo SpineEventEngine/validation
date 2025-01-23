@@ -34,18 +34,10 @@ import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFileSet
 import io.spine.protodata.type.TypeSystem
-import io.spine.tools.psi.java.Environment.elementFactory
-import io.spine.tools.psi.java.createInterfaceReference
 import io.spine.tools.psi.java.execute
-import io.spine.tools.psi.java.implement
-import io.spine.tools.psi.java.method
 import io.spine.validate.NonValidated
 import io.spine.validate.Validated
-import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
-import io.spine.validation.java.psi.addBefore
-import io.spine.validation.java.psi.createStatementsFromText
-import io.spine.validation.java.psi.deepSearch
 import io.spine.validation.java.psi.nested
 
 /**
@@ -65,11 +57,6 @@ import io.spine.validation.java.psi.nested
  *
  * 1. [Validated] for [Message.Builder.build] method.
  * 2. [NonValidated] for [Message.Builder.buildPartial] method.
- *
- * Note: there is also [ImplementValidatingBuilder] renderer that makes [Message.Builder]
- * implement [io.spine.validate.ValidatingBuilder] interface. Logically, it is a part
- * of this renderer, but as for now, it is a standalone renderer before this class
- * migrates to PSI.
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
@@ -93,42 +80,20 @@ public class JavaValidationRenderer : JavaRenderer() {
         allCompilationMessages.forEach { (message, file) ->
             val psiFile = file.psi() as PsiJavaFile
 
-            val validationCode = MessageValidationCode(renderer = this, message)
-            val messageClass = message.type.javaClassName(typeSystem)
-            val psiMessageClass = psiFile.findClass(messageClass)
+            val messageCode = MessageValidationCode(renderer = this, message)
+            val messageClassName = message.type.javaClassName(typeSystem)
+            val messageClass = psiFile.findClass(messageClassName)
             execute {
-                validationCode.generate(psiMessageClass)
+                messageCode.render(messageClass)
             }
 
-            val psiBuilderClass = psiMessageClass.nested("Builder")
+            val builderCode = BuilderValidationCode(messageClassName)
+            val builderClass = messageClass.nested("Builder")
             execute {
-                val validatingBuilder = ValidatingBuilder::class.java.canonicalName
-                val reference = elementFactory.createInterfaceReference(
-                    validatingBuilder, messageClass.canonical)
-                psiBuilderClass.implement(reference)
-
-                psiBuilderClass.method("build").run {
-                    returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!)
-                    val returnResult = deepSearch("return result;")
-                    val runValidation = runValidation()
-                    body!!.addBefore(runValidation, returnResult)
-                }
-
-                psiBuilderClass.method("buildPartial").run {
-                    returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!)
-                }
+                builderCode.render(builderClass)
             }
 
             file.overwrite(psiFile.text)
         }
     }
 }
-
-private fun runValidation() = elementFactory.createStatementsFromText(
-    """
-    java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
-    if (error.isPresent()) {
-        throw new io.spine.validate.ValidationException(error.get().getConstraintViolationList());
-    }
-""".trimIndent(), null
-)

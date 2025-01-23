@@ -64,9 +64,9 @@ internal class MessageValidationCode(
     private val supportingFields = mutableListOf<FieldSpec>()
     private val supportingMethods = mutableListOf<MethodSpec>()
 
-    fun generate(psiClass: PsiClass) {
+    fun render(messageClass: PsiClass) {
         message.ruleList.forEach(::generateRule)
-        with(psiClass) {
+        with(messageClass) {
             implementInterface()
             implementMethod()
             declareSupportingFields()
