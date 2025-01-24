@@ -79,14 +79,14 @@ internal abstract class CodeGenerator(
     }
 
     /**
-     * Fields inserted into the message class scope.
+     * Fields to be inserted into the message class scope.
      *
      * Such fields may cache intermediate validation results, etc.
      */
     open fun supportingFields(): List<FieldSpec> = emptyList()
 
     /**
-     * Methods inserted into the message class scope.
+     * Methods to be inserted into the message class scope.
      *
      * Such methods may contain validation subroutines, etc.
      */
