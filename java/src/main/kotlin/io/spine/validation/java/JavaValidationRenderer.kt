@@ -31,7 +31,6 @@ import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
-import io.spine.protodata.type.TypeSystem
 import io.spine.validation.CompilationMessage
 
 /**
@@ -41,12 +40,6 @@ import io.spine.validation.CompilationMessage
  * does not have any declared constraints.
  */
 public class JavaValidationRenderer : JavaRenderer() {
-
-    /**
-     * Exposes [typeSystem] property, so that the code generation context could use it.
-     */
-    public override val typeSystem: TypeSystem
-        get() = super.typeSystem
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
@@ -58,7 +51,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         select(CompilationMessage::class.java).all()
             .associateWith { sources.javaFileOf(it.type) }
             .forEach { (message, file) ->
-                val messageCode = MessageValidationCode(renderer = this, message)
+                val messageCode = MessageValidationCode(message, typeSystem)
                 val psiFile = file.psi() as PsiJavaFile
                 messageCode.render(psiFile)
                 file.overwrite(psiFile.text)

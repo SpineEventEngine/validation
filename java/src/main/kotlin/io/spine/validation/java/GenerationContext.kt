@@ -30,16 +30,12 @@ import com.google.protobuf.Message
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.ProtobufSourceFile
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MessageOrEnumConvention
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.field
 import io.spine.protodata.type.TypeSystem
-import io.spine.server.query.Querying
-import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.Rule
 import io.spine.validation.isSimple
@@ -50,11 +46,6 @@ import io.spine.validation.isSimple
 public data class GenerationContext
 @JvmOverloads
 internal constructor(
-
-    /**
-     * A [Querying] ProtoData component.
-     */
-    private val client: Querying,
 
     /**
      * The Protobuf types known to the application.
@@ -184,24 +175,7 @@ internal constructor(
      * @throws IllegalArgumentException if there is no such field
      */
     public fun lookUpField(name: FieldName): Field =
-        client.lookUpField(protoFile, validatedType, name)
-}
-
-private fun Querying.lookUpField(file: File, type: TypeName, field: FieldName): Field {
-    val protoFile = select<ProtobufSourceFile>().findById(file)
-    val messageType = protoFile!!.typeMap[type.typeUrl]
-    require(messageType != null) { "Unknown type: `${type.typeUrl}`." }
-    val result = messageType.lookUpField(field)
-    require(result != null) { "Unknown field: `${type.typeUrl}.${field.value}`." }
-    return result
-}
-
-private fun MessageType.lookUpField(name: FieldName): Field? {
-    var field = fieldList.find { it.name == name }
-    if (field == null) {
-        field = oneofGroupList
-            .flatMap { group -> group.fieldList }
-            .find { it.name == name }
-    }
-    return field
+        typeSystem.findMessage(validatedType)!!
+            .first.fieldList
+            .first { it.name == name }
 }

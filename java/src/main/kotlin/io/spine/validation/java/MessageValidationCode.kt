@@ -36,6 +36,7 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.annotate
@@ -74,11 +75,11 @@ private typealias BuilderPsiClass = PsiClass
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
-    private val renderer: JavaValidationRenderer,
     private val message: CompilationMessage,
+    private val typeSystem: TypeSystem,
 ) {
     private val messageType: TypeName = message.name
-    private val messageClassName = messageType.javaClassName(renderer.typeSystem)
+    private val messageClassName = messageType.javaClassName(typeSystem)
     private val supportingFields = mutableListOf<FieldSpec>()
     private val supportingMethods = mutableListOf<MethodSpec>()
     private val constraints = mutableListOf<CodeBlock>()
@@ -128,8 +129,7 @@ internal class MessageValidationCode(
 
     private fun newContext(rule: Rule, message: CompilationMessage) =
         GenerationContext(
-            client = renderer,
-            typeSystem = renderer.typeSystem,
+            typeSystem = typeSystem,
             rule = rule,
             msg = This(),
             validatedType = messageType,
