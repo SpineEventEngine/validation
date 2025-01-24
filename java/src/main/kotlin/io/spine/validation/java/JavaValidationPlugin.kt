@@ -32,10 +32,14 @@ import io.spine.validation.java.setonce.SetOnceRenderer
 /**
  * An implementation of [ValidationPlugin] for Java language.
  *
- * Note: [`(set_once)`][SetOnceRenderer] validation code is rendered with its own
- * renderer because it significantly differs from the rest of constraints. This option
- * modifies the message builder behavior. The rest of the constraints are more about
- * field value assertions.
+ * The validation constraints for Java are implemented with two renderers:
+ *
+ * 1. [JavaValidationRenderer] is the main renderer for Java. It renders the validation
+ * code for all options that perform an assertion upon a message field value.
+ * 2. [SetOnceRenderer] is responsible for the validation code of `(set_once)` option.
+ * It is a standalone renderer because it significantly differs from the rest of constraints.
+ * Its implementation modifies the message builder behavior, affecting every setter or merge
+ * method that can change the field value.
  */
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
