@@ -29,12 +29,12 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.psi.methodWithSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given message [field].
@@ -72,8 +72,8 @@ internal class SetOnceMessageField(
         alterFieldMerge()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("input.readMessage"),
-            readerContains = AnElement("${fieldGetterName}FieldBuilder().getBuilder()"),
+            readerStartsWith = "input.readMessage",
+            readerContains = "${fieldGetterName}FieldBuilder().getBuilder()"
         )
     }
 

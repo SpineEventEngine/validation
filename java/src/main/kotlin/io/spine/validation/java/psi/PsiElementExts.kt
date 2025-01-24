@@ -36,7 +36,7 @@ import com.intellij.psi.PsiElement
  * child of this [PsiElement] is checked only when the first child and all its descendants
  * are checked.
  */
-internal fun PsiElement.deepSearch(
+internal fun PsiElement.findFirstByText(
     startsWith: String,
     contains: String = startsWith
 ): PsiElement = children.firstNotNullOf { element ->
@@ -44,6 +44,6 @@ internal fun PsiElement.deepSearch(
     when {
         !text.contains(contains) -> null
         text.startsWith(startsWith) -> element
-        else -> element.deepSearch(startsWith, contains)
+        else -> element.findFirstByText(startsWith, contains)
     }
 }

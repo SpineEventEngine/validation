@@ -30,7 +30,6 @@ import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
@@ -70,7 +69,7 @@ internal class SetOnceBytesField(
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("${fieldName}_ = input.readBytes();")
+            readerStartsWith = "${fieldName}_ = input.readBytes();"
         )
     }
 

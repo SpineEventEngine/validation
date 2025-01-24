@@ -30,7 +30,6 @@ import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
@@ -65,7 +64,7 @@ internal class SetOnceBooleanField(
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("${fieldName}_ = input.readBool();")
+            readerStartsWith = "${fieldName}_ = input.readBool();"
         )
     }
 

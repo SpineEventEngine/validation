@@ -53,7 +53,7 @@ import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.psi.addBefore
 import io.spine.validation.java.psi.createStatementsFromText
-import io.spine.validation.java.psi.deepSearch
+import io.spine.validation.java.psi.findFirstByText
 import io.spine.validation.java.psi.nested
 
 private typealias MessagePsiClass = PsiClass
@@ -201,7 +201,7 @@ internal class MessageValidationCode(
      * If one or more constraints are violated, the injected snippet will throw.
      */
     private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build").run {
-        val returningResult = deepSearch("return result;")
+        val returningResult = findFirstByText("return result;")
         val runValidation = elementFactory.createStatementsFromText(
             """
             java.util.Optional<io.spine.validate.ValidationError> error = result.validate();

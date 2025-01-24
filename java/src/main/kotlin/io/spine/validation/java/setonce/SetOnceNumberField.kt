@@ -91,7 +91,7 @@ internal class SetOnceNumberField(
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("${fieldName}_ = input.$fieldReader();")
+            readerStartsWith = "${fieldName}_ = input.$fieldReader();"
         )
     }
 

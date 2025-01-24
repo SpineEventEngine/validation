@@ -34,7 +34,6 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
-import io.spine.protodata.java.JavaElement
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
@@ -45,7 +44,8 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
-import io.spine.validation.java.protodata.deepSearch
+import io.spine.validation.java.psi.findFirstByText
+import io.spine.validation.java.psi.methodWithSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -151,12 +151,12 @@ internal sealed class SetOnceJavaConstraints<T>(
      */
     protected fun PsiClass.alterBytesMerge(
         currentValue: Expression<T>,
-        readerStartsWith: JavaElement,
-        readerContains: JavaElement = readerStartsWith,
+        readerStartsWith: String,
+        readerContains: String = readerStartsWith,
     ) {
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
+        val fieldReading = mergeFromBytes.findFirstByText(readerStartsWith, readerContains)
         val fieldCaseBlock = fieldReading.parent
 
         val previousValue = InitVar("previous", currentValue)
