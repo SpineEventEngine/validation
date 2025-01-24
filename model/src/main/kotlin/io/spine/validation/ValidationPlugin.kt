@@ -29,16 +29,21 @@ package io.spine.validation
 import io.spine.protodata.plugin.Plugin
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.ViewRepository
+import io.spine.protodata.render.Renderer
 import io.spine.validation.required.RequiredFieldRepository
 import io.spine.validation.required.RequiredIdOptionPolicy
 import io.spine.validation.required.RequiredIdPatternPolicy
 import io.spine.validation.required.RequiredPolicy
 
 /**
- * A ProtoData plugin which attaches validation-related policies and views.
+ * The basic implementation of ProtoData validation plugin, which builds
+ * language-agnostic representation of the declared constraints.
+ *
+ * The concrete implementations should provide [renderers], which implement
+ * these constraints for a specific programming language.
  */
-public class ValidationPlugin : Plugin(
-    renderers = listOf(),
+public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
+    renderers = renderers,
     views = setOf(),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompiledMessageRepository(),

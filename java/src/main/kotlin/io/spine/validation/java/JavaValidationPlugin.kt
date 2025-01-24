@@ -26,48 +26,25 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.plugin.Plugin
-import io.spine.protodata.render.Renderer
-import io.spine.server.BoundedContextBuilder
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.java.point.PrintValidationInsertionPoints
-import io.spine.validation.java.setonce.SetOnceValidationRenderer
+import io.spine.validation.java.setonce.SetOnceRenderer
 
 /**
- * A plugin that sets up everything needed to generate Java validation code.
+ * An implementation of [ValidationPlugin] for Java language.
  *
- * This plugin uses a delegate plugin to set up some of the components needed for
- * code generation. By default, a [ValidationPlugin] is used. However, API users may
- * extend this plugin's behavior and supply a more rich base plugin.
+ * The validation constraints for Java are implemented with two renderers:
  *
- * @param base The base plugin to extend.
- * @constructor Creates an instance that contains all the components from the given [base] plugin.
+ * 1. [JavaValidationRenderer] is the main renderer for Java. It renders the validation
+ * code for all options that perform an assertion upon a message field value.
+ * 2. [SetOnceRenderer] is responsible for the validation code of `(set_once)` option.
+ * It is a standalone renderer because it significantly differs from the rest of constraints.
+ * Its implementation modifies the message builder behavior, affecting every setter or merge
+ * method that can change the field value.
  */
 @Suppress("unused") // Accessed via reflection.
-public class JavaValidationPlugin(private val base: Plugin) :
-    Plugin(mergeRenderers(base), base.views, base.viewRepositories, base.policies) {
-
-    /**
-     * The constructor to be invoked reflectively by ProtoData.
-     */
-    public constructor() : this(ValidationPlugin())
-
-    override fun extend(context: BoundedContextBuilder) {
-        base.extend(context)
-    }
-
-    public companion object {
-
-        /**
-         * Orders the renderers in such a way that the renderers of
-         * the `base` plugin always come before its own renderers.
-         */
-        private fun mergeRenderers(base: Plugin): List<Renderer<*>> = buildList {
-            addAll(base.renderers)
-            add(PrintValidationInsertionPoints())
-            add(JavaValidationRenderer())
-            add(ImplementValidatingBuilder())
-            add(SetOnceValidationRenderer())
-        }
-    }
-}
+public class JavaValidationPlugin : ValidationPlugin(
+    renderers = listOf(
+        JavaValidationRenderer(),
+        SetOnceRenderer()
+    )
+)

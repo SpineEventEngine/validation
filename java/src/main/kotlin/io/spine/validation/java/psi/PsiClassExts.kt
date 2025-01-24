@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.setonce
+package io.spine.validation.java.psi
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
 import io.spine.tools.psi.java.Environment.elementFactory
 
 /**
- * Searches for a method in this [PsiClass] matching the given signature
+ * Returns a nested class declared in this [PsiClass].
+ *
+ * @param simpleName The simple name of the class.
+ */
+public fun PsiClass.nested(simpleName: String): PsiClass {
+    val found = innerClasses.firstOrNull { it.name == simpleName }
+    check(found != null) {
+        "The class `$qualifiedName` does not declare a nested class named `$name`."
+    }
+    return found
+}
+
+/**
+ * Looks for a method in this [PsiClass] matching the given signature
  * specified as [text].
  *
  * An example usage:
@@ -42,7 +55,7 @@ import io.spine.tools.psi.java.Environment.elementFactory
  *
  * @param text The method signature as text.
  */
-internal fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
+public fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
     val reference = elementFactory.createMethodFromText(text, null)
     return findMethodBySignature(reference, false)
 }
@@ -60,7 +73,7 @@ internal fun PsiClass.findMethodBySignature(text: String): PsiMethod? {
  * @param text The method signature as text.
  * @throws IllegalStateException if this class does not have such a method.
  */
-internal fun PsiClass.methodWithSignature(text: String): PsiMethod =
+public fun PsiClass.methodWithSignature(text: String): PsiMethod =
     findMethodBySignature(text)
         ?: error(
             "Could not find the method with the signature `$text` " +

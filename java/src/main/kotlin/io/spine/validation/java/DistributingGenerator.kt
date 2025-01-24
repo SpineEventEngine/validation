@@ -30,6 +30,8 @@ import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
 import com.google.protobuf.Message
 import com.squareup.javapoet.CodeBlock
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.MethodSpec
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.extractPrimitiveType
 import io.spine.protodata.ast.extractTypeName
@@ -76,7 +78,7 @@ internal class DistributingGenerator(
     private val violationsName = ReadVar<ImmutableList<ConstraintViolation>>("violationsOf$ruleId")
     private val violationsType = object : TypeToken<ImmutableList<ConstraintViolation>>() {}.type
 
-    override fun supportingMembers(): CodeBlock {
+    override fun supportingMethods(): List<MethodSpec> {
         val typeName = typeName()
         val collection = iterableExpression()
         val body = codeBlock {
@@ -92,23 +94,18 @@ internal class DistributingGenerator(
             endControlFlow()
             addStatement("return \$L.build()", elementContext.violationList)
         }
-        val otherMembers = delegate.supportingMembers()
 
         val groupingMethod = methodSpec(methodName) {
             addModifiers(Modifier.PRIVATE)
             returns(violationsType)
             addCode(body)
         }
-            // `MethodSpec` cannot be added to `CodeBlock`, so we have to convert it to `String`.
-            // We also need to escape `$` symbols because they are part of JavaPoet templates.
-            // These symbols can be present in our own error message templates.
-            .toString()
-            .replace("$", "$$")
 
-        return otherMembers.toBuilder()
-            .add(groupingMethod)
-            .build()
+        val otherMembers = delegate.supportingMethods()
+        return otherMembers + groupingMethod
     }
+
+    override fun supportingFields(): List<FieldSpec> = delegate.supportingFields()
 
     private fun typeName(): ClassName {
         val name = field.type.extractTypeName()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.point
+package io.spine.validation.java.psi
 
-import com.google.errorprone.annotations.Immutable
+import com.intellij.psi.PsiElement
 
 /**
- * Locates the placement for annotating the type returned by the `Builder.build()` method.
+ * Looks for the first child of this [PsiElement], the text representation
+ * of which satisfies both [startsWith] and [contains] criteria.
+ *
+ * This method performs a depth-first search of the PSI hierarchy. So, the second direct
+ * child of this [PsiElement] is checked only when the first child and all its descendants
+ * are checked.
  */
-@Immutable
-internal class BuildMethodReturnTypeAnnotation :
-    BuilderMethodReturnTypeAnnotation(BUILD_METHOD)
+internal fun PsiElement.findFirstByText(
+    startsWith: String,
+    contains: String = startsWith
+): PsiElement = children.firstNotNullOf { element ->
+    val text = element.text
+    when {
+        !text.contains(contains) -> null
+        text.startsWith(startsWith) -> element
+        else -> element.findFirstByText(startsWith, contains)
+    }
+}

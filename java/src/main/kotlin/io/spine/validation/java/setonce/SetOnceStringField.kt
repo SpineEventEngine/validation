@@ -32,11 +32,12 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.psi.findFirstByText
+import io.spine.validation.java.psi.methodWithSignature
 
 /**
  * A type that can be either [String] or [ByteString].
@@ -85,7 +86,7 @@ internal class SetOnceStringField(
         alterMessageMerge()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = AnElement("${fieldName}_ = input.readStringRequireUtf8();")
+            readerStartsWith = "${fieldName}_ = input.readStringRequireUtf8();"
         )
     }
 
@@ -140,8 +141,8 @@ internal class SetOnceStringField(
         val mergeFromMessage = methodWithSignature(
             "public Builder mergeFrom(${declaringMessageClass.canonical} other)"
         ).body!!
-        val fieldCheck = mergeFromMessage.deepSearch(
-            AnElement("if (!other.$fieldGetter.isEmpty())")
+        val fieldCheck = mergeFromMessage.findFirstByText(
+            "if (!other.$fieldGetter.isEmpty())"
         ) as PsiIfStatement
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)

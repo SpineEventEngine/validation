@@ -31,7 +31,6 @@ import com.google.protobuf.ProtocolMessageEnum
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.type.TypeSystem
-import io.spine.protodata.java.AnElement
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
 import io.spine.protodata.java.javaClassName
@@ -72,7 +71,7 @@ internal class SetOnceEnumField(
         alterEnumValueSetter()
         alterBytesMerge(
             currentValue = Expression("${fieldName}_"),
-            readerStartsWith = AnElement("${fieldName}_ = input.readEnum();")
+            readerStartsWith = "${fieldName}_ = input.readEnum();"
         )
     }
 

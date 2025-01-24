@@ -27,16 +27,13 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.InitVar
-import io.spine.protodata.java.JavaElement
 import io.spine.protodata.java.javaCase
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
@@ -47,6 +44,8 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
+import io.spine.validation.java.psi.findFirstByText
+import io.spine.validation.java.psi.methodWithSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -106,10 +105,7 @@ internal sealed class SetOnceJavaConstraints<T>(
      * @see throwIfNotDefaultAndNotSame
      */
     fun render(sourceFile: SourceFile<Java>) {
-        val messageBuilder = ClassName(
-            packageName = declaringMessageClass.packageName,
-            simpleNames = declaringMessageClass.simpleNames + "Builder"
-        )
+        val messageBuilder = declaringMessageClass.nested("Builder")
         val psiFile = sourceFile.psi() as PsiJavaFile
         val psiClass = psiFile.findClass(messageBuilder)
 
@@ -155,12 +151,12 @@ internal sealed class SetOnceJavaConstraints<T>(
      */
     protected fun PsiClass.alterBytesMerge(
         currentValue: Expression<T>,
-        readerStartsWith: JavaElement,
-        readerContains: JavaElement = readerStartsWith,
+        readerStartsWith: String,
+        readerContains: String = readerStartsWith,
     ) {
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.deepSearch(readerStartsWith, readerContains)
+        val fieldReading = mergeFromBytes.findFirstByText(readerStartsWith, readerContains)
         val fieldCaseBlock = fieldReading.parent
 
         val previousValue = InitVar("previous", currentValue)
@@ -216,26 +212,6 @@ internal sealed class SetOnceJavaConstraints<T>(
         currentValue: Expression<T>,
         newValue: Expression<T>
     ): Expression<Boolean>
-
-    /**
-     * Looks for the first child of this [PsiElement], the text representation of which
-     * satisfies both [startsWith] and [contains] criteria.
-     *
-     * This method performs a depth-first search of the PSI hierarchy. So, the second direct
-     * child of this [PsiElement] is checked only when the first child and all its descendants
-     * are checked.
-     */
-    protected fun PsiElement.deepSearch(
-        startsWith: JavaElement,
-        contains: JavaElement = startsWith
-    ): PsiStatement = children.firstNotNullOf { element ->
-        val text = element.text
-        when {
-            !text.contains("$contains") -> null
-            text.startsWith("$startsWith") -> element
-            else -> element.deepSearch(startsWith, contains)
-        }
-    } as PsiStatement
 
     /**
      * Converts the given [fieldValue] to string for a diagnostics message.
