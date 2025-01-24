@@ -35,7 +35,7 @@ import io.spine.validation.java.setonce.SetOnceRenderer
  * Note: [`(set_once)`][SetOnceRenderer] validation code is rendered with its own
  * renderer because it significantly differs from the rest of constraints. This option
  * modifies the message builder behavior. The rest of the constraints are more about
- * message state assertions.
+ * field value assertions.
  */
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
