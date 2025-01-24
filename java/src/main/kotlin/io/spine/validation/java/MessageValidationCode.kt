@@ -143,9 +143,20 @@ internal class MessageValidationCode(
         implement(reference)
     }
 
+    /**
+     * Declares `validate()` method in this [MessagePsiClass].
+     *
+     * This method does the following to address the formatting issues:
+     *
+     * 1. [constraints] are joined to [String] using [joinToString] instead of `joinByLine()`
+     * because the contained code blocks already have new lines when converted to string.
+     * 2. For the same reason, we trim the result because a trailing empty line is not needed.
+     * 3. When creating PSI method from the text, we have to use [trimMargin] and '|' symbols
+     * (the default separator) to specify minimal common intend explicitly. The code blocks
+     * from the constraints add some whitespace characters. They break [trimIndent] and corrupt
+     * the resulting formatting, often leading to non-compilable Java code.
+     */
     private fun MessagePsiClass.declareValidateMethod() {
-        // `CodeBlock` is printed with a new line in the end, so no need to call `joinByLine()`.
-        // And we have to trim because we don't need a trailing empty line.
         val formattedConstraints = constraints.joinToString(separator = "").trim()
         val psiMethod = elementFactory.createMethodFromText(
             """
