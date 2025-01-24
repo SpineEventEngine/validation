@@ -30,11 +30,12 @@ import io.spine.validation.ValidationPlugin
 import io.spine.validation.java.setonce.SetOnceRenderer
 
 /**
- * A plugin that sets up everything needed to generate Java validation code.
+ * An implementation of [ValidationPlugin] for Java language.
  *
- * This plugin uses a delegate plugin to set up some of the components needed for
- * code generation. By default, a [ValidationPlugin] is used. However, API users may
- * extend this plugin's behavior and supply a more rich base plugin.
+ * Note: [`(set_once)`][SetOnceRenderer] option is rendered with its own
+ * renderer because it significantly differs from the rest of constraints.
+ * This option modifies the message builder behavior. The rest of
+ * the constraints are more about message state assertions.
  */
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(

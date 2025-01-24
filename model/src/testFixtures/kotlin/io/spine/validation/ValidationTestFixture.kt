@@ -50,7 +50,7 @@ import java.nio.file.Path
 class ValidationTestFixture(
     descriptor: GenericDescriptor,
     workingDir: Path,
-    plugin: Plugin = ValidationPlugin()
+    plugin: Plugin = object : ValidationPlugin() {}
 ) {
     val setup: PipelineSetup
 

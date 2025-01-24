@@ -36,9 +36,14 @@ import io.spine.validation.required.RequiredIdPatternPolicy
 import io.spine.validation.required.RequiredPolicy
 
 /**
- * A ProtoData plugin which attaches validation-related policies and views.
+ * The basic implementation of ProtoData validation plugin, which builds
+ * language-agnostic representation of the declared constraints.
+ *
+ * The concrete implementations should provide [renderers], which will
+ * implement these constraints for a specific programming language.
+ * For example, Java, Dart, or TypeScript.
  */
-public open class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
+public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
     renderers = renderers,
     views = setOf(),
     viewRepositories = setOf<ViewRepository<*, *, *>>(

@@ -87,7 +87,7 @@ class PolicySpec {
             ProtoFileList(emptyList()),
             emptySet()
         )
-        val plugin = ValidationPlugin()
+        val plugin = object : ValidationPlugin() {}
         codegenContext = CodeGenerationContext(Pipeline.generateId(), typeSystem) {
             // Mimic what a `Pipeline` does to its plugins.
             plugin.applyTo(this, typeSystem)
