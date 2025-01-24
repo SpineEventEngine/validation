@@ -39,9 +39,8 @@ import io.spine.validation.required.RequiredPolicy
  * The basic implementation of ProtoData validation plugin, which builds
  * language-agnostic representation of the declared constraints.
  *
- * The concrete implementations should provide [renderers], which will
- * implement these constraints for a specific programming language.
- * For example, Java, Dart, or TypeScript.
+ * The concrete implementations should provide [renderers], which implement
+ * these constraints for a specific programming language.
  */
 public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
     renderers = renderers,

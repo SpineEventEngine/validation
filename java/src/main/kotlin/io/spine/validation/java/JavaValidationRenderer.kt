@@ -36,8 +36,8 @@ import io.spine.validation.CompilationMessage
 /**
  * The main Java renderer of the validation library.
  *
- * This rendered is applied to every [Message] being compiled, even if the message
- * does not have any declared constraints.
+ * This renderer is applied to every compilation [Message],
+ * even if the message does not have any declared constraints.
  */
 public class JavaValidationRenderer : JavaRenderer() {
 

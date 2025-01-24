@@ -33,7 +33,7 @@ import io.spine.tools.psi.java.Environment.elementFactory
 /**
  * Returns a nested class declared in this [PsiClass].
  *
- * @param simpleName The class simple name.
+ * @param simpleName The simple name of the class.
  */
 public fun PsiClass.nested(simpleName: String): PsiClass {
     val found = innerClasses.firstOrNull { it.name == simpleName }

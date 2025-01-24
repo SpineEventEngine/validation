@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,10 +67,10 @@ private typealias BuilderPsiClass = PsiClass
  * All validation logic is injected into the [ValidatableMessage.validate] method
  * within the message class itself. This allows a message instance to be validated even
  * after it has been built. Note that this method does not throw exceptions directly;
- * instead, it returns any detected violations, if any.
+ * instead, it returns the detected violations, if any.
  *
- * The message builder is modified to invoke the [ValidatableMessage.validate] just
- * before returning from its [build][com.google.protobuf.Message.Builder.build] method.
+ * The message builder is modified to invoke the [ValidatableMessage.validate] just before
+ * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
@@ -112,8 +112,7 @@ internal class MessageValidationCode(
     }
 
     /**
-     * Generates a Java [constraint][constraints], [supportingFields] and [supportingMethods]
-     * for the passed [rule].
+     * Generates a Java constraint and supporting members for the passed [rule].
      *
      * A single rule always generates a single Java constraint represented by a [CodeBlock].
      * The number of supported members is not restricted. A single rule may generate zero,
@@ -151,9 +150,9 @@ internal class MessageValidationCode(
      * 1. [constraints] are joined to [String] using [joinToString] instead of `joinByLine()`
      * because the contained code blocks already have new lines when converted to string.
      * 2. For the same reason, we trim the result because a trailing empty line is not needed.
-     * 3. When creating PSI method from the text, we have to use [trimMargin] and '|' symbols
-     * (the default separator) to specify minimal common intend explicitly. The code blocks
-     * from the constraints add some whitespace characters. They break [trimIndent] and corrupt
+     * 3. When creating a PSI method from text, we must use [trimMargin] with '|' symbols
+     * (the default separator) to explicitly specify the minimal common indent. The code blocks
+     * in the constraints add some whitespace characters, which break [trimIndent] and distort
      * the resulting formatting, often leading to non-compilable Java code.
      */
     private fun MessagePsiClass.declareValidateMethod() {
