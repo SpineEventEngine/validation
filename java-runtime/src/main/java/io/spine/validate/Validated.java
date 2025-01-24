@@ -42,10 +42,9 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * is overridden with a version which returns only valid messages, that version should be marked
  * with this annotation.
  *
- * <p>Note: this annotation is not intended to be retained at runtime.
- * Therefore, {@link java.lang.annotation.RetentionPolicy#CLASS RetentionPolicy.CLASS}
- * is explicitly specified. The annotation enhances method semantics in the source code
- * and does not affect runtime behavior.
+ * <p>Note: {@link java.lang.annotation.RetentionPolicy#CLASS RetentionPolicy.CLASS}
+ * is explicitly specified because this annotation is designed to improve method semantics
+ * in source files, and is intended for programmers. It does not affect runtime behavior.
  *
  * @see ValidatingBuilder
  * @see NonValidated
