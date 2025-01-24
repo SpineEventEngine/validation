@@ -31,17 +31,19 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementFactory
 
 /**
- * List of statements from [PsiCodeBlock] without surrounding braces,
- * but with the preserved formatting elements.
+ * A list of statements extracted from the given [PsiCodeBlock],
+ * excluding the surrounding braces.
  *
- * This type resolves two problems:
+ * This type addresses several challenges:
  *
- * 1. In PSI, the code block cannot be created without curly braces, making it
- *    difficult to insert a code block into a method body.
- * 2. A list of statements can be [retrieved][PsiCodeBlock.getStatements] from the block.
- *    Though, formatting-related elements like whitespaces and new lines are filtered out.
- *    An attempt to add these statements one-by-one to a method block often leads to
- *    non-compilable Java code.
+ * 1. In PSI, a code block cannot be created without curly braces. As a result, even if
+ *    you only need a list of statements, you must create a full block with braces.
+ * 2. Inserting such a block into another code block requires range copying
+ *    to skip the braces.
+ * 3. While a list of statements can be [retrieved][PsiCodeBlock.getStatements] directly from
+ *    the code block, formatting elements like whitespace and newlines are omitted, leaving
+ *    only the raw statements. Adding these statements individually to a method body often
+ *    results in invalid or non-compilable Java code.
  */
 public class PsiStatements(codeBlock: PsiCodeBlock) {
 
@@ -66,7 +68,7 @@ public class PsiStatements(codeBlock: PsiCodeBlock) {
  * Creates a new [PsiStatements] from the given [text].
  *
  * @param text The text of the statements to create.
- * @param context The PSI element used as context for resolving references from the statements.
+ * @param context The PSI element used as context for resolving references.
  */
 public fun PsiElementFactory.createStatementsFromText(
     text: String,
