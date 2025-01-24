@@ -40,7 +40,7 @@ import io.spine.validation.java.setonce.SetOnceRenderer
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaMessageRenderer(),
+        JavaValidationRenderer(),
         SetOnceRenderer()
     )
 )

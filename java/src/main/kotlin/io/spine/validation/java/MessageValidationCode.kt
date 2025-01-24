@@ -74,7 +74,7 @@ private typealias BuilderPsiClass = PsiClass
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
-    private val renderer: JavaMessageRenderer,
+    private val renderer: JavaValidationRenderer,
     private val message: CompilationMessage,
 ) {
     private val messageType: TypeName = message.name

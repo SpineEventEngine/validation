@@ -40,7 +40,7 @@ import io.spine.validation.CompilationMessage
  * This rendered is applied to every [Message] being compiled, even if the message
  * does not have any declared constraints.
  */
-public class JavaMessageRenderer : JavaRenderer() {
+public class JavaValidationRenderer : JavaRenderer() {
 
     /**
      * Exposes [typeSystem] property, so that the code generation context could use it.
