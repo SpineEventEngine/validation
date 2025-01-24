@@ -38,8 +38,13 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  * Marks a message which may not be valid.
  *
  * <p>By default, all the messages should be validated. In some cases, users may choose not to
- * validate certain parts of model at a certain point. For example, to group them into a bigger
+ * validate certain parts of a model at a certain point. For example, to group them into a bigger
  * message which is going to be validated later.
+ *
+ * <p>Note: this annotation is not intended to be retained at runtime.
+ * Therefore, {@link java.lang.annotation.RetentionPolicy#CLASS RetentionPolicy.CLASS}
+ * is explicitly specified. The annotation enhances method semantics in the source code
+ * and does not affect runtime behavior.
  *
  * @see ValidatingBuilder
  * @see Validated
