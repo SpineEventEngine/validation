@@ -103,7 +103,7 @@ internal class MessageValidationCode(
             }
             builderClass.apply {
                 implementValidatingBuilder()
-                injectValidation()
+                injectValidationIntoBuildMethod()
                 annotateBuildReturnType()
                 annotateBuildPartialReturnType()
             }
@@ -200,7 +200,7 @@ internal class MessageValidationCode(
      * The validation code is executed right before returning from the `build()`.
      * If one or more constraints are violated, the injected snippet will throw.
      */
-    private fun BuilderPsiClass.injectValidation() = method("build").run {
+    private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build").run {
         val returningResult = deepSearch("return result;")
         val runValidation = elementFactory.createStatementsFromText(
             """
