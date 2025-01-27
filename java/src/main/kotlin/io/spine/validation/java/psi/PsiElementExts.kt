@@ -36,7 +36,7 @@ import com.intellij.psi.PsiElement
  * child of this [PsiElement] is checked only when the first child and all its descendants
  * are checked.
  */
-internal fun PsiElement.findFirstByText(
+public fun PsiElement.findFirstByText(
     startsWith: String,
     contains: String = startsWith
 ): PsiElement = children.firstNotNullOf { element ->
