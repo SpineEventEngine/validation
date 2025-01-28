@@ -98,7 +98,8 @@ internal class MessageValidationCode(
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declareValidateMethod()
+                declarePublicValidateMethod()
+                declarePrivateValidateMethod()
                 declareSupportingFields()
                 declareSupportingMethods()
             }
@@ -145,6 +146,31 @@ internal class MessageValidationCode(
     /**
      * Declares `validate()` method in this [MessagePsiClass].
      *
+     * This method implements [ValidatableMessage.validate], and has
+     * [Override] annotation.
+     */
+    private fun MessagePsiClass.declarePublicValidateMethod() {
+        val psiMethod = elementFactory.createMethodFromText(
+            """
+            public java.util.Optional<io.spine.validate.ValidationError> validate() {
+                var noParent = io.spine.base.FieldPath.getDefaultInstance();
+                return validate(noParent);
+            }
+            """.trimIndent(), this)
+        psiMethod.annotate(Override::class.java)
+        addLast(psiMethod)
+    }
+
+    /**
+     * Declares `validate(FieldPath)` method in this [MessagePsiClass].
+     *
+     * All actual validations are done in this `private` overloading. It accepts
+     * the parent field path, so that the created violation errors could use it
+     * when it is non-empty. Non-empty field path is possible only when the current
+     * invocation of `validate()` is performed within `(validate)` option. In this case,
+     * the parent field path is populated, and the created violation will correctly
+     * point to the field, which actually requested a nested validation.
+     *
      * This method does the following to address the formatting issues:
      *
      * 1. [constraints] are joined to [String] using [joinToString] instead of `joinByLine()`
@@ -155,16 +181,15 @@ internal class MessageValidationCode(
      * in the constraints add some whitespace characters, which break [trimIndent] and distort
      * the resulting formatting, often leading to non-compilable Java code.
      */
-    private fun MessagePsiClass.declareValidateMethod() {
+    private fun MessagePsiClass.declarePrivateValidateMethod() {
         val formattedConstraints = constraints.joinToString(separator = "").trim()
         val psiMethod = elementFactory.createMethodFromText(
             """
-            |public java.util.Optional<io.spine.validate.ValidationError> validate() {
+            |private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
             |    ${validateMethodBody(formattedConstraints)}
             |}
             """.trimMargin(), this
         )
-        psiMethod.annotate(Override::class.java)
         addLast(psiMethod)
     }
 
