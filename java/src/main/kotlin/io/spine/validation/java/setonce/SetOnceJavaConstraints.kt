@@ -44,8 +44,8 @@ import io.spine.string.camelCase
 import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
-import io.spine.validation.java.psi.findFirstByText
-import io.spine.validation.java.psi.methodWithSignature
+import io.spine.tools.psi.java.getFirstByText
+import io.spine.tools.psi.java.methodWithSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -156,7 +156,7 @@ internal sealed class SetOnceJavaConstraints<T>(
     ) {
 
         val mergeFromBytes = methodWithSignature(MergeFromBytesSignature).body!!
-        val fieldReading = mergeFromBytes.findFirstByText(readerStartsWith, readerContains)
+        val fieldReading = mergeFromBytes.getFirstByText(readerStartsWith, readerContains)
         val fieldCaseBlock = fieldReading.parent
 
         val previousValue = InitVar("previous", currentValue)

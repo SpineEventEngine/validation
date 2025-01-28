@@ -35,9 +35,9 @@ import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.type.TypeSystem
+import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.psi.findFirstByText
-import io.spine.validation.java.psi.methodWithSignature
+import io.spine.tools.psi.java.methodWithSignature
 
 /**
  * A type that can be either [String] or [ByteString].
@@ -141,7 +141,7 @@ internal class SetOnceStringField(
         val mergeFromMessage = methodWithSignature(
             "public Builder mergeFrom(${declaringMessageClass.canonical} other)"
         ).body!!
-        val fieldCheck = mergeFromMessage.findFirstByText(
+        val fieldCheck = mergeFromMessage.getFirstByText(
             "if (!other.$fieldGetter.isEmpty())"
         ) as PsiIfStatement
         val fieldProcessing = (fieldCheck.thenBranch!! as PsiBlockStatement).codeBlock
