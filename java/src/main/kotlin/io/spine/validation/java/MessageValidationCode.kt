@@ -38,12 +38,16 @@ import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.Environment.elementFactory
+import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.annotate
 import io.spine.tools.psi.java.createInterfaceReference
+import io.spine.tools.psi.java.createStatementsFromText
 import io.spine.tools.psi.java.execute
+import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
+import io.spine.tools.psi.java.nested
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
@@ -51,10 +55,6 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
-import io.spine.validation.java.psi.addBefore
-import io.spine.validation.java.psi.createStatementsFromText
-import io.spine.validation.java.psi.findFirstByText
-import io.spine.validation.java.psi.nested
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
@@ -211,7 +211,7 @@ internal class MessageValidationCode(
      * If one or more constraints are violated, the injected snippet will throw.
      */
     private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build").run {
-        val returningResult = findFirstByText("return result;")
+        val returningResult = getFirstByText("return result;")
         val runValidation = elementFactory.createStatementsFromText(
             """
             java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
