@@ -34,7 +34,7 @@ import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.psi.methodWithSignature
+import io.spine.tools.psi.java.methodWithSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given message [field].
