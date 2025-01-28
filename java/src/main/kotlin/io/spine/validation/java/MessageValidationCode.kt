@@ -210,19 +210,20 @@ internal class MessageValidationCode(
      * The validation code is executed right before returning from the `build()`.
      * If one or more constraints are violated, the injected snippet will throw.
      */
-    private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build").run {
-        val returningResult = getFirstByText("return result;")
-        val runValidation = elementFactory.createStatementsFromText(
-            """
+    private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build")
+        .run {
+            val returningResult = getFirstByText("return result;")
+            val runValidation = elementFactory.createStatementsFromText(
+                """
             java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
             if (error.isPresent()) {
                 var violations = error.get().getConstraintViolationList();
                 throw new io.spine.validate.ValidationException(violations);
             }
             """.trimIndent(), this
-        )
-        body!!.addBefore(runValidation, returningResult)
-    }
+            )
+            body!!.addBefore(runValidation, returningResult)
+        }
 
     private fun BuilderPsiClass.annotateBuildReturnType() = method("build")
         .run { returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!) }
