@@ -48,10 +48,14 @@ public class JavaValidationRenderer : JavaRenderer() {
             return
         }
 
+        val generators = listOf(
+            RequiredGenerator(querying = this, typeSystem)
+        )
+
         select(CompilationMessage::class.java).all()
             .associateWith { sources.javaFileOf(it.type) }
             .forEach { (message, file) ->
-                val messageCode = MessageValidationCode(message, typeSystem)
+                val messageCode = MessageValidationCode(message, typeSystem, generators)
                 val psiFile = file.psi() as PsiJavaFile
                 messageCode.render(psiFile)
                 file.overwrite(psiFile.text)

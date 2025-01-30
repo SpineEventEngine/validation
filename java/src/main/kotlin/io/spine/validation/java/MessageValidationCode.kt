@@ -37,6 +37,7 @@ import io.spine.protodata.java.This
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.type.TypeSystem
+import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
@@ -55,6 +56,7 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
+import io.spine.validation.java.protodata.CodeBlock as LocalCodeBlock
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
@@ -77,6 +79,7 @@ private typealias BuilderPsiClass = PsiClass
 internal class MessageValidationCode(
     private val message: CompilationMessage,
     private val typeSystem: TypeSystem,
+    private val generators: List<MessageStateValidation>
 ) {
     private val messageType: TypeName = message.name
     private val messageClassName = messageType.javaClassName(typeSystem)
@@ -152,11 +155,11 @@ internal class MessageValidationCode(
     private fun MessagePsiClass.declarePublicValidateMethod() {
         val psiMethod = elementFactory.createMethodFromText(
             """
-            public java.util.Optional<io.spine.validate.ValidationError> validate() {
-                var noParent = io.spine.base.FieldPath.getDefaultInstance();
-                return validate(noParent);
-            }
-            """.trimIndent(), this)
+            |public java.util.Optional<io.spine.validate.ValidationError> validate() {
+            |    var noParent = io.spine.base.FieldPath.getDefaultInstance();
+            |    return validate(noParent);
+            |}
+            """.trimMargin(), this)
         psiMethod.annotate(Override::class.java)
         addLast(psiMethod)
     }
@@ -182,34 +185,49 @@ internal class MessageValidationCode(
      * the resulting formatting, often leading to non-compilable Java code.
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
-        val formattedConstraints = constraints.joinToString(separator = "").trim()
+        val ruleConstraints = constraints
+        val generatedConstraints = generators.flatMap { it.constraints(messageType) }
         val psiMethod = elementFactory.createMethodFromText(
             """
             |private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
-            |    ${validateMethodBody(formattedConstraints)}
+            |    ${validateMethodBody(ruleConstraints, generatedConstraints)}
             |}
             """.trimMargin(), this
         )
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(formattedConstraints: String): String =
-        if (formattedConstraints.isEmpty()) {
-            "return java.util.Optional.empty();"
-        } else {
-            """
-            var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
-            $formattedConstraints
-            if (!$violations.isEmpty()) {
-                var error = io.spine.validate.ValidationError.newBuilder()
-                    .addAllConstraintViolation($violations)
-                    .build();
-                return java.util.Optional.of(error);
-            } else {
-                return java.util.Optional.empty();
-            }
-            """.trimIndent()
+    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<LocalCodeBlock>): String {
+        if (rules.isEmpty() && generated.isEmpty()) {
+            return """
+                |// This message does not have any validation constraints.
+                |return java.util.Optional.empty();
+            """.trimMargin()
         }
+
+        return """
+            |var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+            |
+            |/* Rule-based constraints. */
+            |${rules.formatRules()}
+            |
+            |/* Standalone constraints. */
+            |${generated.formatGenerated()}
+            |
+            |if (!$violations.isEmpty()) {
+            |    var error = io.spine.validate.ValidationError.newBuilder()
+            |        .addAllConstraintViolation($violations)
+            |        .build();
+            |    return java.util.Optional.of(error);
+            |} else {
+            |    return java.util.Optional.empty();
+            |}
+        """.trimMargin()
+    }
+
+    private fun List<CodeBlock>.formatRules() = joinToString(separator = "").trim()
+
+    private fun List<LocalCodeBlock>.formatGenerated() = joinByLines()
 
     private fun MessagePsiClass.declareSupportingFields() =
         supportingFields.forEach {
@@ -240,12 +258,12 @@ internal class MessageValidationCode(
             val returningResult = getFirstByText("return result;")
             val runValidation = elementFactory.createStatementsFromText(
                 """
-            java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
-            if (error.isPresent()) {
-                var violations = error.get().getConstraintViolationList();
-                throw new io.spine.validate.ValidationException(violations);
-            }
-            """.trimIndent(), this
+                |java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+                |if (error.isPresent()) {
+                |    var violations = error.get().getConstraintViolationList();
+                |    throw new io.spine.validate.ValidationException(violations);
+                |}
+                """.trimMargin(), this
             )
             body!!.addBefore(runValidation, returningResult)
         }
