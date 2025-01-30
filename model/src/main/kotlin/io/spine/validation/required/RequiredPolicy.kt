@@ -26,26 +26,33 @@
 
 package io.spine.validation.required
 
-import com.google.common.annotations.VisibleForTesting
 import io.spine.core.External
+import io.spine.core.Where
+import io.spine.option.IfMissingOption
+import io.spine.protobuf.unpack
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.declaringFile
-import io.spine.protodata.ast.event.FieldExited
-import io.spine.protodata.ast.protoName
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ast.Span
+import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.toPath
+import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
-import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.DefaultErrorMessage
+import io.spine.validation.IF_MISSING
+import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
-import io.spine.validation.RequiredField
 import io.spine.validation.ValidationPolicy
-import io.spine.validation.event.RuleAdded
+import io.spine.validation.boolValue
+import io.spine.validation.event.RequiredFieldAccepted
+import io.spine.validation.event.requiredFieldAccepted
 import io.spine.validation.fieldId
-import io.spine.validation.findField
-import io.spine.validation.toEvent
 
 /**
  * A [ValidationPolicy] which controls whether a field should be validated as `required`.
@@ -58,51 +65,72 @@ import io.spine.validation.toEvent
  *
  * If any of these conditions are not met, nothing happens.
  */
-internal class RequiredPolicy : ValidationPolicy<FieldExited>() {
+internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
-    override fun whenever(@External event: FieldExited): EitherOf2<RuleAdded, NoReaction> {
-        val declaringType = event.type
-        val fieldName = event.field
-        val id = fieldId {
-            name = fieldName
-            type = declaringType
-        }
-        val field = select<RequiredField>().findById(id)
-        if (field != null && field.required) {
-            val declaration = findField(fieldName, declaringType, event.file)
-            val rule = requiredRule(declaration, field)
-            return rule.asA()
-        }
-        return ignore()
-    }
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = REQUIRED)
+        event: FieldOptionDiscovered,
+    ): EitherOf2<RequiredFieldAccepted, NoReaction> {
+        val field = event.subject
+        val file = event.file
 
-    private fun requiredRule(declaration: Field, field: RequiredField): RuleAdded {
-        val rule = RequiredRule.forField(declaration, field.errorMessage)
-            ?: throwDoesNotSupportRequired(declaration)
-        return rule.toEvent(declaration.declaringType)
-    }
+        checkFieldType(field, file)
+        val message = extractErrorMessage(field, file)
 
-    private fun throwDoesNotSupportRequired(field: Field): Nothing {
-        val file = field.declaringFile(typeSystem!!)
-        val msg = fieldDoesNotSupportRequired(field)
-        Compilation.error(
-            file,
-            field.span.startLine, field.span.startColumn,
-            msg
-        )
+        return if (event.option.boolValue) {
+            accepted(field, message).asA()
+        } else {
+            ignore()
+        }
     }
 }
 
-/**
- * Composes an error message for the field which cannot have the `(required)` option
- * because it cannot be used for the type of the field.
- */
-@VisibleForTesting
-internal fun fieldDoesNotSupportRequired(field: Field): String {
-    val fieldName = field.name.value
-    val declaringType = field.declaringType.qualifiedName
-    val type = field.type.primitive.protoName
-    return "The field `${declaringType}.${fieldName}` of the type `${type}`" +
-            " does not support `($REQUIRED)` constraint."
+private fun accepted(field: Field, message: String): RequiredFieldAccepted =
+    requiredFieldAccepted {
+        id = fieldId {
+            type = field.declaringType
+            name = field.name
+        }
+        errorMessage = message
+        subject = field
+    }
+
+private fun checkFieldType(field: Field, file: File) {
+    val type = field.type
+    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
+        file.compilationError(field.span) {
+            "The field `${field.qualifiedName}` of the type `${field.type}` does not " +
+                    "support `($REQUIRED)` option."
+        }
+    }
 }
+
+private fun extractErrorMessage(field: Field, file: File): String {
+    val messageOptions = field.optionList.filter { it.name == IF_MISSING }
+    return when (messageOptions.size) {
+        0 -> DefaultErrorMessage.from(IfMissingOption.getDescriptor())
+        1 -> {
+            val ifMissing = messageOptions.first().value.unpack<IfMissingOption>()
+            ifMissing.errorMsg
+        }
+
+        else -> {
+            file.compilationError(field.span) {
+                "The field `${field.qualifiedName}` declares `($IF_MISSING)` option " +
+                        "more than once."
+            }
+        }
+    }
+}
+
+private fun File.compilationError(span: Span, message: () -> String): Nothing =
+    Compilation.error(
+        toPath().toFile(),
+        span.startLine, span.startColumn,
+        message()
+    )
+
+private val SUPPORTED_PRIMITIVES = listOf(
+    TYPE_STRING, TYPE_BYTES
+)

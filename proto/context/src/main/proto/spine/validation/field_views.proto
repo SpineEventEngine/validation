@@ -30,11 +30,8 @@ message RequiredField {
     // The error message template.
     string error_message = 2;
 
-    // `true` if the field is marked with `(required) = true`, `false` otherwise.
-    bool required = 3;
-
     // The field in which the option was discovered.
-    protodata.Field subject = 4;
+    protodata.Field subject = 3;
 }
 
 // A view on a field that is marked with `(validate)`.

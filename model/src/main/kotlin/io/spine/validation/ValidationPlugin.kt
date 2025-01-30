@@ -30,7 +30,7 @@ import io.spine.protodata.plugin.Plugin
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.protodata.render.Renderer
-import io.spine.validation.required.RequiredFieldRepository
+import io.spine.validation.required.RequiredFieldView
 import io.spine.validation.required.RequiredIdOptionPolicy
 import io.spine.validation.required.RequiredIdPatternPolicy
 import io.spine.validation.required.RequiredPolicy
@@ -44,10 +44,11 @@ import io.spine.validation.required.RequiredPolicy
  */
 public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
     renderers = renderers,
-    views = setOf(),
+    views = setOf(
+        RequiredFieldView::class.java
+    ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompiledMessageRepository(),
-        RequiredFieldRepository(),
         ValidatedFieldRepository(),
         SetOnceFieldRepository()
     ),
