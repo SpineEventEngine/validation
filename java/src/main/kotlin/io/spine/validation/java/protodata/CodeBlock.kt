@@ -27,22 +27,30 @@
 package io.spine.validation.java.protodata
 
 import io.spine.protodata.java.AnElement
-import io.spine.protodata.java.JavaElement
+import io.spine.protodata.java.Statement
+import io.spine.string.joinByLines
 
 /**
- * An arbitrary piece of Java code that can be thought as a collection
- * of one or more [JavaElement]s.
+ * A list of Java statements.
  *
- * @param code Arbitrary Java code.
+ * An example of creating a code block:
+ *
+ * ```
+ * CodeBlock(
+ *     """
+ *     if (fieldValue.equals("hello")) {
+ *         var fieldPath = getFieldPath();
+ *         var violation = createViolation(fieldPath);
+ *         violations.add(violation);
+ *     }
+ *     """.trimIndent()
+ * )
+ * ```
  */
-public class CodeBlock(public val code: String) : JavaElement {
+public class CodeBlock(code: String) : AnElement(code) {
 
-    override fun toCode(): String = code
-
-    override fun equals(other: Any?): Boolean =
-        other is AnElement && this.code == other.code
-
-    override fun hashCode(): Int = code.hashCode()
-
-    override fun toString(): String = code
+    /**
+     * Creates a [CodeBlock] from the provided list of [Statement].
+     */
+    public constructor(statements: List<Statement>) : this(statements.joinByLines())
 }
