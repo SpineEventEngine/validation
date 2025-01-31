@@ -109,6 +109,8 @@ private fun checkFieldType(field: Field, file: File) {
     }
 }
 
+// TODO:2025-01-31:yevhenii.nadtochii: Locally changed ProtoData.
+//  `Field.optionList` is empty when it is part of `FieldOptionDiscovered` event.
 private fun determineErrorMessage(field: Field, file: File): String {
     val ifMissingOptions = field.optionList.filter { it.name == IF_MISSING }
     return when (ifMissingOptions.size) {
