@@ -197,21 +197,23 @@ internal class MessageValidationCode(
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<LocalCodeBlock>): String {
+    private fun validateMethodBody(
+        rules: List<CodeBlock>,
+        generated: List<LocalCodeBlock>
+    ): String {
         if (rules.isEmpty() && generated.isEmpty()) {
             return """
                 |// This message does not have any validation constraints.
                 |return java.util.Optional.empty();
             """.trimMargin()
         }
-
         return """
             |var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
             |
             |/* Rule-based constraints. */
             |${rules.formatRules()}
             |
-            |/* Standalone constraints. */
+            |/* Standalone generated constraints. */
             |${generated.formatGenerated()}
             |
             |if (!$violations.isEmpty()) {

@@ -42,7 +42,6 @@ import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
-import io.spine.protodata.java.packToAny
 import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
@@ -58,7 +57,7 @@ import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.protodata.CodeBlock
 import io.spine.validation.protodata.toBuilder
 
-internal class RequiredGenerator(
+internal class RequiredOption(
     private val querying: Querying,
     typeSystem: TypeSystem
 ) : MessageStateValidation {

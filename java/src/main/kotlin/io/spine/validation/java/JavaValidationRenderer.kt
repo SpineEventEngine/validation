@@ -49,7 +49,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         val generators = listOf(
-            RequiredGenerator(querying = this, typeSystem)
+            RequiredOption(querying = this, typeSystem)
         )
 
         select(CompilationMessage::class.java).all()
