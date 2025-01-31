@@ -31,9 +31,9 @@ import io.spine.protodata.java.AnElement
 /**
  * Represents class level member declaration.
  */
+// TODO:2025-01-31:yevhenii.nadtochii: Add `MethodDeclaration`. Also, `FieldDeclaration` is not
+//  a statement, it should become a declaration too.
+// TODO:2025-01-31:yevhenii.nadtochii: Consider adding `Context<T>`. So, that instead of
+//  `Expression<Message>.call("getField")` we could use `Context<Message>.call("getField").
+//  We don't really an explicit `this` in the class context. It harms readability a bit.
 public open class MemberDeclaration(code: String) : AnElement(code)
-
-// We already need the following children: FieldDeclaration, MethodDeclaration.
-// Also, we need the context. So, that instead of `Expression<Message>.call("getField")`
-// we could use `Context<Message>.call("getField"). We don't really need an explicit
-// `this` everywhere.
