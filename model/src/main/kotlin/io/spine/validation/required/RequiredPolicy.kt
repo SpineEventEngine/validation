@@ -55,15 +55,20 @@ import io.spine.validation.event.requiredFieldAccepted
 import io.spine.validation.fieldId
 
 /**
- * A [ValidationPolicy] which controls whether a field should be validated as `required`.
+ * A [ValidationPolicy] which controls whether a field should be validated as `(required)`.
  *
- * Whenever a field traversal is finished, add the validation rule if
- * all of these conditions are met:
- *   1. The field has the `(required)` option.
- *   2. The value of the option is `true`.
- *   3. The field type allows checking if a value is set or not.
+ * Whenever a required field is discovered, emit [RequiredFieldAccepted]
+ * if the following conditions are met:
  *
- * If any of these conditions are not met, nothing happens.
+ * 1. The field type is supported by the option.
+ * 2. The field has zero or exactly one [IF_MISSING] companion option declared.
+ * 3. The value of the option is `true`.
+ *
+ * Violation of the first or second condition leads to a compilation error.
+ *
+ * Violation of the third condition means that the `(required)` option
+ * is applied correctly, but disabled. In this case, the policy emits [NoReaction]
+ * because we actually have a non-required field.
  */
 internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -74,10 +79,8 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     ): EitherOf2<RequiredFieldAccepted, NoReaction> {
         val field = event.subject
         val file = event.file
-
         checkFieldType(field, file)
-        val message = extractErrorMessage(field, file)
-
+        val message = determineErrorMessage(field, file)
         return if (event.option.boolValue) {
             accepted(field, message).asA()
         } else {
@@ -106,19 +109,19 @@ private fun checkFieldType(field: Field, file: File) {
     }
 }
 
-private fun extractErrorMessage(field: Field, file: File): String {
-    val messageOptions = field.optionList.filter { it.name == IF_MISSING }
-    return when (messageOptions.size) {
+private fun determineErrorMessage(field: Field, file: File): String {
+    val ifMissingOptions = field.optionList.filter { it.name == IF_MISSING }
+    return when (ifMissingOptions.size) {
         0 -> DefaultErrorMessage.from(IfMissingOption.getDescriptor())
         1 -> {
-            val ifMissing = messageOptions.first().value.unpack<IfMissingOption>()
-            ifMissing.errorMsg
+            val companion = ifMissingOptions.first().value.unpack<IfMissingOption>()
+            companion.errorMsg
         }
 
         else -> {
             file.compilationError(field.span) {
-                "The field `${field.qualifiedName}` declares `($IF_MISSING)` option " +
-                        "more than once."
+                "The field `${field.qualifiedName}` is allowed to have zero or one " +
+                        "`($IF_MISSING)` companion option."
             }
         }
     }
