@@ -28,6 +28,7 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
+import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
@@ -41,6 +42,8 @@ import io.spine.validation.CompilationMessage
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
+    private val valueConverter = JavaValueConverter(typeSystem)
+
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
         // As for now, we modify only `java` sources.
@@ -49,7 +52,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         val generators = listOf(
-            RequiredOption(querying = this, typeSystem)
+            RequiredOption(querying = this, valueConverter)
         )
 
         select(CompilationMessage::class.java).all()

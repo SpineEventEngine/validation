@@ -42,7 +42,6 @@ import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
-import io.spine.protodata.type.TypeSystem
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
@@ -59,10 +58,9 @@ import io.spine.validation.protodata.toBuilder
 
 internal class RequiredOption(
     private val querying: Querying,
-    typeSystem: TypeSystem
+    private val converter: JavaValueConverter
 ) : MessageStateValidation {
 
-    private val valueConverter = JavaValueConverter(typeSystem)
     private val allViews by lazy {
         querying.select<RequiredField>()
             .all()
@@ -99,7 +97,7 @@ internal class RequiredOption(
     //  collection, which is always created just for that.
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
-        val expression = valueConverter.valueToCode(unsetValue)
+        val expression = converter.valueToCode(unsetValue)
         return expression
     }
 
