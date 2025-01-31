@@ -56,6 +56,9 @@ import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.protodata.CodeBlock
 import io.spine.validation.protodata.toBuilder
 
+/**
+ * The generator for `(required)` option.
+ */
 internal class RequiredOption(
     private val querying: Querying,
     private val converter: JavaValueConverter
@@ -69,13 +72,16 @@ internal class RequiredOption(
             .all()
     }
 
+    // TODO:2025-01-31:yevhenii.nadtochii: It is also possible to ask `OptionCode` for a specific
+    //  field. It will not add up to performance, by in `validate()` method, constrains will be
+    //  grouped by a field, rather then by an option.
     override fun codeFor(type: TypeName): OptionCode {
         val requiredMessageFields = allRequiredFields.filter { it.id.type == type }
         val constraints = requiredMessageFields.map { constraints((it)) }
         return OptionCode(constraints)
     }
 
-    // TODO:2025-01-31:yevhenii.nadtochii: The OptionGenerater is already aware about `validate()`
+    // TODO:2025-01-31:yevhenii.nadtochii: The `OptionGenerator` is already aware about `validate()`
     //  method, it should pass expressions for `violations` and `parent` variables.  So, not to
     //  hardcode them as text.
     private fun constraints(view: RequiredField): CodeBlock {
@@ -97,8 +103,8 @@ internal class RequiredOption(
 
     // TODO:2025-01-31:yevhenii.nadtochii: Consider migration from the general check
     //  to type-specific checks. This approach with `equals()` was great for rules.
-    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with an empty
-    //  collection, which is always created just for that.
+    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with
+    //  an empty collection.
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
         val expression = converter.valueToCode(unsetValue)
@@ -111,8 +117,8 @@ internal class RequiredOption(
             .chainBuild()
 
     // TODO:2025-01-31:yevhenii.nadtochii: Set `field_value` when `TypeConverter` knows
-    //  how to convert collections: Could not find a wrapper type for `java.util.Collections$EmptyList`.
-    //  I suppose the same story is with maps. An empty list is a default value for empty `repeated`.
+    //  how to convert collections: "Could not find a wrapper type for `java.util.Collections$EmptyList`."
+    //  An empty list is a default value for empty `repeated`. I suppose the same is with maps.
     private fun violation(
         field: Field,
         path: Expression<FieldPath>,

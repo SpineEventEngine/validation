@@ -28,7 +28,6 @@ package io.spine.validation.java
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
-import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import io.spine.protodata.ast.TypeName
@@ -56,7 +55,7 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
-import io.spine.validation.java.protodata.CodeBlock as LocalCodeBlock
+import io.spine.validation.java.protodata.CodeBlock
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
@@ -121,11 +120,15 @@ internal class MessageValidationCode(
      * A single rule always generates a single Java constraint represented by a [CodeBlock].
      * The number of supported members is not restricted. A single rule may generate zero,
      * one, or more supporting members.
+     *
+     * Please note, [CodeGenerator.code] continues to return a JavaPoet's code block,
+     * which we convert to [CodeBlock] from ProtoData Expression API for convenience.
+     * We're not going to migrate them because the rule generator will be removed soon.
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
         val generator = generatorFor(context)
-        constraints.add(generator.code())
+        constraints.add(CodeBlock(generator.code().toString()))
         supportingFields.addAll(generator.supportingFields())
         supportingMethods.addAll(generator.supportingMethods())
     }
@@ -149,7 +152,7 @@ internal class MessageValidationCode(
     /**
      * Declares `validate()` method in this [MessagePsiClass].
      *
-     * This method implements [ValidatableMessage.validate], and has
+     * This is a `public` implementation of [ValidatableMessage.validate] with
      * [Override] annotation.
      */
     private fun MessagePsiClass.declarePublicValidateMethod() {
@@ -168,11 +171,11 @@ internal class MessageValidationCode(
      * Declares `validate(FieldPath)` method in this [MessagePsiClass].
      *
      * All actual validations are done in this `private` overloading. It accepts
-     * the parent field path, so that the created violation errors could use it
-     * when it is non-empty. Non-empty field path is possible only when the current
-     * invocation of `validate()` is performed within `(validate)` option. In this case,
-     * the parent field path is populated, and the created violation will correctly
-     * point to the field, which actually requested a nested validation.
+     * the parent field path, so that the created violation errors could use it.
+     * Non-empty field path is possible only when the current invocation of `validate()`
+     * is performed within `(validate)` option. In this case, the parent field path is populated,
+     * and the created violation will correctly point to the field, which actually requested
+     * a nested validation.
      *
      * This method does the following to address the formatting issues:
      *
@@ -186,7 +189,7 @@ internal class MessageValidationCode(
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
-        // We are temporarily ignoring members for standalone generators.
+        // We are temporarily ignoring members from standalone generators.
         val generatedConstraints = generators.flatMap { it.codeFor(messageType).constraints }
         val psiMethod = elementFactory.createMethodFromText(
             """
@@ -198,10 +201,7 @@ internal class MessageValidationCode(
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(
-        rules: List<CodeBlock>,
-        generated: List<LocalCodeBlock>
-    ): String {
+    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<CodeBlock>): String {
         if (rules.isEmpty() && generated.isEmpty()) {
             return """
                 |// This message does not have any validation constraints.
@@ -230,7 +230,7 @@ internal class MessageValidationCode(
 
     private fun List<CodeBlock>.formatRules() = joinToString(separator = "").trim()
 
-    private fun List<LocalCodeBlock>.formatGenerated() = joinByLines()
+    private fun List<CodeBlock>.formatGenerated() = joinByLines()
 
     private fun MessagePsiClass.declareSupportingFields() =
         supportingFields.forEach {
