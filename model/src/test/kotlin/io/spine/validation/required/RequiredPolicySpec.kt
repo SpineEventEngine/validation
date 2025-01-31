@@ -30,7 +30,10 @@ import com.google.protobuf.Descriptors.Descriptor
 import io.kotest.matchers.string.shouldContain
 import io.spine.logging.testing.tapConsole
 import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
+import io.spine.validation.REQUIRED
 import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
 import io.spine.validation.given.required.WithDoubleField
@@ -49,40 +52,32 @@ internal class RequiredPolicySpec {
     fun `reject option on a boolean field`(@TempDir workingDir: Path) {
         val message = WithBoolField.getDescriptor()
         val error = compile(message, workingDir)
-
         val field = message.field("really")
-        val expected = fieldDoesNotSupportRequired(field)
-        error.message shouldContain expected
+        error.message shouldContain expected(field)
     }
 
     @Test
     fun `reject option on an integer field`(@TempDir workingDir: Path) {
         val message = WithIntField.getDescriptor()
         val error = compile(message, workingDir)
-
         val field = message.field("zero")
-        val expected = fieldDoesNotSupportRequired(field)
-        error.message shouldContain expected
+        error.message shouldContain expected(field)
     }
 
     @Test
     fun `reject option on a signed integer field`(@TempDir workingDir: Path) {
         val message = WithSignedInt.getDescriptor()
         val error = compile(message, workingDir)
-
         val field = message.field("signed")
-        val expected = fieldDoesNotSupportRequired(field)
-        error.message shouldContain expected
+        error.message shouldContain expected(field)
     }
 
     @Test
     fun `reject option on a double field`(@TempDir workingDir: Path) {
         val message = WithDoubleField.getDescriptor()
         val error = compile(message, workingDir)
-
         val field = message.field("temperature")
-        val expected = fieldDoesNotSupportRequired(field)
-        error.message shouldContain expected
+        error.message shouldContain expected(field)
     }
 
     /**
@@ -103,3 +98,6 @@ internal class RequiredPolicySpec {
         return error
     }
 }
+
+private fun expected(field: Field) = "The field `${field.qualifiedName}` of the type " +
+        "`${field.type}` does not support `($REQUIRED)` option."
