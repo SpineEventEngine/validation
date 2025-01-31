@@ -30,7 +30,6 @@ import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
-import io.spine.validate.Diags
 import io.spine.validation.assertions.assertViolation
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
@@ -44,7 +43,7 @@ internal class RequiredMapWithStringsITest {
         val instance = Collections.newBuilder()
         assertViolation(instance,
             "contains_a_non_empty_string_value",
-            Diags.Required.collectionErrorMsg
+            "must have a value"
         )
     }
 
