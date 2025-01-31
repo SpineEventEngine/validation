@@ -84,13 +84,20 @@ internal class RequiredGenerator(
             """
             |if ($getter.equals(${defaultValue(field)})) {
             |    var fieldPath = ${filedPath(field.name.value, ReadVar("parent"))};
-            |    var violation = ${violation(field, getter, ReadVar("fieldPath"), message)};
+            |    var violation = ${violation(field, ReadVar("fieldPath"), message)};
             |    violations.add(violation);
             |}
             """.trimMargin()
         )
     }
 
+    /**
+     * This approach with `equals()` is unified. Now we
+     */
+    // TODO:2025-01-31:yevhenii.nadtochii: Consider migration from the universal test
+    //  to type-specific tests. This approach with `equals()` was great for rules.
+    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with empty
+    //  collection, which is always created just for that.
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
         val expression = valueConverter.valueToCode(unsetValue)
@@ -102,9 +109,11 @@ internal class RequiredGenerator(
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild()
 
+    // TODO:2025-01-31:yevhenii.nadtochii: Set `field_value` when `TypeConverter` knows
+    //  how to convert collections: Could not find a wrapper type for `java.util.Collections$EmptyList`.
+    //  I suppose the same story is with maps. An empty list is a default value for empty repeated.
     private fun violation(
         field: Field,
-        getter: Expression<*>,
         path: Expression<FieldPath>,
         message: String
     ): Expression<ConstraintViolation> {
@@ -114,7 +123,7 @@ internal class RequiredGenerator(
             .chainSet("message", templateString)
             .chainSet("type_name", StringLiteral(field.declaringType.qualifiedName))
             .chainSet("field_path", path)
-            .chainSet("field_value", getter.packToAny())
+            //.chainSet("field_value", getter.packToAny())
             .chainBuild<ConstraintViolation>()
         return violation
     }
