@@ -79,7 +79,7 @@ private typealias BuilderPsiClass = PsiClass
 internal class MessageValidationCode(
     private val message: CompilationMessage,
     private val typeSystem: TypeSystem,
-    private val generators: List<MessageStateValidation>
+    private val generators: List<OptionGenerator>
 ) {
     private val messageType: TypeName = message.name
     private val messageClassName = messageType.javaClassName(typeSystem)
@@ -186,7 +186,8 @@ internal class MessageValidationCode(
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
-        val generatedConstraints = generators.flatMap { it.constraints(messageType) }
+        // We are temporarily ignoring members for standalone generators.
+        val generatedConstraints = generators.flatMap { it.codeFor(messageType).constraints }
         val psiMethod = elementFactory.createMethodFromText(
             """
             |private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {

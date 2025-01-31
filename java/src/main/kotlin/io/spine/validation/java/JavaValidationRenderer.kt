@@ -42,7 +42,7 @@ import io.spine.validation.CompilationMessage
  */
 public class JavaValidationRenderer : JavaRenderer() {
 
-    private val valueConverter = JavaValueConverter(typeSystem)
+    private val valueConverter by lazy { JavaValueConverter(typeSystem) }
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.

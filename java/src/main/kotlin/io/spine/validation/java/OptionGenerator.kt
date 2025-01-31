@@ -28,8 +28,36 @@ package io.spine.validation.java
 
 import io.spine.protodata.ast.TypeName
 import io.spine.validation.java.protodata.CodeBlock
+import io.spine.validation.java.protodata.MemberDeclaration
 
-internal interface MessageStateValidation {
+/**
+ * Generates Java code for a specific option.
+ */
+internal interface OptionGenerator {
 
-    fun constraints(type: TypeName): List<CodeBlock>
+    /**
+     * Generates validation code for the option within the provided
+     * message [type].
+     *
+     * If multiple fields declare the option, the returned code handles them all.
+     */
+    fun codeFor(type: TypeName): OptionCode
 }
+
+/**
+ * Java code handling all applications of a specific option within a message.
+ */
+internal class OptionCode(
+
+    /**
+     * Code blocks to be added to the `validate()` method of the message.
+     */
+    val constraints: List<CodeBlock>,
+
+    /**
+     * Additional class-level declarations required by the validation logic.
+     *
+     * Some constraints may require defining extra fields or methods.
+     */
+    val declarations: List<MemberDeclaration> = emptyList()
+)

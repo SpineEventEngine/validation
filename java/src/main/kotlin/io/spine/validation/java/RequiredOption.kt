@@ -59,18 +59,25 @@ import io.spine.validation.protodata.toBuilder
 internal class RequiredOption(
     private val querying: Querying,
     private val converter: JavaValueConverter
-) : MessageStateValidation {
+) : OptionGenerator {
 
-    private val allViews by lazy {
+    /**
+     * All required fields in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
     }
 
-    override fun constraints(type: TypeName): List<CodeBlock> =
-        allViews.filter { it.id.type == type }
-            .map { constraints(it) }
+    override fun codeFor(type: TypeName): OptionCode {
+        val requiredMessageFields = allRequiredFields.filter { it.id.type == type }
+        val constraints = requiredMessageFields.map { constraints((it)) }
+        return OptionCode(constraints)
+    }
 
-    // How do we know about variables `violations` and `parent`?
+    // TODO:2025-01-31:yevhenii.nadtochii: The OptionGenerater is already aware about `validate()`
+    //  method, it should pass expressions for `violations` and `parent` variables.  So, not to
+    //  hardcode them as text.
     private fun constraints(view: RequiredField): CodeBlock {
         val field = view.subject
         val getter = This<Message>()
@@ -88,12 +95,9 @@ internal class RequiredOption(
         )
     }
 
-    /**
-     * This approach with `equals()` is unified. Now we
-     */
-    // TODO:2025-01-31:yevhenii.nadtochii: Consider migration from the universal test
-    //  to type-specific tests. This approach with `equals()` was great for rules.
-    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with empty
+    // TODO:2025-01-31:yevhenii.nadtochii: Consider migration from the general check
+    //  to type-specific checks. This approach with `equals()` was great for rules.
+    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with an empty
     //  collection, which is always created just for that.
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
@@ -108,7 +112,7 @@ internal class RequiredOption(
 
     // TODO:2025-01-31:yevhenii.nadtochii: Set `field_value` when `TypeConverter` knows
     //  how to convert collections: Could not find a wrapper type for `java.util.Collections$EmptyList`.
-    //  I suppose the same story is with maps. An empty list is a default value for empty repeated.
+    //  I suppose the same story is with maps. An empty list is a default value for empty `repeated`.
     private fun violation(
         field: Field,
         path: Expression<FieldPath>,
@@ -125,6 +129,7 @@ internal class RequiredOption(
         return violation
     }
 
+    // TODO:2025-01-31:yevhenii.nadtochii: This method should be shared with `SetOnceConstraints`.
     private fun Field.templateString(
         template: String,
         placeholders: Map<ErrorPlaceholder, Expression<String>>
