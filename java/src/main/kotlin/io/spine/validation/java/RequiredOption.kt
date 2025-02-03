@@ -40,13 +40,10 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
-import io.spine.validate.TemplateString
-import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
 import io.spine.validation.UnsetValue
@@ -72,19 +69,24 @@ internal class RequiredOption(
             .all()
     }
 
-    // TODO:2025-01-31:yevhenii.nadtochii: It is also possible to ask `OptionCode` for a specific
-    //  field. It will not add up to performance, by in `validate()` method, constrains will be
-    //  grouped by a field, rather then by an option.
-    override fun codeFor(type: TypeName): OptionCode {
+    override fun codeFor(
+        type: TypeName,
+        parent: Expression<FieldPath>,
+        violations: Expression<List<ConstraintViolation>>
+    ): OptionCode {
         val requiredMessageFields = allRequiredFields.filter { it.id.type == type }
-        val constraints = requiredMessageFields.map { constraints((it)) }
+        val constraints = requiredMessageFields.map { constraints(it, parent, violations) }
         return OptionCode(constraints)
     }
 
-    // TODO:2025-01-31:yevhenii.nadtochii: The `OptionGenerator` is already aware about `validate()`
-    //  method, it should pass expressions for `violations` and `parent` variables.  So, not to
-    //  hardcode them as text.
-    private fun constraints(view: RequiredField): CodeBlock {
+    // TODO:2025-02-03:yevhenii.nadtochii: Actually, we don't need an explicit `this.`
+    //  for field getters. Should we introduce `Context<T>` in Expression API?
+    //  So that, method calls were performed either upon `Expression<T>` or within `Context<T>`.
+    private fun constraints(
+        view: RequiredField,
+        parent: Expression<FieldPath>,
+        violations: Expression<List<ConstraintViolation>>
+    ): CodeBlock {
         val field = view.subject
         val getter = This<Message>()
             .field(field)
@@ -93,18 +95,14 @@ internal class RequiredOption(
         return CodeBlock(
             """
             |if ($getter.equals(${defaultValue(field)})) {
-            |    var fieldPath = ${filedPath(field.name.value, ReadVar("parent"))};
+            |    var fieldPath = ${filedPath(field.name.value, parent)};
             |    var violation = ${violation(field, ReadVar("fieldPath"), message)};
-            |    violations.add(violation);
+            |    $violations.add(violation);
             |}
             """.trimMargin()
         )
     }
 
-    // TODO:2025-01-31:yevhenii.nadtochii: Consider migration from the general check
-    //  to type-specific checks. This approach with `equals()` was great for rules.
-    //  But now we can write, i.e., `list.size() == 0` instead of comparing it with
-    //  an empty collection.
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
         val expression = converter.valueToCode(unsetValue)
@@ -116,43 +114,19 @@ internal class RequiredOption(
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild()
 
-    // TODO:2025-01-31:yevhenii.nadtochii: Set `field_value` when `TypeConverter` knows
-    //  how to convert collections: "Could not find a wrapper type for `java.util.Collections$EmptyList`."
-    //  An empty list is a default value for empty `repeated`. I suppose the same is with maps.
     private fun violation(
         field: Field,
         path: Expression<FieldPath>,
         message: String
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(field, path)
-        val templateString = field.templateString(message, placeholders)
+        val templateString = field.templateString(message, placeholders, IF_MISSING)
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("message", templateString)
             .chainSet("type_name", StringLiteral(field.declaringType.qualifiedName))
             .chainSet("field_path", path)
-            //.chainSet("field_value", getter.packToAny())
             .chainBuild<ConstraintViolation>()
         return violation
-    }
-
-    // TODO:2025-01-31:yevhenii.nadtochii: This method should be shared with `SetOnceConstraints`.
-    private fun Field.templateString(
-        template: String,
-        placeholders: Map<ErrorPlaceholder, Expression<String>>
-    ): Expression<TemplateString> {
-        checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
-            "The `($IF_MISSING)` option doesn't support the following placeholders: `$it`. " +
-                    "The supported placeholders: `${placeholders.keys}`. " +
-                    "The declared field: `${qualifiedName}`."
-        }
-        val placeholderEntries = mapExpression(
-            ClassName(String::class), ClassName(String::class),
-            placeholders.mapKeys { StringLiteral(it.key.toString()) }
-        )
-        return ClassName(TemplateString::class).newBuilder()
-            .chainSet("withPlaceholders", StringLiteral(template))
-            .chainPutAll("placeholderValue", placeholderEntries)
-            .chainBuild()
     }
 
     /**

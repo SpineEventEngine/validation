@@ -26,7 +26,10 @@
 
 package io.spine.validation.java
 
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.Expression
+import io.spine.validate.ConstraintViolation
 import io.spine.validation.java.protodata.CodeBlock
 import io.spine.validation.java.protodata.MemberDeclaration
 
@@ -38,8 +41,16 @@ internal interface OptionGenerator {
     /**
      * Generates validation code for all option applications within the provided
      * message [type].
+     *
+     * @param type The message to generate code for.
+     * @param parent A reference to the parent field path.
+     * @param violations A reference to a list of discovered violations.
      */
-    fun codeFor(type: TypeName): OptionCode
+    fun codeFor(
+        type: TypeName,
+        parent: Expression<FieldPath>,
+        violations: Expression<List<ConstraintViolation>>
+    ): OptionCode
 }
 
 /**

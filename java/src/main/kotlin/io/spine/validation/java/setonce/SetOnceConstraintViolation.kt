@@ -33,19 +33,16 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
-import io.spine.validate.TemplateString
-import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.IF_SET_AGAIN
-import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.templateString
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.
@@ -55,12 +52,11 @@ import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
  */
 internal class SetOnceConstraintViolation(
     private val errorTemplate: String,
-    field: Field
+    private val field: Field
 ) {
 
     private val fieldName = field.name.value
     private val fieldType = field.type.name
-    private val qualifiedName = field.qualifiedName
     private val declaringMessage = field.declaringType.qualifiedName
 
     /**
@@ -79,7 +75,7 @@ internal class SetOnceConstraintViolation(
         payload: Expression<*> = newValue
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(currentValue, newValue)
-        val message = templateString(errorTemplate, placeholders)
+        val message = field.templateString(errorTemplate, placeholders, IF_SET_AGAIN)
         val fieldPath = ClassName(FieldPath::class).newBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild<FieldPath>()
@@ -90,25 +86,6 @@ internal class SetOnceConstraintViolation(
             .chainSet("field_value", payload.packToAny())
             .chainBuild<ConstraintViolation>()
         return violation
-    }
-
-    private fun templateString(
-        template: String,
-        placeholders: Map<ErrorPlaceholder, Expression<String>>
-    ): Expression<TemplateString> {
-        checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
-            "The `($IF_SET_AGAIN)` option doesn't support the following placeholders: `$it`. " +
-                    "The supported placeholders: `${placeholders.keys}`. " +
-                    "The declared field: `${qualifiedName}`."
-        }
-        val placeholderEntries = mapExpression(
-            ClassName(String::class), ClassName(String::class),
-            placeholders.mapKeys { StringLiteral(it.key.toString()) }
-        )
-        return ClassName(TemplateString::class).newBuilder()
-            .chainSet("withPlaceholders", StringLiteral(template))
-            .chainPutAll("placeholderValue", placeholderEntries)
-            .chainBuild()
     }
 
     /**
