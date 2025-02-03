@@ -49,7 +49,7 @@ internal interface OptionGenerator {
     fun codeFor(
         type: TypeName,
         parent: Expression<FieldPath>,
-        violations: Expression<List<ConstraintViolation>>
+        violations: Expression<MutableList<ConstraintViolation>>
     ): OptionCode
 }
 

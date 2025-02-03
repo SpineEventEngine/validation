@@ -30,6 +30,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
@@ -189,8 +190,12 @@ internal class MessageValidationCode(
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
-        // We are temporarily ignoring members from standalone generators.
-        val generatedConstraints = generators.flatMap { it.codeFor(messageType).constraints }
+        val generatedConstraints = generators.flatMap {
+            // We are temporarily ignoring members from standalone generators.
+            // Nobody generates them.
+            it.codeFor(messageType, parentPath, violations)
+                .constraints
+        }
         val psiMethod = elementFactory.createMethodFromText(
             """
             |private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
@@ -289,5 +294,6 @@ internal class MessageValidationCode(
 
     private companion object {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
+        val parentPath = ReadVar<FieldPath>("parent")
     }
 }

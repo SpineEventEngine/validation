@@ -72,7 +72,7 @@ internal class RequiredOption(
     override fun codeFor(
         type: TypeName,
         parent: Expression<FieldPath>,
-        violations: Expression<List<ConstraintViolation>>
+        violations: Expression<MutableList<ConstraintViolation>>
     ): OptionCode {
         val requiredMessageFields = allRequiredFields.filter { it.id.type == type }
         val constraints = requiredMessageFields.map { constraints(it, parent, violations) }
