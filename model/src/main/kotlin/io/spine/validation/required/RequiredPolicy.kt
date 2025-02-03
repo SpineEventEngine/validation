@@ -80,7 +80,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
-        val message = determineErrorMessage(field, file)
+        val message = determineErrorMessage(field)
         return if (event.option.boolValue) {
             accepted(field, message).asA()
         } else {
@@ -111,21 +111,14 @@ private fun checkFieldType(field: Field, file: File) {
 
 // TODO:2025-01-31:yevhenii.nadtochii: Locally changed ProtoData.
 //  `Field.optionList` is empty when it is part of `FieldOptionDiscovered` event.
-private fun determineErrorMessage(field: Field, file: File): String {
-    val ifMissingOptions = field.optionList.filter { it.name == IF_MISSING }
-    return when (ifMissingOptions.size) {
-        0 -> DefaultErrorMessage.from(IfMissingOption.getDescriptor())
-        1 -> {
-            val companion = ifMissingOptions.first().value.unpack<IfMissingOption>()
-            companion.errorMsg
-        }
-
-        else -> {
-            file.compilationError(field.span) {
-                "The field `${field.qualifiedName}` is allowed to have zero or one " +
-                        "`($IF_MISSING)` companion option."
-            }
-        }
+// TODO:2025-02-03:yevhenii.nadtochii: No need to check the number of declarations.
+private fun determineErrorMessage(field: Field): String {
+    val companion = field.optionList.find { it.name == IF_MISSING }
+    return if (companion == null) {
+        DefaultErrorMessage.from(IfMissingOption.getDescriptor())
+    } else {
+        companion.value.unpack<IfMissingOption>()
+            .errorMsg
     }
 }
 
