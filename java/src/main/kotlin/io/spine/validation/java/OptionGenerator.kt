@@ -36,10 +36,8 @@ import io.spine.validation.java.protodata.MemberDeclaration
 internal interface OptionGenerator {
 
     /**
-     * Generates validation code for the option within the provided
+     * Generates validation code for all option applications within the provided
      * message [type].
-     *
-     * If multiple fields declare the option, the returned code handles them all.
      */
     fun codeFor(type: TypeName): OptionCode
 }
