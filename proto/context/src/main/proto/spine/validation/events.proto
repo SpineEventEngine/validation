@@ -68,7 +68,7 @@ message MessageWideRuleAdded {
 
 // The event emitted whenever a field with `(required)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message RequiredFieldAccepted {
+message RequiredFieldDiscovered {
 
     spine.validation.FieldId id = 1;
 

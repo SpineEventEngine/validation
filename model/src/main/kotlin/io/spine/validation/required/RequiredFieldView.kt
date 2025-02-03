@@ -31,7 +31,7 @@ import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.FieldId
 import io.spine.validation.RequiredField
-import io.spine.validation.event.RequiredFieldAccepted
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
  * A view of a field that is marked with `(required)` option.
@@ -39,7 +39,7 @@ import io.spine.validation.event.RequiredFieldAccepted
 internal class RequiredFieldView : View<FieldId, RequiredField, RequiredField.Builder>() {
 
     @Subscribe
-    fun on(e: RequiredFieldAccepted) = alter {
+    fun on(e: RequiredFieldDiscovered) = alter {
         errorMessage = e.errorMessage
         subject = e.subject
     }

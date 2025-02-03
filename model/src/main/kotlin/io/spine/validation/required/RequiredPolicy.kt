@@ -48,27 +48,25 @@ import io.spine.validation.DefaultErrorMessage
 import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
-import io.spine.validation.ValidationPolicy
 import io.spine.validation.boolValue
-import io.spine.validation.event.RequiredFieldAccepted
-import io.spine.validation.event.requiredFieldAccepted
+import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.fieldId
 
 /**
- * A [ValidationPolicy] which controls whether a field should be validated as `(required)`.
+ * Controls whether a field should be validated as `(required)`.
  *
- * Whenever a required field is discovered, emit [RequiredFieldAccepted]
+ * Whenever a required field is discovered, emits [RequiredFieldDiscovered]
  * if the following conditions are met:
  *
  * 1. The field type is supported by the option.
- * 2. The field has zero or exactly one [IF_MISSING] companion option declared.
- * 3. The value of the option is `true`.
+ * 2. The option value is `true`.
  *
- * Violation of the first or second condition leads to a compilation error.
+ * If (1) is violated, the policy reports a compilation error.
  *
- * Violation of the third condition means that the `(required)` option
- * is applied correctly, but disabled. In this case, the policy emits [NoReaction]
- * because we actually have a non-required field.
+ * Violation of (2) means that the `(required)` option is applied correctly,
+ * but disabled. In this case, the policy emits [NoReaction] because we actually
+ * have a non-required field, marked with `(required)`.
  */
 internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -76,21 +74,21 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = REQUIRED)
         event: FieldOptionDiscovered,
-    ): EitherOf2<RequiredFieldAccepted, NoReaction> {
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
-        val message = determineErrorMessage(field)
+        val errorMessage = determineErrorMessage(field)
         return if (event.option.boolValue) {
-            accepted(field, message).asA()
+            discovered(field, errorMessage).asA()
         } else {
             ignore()
         }
     }
 }
 
-private fun accepted(field: Field, message: String): RequiredFieldAccepted =
-    requiredFieldAccepted {
+private fun discovered(field: Field, message: String): RequiredFieldDiscovered =
+    requiredFieldDiscovered {
         id = fieldId {
             type = field.declaringType
             name = field.name
