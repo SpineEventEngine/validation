@@ -78,38 +78,47 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
-        val errorMessage = determineErrorMessage(field)
-        return if (event.option.boolValue) {
-            discovered(field, errorMessage).asA()
-        } else {
-            ignore()
+
+        if (!event.option.boolValue) {
+            return ignore()
         }
+
+        val message = determineErrorMessage(field)
+        return requiredFieldDiscovered {
+            id = fieldId {
+                type = field.declaringType
+                name = field.name
+            }
+            errorMessage = message
+            subject = field
+        }.asA()
     }
 }
 
-private fun discovered(field: Field, message: String): RequiredFieldDiscovered =
-    requiredFieldDiscovered {
-        id = fieldId {
-            type = field.declaringType
-            name = field.name
-        }
-        errorMessage = message
-        subject = field
-    }
 
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
-        file.compilationError(field.span) {
+        compilationError(file, field.span) {
             "The field `${field.qualifiedName}` of the type `${field.type}` does not " +
                     "support `($REQUIRED)` option."
         }
     }
 }
 
+private val SUPPORTED_PRIMITIVES = listOf(
+    TYPE_STRING, TYPE_BYTES
+)
+
+private fun compilationError(file: File, span: Span, message: () -> String): Nothing =
+    Compilation.error(
+        file.toPath().toFile(),
+        span.startLine, span.startColumn,
+        message()
+    )
+
 // TODO:2025-01-31:yevhenii.nadtochii: Locally changed ProtoData.
-//  `Field.optionList` is empty when it is part of `FieldOptionDiscovered` event.
-// TODO:2025-02-03:yevhenii.nadtochii: No need to check the number of declarations.
+//  `Field.optionList` is empty when it is payload of `FieldOptionDiscovered` event.
 private fun determineErrorMessage(field: Field): String {
     val companion = field.optionList.find { it.name == IF_MISSING }
     return if (companion == null) {
@@ -119,14 +128,3 @@ private fun determineErrorMessage(field: Field): String {
             .errorMsg
     }
 }
-
-private fun File.compilationError(span: Span, message: () -> String): Nothing =
-    Compilation.error(
-        toPath().toFile(),
-        span.startLine, span.startColumn,
-        message()
-    )
-
-private val SUPPORTED_PRIMITIVES = listOf(
-    TYPE_STRING, TYPE_BYTES
-)
