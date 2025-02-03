@@ -31,7 +31,7 @@ import io.spine.protodata.java.Statement
 import io.spine.string.joinByLines
 
 /**
- * A list of Java statements.
+ * Represents one or more Java statements.
  *
  * An example of creating a code block:
  *
@@ -43,6 +43,7 @@ import io.spine.string.joinByLines
  *         var violation = createViolation(fieldPath);
  *         violations.add(violation);
  *     }
+ *     return violations;
  *     """.trimIndent()
  * )
  * ```

@@ -30,10 +30,7 @@ import io.spine.protodata.java.AnElement
 
 /**
  * Represents class level member declaration.
+ *
+ * A class body may contain declarations of fields, methods, classes, and interfaces.
  */
-// TODO:2025-01-31:yevhenii.nadtochii: Add `MethodDeclaration`. Also, `FieldDeclaration` is not
-//  a statement, it should become a declaration too.
-// TODO:2025-01-31:yevhenii.nadtochii: Consider adding `Context<T>`. So, that instead of
-//  `Expression<Message>.call("getField")` we could use `Context<Message>.call("getField").
-//  We don't really an explicit `this` in the class context. It harms readability a bit.
 public open class MemberDeclaration(code: String) : AnElement(code)
