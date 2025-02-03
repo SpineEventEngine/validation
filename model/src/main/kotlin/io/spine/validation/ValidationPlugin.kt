@@ -45,7 +45,6 @@ import io.spine.validation.required.RequiredPolicy
 public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
     renderers = renderers,
     views = setOf(
-        // TODO:2025-01-31:yevhenii.nadtochii: Accept `KClass`?
         RequiredFieldView::class.java
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
