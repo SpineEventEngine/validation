@@ -73,6 +73,12 @@ private typealias BuilderPsiClass = PsiClass
  * The message builder is modified to invoke the [ValidatableMessage.validate] just before
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
+ *
+ * Notice on multiline string literals in this class: when creating a PSI method from text,
+ * we prefer using [trimMargin] with '|' symbols (the default separator) to explicitly
+ * specify the minimal common indent. For some reason, [trimIndent] cannot always correctly
+ * detect the expected common indent. It may distort the resulting formatting, often leading
+ * to non-compilable Java code.
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
@@ -121,9 +127,9 @@ internal class MessageValidationCode(
      * The number of supported members is not restricted. A single rule may generate zero,
      * one, or more supporting members.
      *
-     * Please note, [CodeGenerator.code] continues to return a JavaPoet's code block,
-     * which we convert to [CodeBlock] from ProtoData Expression API for convenience.
-     * We're not going to migrate them because the rule generator will be removed soon.
+     * Note: [CodeGenerator.code] returns a JavaPoet's code block, which we convert
+     * to [CodeBlock] from ProtoData Expression API. We're not going to migrate it
+     * because the rule generators will be removed soon.
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
@@ -153,7 +159,10 @@ internal class MessageValidationCode(
      * Declares `validate()` method in this [MessagePsiClass].
      *
      * This is a `public` implementation of [ValidatableMessage.validate] with
-     * [Override] annotation.
+     * [Override] annotation. The actual constraints are contained in its
+     * private overloading, that accepts the field path.
+     *
+     *  @see declarePrivateValidateMethod
      */
     private fun MessagePsiClass.declarePublicValidateMethod() {
         val psiMethod = elementFactory.createMethodFromText(
@@ -170,22 +179,13 @@ internal class MessageValidationCode(
     /**
      * Declares `validate(FieldPath)` method in this [MessagePsiClass].
      *
-     * All actual validations are done in this `private` overloading. It accepts
+     * All actual validations are rendered in this `private` overloading. It accepts
      * the parent field path, so that the created violation errors could use it.
+     *
      * Non-empty field path is possible only when the current invocation of `validate()`
-     * is performed within `(validate)` option. In this case, the parent field path is populated,
-     * and the created violation will correctly point to the field, which actually requested
-     * a nested validation.
-     *
-     * This method does the following to address the formatting issues:
-     *
-     * 1. [constraints] are joined to [String] using [joinToString] instead of `joinByLine()`
-     * because the contained code blocks already have new lines when converted to string.
-     * 2. For the same reason, we trim the result because a trailing empty line is not needed.
-     * 3. When creating a PSI method from text, we must use [trimMargin] with '|' symbols
-     * (the default separator) to explicitly specify the minimal common indent. The code blocks
-     * in the constraints add some whitespace characters, which break [trimIndent] and distort
-     * the resulting formatting, often leading to non-compilable Java code.
+     * is performed within `(validate)` option. In this case, the parent field path
+     * is populated, and the created violation will correctly point to the field,
+     * which actually triggered a nested validation.
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
@@ -228,6 +228,16 @@ internal class MessageValidationCode(
         """.trimMargin()
     }
 
+    /**
+     * Format this list of [CodeBlock], provided by the rule generator.
+     *
+     * There are the following peculiarities to note:
+     *
+     * 1. They are joined to [String] using [joinToString] instead of `joinByLine()`
+     * because the contained code blocks already have new lines when converted to string.
+     * They were appended by JavaPoet.
+     * 2. For the same reason, we trim the result because a trailing empty line is not needed.
+     */
     private fun List<CodeBlock>.formatRules() = joinToString(separator = "").trim()
 
     private fun List<CodeBlock>.formatGenerated() = joinByLines()
