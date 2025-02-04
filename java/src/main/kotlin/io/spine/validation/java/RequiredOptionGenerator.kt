@@ -56,7 +56,7 @@ import io.spine.validation.protodata.toBuilder
 /**
  * The generator for `(required)` option.
  */
-internal class RequiredOption(
+internal class RequiredOptionGenerator(
     private val querying: Querying,
     private val converter: JavaValueConverter
 ) : OptionGenerator {
@@ -79,9 +79,6 @@ internal class RequiredOption(
         return OptionCode(constraints)
     }
 
-    // TODO:2025-02-03:yevhenii.nadtochii: Actually, we don't need an explicit `this.`
-    //  for field getters. Should we introduce `Context<T>` in Expression API?
-    //  So that, method calls were performed either upon `Expression<T>` or within `Context<T>`.
     private fun constraints(
         view: RequiredField,
         parent: Expression<FieldPath>,

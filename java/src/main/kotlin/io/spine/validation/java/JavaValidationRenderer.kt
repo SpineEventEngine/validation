@@ -52,7 +52,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         val generators = listOf(
-            RequiredOption(querying = this, valueConverter)
+            RequiredOptionGenerator(querying = this, valueConverter)
         )
 
         select(CompilationMessage::class.java).all()
