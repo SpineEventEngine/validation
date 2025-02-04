@@ -95,7 +95,7 @@ internal class RequiredOption(
         return CodeBlock(
             """
             if ($getter.equals(${defaultValue(field)})) {
-                var fieldPath = ${filedPath(field.name.value, parent)};
+                var fieldPath = ${fieldPath(field.name.value, parent)};
                 var violation = ${violation(field, ReadVar("fieldPath"), message)};
                 $violations.add(violation);
             }
@@ -109,7 +109,7 @@ internal class RequiredOption(
         return expression
     }
 
-    private fun filedPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
+    private fun fieldPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
         parent.toBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild()
