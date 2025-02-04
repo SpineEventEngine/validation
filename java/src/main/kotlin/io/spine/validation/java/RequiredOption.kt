@@ -103,6 +103,12 @@ internal class RequiredOption(
         )
     }
 
+    /**
+     * Returns the expression that yields a default value for the given field.
+     *
+     * Each field type has its own default value. The option considers the field
+     * to be non-set when its value equals to default one.
+     */
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
         val expression = converter.valueToCode(unsetValue)
