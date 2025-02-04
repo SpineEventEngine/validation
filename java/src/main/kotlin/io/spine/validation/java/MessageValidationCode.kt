@@ -39,6 +39,7 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.type.TypeSystem
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
+import io.spine.tools.psi.java.add
 import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.annotate
@@ -74,12 +75,6 @@ private typealias BuilderPsiClass = PsiClass
  * The message builder is modified to invoke the [ValidatableMessage.validate] just before
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
- *
- * Notice on multiline string literals in this class: when creating a PSI method from text,
- * we prefer using [trimMargin] with '|' symbols (the default separator) to explicitly
- * specify the minimal common indent. For some reason, [trimIndent] cannot always correctly
- * detect the expected common indent. It may distort the resulting formatting, often leading
- * to non-compilable Java code.
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
@@ -168,11 +163,11 @@ internal class MessageValidationCode(
     private fun MessagePsiClass.declarePublicValidateMethod() {
         val psiMethod = elementFactory.createMethodFromText(
             """
-            |public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            |    var noParent = io.spine.base.FieldPath.getDefaultInstance();
-            |    return validate(noParent);
-            |}
-            """.trimMargin(), this)
+            public java.util.Optional<io.spine.validate.ValidationError> validate() {
+                var noParent = io.spine.base.FieldPath.getDefaultInstance();
+                return validate(noParent);
+            }
+            """.trimIndent(), this)
         psiMethod.annotate(Override::class.java)
         addLast(psiMethod)
     }
@@ -192,6 +187,7 @@ internal class MessageValidationCode(
      * field path should be provided. In that case, any constraint violations reported
      * by this method will include the parent field, which actually triggered validation.
      */
+    @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
         val generatedConstraints = generators.flatMap {
@@ -200,41 +196,43 @@ internal class MessageValidationCode(
             it.codeFor(messageType, parentPath, violations)
                 .constraints
         }
-        val psiMethod = elementFactory.createMethodFromText(
-            """
-            |private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
-            |    ${validateMethodBody(ruleConstraints, generatedConstraints)}
-            |}
-            """.trimMargin(), this
+        val psiBody = elementFactory.createStatementsFromText(
+            validateMethodBody(ruleConstraints, generatedConstraints),
+            this
         )
+        val psiMethod = elementFactory.createMethodFromText(
+            "private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {}",
+            this
+        )
+        psiMethod.body!!.add(psiBody)
         addLast(psiMethod)
     }
 
     private fun validateMethodBody(rules: List<CodeBlock>, generated: List<CodeBlock>): String {
         if (rules.isEmpty() && generated.isEmpty()) {
             return """
-                |// This message does not have any validation constraints.
-                |return java.util.Optional.empty();
-            """.trimMargin()
+                // This message does not have any validation constraints.
+                return java.util.Optional.empty();
+            """.trimIndent()
         }
         return """
-            |var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
-            |
-            |/* Rule-based constraints. */
-            |${rules.formatRules()}
-            |
-            |/* Standalone generated constraints. */
-            |${generated.formatGenerated()}
-            |
-            |if (!$violations.isEmpty()) {
-            |    var error = io.spine.validate.ValidationError.newBuilder()
-            |        .addAllConstraintViolation($violations)
-            |        .build();
-            |    return java.util.Optional.of(error);
-            |} else {
-            |    return java.util.Optional.empty();
-            |}
-        """.trimMargin()
+            var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+            
+            /* Rule-based constraints. */
+            ${rules.formatRules()}
+            
+            /* Standalone generated constraints. */
+            ${generated.formatGenerated()}
+            
+            if (!$violations.isEmpty()) {
+                var error = io.spine.validate.ValidationError.newBuilder()
+                    .addAllConstraintViolation($violations)
+                    .build();
+                return java.util.Optional.of(error);
+            } else {
+                return java.util.Optional.empty();
+            }
+        """.trimIndent()
     }
 
     /**
@@ -280,12 +278,12 @@ internal class MessageValidationCode(
             val returningResult = getFirstByText("return result;")
             val runValidation = elementFactory.createStatementsFromText(
                 """
-                |java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
-                |if (error.isPresent()) {
-                |    var violations = error.get().getConstraintViolationList();
-                |    throw new io.spine.validate.ValidationException(violations);
-                |}
-                """.trimMargin(), this
+                java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+                if (error.isPresent()) {
+                    var violations = error.get().getConstraintViolationList();
+                    throw new io.spine.validate.ValidationException(violations);
+                }
+                """.trimIndent(), this
             )
             body!!.addBefore(runValidation, returningResult)
         }
