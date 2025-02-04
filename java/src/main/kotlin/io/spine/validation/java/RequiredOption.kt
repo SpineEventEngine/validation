@@ -94,12 +94,12 @@ internal class RequiredOption(
         val message = view.errorMessage
         return CodeBlock(
             """
-            |if ($getter.equals(${defaultValue(field)})) {
-            |    var fieldPath = ${filedPath(field.name.value, parent)};
-            |    var violation = ${violation(field, ReadVar("fieldPath"), message)};
-            |    $violations.add(violation);
-            |}
-            """.trimMargin()
+            if ($getter.equals(${defaultValue(field)})) {
+                var fieldPath = ${filedPath(field.name.value, parent)};
+                var violation = ${violation(field, ReadVar("fieldPath"), message)};
+                $violations.add(violation);
+            }
+            """.trimIndent()
         )
     }
 

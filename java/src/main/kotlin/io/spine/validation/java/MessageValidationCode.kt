@@ -128,9 +128,9 @@ internal class MessageValidationCode(
      * The number of supported members is not restricted. A single rule may generate zero,
      * one, or more supporting members.
      *
-     * Note: [CodeGenerator.code] returns a JavaPoet's code block, which we convert
-     * to [CodeBlock] from ProtoData Expression API. We're not going to migrate it
-     * because the rule generators will be removed soon.
+     * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
+     * to [CodeBlock] from ProtoData Expression API, so that they could be added
+     * to a single collection with the ones produced by [generators].
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
@@ -191,7 +191,7 @@ internal class MessageValidationCode(
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints
         val generatedConstraints = generators.flatMap {
-            // We are temporarily ignoring members from standalone generators.
+            // We are temporarily ignoring members from the option generators.
             // Nobody generates them.
             it.codeFor(messageType, parentPath, violations)
                 .constraints
