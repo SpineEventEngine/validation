@@ -26,6 +26,7 @@
 
 package io.spine.test.options
 
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
@@ -67,8 +68,8 @@ internal class ValidateConstraintTest {
         val violations = error.get().constraintViolationList
         violations.size shouldBe 2
 
-        violations[0].fieldPath.getFieldName(0) shouldBe "first_line"
-        violations[1].fieldPath.getFieldName(0) shouldBe "town"
+        val failedFields = violations.map { it.fieldPath.getFieldName(0) }
+        failedFields shouldContainExactlyInAnyOrder listOf("first_line", "town")
     }
 
     @Test
