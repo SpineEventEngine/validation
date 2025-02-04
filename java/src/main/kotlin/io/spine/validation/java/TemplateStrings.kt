@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
@@ -43,11 +42,13 @@ import io.spine.validate.checkPlaceholdersHasValue
  * @param template The template string that may have one or more placeholders.
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
+ * @param qualifiedName The name of the field, which passed the provided [template].
  */
-public fun Field.templateString(
+public fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
-    optionName: String
+    optionName: String,
+    qualifiedName: String
 ): Expression<TemplateString> {
     checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
         "The `($optionName)` option doesn't support the following placeholders: `$it`. " +

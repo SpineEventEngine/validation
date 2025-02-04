@@ -120,7 +120,7 @@ internal class RequiredOption(
         message: String
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(field, path)
-        val templateString = field.templateString(message, placeholders, IF_MISSING)
+        val templateString = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
         val violation = ClassName(ConstraintViolation::class).newBuilder()
             .chainSet("message", templateString)
             .chainSet("type_name", StringLiteral(field.declaringType.qualifiedName))

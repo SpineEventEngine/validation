@@ -52,11 +52,12 @@ import io.spine.validation.java.templateString
  */
 internal class SetOnceConstraintViolation(
     private val errorTemplate: String,
-    private val field: Field
+    field: Field
 ) {
 
     private val fieldName = field.name.value
     private val fieldType = field.type.name
+    private val qualifiedName = field.qualifiedName
     private val declaringMessage = field.declaringType.qualifiedName
 
     /**
@@ -75,7 +76,7 @@ internal class SetOnceConstraintViolation(
         payload: Expression<*> = newValue
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(currentValue, newValue)
-        val message = field.templateString(errorTemplate, placeholders, IF_SET_AGAIN)
+        val message = templateString(errorTemplate, placeholders, IF_SET_AGAIN, qualifiedName)
         val fieldPath = ClassName(FieldPath::class).newBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild<FieldPath>()
