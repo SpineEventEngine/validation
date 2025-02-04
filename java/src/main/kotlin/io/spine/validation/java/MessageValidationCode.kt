@@ -234,7 +234,7 @@ internal class MessageValidationCode(
     }
 
     /**
-     * Format this list of [CodeBlock], provided by the rule generator.
+     * Converts this list of [CodeBlock]s to a list of strings.
      *
      * There are the following peculiarities to note:
      *
