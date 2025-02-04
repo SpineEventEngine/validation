@@ -37,23 +37,23 @@ import io.spine.validate.checkPlaceholdersHasValue
 
 /**
  * Yields an expression that creates a new instance of [TemplateString]
- * for this [Field] with the given parameters.
+ * with the given parameters.
  *
  * @param template The template string that may have one or more placeholders.
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
- * @param qualifiedName The name of the field, which passed the provided [template].
+ * @param fieldName The fully qualified name of the field, which passed the provided [template].
  */
 public fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
     optionName: String,
-    qualifiedName: String
+    fieldName: String
 ): Expression<TemplateString> {
     checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
         "The `($optionName)` option doesn't support the following placeholders: `$it`. " +
                 "The supported placeholders: `${placeholders.keys}`. " +
-                "The declared field: `${qualifiedName}`."
+                "The declared field: `${fieldName}`."
     }
     val placeholderEntries = mapExpression(
         ClassName(String::class), ClassName(String::class),
