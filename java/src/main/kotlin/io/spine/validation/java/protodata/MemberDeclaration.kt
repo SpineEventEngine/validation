@@ -29,7 +29,7 @@ package io.spine.validation.java.protodata
 import io.spine.protodata.java.AnElement
 
 /**
- * Represents class level member declaration.
+ * Represents a class-level declaration of a member.
  *
  * A class body may contain declarations of fields, methods, classes, and interfaces.
  */

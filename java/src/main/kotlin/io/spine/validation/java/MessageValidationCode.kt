@@ -129,8 +129,8 @@ internal class MessageValidationCode(
      * one, or more supporting members.
      *
      * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
-     * to [CodeBlock] from ProtoData Expression API, so that they could be added
-     * to a single collection with the ones produced by [generators].
+     * to [CodeBlock] from ProtoData Expression API, so that these blocks could be
+     * added to a single collection with those produced by [generators].
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
@@ -178,15 +178,19 @@ internal class MessageValidationCode(
     }
 
     /**
-     * Declares `validate(FieldPath)` method in this [MessagePsiClass].
+     * Declares a private `validate(FieldPath)` method that performs all constraint
+     * checks for the message.
      *
-     * All actual validations are rendered in this `private` overloading. It accepts
-     * the parent field path, so that the created violation errors could use it.
+     * This method implements the actual logic for verifying that the message’s
+     * constraints are met. It takes a [FieldPath] parameter that represents the path
+     * to the parent field, which triggered the validation, if any. This path is used
+     * when constructing constraint violation errors.
      *
-     * Non-empty field path is possible only when the current invocation of `validate()`
-     * is performed within `(validate)` option. In this case, the parent field path
-     * is populated, and the created violation will correctly point to the field,
-     * which actually triggered a nested validation.
+     * In typical (top-level) validations, the public `validate()` method is called,
+     * which passes an empty field path. However, when validating a nested message
+     * (for example, a message field marked with `(validate) = true`), a non-empty
+     * field path should be provided. In that case, any constraint violations reported
+     * by this method will include the parent field, which actually triggered validation.
      */
     private fun MessagePsiClass.declarePrivateValidateMethod() {
         val ruleConstraints = constraints

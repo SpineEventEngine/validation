@@ -21,7 +21,7 @@ message FieldId {
     protodata.FieldName name = 2;
 }
 
-// A view on a field that is marked `(required)`.
+// A view on a field that is marked with `(required) = true`.
 message RequiredField {
     option (entity).kind = PROJECTION;
 
