@@ -134,6 +134,10 @@ internal class RequiredOptionGenerator(
 
     /**
      * Determines the value for each of the supported `(required)` placeholders.
+     *
+     * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
+     * declared for [FieldPath]. It is available from Java, not in Kotlin.
+     * So, we specify it as a string literal here.
      */
     private fun supportedPlaceholders(
         field: Field,
