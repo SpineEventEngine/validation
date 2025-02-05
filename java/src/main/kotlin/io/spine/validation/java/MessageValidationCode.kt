@@ -40,7 +40,6 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.type.TypeSystem
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
-import io.spine.tools.psi.java.add
 import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.annotate
@@ -125,12 +124,13 @@ internal class MessageValidationCode(
      *
      * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
      * to [CodeBlock] from ProtoData Expression API, so that these blocks could be
-     * added to a single collection with those produced by [generators].
+     * treated similarly to those produced by option-specific [generators]. We are
+     * trimming them to prevent trailing empty lines, if any.
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
         val generator = generatorFor(context)
-        constraints.add(CodeBlock(generator.code().toString()))
+        constraints.add(CodeBlock(generator.code().toString().trim()))
         supportingFields.addAll(generator.supportingFields())
         supportingMethods.addAll(generator.supportingMethods())
     }
@@ -186,6 +186,12 @@ internal class MessageValidationCode(
      * (for example, a message field marked with `(validate) = true`), a non-empty
      * field path should be provided. In that case, any constraint violations reported
      * by this method will include the parent field, which actually triggered validation.
+     *
+     * Note on `trim()`: for PSI, it is important that the method declaration starts
+     * without any leading whitespaces. Otherwise, the PSI parser throws an exception.
+     * Leading whitespaces may be retained by `trimIndent()`, which calculates common
+     * minimal indent on its own. If any line of code produced by generators has no
+     * indent at all, we immediately get `0` as the minimal common indent to remove.
      */
     @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
@@ -196,33 +202,31 @@ internal class MessageValidationCode(
             it.codeFor(messageType, parentPath, violations)
                 .constraints
         }
-        val methodBody = elementFactory.createCodeBlockAdapterFromText(
-            validateMethodBody(ruleConstraints, generatedConstraints),
-            this
-        )
         val psiMethod = elementFactory.createMethodFromText(
-            "private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {}",
-            this
+            """
+            private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
+                ${validateMethodBody(ruleConstraints, generatedConstraints)}
+            }
+            """.trim(), this // See why not `trimIndent()` in method's docs.
         )
-        psiMethod.body!!.add(methodBody)
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<CodeBlock>): String {
-        if (rules.isEmpty() && generated.isEmpty()) {
-            return """
-                // This message does not have any validation constraints.
-                return java.util.Optional.empty();
+    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<CodeBlock>): String =
+        if (rules.isEmpty() && generated.isEmpty())
+            """
+            // This message does not have any validation constraints.
+            return java.util.Optional.empty();
             """.trimIndent()
-        }
-        return """
+        else
+            """
             var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
             
             /* Rule-based constraints. */
-            ${rules.formatRules()}
+            ${rules.joinByLines()}
             
             /* Standalone generated constraints. */
-            ${generated.formatGenerated()}
+            ${generated.joinByLines()}
             
             if (!$violations.isEmpty()) {
                 var error = io.spine.validate.ValidationError.newBuilder()
@@ -232,22 +236,7 @@ internal class MessageValidationCode(
             } else {
                 return java.util.Optional.empty();
             }
-        """.trimIndent()
-    }
-
-    /**
-     * Converts this list of [CodeBlock]s to a list of strings.
-     *
-     * There are the following peculiarities to note:
-     *
-     * 1. They are joined to [String] using [joinToString] instead of `joinByLine()`
-     * because the contained code blocks already have new lines when converted to string.
-     * They were appended by JavaPoet.
-     * 2. For the same reason, we trim the result because a trailing empty line is not needed.
-     */
-    private fun List<CodeBlock>.formatRules() = joinToString(separator = "").trim()
-
-    private fun List<CodeBlock>.formatGenerated() = joinByLines()
+            """.trimIndent()
 
     private fun MessagePsiClass.declareSupportingFields() =
         supportingFields.forEach {
