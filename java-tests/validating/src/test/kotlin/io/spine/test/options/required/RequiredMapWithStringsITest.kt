@@ -41,10 +41,7 @@ internal class RequiredMapWithStringsITest {
     @Test
     fun `require at least one entry`() {
         val instance = Collections.newBuilder()
-        assertViolation(instance,
-            "contains_a_non_empty_string_value",
-            "must have a value"
-        )
+        assertViolation(instance, "contains_a_non_empty_string_value")
     }
 
     @Test

@@ -32,6 +32,7 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.javaClassName
@@ -43,8 +44,8 @@ import io.spine.tools.psi.java.add
 import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
 import io.spine.tools.psi.java.annotate
+import io.spine.tools.psi.java.createCodeBlockAdapterFromText
 import io.spine.tools.psi.java.createInterfaceReference
-import io.spine.tools.psi.java.createStatementsFromText
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
@@ -57,7 +58,6 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
-import io.spine.validation.java.protodata.CodeBlock
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
@@ -196,7 +196,7 @@ internal class MessageValidationCode(
             it.codeFor(messageType, parentPath, violations)
                 .constraints
         }
-        val psiBody = elementFactory.createStatementsFromText(
+        val methodBody = elementFactory.createCodeBlockAdapterFromText(
             validateMethodBody(ruleConstraints, generatedConstraints),
             this
         )
@@ -204,7 +204,7 @@ internal class MessageValidationCode(
             "private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {}",
             this
         )
-        psiMethod.body!!.add(psiBody)
+        psiMethod.body!!.add(methodBody)
         addLast(psiMethod)
     }
 
@@ -276,7 +276,7 @@ internal class MessageValidationCode(
     private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build")
         .run {
             val returningResult = getFirstByText("return result;")
-            val runValidation = elementFactory.createStatementsFromText(
+            val runValidation = elementFactory.createCodeBlockAdapterFromText(
                 """
                 java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
                 if (error.isPresent()) {

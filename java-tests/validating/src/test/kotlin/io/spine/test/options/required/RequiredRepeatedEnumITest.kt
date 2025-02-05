@@ -41,7 +41,7 @@ internal class RequiredRepeatedEnumITest {
     @Test
     fun `require at least one item`() {
         val instance = Collections.newBuilder()
-        assertViolation(instance, field, "must have a value")
+        assertViolation(instance, field, "must have a non-default value")
     }
 
     @Test // https://github.com/SpineEventEngine/mc-java/issues/119

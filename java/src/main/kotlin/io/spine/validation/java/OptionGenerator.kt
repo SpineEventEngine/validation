@@ -28,10 +28,10 @@ package io.spine.validation.java
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.MemberDeclaration
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.java.protodata.CodeBlock
-import io.spine.validation.java.protodata.MemberDeclaration
 
 /**
  * Generates Java code for a specific option.

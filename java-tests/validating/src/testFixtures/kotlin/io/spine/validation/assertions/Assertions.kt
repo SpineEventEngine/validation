@@ -82,7 +82,7 @@ private val fieldName: Correspondence<ConstraintViolation, String> =
 fun assertViolation(
     message: Message.Builder,
     field: String,
-    errorMessagePart: String = "must have a value"
+    errorMessagePart: String = "must have a non-default value"
 ) {
     val violations = assertInvalid(message)
     assertThat(violations)

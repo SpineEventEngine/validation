@@ -33,6 +33,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
@@ -41,6 +42,7 @@ import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.newBuilder
+import io.spine.protodata.java.toBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
@@ -50,8 +52,6 @@ import io.spine.validation.UnsetValue
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.protodata.CodeBlock
-import io.spine.validation.protodata.toBuilder
 
 /**
  * The generator for `(required)` option.
