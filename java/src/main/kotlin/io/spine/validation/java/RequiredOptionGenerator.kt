@@ -104,7 +104,7 @@ internal class RequiredOptionGenerator(
      * Returns the expression that yields a default value for the given field.
      *
      * Each field type has its own default value. The option considers the field
-     * to be non-set when its value equals to default one.
+     * to be missing if its current value equals to the default one.
      */
     private fun defaultValue(field: Field): Expression<*> {
         val unsetValue = UnsetValue.forField(field)!!
@@ -133,10 +133,10 @@ internal class RequiredOptionGenerator(
     }
 
     /**
-     * Determines the value for each of the supported `(required)` placeholders.
+     * Determines the value for each of the supported `(if_missing)` placeholders.
      *
      * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
-     * declared for [FieldPath]. It is available from Java, not in Kotlin.
+     * declared for [FieldPath]. It is available from Java, but not from Kotlin.
      * So, we specify it as a string literal here.
      */
     private fun supportedPlaceholders(

@@ -209,7 +209,7 @@ internal class MessageValidationCode(
             private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
                 ${validateMethodBody(ruleConstraints, optionConstraints)}
             }
-            """.trimIndent(), this // See why not `trimIndent()` in method's docs.
+            """.trimIndent(), this
         )
         addLast(psiMethod)
     }
