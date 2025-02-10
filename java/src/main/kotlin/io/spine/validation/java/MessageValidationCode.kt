@@ -82,7 +82,7 @@ private typealias BuilderPsiClass = PsiClass
  * @param [message] The message, for which the validation code is generated.
  * @param [typeSystem] The type system to resolve the message class name in Java,
  *   and perform type conversions within [GenerationContext] (`Rule`s generation).
- * @param [generators] The code generators to apply for the [message].
+ * @param [generators] The option generators to apply for the [message].
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
@@ -92,9 +92,9 @@ internal class MessageValidationCode(
 ) {
     private val messageType: TypeName = message.name
     private val messageClassName = messageType.javaClassName(typeSystem)
-    private val supportingFields = mutableListOf<FieldSpec>()
-    private val supportingMethods = mutableListOf<MethodSpec>()
-    private val constraints = mutableListOf<CodeBlock>()
+    private val ruleFields = mutableListOf<FieldSpec>()
+    private val ruleMethods = mutableListOf<MethodSpec>()
+    private val ruleConstraints = mutableListOf<CodeBlock>()
 
     /**
      * Renders the message validation code into the provided [psiFile].
@@ -139,9 +139,9 @@ internal class MessageValidationCode(
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
         val generator = generatorFor(context)
-        constraints.add(CodeBlock(generator.code().toString().trim()))
-        supportingFields.addAll(generator.supportingFields())
-        supportingMethods.addAll(generator.supportingMethods())
+        ruleConstraints.add(CodeBlock(generator.code().toString().trim()))
+        ruleFields.addAll(generator.supportingFields())
+        ruleMethods.addAll(generator.supportingMethods())
     }
 
     private fun newContext(rule: Rule, message: CompilationMessage) =
@@ -198,25 +198,24 @@ internal class MessageValidationCode(
      */
     @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
-        val ruleConstraints = constraints
-        val generatedConstraints = generators.flatMap {
+        val optionConstraints = generators.flatMap {
             // We are temporarily ignoring members from the option generators.
-            // Nobody generates them.
+            // As for now, they are not generated.
             it.codeFor(messageType, parentPath, violations)
                 .constraints
         }
         val psiMethod = elementFactory.createMethodFromText(
             """
             private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
-                ${validateMethodBody(ruleConstraints, generatedConstraints)}
+                ${validateMethodBody(ruleConstraints, optionConstraints)}
             }
             """.trimIndent(), this // See why not `trimIndent()` in method's docs.
         )
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(rules: List<CodeBlock>, generated: List<CodeBlock>): String =
-        if (rules.isEmpty() && generated.isEmpty())
+    private fun validateMethodBody(rules: List<CodeBlock>, options: List<CodeBlock>): String =
+        if (rules.isEmpty() && options.isEmpty())
             """
             // This message does not have any validation constraints.
             return java.util.Optional.empty();
@@ -225,11 +224,11 @@ internal class MessageValidationCode(
             """
             var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
             
-            // Rule-based constraints.
+            // `Rule`-based constraints.
             ${rules.joinByLines()}
             
-            // Standalone generated constraints.
-            ${generated.joinByLines()}
+            // `OptionGenerator`-based constraints.
+            ${options.joinByLines()}
             
             if (!$violations.isEmpty()) {
                 var error = io.spine.validate.ValidationError.newBuilder()
@@ -242,12 +241,12 @@ internal class MessageValidationCode(
             """.trimIndent()
 
     private fun MessagePsiClass.declareSupportingFields() =
-        supportingFields.forEach {
+        ruleFields.forEach {
             addLast(elementFactory.createFieldFromText(it.toString(), this))
         }
 
     private fun MessagePsiClass.declareSupportingMethods() =
-        supportingMethods.forEach {
+        ruleMethods.forEach {
             addLast(elementFactory.createMethodFromText(it.toString(), this))
         }
 
