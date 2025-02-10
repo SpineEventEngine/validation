@@ -47,8 +47,9 @@ import io.spine.validate.checkPlaceholdersHasValue
  * @param declaringType The message type being validated.
  * @param fieldPath The path to the field containing an invalid value.
  * @param fieldValue The field value violated the constraint, if any.
- *   For some validation options, the field value is either absent or irrelevant.
- *   For example, `(required)` option doesn't set it for its [ConstraintViolation]s.
+ *   For example, the `(required)` option uses `null` for this parameter because
+ *   the invalid field value for this option is field type's default value,
+ *   which the option treats as "no value" at all.
  */
 public fun constraintViolation(
     errorMessage: Expression<TemplateString>,
