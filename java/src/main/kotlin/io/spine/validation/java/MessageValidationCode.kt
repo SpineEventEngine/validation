@@ -134,7 +134,7 @@ internal class MessageValidationCode(
      * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
      * to [CodeBlock] from ProtoData Expression API, so that these blocks could be
      * treated similarly to those produced by option-specific [generators]. We are
-     * trimming them to prevent trailing empty lines between two `if` statements.
+     * trimming them to prevent an empty line between two `if` statements.
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
@@ -192,9 +192,9 @@ internal class MessageValidationCode(
      *
      * In typical (top-level) validations, the public `validate()` method is called,
      * which passes an empty field path. However, when validating a nested message
-     * (for example, a message field marked with `(validate) = true`), a non-empty
-     * field path should be provided. In that case, any constraint violations reported
-     * by this method will include the parent field, which actually triggered validation.
+     * (a message field marked with `(validate) = true`), a non-empty field path
+     * should be provided. In that case, any constraint violations reported by this
+     * method will include the parent field, which actually triggered validation.
      */
     @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
