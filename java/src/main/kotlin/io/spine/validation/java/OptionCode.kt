@@ -26,27 +26,23 @@
 
 package io.spine.validation.java
 
-import io.spine.base.FieldPath
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.Expression
-import io.spine.validate.ConstraintViolation
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.MemberDeclaration
 
 /**
- * Generates Java code for a specific option.
+ * Java code handling all applications of a specific option within a message.
  */
-internal interface OptionGenerator {
+internal class OptionCode(
 
     /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     * @param parent A reference to the parent field path.
-     * @param violations A reference to a list of discovered violations.
+     * Code blocks to be added to the `validate()` method of the message.
      */
-    fun codeFor(
-        type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): OptionCode
-}
+    val constraints: List<CodeBlock>,
+
+    /**
+     * Additional class-level members required by the validation logic.
+     *
+     * Some constraints may require defining extra fields or methods.
+     */
+    val members: List<MemberDeclaration> = emptyList()
+)
