@@ -100,8 +100,8 @@ private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
         compilationError(file, field.span) {
-            "The field `${field.qualifiedName}` of the type `${field.type}` does not " +
-                    "support `($REQUIRED)` option."
+            "The field type `${field.type}` of `${field.qualifiedName}` field is not supported " +
+                    "by `($REQUIRED)` option."
         }
     }
 }
@@ -117,8 +117,6 @@ private fun compilationError(file: File, span: Span, message: () -> String): Not
         message()
     )
 
-// TODO:2025-01-31:yevhenii.nadtochii: Locally changed ProtoData.
-//  `Field.optionList` is empty when it is payload of `FieldOptionDiscovered` event.
 private fun determineErrorMessage(field: Field): String {
     val companion = field.optionList.find { it.name == IF_MISSING }
     return if (companion == null) {
