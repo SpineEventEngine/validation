@@ -186,12 +186,6 @@ internal class MessageValidationCode(
      * (for example, a message field marked with `(validate) = true`), a non-empty
      * field path should be provided. In that case, any constraint violations reported
      * by this method will include the parent field, which actually triggered validation.
-     *
-     * Note on `trim()`: for PSI, it is important that the method declaration starts
-     * without any leading whitespaces. Otherwise, the PSI parser throws an exception.
-     * Leading whitespaces may be retained by `trimIndent()`, which calculates common
-     * minimal indent on its own. If any line of code produced by generators has no
-     * indent at all, we immediately get `0` as the minimal common indent to remove.
      */
     @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
@@ -207,7 +201,7 @@ internal class MessageValidationCode(
             private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
                 ${validateMethodBody(ruleConstraints, generatedConstraints)}
             }
-            """.trim(), this // See why not `trimIndent()` in method's docs.
+            """.trimIndent(), this // See why not `trimIndent()` in method's docs.
         )
         addLast(psiMethod)
     }
