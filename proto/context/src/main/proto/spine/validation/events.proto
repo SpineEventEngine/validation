@@ -66,7 +66,7 @@ message MessageWideRuleAdded {
     MessageWideRule rule = 3;
 }
 
-// The event emitted whenever a field with `(required)` option is discovered
+// The event emitted whenever a field with `(required) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message RequiredFieldDiscovered {
 
