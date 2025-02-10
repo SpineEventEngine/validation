@@ -26,14 +26,43 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.ast.Field
+import io.spine.base.FieldPath
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.mapExpression
 import io.spine.protodata.java.newBuilder
+import io.spine.protodata.java.packToAny
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
+
+/**
+ * Yields an expression that creates a new instance of [ConstraintViolation]
+ * with the given parameters.
+ *
+ * @param errorMessage The error message template string.
+ * @param declaringType The message type being validated.
+ * @param fieldPath The path to the field containing an invalid value.
+ * @param fieldValue The field value, if any.
+ */
+public fun constraintViolation(
+    errorMessage: Expression<TemplateString>,
+    declaringType: TypeName,
+    fieldPath: Expression<FieldPath>,
+    fieldValue: Expression<*>? = null
+): Expression<ConstraintViolation> {
+    var builder = ClassName(ConstraintViolation::class).newBuilder()
+        .chainSet("message", errorMessage)
+        .chainSet("type_name", StringLiteral(declaringType.qualifiedName))
+        .chainSet("field_path", fieldPath)
+    fieldValue?.let {
+        builder = builder.chainSet("field_value", fieldValue.packToAny())
+    }
+    return builder.chainBuild()
+}
 
 /**
  * Yields an expression that creates a new instance of [TemplateString]

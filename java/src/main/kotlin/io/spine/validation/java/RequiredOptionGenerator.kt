@@ -41,7 +41,6 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.toBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
@@ -119,17 +118,12 @@ internal class RequiredOptionGenerator(
 
     private fun violation(
         field: Field,
-        path: Expression<FieldPath>,
+        fieldPath: Expression<FieldPath>,
         message: String
     ): Expression<ConstraintViolation> {
-        val placeholders = supportedPlaceholders(field, path)
-        val templateString = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
-        val violation = ClassName(ConstraintViolation::class).newBuilder()
-            .chainSet("message", templateString)
-            .chainSet("type_name", StringLiteral(field.declaringType.qualifiedName))
-            .chainSet("field_path", path)
-            .chainBuild<ConstraintViolation>()
-        return violation
+        val placeholders = supportedPlaceholders(field, fieldPath)
+        val errorMessage = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
+        return constraintViolation(errorMessage, field.declaringType, fieldPath)
     }
 
     /**
@@ -141,10 +135,10 @@ internal class RequiredOptionGenerator(
      */
     private fun supportedPlaceholders(
         field: Field,
-        path: Expression<FieldPath>
+        fieldPath: Expression<FieldPath>
     ): Map<ErrorPlaceholder, Expression<String>> {
         val pathAsString = ClassName("io.spine.base", "FieldPaths")
-            .call<String>("getJoined", path)
+            .call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
             FIELD_TYPE to StringLiteral(field.type.name),
