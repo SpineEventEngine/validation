@@ -34,6 +34,7 @@ import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.StringClass
 
 /**
  * Renders Java code to support `(set_once)` option for the given boolean [field].
@@ -87,5 +88,5 @@ internal class SetOnceBooleanField(
     }
 
     override fun asString(fieldValue: Expression<Boolean>): Expression<String> =
-        ClassName(String::class).call("valueOf", fieldValue)
+        StringClass.call("valueOf", fieldValue)
 }

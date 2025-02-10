@@ -46,6 +46,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.StringClass
 
 /**
  * Renders Java code to support `(set_once)` option for the given number [field].
@@ -114,5 +115,5 @@ internal class SetOnceNumberField(
     }
 
     override fun asString(fieldValue: Expression<Number>): Expression<String> =
-        ClassName(String::class).call("valueOf", fieldValue)
+        StringClass.call("valueOf", fieldValue)
 }

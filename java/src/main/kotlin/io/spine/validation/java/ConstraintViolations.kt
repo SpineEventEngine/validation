@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("ConstraintViolations")
+
 package io.spine.validation.java
 
 import io.spine.base.FieldPath
@@ -88,10 +90,10 @@ public fun templateString(
                 "The declared field: `${fieldName}`."
     }
     val placeholderEntries = mapExpression(
-        ClassName(String::class), ClassName(String::class),
+        StringClass, StringClass,
         placeholders.mapKeys { StringLiteral(it.key.toString()) }
     )
-    return ClassName(TemplateString::class).newBuilder()
+    return TemplateStringClass.newBuilder()
         .chainSet("withPlaceholders", StringLiteral(template))
         .chainPutAll("placeholderValue", placeholderEntries)
         .chainBuild()
