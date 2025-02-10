@@ -99,5 +99,5 @@ internal class RequiredPolicySpec {
     }
 }
 
-private fun expected(field: Field) = "The field `${field.type}` type of `${field.qualifiedName}` " +
-        "field is not supported by `($REQUIRED)` option."
+private fun expected(field: Field) = "The field type `${field.type}` of `${field.qualifiedName}` " +
+        "is not supported by `($REQUIRED)` option."

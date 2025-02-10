@@ -100,7 +100,7 @@ private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
         compilationError(file, field.span) {
-            "The field type `${field.type}` of `${field.qualifiedName}` field is not supported " +
+            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
                     "by `($REQUIRED)` option."
         }
     }
