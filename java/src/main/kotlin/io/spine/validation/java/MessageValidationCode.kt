@@ -74,6 +74,15 @@ private typealias BuilderPsiClass = PsiClass
  * The message builder is modified to invoke the [ValidatableMessage.validate] just before
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
+ *
+ * Note, this class uses two kinds of generators simultaneously: `Rule`-based ones
+ * and [OptionGenerator]s. We are gradually migrating `Rule`s generators to [OptionGenerator]s.
+ * The former will be removed as we complete our migration.
+ *
+ * @param [message] The message, for which the validation code is generated.
+ * @param [typeSystem] The type system to resolve the message class name in Java,
+ *   and perform type conversions within [GenerationContext] (`Rule`s generation).
+ * @param [generators] The code generators to apply for the [message].
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
@@ -125,7 +134,7 @@ internal class MessageValidationCode(
      * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
      * to [CodeBlock] from ProtoData Expression API, so that these blocks could be
      * treated similarly to those produced by option-specific [generators]. We are
-     * trimming them to prevent trailing empty lines, if any.
+     * trimming them to prevent trailing empty lines between two `if` statements.
      */
     private fun generate(rule: Rule) {
         val context = newContext(rule, message)
@@ -216,10 +225,10 @@ internal class MessageValidationCode(
             """
             var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
             
-            /* Rule-based constraints. */
+            // Rule-based constraints.
             ${rules.joinByLines()}
             
-            /* Standalone generated constraints. */
+            // Standalone generated constraints.
             ${generated.joinByLines()}
             
             if (!$violations.isEmpty()) {
