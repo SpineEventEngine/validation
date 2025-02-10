@@ -56,8 +56,8 @@ import io.spine.validation.fieldId
 /**
  * Controls whether a field should be validated as `(required)`.
  *
- * Whenever a required field is discovered, emits [RequiredFieldDiscovered]
- * if the following conditions are met:
+ * Whenever a filed marked with `(required)` option is discovered,
+ * emits [RequiredFieldDiscovered] if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
@@ -67,6 +67,13 @@ import io.spine.validation.fieldId
  * Violation of (2) means that the `(required)` option is applied correctly,
  * but disabled. In this case, the policy emits [NoReaction] because we actually
  * have a non-required field, marked with `(required)`.
+ *
+ * Note that this policy is responsible only for fields explicitly marked with
+ * the validation option. There are other policies that handle implicitly
+ * required fields, i.e., ID fields in entities and signal messages.
+ *
+ * @see [RequiredIdOptionPolicy]
+ * @see [RequiredIdPatternPolicy]
  */
 internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
