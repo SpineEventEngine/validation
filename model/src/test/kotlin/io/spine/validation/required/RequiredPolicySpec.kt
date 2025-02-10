@@ -100,4 +100,4 @@ internal class RequiredPolicySpec {
 }
 
 private fun expected(field: Field) = "The field type `${field.type}` of `${field.qualifiedName}` " +
-        "is not supported by `($REQUIRED)` option."
+        "is not supported by the `($REQUIRED)` option."
