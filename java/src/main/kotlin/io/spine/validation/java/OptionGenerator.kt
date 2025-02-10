@@ -64,9 +64,9 @@ internal class OptionCode(
     val constraints: List<CodeBlock>,
 
     /**
-     * Additional class-level declarations required by the validation logic.
+     * Additional class-level members required by the validation logic.
      *
      * Some constraints may require defining extra fields or methods.
      */
-    val declarations: List<MemberDeclaration> = emptyList()
+    val members: List<MemberDeclaration> = emptyList()
 )
