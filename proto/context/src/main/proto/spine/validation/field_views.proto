@@ -77,4 +77,7 @@ message PatternField {
 
     // Regular expression modifiers.
     PatternOption.Modifier modifier = 4;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 5;
 }

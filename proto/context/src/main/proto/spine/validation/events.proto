@@ -87,12 +87,12 @@ message PatternFieldDiscovered {
     // The error message template.
     string error_message = 2;
 
-    // The field in which the option was discovered.
-    protodata.Field subject = 3;
-
     // The regular expression to match.
-    string pattern = 4;
+    string pattern = 3;
 
     // Regular expression modifiers.
-    PatternOption.Modifier modifier = 5;
+    PatternOption.Modifier modifier = 4;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 5;
 }
