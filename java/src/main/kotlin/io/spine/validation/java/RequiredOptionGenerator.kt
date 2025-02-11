@@ -73,8 +73,8 @@ internal class RequiredOptionGenerator(
         parent: Expression<FieldPath>,
         violations: Expression<MutableList<ConstraintViolation>>
     ): OptionCode {
-        val requiredMessageFields = allRequiredFields.filter { it.id.type == type }
-        val constraints = requiredMessageFields.map { constraints(it, parent, violations) }
+        val requiredFields = allRequiredFields.filter { it.id.type == type }
+        val constraints = requiredFields.map { constraints(it, parent, violations) }
         return OptionCode(constraints)
     }
 
