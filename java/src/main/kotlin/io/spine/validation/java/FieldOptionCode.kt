@@ -27,8 +27,8 @@
 package io.spine.validation.java
 
 import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
-import org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.ast.FieldDeclaration
 
 /**
  * Java code handling a single application of a specific option for a message field.
@@ -48,5 +48,5 @@ internal class FieldOptionCode(
     /**
      * An additional class-level field required by the validation logic, if any.
      */
-    val field: FieldDeclaration? = null
+    val field: FieldDeclaration<*>? = null
 )
