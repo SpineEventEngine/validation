@@ -62,3 +62,19 @@ message SetOnceField {
     // The field in which the option was discovered.
     protodata.Field subject = 4;
 }
+
+// A view of a field that is marked with `(pattern)` option.
+message PatternField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The regular expression to match.
+    string pattern = 3;
+
+    // Regular expression modifiers.
+    PatternOption.Modifier modifier = 4;
+}
