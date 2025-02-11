@@ -37,6 +37,7 @@ option java_multiple_files = true;
 
 option (every_is).java_type = "io.spine.validation.event.RuleAdded";
 
+import "spine/validation/field_views.proto";
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
 
@@ -63,4 +64,17 @@ message MessageWideRuleAdded {
     protodata.TypeName type = 1;
 
     MessageWideRule rule = 3;
+}
+
+// The event emitted whenever a field with `(required) = true` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message RequiredFieldDiscovered {
+
+    spine.validation.FieldId id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 3;
 }

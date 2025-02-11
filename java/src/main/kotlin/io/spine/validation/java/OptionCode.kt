@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.java
 
-import io.spine.validation.BoolFieldOptionRepo
-import io.spine.validation.RequiredField
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.MemberDeclaration
 
 /**
- * A repository for the [RequiredFieldView]s.
+ * Java code handling all applications of a specific option within a message.
  */
-internal class RequiredFieldRepository : BoolFieldOptionRepo<RequiredFieldView, RequiredField>()
+internal class OptionCode(
+
+    /**
+     * Code blocks to be added to the `validate()` method of the message.
+     */
+    val constraints: List<CodeBlock>,
+
+    /**
+     * Additional class-level members required by the validation logic.
+     *
+     * Some constraints may require defining extra fields or methods.
+     */
+    val members: List<MemberDeclaration> = emptyList()
+)

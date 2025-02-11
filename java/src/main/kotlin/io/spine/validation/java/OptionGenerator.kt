@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.java
 
-import io.spine.core.Subscribe
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.FieldId
-import io.spine.validation.RequiredField
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.base.FieldPath
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.Expression
+import io.spine.validate.ConstraintViolation
 
 /**
- * A view of a field that is marked with `(required)` option.
+ * Generates Java code for a specific option.
  */
-internal class RequiredFieldView : View<FieldId, RequiredField, RequiredField.Builder>() {
+internal interface OptionGenerator {
 
-    @Subscribe
-    fun on(e: RequiredFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
-        subject = e.subject
-    }
+    /**
+     * Generates validation code for all option applications within the provided
+     * message [type].
+     *
+     * @param type The message to generate code for.
+     * @param parent A reference to the parent field path.
+     * @param violations A reference to a list of discovered violations.
+     */
+    fun codeFor(
+        type: TypeName,
+        parent: Expression<FieldPath>,
+        violations: Expression<MutableList<ConstraintViolation>>
+    ): OptionCode
 }

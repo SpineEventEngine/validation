@@ -143,8 +143,7 @@ internal open class SimpleRuleGenerator(ctx: GenerationContext) : CodeGenerator(
     }
 
     override fun error(): ErrorMessage {
-        val actualValue = ClassName(String::class)
-            .call<String>("valueOf", ctx.fieldOrElement!!)
+        val actualValue = StringClass.call<String>("valueOf", ctx.fieldOrElement!!)
         return ErrorMessage.forRule(
             rule.errorMessage,
             actualValue.toCode(),

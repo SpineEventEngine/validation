@@ -101,7 +101,7 @@ private fun ErrorMessage.buildViolation(
     fieldValue: Expression<*>?,
     ignoreCardinality: Boolean = false
 ): Expression<ConstraintViolation> {
-    val message = ClassName(TemplateString::class).newBuilder()
+    val message = TemplateStringClass.newBuilder()
         .chainSet("withPlaceholders", Literal(this))
         .chainBuild<TemplateString>()
     var violationBuilder = ClassName(ConstraintViolation::class).newBuilder()

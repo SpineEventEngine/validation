@@ -72,7 +72,7 @@ internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
         if (!isRequired(field, true)) {
             return ignore()
         }
-        val errorMessage = "The ID field `${field.name.value}` must have a value."
+        val errorMessage = "The ID field `${field.name.value}` must have a non-default value."
         val rule = RequiredRule.forField(field, errorMessage)
             ?: return ignore()
         return rule.toEvent(field.declaringType).asA()
