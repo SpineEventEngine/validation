@@ -40,11 +40,9 @@ internal interface OptionGenerator {
      * Generates validation code for all option applications within the provided
      * message [type].
      *
-     * Note: the provided [parent] and [violations] expressions are expected to be valid
-     * only within the scope of `validate()` method. Use them "as is" only within
-     * the returned [constraint blocks][OptionCode.constraints]. Bypass their values
-     * to [additional members][OptionCode.members] explicitly through the method parameters
-     * or field re-assignments.
+     * Note: the provided [parent] and [violations] expressions are guaranteed to be
+     * valid only within the scope of `validate()` method. Use them "as is" only within
+     * the [constraints][OptionCode.constraints] code blocks.
      *
      * @param type The message to generate code for.
      * @param parent A reference to the parent field path.

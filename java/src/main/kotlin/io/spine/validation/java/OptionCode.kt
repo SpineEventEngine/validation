@@ -27,7 +27,8 @@
 package io.spine.validation.java
 
 import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.MemberDeclaration
+import io.spine.protodata.java.MethodDeclaration
+import org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.ast.FieldDeclaration
 
 /**
  * Java code handling all applications of a specific option within a message.
@@ -40,9 +41,12 @@ internal class OptionCode(
     val constraints: List<CodeBlock>,
 
     /**
-     * Additional class-level members required by the validation logic.
-     *
-     * Some constraints may require defining extra fields or methods.
+     * Additional class-level methods required by the validation logic.
      */
-    val members: List<MemberDeclaration> = emptyList()
+    val methods: List<MethodDeclaration> = emptyList(),
+
+    /**
+     * Additional class-level fields required by the validation logic.
+     */
+    val fields: List<FieldDeclaration> = emptyList()
 )
