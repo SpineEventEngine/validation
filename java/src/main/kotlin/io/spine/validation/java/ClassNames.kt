@@ -30,6 +30,7 @@ package io.spine.validation.java
 
 import io.spine.protodata.java.ClassName
 import io.spine.validate.TemplateString
+import java.util.regex.Pattern
 
 /**
  * The [ClassName] of [String].
@@ -40,3 +41,8 @@ internal val StringClass = ClassName(String::class)
  * The [ClassName] of [TemplateString].
  */
 internal val TemplateStringClass = ClassName(TemplateString::class)
+
+/**
+ * The [ClassName] of [Pattern].
+ */
+internal val PatternClass = ClassName(Pattern::class)
