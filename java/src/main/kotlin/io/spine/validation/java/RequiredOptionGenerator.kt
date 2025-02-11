@@ -84,7 +84,7 @@ internal class RequiredOptionGenerator(
         violations: Expression<List<ConstraintViolation>>
     ): CodeBlock {
         val field = view.subject
-        val getter = This<Message>()
+        val getter = This<Message>(explicit = false)
             .field(field)
             .getter<Any>()
         val message = view.errorMessage
