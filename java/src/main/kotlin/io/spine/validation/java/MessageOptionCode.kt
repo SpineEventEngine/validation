@@ -26,31 +26,37 @@
 
 package io.spine.validation.java
 
-import io.spine.base.FieldPath
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.Expression
-import io.spine.validate.ConstraintViolation
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.MethodDeclaration
+import org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.ast.FieldDeclaration
 
 /**
- * Generates Java code for a specific option.
+ * Java code handling all applications of a specific option within a message.
  */
-internal interface OptionGenerator {
+internal class MessageOptionCode(
 
     /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * Note: the provided [parent] and [violations] expressions are guaranteed to be
-     * valid only within the scope of `validate()` method. Use them "as is" only within
-     * the [constraints][MessageOptionCode.constraints] code blocks.
-     *
-     * @param type The message to generate code for.
-     * @param parent A reference to the parent field path.
-     * @param violations A reference to a list of discovered violations.
+     * Code blocks to be added to the `validate()` method of the message.
      */
-    fun codeFor(
-        type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): MessageOptionCode
+    val constraints: List<CodeBlock>,
+
+    /**
+     * Additional class-level methods required by the validation logic.
+     */
+    val methods: List<MethodDeclaration> = emptyList(),
+
+    /**
+     * Additional class-level fields required by the validation logic.
+     */
+    val fields: List<FieldDeclaration> = emptyList()
+) {
+
+    /**
+     * Creates a [MessageOptionCode] from the given list of [fields] option code.
+     */
+    constructor(fields: List<FieldOptionCode>) : this(
+        constraints = fields.map { it.constraint },
+        methods = fields.mapNotNull { it.method },
+        fields = fields.mapNotNull { it.field }
+    )
 }

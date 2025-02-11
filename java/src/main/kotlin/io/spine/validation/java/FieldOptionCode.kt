@@ -31,22 +31,22 @@ import io.spine.protodata.java.MethodDeclaration
 import org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.ast.FieldDeclaration
 
 /**
- * Java code handling all applications of a specific option within a message.
+ * Java code handling a single application of a specific option for a message field.
  */
-internal class OptionCode(
+internal class FieldOptionCode(
 
     /**
-     * Code blocks to be added to the `validate()` method of the message.
+     * A code block to be added to the `validate()` method of the message.
      */
-    val constraints: List<CodeBlock>,
+    val constraint: CodeBlock,
 
     /**
-     * Additional class-level methods required by the validation logic.
+     * An additional class-level method required by the validation logic, if any.
      */
-    val methods: List<MethodDeclaration> = emptyList(),
+    val method: MethodDeclaration? = null,
 
     /**
-     * Additional class-level fields required by the validation logic.
+     * An additional class-level field required by the validation logic, if any.
      */
-    val fields: List<FieldDeclaration> = emptyList()
+    val field: FieldDeclaration? = null
 )
