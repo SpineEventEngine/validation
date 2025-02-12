@@ -26,15 +26,20 @@
 
 package io.spine.validation.java
 
+import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
@@ -42,6 +47,7 @@ import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.InitField
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
@@ -52,6 +58,7 @@ import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
+import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
@@ -78,40 +85,73 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         violations: Expression<MutableList<ConstraintViolation>>
     ): MessageOptionCode {
         val patternFields = allPatternFields.filter { it.id.type == type }
-        val fieldsCode = mutableListOf<FieldOptionCode>()
-        patternFields.forEach { field ->
-            val fieldType = field.subject.type
-            when {
-                fieldType.isSingular -> forSingularString(field, parent, violations)
-                fieldType.isList -> forRepeatedString(field)
-            }
-        }
+        val fieldsCode = patternFields.map { codeFor(it, parent, violations) }
         return MessageOptionCode(fieldsCode)
     }
 
-    private fun forSingularString(
+    private fun codeFor(
         view: PatternField,
         parent: Expression<FieldPath>,
         violations: Expression<MutableList<ConstraintViolation>>
     ): FieldOptionCode {
         val field = view.subject
-        val getter = This<Message>(explicit = false)
-            .field(field)
-            .getter<Any>()
-        val pattern = compilePattern(view)
-        val constraint = CodeBlock(
-            """
-            if (!$getter.isEmpty() && !${pattern.matches(getter, view.modifier.partialMatch)}) {
-                var fieldPath = ${fieldPath(field, parent)};
-                var violation = ${violation(field, ReadVar("fieldPath"), view.errorMessage)};
-                $violations.add(violation);
-            }
-        """.trimIndent()
-        )
-        return FieldOptionCode(constraint, field = pattern)
-    }
+        val fieldType = field.type
+        val fieldAccess = This<Message>(explicit = false).field(field)
 
-    private fun forRepeatedString(field: PatternField): MessageOptionCode = TODO("WIP")
+        val pattern = compilePattern(view)
+        val partialMatch = view.modifier.partialMatch
+        val errorMessage = view.errorMessage
+
+        return when {
+            fieldType.isSingularString -> {
+                val fieldValue = fieldAccess.getter<String>()
+                val constraint = CodeBlock(
+                    """
+                    if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue, partialMatch)}) {
+                        var fieldPath = ${fieldPath(field, parent)};
+                        var violation = ${violation(field, ReadVar("fieldPath"), errorMessage)};
+                        $violations.add(violation);
+                    }
+                    """.trimIndent()
+                )
+                FieldOptionCode(constraint, pattern)
+            }
+
+            fieldType.isRepeatedString -> {
+                val fieldValue = fieldAccess.getter<List<String>>()
+                val validateRepeatedField = "validate${field.name.camelCase}_${hash()}"
+                val validateRepeatedFieldDecl = MethodDeclaration(
+                    """
+                    private $ImmutableListClass $validateRepeatedField($FieldPathClass parent) {
+                        var violations = ${ImmutableListClass.call<ImmutableList.Builder<*>>("builder")}
+                        for ($StringClass element : $fieldValue) {
+                            if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), view.modifier.partialMatch)}) {
+                                var fieldPath = ${fieldPath(field, ReadVar("parent"))};
+                                var violation = ${violation(field, ReadVar("fieldPath"), view.errorMessage)};
+                                violations.add(violation);
+                            }
+                        }
+                        return violations;
+                    }
+                    """.trimIndent()
+                )
+                val constraint = CodeBlock(
+                    """
+                    if (!$fieldValue.isEmpty()) {
+                        var fieldViolations = $validateRepeatedField($parent);
+                        $violations.add(fieldViolations);
+                    }
+                    """.trimIndent()
+                )
+                FieldOptionCode(constraint, pattern, validateRepeatedFieldDecl)
+            }
+
+            else -> error {
+                "Unsupported field type: `${fieldType.name}`. The `(${PATTERN})` option can be" +
+                        "applied only to singular or repeated string fields."
+            }
+        }
+    }
 
     private fun compilePattern(view: PatternField): FieldDeclaration<Pattern> {
         val compilationArgs = listOf(
@@ -127,10 +167,10 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
     }
 
     private fun FieldDeclaration<Pattern>.matches(
-        getter: Expression<*>,
+        value: Expression<String>,
         partialMatch: Boolean
     ): Expression<Boolean> {
-        val matcher = MethodCall<Matcher>(this, "matcher", getter)
+        val matcher = MethodCall<Matcher>(this, "matcher", value)
         val operation = if (partialMatch) "find" else "matches"
         return matcher.chain(operation)
     }
@@ -195,3 +235,15 @@ private fun PatternOption.Modifier.asFlagsMask(): Int {
     }
     return mask
 }
+
+private val FieldType.isRepeatedString
+    get() = isList && list.primitive == TYPE_STRING
+
+private val FieldType.isSingularString
+    get() =  isSingular && primitive == TYPE_STRING
+
+private const val RANDOM_STR_LENGTH = 10
+
+private fun hash(): String =
+    SecureRandomString.generate(RANDOM_STR_LENGTH)
+        .filter(Char::isJavaIdentifierPart)
