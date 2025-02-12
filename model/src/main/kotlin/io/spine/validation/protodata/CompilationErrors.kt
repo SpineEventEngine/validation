@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,32 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.protodata
 
-import com.google.protobuf.Descriptors.Descriptor
-import io.spine.option.OptionsProto
-
-/**
- * A factory of validation error messages.
- */
-internal object DefaultErrorMessage {
-
-    /**
-     * Obtains the validation error message from the given option descriptor.
-     *
-     * The descriptor should be marked with the `(default_message)` option.
-     * If the option is absent, an empty message is returned.
-     */
-    @JvmStatic
-    fun from(optionDescriptor: Descriptor): String =
-        optionDescriptor.options.getExtension(OptionsProto.defaultMessage)
-}
+import io.spine.environment.Tests
+import io.spine.protodata.Compilation
+import io.spine.protodata.Compilation.ERROR_EXIT_CODE
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.Span
+import io.spine.protodata.ast.toPath
 
 /**
- * Returns the default error message from the given option descriptor.
+ * Prints the error diagnostics to [System.err] and terminates the compilation.
  *
- * The descriptor should be marked with the `(default_message)` option.
- * If the option is absent, an empty message is returned.
+ * The termination of the compilation in the production mode is done by
+ * exiting the process with [ERROR_EXIT_CODE].
+ *
+ * If the code is run [under tests][Tests] the method throws [Compilation.Error].
+ *
+ * @param file The file in which the error occurred.
+ * @param span The location span of erroneous Protobuf declaration.
+ * @param message The description of what went wrong.
+ *
+ * @throws Compilation.Error exception when called under tests.
  */
-internal val Descriptor.defaultMessage: String
-    get() = DefaultErrorMessage.from(this)
+public fun compilationError(file: File, span: Span, message: () -> String): Nothing =
+    Compilation.error(
+        file.toPath().toFile(),
+        span.startLine, span.startColumn,
+        message()
+    )
