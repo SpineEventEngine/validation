@@ -24,23 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation
 
 import io.spine.core.Subscribe
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.FieldId
-import io.spine.validation.RequiredField
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.PatternFieldDiscovered
 
 /**
- * A view of a field that is marked with `(required) = true` option.
+ * A view of a field that is marked with `(pattern)` option.
  */
-internal class RequiredFieldView : View<FieldId, RequiredField, RequiredField.Builder>() {
+internal class PatternFieldView : View<FieldId, PatternField, PatternField.Builder>() {
 
     @Subscribe
-    fun on(e: RequiredFieldDiscovered) = alter {
+    fun on(e: PatternFieldDiscovered) = alter {
+        id = e.id
         errorMessage = e.errorMessage
+        pattern = e.pattern
+        modifier = e.modifier
         subject = e.subject
     }
 }
