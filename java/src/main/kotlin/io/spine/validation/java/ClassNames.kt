@@ -31,6 +31,7 @@ package io.spine.validation.java
 import com.google.common.collect.ImmutableList
 import io.spine.base.FieldPath
 import io.spine.protodata.java.ClassName
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import java.util.regex.Pattern
 
@@ -58,3 +59,8 @@ internal val ImmutableListClass = ClassName(ImmutableList::class)
  * The [ClassName] of [FieldPath].
  */
 internal val FieldPathClass = ClassName(FieldPath::class)
+
+/**
+ * The [ClassName] of [ConstraintViolation].
+ */
+internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)

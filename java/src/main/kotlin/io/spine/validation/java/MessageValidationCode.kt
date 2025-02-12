@@ -33,6 +33,8 @@ import com.squareup.javapoet.MethodSpec
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.getDefaultInstance
@@ -93,9 +95,14 @@ internal class MessageValidationCode(
 ) {
     private val messageType: TypeName = message.name
     private val messageClassName = messageType.javaClassName(typeSystem)
+
     private val ruleFields = mutableListOf<FieldSpec>()
     private val ruleMethods = mutableListOf<MethodSpec>()
     private val ruleConstraints = mutableListOf<CodeBlock>()
+
+    private val optionsFields = mutableListOf<FieldDeclaration<*>>()
+    private val optionsMethods = mutableListOf<MethodDeclaration>()
+    private val optionsConstraints = mutableListOf<CodeBlock>()
 
     /**
      * Renders the message validation code into the provided [psiFile].
@@ -106,8 +113,16 @@ internal class MessageValidationCode(
      */
     fun render(psiFile: PsiJavaFile) {
         message.ruleList.forEach(::generate)
+        generators.forEach {
+            val optionCode = it.codeFor(messageType, parentPath, violations)
+            optionsFields.addAll(optionCode.fields)
+            optionsMethods.addAll(optionCode.methods)
+            optionsConstraints.addAll(optionCode.constraints)
+        }
+
         val messageClass = psiFile.findClass(messageClassName)
         val builderClass = messageClass.nested("Builder")
+
         execute {
             messageClass.apply {
                 implementValidatableMessage()
@@ -199,16 +214,10 @@ internal class MessageValidationCode(
      */
     @Suppress("MaxLineLength") // Long method signature.
     private fun MessagePsiClass.declarePrivateValidateMethod() {
-        val optionConstraints = generators.flatMap {
-            // We are temporarily ignoring members from the option generators.
-            // As for now, they are not generated.
-            it.codeFor(messageType, parentPath, violations)
-                .constraints
-        }
         val psiMethod = elementFactory.createMethodFromText(
             """
             private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
-                ${validateMethodBody(ruleConstraints, optionConstraints)}
+                ${validateMethodBody(ruleConstraints, optionsConstraints)}
             }
             """.trimIndent(), this
         )
@@ -241,15 +250,24 @@ internal class MessageValidationCode(
             }
             """.trimIndent()
 
-    private fun MessagePsiClass.declareSupportingFields() =
+    private fun MessagePsiClass.declareSupportingFields() {
         ruleFields.forEach {
             addLast(elementFactory.createFieldFromText(it.toString(), this))
         }
+        optionsFields.forEach {
+            addLast(elementFactory.createFieldFromText(it.toString(), this))
+        }
+    }
 
-    private fun MessagePsiClass.declareSupportingMethods() =
+
+    private fun MessagePsiClass.declareSupportingMethods() {
         ruleMethods.forEach {
             addLast(elementFactory.createMethodFromText(it.toString(), this))
         }
+        optionsMethods.forEach {
+            addLast(elementFactory.createMethodFromText(it.toString(), this))
+        }
+    }
 
     private fun BuilderPsiClass.implementValidatingBuilder() {
         val qualifiedName = ValidatingBuilder::class.java.canonicalName
