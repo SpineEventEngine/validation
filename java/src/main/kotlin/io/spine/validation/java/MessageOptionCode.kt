@@ -27,8 +27,8 @@
 package io.spine.validation.java
 
 import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
-import org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.ast.FieldDeclaration
 
 /**
  * Java code handling all applications of a specific option within a message.
@@ -48,7 +48,7 @@ internal class MessageOptionCode(
     /**
      * Additional class-level fields required by the validation logic.
      */
-    val fields: List<FieldDeclaration> = emptyList()
+    val fields: List<FieldDeclaration<*>> = emptyList()
 ) {
 
     /**
@@ -56,7 +56,7 @@ internal class MessageOptionCode(
      */
     constructor(fields: List<FieldOptionCode>) : this(
         constraints = fields.map { it.constraint },
+        fields = fields.mapNotNull { it.field },
         methods = fields.mapNotNull { it.method },
-        fields = fields.mapNotNull { it.field }
     )
 }
