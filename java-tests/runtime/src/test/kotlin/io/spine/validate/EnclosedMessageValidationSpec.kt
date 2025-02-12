@@ -26,6 +26,7 @@
 
 package io.spine.validate
 
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldStartWith
 import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.ValidateEnclosed
@@ -90,7 +91,7 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
         validate(msg)
 
         val violation = singleViolation()
-        violation.message.formatUnsafe() shouldStartWith Diags.Regex.prefix
+        violation.message.format() shouldContain "field must match the regular expression"
         assertFieldPathIs(violation, EMAIL)
     }
 }

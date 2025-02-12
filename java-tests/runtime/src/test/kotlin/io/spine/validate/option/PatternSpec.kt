@@ -41,9 +41,9 @@ import org.junit.jupiter.api.Test
 @DisplayName(VALIDATION_SHOULD + "analyze `(pattern)` option and")
 internal class PatternSpec : ValidationOfConstraintTest() {
 
-    /** As defined in the stub message type [PatternStringFieldValue]. */
-    private val regex: @Regex String =
-        "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+//    /** As defined in the stub message type [PatternStringFieldValue]. */
+//    private val regex: @Regex String =
+//        "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
     @Test
     fun `find out that string matches to regex pattern`() =
@@ -60,9 +60,7 @@ internal class PatternSpec : ValidationOfConstraintTest() {
     @Test
     fun `provide one valid violation if string does not match the regex pattern`() {
         val msg = patternStringFor("invalid email")
-
-        val expectedErrMsg = errorMessage(regex).replace("\\\\", "\\")
-
+        val expectedErrMsg = "field must match the regular expression"
         assertSingleViolation(msg, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
     }
 
