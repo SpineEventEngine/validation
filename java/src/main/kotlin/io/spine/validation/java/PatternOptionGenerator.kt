@@ -53,16 +53,19 @@ import io.spine.protodata.java.toBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_MISSING
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.ErrorPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.java.ErrorPlaceholder.REGEX_PATTERN
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import org.apache.commons.lang.StringEscapeUtils.escapeJava
 
 /**
  * The generator for `(pattern)` option.
@@ -98,7 +101,6 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
 
         val pattern = compilePattern(view)
         val partialMatch = view.modifier.partialMatch
-        val errorMessage = view.errorMessage
 
         return when {
             fieldType.isSingularString -> {
@@ -107,7 +109,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                     """
                     if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue, partialMatch)}) {
                         var fieldPath = ${fieldPath(field, parent)};
-                        var violation = ${violation(field, ReadVar("fieldPath"), errorMessage)};
+                        var violation = ${violation(view, ReadVar("fieldPath"), fieldValue)};
                         $violations.add(violation);
                     }
                     """.trimIndent()
@@ -125,7 +127,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                         for ($StringClass element : $fieldValue) {
                             if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), view.modifier.partialMatch)}) {
                                 var fieldPath = ${fieldPath(field, ReadVar("parent"))};
-                                var violation = ${violation(field, ReadVar("fieldPath"), view.errorMessage)};
+                                var violation = ${violation(view, ReadVar("fieldPath"), ReadVar("element"))};
                                 violations.add(violation);
                             }
                         }
@@ -159,7 +161,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         return InitField(
             modifiers = "private static final",
             type = PatternClass,
-            name = "${view.subject.name}_PATTERN",
+            name = "${view.subject.name.value}_PATTERN",
             value = PatternClass.call("compile", compilationArgs)
         )
     }
@@ -168,7 +170,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         value: Expression<String>,
         partialMatch: Boolean
     ): Expression<Boolean> {
-        val matcher = MethodCall<Matcher>(this, "matcher", value)
+        val matcher = MethodCall<Matcher>(this.read(), "matcher", value)
         val operation = if (partialMatch) "find" else "matches"
         return matcher.chain(operation)
     }
@@ -179,12 +181,13 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
             .chainBuild()
 
     private fun violation(
-        field: Field,
+        view: PatternField,
         fieldPath: Expression<FieldPath>,
-        message: String
+        fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
-        val placeholders = supportedPlaceholders(field, fieldPath)
-        val errorMessage = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
+        val field = view.subject
+        val placeholders = supportedPlaceholders(view, fieldPath, fieldValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, field.qualifiedName)
         return constraintViolation(errorMessage, field.declaringType, fieldPath)
     }
 
@@ -196,15 +199,19 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
      * So, we specify it as a string literal here.
      */
     private fun supportedPlaceholders(
-        field: Field,
-        fieldPath: Expression<FieldPath>
+        view: PatternField,
+        fieldPath: Expression<FieldPath>,
+        fieldValue: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> {
         val pathAsString = ClassName("io.spine.base", "FieldPaths")
             .call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
-            FIELD_TYPE to StringLiteral(field.type.name),
-            PARENT_TYPE to StringLiteral(field.declaringType.qualifiedName)
+            FIELD_VALUE to fieldValue,
+            FIELD_TYPE to StringLiteral(view.subject.type.name),
+            PARENT_TYPE to StringLiteral(view.subject.declaringType.qualifiedName),
+            REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
+            REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
         )
     }
 }
