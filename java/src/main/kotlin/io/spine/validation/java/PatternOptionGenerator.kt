@@ -31,12 +31,8 @@ import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.camelCase
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.backend.SecureRandomString
@@ -60,6 +56,8 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
+import io.spine.validation.isRepeatedString
+import io.spine.validation.isSingularString
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
@@ -235,12 +233,6 @@ private fun PatternOption.Modifier.asFlagsMask(): Int {
     }
     return mask
 }
-
-private val FieldType.isRepeatedString
-    get() = isList && list.primitive == TYPE_STRING
-
-private val FieldType.isSingularString
-    get() =  isSingular && primitive == TYPE_STRING
 
 private const val RANDOM_STR_LENGTH = 10
 
