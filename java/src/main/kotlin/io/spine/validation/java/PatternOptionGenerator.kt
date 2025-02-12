@@ -122,8 +122,8 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                 val validateRepeatedField = "validate${field.name.camelCase}_${hash()}"
                 val validateRepeatedFieldDecl = MethodDeclaration(
                     """
-                    private $ImmutableListClass $validateRepeatedField($FieldPathClass parent) {
-                        var violations = ${ImmutableListClass.call<ImmutableList.Builder<*>>("builder")}
+                    private $ImmutableListClass<$ConstraintViolationClass> $validateRepeatedField($FieldPathClass parent) {
+                        var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
                         for ($StringClass element : $fieldValue) {
                             if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), view.modifier.partialMatch)}) {
                                 var fieldPath = ${fieldPath(field, ReadVar("parent"))};
@@ -131,7 +131,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                                 violations.add(violation);
                             }
                         }
-                        return violations;
+                        return violations.build();
                     }
                     """.trimIndent()
                 )
@@ -139,7 +139,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                     """
                     if (!$fieldValue.isEmpty()) {
                         var fieldViolations = $validateRepeatedField($parent);
-                        $violations.add(fieldViolations);
+                        $violations.addAll(fieldViolations);
                     }
                     """.trimIndent()
                 )
@@ -155,7 +155,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
 
     private fun compilePattern(view: PatternField): FieldDeclaration<Pattern> {
         val compilationArgs = listOf(
-            StringLiteral(view.pattern),
+            StringLiteral(escapeJava(view.pattern)),
             Literal(view.modifier.asFlagsMask())
         )
         return InitField(
@@ -187,7 +187,8 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
     ): Expression<ConstraintViolation> {
         val field = view.subject
         val placeholders = supportedPlaceholders(view, fieldPath, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, field.qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN,
+            field.qualifiedName)
         return constraintViolation(errorMessage, field.declaringType, fieldPath)
     }
 
