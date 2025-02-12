@@ -30,28 +30,26 @@ import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
 import io.spine.protobuf.unpack
-import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.ast.toPath
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.DefaultErrorMessage
 import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.boolValue
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.fieldId
+import io.spine.validation.protodata.compilationError
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -102,7 +100,6 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
@@ -117,17 +114,10 @@ private val SUPPORTED_PRIMITIVES = listOf(
     TYPE_STRING, TYPE_BYTES
 )
 
-private fun compilationError(file: File, span: Span, message: () -> String): Nothing =
-    Compilation.error(
-        file.toPath().toFile(),
-        span.startLine, span.startColumn,
-        message()
-    )
-
 private fun determineErrorMessage(field: Field): String {
     val companion = field.optionList.find { it.name == IF_MISSING }
     return if (companion == null) {
-        DefaultErrorMessage.from(IfMissingOption.getDescriptor())
+        IfMissingOption.getDescriptor().defaultMessage
     } else {
         companion.value.unpack<IfMissingOption>()
             .errorMsg
