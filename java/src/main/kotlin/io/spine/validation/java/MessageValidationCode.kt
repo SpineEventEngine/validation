@@ -35,6 +35,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
+import io.spine.protodata.java.getDefaultInstance
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
 import io.spine.protodata.type.TypeSystem
@@ -173,7 +174,7 @@ internal class MessageValidationCode(
         val psiMethod = elementFactory.createMethodFromText(
             """
             public java.util.Optional<io.spine.validate.ValidationError> validate() {
-                var noParent = io.spine.base.FieldPath.getDefaultInstance();
+                var noParent = ${FieldPathClass.getDefaultInstance()};
                 return validate(noParent);
             }
             """.trimIndent(), this)
@@ -206,7 +207,7 @@ internal class MessageValidationCode(
         }
         val psiMethod = elementFactory.createMethodFromText(
             """
-            private java.util.Optional<io.spine.validate.ValidationError> validate(io.spine.base.FieldPath parent) {
+            private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
                 ${validateMethodBody(ruleConstraints, optionConstraints)}
             }
             """.trimIndent(), this
