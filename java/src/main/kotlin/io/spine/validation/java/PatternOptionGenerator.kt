@@ -45,12 +45,8 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
     }
 
     override fun codeFor(type: TypeName): MessageOptionCode {
-        val fieldsCode = allPatternFields
-            .filter { it.id.type == type }
-            .map {
-                PatternFieldGenerator(it)
-                    .generate()
-            }
-        return MessageOptionCode(fieldsCode)
+        val patternFields = allPatternFields.filter { it.id.type == type }
+        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
+        return MessageOptionCode(generatedFields)
     }
 }
