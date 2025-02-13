@@ -26,6 +26,7 @@
 
 package io.spine.validation.java
 
+import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
 import com.squareup.javapoet.FieldSpec
@@ -60,6 +61,7 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
+import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
@@ -114,7 +116,7 @@ internal class MessageValidationCode(
     fun render(psiFile: PsiJavaFile) {
         message.ruleList.forEach(::generate)
         generators.forEach {
-            val optionCode = it.codeFor(messageType, parentPath, violations)
+            val optionCode = it.codeFor(messageType)
             optionsFields.addAll(optionCode.fields)
             optionsMethods.addAll(optionCode.methods)
             optionsConstraints.addAll(optionCode.constraints)
@@ -304,8 +306,18 @@ internal class MessageValidationCode(
     private fun BuilderPsiClass.annotateBuildPartialReturnType() = method("buildPartial")
         .run { returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!) }
 
-    private companion object {
+    /**
+     * Scope variable available within `validate(FieldPath)` method.
+     */
+    internal object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
         val parentPath = ReadVar<FieldPath>("parent")
+    }
+
+    /**
+     * Scope variables available within the message class.
+     */
+    internal object MessageScope {
+        val message = This<Message>(explicit = false)
     }
 }

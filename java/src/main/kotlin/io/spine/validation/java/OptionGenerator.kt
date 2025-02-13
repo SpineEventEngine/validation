@@ -26,10 +26,7 @@
 
 package io.spine.validation.java
 
-import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.Expression
-import io.spine.validate.ConstraintViolation
 
 /**
  * Generates Java code for a specific option.
@@ -40,17 +37,7 @@ internal interface OptionGenerator {
      * Generates validation code for all option applications within the provided
      * message [type].
      *
-     * Note: the provided [parent] and [violations] expressions are guaranteed to be
-     * valid only within the scope of `validate()` method. Use them "as is" only within
-     * the [constraints][MessageOptionCode.constraints] code blocks.
-     *
      * @param type The message to generate code for.
-     * @param parent A reference to the parent field path.
-     * @param violations A reference to a list of discovered violations.
      */
-    fun codeFor(
-        type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): MessageOptionCode
+    fun codeFor(type: TypeName): MessageOptionCode
 }

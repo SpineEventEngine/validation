@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
@@ -37,7 +36,6 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.toBuilder
@@ -50,6 +48,9 @@ import io.spine.validation.UnsetValue
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.MessageValidationCode.MessageScope.message
+import io.spine.validation.java.MessageValidationCode.ValidateScope.parentPath
+import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
 
 /**
  * The generator for `(required)` option.
@@ -67,30 +68,20 @@ internal class RequiredOptionGenerator(
             .all()
     }
 
-    override fun codeFor(
-        type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): MessageOptionCode {
+    override fun codeFor(type: TypeName): MessageOptionCode {
         val requiredFields = allRequiredFields.filter { it.id.type == type }
-        val constraints = requiredFields.map { constraints(it, parent, violations) }
+        val constraints = requiredFields.map { constraints(it) }
         return MessageOptionCode(constraints)
     }
 
-    private fun constraints(
-        view: RequiredField,
-        parent: Expression<FieldPath>,
-        violations: Expression<List<ConstraintViolation>>
-    ): CodeBlock {
+    private fun constraints(view: RequiredField): CodeBlock {
         val field = view.subject
-        val getter = This<Message>(explicit = false)
-            .field(field)
-            .getter<Any>()
+        val getter = message.field(field).getter<Any>()
         val message = view.errorMessage
         return CodeBlock(
             """
             if ($getter.equals(${defaultValue(field)})) {
-                var fieldPath = ${fieldPath(field.name.value, parent)};
+                var fieldPath = ${fieldPath(field.name.value, parentPath)};
                 var violation = ${violation(field, ReadVar("fieldPath"), message)};
                 $violations.add(violation);
             }

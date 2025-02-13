@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
 import io.spine.protodata.ast.Field
@@ -43,7 +42,6 @@ import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.toBuilder
@@ -60,6 +58,9 @@ import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.java.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.java.MessageValidationCode.MessageScope.message
+import io.spine.validation.java.MessageValidationCode.ValidateScope.parentPath
+import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.apache.commons.lang.StringEscapeUtils.escapeJava
@@ -77,24 +78,16 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
             .all()
     }
 
-    override fun codeFor(
-        type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): MessageOptionCode {
+    override fun codeFor(type: TypeName): MessageOptionCode {
         val patternFields = allPatternFields.filter { it.id.type == type }
-        val fieldsCode = patternFields.map { codeFor(it, parent, violations) }
+        val fieldsCode = patternFields.map { codeFor(it) }
         return MessageOptionCode(fieldsCode)
     }
 
-    private fun codeFor(
-        view: PatternField,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): FieldOptionCode {
+    private fun codeFor(view: PatternField): FieldOptionCode {
         val field = view.subject
         val fieldType = field.type
-        val fieldAccess = This<Message>(explicit = false).field(field)
+        val fieldAccess = message.field(field)
 
         val pattern = compilePattern(view)
         val partialMatch = view.modifier.partialMatch
@@ -105,7 +98,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                 val constraint = CodeBlock(
                     """
                     if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue, partialMatch)}) {
-                        var fieldPath = ${fieldPath(field, parent)};
+                        var fieldPath = ${fieldPath(field, parentPath)};
                         var violation = ${violation(view, ReadVar("fieldPath"), fieldValue)};
                         $violations.add(violation);
                     }
@@ -135,7 +128,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                 val constraint = CodeBlock(
                     """
                     if (!$fieldValue.isEmpty()) {
-                        var fieldViolations = $validateRepeatedField($parent);
+                        var fieldViolations = $validateRepeatedField($parentPath);
                         $violations.addAll(fieldViolations);
                     }
                     """.trimIndent()
