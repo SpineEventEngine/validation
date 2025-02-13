@@ -29,19 +29,16 @@ package io.spine.validation.java
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiJavaFile
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
 import io.spine.protodata.java.getDefaultInstance
-import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.findClass
-import io.spine.protodata.type.TypeSystem
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore
@@ -59,15 +56,13 @@ import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.CompilationMessage
-import io.spine.validation.Rule
 import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
 
 /**
- * Generates validation code for the given [CompilationMessage].
+ * Generates validation code for the given [TypeName].
  *
  * This class modifies both the generated Java class of the message and its builder.
  *
@@ -80,58 +75,40 @@ private typealias BuilderPsiClass = PsiClass
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
  *
- * Note, this class uses two kinds of generators simultaneously: `Rule`-based ones
- * and [OptionGenerator]s. We are gradually migrating `Rule`s generators to [OptionGenerator]s.
- * The former will be removed as we complete our migration.
- *
- * @param [message] The message, for which the validation code is generated.
- * @param [typeSystem] The type system to resolve the message class name in Java,
- *   and perform type conversions within [GenerationContext] (`Rule`s generation).
- * @param [generators] The option generators to apply for the [message].
+ * @param [messageType] The message, for which the validation code is generated.
+ * @param [messageClass] The Java class name of the processed message.
+ * @param [generators] The generators to apply.
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class MessageValidationCode(
-    private val message: CompilationMessage,
-    private val typeSystem: TypeSystem,
+    private val messageType: TypeName,
+    private val messageClass: ClassName,
     private val generators: List<OptionGenerator>
 ) {
-    private val messageType: TypeName = message.name
-    private val messageClassName = messageType.javaClassName(typeSystem)
-
-    private val ruleFields = mutableListOf<FieldSpec>()
-    private val ruleMethods = mutableListOf<MethodSpec>()
-    private val ruleConstraints = mutableListOf<CodeBlock>()
-
-    private val optionsFields = mutableListOf<FieldDeclaration<*>>()
-    private val optionsMethods = mutableListOf<MethodDeclaration>()
-    private val optionsConstraints = mutableListOf<CodeBlock>()
 
     /**
      * Renders the message validation code into the provided [psiFile].
      *
-     * @param psiFile A source file with the generated Java class for the [message].
+     * @param psiFile A source file with the generated Java class for the [messageType].
      *
-     * @throws IllegalStateException if [psiFile] doesn't contain a Java class for the [message].
+     * @throws IllegalStateException if [psiFile] doesn't contain a Java class for [messageType].
      */
     fun render(psiFile: PsiJavaFile) {
-        message.ruleList.forEach(::generate)
-        generators.forEach {
-            val optionCode = it.codeFor(messageType)
-            optionsFields.addAll(optionCode.fields)
-            optionsMethods.addAll(optionCode.methods)
-            optionsConstraints.addAll(optionCode.constraints)
-        }
+        val optionsCode = generators.map { it.codeFor(messageType) }
+        val constraints = optionsCode.flatMap { it.constraints }
+        val fields = optionsCode.flatMap { it.fields }
+        val methods = optionsCode.flatMap { it.methods }
 
-        val messageClass = psiFile.findClass(messageClassName)
+        val messageClass = psiFile.findClass(messageClass)
         val builderClass = messageClass.nested("Builder")
 
         execute {
             messageClass.apply {
                 implementValidatableMessage()
                 declarePublicValidateMethod()
-                declarePrivateValidateMethod()
-                declareSupportingFields()
-                declareSupportingMethods()
+                declarePrivateValidateMethod(constraints)
+                declareSupportingFields(fields)
+                declareSupportingMethods(methods)
             }
             builderClass.apply {
                 implementValidatingBuilder()
@@ -141,36 +118,6 @@ internal class MessageValidationCode(
             }
         }
     }
-
-    /**
-     * Generates a Java constraint and supporting members for the passed [rule].
-     *
-     * A single rule always generates a single Java constraint represented by a [CodeBlock].
-     * The number of supported members is not restricted. A single rule may generate zero,
-     * one, or more supporting members.
-     *
-     * Note: [CodeGenerator.code] returns JavaPoet's code block, which we convert
-     * to [CodeBlock] from ProtoData Expression API, so that these blocks could be
-     * treated similarly to those produced by option-specific [generators]. We are
-     * trimming them to prevent an empty line between two `if` statements.
-     */
-    private fun generate(rule: Rule) {
-        val context = newContext(rule, message)
-        val generator = generatorFor(context)
-        ruleConstraints.add(CodeBlock(generator.code().toString().trim()))
-        ruleFields.addAll(generator.supportingFields())
-        ruleMethods.addAll(generator.supportingMethods())
-    }
-
-    private fun newContext(rule: Rule, message: CompilationMessage) =
-        GenerationContext(
-            typeSystem = typeSystem,
-            rule = rule,
-            msg = This(),
-            validatedType = messageType,
-            protoFile = message.type.file,
-            violationList = violations
-        )
 
     private fun MessagePsiClass.implementValidatableMessage() {
         val qualifiedName = ValidatableMessage::class.java.canonicalName
@@ -215,19 +162,19 @@ internal class MessageValidationCode(
      * method will include the parent field, which actually triggered validation.
      */
     @Suppress("MaxLineLength") // Long method signature.
-    private fun MessagePsiClass.declarePrivateValidateMethod() {
+    private fun MessagePsiClass.declarePrivateValidateMethod(constraints: List<CodeBlock>) {
         val psiMethod = elementFactory.createMethodFromText(
             """
             private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
-                ${validateMethodBody(ruleConstraints, optionsConstraints)}
+                ${validateMethodBody(constraints)}
             }
             """.trimIndent(), this
         )
         addLast(psiMethod)
     }
 
-    private fun validateMethodBody(rules: List<CodeBlock>, options: List<CodeBlock>): String =
-        if (rules.isEmpty() && options.isEmpty())
+    private fun validateMethodBody(constraints: List<CodeBlock>): String =
+        if (constraints.isEmpty())
             """
             // This message does not have any validation constraints.
             return java.util.Optional.empty();
@@ -236,11 +183,7 @@ internal class MessageValidationCode(
             """
             var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
             
-            // `Rule`-based constraints.
-            ${rules.joinByLines()}
-            
-            // `OptionGenerator`-based constraints.
-            ${options.joinByLines()}
+            ${constraints.joinByLines()}
             
             if (!$violations.isEmpty()) {
                 var error = io.spine.validate.ValidationError.newBuilder()
@@ -252,28 +195,19 @@ internal class MessageValidationCode(
             }
             """.trimIndent()
 
-    private fun MessagePsiClass.declareSupportingFields() {
-        ruleFields.forEach {
+    private fun MessagePsiClass.declareSupportingFields(fields: List<FieldDeclaration<*>>) =
+        fields.forEach {
             addLast(elementFactory.createFieldFromText(it.toString(), this))
         }
-        optionsFields.forEach {
-            addLast(elementFactory.createFieldFromText(it.toString(), this))
-        }
-    }
 
-
-    private fun MessagePsiClass.declareSupportingMethods() {
-        ruleMethods.forEach {
+    private fun MessagePsiClass.declareSupportingMethods(methods: List<MethodDeclaration>) =
+        methods.forEach {
             addLast(elementFactory.createMethodFromText(it.toString(), this))
         }
-        optionsMethods.forEach {
-            addLast(elementFactory.createMethodFromText(it.toString(), this))
-        }
-    }
 
     private fun BuilderPsiClass.implementValidatingBuilder() {
         val qualifiedName = ValidatingBuilder::class.java.canonicalName
-        val genericParameter = messageClassName.canonical
+        val genericParameter = messageClass.canonical
         val reference = elementFactory.createInterfaceReference(qualifiedName, genericParameter)
         implement(reference)
     }

@@ -41,14 +41,14 @@ internal class MessageOptionCode(
     val constraints: List<CodeBlock>,
 
     /**
+     * Additional class-level fields required by the validation logic.
+     */
+    val fields: List<FieldDeclaration<*>> = emptyList(),
+
+    /**
      * Additional class-level methods required by the validation logic.
      */
     val methods: List<MethodDeclaration> = emptyList(),
-
-    /**
-     * Additional class-level fields required by the validation logic.
-     */
-    val fields: List<FieldDeclaration<*>> = emptyList()
 ) {
 
     /**

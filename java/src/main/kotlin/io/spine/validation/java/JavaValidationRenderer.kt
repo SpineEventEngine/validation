@@ -30,9 +30,9 @@ import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.file.hasJavaRoot
+import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
-import io.spine.validation.CompilationMessage
 
 /**
  * The main Java renderer of the validation library.
@@ -52,14 +52,18 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         val generators = listOf(
+            RuleGenerator(querying = this, typeSystem),
             RequiredGenerator(querying = this, valueConverter),
             PatternGenerator(querying = this)
         )
 
-        select(CompilationMessage::class.java).all()
-            .associateWith { sources.javaFileOf(it.type) }
-            .forEach { (message, file) ->
-                val messageCode = MessageValidationCode(message, typeSystem, generators)
+        findMessageTypes()
+            .map { it.message }
+            .forEach { messageType ->
+                val typeName = messageType.name
+                val className = messageType.javaClassName(typeSystem)
+                val messageCode = MessageValidationCode(typeName, className, generators)
+                val file = sources.javaFileOf(messageType)
                 val psiFile = file.psi() as PsiJavaFile
                 messageCode.render(psiFile)
                 file.overwrite(psiFile.text)
