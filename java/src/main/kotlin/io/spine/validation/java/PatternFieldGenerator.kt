@@ -71,6 +71,8 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     private val field = view.subject
     private val fieldType = field.type
     private val fieldAccess = message.field(field)
+    private val declaringType = field.declaringType
+    private val camelFieldName = field.name.camelCase
     private val pattern = compilePattern()
 
     fun generate(): FieldOptionCode = when {
@@ -82,7 +84,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
 
         fieldType.isRepeatedString -> {
             val fieldValue = fieldAccess.getter<List<String>>()
-            val validateRepeatedField = mangled("validate${field.name.camelCase}")
+            val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeatedField(fieldValue, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValue, validateRepeatedField)
             FieldOptionCode(constraint, pattern.field, validateRepeatedFieldDecl)
@@ -144,7 +146,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         val field = InitField<Pattern>(
             modifiers = "private static final",
             type = PatternClass,
-            name = "${view.subject.name.value}_PATTERN",
+            name = mangled("${camelFieldName}Pattern"),
             value = PatternClass.call("compile", compilationArgs)
         )
         return CompiledPattern(field, modifiers.partialMatch)
@@ -165,10 +167,10 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
-        val fieldName = field.qualifiedName
+        val qualifiedName = field.qualifiedName
         val placeholders = supportedPlaceholders(fieldPath, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, fieldName)
-        return constraintViolation(errorMessage, field.declaringType, fieldPath, fieldValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(
@@ -179,8 +181,8 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         return mapOf(
             FIELD_PATH to pathAsString,
             FIELD_VALUE to fieldValue,
-            FIELD_TYPE to StringLiteral(field.type.name),
-            PARENT_TYPE to StringLiteral(field.declaringType.qualifiedName),
+            FIELD_TYPE to StringLiteral(fieldType.name),
+            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
             REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
             REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
         )
