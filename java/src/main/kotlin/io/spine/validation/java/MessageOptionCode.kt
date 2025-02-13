@@ -56,7 +56,7 @@ internal class MessageOptionCode(
      */
     constructor(fields: List<FieldOptionCode>) : this(
         constraints = fields.map { it.constraint },
-        fields = fields.mapNotNull { it.field },
-        methods = fields.mapNotNull { it.method },
+        fields = fields.flatMap { it.fields },
+        methods = fields.flatMap { it.methods },
     )
 }

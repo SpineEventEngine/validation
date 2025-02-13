@@ -31,7 +31,7 @@ import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
 
 /**
- * Java code handling a single application of a specific option for a message field.
+ * Java code handling an application of a specific option for a message field.
  */
 internal class FieldOptionCode(
 
@@ -41,12 +41,22 @@ internal class FieldOptionCode(
     val constraint: CodeBlock,
 
     /**
-     * An additional class-level field required by the validation logic, if any.
+     * An additional class-level fields required by the validation logic, if any.
      */
-    val field: FieldDeclaration<*>? = null,
+    val fields: List<FieldDeclaration<*>> = emptyList(),
 
     /**
-     * An additional class-level method required by the validation logic, if any.
+     * An additional class-level methods required by the validation logic, if any.
      */
-    val method: MethodDeclaration? = null,
-)
+    val methods: List<MethodDeclaration> = emptyList(),
+) {
+
+    /**
+     * Creates a new instance of [FieldOptionCode] with the given parameters.
+     */
+    constructor(
+        constraint: CodeBlock,
+        field: FieldDeclaration<*>? = null,
+        method: MethodDeclaration? = null
+    ) : this(constraint, listOfNotNull(field), listOfNotNull(method))
+}
