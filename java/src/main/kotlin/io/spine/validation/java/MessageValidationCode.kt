@@ -89,7 +89,7 @@ internal class MessageValidationCode(
     /**
      * Renders the message validation code into the provided [psiFile].
      *
-     * @param psiFile A source file with the generated Java class for the [messageType].
+     * @param psiFile A source file that contains the Java class for the [messageType].
      *
      * @throws IllegalStateException if [psiFile] doesn't contain a Java class for [messageType].
      */
@@ -241,7 +241,7 @@ internal class MessageValidationCode(
         .run { returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!) }
 
     /**
-     * Scope variable available within `validate(FieldPath)` method.
+     * Scope variables available within `validate(FieldPath)` method.
      */
     internal object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
@@ -249,7 +249,7 @@ internal class MessageValidationCode(
     }
 
     /**
-     * Scope variables available within the message class.
+     * Scope variables available within the whole message class.
      */
     internal object MessageScope {
         val message = This<Message>(explicit = false)

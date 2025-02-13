@@ -92,7 +92,7 @@ private fun checkFieldType(field: Field, file: File) {
 /**
  * Tells if this [FieldType] represents a `repeated string` field.
  *
- * The property is `public` because the option generator also needs it.
+ * The property is `public` because the option generator also uses it.
  */
 public val FieldType.isRepeatedString: Boolean
     get() = isList && list.primitive == TYPE_STRING
@@ -100,7 +100,7 @@ public val FieldType.isRepeatedString: Boolean
 /**
  * Tells if this [FieldType] represents a `string` field.
  *
- * The property is `public` because the option generator also needs it.
+ * The property is `public` because the option generator also uses it.
  */
 public val FieldType.isSingularString: Boolean
     get() = isSingular && primitive == TYPE_STRING

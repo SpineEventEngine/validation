@@ -64,7 +64,7 @@ import org.apache.commons.lang.StringEscapeUtils.escapeJava
 /**
  * The generator for `(pattern)` option.
  *
- * Generates code for a single field represented by the given [view].
+ * Generates code for a single field represented by the provided [view].
  */
 internal class PatternFieldGenerator(private val view: PatternField) {
 
@@ -75,6 +75,9 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     private val camelFieldName = field.name.camelCase
     private val pattern = compilePattern()
 
+    /**
+     * Generates code for a field represented by the [view].
+     */
     fun generate(): FieldOptionCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()

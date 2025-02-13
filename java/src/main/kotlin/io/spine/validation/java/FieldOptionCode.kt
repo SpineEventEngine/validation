@@ -41,12 +41,12 @@ internal class FieldOptionCode(
     val constraint: CodeBlock,
 
     /**
-     * An additional class-level fields required by the validation logic, if any.
+     * Additional class-level fields required by the validation logic.
      */
     val fields: List<FieldDeclaration<*>> = emptyList(),
 
     /**
-     * An additional class-level methods required by the validation logic, if any.
+     * Additional class-level methods required by the validation logic.
      */
     val methods: List<MethodDeclaration> = emptyList(),
 ) {
