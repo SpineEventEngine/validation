@@ -88,23 +88,20 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         val field = view.subject
         val fieldType = field.type
         val fieldAccess = message.field(field)
-
         val pattern = compilePattern(view)
-        val partialMatch = view.modifier.partialMatch
-
         return when {
             fieldType.isSingularString -> {
                 val fieldValue = fieldAccess.getter<String>()
                 val constraint = CodeBlock(
                     """
-                    if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue, partialMatch)}) {
+                    if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
                         var fieldPath = ${fieldPath(field, parentPath)};
                         var violation = ${violation(view, ReadVar("fieldPath"), fieldValue)};
                         $violations.add(violation);
                     }
                     """.trimIndent()
                 )
-                FieldOptionCode(constraint, pattern)
+                FieldOptionCode(constraint, pattern.field)
             }
 
             fieldType.isRepeatedString -> {
@@ -115,7 +112,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                     private $ImmutableListClass<$ConstraintViolationClass> $validateRepeatedField($FieldPathClass parent) {
                         var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
                         for ($StringClass element : $fieldValue) {
-                            if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), partialMatch)}) {
+                            if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
                                 var fieldPath = ${fieldPath(field, ReadVar("parent"))};
                                 var violation = ${violation(view, ReadVar("fieldPath"), ReadVar("element"))};
                                 violations.add(violation);
@@ -133,7 +130,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                     }
                     """.trimIndent()
                 )
-                FieldOptionCode(constraint, pattern, validateRepeatedFieldDecl)
+                FieldOptionCode(constraint, pattern.field, validateRepeatedFieldDecl)
             }
 
             else -> error {
@@ -143,24 +140,23 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         }
     }
 
-    private fun compilePattern(view: PatternField): FieldDeclaration<Pattern> {
+    private fun compilePattern(view: PatternField): CompiledPattern {
+        val modifiers = view.modifier
         val compilationArgs = listOf(
             StringLiteral(escapeJava(view.pattern)),
-            Literal(view.modifier.asFlagsMask())
+            Literal(modifiers.asFlagsMask())
         )
-        return InitField(
+        val field = InitField<Pattern>(
             modifiers = "private static final",
             type = PatternClass,
             name = "${view.subject.name.value}_PATTERN",
             value = PatternClass.call("compile", compilationArgs)
         )
+        return CompiledPattern(field, modifiers.partialMatch)
     }
 
-    private fun FieldDeclaration<Pattern>.matches(
-        value: Expression<String>,
-        partialMatch: Boolean
-    ): Expression<Boolean> {
-        val matcher = MethodCall<Matcher>(this.read(), "matcher", value)
+    private fun CompiledPattern.matches(value: Expression<String>): Expression<Boolean> {
+        val matcher = MethodCall<Matcher>(field.read(), "matcher", value)
         val operation = if (partialMatch) "find" else "matches"
         return matcher.chain(operation)
     }
@@ -198,6 +194,15 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         )
     }
 }
+
+/**
+ * Stores the compiled pattern field along with [partialMatch] modifier.
+ *
+ * This way, we have everything we need to yield an expression for [Pattern.matcher]
+ * invocation under a single object. Otherwise, [PatternOptionGenerator.matches] would
+ * have to accept [partialMatch] along the string value to check.
+ */
+private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialMatch: Boolean)
 
 /**
  * Converts this [PatternOption.Modifier] to a Java [Pattern] bitwise mask.
