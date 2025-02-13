@@ -64,20 +64,6 @@ message DistinctCollection {
 message RecursiveValidation {
 }
 
-// The associated string field must match the given regular expression.
-//
-// If `modifier.partial_match` is `true`, only a part of the string must match the regex, not
-// the whole string.
-//
-message Regex {
-
-    // The regular expression.
-    string pattern = 1;
-
-    // Attributes of the regex.
-    PatternOption.Modifier modifier = 2;
-}
-
 // The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
 //
 // Generated code must check the `oneof` case in order to avoid comparisons to default values for
