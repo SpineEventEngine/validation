@@ -183,10 +183,10 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
         val field = view.subject
+        val fieldName = field.qualifiedName
         val placeholders = supportedPlaceholders(view, fieldPath, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN,
-            field.qualifiedName)
-        return constraintViolation(errorMessage, field.declaringType, fieldPath)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, fieldName)
+        return constraintViolation(errorMessage, field.declaringType, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(

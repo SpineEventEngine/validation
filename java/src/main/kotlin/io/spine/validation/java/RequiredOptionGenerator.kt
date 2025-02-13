@@ -122,7 +122,7 @@ internal class RequiredOptionGenerator(
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(field, fieldPath)
         val errorMessage = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
-        return constraintViolation(errorMessage, field.declaringType, fieldPath)
+        return constraintViolation(errorMessage, field.declaringType, fieldPath, fieldValue = null)
     }
 
     private fun supportedPlaceholders(
