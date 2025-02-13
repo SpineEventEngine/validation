@@ -29,7 +29,6 @@ package io.spine.validate.option
 import com.google.protobuf.StringValue
 import io.spine.test.validate.AllThePatterns
 import io.spine.test.validate.PatternStringFieldValue
-import io.spine.validate.Diags.Regex.errorMessage
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
@@ -41,9 +40,9 @@ import org.junit.jupiter.api.Test
 @DisplayName(VALIDATION_SHOULD + "analyze `(pattern)` option and")
 internal class PatternSpec : ValidationOfConstraintTest() {
 
-//    /** As defined in the stub message type [PatternStringFieldValue]. */
-//    private val regex: @Regex String =
-//        "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+    /** As defined in the stub message type [PatternStringFieldValue]. */
+    private val regex: @Regex String =
+        "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
 
     @Test
     fun `find out that string matches to regex pattern`() =
@@ -59,9 +58,12 @@ internal class PatternSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `provide one valid violation if string does not match the regex pattern`() {
-        val msg = patternStringFor("invalid email")
-        val expectedErrMsg = "field must match the regular expression"
-        assertSingleViolation(msg, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
+        val fieldValue = "invalidEmail"
+        val protoMessage = patternStringFor(fieldValue)
+        val expectedErrMsg = "The `spine.test.validation.PatternStringFieldValue.email` field " +
+                "must match the regular expression `$regex` (modifiers: ``). " +
+                "The passed value: `$fieldValue`."
+        assertSingleViolation(protoMessage, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
     }
 
     @Test
