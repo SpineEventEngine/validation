@@ -34,7 +34,6 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.FieldDeclaration
@@ -123,7 +122,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
                     private $ImmutableListClass<$ConstraintViolationClass> $validateRepeatedField($FieldPathClass parent) {
                         var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
                         for ($StringClass element : $fieldValue) {
-                            if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), view.modifier.partialMatch)}) {
+                            if (!element.isEmpty() && !${pattern.matches(ReadVar("element"), partialMatch)}) {
                                 var fieldPath = ${fieldPath(field, ReadVar("parent"))};
                                 var violation = ${violation(view, ReadVar("fieldPath"), ReadVar("element"))};
                                 violations.add(violation);
@@ -190,20 +189,12 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
         return constraintViolation(errorMessage, field.declaringType, fieldPath)
     }
 
-    /**
-     * Determines the value for each of the supported `(if_missing)` placeholders.
-     *
-     * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
-     * declared for [FieldPath]. It is available from Java, but not from Kotlin.
-     * So, we specify it as a string literal here.
-     */
     private fun supportedPlaceholders(
         view: PatternField,
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = ClassName("io.spine.base", "FieldPaths")
-            .call<String>("getJoined", fieldPath)
+        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
             FIELD_VALUE to fieldValue,

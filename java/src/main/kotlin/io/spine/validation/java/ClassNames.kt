@@ -64,3 +64,12 @@ internal val FieldPathClass = ClassName(FieldPath::class)
  * The [ClassName] of [ConstraintViolation].
  */
 internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
+
+/**
+ * The [ClassName] of `io.spine.base.FieldPaths`.
+ *
+ * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
+ * declared for [FieldPath]. It is available from Java, but not from Kotlin.
+ * So, we specify it as a string literal here.
+ */
+internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")
