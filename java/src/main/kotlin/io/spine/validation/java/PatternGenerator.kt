@@ -34,7 +34,7 @@ import io.spine.validation.PatternField
 /**
  * The generator for `(pattern)` option.
  */
-internal class PatternOptionGenerator(private val querying: Querying) : OptionGenerator {
+internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
      * All pattern fields in the current compilation process.

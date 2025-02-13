@@ -55,7 +55,7 @@ import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
 /**
  * The generator for `(required)` option.
  */
-internal class RequiredOptionGenerator(
+internal class RequiredGenerator(
     private val querying: Querying,
     private val converter: JavaValueConverter
 ) : OptionGenerator {
