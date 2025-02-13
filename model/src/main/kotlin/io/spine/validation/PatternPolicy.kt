@@ -47,11 +47,11 @@ import io.spine.validation.event.patternFieldDiscovered
 import io.spine.validation.protodata.compilationError
 
 /**
- * Controls whether a field should be validated with the `(pattern)`.
+ * Controls whether a field should be validated with the `(pattern)` option.
  *
- * Whenever a filed marked with `(pattern)` option is discovered, emits
- * [PatternFieldDiscovered] if the option supports the field type.
- * Otherwise, the policy reports a compilation error.
+ * Whenever a filed marked with the `(pattern)` option is discovered
+ * emits [PatternFieldDiscovered]. The policy reports a compilation
+ * error if the option does not support the field type.
  */
 internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
