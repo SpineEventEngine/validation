@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.ImmutableList
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
@@ -35,7 +34,6 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.backend.SecureRandomString
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
@@ -119,7 +117,7 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
 
             fieldType.isRepeatedString -> {
                 val fieldValue = fieldAccess.getter<List<String>>()
-                val validateRepeatedField = "validate${field.name.camelCase}_${hash()}"
+                val validateRepeatedField = mangled("validate${field.name.camelCase}")
                 val validateRepeatedFieldDecl = MethodDeclaration(
                     """
                     private $ImmutableListClass<$ConstraintViolationClass> $validateRepeatedField($FieldPathClass parent) {
@@ -218,12 +216,11 @@ internal class PatternOptionGenerator(private val querying: Querying) : OptionGe
 }
 
 /**
- * Converts this [PatternOption.Modifier] into a bitwise mask built
- * from Java [Pattern] flags constants.
+ * Converts this [PatternOption.Modifier] to a Java [Pattern] bitwise mask.
  *
  * Note that [PatternOption.Modifier.getPartialMatch] is not handled by this method.
- * For Java patterns, it is not a flag. We handle it when choosing which method
- * to invoke upon the resulting matcher: `matcher.find()` or `matcher.matches()`.
+ * It is not a flag in Java. We take it into account when choosing which method to invoke
+ * upon the [Matcher]: [Matcher.find] or [Matcher.matches].
  */
 private fun PatternOption.Modifier.asFlagsMask(): Int {
     var mask = 0
@@ -241,9 +238,3 @@ private fun PatternOption.Modifier.asFlagsMask(): Int {
     }
     return mask
 }
-
-private const val RANDOM_STR_LENGTH = 10
-
-private fun hash(): String =
-    SecureRandomString.generate(RANDOM_STR_LENGTH)
-        .filter(Char::isJavaIdentifierPart)
