@@ -32,4 +32,4 @@ import io.spine.server.event.Just
 /**
  * Converts this [EventMessage] into [Just].
  */
-public fun <E : EventMessage> E.asJust(): Just<E> = Just(this)
+public fun <E : EventMessage> E.just(): Just<E> = Just(this)

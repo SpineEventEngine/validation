@@ -41,7 +41,7 @@ import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
-import io.spine.validation.core.asJust
+import io.spine.validation.core.just
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 import io.spine.validation.protodata.compilationError
@@ -75,7 +75,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
             pattern = option.regex
             modifier = option.modifier
             subject = field
-        }.asJust()
+        }.just()
     }
 }
 
