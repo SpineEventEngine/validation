@@ -100,7 +100,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         }
 
         else -> error {
-            "Unsupported field type: `${fieldType.name}`. The `(${PATTERN})` option can be" +
+            "Unsupported field type: `${fieldType.name}`. The `(${PATTERN})` option can be " +
                     "applied only to singular or repeated string fields."
         }
     }
