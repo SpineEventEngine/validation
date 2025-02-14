@@ -54,9 +54,9 @@ import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.java.ErrorPlaceholder.REGEX_PATTERN
-import io.spine.validation.java.MessageValidationRenderer.MessageScope.message
-import io.spine.validation.java.MessageValidationRenderer.ValidateScope.parentPath
-import io.spine.validation.java.MessageValidationRenderer.ValidateScope.violations
+import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.apache.commons.lang.StringEscapeUtils.escapeJava

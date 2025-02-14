@@ -52,13 +52,13 @@ import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.java.MessageValidationRenderer.ValidateScope.violations
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 private typealias MessagePsiClass = PsiClass
 private typealias BuilderPsiClass = PsiClass
 
 /**
- * Renders the message validation code into the given PSI class.
+ * Injects the message validation code into the given PSI class.
  *
  * This class modifies both the Java class of the message and its builder.
  *
@@ -72,12 +72,12 @@ private typealias BuilderPsiClass = PsiClass
  * If one or more violations are detected, the builder will throw an exception.
  */
 @Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
-internal class MessageValidationRenderer {
+internal class ValidationCodeInjector {
 
     /**
-     * Renders the provided validation [code] into the PSI class of the message.
+     * Injects the provided validation [code] into the PSI class of the message.
      */
-    fun render(code: MessageValidationCode, messageClass: PsiClass) {
+    fun inject(code: MessageValidationCode, messageClass: PsiClass) {
         val builderClass = messageClass.nested("Builder")
         execute {
             messageClass.apply {

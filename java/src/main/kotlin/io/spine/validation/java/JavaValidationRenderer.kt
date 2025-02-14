@@ -47,7 +47,7 @@ import io.spine.tools.code.Java
 public class JavaValidationRenderer : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
-    private val messageRenderer = MessageValidationRenderer()
+    private val codeInjector = ValidationCodeInjector()
     private val generators by lazy {
         listOf(
             RuleGenerator(querying = this, typeSystem),
@@ -88,7 +88,7 @@ public class JavaValidationRenderer : JavaRenderer() {
     private fun SourceFile<Java>.render(code: MessageValidationCode) {
         val psiFile = psi() as PsiJavaFile
         val messageClass = psiFile.findClass(code.message)
-        messageRenderer.render(code, messageClass)
+        codeInjector.inject(code, messageClass)
         overwrite(psiFile.text)
     }
 }
