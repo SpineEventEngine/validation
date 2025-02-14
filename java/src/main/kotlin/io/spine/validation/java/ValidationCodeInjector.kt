@@ -99,7 +99,7 @@ internal class ValidationCodeInjector {
     /**
      * Scope variables available within `validate(FieldPath)` method.
      */
-    internal object ValidateScope {
+    object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
         val parentPath = ReadVar<FieldPath>("parent")
     }
@@ -107,7 +107,7 @@ internal class ValidationCodeInjector {
     /**
      * Scope variables available within the whole message class.
      */
-    internal object MessageScope {
+    object MessageScope {
         val message = This<Message>(explicit = false)
     }
 }
