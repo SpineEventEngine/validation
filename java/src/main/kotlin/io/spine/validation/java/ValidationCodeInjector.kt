@@ -71,7 +71,6 @@ private typealias BuilderPsiClass = PsiClass
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
  */
-@Suppress("TooManyFunctions") // Small methods representing atomic PSI modifications.
 internal class ValidationCodeInjector {
 
     /**
