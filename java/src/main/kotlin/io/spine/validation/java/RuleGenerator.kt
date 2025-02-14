@@ -78,8 +78,7 @@ internal class RuleGenerator(
      * one, or more supporting members.
      *
      * Note: [CodeGenerator] returns JavaPoet's elements, which we convert to counterparts
-     * from ProtoData Expression API, so that these elements could be used similarly
-     * to those produced by option-specific generators.
+     * from ProtoData Expression API as required by [OptionGenerator] interface.
      */
     private fun generate(messageType: MessageType, rule: Rule): FieldOptionCode {
         val context = newContext(rule, messageType)
