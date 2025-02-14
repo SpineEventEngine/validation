@@ -32,22 +32,14 @@ import io.spine.protodata.java.MethodDeclaration
 
 /**
  * Java code handling all applications of a specific option within a message.
+ *
+ * @property constraints Code blocks to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
 internal class MessageOptionCode(
-
-    /**
-     * Code blocks to be added to the `validate()` method of the message.
-     */
     val constraints: List<CodeBlock>,
-
-    /**
-     * Additional class-level fields required by the validation logic.
-     */
     val fields: List<FieldDeclaration<*>> = emptyList(),
-
-    /**
-     * Additional class-level methods required by the validation logic.
-     */
     val methods: List<MethodDeclaration> = emptyList(),
 ) {
 

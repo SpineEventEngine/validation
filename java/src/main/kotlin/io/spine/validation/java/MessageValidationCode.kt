@@ -33,26 +33,15 @@ import io.spine.protodata.java.MethodDeclaration
 
 /**
  * Holds all generated validation code for a specific message type.
+ *
+ * @property message The class name of the target message.
+ * @property constraints Code blocks to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
 internal class MessageValidationCode(
-
-    /**
-     * The class name of the target message.
-     */
     val message: ClassName,
-
-    /**
-     * Code blocks to be added to the `validate()` method of the message.
-     */
     val constraints: List<CodeBlock>,
-
-    /**
-     * Additional class-level fields required by the validation logic.
-     */
     val fields: List<FieldDeclaration<*>>,
-
-    /**
-     * Additional class-level methods required by the validation logic.
-     */
     val methods: List<MethodDeclaration>,
 )
