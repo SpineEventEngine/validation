@@ -82,7 +82,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)
-            FieldOptionCode(constraint, pattern.field)
+            FieldOptionCode(constraint, listOf(pattern.field))
         }
 
         fieldType.isRepeatedString -> {
@@ -90,7 +90,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
             val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeatedField(fieldValue, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValue, validateRepeatedField)
-            FieldOptionCode(constraint, pattern.field, validateRepeatedFieldDecl)
+            FieldOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
         }
 
         else -> error {

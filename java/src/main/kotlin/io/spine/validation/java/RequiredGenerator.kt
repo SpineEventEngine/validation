@@ -68,10 +68,11 @@ internal class RequiredGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): MessageOptionCode {
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val requiredFields = allRequiredFields.filter { it.id.type == type }
         val constraints = requiredFields.map { constraints(it) }
-        return MessageOptionCode(constraints)
+        val fieldOptions = constraints.map { FieldOptionCode(it) }
+        return fieldOptions
     }
 
     private fun constraints(view: RequiredField): CodeBlock {

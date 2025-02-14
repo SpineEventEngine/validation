@@ -39,5 +39,5 @@ internal interface OptionGenerator {
      *
      * @param type The message to generate code for.
      */
-    fun codeFor(type: TypeName): MessageOptionCode
+    fun codeFor(type: TypeName): List<FieldOptionCode>
 }

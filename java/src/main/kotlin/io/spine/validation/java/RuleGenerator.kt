@@ -64,10 +64,10 @@ internal class RuleGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): MessageOptionCode {
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val message = allMessagesWithRules.first { it.type.name == type }
         val generatedRules = message.ruleList.map { generate(message.type, it) }
-        return MessageOptionCode(generatedRules)
+        return generatedRules
     }
 
     /**

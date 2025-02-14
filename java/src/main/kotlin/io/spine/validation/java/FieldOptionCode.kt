@@ -41,18 +41,4 @@ internal class FieldOptionCode(
     val constraint: CodeBlock,
     val fields: List<FieldDeclaration<*>> = emptyList(),
     val methods: List<MethodDeclaration> = emptyList(),
-) {
-
-    /**
-     * Creates a new instance of [FieldOptionCode] with the given parameters.
-     *
-     * @property constraint A code block to be added to the `validate()` method of the message.
-     * @property fields An additional class-level field, if the validation logic needs one.
-     * @property methods An additional class-level method, if the validation logic needs one.
-     */
-    constructor(
-        constraint: CodeBlock,
-        field: FieldDeclaration<*>? = null,
-        method: MethodDeclaration? = null
-    ) : this(constraint, listOfNotNull(field), listOfNotNull(method))
-}
+)

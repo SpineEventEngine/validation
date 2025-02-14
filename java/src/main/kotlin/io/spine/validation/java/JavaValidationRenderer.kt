@@ -73,11 +73,11 @@ public class JavaValidationRenderer : JavaRenderer() {
     }
 
     private fun generateCode(message: TypeName): MessageValidationCode {
-        val optionsCode = generators.map { it.codeFor(message) }
-        val messageCode = with(optionsCode) {
+        val fieldOptions = generators.flatMap { it.codeFor(message) }
+        val messageCode = with(fieldOptions) {
             MessageValidationCode(
                 message = message.javaClassName(typeSystem),
-                constraints = flatMap { it.constraints },
+                constraints = map { it.constraint },
                 fields = flatMap { it.fields },
                 methods = flatMap { it.methods }
             )
