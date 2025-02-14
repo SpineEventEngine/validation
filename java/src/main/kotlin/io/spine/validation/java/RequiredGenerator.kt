@@ -48,9 +48,9 @@ import io.spine.validation.UnsetValue
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.MessageValidationCode.MessageScope.message
-import io.spine.validation.java.MessageValidationCode.ValidateScope.parentPath
-import io.spine.validation.java.MessageValidationCode.ValidateScope.violations
+import io.spine.validation.java.MessageValidationRenderer.MessageScope.message
+import io.spine.validation.java.MessageValidationRenderer.ValidateScope.parentPath
+import io.spine.validation.java.MessageValidationRenderer.ValidateScope.violations
 
 /**
  * The generator for `(required)` option.
