@@ -45,6 +45,10 @@ internal class FieldOptionCode(
 
     /**
      * Creates a new instance of [FieldOptionCode] with the given parameters.
+     *
+     * @property constraint A code block to be added to the `validate()` method of the message.
+     * @property fields An additional class-level field, if the validation logic needs one.
+     * @property methods An additional class-level method, if the validation logic needs one.
      */
     constructor(
         constraint: CodeBlock,
