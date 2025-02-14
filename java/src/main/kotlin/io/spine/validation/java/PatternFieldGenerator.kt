@@ -62,6 +62,12 @@ import java.util.regex.Pattern
 import org.apache.commons.lang.StringEscapeUtils.escapeJava
 
 /**
+ * Stores the generated Java field that contains the compiled [Pattern]
+ * along with [partialMatch] modifier.
+ */
+private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialMatch: Boolean)
+
+/**
  * The generator for `(pattern)` option.
  *
  * Generates code for a single field represented by the provided [view].
@@ -86,10 +92,10 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         }
 
         fieldType.isRepeatedString -> {
-            val fieldValue = fieldAccess.getter<List<String>>()
+            val fieldValues = fieldAccess.getter<List<String>>()
             val validateRepeatedField = mangled("validate$camelFieldName")
-            val validateRepeatedFieldDecl = validateRepeatedField(fieldValue, validateRepeatedField)
-            val constraint = repeatedStringConstraint(fieldValue, validateRepeatedField)
+            val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
+            val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
             FieldOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
         }
 
@@ -99,6 +105,9 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         }
     }
 
+    /**
+     * Return a [CodeBlock] that checks if the [fieldValue] matches the [pattern].
+     */
     private fun singularStringConstraint(fieldValue: Expression<String>) = CodeBlock(
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
@@ -109,26 +118,37 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         """.trimIndent()
     )
 
+    /**
+     * Returns a [CodeBlock] that invokes [validateRepeated] method to check
+     * if each value from [fieldValues] list matches the [pattern].
+     */
     private fun repeatedStringConstraint(
-        fieldValue: Expression<List<String>>,
-        validateRepeatedField: String
+        fieldValues: Expression<List<String>>,
+        validateRepeated: String
     ) = CodeBlock(
         """
-        if (!$fieldValue.isEmpty()) {
-            var fieldViolations = $validateRepeatedField($parentPath);
+        if (!$fieldValues.isEmpty()) {
+            var fieldViolations = $validateRepeated($parentPath);
             $violations.addAll(fieldViolations);
         }
         """.trimIndent()
     )
 
-    private fun validateRepeatedField(
-        fieldValue: Expression<List<String>>,
+    /**
+     * Returns a [MethodDeclaration] that goes through each element of [fieldValues] list
+     * making sure it matches the [pattern].
+     *
+     * The created method returns a list of [ConstraintViolation], containing one violation
+     * per each invalid field value.
+     */
+    private fun validateRepeated(
+        fieldValues: Expression<List<String>>,
         methodName: String
     ) = MethodDeclaration(
         """
         private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass parent) {
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
-            for ($StringClass element : $fieldValue) {
+            for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
                     var fieldPath = ${fieldPath(ReadVar("parent"))};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("element"))};
@@ -140,6 +160,15 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         """.trimIndent()
     )
 
+    /**
+     * Creates a field containing a compiled Java [Pattern].
+     *
+     * The created field is wrapped in [CompiledPattern] instance along with
+     * the [PatternOption.Modifier.getPartialMatch] value. This way, we have
+     * everything we need to yield an expression for [Pattern.matcher] invocation
+     * under a single object. Otherwise, the [matches] method would have to accept
+     * `partialMatch` parameter along with the string value to check.
+     */
     private fun compilePattern(): CompiledPattern {
         val modifiers = view.modifier
         val compilationArgs = listOf(
@@ -191,15 +220,6 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         )
     }
 }
-
-/**
- * Stores the compiled pattern field along with [partialMatch] modifier.
- *
- * This way, we have everything we need to yield an expression for [Pattern.matcher]
- * invocation under a single object. Otherwise, [PatternFieldGenerator.matches] would
- * have to accept [partialMatch] along the string value to check.
- */
-private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialMatch: Boolean)
 
 /**
  * Converts this [PatternOption.Modifier] to a Java [Pattern] bitwise mask.
