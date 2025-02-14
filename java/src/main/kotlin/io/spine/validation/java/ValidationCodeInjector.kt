@@ -96,126 +96,6 @@ internal class ValidationCodeInjector {
         }
     }
 
-    private fun MessagePsiClass.implementValidatableMessage() {
-        val qualifiedName = ValidatableMessage::class.java.canonicalName
-        val reference = elementFactory.createInterfaceReference(qualifiedName)
-        implement(reference)
-    }
-
-    /**
-     * Declares `validate()` method in this [MessagePsiClass].
-     *
-     * This is a `public` implementation of [ValidatableMessage.validate] with
-     * [Override] annotation. The actual constraints are contained in its
-     * private overloading, that accepts the field path.
-     *
-     *  @see declarePrivateValidateMethod
-     */
-    private fun MessagePsiClass.declarePublicValidateMethod() {
-        val psiMethod = elementFactory.createMethodFromText(
-            """
-            public java.util.Optional<io.spine.validate.ValidationError> validate() {
-                var noParent = ${FieldPathClass.getDefaultInstance()};
-                return validate(noParent);
-            }
-            """.trimIndent(), this)
-        psiMethod.annotate(Override::class.java)
-        addLast(psiMethod)
-    }
-
-    /**
-     * Declares a private `validate(FieldPath)` method that performs all constraint
-     * checks for the message.
-     *
-     * This method implements the actual logic for verifying that the message’s
-     * constraints are met. It takes a [FieldPath] parameter that represents the path
-     * to the parent field, which triggered the validation, if any. This path is used
-     * when constructing constraint violation errors.
-     *
-     * In typical (top-level) validations, the public `validate()` method is called,
-     * which passes an empty field path. However, when validating a nested message
-     * (a message field marked with `(validate) = true`), a non-empty field path
-     * should be provided. In that case, any constraint violations reported by this
-     * method will include the parent field, which actually triggered validation.
-     */
-    private fun MessagePsiClass.declarePrivateValidateMethod(constraints: List<CodeBlock>) {
-        val psiMethod = elementFactory.createMethodFromText(
-            """
-            private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
-                ${validateMethodBody(constraints)}
-            }
-            """.trimIndent(), this
-        )
-        addLast(psiMethod)
-    }
-
-    private fun validateMethodBody(constraints: List<CodeBlock>): String =
-        if (constraints.isEmpty())
-            """
-            // This message does not have any validation constraints.
-            return java.util.Optional.empty();
-            """.trimIndent()
-        else
-            """
-            var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
-            
-            ${constraints.joinByLines()}
-            
-            if (!$violations.isEmpty()) {
-                var error = io.spine.validate.ValidationError.newBuilder()
-                    .addAllConstraintViolation($violations)
-                    .build();
-                return java.util.Optional.of(error);
-            } else {
-                return java.util.Optional.empty();
-            }
-            """.trimIndent()
-
-    private fun MessagePsiClass.declareSupportingFields(fields: List<FieldDeclaration<*>>) =
-        fields.forEach {
-            addLast(elementFactory.createFieldFromText(it.toString(), this))
-        }
-
-    private fun MessagePsiClass.declareSupportingMethods(methods: List<MethodDeclaration>) =
-        methods.forEach {
-            addLast(elementFactory.createMethodFromText(it.toString(), this))
-        }
-
-    private fun BuilderPsiClass.implementValidatingBuilder(message: PsiClass) {
-        val qualifiedName = ValidatingBuilder::class.java.canonicalName
-        val genericParameter = message.qualifiedName!!
-        val reference = elementFactory.createInterfaceReference(qualifiedName, genericParameter)
-        implement(reference)
-    }
-
-    /**
-     * Injects an invocation of [ValidatableMessage.validate] method into the end
-     * of `build()` method body of this [PsiClass].
-     *
-     * The validation code is executed right before returning from the `build()`.
-     * If one or more constraints are violated, the injected snippet will throw.
-     */
-    private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build")
-        .run {
-            val returningResult = getFirstByText("return result;")
-            val runValidation = elementFactory.createCodeBlockAdapterFromText(
-                """
-                java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
-                if (error.isPresent()) {
-                    var violations = error.get().getConstraintViolationList();
-                    throw new io.spine.validate.ValidationException(violations);
-                }
-                """.trimIndent(), this
-            )
-            body!!.addBefore(runValidation, returningResult)
-        }
-
-    private fun BuilderPsiClass.annotateBuildReturnType() = method("build")
-        .run { returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!) }
-
-    private fun BuilderPsiClass.annotateBuildPartialReturnType() = method("buildPartial")
-        .run { returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!) }
-
     /**
      * Scope variables available within `validate(FieldPath)` method.
      */
@@ -231,3 +111,144 @@ internal class ValidationCodeInjector {
         val message = This<Message>(explicit = false)
     }
 }
+
+/**
+ * Makes this [MessagePsiClass] implement [ValidatableMessage] interface.
+ */
+private fun MessagePsiClass.implementValidatableMessage() {
+    val qualifiedName = ValidatableMessage::class.java.canonicalName
+    val reference = elementFactory.createInterfaceReference(qualifiedName)
+    implement(reference)
+}
+
+/**
+ * Declares `validate()` method in this [MessagePsiClass].
+ *
+ * This is a `public` implementation of [ValidatableMessage.validate] with
+ * [Override] annotation. The actual constraints are contained in its
+ * private overloading, that accepts the field path.
+ *
+ *  @see declarePrivateValidateMethod
+ */
+private fun MessagePsiClass.declarePublicValidateMethod() {
+    val psiMethod = elementFactory.createMethodFromText(
+        """
+        public java.util.Optional<io.spine.validate.ValidationError> validate() {
+            var noParent = ${FieldPathClass.getDefaultInstance()};
+            return validate(noParent);
+        }
+        """.trimIndent(), this)
+    psiMethod.annotate(Override::class.java)
+    addLast(psiMethod)
+}
+
+/**
+ * Declares a private `validate(FieldPath)` method that performs all constraint
+ * checks for the message.
+ *
+ * This method implements the actual logic for verifying that the message’s
+ * constraints are met. It takes a [FieldPath] parameter that represents the path
+ * to the parent field, which triggered the validation, if any. This path is used
+ * when constructing constraint violation errors.
+ *
+ * In typical (top-level) validations, the public `validate()` method is called,
+ * which passes an empty field path. However, when validating a nested message
+ * (a message field marked with `(validate) = true`), a non-empty field path
+ * should be provided. In that case, any constraint violations reported by this
+ * method will include the parent field, which actually triggered validation.
+ */
+private fun MessagePsiClass.declarePrivateValidateMethod(constraints: List<CodeBlock>) {
+    val psiMethod = elementFactory.createMethodFromText(
+        """
+        private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
+            ${validateMethodBody(constraints)}
+        }
+        """.trimIndent(), this
+    )
+    addLast(psiMethod)
+}
+
+private fun validateMethodBody(constraints: List<CodeBlock>): String =
+    if (constraints.isEmpty())
+        """
+        // This message does not have any validation constraints.
+        return java.util.Optional.empty();
+        """.trimIndent()
+    else
+        """
+        var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+        
+        ${constraints.joinByLines()}
+        
+        if (!$violations.isEmpty()) {
+            var error = io.spine.validate.ValidationError.newBuilder()
+                .addAllConstraintViolation($violations)
+                .build();
+            return java.util.Optional.of(error);
+        } else {
+            return java.util.Optional.empty();
+        }
+        """.trimIndent()
+
+/**
+ * Adds declarations of the given [fields] to this [MessagePsiClass].
+ */
+private fun MessagePsiClass.declareSupportingFields(fields: List<FieldDeclaration<*>>) =
+    fields.forEach {
+        addLast(elementFactory.createFieldFromText(it.toString(), this))
+    }
+
+/**
+ * Adds declarations of the given [methods] to this [MessagePsiClass].
+ */
+private fun MessagePsiClass.declareSupportingMethods(methods: List<MethodDeclaration>) =
+    methods.forEach {
+        addLast(elementFactory.createMethodFromText(it.toString(), this))
+    }
+
+/**
+ * Makes this [BuilderPsiClass] implement [ValidatingBuilder] interface using
+ * the provided [message] class name as its type parameter.
+ */
+private fun BuilderPsiClass.implementValidatingBuilder(message: PsiClass) {
+    val qualifiedName = ValidatingBuilder::class.java.canonicalName
+    val genericParameter = message.qualifiedName!!
+    val reference = elementFactory.createInterfaceReference(qualifiedName, genericParameter)
+    implement(reference)
+}
+
+/**
+ * Injects an invocation of [ValidatableMessage.validate] method into the end
+ * of `build()` method body of this [PsiClass].
+ *
+ * The validation code is executed right before returning from the `build()`.
+ * If one or more constraints are violated, the injected snippet will throw.
+ */
+private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build")
+    .run {
+        val returningResult = getFirstByText("return result;")
+        val runValidation = elementFactory.createCodeBlockAdapterFromText(
+            """
+            java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+            if (error.isPresent()) {
+                var violations = error.get().getConstraintViolationList();
+                throw new io.spine.validate.ValidationException(violations);
+            }
+            """.trimIndent(), this
+        )
+        body!!.addBefore(runValidation, returningResult)
+    }
+
+/**
+ * Annotates the return type of [Message.Builder.build] method of this [BuilderPsiClass]
+ * with [Validated] annotation.
+ */
+private fun BuilderPsiClass.annotateBuildReturnType() = method("build")
+    .run { returnTypeElement!!.addAnnotation(Validated::class.qualifiedName!!) }
+
+/**
+ * Annotates the return type of [Message.Builder.buildPartial] method of this
+ * [BuilderPsiClass] with [NonValidated] annotation.
+ */
+private fun BuilderPsiClass.annotateBuildPartialReturnType() = method("buildPartial")
+    .run { returnTypeElement!!.addAnnotation(NonValidated::class.qualifiedName!!) }
