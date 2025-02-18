@@ -75,8 +75,8 @@ class ValidationTestFixture(
     /**
      * Creates the predicate accepting only the given [descriptor] of
      * a Protobuf declaration and the descriptor of the file in
-     * which declaration was made, so that [Pipeline] can get down to
-     * the descriptor of interest.
+     * which declaration was made, so that a [Pipeline][io.spine.protodata.backend.Pipeline]
+     * can get down to the [descriptor] of interest.
      *
      * If the given [descriptor] is [FileDescriptor] the predicate accepts
      * the file itself, all the declarations made in this file.
