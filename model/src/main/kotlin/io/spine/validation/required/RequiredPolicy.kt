@@ -30,6 +30,7 @@ import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
 import io.spine.protobuf.unpack
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
@@ -49,7 +50,6 @@ import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.fieldId
-import io.spine.validation.protodata.compilationError
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -102,8 +102,8 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
-    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
-        compilationError(file, field.span) {
+    if (type.isPrimitive && type.primitive in SUPPORTED_PRIMITIVES) {
+        Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
                     "by the `($REQUIRED)` option."
         }

@@ -34,7 +34,6 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.InitField
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.MethodCall
 import io.spine.protodata.java.MethodDeclaration
@@ -175,7 +174,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
             StringLiteral(escapeJava(view.pattern)),
             Literal(modifiers.asFlagsMask())
         )
-        val field = InitField<Pattern>(
+        val field = FieldDeclaration<Pattern>(
             modifiers = "private static final",
             type = PatternClass,
             name = mangled("${camelFieldName}Pattern"),

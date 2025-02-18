@@ -29,6 +29,7 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.PatternOption
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
@@ -41,10 +42,9 @@ import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
-import io.spine.validation.core.just
+import io.spine.server.event.just
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
-import io.spine.validation.protodata.compilationError
 
 /**
  * Controls whether a field should be validated with the `(pattern)` option.
@@ -82,7 +82,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (!(type.isSingularString || type.isRepeatedString)) {
-        compilationError(file, field.span) {
+        Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
                     "by the `($PATTERN)` option."
         }
