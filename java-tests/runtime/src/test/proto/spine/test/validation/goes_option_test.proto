@@ -54,10 +54,9 @@ message PaymentId {
     string uuid = 1;
 }
 
-
-message WithFieldNotFound {
-
-    string id = 1;
-
-    bytes avatar = 2 [(goes).with = "user_id"];
-}
+//message WithFieldNotFound {
+//
+//    string id = 1;
+//
+//    bytes avatar = 2 [(goes).with = "user_id"];
+//}
