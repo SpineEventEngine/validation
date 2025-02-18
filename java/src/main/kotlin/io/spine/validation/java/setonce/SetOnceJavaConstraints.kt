@@ -46,6 +46,7 @@ import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.methodWithSignature
+import io.spine.validation.java.stringValueOf
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -216,7 +217,8 @@ internal sealed class SetOnceJavaConstraints<T>(
     /**
      * Converts the given [fieldValue] to string for a diagnostics message.
      */
-    protected abstract fun asString(fieldValue: Expression<T>): Expression<String>
+    protected open fun asString(fieldValue: Expression<T>): Expression<String> =
+        field.type.stringValueOf(fieldValue)
 
     /**
      * Prepares the given [fieldValue] to be used as a payload for [SetOnceConstraintViolation].

@@ -91,7 +91,6 @@ internal class GoesFieldGenerator(
 
     private val field = view.subject
     private val fieldType = field.type
-    private val fieldAccess = This<Message>().field(field)
     private val declaringType = field.declaringType
 
     fun generate(
@@ -159,7 +158,7 @@ internal class GoesFieldGenerator(
             .call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
-            FIELD_VALUE to StringLiteral(fieldValue.toCode()), // Wrong.
+            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
             FIELD_TYPE to StringLiteral(fieldType.name),
             PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
             GOES_COMPANION to StringLiteral(view.companion.name.value)
