@@ -140,7 +140,7 @@ internal class GoesFieldGenerator(
         val qualifiedName = field.qualifiedName
         val placeholders = supportedPlaceholders(fieldPath, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
+        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue = null)
     }
 
     /**
