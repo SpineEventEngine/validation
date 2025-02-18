@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-java:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -307,14 +307,6 @@
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -592,11 +584,6 @@
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
-
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
@@ -848,12 +835,12 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:27 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-java-bundle:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 24.0.1.
@@ -970,14 +957,6 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
 1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
-
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
@@ -1207,11 +1186,6 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
 1.  **Group** : org.apiguardian. **Name** : apiguardian-api. **Version** : 1.1.2.
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
 
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
@@ -1448,12 +1422,12 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:27 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -2110,12 +2084,12 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:28 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-java-tests:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -2508,11 +2482,15 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
      * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.squareup. **Name** : kotlinpoet. **Version** : 1.14.2.
+1.  **Group** : com.squareup. **Name** : kotlinpoet. **Version** : 1.17.0.
      * **Project URL:** [https://github.com/square/kotlinpoet](https://github.com/square/kotlinpoet)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : dev.zacsweers.autoservice. **Name** : auto-service-ksp. **Version** : 1.1.0.
+1.  **Group** : com.squareup. **Name** : kotlinpoet-jvm. **Version** : 1.17.0.
+     * **Project URL:** [https://github.com/square/kotlinpoet](https://github.com/square/kotlinpoet)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : dev.zacsweers.autoservice. **Name** : auto-service-ksp. **Version** : 1.2.0.
      * **Project URL:** [https://github.com/ZacSweers/auto-service-ksp](https://github.com/ZacSweers/auto-service-ksp)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3031,12 +3009,12 @@ This report was generated on **Mon Feb 10 12:59:36 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:28 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-model:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -3895,12 +3873,12 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:28 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-proto:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -4207,14 +4185,6 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -4501,11 +4471,6 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
-
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
@@ -4785,12 +4750,12 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:29 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-consumer:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -5657,12 +5622,12 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:29 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-consumer-dependency:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-consumer-dependency:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -5847,14 +5812,6 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
 1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
-
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
@@ -6142,11 +6099,6 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
-
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
@@ -6410,12 +6362,12 @@ This report was generated on **Mon Feb 10 12:59:37 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:29 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-extensions:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -6734,14 +6686,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6801,11 +6745,15 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.squareup. **Name** : kotlinpoet. **Version** : 1.14.2.
+1.  **Group** : com.squareup. **Name** : kotlinpoet. **Version** : 1.17.0.
      * **Project URL:** [https://github.com/square/kotlinpoet](https://github.com/square/kotlinpoet)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : dev.zacsweers.autoservice. **Name** : auto-service-ksp. **Version** : 1.1.0.
+1.  **Group** : com.squareup. **Name** : kotlinpoet-jvm. **Version** : 1.17.0.
+     * **Project URL:** [https://github.com/square/kotlinpoet](https://github.com/square/kotlinpoet)
+     * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : dev.zacsweers.autoservice. **Name** : auto-service-ksp. **Version** : 1.2.0.
      * **Project URL:** [https://github.com/ZacSweers/auto-service-ksp](https://github.com/ZacSweers/auto-service-ksp)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -7035,11 +6983,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 1.  **Group** : org.apiguardian. **Name** : apiguardian-api. **Version** : 1.1.2.
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
 
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
@@ -7308,12 +7251,12 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:30 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-runtime:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-runtime:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8064,12 +8007,12 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:30 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-validating:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-validating:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8824,12 +8767,12 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:30 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-vanilla:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -9575,12 +9518,12 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:30 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-configuration:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -9887,14 +9830,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -10181,11 +10116,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
-
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
@@ -10449,12 +10379,12 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:30 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.192`
+# Dependencies of `io.spine.validation:spine-validation-context:2.0.0-SNAPSHOT.193`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.15.3.
@@ -10761,14 +10691,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
      * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
-1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.flogger. **Name** : flogger-system-backend. **Version** : 0.7.4.
-     * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
-     * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.1.
      * **Project URL:** [https://github.com/google/guava/](https://github.com/google/guava/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -11055,11 +10977,6 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
      * **Project URL:** [https://github.com/apiguardian-team/apiguardian](https://github.com/apiguardian-team/apiguardian)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.checkerframework. **Name** : checker-compat-qual. **Version** : 2.5.3.
-     * **Project URL:** [https://checkerframework.org](https://checkerframework.org)
-     * **License:** [GNU General Public License, version 2 (GPL2), with the classpath exception](http://www.gnu.org/software/classpath/license.html)
-     * **License:** [The MIT License](http://opensource.org/licenses/MIT)
-
 1.  **Group** : org.checkerframework. **Name** : checker-qual. **Version** : 3.40.0.
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](http://opensource.org/licenses/MIT)
@@ -11323,4 +11240,4 @@ This report was generated on **Mon Feb 10 12:59:38 CET 2025** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Feb 10 12:59:39 CET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Tue Feb 18 19:01:31 WET 2025** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
