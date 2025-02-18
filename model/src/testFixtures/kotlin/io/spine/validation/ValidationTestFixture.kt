@@ -85,15 +85,16 @@ class ValidationTestFixture(
         return if (descriptor is FileDescriptor) {
             /* The descriptor tested by the predicate */ d ->
             if (d is FileDescriptor) {
-                d.fullName == descriptor.fullName
+                descriptor.fullName == d.fullName
             } else {
-                d.file.fullName == descriptor.file.fullName
+                descriptor.fullName == d.file.fullName
             }
-        } else { /* The descriptor tested by the predicate */ d ->
+        } else { /* `descriptor` of interest is a message, an enum, or a service. */
+            /* The descriptor tested by the predicate */ d ->
             if (d is FileDescriptor) {
-                d.fullName == descriptor.file.fullName
+                descriptor.file.fullName == d.fullName
             } else {
-                d.fullName == descriptor.fullName
+                descriptor.fullName == d.fullName
             }
         }
     }
