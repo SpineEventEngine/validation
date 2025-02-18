@@ -35,10 +35,8 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.ast.toPath
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -102,11 +100,10 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
-        compilationError(file, field.span) {
+        Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
                     "by the `($REQUIRED)` option."
         }
@@ -116,13 +113,6 @@ private fun checkFieldType(field: Field, file: File) {
 private val SUPPORTED_PRIMITIVES = listOf(
     TYPE_STRING, TYPE_BYTES
 )
-
-private fun compilationError(file: File, span: Span, message: () -> String): Nothing =
-    Compilation.error(
-        file.toPath().toFile(),
-        span.startLine, span.startColumn,
-        message()
-    )
 
 private fun determineErrorMessage(field: Field): String {
     val companion = field.optionList.find { it.name == IF_MISSING }
