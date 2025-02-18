@@ -26,21 +26,28 @@
 
 package io.spine.validation
 
-import com.google.protobuf.kotlin.unpack
-import io.spine.base.FieldPath
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.GoesOption
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.field
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.toPath
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.type.resolve
-import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.just
+import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.required.RequiredRule
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
+import io.spine.validation.event.GoesFieldDiscovered
+import io.spine.validation.event.goesFieldDiscovered
 
 /**
  * A policy to add a validation rule to a type whenever the `(goes)` field option
@@ -59,66 +66,82 @@ import io.spine.validation.required.RequiredRule
  */
 internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
-    private companion object {
-        const val NO_ERROR_MESSAGE = ""
-    }
-
+    // TODO:2025-02-18:yevhenii.nadtochii: Make non-nullable in ProtoData.
     override val typeSystem by lazy { super.typeSystem!! }
 
     @React
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = GOES)
         event: FieldOptionDiscovered
-    ): Just<RuleAdded> {
-        val target = event.subject
-        val option = event.option.value.unpack<GoesOption>()
-        val declaringMessage = typeSystem.findMessage(target.declaringType)!!.first
-        val companionName = FieldPath(option.with)
-        val companion = typeSystem.resolve(companionName, declaringMessage)
-        checkDistinct(target, companion)
-        val rule = compositeRule {
-            left = targetFieldShouldBeUnset(target)
-            operator = LogicalOperator.OR
-            right = companionFieldShouldBeSet(companion)
-            errorMessage = option.errorMessage()
-            field = target.name
-        }.wrap()
-        return just(rule.toEvent(target.declaringType))
+    ): EitherOf2<GoesFieldDiscovered, NoReaction> {
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, file)
+
+        // TODO:2025-02-18:yevhenii.nadtochii: Use a shortcut for `defaultMessage`.
+        val option = event.option.unpack<GoesOption>()
+        val declaringType = field.declaringType
+        val declaringMessage = typeSystem.findMessage(declaringType)!!.first
+        val companionName = option.with
+        checkFieldExists(declaringMessage, companionName, field, file)
+
+        val companionField = declaringMessage.field(companionName)
+        checkDistinct(field, companionField, file)
+
+        val message = option.errorMsg.ifEmpty { DefaultErrorMessage.from(option.descriptorForType) }
+        return goesFieldDiscovered {
+            id = field.id()
+            errorMessage = message
+            companion = companionField
+            subject = field
+        }.asA()
     }
-
-    /**
-     * Checks that the given [target] and [companion] fields are distinct.
-     *
-     * Please note, this method does not use `==` comparison between two objects
-     * because the field returned from [FieldOptionDiscovered] event has an empty
-     * [options list][Field.getOptionList].
-     */
-    private fun checkDistinct(target: Field, companion: Field) =
-        check(target.qualifiedName != companion.qualifiedName) {
-            "The `($GOES)` option can not use the target field as its own companion. " +
-                    "Self-referencing is prohibited. Please specify another field. " +
-                    "The invalid field: `${target.qualifiedName}`."
-        }
-
-    /**
-     * Creates a simple rule that makes sure the given [target] field is NOT set.
-     */
-    private fun targetFieldShouldBeUnset(target: Field) =
-        RequiredRule.forField(target, NO_ERROR_MESSAGE)!!
-            .simple.toBuilder()
-            .setOperator(ComparisonOperator.EQUAL)
-            .build().wrap()
-
-    /**
-     * Creates a simple rule that makes sure the given [companion] field is SET.
-     */
-    private fun companionFieldShouldBeSet(companion: Field) =
-        RequiredRule.forField(companion, NO_ERROR_MESSAGE)!!
-
-    /**
-     * Returns an error message for the outer composite rule.
-     */
-    private fun GoesOption.errorMessage() = errorMsg.ifEmpty { DEFAULT_MESSAGE }
 }
 
-private val DEFAULT_MESSAGE = DefaultErrorMessage.from(GoesOption.getDescriptor())
+public fun Field.id(): FieldId = fieldId {
+    type = declaringType
+    name = this@id.name
+}
+
+private fun checkFieldType(field: Field, file: File) {
+    val type = field.type
+    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
+        compilationError(file, field.span) {
+            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
+                    "by the `($GOES)` option."
+        }
+    }
+}
+
+private fun checkFieldExists(message: MessageType, companion: String, field: Field, file: File) {
+    if (message.fieldList.find { it.name.value == companion } == null) {
+        compilationError(file, field.span) {
+            "The message `${message.name.qualifiedName}` does not have `$companion` field " +
+                    "declared as companion of `${field.name.value}` by the `($GOES)` option."
+        }
+    }
+}
+
+/**
+ * Checks that the given [field] and its [companion] are distinct fields.
+ */
+private fun checkDistinct(field: Field, companion: Field, file: File) {
+    if (field == companion) {
+        compilationError(file, field.span) {
+            "The `($GOES)` option can not use the marked field as its own companion. " +
+                    "Self-referencing is prohibited. Please specify another field. " +
+                    "The invalid field: `${field.qualifiedName}`."
+        }
+    }
+}
+
+private val SUPPORTED_PRIMITIVES = listOf(
+    TYPE_STRING, TYPE_BYTES
+)
+
+private fun compilationError(file: File, span: Span, message: () -> String): Nothing =
+    Compilation.error(
+        file.toPath().toFile(),
+        span.startLine, span.startColumn,
+        message()
+    )

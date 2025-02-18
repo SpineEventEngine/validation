@@ -45,7 +45,8 @@ import io.spine.validation.required.RequiredPolicy
 public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList()) : Plugin(
     renderers = renderers,
     views = setOf(
-        RequiredFieldView::class.java
+        RequiredFieldView::class.java,
+        GoesFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompiledMessageRepository(),
