@@ -26,6 +26,7 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Descriptors.FileDescriptor
 import com.google.protobuf.Descriptors.GenericDescriptor
 import io.spine.option.OptionsProto
 import io.spine.protodata.ast.filePattern
@@ -71,9 +72,31 @@ class ValidationTestFixture(
         }
     }
 
-
-    private fun acceptingOnly(descriptor: GenericDescriptor): DescriptorFilter =
-        { it.fullName == descriptor.fullName }
+    /**
+     * Creates the predicate accepting only the given [descriptor] of
+     * a Protobuf declaration and the descriptor of the file in
+     * which declaration was made, so that [Pipeline] can get down to
+     * the descriptor of interest.
+     *
+     * If the given [descriptor] is [FileDescriptor] the predicate accepts
+     * the file itself, all the declarations made in this file.
+     */
+    private fun acceptingOnly(descriptor: GenericDescriptor): DescriptorFilter {
+        return if (descriptor is FileDescriptor) {
+            /* The descriptor tested by the predicate */ d ->
+            if (d is FileDescriptor) {
+                d.fullName == descriptor.fullName
+            } else {
+                d.file.fullName == descriptor.file.fullName
+            }
+        } else { /* The descriptor tested by the predicate */ d ->
+            if (d is FileDescriptor) {
+                d.fullName == descriptor.file.fullName
+            } else {
+                d.fullName == descriptor.fullName
+            }
+        }
+    }
 
     /**
      * Writes default settings as created by McJava.
