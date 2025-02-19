@@ -28,11 +28,15 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.file.hasJavaRoot
+import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.java.render.findClass
+import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
-import io.spine.validation.CompilationMessage
+import io.spine.tools.code.Java
 
 /**
  * The main Java renderer of the validation library.
@@ -43,6 +47,14 @@ import io.spine.validation.CompilationMessage
 public class JavaValidationRenderer : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
+    private val codeInjector = ValidationCodeInjector()
+    private val generators by lazy {
+        listOf(
+            RuleGenerator(querying = this, typeSystem),
+            RequiredGenerator(querying = this, valueConverter),
+            PatternGenerator(querying = this)
+        )
+    }
 
     override fun render(sources: SourceFileSet) {
         // We receive `grpc` and `kotlin` output sources roots here as well.
@@ -51,18 +63,32 @@ public class JavaValidationRenderer : JavaRenderer() {
             return
         }
 
-        val generators = listOf(
-            RequiredOptionGenerator(querying = this, valueConverter),
-            GoesGenerator(querying = this, valueConverter),
-        )
-
-        select(CompilationMessage::class.java).all()
-            .associateWith { sources.javaFileOf(it.type) }
-            .forEach { (message, file) ->
-                val messageCode = MessageValidationCode(message, typeSystem, generators)
-                val psiFile = file.psi() as PsiJavaFile
-                messageCode.render(psiFile)
-                file.overwrite(psiFile.text)
+        findMessageTypes()
+            .map { it.message }
+            .forEach { message ->
+                val code = generateCode(message.name)
+                val file = sources.javaFileOf(message)
+                file.render(code)
             }
+    }
+
+    private fun generateCode(message: TypeName): MessageValidationCode {
+        val fieldOptions = generators.flatMap { it.codeFor(message) }
+        val messageCode = with(fieldOptions) {
+            MessageValidationCode(
+                message = message.javaClassName(typeSystem),
+                constraints = map { it.constraint },
+                fields = flatMap { it.fields },
+                methods = flatMap { it.methods }
+            )
+        }
+        return messageCode
+    }
+
+    private fun SourceFile<Java>.render(code: MessageValidationCode) {
+        val psiFile = psi() as PsiJavaFile
+        val messageClass = psiFile.findClass(code.message)
+        codeInjector.inject(code, messageClass)
+        overwrite(psiFile.text)
     }
 }

@@ -46,6 +46,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
     renderers = renderers,
     views = setOf(
         RequiredFieldView::class.java,
+        PatternFieldView::class.java,
         GoesFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(

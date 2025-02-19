@@ -29,17 +29,29 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.PatternOption
-import io.spine.protobuf.unpack
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
-import io.spine.validate.Diags.Regex.errorMessage
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.server.event.just
+import io.spine.validation.event.PatternFieldDiscovered
+import io.spine.validation.event.patternFieldDiscovered
 
 /**
- * A policy to add a validation rule to a type whenever the `(pattern)` field option
- * is discovered.
+ * Controls whether a field should be validated with the `(pattern)` option.
+ *
+ * Whenever a filed marked with the `(pattern)` option is discovered
+ * emits [PatternFieldDiscovered]. The policy reports a compilation
+ * error if the option does not support the field type.
  */
 internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -47,23 +59,49 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = PATTERN)
         event: FieldOptionDiscovered
-    ): Just<SimpleRuleAdded> {
-        val patternOption = event.option.value.unpack<PatternOption>()
-        val regex = patternOption.regex
-        val feature = regex {
-            pattern = regex
-            modifier = patternOption.modifier
-        }
-        val customError = patternOption.errorMsg
-        val error = customError.ifEmpty { errorMessage(regex) }
+    ): Just<PatternFieldDiscovered> {
         val field = event.subject
-        val rule = SimpleRule(
-            field.name,
-            feature,
-            "String should match regex.",
-            error,
-            true
-        )
-        return simpleRuleAdded(field.declaringType, rule)
+        val file = event.file
+        checkFieldType(field, file)
+
+        val option = event.option.unpack<PatternOption>()
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        return patternFieldDiscovered {
+            id = fieldId {
+                type = field.declaringType
+                name = field.name
+            }
+            errorMessage = message
+            pattern = option.regex
+            modifier = option.modifier
+            subject = field
+        }.just()
     }
 }
+
+private fun checkFieldType(field: Field, file: File) {
+    val type = field.type
+    if (!(type.isSingularString || type.isRepeatedString)) {
+        Compilation.error(file, field.span) {
+            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
+                    "by the `($PATTERN)` option. Supported field types: strings and repeated " +
+                    "of strings."
+        }
+    }
+}
+
+/**
+ * Tells if this [FieldType] represents a `repeated string` field.
+ *
+ * The property is `public` because the option generator also uses it.
+ */
+public val FieldType.isRepeatedString: Boolean
+    get() = isList && list.primitive == TYPE_STRING
+
+/**
+ * Tells if this [FieldType] represents a `string` field.
+ *
+ * The property is `public` because the option generator also uses it.
+ */
+public val FieldType.isSingularString: Boolean
+    get() = isSingular && primitive == TYPE_STRING

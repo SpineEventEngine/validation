@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,75 +26,27 @@
 
 package io.spine.validation.java
 
-import com.squareup.javapoet.FieldSpec
-import io.spine.option.PatternOption
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
-import io.spine.protodata.java.MethodCall
-import io.spine.protodata.java.ReadVar
-import io.spine.validation.Regex
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import javax.lang.model.element.Modifier
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.PatternField
 
 /**
- * Generates code for the [Regex] operator.
+ * The generator for `(pattern)` option.
  */
-internal class PatternGenerator(
-    private val feature: Regex,
-    ctx: GenerationContext
-) : SimpleRuleGenerator(ctx) {
+internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
-    private val fieldName = ctx.simpleRuleField.name
-    private val patternConstant = ReadVar<Pattern>("${fieldName.value}_PATTERN")
-
-    override fun condition(): Expression<Boolean> {
-        val matcher = MethodCall<Matcher>(patternConstant, "matcher", ctx.fieldOrElement!!)
-        val matchingMethod = if (feature.modifier.partialMatch) {
-            "find"
-        } else {
-            "matches"
-        }
-        return matcher.chain(matchingMethod)
+    /**
+     * All pattern fields in the current compilation process.
+     */
+    private val allPatternFields by lazy {
+        querying.select<PatternField>()
+            .all()
     }
 
-    override fun supportingFields(): List<FieldSpec> {
-        val compileModifiers = feature.hasModifier() && feature.modifier.containsFlags()
-        val field = FieldSpec.builder(
-            Pattern::class.java,
-            "$patternConstant",
-            Modifier.PRIVATE,
-            Modifier.STATIC,
-            Modifier.FINAL
-        )
-        if (compileModifiers) {
-            field.initializer(
-                "\$T.compile(\$S, \$L)",
-                Pattern::class.java,
-                feature.pattern,
-                feature.modifier.flagsMask()
-            )
-        } else {
-            field.initializer("\$T.compile(\$S)", Pattern::class.java, feature.pattern)
-        }
-        return super.supportingFields() + field.build()
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
+        val patternFields = allPatternFields.filter { it.id.type == type }
+        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
+        return generatedFields
     }
-}
-
-/**
- * Checks if this pattern modifier contains flags matching to those in `java.util.regex.Pattern`.
- */
-private fun PatternOption.Modifier.containsFlags() =
-    dotAll || caseInsensitive || multiline || unicode
-
-/**
- * Converts this modifier into a bitwise mask built from `java.util.regex.Pattern` constants.
- */
-private fun PatternOption.Modifier.flagsMask(): Expression<Int> {
-    var mask = 0
-    if (dotAll) mask = mask or Pattern.DOTALL
-    if (caseInsensitive) mask = mask or Pattern.CASE_INSENSITIVE
-    if (multiline) mask = mask or Pattern.MULTILINE
-    if (unicode) mask = mask or Pattern.UNICODE_CASE
-    return Literal(mask)
 }

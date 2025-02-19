@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+package io.spine.validation.java
+
+import io.spine.protodata.backend.SecureRandomString
 
 /**
- * Dependencies on ProtoTap plugins.
+ * Returns a Java identifier with an appended hash in the format `<javaIdentifier>_<hash>`.
  *
- * See [`SpineEventEngine/ProtoTap`](https://github.com/SpineEventEngine/ProtoTap/).
+ * The random hash is filtered to include only valid Java identifier chars.
+ * Appending this hash ensures that the generated field or method name does
+ * not conflict with existing declarations in the target class.
  */
-@Suppress(
-    "unused" /* Some subprojects do not use ProtoData directly. */,
-    "ConstPropertyName" /* We use custom convention for artifact properties. */,
-    "MemberVisibilityCanBePrivate" /* The properties are used directly by other subprojects. */,
-)
-object ProtoTap {
-    const val group = "io.spine.tools"
-    const val version = "0.9.1"
-    const val gradlePluginId = "io.spine.prototap"
-    const val api = "$group:prototap-api:$version"
-    const val gradlePlugin = "$group:prototap-gradle-plugin:$version"
-    const val protocPlugin = "$group:prototap-protoc-plugin:$version"
+internal fun mangled(javaIdentifier: String): String {
+    val hash = SecureRandomString.generate(HASH_LENGTH)
+        .filter(Char::isJavaIdentifierPart)
+    return "${javaIdentifier}_$hash"
 }
+
+private const val HASH_LENGTH = 10
