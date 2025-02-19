@@ -84,7 +84,8 @@ private fun checkFieldType(field: Field, file: File) {
     if (!(type.isSingularString || type.isRepeatedString)) {
         Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                    "by the `($PATTERN)` option."
+                    "by the `($PATTERN)` option. Supported field types: strings and repeated " +
+                    "of strings."
         }
     }
 }
