@@ -32,7 +32,6 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -149,7 +148,7 @@ internal class GoesFieldGenerator(
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathClass.call<String>("getJoined", fieldPath)
+        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
             FIELD_VALUE to fieldType.stringValueOf(fieldValue),
