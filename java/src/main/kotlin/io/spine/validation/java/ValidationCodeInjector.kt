@@ -55,12 +55,12 @@ import io.spine.validate.ValidatingBuilder
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
- * A [PsiClass] representing an instance of [Message].
+ * A [PsiClass] holding an instance of [Message].
  */
 private typealias MessagePsiClass = PsiClass
 
 /**
- * A [PsiClass] representing an instance of [Message.Builder].
+ * A [PsiClass] holding an instance of [Message.Builder].
  */
 private typealias BuilderPsiClass = PsiClass
 
