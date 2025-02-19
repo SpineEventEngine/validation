@@ -102,7 +102,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) {
     val type = field.type
-    if (type.isPrimitive && type.primitive in SUPPORTED_PRIMITIVES) {
+    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
         Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
                     "by the `($REQUIRED)` option."
