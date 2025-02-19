@@ -53,6 +53,8 @@ import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
  * The generator for `(goes)` option.
@@ -72,15 +74,10 @@ internal class GoesGenerator(
 
     override fun codeFor(
         type: TypeName,
-        parent: Expression<FieldPath>,
-        violations: Expression<MutableList<ConstraintViolation>>
-    ): OptionCode {
+    ): List<FieldOptionCode> {
         val goesFields = allGoesFields.filter { it.id.type == type }
-        val constraints = goesFields.map {
-            GoesFieldGenerator(it, converter)
-                .generate(parent, violations)
-        }
-        return OptionCode(constraints)
+        val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
+        return constraints
     }
 }
 
@@ -93,10 +90,7 @@ internal class GoesFieldGenerator(
     private val fieldType = field.type
     private val declaringType = field.declaringType
 
-    fun generate(
-        parent: Expression<FieldPath>,
-        violations: Expression<List<ConstraintViolation>>
-    ): CodeBlock {
+    fun generate(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion
         val getter = This<Message>()
@@ -105,15 +99,16 @@ internal class GoesFieldGenerator(
         val companionGetter = This<Message>()
             .field(companion)
             .getter<Any>()
-        return CodeBlock(
+        val constraint = CodeBlock(
             """
             if (!$getter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
-                var fieldPath = ${fieldPath(field.name.value, parent)};
+                var fieldPath = ${fieldPath(field.name.value, parentPath)};
                 var violation = ${violation(ReadVar("fieldPath"), getter)};
                 $violations.add(violation);
             }
             """.trimIndent()
         )
+        return FieldOptionCode(constraint)
     }
 
     /**
@@ -154,8 +149,7 @@ internal class GoesFieldGenerator(
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = ClassName("io.spine.base", "FieldPaths")
-            .call<String>("getJoined", fieldPath)
+        val pathAsString = FieldPathClass.call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
             FIELD_VALUE to fieldType.stringValueOf(fieldValue),
