@@ -105,7 +105,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     }
 
     /**
-     * Return a [CodeBlock] that checks if the [fieldValue] matches the [pattern].
+     * Returns a [CodeBlock] that checks if the [fieldValue] matches the [pattern].
      */
     private fun singularStringConstraint(fieldValue: Expression<String>) = CodeBlock(
         """
@@ -119,7 +119,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
 
     /**
      * Returns a [CodeBlock] that invokes [validateRepeated] method to check
-     * if each value from [fieldValues] list matches the [pattern].
+     * if each value from the [fieldValues] list matches the [pattern].
      */
     private fun repeatedStringConstraint(
         fieldValues: Expression<List<String>>,
@@ -134,11 +134,11 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     )
 
     /**
-     * Returns a [MethodDeclaration] that goes through each element of [fieldValues] list
-     * making sure it matches the [pattern].
+     * Returns a [MethodDeclaration] of the method that goes through each element of
+     * the [fieldValues] list making sure it matches the [pattern].
      *
-     * The created method returns a list of [ConstraintViolation], containing one violation
-     * per each invalid field value.
+     * The created method returns a list of [ConstraintViolation]s, containing one
+     * violation per each invalid field value.
      */
     private fun validateRepeated(
         fieldValues: Expression<List<String>>,
@@ -183,6 +183,10 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         return CompiledPattern(field, modifiers.partialMatch)
     }
 
+    /**
+     * Yields a boolean expression that checks the given string [value]
+     * matches this [CompiledPattern].
+     */
     private fun CompiledPattern.matches(value: Expression<String>): Expression<Boolean> {
         val matcher = MethodCall<Matcher>(field.read(), "matcher", value)
         val operation = if (partialMatch) "find" else "matches"
