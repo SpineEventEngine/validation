@@ -31,7 +31,6 @@ import io.spine.protobuf.unpackGuessingType
 import io.spine.validation.DistinctCollection
 import io.spine.validation.InTime
 import io.spine.validation.RecursiveValidation
-import io.spine.validation.Regex
 import io.spine.validation.RequiredOneof
 import io.spine.validation.isMessageWide
 import io.spine.validation.isSimple
@@ -43,7 +42,6 @@ internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
     when (val feature = ctx.feature()) {
         is DistinctCollection -> DistinctGenerator(ctx)
         is RecursiveValidation -> ValidateGenerator(ctx)
-        is Regex -> PatternGenerator(feature, ctx)
         is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
         is InTime -> inTimeGenerator(feature, ctx)
         else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)

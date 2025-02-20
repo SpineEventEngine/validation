@@ -42,11 +42,11 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.DefaultErrorMessage
 import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.boolValue
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.fieldId
@@ -105,7 +105,8 @@ private fun checkFieldType(field: Field, file: File) {
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
         Compilation.error(file, field.span) {
             "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                    "by the `($REQUIRED)` option."
+                    "by the `($REQUIRED)` option. Supported field types: messages, enums, " +
+                    "strings, bytes, repeated, and maps."
         }
     }
 }
@@ -117,7 +118,7 @@ private val SUPPORTED_PRIMITIVES = listOf(
 private fun determineErrorMessage(field: Field): String {
     val companion = field.optionList.find { it.name == IF_MISSING }
     return if (companion == null) {
-        DefaultErrorMessage.from(IfMissingOption.getDescriptor())
+        IfMissingOption.getDescriptor().defaultMessage
     } else {
         companion.value.unpack<IfMissingOption>()
             .errorMsg

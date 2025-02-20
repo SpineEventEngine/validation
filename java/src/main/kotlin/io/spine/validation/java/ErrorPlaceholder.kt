@@ -33,13 +33,13 @@ package io.spine.validation.java
  * Each validation option declares the supported placeholders. Take a look at
  * `options.proto` for examples.
  *
- * Important Note: we have the same [enum][io.spine.validate.RuntimeErrorPlaceholder] in the runtime
- * library, which is exactly as this one. Please keep them in sync. This duplication
- * is done intentionally to prevent clash between the runtime library, which is added
- * to the classpath of ProtoData and the runtime library, which is part of ProtoData itself
- * because it is a part of Spine. As we complete our migration of validation to codegen,
- * the runtime library will either be significantly simplified, or even its content may
- * be moved to `base`. Then, the duplicate enum should be removed.
+ * Important Note: we have the same [enum][io.spine.validate.RuntimeErrorPlaceholder]
+ * in the runtime library, which is exactly as this one. Please keep them in sync.
+ * This duplication is done intentionally to prevent clash between the runtime library,
+ * which is added to the classpath of ProtoData and the runtime library, which is part
+ * of ProtoData itself because it is a part of Spine. As we complete our migration
+ * of validation to codegen, the runtime library will either be significantly simplified,
+ * or even its content may be moved to `base`. Then, the duplicate enum should be removed.
  *
  * @see io.spine.validate.TemplateString
  * @see io.spine.validate.RuntimeErrorPlaceholder
@@ -54,6 +54,7 @@ public enum class ErrorPlaceholder(public val value: String) {
 
     // Option-specific placeholders.
     REGEX_PATTERN("regex.pattern"),
+    REGEX_MODIFIERS("regex.modifiers"),
     GOES_COMPANION("goes.companion"),
     FIELD_PROPOSED_VALUE("field.proposed_value");
 

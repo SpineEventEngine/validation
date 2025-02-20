@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,25 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation
 
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.MemberDeclaration
+import io.spine.core.Subscribe
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.PatternFieldDiscovered
 
 /**
- * Java code handling all applications of a specific option within a message.
+ * A view of a field that is marked with `(pattern)` option.
  */
-internal class OptionCode(
+internal class PatternFieldView : View<FieldId, PatternField, PatternField.Builder>() {
 
-    /**
-     * Code blocks to be added to the `validate()` method of the message.
-     */
-    val constraints: List<CodeBlock>,
-
-    /**
-     * Additional class-level members required by the validation logic.
-     *
-     * Some constraints may require defining extra fields or methods.
-     */
-    val members: List<MemberDeclaration> = emptyList()
-)
+    @Subscribe
+    fun on(e: PatternFieldDiscovered) = alter {
+        id = e.id
+        errorMessage = e.errorMessage
+        pattern = e.pattern
+        modifier = e.modifier
+        subject = e.subject
+    }
+}

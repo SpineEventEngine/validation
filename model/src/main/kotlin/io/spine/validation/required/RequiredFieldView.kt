@@ -34,7 +34,7 @@ import io.spine.validation.RequiredField
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
- * A view of a field that is marked with `(required)` option.
+ * A view of a field that is marked with `(required) = true` option.
  */
 internal class RequiredFieldView : View<FieldId, RequiredField, RequiredField.Builder>() {
 

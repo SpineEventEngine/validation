@@ -28,8 +28,12 @@
 
 package io.spine.validation.java
 
+import com.google.common.collect.ImmutableList
+import io.spine.base.FieldPath
 import io.spine.protodata.java.ClassName
+import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
+import java.util.regex.Pattern
 
 /**
  * The [ClassName] of [String].
@@ -40,3 +44,32 @@ internal val StringClass = ClassName(String::class)
  * The [ClassName] of [TemplateString].
  */
 internal val TemplateStringClass = ClassName(TemplateString::class)
+
+/**
+ * The [ClassName] of [Pattern].
+ */
+internal val PatternClass = ClassName(Pattern::class)
+
+/**
+ * The [ClassName] of [ImmutableList].
+ */
+internal val ImmutableListClass = ClassName(ImmutableList::class)
+
+/**
+ * The [ClassName] of [FieldPath].
+ */
+internal val FieldPathClass = ClassName(FieldPath::class)
+
+/**
+ * The [ClassName] of [ConstraintViolation].
+ */
+internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
+
+/**
+ * The [ClassName] of `io.spine.base.FieldPaths`.
+ *
+ * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
+ * declared for [FieldPath]. It is available from Java, but not from Kotlin.
+ * So, we specify it as a string literal here.
+ */
+internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")

@@ -29,7 +29,6 @@ package io.spine.validate.option
 import com.google.protobuf.StringValue
 import io.spine.test.validate.AllThePatterns
 import io.spine.test.validate.PatternStringFieldValue
-import io.spine.validate.Diags.Regex.errorMessage
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
@@ -59,11 +58,12 @@ internal class PatternSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `provide one valid violation if string does not match the regex pattern`() {
-        val msg = patternStringFor("invalid email")
-
-        val expectedErrMsg = errorMessage(regex).replace("\\\\", "\\")
-
-        assertSingleViolation(msg, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
+        val fieldValue = "invalidEmail"
+        val protoMessage = patternStringFor(fieldValue)
+        val expectedErrMsg = "The `spine.test.validation.PatternStringFieldValue.email` field " +
+                "must match the regular expression `$regex` (modifiers: ``). " +
+                "The passed value: `$fieldValue`."
+        assertSingleViolation(protoMessage, expectedErrMsg, MessageValidatorTestEnv.EMAIL)
     }
 
     @Test

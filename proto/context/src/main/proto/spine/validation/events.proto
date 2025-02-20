@@ -57,7 +57,6 @@ message CompositeRuleAdded {
     CompositeRule rule = 2;
 }
 
-
 // The event emitted whenever a message-wide validation rule is attached to a type.
 message MessageWideRuleAdded {
 
@@ -77,4 +76,23 @@ message RequiredFieldDiscovered {
 
     // The field in which the option was discovered.
     protodata.Field subject = 3;
+}
+
+// The event emitted whenever a field with `(pattern)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message PatternFieldDiscovered {
+
+    spine.validation.FieldId id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The regular expression to match.
+    string pattern = 3;
+
+    // Regular expression modifiers.
+    PatternOption.Modifier modifier = 4;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 5;
 }

@@ -47,6 +47,7 @@ public enum class RuntimeErrorPlaceholder(public val value: String) {
 
     // Option-specific placeholders.
     REGEX_PATTERN("regex.pattern"),
+    REGEX_MODIFIERS("regex.modifiers"),
     GOES_COMPANION("goes.companion"),
     FIELD_PROPOSED_VALUE("field.proposed_value");
 

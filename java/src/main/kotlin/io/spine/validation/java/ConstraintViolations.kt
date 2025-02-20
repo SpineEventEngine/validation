@@ -57,7 +57,7 @@ public fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     declaringType: TypeName,
     fieldPath: Expression<FieldPath>,
-    fieldValue: Expression<*>? = null
+    fieldValue: Expression<*>?
 ): Expression<ConstraintViolation> {
     var builder = ClassName(ConstraintViolation::class).newBuilder()
         .chainSet("message", errorMessage)

@@ -44,3 +44,12 @@ internal object DefaultErrorMessage {
     fun from(optionDescriptor: Descriptor): String =
         optionDescriptor.options.getExtension(OptionsProto.defaultMessage)
 }
+
+/**
+ * Returns the default error message from the given option descriptor.
+ *
+ * The descriptor should be marked with the `(default_message)` option.
+ * If the option is absent, an empty message is returned.
+ */
+internal val Descriptor.defaultMessage: String
+    get() = DefaultErrorMessage.from(this)
