@@ -87,6 +87,7 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
         val companionField = declaringMessage.field(companionName)
         checkDistinct(field, companionField, file)
+        checkCompanionType(companionField, file)
 
         val message = option.errorMsg.ifEmpty { DefaultErrorMessage.from(option.descriptorForType) }
         return goesFieldDiscovered {
@@ -107,8 +108,18 @@ private fun checkFieldType(field: Field, file: File) {
     val type = field.type
     if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
         compilationError(file, field.span) {
-            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                    "by the `($GOES)` option."
+            "The field type `${field.type}` of the `${field.qualifiedName}` field " +
+                    "is not supported by the `($GOES)` option."
+        }
+    }
+}
+
+private fun checkCompanionType(field: Field, file: File) {
+    val type = field.type
+    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
+        compilationError(file, field.span) {
+            "The field type `${field.type}` of the companion `${field.qualifiedName}` field " +
+                    "is not supported by the `($GOES)` option."
         }
     }
 }
