@@ -26,16 +26,15 @@
 
 package io.spine.test.options.setonce
 
-import com.google.protobuf.Descriptors.EnumValueDescriptor
 import com.google.protobuf.Message.Builder
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
+import io.spine.test.options.set
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
-import io.spine.test.tools.validate.YearOfStudy
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
@@ -51,28 +50,18 @@ import org.junit.jupiter.params.provider.MethodSource
 internal class SetOnceErrorMessageITest {
 
     @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the default error message for `{0}` field")
     fun <T : Any> defaultErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
-        assertDefault(fieldName, fieldType, value1, value2)
+        StudentDefaultMessage.newBuilder()
+            .assertErrorMessage(fieldName, fieldType, value1, value2, ::defaultTemplate)
 
     @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "show the custom error message for `{0}` field")
     fun <T : Any> customErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
-        assertCustom(fieldName, fieldType, value1, value2)
-}
-
-private fun <T : Any> assertDefault(fieldName: String, fieldType: String, value1: T, value2: T) {
-    val builder = StudentDefaultMessage.newBuilder()
-    val template = { _: Int -> DEFAULT_MESSAGE }
-    return builder.assertErrorMessage(template, fieldName, fieldType, value1, value2)
-}
-
-private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1: T, value2: T) {
-    val builder = StudentCustomMessage.newBuilder()
-    val template = ::customErrorMessage
-    return builder.assertErrorMessage(template, fieldName, fieldType, value1, value2)
+        StudentCustomMessage.newBuilder()
+            .assertErrorMessage(fieldName, fieldType, value1, value2, ::customTemplate)
 }
 
 /**
@@ -84,25 +73,26 @@ private fun <T : Any> assertCustom(fieldName: String, fieldType: String, value1:
  * so we also have to take this into account during assertions because
  * in `ConstraintViolation` they still arrive as Java enum constants.
  *
+ * @param fieldName The name of the field.
+ * @param fieldType The name of the field type.
+ * @param fieldValue1 The first field value to set.
+ * @param fieldValue2 The second field value to set.
  * @param template The error message template to check.
- * @param fieldName The field to set.
- * @param value1 The first field value to set.
- * @param value2 The second field value to set for triggering the exception.
  */
 private fun <T : Any> Builder.assertErrorMessage(
-    template: (Int) -> String,
     fieldName: String,
     fieldType: String,
-    value1: T,
-    value2: T,
+    fieldValue1: T,
+    fieldValue2: T,
+    template: (Int) -> String,
 ) {
-    check(value1 != value2)
+    check(fieldValue1 != fieldValue2)
 
     val field = descriptorForType.field(fieldName)!!
     val parentType = descriptorForType.fullName
     val exception = assertThrows<ValidationException> {
-        setField(field, value1)
-        setField(field, value2)
+        set(field, fieldValue1)
+        set(field, fieldValue2)
     }
 
     val violations = exception.constraintViolations.also { it.size shouldBe 1 }
@@ -113,29 +103,22 @@ private fun <T : Any> Builder.assertErrorMessage(
         message.placeholderValueMap shouldContainExactly mapOf(
             FIELD_PATH to fieldName,
             FIELD_TYPE to fieldType,
-            FIELD_VALUE to "$value1",
-            FIELD_PROPOSED_VALUE to "$value2",
+            FIELD_VALUE to "$fieldValue1",
+            FIELD_PROPOSED_VALUE to "$fieldValue2",
             PARENT_TYPE to parentType
         ).mapKeys { it.key.toString() }
 
-        fieldPath shouldBe FieldPath(fieldName)
         typeName shouldBe parentType
-
-        // Enums are a bit special. See the method docs for details.
-        if (value2 is EnumValueDescriptor) {
-            // Any enum in `(set_once)` tests is `YearOfStudy`, so it is safe.
-            val enumConstant = YearOfStudy.forNumber(value2.number)
-            fieldValue shouldBe toAny(enumConstant)
-        } else {
-            fieldValue shouldBe toAny(value2)
-        }
+        fieldPath shouldBe FieldPath(fieldName)
+        fieldValue shouldBe toAny(fieldValue2)
     }
 }
 
-private const val DEFAULT_MESSAGE =
+@Suppress("UNUSED_PARAMETER") // The function should match the expected interface.
+private fun defaultTemplate(fieldNumber: Int) =
     "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has " +
             "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
-private fun customErrorMessage(fieldNumber: Int) =
+private fun customTemplate(fieldNumber: Int) =
     "Field_$fieldNumber: " +
             "`\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."

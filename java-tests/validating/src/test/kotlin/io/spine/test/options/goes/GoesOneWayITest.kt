@@ -27,6 +27,7 @@
 package io.spine.test.options.goes
 
 import com.google.protobuf.Message
+import io.spine.test.options.set
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -47,20 +48,19 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesOneWayITest {
 
-    @MethodSource("io.spine.test.options.goes.given.GoesOneWayTestEnv#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.GoesOneWayTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "throw if only the target `{1}` field is set")
     fun throwIfOnlyTargetFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
         val descriptor = message.protoDescriptor()
         val field = descriptor.findFieldByName(fieldName)!!
-        val protoValue = protoValue(field, fieldValue)
         assertThrows<ValidationException> {
             message.newBuilder()
-                .setField(field, protoValue)
+                .set(field, fieldValue)
                 .build()
         }
     }
 
-    @MethodSource("io.spine.test.options.goes.given.GoesOneWayTestEnv#onlyCompanionFields")
+    @MethodSource("io.spine.test.options.goes.GoesOneWayTestEnv#onlyCompanionFields")
     @ParameterizedTest(name = "pass if only the companion `{1}` field is set")
     fun passIfOnlyCompanionFieldSet(
         message: Class<out Message>,
@@ -69,16 +69,15 @@ internal class GoesOneWayITest {
     ) {
         val descriptor = message.protoDescriptor()
         val companionField = descriptor.findFieldByName(fieldName)!!
-        val companionProtoValue = protoValue(companionField, fieldValue)
         assertDoesNotThrow {
             message.newBuilder()
-                .setField(companionField, companionProtoValue)
+                .set(companionField, fieldValue)
                 .build()
         }
     }
 
     @Suppress("MaxLineLength") // So not to wrap the test name.
-    @MethodSource("io.spine.test.options.goes.given.GoesOneWayTestEnv#bothTargetAndCompanionFields")
+    @MethodSource("io.spine.test.options.goes.GoesOneWayTestEnv#bothTargetAndCompanionFields")
     @ParameterizedTest(name = "pass if both the target `{1}` and its companion `{3}` fields are set")
     fun passIfBothTargetAndCompanionFieldsSet(
         message: Class<out Message>,
@@ -89,13 +88,11 @@ internal class GoesOneWayITest {
     ) {
         val descriptor = message.protoDescriptor()
         val field = descriptor.findFieldByName(fieldName)!!
-        val protoValue = protoValue(field, fieldValue)
         val companionField = descriptor.findFieldByName(companionName)!!
-        val companionProtoValue = protoValue(companionField, companionValue)
         assertDoesNotThrow {
             message.newBuilder()
-                .setField(field, protoValue)
-                .setField(companionField, companionProtoValue)
+                .set(field, fieldValue)
+                .set(companionField, companionValue)
                 .build()
         }
     }

@@ -42,7 +42,7 @@ import io.spine.test.tools.validate.name
  * to cover ten Protobuf integer types. All 32-bit numbers are mapped to `int`
  * and all 64bit numbers are mapped to `long`.
  */
-internal object SetOnceTestEnv {
+object SetOnceTestEnv {
 
     const val STUDENT1: String = "student-1"
     const val STUDENT2: String = "student-2"

@@ -53,18 +53,13 @@ internal object SetOnceErrorMessageTestEnv {
      * of the field type under the test differs from the actual field type name.
      * For messages and enums, the actual field type name is not `message` or `enum`,
      * but names of their corresponding messages like [YearOfStudy] or [Name].
-     *
-     * Notice on enum fields: we have to pass enum values as value descriptors because,
-     * for some reason, exactly for enums, [com.google.protobuf.Message.Builder.setField]
-     * method expects a value descriptor instead of an enum constant. This method
-     * is used by tests to dynamically set values to fields by their name.
      */
     private fun messageFieldsAndTwoDistinctValues() = listOf(
         Arguments.arguments(
             Named.named("enum", "year_of_study"),
             YearOfStudy.getDescriptor().fullName, // A specific enum type name is expected.
-            SetOnceTestEnv.FIRST_YEAR.valueDescriptor,
-            SetOnceTestEnv.THIRD_YEAR.valueDescriptor
+            SetOnceTestEnv.FIRST_YEAR,
+            SetOnceTestEnv.THIRD_YEAR
         ),
         Arguments.arguments(
             Named.named("message", "name"),
