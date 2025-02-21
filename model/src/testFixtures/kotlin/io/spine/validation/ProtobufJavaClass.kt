@@ -24,19 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes
+package io.spine.validation
 
 import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Descriptors.FieldDescriptor
-import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
-import com.google.protobuf.ProtocolMessageEnum
+import kotlin.reflect.KClass
 
 /**
  * Returns a Protobuf descriptor for the given message class.
  */
-fun Class<out Message>.protoDescriptor() =
+fun Class<out Message>.getDescriptor() =
     getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
+
+/**
+ * Returns a Protobuf descriptor for the given message class.
+ */
+fun KClass<out Message>.getDescriptor() = java.getDescriptor()
 
 /**
  * Creates a new builder of the given message class.

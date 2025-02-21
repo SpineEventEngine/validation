@@ -29,6 +29,8 @@ package io.spine.test.options.goes
 import com.google.protobuf.Message
 import io.spine.test.options.set
 import io.spine.validate.ValidationException
+import io.spine.validation.getDescriptor
+import io.spine.validation.newBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -58,7 +60,7 @@ internal class GoesMutualITest {
         fieldName2: String,
         fieldValue2: Any
     ) {
-        val descriptor = message.protoDescriptor()
+        val descriptor = message.getDescriptor()
         val field1 = descriptor.findFieldByName(fieldName1)!!
         assertThrows<ValidationException> {
             message.newBuilder()
@@ -82,7 +84,7 @@ internal class GoesMutualITest {
         fieldName2: String,
         fieldValue2: Any
     ) {
-        val descriptor = message.protoDescriptor()
+        val descriptor = message.getDescriptor()
         val field1 = descriptor.findFieldByName(fieldName1)!!
         val field2 = descriptor.findFieldByName(fieldName2)!!
         assertDoesNotThrow {

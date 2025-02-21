@@ -54,6 +54,7 @@ dependencies {
         testFixturesImplementation(it)
     }
 
+    testImplementation(testFixtures(project(":model")))
     testImplementation(JUnit.params)
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
