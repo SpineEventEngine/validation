@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.setonce.given
+package io.spine.test.options.setonce
 
 import com.google.protobuf.ByteString
 import io.spine.test.tools.validate.Name
@@ -42,7 +42,7 @@ import io.spine.test.tools.validate.name
  * to cover ten Protobuf integer types. All 32-bit numbers are mapped to `int`
  * and all 64bit numbers are mapped to `long`.
  */
-internal object TestEnv {
+internal object SetOnceTestEnv {
 
     const val STUDENT1: String = "student-1"
     const val STUDENT2: String = "student-2"
