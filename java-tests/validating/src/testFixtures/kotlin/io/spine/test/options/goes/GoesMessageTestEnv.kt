@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes.given
+package io.spine.test.options.goes
 
 import com.google.protobuf.ByteString
 import com.google.protobuf.Timestamp

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes.given
+package io.spine.test.options.goes
 
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.FieldDescriptor
@@ -56,7 +56,7 @@ internal fun Class<out Message>.newBuilder() =
  *
  * Other values are passed "as is".
  */
-internal fun protoValue(field: FieldDescriptor, value: Any): Any =
+fun protoValue(field: FieldDescriptor, value: Any): Any =
     when (value) {
         is Map<*, *> -> {
             val descriptor = field.messageType

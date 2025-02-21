@@ -32,7 +32,6 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
-import io.spine.test.options.goes.given.protoValue
 import io.spine.test.tools.validate.GoesCustomMessage
 import io.spine.test.tools.validate.GoesDefaultMessage
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
@@ -49,13 +48,13 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesErrorMessageITest {
 
-    @MethodSource("io.spine.test.options.goes.given.GoesMessageTestEnv#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "show the default error message for `{0}` field") // `{0}` is a named argument.
     fun showDefaultErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
         GoesDefaultMessage.newBuilder()
             .assertErrorMessage(fieldName, fieldType, fieldValue, ::defaultTemplate)
 
-    @MethodSource("io.spine.test.options.goes.given.GoesMessageTestEnv#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "show the custom error message for `{0}` field") // `{0}` is a named argument.
     fun showCustomErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
         GoesCustomMessage.newBuilder()
