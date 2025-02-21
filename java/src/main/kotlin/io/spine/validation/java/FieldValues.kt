@@ -24,19 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+package io.spine.validation.java
 
-/**
- * Spine Base module.
- *
- * @see <a href="https://github.com/SpineEventEngine/base">spine-base</a>
- */
-@Suppress("ConstPropertyName")
-object Base {
-    const val version = "2.0.0-SNAPSHOT.242"
-    const val versionForBuildScript = "2.0.0-SNAPSHOT.241"
-    const val group = Spine.group
-    const val artifact = "spine-base"
-    const val lib = "$group:$artifact:$version"
-    const val libForBuildScript = "$group:$artifact:$versionForBuildScript"
-}
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.name
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
+import io.spine.validation.java.protodata.call
+
+@Suppress("UNCHECKED_CAST")
+internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
+    when {
+        isSingular -> when {
+            isMessage || isEnum -> value.call("toString")
+            isPrimitive -> when (primitive) {
+                TYPE_STRING -> value as Expression<String>
+                TYPE_BYTES -> value.call("toString")
+                else -> StringClass.call("valueOf", value)
+            }
+            else -> error("Unsupported singular field type: `${name}`.")
+        }
+        isList -> value.call("toString")
+        isMap -> value.call("toString")
+        else -> error("Unsupported field type: `${name}`.")
+    }

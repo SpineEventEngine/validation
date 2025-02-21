@@ -52,7 +52,8 @@ public class JavaValidationRenderer : JavaRenderer() {
         listOf(
             RuleGenerator(querying = this, typeSystem),
             RequiredGenerator(querying = this, valueConverter),
-            PatternGenerator(querying = this)
+            PatternGenerator(querying = this),
+            GoesGenerator(querying = this, valueConverter),
         )
     }
 

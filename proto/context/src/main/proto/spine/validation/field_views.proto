@@ -81,3 +81,19 @@ message PatternField {
     // The field in which the option was discovered.
     protodata.Field subject = 5;
 }
+
+// A view of a field that is marked with `(goes)` option.
+message GoesField {
+    option (entity).kind = PROJECTION;
+
+    FieldId id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The name of the required companion field.
+    protodata.Field companion = 3;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 4;
+}

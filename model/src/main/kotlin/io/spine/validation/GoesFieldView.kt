@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,34 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
 
-syntax = "proto3";
+import io.spine.core.Subscribe
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.GoesFieldDiscovered
 
-package spine.validation.given.required;
+/**
+ * A view of a field that is marked with `(required)` option.
+ */
+internal class GoesFieldView : View<FieldId, GoesField, GoesField.Builder>() {
 
-import "spine/options.proto";
-
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.given.required";
-option java_outer_classname = "RequiredPolicySpecProto";
-option java_multiple_files = true;
-
-// Provides a boolean field with the inapplicable `(required)` option.
-message WithBoolField {
-    bool really = 1 [(.required) = true];
-}
-
-// Provides an `int32` field with the inapplicable `(required)` option.
-message WithIntField {
-    int32 zero = 1 [(.required) = true];
-}
-
-// Provides a `sint64` field with the inapplicable `(required)` option.
-message WithSignedInt {
-    sint64 signed = 1 [(.required) = true];
-}
-
-// Provides a `double` field with the inapplicable `(required)` option.
-message WithDoubleField {
-    double temperature = 1 [(.required) = true];
+    @Subscribe
+    fun on(e: GoesFieldDiscovered) = alter {
+        errorMessage = e.errorMessage
+        companion = e.companion
+        subject = e.subject
+    }
 }

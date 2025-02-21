@@ -49,7 +49,7 @@ import io.spine.validation.boolValue
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.fieldId
+import io.spine.validation.id
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -90,10 +90,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
         val message = determineErrorMessage(field)
         return requiredFieldDiscovered {
-            id = fieldId {
-                type = field.declaringType
-                name = field.name
-            }
+            id = field.id()
             errorMessage = message
             subject = field
         }.asA()

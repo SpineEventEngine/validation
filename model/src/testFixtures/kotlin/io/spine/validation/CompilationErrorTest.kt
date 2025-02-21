@@ -24,19 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+package io.spine.validation
+
+import com.google.protobuf.Descriptors
+import io.spine.logging.testing.tapConsole
+import io.spine.protodata.Compilation
+import java.nio.file.Path
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.io.TempDir
 
 /**
- * Spine Base module.
- *
- * @see <a href="https://github.com/SpineEventEngine/base">spine-base</a>
+ * An abstract base for classes that test compilation errors.
  */
-@Suppress("ConstPropertyName")
-object Base {
-    const val version = "2.0.0-SNAPSHOT.242"
-    const val versionForBuildScript = "2.0.0-SNAPSHOT.241"
-    const val group = Spine.group
-    const val artifact = "spine-base"
-    const val lib = "$group:$artifact:$version"
-    const val libForBuildScript = "$group:$artifact:$versionForBuildScript"
+abstract class CompilationErrorTest {
+
+    @TempDir
+    private lateinit var workingDir: Path
+
+    /**
+     * Asserts that the messages represented by the given [descriptor]
+     * does not compile.
+     *
+     * It is `public`, so that extension functions could use it to create
+     * test-specific assertion methods.
+     */
+    fun assertDoesNotCompile(descriptor: Descriptors.Descriptor): Compilation.Error {
+        val fixture = ValidationTestFixture(descriptor, workingDir)
+        val pipeline = fixture.setup.createPipeline()
+        val error = assertThrows<Compilation.Error> {
+            // Redirect console output so that we don't print errors during the build.
+            tapConsole {
+                pipeline()
+            }
+        }
+        return error
+    }
 }

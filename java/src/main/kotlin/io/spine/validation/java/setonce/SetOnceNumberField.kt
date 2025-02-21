@@ -113,7 +113,4 @@ internal class SetOnceNumberField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
-
-    override fun asString(fieldValue: Expression<Number>): Expression<String> =
-        StringClass.call("valueOf", fieldValue)
 }

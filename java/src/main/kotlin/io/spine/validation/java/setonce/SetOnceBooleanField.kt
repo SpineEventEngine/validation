@@ -86,7 +86,4 @@ internal class SetOnceBooleanField(
         val setter = method(fieldSetterName).body!!
         setter.addAfter(precondition, setter.lBrace)
     }
-
-    override fun asString(fieldValue: Expression<Boolean>): Expression<String> =
-        StringClass.call("valueOf", fieldValue)
 }
