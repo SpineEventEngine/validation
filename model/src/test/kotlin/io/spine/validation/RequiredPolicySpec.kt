@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation
 
-import com.google.protobuf.Descriptors.Descriptor
+import com.google.protobuf.Descriptors
 import io.kotest.matchers.string.shouldContain
 import io.spine.logging.testing.tapConsole
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
-import io.spine.validation.REQUIRED
-import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
 import io.spine.validation.given.required.WithDoubleField
 import io.spine.validation.given.required.WithIntField
@@ -84,7 +82,7 @@ internal class RequiredPolicySpec {
      * Creates and runs a pipeline which handles only the proto type with the given [descriptor].
      */
     private fun compile(
-        descriptor: Descriptor,
+        descriptor: Descriptors.Descriptor,
         workingDir: Path
     ): Compilation.Error {
         val fixture = ValidationTestFixture(descriptor, workingDir)
