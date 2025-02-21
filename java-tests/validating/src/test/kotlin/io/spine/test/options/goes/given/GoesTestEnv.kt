@@ -30,6 +30,7 @@ import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
+import com.google.protobuf.ProtocolMessageEnum
 
 /**
  * Returns a Protobuf descriptor for the given message class.
@@ -44,23 +45,30 @@ internal fun Class<out Message>.newBuilder() =
     getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
 
 /**
- * Converts the given [value] to Protobuf equivalent, if needed.
+ * Converts the given [value] so that it is compatible with [Message.Builder.setField] method.
  *
- * The method makes the given value compatible with [Message.Builder.setField] method.
+ * The following conversions take place:
  *
- * Kotlin's [Map] is converted to Protobuf map entries, which are message-specific.
+ * 1. [Map] is converted to a list of [MapEntry][com.google.protobuf.MapEntry]. Entries are
+ *   created using [DynamicMessage]. We cannot create them directly because it is a private
+ *   inner class within the generated message.
+ * 2. Enum constants are converted to [EnumValueDescriptor][com.google.protobuf.Descriptors.EnumValueDescriptor].
+ *
  * Other values are passed "as is".
  */
 internal fun protoValue(field: FieldDescriptor, value: Any): Any =
-    if (value is Map<*, *>) {
-        val descriptor = field.messageType
-        value.map { descriptor.newMapEntry(it.key, it.value) }
-    } else {
-        value
+    when (value) {
+        is Map<*, *> -> {
+            val descriptor = field.messageType
+            value.map { descriptor.newMapEntry(it.key, it.value) }
+        }
+
+        is ProtocolMessageEnum -> value.valueDescriptor
+        else -> value
     }
 
 private fun Descriptor.newMapEntry(key: Any?, value: Any?) =
     DynamicMessage.newBuilder(this)
-        .setField(this.findFieldByName("key"), key)
-        .setField(this.findFieldByName("value"), value)
+        .setField(findFieldByName("key"), key)
+        .setField(findFieldByName("value"), value)
         .build()
