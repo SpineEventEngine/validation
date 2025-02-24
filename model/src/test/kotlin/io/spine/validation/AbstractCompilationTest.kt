@@ -36,7 +36,7 @@ import org.junit.jupiter.api.io.TempDir
 /**
  * An abstract base for classes that test compilation errors.
  */
-abstract class CompilationErrorTest {
+abstract class AbstractCompilationTest {
 
     @TempDir
     private lateinit var workingDir: Path

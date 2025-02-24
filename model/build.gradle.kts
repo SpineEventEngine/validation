@@ -46,12 +46,12 @@ dependencies {
     implementation(project(":proto:context"))
     implementation(project(":java-runtime"))
 
+    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(ProtoData.testlib)
     testImplementation(JUnit.params)
 
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
-    testFixturesImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testFixturesImplementation(Kotlin.stdLib)
 }
