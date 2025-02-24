@@ -54,20 +54,6 @@ public fun <T> Expression<*>.call(
 @JvmOverloads
 public fun <T> Expression<*>.call(
     name: String,
-    argument: Expression<*>,
-    generics: List<ClassName> = listOf()
-): MethodCall<T> = MethodCall(this, name, argument, generics)
-
-/**
- * Constructs a method call upon this [Expression].
- *
- * @param name The name of the method.
- * @param argument The method argument.
- * @param generics The method type parameters.
- */
-@JvmOverloads
-public fun <T> Expression<*>.call(
-    name: String,
     vararg argument: Expression<*>,
     generics: List<ClassName> = listOf()
 ): MethodCall<T> = MethodCall(this, name, argument.asList(), generics)
