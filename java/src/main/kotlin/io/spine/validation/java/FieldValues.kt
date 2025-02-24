@@ -27,6 +27,7 @@
 package io.spine.validation.java
 
 import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.isList
@@ -37,19 +38,35 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
 import io.spine.validation.java.protodata.call
 
-@Suppress("UNCHECKED_CAST")
+/**
+ * Returns an expression that converts the provided field [value] to [String].
+ *
+ * How the value is converted to [String] is determined by this [FieldType].
+ */
 internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
         isSingular -> when {
-            isMessage || isEnum -> value.call("toString")
-            isPrimitive -> when (primitive) {
-                TYPE_STRING -> value as Expression<String>
-                TYPE_BYTES -> value.call("toString")
-                else -> StringClass.call("valueOf", value)
-            }
-            else -> error("Unsupported singular field type: `${name}`.")
+            isMessage || isEnum -> value.stringify()
+            isPrimitive -> value.stringifyPrimitive(primitive)
+            else -> error(
+                "Cannot convert `$value` expression to `String` expression. " +
+                        "Unsupported field type: `${name}`."
+            )
         }
-        isList -> value.call("toString")
-        isMap -> value.call("toString")
-        else -> error("Unsupported field type: `${name}`.")
+        isList -> value.stringify()
+        isMap -> value.stringify()
+        else -> error(
+            "Cannot convert `$value` expression to `String` expression. " +
+                    "Unsupported field type: `${name}`."
+        )
     }
+
+@Suppress("UNCHECKED_CAST") // Casting string field's value to `String` is safe.
+private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
+    when (primitive) {
+        TYPE_STRING -> this as Expression<String>
+        TYPE_BYTES -> stringify()
+        else -> StringClass.call("valueOf", this)
+    }
+
+private fun Expression<*>.stringify(): Expression<String> = call("toString")
