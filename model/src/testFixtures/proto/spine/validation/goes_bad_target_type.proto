@@ -36,12 +36,10 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "GoesBadTargetTypeProto";
 option java_multiple_files = true;
 
-/*
-Incompatible field types:
-    1. double, float.
-    2. all integers.
-    3. bool.
- */
+// This file declares messages that apply `(goes)` option to fields with incompatible type.
+// Incompatible field types are the following:
+// 1. All numeric fields.
+// 3. Boolean.
 
 message GoesBoolTarget {
     string companion = 1;
