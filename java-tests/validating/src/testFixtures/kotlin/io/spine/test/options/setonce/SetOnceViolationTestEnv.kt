@@ -32,15 +32,15 @@ import org.junit.jupiter.api.Named
 import org.junit.jupiter.params.provider.Arguments
 
 /**
- * Provides data for parametrized [io.spine.test.options.setonce.SetOnceErrorMessageITest].
+ * Provides data for parametrized [io.spine.test.options.setonce.SetOnceViolationITest].
  */
-internal object SetOnceErrorMessageTestEnv {
+internal object SetOnceViolationTestEnv {
 
     /**
      * Test data for the following tests:
      *
-     * 1. [io.spine.test.options.setonce.SetOnceErrorMessageITest.defaultErrorMessage].
-     * 2. [io.spine.test.options.setonce.SetOnceErrorMessageITest.customErrorMessage].
+     * 1. [io.spine.test.options.setonce.SetOnceViolationITest.useDefaultErrorMessage].
+     * 2. [io.spine.test.options.setonce.SetOnceViolationITest.useCustomErrorMessage].
      */
     @JvmStatic
     fun allFieldTypesWithTwoDistinctValues() =

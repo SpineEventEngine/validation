@@ -34,18 +34,18 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [io.spine.test.options.goes.GoesErrorMessageITest].
+ * Provides data for parameterized [io.spine.test.options.goes.GoesViolationITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
-internal object GoesMessageTestEnv {
+internal object GoesViolationTestEnv {
 
     const val COMPANION_FIELD_NAME = "companion"
 
     /**
      * Test data for the following tests:
      *
-     * 1. [io.spine.test.options.goes.GoesErrorMessageITest.showDefaultErrorMessage].
-     * 1. [io.spine.test.options.goes.GoesErrorMessageITest.showCustomErrorMessage].
+     * 1. [io.spine.test.options.goes.GoesViolationITest.useDefaultErrorMessage].
+     * 1. [io.spine.test.options.goes.GoesViolationITest.useCustomErrorMessage].
      */
     @JvmStatic
     fun onlyTargetFields() = listOf(

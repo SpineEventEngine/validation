@@ -53,14 +53,14 @@ import org.junit.jupiter.params.provider.MethodSource
 internal class SetOnceViolationITest {
 
     @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.SetOnceViolationTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "use the default error message for `{0}` field")
     fun <T : Any> useDefaultErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
         StudentDefaultMessage.newBuilder()
             .assertConstraintViolation(fieldName, fieldType, value1, value2, ::defaultTemplate)
 
     @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
+    @MethodSource("io.spine.test.options.setonce.SetOnceViolationTestEnv#allFieldTypesWithTwoDistinctValues")
     @ParameterizedTest(name = "use the custom error message for `{0}` field")
     fun <T : Any> useCustomErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
         StudentCustomMessage.newBuilder()

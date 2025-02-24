@@ -52,13 +52,13 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`(goes)` constraint should")
 internal class GoesViolationITest {
 
-    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.GoesViolationTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "use the default error message for `{0}` field")
     fun useDefaultErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
         GoesDefaultMessage.newBuilder()
             .assertConstraintViolation(fieldName, fieldType, fieldValue, ::defaultTemplate)
 
-    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
+    @MethodSource("io.spine.test.options.goes.GoesViolationTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "use the custom error message for `{0}` field")
     fun useCustomErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
         GoesCustomMessage.newBuilder()
