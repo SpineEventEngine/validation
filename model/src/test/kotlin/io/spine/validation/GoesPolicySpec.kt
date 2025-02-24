@@ -47,7 +47,7 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
         val descriptor = message.getDescriptor()
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("target")
-        error.message shouldContain unsupportedTargetMessage(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedCompanion")
@@ -56,7 +56,7 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
         val descriptor = message.getDescriptor()
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("companion")
-        error.message shouldContain unsupportedCompanionMessage(field)
+        error.message shouldContain unsupportedCompanionType(field)
     }
 
     @Test
@@ -75,11 +75,11 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
     }
 }
 
-private fun unsupportedTargetMessage(field: Field) =
+private fun unsupportedFieldType(field: Field) =
     "The field type `${field.type}` of the `${field.qualifiedName}` field " +
             "is not supported by the `($GOES)` option."
 
-private fun unsupportedCompanionMessage(field: Field) =
+private fun unsupportedCompanionType(field: Field) =
     "The field type `${field.type}` of the companion `${field.qualifiedName}` field " +
             "is not supported by the `($GOES)` option."
 

@@ -45,7 +45,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
         val message = WithBoolField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("really")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
@@ -53,7 +53,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
         val message = WithIntField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("zero")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
@@ -61,7 +61,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
         val message = WithSignedInt.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("signed")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
@@ -69,10 +69,10 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
         val message = WithDoubleField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("temperature")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 }
 
-private fun expected(field: Field) =
+private fun unsupportedFieldType(field: Field) =
     "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
             "by the `($REQUIRED)` option."
