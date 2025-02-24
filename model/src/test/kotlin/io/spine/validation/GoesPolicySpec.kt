@@ -63,8 +63,7 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
     fun `the specified companion field does not exist`() {
         val message = GoesNonExistingCompanion.getDescriptor()
         val error = assertCompilationFails(message)
-        val expected = nonExistingCompanionMessage(message)
-        error.message shouldContain expected
+        error.message shouldContain nonExistingCompanionMessage(message)
     }
 
     @Test
@@ -72,8 +71,7 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
         val message = GoesSelfCompanion.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("companion")
-        val expected = selfCompanionMessage(field)
-        error.message shouldContain expected
+        error.message shouldContain selfCompanionMessage(field)
     }
 }
 
