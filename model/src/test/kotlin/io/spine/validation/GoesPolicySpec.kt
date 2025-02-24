@@ -39,7 +39,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`GoesPolicy` should reject the option")
-class GoesPolicySpec : AbstractCompilationTest() {
+internal class GoesPolicySpec : AbstractCompilationTest() {
 
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
