@@ -45,7 +45,7 @@ class GoesPolicySpec : AbstractCompilationTest() {
     @ParameterizedTest(name = "when target field type is `{0}`")
     fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.getDescriptor()
-        val error = assertDoesNotCompile(descriptor)
+        val error = assertCompilationFails(descriptor)
         val field = descriptor.field("target")
         error.message shouldContain unsupportedTargetMessage(field)
     }
@@ -54,7 +54,7 @@ class GoesPolicySpec : AbstractCompilationTest() {
     @ParameterizedTest(name = "when companion's field type is `{0}`")
     fun whenCompanionFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.getDescriptor()
-        val error = assertDoesNotCompile(descriptor)
+        val error = assertCompilationFails(descriptor)
         val field = descriptor.field("companion")
         error.message shouldContain unsupportedCompanionMessage(field)
     }
@@ -62,7 +62,7 @@ class GoesPolicySpec : AbstractCompilationTest() {
     @Test
     fun `the specified companion field does not exist`() {
         val message = GoesNonExistingCompanion.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val expected = nonExistingCompanionMessage(message)
         error.message shouldContain expected
     }
@@ -70,7 +70,7 @@ class GoesPolicySpec : AbstractCompilationTest() {
     @Test
     fun `the field specified itself as its companion`() {
         val message = GoesSelfCompanion.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val field = message.field("companion")
         val expected = selfCompanionMessage(field)
         error.message shouldContain expected

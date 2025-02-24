@@ -36,19 +36,16 @@ import org.junit.jupiter.api.io.TempDir
 /**
  * An abstract base for classes that test compilation errors.
  */
-abstract class AbstractCompilationTest {
+internal abstract class AbstractCompilationTest {
 
     @TempDir
     private lateinit var workingDir: Path
 
     /**
      * Asserts that the messages represented by the given [descriptor]
-     * does not compile.
-     *
-     * It is `public`, so that extension functions could use it to create
-     * test-specific assertion methods.
+     * fails the compilation process.
      */
-    fun assertDoesNotCompile(descriptor: Descriptors.Descriptor): Compilation.Error {
+    fun assertCompilationFails(descriptor: Descriptors.Descriptor): Compilation.Error {
         val fixture = ValidationTestFixture(descriptor, workingDir)
         val pipeline = fixture.setup.createPipeline()
         val error = assertThrows<Compilation.Error> {

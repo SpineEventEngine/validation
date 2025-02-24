@@ -43,7 +43,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
     @Test
     fun `reject option on a boolean field`() {
         val message = WithBoolField.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val field = message.field("really")
         error.message shouldContain expected(field)
     }
@@ -51,7 +51,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
     @Test
     fun `reject option on an integer field`() {
         val message = WithIntField.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val field = message.field("zero")
         error.message shouldContain expected(field)
     }
@@ -59,7 +59,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
     @Test
     fun `reject option on a signed integer field`() {
         val message = WithSignedInt.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val field = message.field("signed")
         error.message shouldContain expected(field)
     }
@@ -67,7 +67,7 @@ internal class RequiredPolicySpec : AbstractCompilationTest() {
     @Test
     fun `reject option on a double field`() {
         val message = WithDoubleField.getDescriptor()
-        val error = assertDoesNotCompile(message)
+        val error = assertCompilationFails(message)
         val field = message.field("temperature")
         error.message shouldContain expected(field)
     }
