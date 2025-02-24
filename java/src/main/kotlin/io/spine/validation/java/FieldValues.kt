@@ -53,8 +53,7 @@ internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
                         "Unsupported field type: `${name}`."
             )
         }
-        isList -> value.stringify()
-        isMap -> value.stringify()
+        isList || isMap -> value.stringify()
         else -> error(
             "Cannot convert `$value` expression to `String` expression. " +
                     "Unsupported field type: `${name}`."
