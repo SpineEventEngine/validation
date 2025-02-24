@@ -26,34 +26,11 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
-import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.This
-import io.spine.protodata.java.call
-import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validate.ConstraintViolation
-import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.UnsetValue
-import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
  * The generator for `(goes)` option.
@@ -71,90 +48,9 @@ internal class GoesGenerator(
             .all()
     }
 
-    override fun codeFor(
-        type: TypeName,
-    ): List<FieldOptionCode> {
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val goesFields = allGoesFields.filter { it.id.type == type }
         val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
         return constraints
-    }
-}
-
-internal class GoesFieldGenerator(
-    private val view: GoesField,
-    private val converter: JavaValueConverter
-) {
-
-    private val field = view.subject
-    private val fieldType = field.type
-    private val declaringType = field.declaringType
-
-    fun generate(): FieldOptionCode {
-        val field = view.subject
-        val companion = view.companion
-        val getter = This<Message>()
-            .field(field)
-            .getter<Any>()
-        val companionGetter = This<Message>()
-            .field(companion)
-            .getter<Any>()
-        val constraint = CodeBlock(
-            """
-            if (!$getter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
-                var fieldPath = ${fieldPath(field.name.value, parentPath)};
-                var violation = ${violation(ReadVar("fieldPath"), getter)};
-                $violations.add(violation);
-            }
-            """.trimIndent()
-        )
-        return FieldOptionCode(constraint)
-    }
-
-    /**
-     * Returns the expression that yields a default value for the given field.
-     *
-     * Each field type has its own default value. The option considers the field
-     * to be missing if its current value equals to the default one.
-     */
-    private fun defaultValue(field: Field): Expression<*> {
-        val unsetValue = UnsetValue.forField(field)!!
-        val expression = converter.valueToCode(unsetValue)
-        return expression
-    }
-
-    private fun fieldPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
-            .chainBuild()
-
-    private fun violation(
-        fieldPath: Expression<FieldPath>,
-        fieldValue: Expression<*>,
-    ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
-    }
-
-    /**
-     * Determines the value for each of the supported `(if_missing)` placeholders.
-     *
-     * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
-     * declared for [FieldPath]. It is available from Java, but not from Kotlin.
-     * So, we specify it as a string literal here.
-     */
-    private fun supportedPlaceholders(
-        fieldPath: Expression<FieldPath>,
-        fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-            FIELD_TYPE to StringLiteral(fieldType.name),
-            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            GOES_COMPANION to StringLiteral(view.companion.name.value)
-        )
     }
 }
