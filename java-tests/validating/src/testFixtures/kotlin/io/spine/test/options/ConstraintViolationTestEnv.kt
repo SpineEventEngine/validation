@@ -34,10 +34,17 @@ import com.google.protobuf.Message.Builder
 import com.google.protobuf.ProtocolMessageEnum
 
 /**
+ * This file contains fixtures used by tests that verify the created instances
+ * of [ConstraintViolation][io.spine.validate.ConstraintViolation].
+ */
+@Suppress("unused")
+val ABOUT = ""
+
+/**
  * Sets the given [field] with a [value] adapted to the field's expected type.
  *
  * The provided [value] can be converted to ensure compatibility with
- * the [FieldDescriptor]'s requirements.
+ * the field's [descriptor][FieldDescriptor]'s requirements.
  *
  * The following conversions take place:
  *
@@ -48,6 +55,8 @@ import com.google.protobuf.ProtocolMessageEnum
  *
  * @param field The descriptor of the field to be set.
  * @param value The value to assign for the field.
+ *
+ * @see adaptedValue
  */
 fun Builder.set(field: FieldDescriptor, value: Any): Builder {
     val adapted = adaptedValue(field, value)
@@ -55,8 +64,8 @@ fun Builder.set(field: FieldDescriptor, value: Any): Builder {
 }
 
 /**
- * Adapts the provided [value] to the [field], so that it is compatible
- * with [Message.Builder.setField] method.
+ * Adapts the provided [value] to the [field] descriptor, so that
+ * it is compatible with [Message.Builder.setField] method.
  *
  * To be used with the mentioned method, the value must be of the correct type
  * for this field, that is, the same type that [Message.getField] returns.
