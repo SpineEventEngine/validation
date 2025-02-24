@@ -29,8 +29,14 @@ package io.spine.validation
 import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
+/**
+ * Provides data for parametrized tests in [io.spine.validation.GoesPolicySpec].
+ */
 object GoesPolicyTestEnv {
 
+    /**
+     * Test data for [io.spine.validation.GoesPolicySpec.whenTargetFieldHasUnsupportedType].
+     */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
         "bool" to GoesBoolTarget::class,
@@ -48,6 +54,9 @@ object GoesPolicyTestEnv {
         "sfixed64" to GoesSFixed64Target::class,
     ).map { arguments(named(it.first, it.second)) }
 
+    /**
+     * Test data for [io.spine.validation.GoesPolicySpec.whenCompanionFieldHasUnsupportedType].
+     */
     @JvmStatic
     fun messagesWithUnsupportedCompanion() = listOf(
         "bool" to GoesBoolCompanion::class,
