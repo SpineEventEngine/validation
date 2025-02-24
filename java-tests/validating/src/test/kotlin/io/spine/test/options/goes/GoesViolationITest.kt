@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.setonce
+package io.spine.test.options.goes
 
 import com.google.protobuf.Message.Builder
 import io.kotest.matchers.maps.shouldContainExactly
@@ -33,12 +33,12 @@ import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
 import io.spine.test.options.set
-import io.spine.test.tools.validate.StudentCustomMessage
-import io.spine.test.tools.validate.StudentDefaultMessage
+import io.spine.test.tools.validate.GoesCustomMessage
+import io.spine.test.tools.validate.GoesDefaultMessage
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_VALUE
+import io.spine.validate.RuntimeErrorPlaceholder.GOES_COMPANION
 import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
@@ -47,55 +47,44 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(set_once)`.
+ * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(goes)`.
  */
-@DisplayName("`(set_once)` constraint should")
-internal class SetOnceErrorMessageITest {
+@DisplayName("`(goes)` constraint should")
+internal class GoesViolationITest {
 
-    @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
-    @ParameterizedTest(name = "show the default error message for `{0}` field")
-    fun <T : Any> defaultErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
-        StudentDefaultMessage.newBuilder()
-            .assertErrorMessage(fieldName, fieldType, value1, value2, ::defaultTemplate)
+    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
+    @ParameterizedTest(name = "use the default error message for `{0}` field")
+    fun useDefaultErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
+        GoesDefaultMessage.newBuilder()
+            .assertConstraintViolation(fieldName, fieldType, fieldValue, ::defaultTemplate)
 
-    @Suppress("MaxLineLength") // Long method source.
-    @MethodSource("io.spine.test.options.setonce.SetOnceErrorMessageTestEnv#allFieldTypesWithTwoDistinctValues")
-    @ParameterizedTest(name = "show the custom error message for `{0}` field")
-    fun <T : Any> customErrorMessage(fieldName: String, fieldType: String, value1: T, value2: T) =
-        StudentCustomMessage.newBuilder()
-            .assertErrorMessage(fieldName, fieldType, value1, value2, ::customTemplate)
+    @MethodSource("io.spine.test.options.goes.GoesMessageTestEnv#onlyTargetFields")
+    @ParameterizedTest(name = "use the custom error message for `{0}` field")
+    fun useCustomErrorMessage(fieldName: String, fieldType: String, fieldValue: Any) =
+        GoesCustomMessage.newBuilder()
+            .assertConstraintViolation(fieldName, fieldType, fieldValue, ::customTemplate)
 }
 
 /**
  * Asserts that this message [Builder] throws [ValidationException] with
- * the expected parameters when [fieldName] is set twice.
- *
- * Notice on enum fields: we have to pass enums as value descriptors
- * (see [io.spine.test.options.setonce.given.SetOnceErrorMessageTestEnv.allFieldTypesWithTwoDistinctValues]),
- * so we also have to take this into account during assertions because
- * in `ConstraintViolation` they still arrive as Java enum constants.
+ * the expected parameters when [fieldName] is set without its [COMPANION_FIELD].
  *
  * @param fieldName The name of the field.
  * @param fieldType The name of the field type.
- * @param fieldValue1 The first field value to set.
- * @param fieldValue2 The second field value to set.
+ * @param value The field value to set.
  * @param template The error message template to check.
  */
-private fun <T : Any> Builder.assertErrorMessage(
+private fun Builder.assertConstraintViolation(
     fieldName: String,
     fieldType: String,
-    fieldValue1: T,
-    fieldValue2: T,
-    template: (Int) -> String,
+    value: Any,
+    template: (Int) -> String
 ) {
-    check(fieldValue1 != fieldValue2)
-
     val field = descriptorForType.field(fieldName)!!
     val parentType = descriptorForType.fullName
     val exception = assertThrows<ValidationException> {
-        set(field, fieldValue1)
-        set(field, fieldValue2)
+        set(field, value)
+            .build()
     }
 
     val violations = exception.constraintViolations.also { it.size shouldBe 1 }
@@ -105,23 +94,28 @@ private fun <T : Any> Builder.assertErrorMessage(
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
             FIELD_PATH to fieldName,
+            FIELD_VALUE to "$value",
             FIELD_TYPE to fieldType,
-            FIELD_VALUE to "$fieldValue1",
-            FIELD_PROPOSED_VALUE to "$fieldValue2",
-            PARENT_TYPE to parentType
+            PARENT_TYPE to parentType,
+            GOES_COMPANION to COMPANION_FIELD,
         ).mapKeys { it.key.toString() }
 
         typeName shouldBe parentType
         fieldPath shouldBe FieldPath(fieldName)
-        fieldValue shouldBe toAny(fieldValue2)
+        fieldValue shouldBe toAny(value)
     }
 }
 
+/**
+ * The name of the field used as a value for `(goes).with` property
+ * in Protobuf test fixtures.
+ */
+private const val COMPANION_FIELD = "companion"
+
 @Suppress("UNUSED_PARAMETER") // The function should match the expected interface.
 private fun defaultTemplate(fieldNumber: Int) =
-    "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has " +
-            "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
+    "The field `\${goes.companion}` must also be set when `\${field.path}` " +
+            "is set in `\${parent.type}`."
 
 private fun customTemplate(fieldNumber: Int) =
-    "Field_$fieldNumber: " +
-            "`\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."
+    "Field_$fieldNumber: `{companionName}`, `{fieldName}`."
