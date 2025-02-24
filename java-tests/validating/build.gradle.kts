@@ -54,10 +54,11 @@ dependencies {
         testFixturesImplementation(it)
     }
 
-    testImplementation(testFixtures(project(":model")))
     testImplementation(JUnit.params)
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
+    testImplementation(testFixtures(project(":model")))
+        ?.because("We need extensions from `ProtobufJavaClass.kt`")
 }
 
 testProtoDataRemoteDebug(enabled = false)
