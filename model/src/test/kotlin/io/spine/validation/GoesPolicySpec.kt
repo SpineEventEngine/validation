@@ -63,15 +63,16 @@ internal class GoesPolicySpec : AbstractCompilationTest() {
     fun `the specified companion field does not exist`() {
         val message = GoesNonExistingCompanion.getDescriptor()
         val error = assertCompilationFails(message)
-        error.message shouldContain nonExistingCompanionMessage(message)
+        val companion = "name"
+        error.message shouldContain nonExistingCompanion(message, companion)
     }
 
     @Test
     fun `the field specified itself as its companion`() {
         val message = GoesSelfCompanion.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("companion")
-        error.message shouldContain selfCompanionMessage(field)
+        val field = message.field("name")
+        error.message shouldContain selfCompanion(field)
     }
 }
 
@@ -83,11 +84,11 @@ private fun unsupportedCompanionType(field: Field) =
     "The field type `${field.type}` of the companion `${field.qualifiedName}` field " +
             "is not supported by the `($GOES)` option."
 
-private fun nonExistingCompanionMessage(message: Descriptor) =
-    "The message `${message.fullName}` does not have `companion` field " +
+private fun nonExistingCompanion(message: Descriptor, companionName: String) =
+    "The message `${message.fullName}` does not have `$companionName` field " +
             "declared as companion of `target` by the `($GOES)` option."
 
-private fun selfCompanionMessage(field: Field) =
+private fun selfCompanion(field: Field) =
     "The `($GOES)` option can not use the marked field as its own companion. " +
             "Self-referencing is prohibited. Please specify another field. " +
             "The invalid field: `${field.qualifiedName}`."

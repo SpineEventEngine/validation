@@ -36,10 +36,12 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "GoesBadCompanionProto";
 option java_multiple_files = true;
 
+// A message that declares a non-existing `name` field as a companion of `target`.
 message GoesNonExistingCompanion {
-    string target = 1 [(goes).with = "companion"];
+    string target = 1 [(goes).with = "name"];
 }
 
+// A message that declares a `name` field as a companion of itself.
 message GoesSelfCompanion {
-    string companion = 1 [(goes).with = "companion"];
+    string name = 1 [(goes).with = "name"];
 }
