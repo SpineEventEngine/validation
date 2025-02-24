@@ -46,6 +46,9 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(set_once)`.
+ */
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceErrorMessageITest {
 

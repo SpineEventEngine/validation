@@ -46,6 +46,9 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(goes)`.
+ */
 @DisplayName("`(goes)` constraint should")
 internal class GoesErrorMessageITest {
 
