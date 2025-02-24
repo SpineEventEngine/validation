@@ -34,13 +34,6 @@ import com.google.protobuf.Message.Builder
 import com.google.protobuf.ProtocolMessageEnum
 
 /**
- * This file contains fixtures used by tests that verify the created instances
- * of [ConstraintViolation][io.spine.validate.ConstraintViolation].
- */
-@Suppress("unused")
-val ABOUT = ""
-
-/**
  * Sets the given [field] with a [value] adapted to the field's expected type.
  *
  * The provided [value] can be converted to ensure compatibility with
