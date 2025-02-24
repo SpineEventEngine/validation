@@ -44,7 +44,13 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
 import io.spine.validation.UnsetValue
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
+/**
+ * The generator for `(goes)` option.
+ *
+ * Generates code for a single field represented by the provided [view].
+ */
 internal class GoesFieldGenerator(
     private val view: GoesField,
     private val converter: JavaValueConverter
@@ -57,7 +63,7 @@ internal class GoesFieldGenerator(
     fun generate(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion
-        val getter = This<Message>()
+        val fieldGetter = This<Message>()
             .field(field)
             .getter<Any>()
         val companionGetter = This<Message>()
@@ -65,19 +71,10 @@ internal class GoesFieldGenerator(
             .getter<Any>()
         val constraint = CodeBlock(
             """
-            if (!$getter.equals(${defaultValue(field)}) && $companionGetter.equals(${
-                defaultValue(
-                    companion
-                )
-            })) {
-                var fieldPath = ${
-                fieldPath(
-                    field.name.value,
-                    ValidationCodeInjector.ValidateScope.parentPath
-                )
-            };
-                var violation = ${violation(ReadVar("fieldPath"), getter)};
-                ${ValidationCodeInjector.ValidateScope.violations}.add(violation);
+            if (!$fieldGetter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
+                var fieldPath = ${fieldPath(field.name.value, ValidationCodeInjector.ValidateScope.parentPath)};
+                var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
+                $violations.add(violation);
             }
             """.trimIndent()
         )
@@ -111,13 +108,6 @@ internal class GoesFieldGenerator(
         return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
     }
 
-    /**
-     * Determines the value for each of the supported `(if_missing)` placeholders.
-     *
-     * Note: `FieldPaths` is a synthetic Java class, which contains Kotlin extensions
-     * declared for [FieldPath]. It is available from Java, but not from Kotlin.
-     * So, we specify it as a string literal here.
-     */
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<*>,
