@@ -68,10 +68,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
         val option = event.option.unpack<PatternOption>()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return patternFieldDiscovered {
-            id = fieldId {
-                type = field.declaringType
-                name = field.name
-            }
+            id = field.id()
             errorMessage = message
             pattern = option.regex
             modifier = option.modifier
