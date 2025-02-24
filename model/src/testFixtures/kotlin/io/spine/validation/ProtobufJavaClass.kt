@@ -31,18 +31,23 @@ import com.google.protobuf.Message
 import kotlin.reflect.KClass
 
 /**
- * Returns a Protobuf descriptor for the given message class.
+ * Returns a Protobuf descriptor for this message [Class].
  */
 fun Class<out Message>.getDescriptor() =
     getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
 
 /**
- * Returns a Protobuf descriptor for the given message class.
+ * Returns a Protobuf descriptor for this message [KClass].
  */
 fun KClass<out Message>.getDescriptor() = java.getDescriptor()
 
 /**
- * Creates a new builder of the given message class.
+ * Creates a new builder for this message [Class].
  */
 fun Class<out Message>.newBuilder() =
     getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
+
+/**
+ * Creates a new builder for this message [KClass].
+ */
+fun KClass<out Message>.newBuilder() = java.newBuilder()
