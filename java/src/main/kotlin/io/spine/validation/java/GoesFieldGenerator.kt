@@ -44,6 +44,11 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
 import io.spine.validation.UnsetValue
+import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
@@ -114,11 +119,11 @@ internal class GoesFieldGenerator(
     ): Map<ErrorPlaceholder, Expression<String>> {
         val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
         return mapOf(
-            ErrorPlaceholder.FIELD_PATH to pathAsString,
-            ErrorPlaceholder.FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-            ErrorPlaceholder.FIELD_TYPE to StringLiteral(fieldType.name),
-            ErrorPlaceholder.PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            ErrorPlaceholder.GOES_COMPANION to StringLiteral(view.companion.name.value)
+            FIELD_PATH to pathAsString,
+            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+            FIELD_TYPE to StringLiteral(fieldType.name),
+            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+            GOES_COMPANION to StringLiteral(view.companion.name.value)
         )
     }
 }
