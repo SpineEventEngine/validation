@@ -53,5 +53,4 @@ dependencies {
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
-    testFixturesImplementation(Kotlin.stdLib)
 }
