@@ -44,7 +44,7 @@ import com.google.protobuf.ProtocolMessageEnum
  * - [Map] becomes a list of [MapEntry][com.google.protobuf.MapEntry].
  * - Enum constant becomes [EnumValueDescriptor][com.google.protobuf.Descriptors.EnumValueDescriptor].
  *
- * Other values are passed "as is".
+ * Other values are passed as is.
  *
  * @param field The descriptor of the field to be set.
  * @param value The value to assign for the field.
