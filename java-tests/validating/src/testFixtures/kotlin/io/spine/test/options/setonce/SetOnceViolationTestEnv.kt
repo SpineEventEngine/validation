@@ -26,10 +26,26 @@
 
 package io.spine.test.options.setonce
 
+import io.spine.test.options.setonce.SetOnceTestEnv.CERT1
+import io.spine.test.options.setonce.SetOnceTestEnv.CERT2
+import io.spine.test.options.setonce.SetOnceTestEnv.DONALD
+import io.spine.test.options.setonce.SetOnceTestEnv.EIGHT
+import io.spine.test.options.setonce.SetOnceTestEnv.EIGHTY_KG
+import io.spine.test.options.setonce.SetOnceTestEnv.FIFTY_KG
+import io.spine.test.options.setonce.SetOnceTestEnv.FIRST_YEAR
+import io.spine.test.options.setonce.SetOnceTestEnv.JACK
+import io.spine.test.options.setonce.SetOnceTestEnv.NO
+import io.spine.test.options.setonce.SetOnceTestEnv.SEVENTY
+import io.spine.test.options.setonce.SetOnceTestEnv.SHORT_HEIGHT
+import io.spine.test.options.setonce.SetOnceTestEnv.TALL_HEIGHT
+import io.spine.test.options.setonce.SetOnceTestEnv.THIRD_YEAR
+import io.spine.test.options.setonce.SetOnceTestEnv.TWENTY
+import io.spine.test.options.setonce.SetOnceTestEnv.TWO
+import io.spine.test.options.setonce.SetOnceTestEnv.YES
 import io.spine.test.tools.validate.Name
 import io.spine.test.tools.validate.YearOfStudy
-import org.junit.jupiter.api.Named
-import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.api.Named.named
+import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
  * Provides data for parametrized [io.spine.test.options.setonce.SetOnceViolationITest].
@@ -55,36 +71,36 @@ internal object SetOnceViolationTestEnv {
      * but names of their corresponding messages like [YearOfStudy] or [Name].
      */
     private fun messageFieldsAndTwoDistinctValues() = listOf(
-        Arguments.arguments(
-            Named.named("enum", "year_of_study"),
+        arguments(
+            named("enum", "year_of_study"),
             YearOfStudy.getDescriptor().fullName, // A specific enum type name is expected.
-            SetOnceTestEnv.FIRST_YEAR,
-            SetOnceTestEnv.THIRD_YEAR
+            FIRST_YEAR,
+            THIRD_YEAR
         ),
-        Arguments.arguments(
-            Named.named("message", "name"),
+        arguments(
+            named("message", "name"),
             Name.getDescriptor().fullName, // A specific message type name is expected.
-            SetOnceTestEnv.JACK,
-            SetOnceTestEnv.DONALD
+            JACK,
+            DONALD
         )
     )
 
     private fun primitiveFieldsAndTwoDistinctValues() = listOf(
-        Primitive("double", "height", SetOnceTestEnv.SHORT_HEIGHT, SetOnceTestEnv.TALL_HEIGHT),
-        Primitive("float", "weight", SetOnceTestEnv.FIFTY_KG, SetOnceTestEnv.EIGHTY_KG),
-        Primitive("int32", "cash_USD", SetOnceTestEnv.TWO, SetOnceTestEnv.EIGHT),
-        Primitive("int64", "cash_EUR", SetOnceTestEnv.TWENTY, SetOnceTestEnv.SEVENTY),
-        Primitive("uint32", "cash_JPY", SetOnceTestEnv.TWO, SetOnceTestEnv.EIGHT),
-        Primitive("uint64", "cash_GBP", SetOnceTestEnv.TWENTY, SetOnceTestEnv.SEVENTY),
-        Primitive("sint32", "cash_AUD", SetOnceTestEnv.TWO, SetOnceTestEnv.EIGHT),
-        Primitive("sint64", "cash_CAD", SetOnceTestEnv.TWENTY, SetOnceTestEnv.SEVENTY),
-        Primitive("fixed32", "cash_CHF", SetOnceTestEnv.TWO, SetOnceTestEnv.EIGHT),
-        Primitive("fixed64", "cash_CNY", SetOnceTestEnv.TWENTY, SetOnceTestEnv.SEVENTY),
-        Primitive("sfixed32", "cash_PLN", SetOnceTestEnv.TWO, SetOnceTestEnv.EIGHT),
-        Primitive("sfixed64", "cash_NZD", SetOnceTestEnv.TWENTY, SetOnceTestEnv.SEVENTY),
-        Primitive("bool", "has_medals", SetOnceTestEnv.YES, SetOnceTestEnv.NO),
-        Primitive("bytes", "signature", SetOnceTestEnv.CERT1, SetOnceTestEnv.CERT2),
-    ).map { Arguments.arguments(Named.named(it.type, it.field), it.type, it.value1, it.value2) }
+        Primitive("double", "height", SHORT_HEIGHT, TALL_HEIGHT),
+        Primitive("float", "weight", FIFTY_KG, EIGHTY_KG),
+        Primitive("int32", "cash_USD", TWO, EIGHT),
+        Primitive("int64", "cash_EUR", TWENTY, SEVENTY),
+        Primitive("uint32", "cash_JPY", TWO, EIGHT),
+        Primitive("uint64", "cash_GBP", TWENTY, SEVENTY),
+        Primitive("sint32", "cash_AUD", TWO, EIGHT),
+        Primitive("sint64", "cash_CAD", TWENTY, SEVENTY),
+        Primitive("fixed32", "cash_CHF", TWO, EIGHT),
+        Primitive("fixed64", "cash_CNY", TWENTY, SEVENTY),
+        Primitive("sfixed32", "cash_PLN", TWO, EIGHT),
+        Primitive("sfixed64", "cash_NZD", TWENTY, SEVENTY),
+        Primitive("bool", "has_medals", YES, NO),
+        Primitive("bytes", "signature", CERT1, CERT2),
+    ).map { arguments(named(it.type, it.field), it.type, it.value1, it.value2) }
 }
 
 private class Primitive(
