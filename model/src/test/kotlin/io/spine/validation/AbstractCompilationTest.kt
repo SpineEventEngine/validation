@@ -26,7 +26,7 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Descriptors
+import com.google.protobuf.Descriptors.Descriptor
 import io.spine.logging.testing.tapConsole
 import io.spine.protodata.Compilation
 import java.nio.file.Path
@@ -45,7 +45,7 @@ internal abstract class AbstractCompilationTest {
      * Asserts that the messages represented by the given [descriptor]
      * fails the compilation process.
      */
-    fun assertCompilationFails(descriptor: Descriptors.Descriptor): Compilation.Error {
+    fun assertCompilationFails(descriptor: Descriptor): Compilation.Error {
         val fixture = ValidationTestFixture(descriptor, workingDir)
         val pipeline = fixture.setup.createPipeline()
         val error = assertThrows<Compilation.Error> {
