@@ -39,7 +39,7 @@ import org.junit.jupiter.api.io.TempDir
 internal abstract class AbstractCompilationTest {
 
     @TempDir
-    private lateinit var workingDir: Path
+    protected lateinit var workingDir: Path
 
     /**
      * Asserts that the messages represented by the given [descriptor]
