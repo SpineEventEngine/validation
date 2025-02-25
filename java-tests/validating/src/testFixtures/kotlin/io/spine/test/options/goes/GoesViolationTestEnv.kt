@@ -39,8 +39,6 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesViolationTestEnv {
 
-    const val COMPANION_FIELD_NAME = "companion"
-
     /**
      * Test data for the following tests:
      *
