@@ -46,7 +46,6 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesOneWayTestEnv {
 
-    private const val COMPANION_FIELD_NAME = "companion"
     private val fieldValues = listOf(
         MessageCompanion::class to Timestamps.now(),
         EnumCompanion::class to EFG_ITEM1.valueDescriptor,
@@ -72,7 +71,7 @@ internal object GoesOneWayTestEnv {
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
         val fieldType = messageCLass.typeUnderTest()
-        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD_NAME), companionValue)
+        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD), companionValue)
     }
 
     /**
@@ -86,7 +85,7 @@ internal object GoesOneWayTestEnv {
             val fieldName = fieldClass.fieldName()
             arguments(
                 messageClass.java,
-                named(companionType, COMPANION_FIELD_NAME),
+                named(companionType, COMPANION_FIELD),
                 companionValue,
                 named(fieldType, fieldName),
                 fieldValue

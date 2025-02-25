@@ -106,12 +106,6 @@ private fun Builder.assertConstraintViolation(
     }
 }
 
-/**
- * The name of the field used as a value for `(goes).with` property
- * in Protobuf test fixtures.
- */
-private const val COMPANION_FIELD = "companion"
-
 @Suppress("UNUSED_PARAMETER") // The function should match the expected interface.
 private fun defaultTemplate(fieldNumber: Int) =
     "The field `\${goes.companion}` must also be set when `\${field.path}` " +
