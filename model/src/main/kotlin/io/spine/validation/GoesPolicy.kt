@@ -115,7 +115,7 @@ private fun checkFieldExists(message: MessageType, companion: String, field: Fie
 
 private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
     Compilation.check(field != companion, file, field.span) {
-        "The `($GOES)` option can not use the marked field as its own companion. " +
+        "The `($GOES)` option cannot use the marked field as its own companion. " +
                 "Self-referencing is prohibited. Please specify another field. " +
                 "The invalid field: `${field.qualifiedName}`."
     }
