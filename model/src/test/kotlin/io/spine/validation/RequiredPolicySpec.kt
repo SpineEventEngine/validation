@@ -38,7 +38,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`RequiredPolicy` should")
-internal class RequiredPolicySpec : AbstractCompilationTest() {
+internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on a boolean field`() {

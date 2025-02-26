@@ -39,7 +39,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`GoesPolicy` should reject the option")
-internal class GoesPolicySpec : AbstractCompilationTest() {
+internal class GoesPolicySpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
@@ -89,6 +89,6 @@ private fun nonExistingCompanion(message: Descriptor, companionName: String) =
             "declared as companion of `target` by the `($GOES)` option."
 
 private fun selfCompanion(field: Field) =
-    "The `($GOES)` option can not use the marked field as its own companion. " +
+    "The `($GOES)` option cannot use the marked field as its own companion. " +
             "Self-referencing is prohibited. Please specify another field. " +
             "The invalid field: `${field.qualifiedName}`."

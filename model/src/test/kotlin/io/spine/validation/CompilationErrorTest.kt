@@ -26,34 +26,36 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Descriptors.Descriptor
-import io.spine.logging.testing.tapConsole
-import io.spine.protodata.Compilation
-import java.nio.file.Path
-import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.io.TempDir
+import io.spine.option.OptionsProto
+import io.spine.protodata.ast.filePattern
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.settings.SettingsDirectory
+import io.spine.protodata.settings.defaultConsumerId
+import io.spine.protodata.testing.AbstractCompilationErrorTest
+import io.spine.protodata.util.Format
 
 /**
- * An abstract base for classes that test compilation errors.
+ * An abstract base for compilation error tests of [ValidationPlugin].
  */
-internal abstract class AbstractCompilationTest {
+internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
 
-    @TempDir
-    protected lateinit var workingDir: Path
+    override fun plugins(): List<Plugin> = listOf(
+        object : ValidationPlugin() {}
+    )
 
-    /**
-     * Asserts that the messages represented by the given [descriptor]
-     * fails the compilation process.
-     */
-    fun assertCompilationFails(descriptor: Descriptor): Compilation.Error {
-        val fixture = ValidationTestFixture(descriptor, workingDir)
-        val pipeline = fixture.setup.createPipeline()
-        val error = assertThrows<Compilation.Error> {
-            // Redirect console output so that we don't print errors during the build.
-            tapConsole {
-                pipeline()
+    override fun writeSettings(settings: SettingsDirectory) {
+        val config = validationConfig {
+            messageMarkers = messageMarkers {
+                commandPattern.add(filePattern { suffix = "commands.proto" })
+                eventPattern.add(filePattern { suffix = "events.proto" })
+                rejectionPattern.add(filePattern { suffix = "rejections.proto" })
+                entityOptionName.add(OptionsProto.entity.descriptor.name)
             }
         }
-        return error
+        settings.write(
+            ValidationPlugin::class.java.defaultConsumerId,
+            Format.PROTO_JSON,
+            config.toByteArray()
+        )
     }
 }
