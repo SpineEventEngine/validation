@@ -38,8 +38,10 @@ option java_multiple_files = true;
 
 // This file declares messages that apply `(goes)` option to fields with incompatible type.
 // Incompatible field types are the following:
+//
 // 1. All numeric fields.
 // 3. Boolean.
+//
 
 message GoesBoolTarget {
     string companion = 1;

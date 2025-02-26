@@ -36,10 +36,12 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "GoesBadCompanionTypeProto";
 option java_multiple_files = true;
 
-// This file declares messages that specify a field with incompatible type as a companion.
-// Incompatible field types are the following:
+// This file declares messages that reference a field with incompatible type as the companion.
+// Incompatible companion field types are the following:
+//
 // 1. All numeric fields.
 // 3. Boolean.
+//
 
 message GoesBoolCompanion {
     bool companion = 1;
