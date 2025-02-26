@@ -46,7 +46,7 @@ internal class MinPolicy : Policy<FieldOptionDiscovered>() {
         event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
         val field = event.subject
-        val rules = from(field, event.option, typeSystem!!)
+        val rules = from(field, event.option, typeSystem)
         val rule = rules.minRule(field.name)
         return simpleRuleAdded(field.declaringType, rule)
     }

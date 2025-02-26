@@ -49,7 +49,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         event: FieldOptionDiscovered
     ): Just<CompositeRuleAdded> {
         val field = event.subject
-        val rules = from(field, event.option, typeSystem!!)
+        val rules = from(field, event.option, typeSystem)
         return just(compositeRuleAdded {
                 type = field.declaringType
                 rule = rules.rangeRule(field.name)
