@@ -38,9 +38,27 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
 
 /**
- * Returns an expression that converts the provided field [value] to [String].
+ * Returns an expression that converts the provided field [value] to a [String].
  *
  * How the value is converted to [String] is determined by this [FieldType].
+ *
+ * For most field types, an invocation of `toString()` is used because these
+ * Protobuf types are represented as Java objects in the generated code.
+ *
+ * The following field types use `toString()`:
+ *
+ * 1. Messages and enums.
+ * 2. Lists and maps.
+ * 3. Bytes.
+ *
+ * Note that the `bytes` field type is represented with [com.google.protobuf.ByteString]
+ * in the generated code. An invocation of `toString()` on this type is completely safe.
+ * It prints a truncated, escaped version of its content along with its size.
+ *
+ * The remaining field types are handled as follows:
+ *
+ * 1. `string` remains unchanged.
+ * 2. Scalar types (except `bytes`) are converted using the `String.valueOf` method.
  */
 internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
