@@ -98,3 +98,8 @@ public const val WHEN: String = "when"
  * The name of the `(goes)` option.
  */
 public const val GOES: String = "goes"
+
+/**
+ * The name of `(if_has_duplicates)` option.
+ */
+public const val IF_HAS_DUPLICATES: String = "if_has_duplicates"
