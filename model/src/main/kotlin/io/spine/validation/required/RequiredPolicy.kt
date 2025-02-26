@@ -52,6 +52,7 @@ import io.spine.validation.boolValue
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.validation.protodata.findOption
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -114,11 +115,8 @@ private val SUPPORTED_PRIMITIVES = listOf(
 )
 
 private fun determineErrorMessage(field: Field): String {
-    val companion = field.optionList.find { it.name == IF_MISSING }
-    return if (companion == null) {
-        IfMissingOption.getDescriptor().defaultMessage
-    } else {
-        companion.value.unpack<IfMissingOption>()
-            .errorMsg
-    }
+    val customMessage = field.findOption(IF_MISSING)
+        ?.value?.unpack<IfMissingOption>()
+        ?.errorMsg
+    return customMessage ?: IfMissingOption.getDescriptor().defaultMessage
 }
