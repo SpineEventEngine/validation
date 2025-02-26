@@ -50,6 +50,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 /**
  * Provides data for parametrized [io.spine.test.options.setonce.SetOnceViolationITest].
  */
+@Suppress("unused") // Data provider for parameterized test.
 internal object SetOnceViolationTestEnv {
 
     /**

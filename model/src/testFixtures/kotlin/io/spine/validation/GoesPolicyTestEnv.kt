@@ -32,6 +32,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 /**
  * Provides data for parametrized tests in [io.spine.validation.GoesPolicySpec].
  */
+@Suppress("unused") // Data provider for parameterized test.
 object GoesPolicyTestEnv {
 
     /**
