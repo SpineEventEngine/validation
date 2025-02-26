@@ -56,7 +56,7 @@ internal object GoesViolationTestEnv {
     ).map { arguments(named(it.name, "${it.name}_field"), it.type, it.value) }
 }
 
-private class Field(
+private data class Field(
     val name: String,
     val type: String,
     val value: Any,

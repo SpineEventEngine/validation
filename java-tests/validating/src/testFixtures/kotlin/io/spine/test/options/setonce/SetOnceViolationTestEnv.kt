@@ -104,7 +104,7 @@ internal object SetOnceViolationTestEnv {
     ).map { arguments(named(it.type, it.field), it.type, it.value1, it.value2) }
 }
 
-private class Primitive(
+private data class Primitive(
     val type: String,
     val field: String,
     val value1: Any,
