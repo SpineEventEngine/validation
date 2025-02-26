@@ -39,16 +39,17 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.field
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
+import io.spine.protodata.java.findField
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.type.message
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
-import io.spine.validation.protodata.findField
-import io.spine.validation.protodata.message
 
 /**
  * Controls whether a field should be validated with the `(goes)` option.
@@ -61,11 +62,9 @@ import io.spine.validation.protodata.message
  * 3. The companion field and the target field are different fields.
  * 4. The companion field type is supported by the option.
  *
- * Ant violation of the above conditions leads to a compilation error.
+ * Any violation of the above conditions leads to a compilation error.
  */
 internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
-
-    override val typeSystem by lazy { super.typeSystem!! }
 
     @React
     override fun whenever(
