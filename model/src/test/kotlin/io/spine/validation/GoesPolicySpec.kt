@@ -77,18 +77,18 @@ internal class GoesPolicySpec : CompilationErrorTest() {
 }
 
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type}` of the `${field.qualifiedName}` field " +
-            "is not supported by the `($GOES)` option."
+    "The field type `${field.type}` of the `${field.qualifiedName}` field" +
+            " is not supported by the `($GOES)` option."
 
 private fun unsupportedCompanionType(field: Field) =
-    "The field type `${field.type}` of the companion `${field.qualifiedName}` field " +
-            "is not supported by the `($GOES)` option."
+    "The field type `${field.type}` of the companion `${field.qualifiedName}` field" +
+            " is not supported by the `($GOES)` option."
 
 private fun nonExistingCompanion(message: Descriptor, companionName: String) =
-    "The message `${message.fullName}` does not have `$companionName` field " +
-            "declared as companion of `target` by the `($GOES)` option."
+    "The message `${message.fullName}` does not have `$companionName` field" +
+            " declared as companion of `target` by the `($GOES)` option."
 
 private fun selfCompanion(field: Field) =
-    "The `($GOES)` option cannot use the marked field as its own companion. " +
-            "Self-referencing is prohibited. Please specify another field. " +
-            "The invalid field: `${field.qualifiedName}`."
+    "The `($GOES)` option cannot use the marked field as its own companion." +
+            " Self-referencing is prohibited. Please specify another field." +
+            " The invalid field: `${field.qualifiedName}`."

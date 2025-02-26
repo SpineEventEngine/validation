@@ -96,27 +96,27 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of the `${field.qualifiedName}` field " +
-                "is not supported by the `($GOES)` option."
+        "The field type `${field.type}` of the `${field.qualifiedName}` field" +
+                " is not supported by the `($GOES)` option."
     }
 
 private fun checkCompanionType(companion: Field, file: File) =
     Compilation.check(companion.type.isSupported(), file, companion.span) {
-        "The field type `${companion.type}` of the companion `${companion.qualifiedName}` field " +
-                "is not supported by the `($GOES)` option."
+        "The field type `${companion.type}` of the companion `${companion.qualifiedName}` field" +
+                " is not supported by the `($GOES)` option."
     }
 
 private fun checkFieldExists(message: MessageType, companion: String, field: Field, file: File) =
     Compilation.check(message.findField(companion) != null, file, field.span) {
-        "The message `${message.name.qualifiedName}` does not have `$companion` field " +
-                "declared as companion of `${field.name.value}` by the `($GOES)` option."
+        "The message `${message.name.qualifiedName}` does not have `$companion` field" +
+                " declared as companion of `${field.name.value}` by the `($GOES)` option."
     }
 
 private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
     Compilation.check(field != companion, file, field.span) {
-        "The `($GOES)` option cannot use the marked field as its own companion. " +
-                "Self-referencing is prohibited. Please specify another field. " +
-                "The invalid field: `${field.qualifiedName}`."
+        "The `($GOES)` option cannot use the marked field as its own companion." +
+                " Self-referencing is prohibited. Please specify another field." +
+                " The invalid field: `${field.qualifiedName}`."
     }
 
 private fun FieldType.isSupported(): Boolean =

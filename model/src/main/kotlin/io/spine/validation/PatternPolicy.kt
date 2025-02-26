@@ -80,9 +80,9 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                "by the `($PATTERN)` option. Supported field types: strings and repeated " +
-                "of strings."
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($PATTERN)` option. Supported field types: strings and repeated" +
+                " of strings."
     }
 
 private fun FieldType.isSupported(): Boolean = isSingularString || isRepeatedString

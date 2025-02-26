@@ -114,9 +114,9 @@ private fun <T : Any> Builder.assertConstraintViolation(
 
 @Suppress("UNUSED_PARAMETER") // The function should match the expected interface.
 private fun defaultTemplate(fieldNumber: Int) =
-    "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has " +
-            "the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
+    "The field `\${parent.type}.\${field.path}` of the type `\${field.type}` already has" +
+            " the value `\${field.value}` and cannot be reassigned to `\${field.proposed_value}`."
 
 private fun customTemplate(fieldNumber: Int) =
-    "Field_$fieldNumber: " +
-            "`\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."
+    "Field_$fieldNumber:" +
+            " `\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."

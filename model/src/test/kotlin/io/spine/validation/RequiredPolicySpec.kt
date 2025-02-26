@@ -74,5 +74,5 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 }
 
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-            "by the `($REQUIRED)` option."
+    "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+            " by the `($REQUIRED)` option."

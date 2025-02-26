@@ -101,9 +101,9 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                "by the `($REQUIRED)` option. Supported field types: messages, enums, " +
-                "strings, bytes, repeated, and maps."
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($REQUIRED)` option. Supported field types: messages, enums," +
+                " strings, bytes, repeated, and maps."
     }
 
 private fun FieldType.isSupported(): Boolean =

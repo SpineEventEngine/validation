@@ -108,8 +108,8 @@ private fun Builder.assertConstraintViolation(
 
 @Suppress("UNUSED_PARAMETER") // The function should match the expected interface.
 private fun defaultTemplate(fieldNumber: Int) =
-    "The field `\${goes.companion}` must also be set when `\${field.path}` " +
-            "is set in `\${parent.type}`."
+    "The field `\${goes.companion}` must also be set when `\${field.path}`" +
+            " is set in `\${parent.type}`."
 
 private fun customTemplate(fieldNumber: Int) =
     "Field_$fieldNumber: `{companionName}`, `{fieldName}`."

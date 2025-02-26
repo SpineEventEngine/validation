@@ -66,14 +66,14 @@ internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
             isMessage || isEnum -> value.stringify()
             isPrimitive -> value.stringifyPrimitive(primitive)
             else -> error(
-                "Cannot convert `$value` expression to `String` expression. " +
-                        "Unsupported field type: `${name}`."
+                "Cannot convert `$value` expression to `String` expression." +
+                        " Unsupported field type: `${name}`."
             )
         }
         isList || isMap -> value.stringify()
         else -> error(
-            "Cannot convert `$value` expression to `String` expression. " +
-                    "Unsupported field type: `${name}`."
+            "Cannot convert `$value` expression to `String` expression." +
+                    " Unsupported field type: `${name}`."
         )
     }
 
