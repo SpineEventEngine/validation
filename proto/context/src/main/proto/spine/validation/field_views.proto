@@ -11,21 +11,11 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
-// Uniquely identifies a message field declaration.
-message FieldId {
-
-    // The name of the containing type.
-    protodata.TypeName type = 1;
-
-    // The name of the field.
-    protodata.FieldName name = 2;
-}
-
 // A view on a field that is marked with `(required) = true`.
 message RequiredField {
     option (entity).kind = PROJECTION;
 
-    FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -38,7 +28,7 @@ message RequiredField {
 message ValidatedField {
     option (entity).kind = PROJECTION;
 
-    FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // Deprecated: this option does not have its own error message.
     string error_message = 2 [deprecated = true];
@@ -51,7 +41,7 @@ message ValidatedField {
 message SetOnceField {
     option (entity).kind = PROJECTION;
 
-    FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -67,7 +57,7 @@ message SetOnceField {
 message PatternField {
     option (entity).kind = PROJECTION;
 
-    FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -80,4 +70,20 @@ message PatternField {
 
     // The field in which the option was discovered.
     protodata.Field subject = 5;
+}
+
+// A view of a field that is marked with `(goes)` option.
+message GoesField {
+    option (entity).kind = PROJECTION;
+
+    protodata.FieldRef id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The name of the required companion field.
+    protodata.Field companion = 3;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 4;
 }

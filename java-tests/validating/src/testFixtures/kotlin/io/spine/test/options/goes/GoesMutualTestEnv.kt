@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes.given
+package io.spine.test.options.goes
 
 import com.google.protobuf.ByteString
 import com.google.protobuf.Message
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesMutualITest].
+ * Provides data for parameterized [io.spine.test.options.goes.GoesMutualITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesMutualTestEnv {
@@ -56,14 +56,16 @@ internal object GoesMutualTestEnv {
     )
 
     /**
-     * Test data for [GoesMutualITest.passIfBothMutuallyDependentFieldsNotSet].
+     * Test data for [io.spine.test.options.goes.GoesMutualITest.passIfBothMutuallyDependentFieldsNotSet].
      */
     @JvmStatic
     fun messagesWithInterdependentFields() = fieldValues.map { it.first.java }
 
     /**
-     * Test data for [GoesMutualITest.throwIfOneOfMutuallyDependentFieldsNotSet] and
-     * [GoesMutualITest.passIfBothMutuallyDependentFieldsSet] tests.
+     * Test data for the following tests:
+     *
+     * 1. [io.spine.test.options.goes.GoesMutualITest.throwIfOneOfMutuallyDependentFieldsNotSet].
+     * 2. [io.spine.test.options.goes.GoesMutualITest.passIfBothMutuallyDependentFieldsSet].
      */
     @JvmStatic
     fun interdependentFields() = fieldValues.flatMap { (messageClass, companionValue) ->

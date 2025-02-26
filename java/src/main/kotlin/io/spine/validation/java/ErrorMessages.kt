@@ -30,17 +30,13 @@ package io.spine.validation.java
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
-import io.spine.protobuf.CollectionsConverter
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
 import io.spine.protodata.java.newBuilder
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isMap
 import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
@@ -51,9 +47,7 @@ import io.spine.validation.ErrorMessage
  * to the mutable list of violations from the given [ctx].
  */
 public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
-    val violation = buildViolation(
-        validatedType, fieldFromSimpleRule, fieldOrElement, ignoreCardinality = isElement
-    )
+    val violation = buildViolation(validatedType, fieldFromSimpleRule, fieldOrElement)
     return addViolation(violation, violationList)
 }
 
@@ -99,7 +93,6 @@ private fun ErrorMessage.buildViolation(
     type: TypeName,
     field: Field?,
     fieldValue: Expression<*>?,
-    ignoreCardinality: Boolean = false
 ): Expression<ConstraintViolation> {
     val message = TemplateStringClass.newBuilder()
         .chainSet("withPlaceholders", Literal(this))
@@ -112,12 +105,7 @@ private fun ErrorMessage.buildViolation(
     }
     if (fieldValue != null) {
         checkNotNull(field) { "The field value (`$fieldValue`) is set without the field." }
-        val packingExpression = when {
-            ignoreCardinality -> fieldValue.packToAny()
-            field.isList || field.isMap  ->
-                ClassName(CollectionsConverter::class).call("toAny", listOf(fieldValue))
-            else -> fieldValue.packToAny()
-        }
+        val packingExpression = fieldValue.packToAny()
         violationBuilder = violationBuilder.chainSet("field_value", packingExpression)
     }
     return violationBuilder.chainBuild()

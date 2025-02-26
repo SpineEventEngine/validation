@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,33 +23,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.validation;
+package io.spine.validation
 
-import "spine/options.proto";
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.GoesFieldDiscovered
 
-option (type_url_prefix) = "type.spine.io";
-option java_multiple_files = true;
-option java_outer_classname = "TestGoesOptionProto";
-option java_package = "io.spine.test.validate";
+/**
+ * A view of a field that is marked with `(required)` option.
+ */
+internal class GoesFieldView : View<FieldRef, GoesField, GoesField.Builder>() {
 
-import "google/protobuf/timestamp.proto";
-
-// Messages for "goes" option tests.
-
-// A scheduled payment which `id` and `timestamp` fields are filled as soon as the payment is
-// processed.
-message Payment {
-
-    PaymentId id = 1 [(goes).with = "timestamp"];
-
-    string description = 2;
-
-    google.protobuf.Timestamp timestamp = 3 [(goes).with = "id"];
-}
-
-message PaymentId {
-
-    string uuid = 1;
+    @Subscribe
+    fun on(e: GoesFieldDiscovered) = alter {
+        errorMessage = e.errorMessage
+        companion = e.companion
+        subject = e.subject
+    }
 }

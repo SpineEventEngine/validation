@@ -65,7 +65,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("Validation policies should")
-class PolicySpec {
+internal class PolicySpec {
 
     private lateinit var codegenContext: CodeGenerationContext
     private lateinit var blackBox: BlackBox

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes.given
+package io.spine.test.options.goes
 
 import com.google.protobuf.ByteString.copyFromUtf8
 import com.google.protobuf.Message
@@ -41,12 +41,11 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesOneWayITest].
+ * Provides data for parameterized [GoesOneWayITest][io.spine.test.options.goes.GoesOneWayITest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesOneWayTestEnv {
 
-    private const val COMPANION_FIELD_NAME = "companion"
     private val fieldValues = listOf(
         MessageCompanion::class to Timestamps.now(),
         EnumCompanion::class to EFG_ITEM1.valueDescriptor,
@@ -57,7 +56,7 @@ internal object GoesOneWayTestEnv {
     )
 
     /**
-     * Test data for [GoesOneWayITest.throwIfOnlyTargetFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.throwIfOnlyTargetFieldSet].
      */
     @JvmStatic
     fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
@@ -67,16 +66,16 @@ internal object GoesOneWayTestEnv {
     }
 
     /**
-     * Test data for [GoesOneWayITest.passIfOnlyCompanionFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfOnlyCompanionFieldSet].
      */
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
         val fieldType = messageCLass.typeUnderTest()
-        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD_NAME), companionValue)
+        arguments(messageCLass.java, named(fieldType, COMPANION_FIELD), companionValue)
     }
 
     /**
-     * Test data for [GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->
@@ -86,7 +85,7 @@ internal object GoesOneWayTestEnv {
             val fieldName = fieldClass.fieldName()
             arguments(
                 messageClass.java,
-                named(companionType, COMPANION_FIELD_NAME),
+                named(companionType, COMPANION_FIELD),
                 companionValue,
                 named(fieldType, fieldName),
                 fieldValue

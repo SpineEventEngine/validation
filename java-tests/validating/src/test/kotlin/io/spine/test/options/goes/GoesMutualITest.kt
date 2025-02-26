@@ -27,10 +27,10 @@
 package io.spine.test.options.goes
 
 import com.google.protobuf.Message
-import io.spine.test.options.goes.given.newBuilder
-import io.spine.test.options.goes.given.protoDescriptor
-import io.spine.test.options.goes.given.protoValue
+import io.spine.test.options.set
 import io.spine.validate.ValidationException
+import io.spine.validation.getDescriptor
+import io.spine.validation.newBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -51,7 +51,7 @@ import org.junit.jupiter.params.provider.MethodSource
 internal class GoesMutualITest {
 
     @Suppress("MaxLineLength") // So not to wrap the test display name.
-    @MethodSource("io.spine.test.options.goes.given.GoesMutualTestEnv#interdependentFields")
+    @MethodSource("io.spine.test.options.goes.GoesMutualTestEnv#interdependentFields")
     @ParameterizedTest(name = "throw if one of mutually dependent `{1}` and `{3}` fields is not set")
     fun throwIfOneOfMutuallyDependentFieldsNotSet(
         message: Class<out Message>,
@@ -60,24 +60,22 @@ internal class GoesMutualITest {
         fieldName2: String,
         fieldValue2: Any
     ) {
-        val descriptor = message.protoDescriptor()
+        val descriptor = message.getDescriptor()
         val field1 = descriptor.findFieldByName(fieldName1)!!
-        val protoValue1 = protoValue(field1, fieldValue1)
         assertThrows<ValidationException> {
             message.newBuilder()
-                .setField(field1, protoValue1)
+                .set(field1, fieldValue1)
                 .build()
         }
         val field2 = descriptor.findFieldByName(fieldName2)!!
-        val protoValue2 = protoValue(field2, fieldValue2)
         assertThrows<ValidationException> {
             message.newBuilder()
-                .setField(field2, protoValue2)
+                .set(field2, fieldValue2)
                 .build()
         }
     }
 
-    @MethodSource("io.spine.test.options.goes.given.GoesMutualTestEnv#interdependentFields")
+    @MethodSource("io.spine.test.options.goes.GoesMutualTestEnv#interdependentFields")
     @ParameterizedTest(name = "pass if both mutually dependent `{1}` and `{3}` fields are set")
     fun passIfBothMutuallyDependentFieldsSet(
         message: Class<out Message>,
@@ -86,21 +84,19 @@ internal class GoesMutualITest {
         fieldName2: String,
         fieldValue2: Any
     ) {
-        val descriptor = message.protoDescriptor()
+        val descriptor = message.getDescriptor()
         val field1 = descriptor.findFieldByName(fieldName1)!!
-        val protoValue1 = protoValue(field1, fieldValue1)
         val field2 = descriptor.findFieldByName(fieldName2)!!
-        val protoValue2 = protoValue(field2, fieldValue2)
         assertDoesNotThrow {
             message.newBuilder()
-                .setField(field1, protoValue1)
-                .setField(field2, protoValue2)
+                .set(field1, fieldValue1)
+                .set(field2, fieldValue2)
                 .build()
         }
     }
 
     @Suppress("MaxLineLength") // Due to a long method source.
-    @MethodSource("io.spine.test.options.goes.given.GoesMutualTestEnv#messagesWithInterdependentFields")
+    @MethodSource("io.spine.test.options.goes.GoesMutualTestEnv#messagesWithInterdependentFields")
     @ParameterizedTest(name = "pass if both mutually dependent fields are not set")
     fun passIfBothMutuallyDependentFieldsNotSet(message: Class<out Message>) {
         assertDoesNotThrow {

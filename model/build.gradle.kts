@@ -24,9 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
+import io.spine.dependency.test.JUnit
 
 plugins {
     java
@@ -46,6 +48,7 @@ dependencies {
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(ProtoData.testlib)
+    testImplementation(JUnit.params)
 
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)

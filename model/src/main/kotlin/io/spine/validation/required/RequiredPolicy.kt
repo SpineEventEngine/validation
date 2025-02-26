@@ -32,11 +32,14 @@ import io.spine.option.IfMissingOption
 import io.spine.protobuf.unpack
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
+import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -49,7 +52,6 @@ import io.spine.validation.boolValue
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.fieldId
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -90,26 +92,22 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
         val message = determineErrorMessage(field)
         return requiredFieldDiscovered {
-            id = fieldId {
-                type = field.declaringType
-                name = field.name
-            }
+            id = field.ref
             errorMessage = message
             subject = field
         }.asA()
     }
 }
 
-private fun checkFieldType(field: Field, file: File) {
-    val type = field.type
-    if (type.isPrimitive && type.primitive !in SUPPORTED_PRIMITIVES) {
-        Compilation.error(file, field.span) {
-            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                    "by the `($REQUIRED)` option. Supported field types: messages, enums, " +
-                    "strings, bytes, repeated, and maps."
-        }
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.isSupported(), file, field.span) {
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($REQUIRED)` option. Supported field types: messages, enums," +
+                " strings, bytes, repeated, and maps."
     }
-}
+
+private fun FieldType.isSupported(): Boolean =
+    !isPrimitive || primitive in SUPPORTED_PRIMITIVES
 
 private val SUPPORTED_PRIMITIVES = listOf(
     TYPE_STRING, TYPE_BYTES

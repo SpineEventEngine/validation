@@ -134,7 +134,4 @@ internal class SetOnceMessageField(
         val merge = method("merge$fieldNameCamel").body!!
         merge.addAfter(precondition, merge.lBrace)
     }
-
-    override fun asString(fieldValue: Expression<Message>): Expression<String> =
-        MethodCall(fieldValue, "toString")
 }

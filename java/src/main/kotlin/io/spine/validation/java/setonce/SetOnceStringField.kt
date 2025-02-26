@@ -148,6 +148,14 @@ internal class SetOnceStringField(
         fieldProcessing.addAfter(precondition, fieldProcessing.lBrace)
     }
 
+    /**
+     * Converts the given [fieldValue] to string for a diagnostics message.
+     *
+     * We have to override this method because within the builder, a string is stored
+     * as [StringOrByteString], but the [field] type is just [String]. This confuses
+     * the default implementation of [asString], which yields an expression to convert
+     * to [String] depending on the [field] type.
+     */
     override fun asString(fieldValue: Expression<StringOrByteString>): Expression<String> =
         MethodCall(fieldValue, "toString")
 }

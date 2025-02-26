@@ -26,99 +26,102 @@
 
 package io.spine.validation
 
-import com.google.protobuf.kotlin.unpack
-import io.spine.base.FieldPath
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.GoesOption
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.field
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
+import io.spine.protodata.check
+import io.spine.protodata.java.findField
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.type.resolve
+import io.spine.protodata.type.message
 import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.just
 import io.spine.server.event.React
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.required.RequiredRule
+import io.spine.server.event.just
+import io.spine.validation.event.GoesFieldDiscovered
+import io.spine.validation.event.goesFieldDiscovered
 
 /**
- * A policy to add a validation rule to a type whenever the `(goes)` field option
- * is discovered.
+ * Controls whether a field should be validated with the `(goes)` option.
  *
- * This option, when being applied to a target field `A`, declares a dependency to
- * a field `B`. So, whenever `A` is set, `B` also must be set.
+ * Whenever a filed marked with `(goes)` option is discovered,
+ * emits [GoesFieldDiscovered] if the following conditions are met:
  *
- * Upon discovering a field with the mentioned option, the police emits the following
- * composite rule for `A`: `(A isNot Set) OR (B is Set)`.
+ * 1. The field type is supported by the option.
+ * 2. The companion field is present in the message.
+ * 3. The companion field and the target field are different fields.
+ * 4. The companion field type is supported by the option.
  *
- * Please note, this police relies on implementation of `required` option to determine
- * whether the field is set. Thus, inheriting its behavior regarding the supported
- * field types and specification about when a field of a specific type is considered
- * to be set.
+ * Any violation of the above conditions leads to a compilation error.
  */
 internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
-
-    private companion object {
-        const val NO_ERROR_MESSAGE = ""
-    }
-
-    override val typeSystem by lazy { super.typeSystem!! }
 
     @React
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = GOES)
         event: FieldOptionDiscovered
-    ): Just<RuleAdded> {
-        val target = event.subject
-        val option = event.option.value.unpack<GoesOption>()
-        val declaringMessage = typeSystem.findMessage(target.declaringType)!!.first
-        val companionName = FieldPath(option.with)
-        val companion = typeSystem.resolve(companionName, declaringMessage)
-        checkDistinct(target, companion)
-        val rule = compositeRule {
-            left = targetFieldShouldBeUnset(target)
-            operator = LogicalOperator.OR
-            right = companionFieldShouldBeSet(companion)
-            errorMessage = option.errorMessage()
-            field = target.name
-        }.wrap()
-        return just(rule.toEvent(target.declaringType))
+    ): Just<GoesFieldDiscovered> {
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, file)
+
+        val option = event.option.unpack<GoesOption>()
+        val declaringMessage = typeSystem.message(field.declaringType)
+        val companionName = option.with
+        checkFieldExists(declaringMessage, companionName, field, file)
+
+        val companionField = declaringMessage.field(companionName)
+        checkFieldsDistinct(field, companionField, file)
+        checkCompanionType(companionField, file)
+
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        return goesFieldDiscovered {
+            id = field.ref
+            errorMessage = message
+            companion = companionField
+            subject = field
+        }.just()
     }
-
-    /**
-     * Checks that the given [target] and [companion] fields are distinct.
-     *
-     * Please note, this method does not use `==` comparison between two objects
-     * because the field returned from [FieldOptionDiscovered] event has an empty
-     * [options list][Field.getOptionList].
-     */
-    private fun checkDistinct(target: Field, companion: Field) =
-        check(target.qualifiedName != companion.qualifiedName) {
-            "The `($GOES)` option can not use the target field as its own companion. " +
-                    "Self-referencing is prohibited. Please specify another field. " +
-                    "The invalid field: `${target.qualifiedName}`."
-        }
-
-    /**
-     * Creates a simple rule that makes sure the given [target] field is NOT set.
-     */
-    private fun targetFieldShouldBeUnset(target: Field) =
-        RequiredRule.forField(target, NO_ERROR_MESSAGE)!!
-            .simple.toBuilder()
-            .setOperator(ComparisonOperator.EQUAL)
-            .build().wrap()
-
-    /**
-     * Creates a simple rule that makes sure the given [companion] field is SET.
-     */
-    private fun companionFieldShouldBeSet(companion: Field) =
-        RequiredRule.forField(companion, NO_ERROR_MESSAGE)!!
-
-    /**
-     * Returns an error message for the outer composite rule.
-     */
-    private fun GoesOption.errorMessage() = errorMsg.ifEmpty { DEFAULT_MESSAGE }
 }
 
-private val DEFAULT_MESSAGE = DefaultErrorMessage.from(GoesOption.getDescriptor())
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.isSupported(), file, field.span) {
+        "The field type `${field.type}` of the `${field.qualifiedName}` field" +
+                " is not supported by the `($GOES)` option."
+    }
+
+private fun checkCompanionType(companion: Field, file: File) =
+    Compilation.check(companion.type.isSupported(), file, companion.span) {
+        "The field type `${companion.type}` of the companion `${companion.qualifiedName}` field" +
+                " is not supported by the `($GOES)` option."
+    }
+
+private fun checkFieldExists(message: MessageType, companion: String, field: Field, file: File) =
+    Compilation.check(message.findField(companion) != null, file, field.span) {
+        "The message `${message.name.qualifiedName}` does not have `$companion` field" +
+                " declared as companion of `${field.name.value}` by the `($GOES)` option."
+    }
+
+private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
+    Compilation.check(field != companion, file, field.span) {
+        "The `($GOES)` option cannot use the marked field as its own companion." +
+                " Self-referencing is prohibited. Please specify another field." +
+                " The invalid field: `${field.qualifiedName}`."
+    }
+
+private fun FieldType.isSupported(): Boolean =
+    !isPrimitive || primitive in SUPPORTED_PRIMITIVES
+
+private val SUPPORTED_PRIMITIVES = listOf(
+    TYPE_STRING, TYPE_BYTES
+)

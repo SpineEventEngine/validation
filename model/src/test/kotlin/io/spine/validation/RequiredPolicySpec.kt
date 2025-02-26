@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,80 +24,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation
 
-import com.google.protobuf.Descriptors.Descriptor
 import io.kotest.matchers.string.shouldContain
-import io.spine.logging.testing.tapConsole
-import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
-import io.spine.validation.REQUIRED
-import io.spine.validation.ValidationTestFixture
 import io.spine.validation.given.required.WithBoolField
 import io.spine.validation.given.required.WithDoubleField
 import io.spine.validation.given.required.WithIntField
 import io.spine.validation.given.required.WithSignedInt
-import java.nio.file.Path
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.io.TempDir
 
 @DisplayName("`RequiredPolicy` should")
-internal class RequiredPolicySpec {
+internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
-    fun `reject option on a boolean field`(@TempDir workingDir: Path) {
+    fun `reject option on a boolean field`() {
         val message = WithBoolField.getDescriptor()
-        val error = compile(message, workingDir)
+        val error = assertCompilationFails(message)
         val field = message.field("really")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `reject option on an integer field`(@TempDir workingDir: Path) {
+    fun `reject option on an integer field`() {
         val message = WithIntField.getDescriptor()
-        val error = compile(message, workingDir)
+        val error = assertCompilationFails(message)
         val field = message.field("zero")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `reject option on a signed integer field`(@TempDir workingDir: Path) {
+    fun `reject option on a signed integer field`() {
         val message = WithSignedInt.getDescriptor()
-        val error = compile(message, workingDir)
+        val error = assertCompilationFails(message)
         val field = message.field("signed")
-        error.message shouldContain expected(field)
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `reject option on a double field`(@TempDir workingDir: Path) {
+    fun `reject option on a double field`() {
         val message = WithDoubleField.getDescriptor()
-        val error = compile(message, workingDir)
+        val error = assertCompilationFails(message)
         val field = message.field("temperature")
-        error.message shouldContain expected(field)
-    }
-
-    /**
-     * Creates and runs a pipeline which handles only the proto type with the given [descriptor].
-     */
-    private fun compile(
-        descriptor: Descriptor,
-        workingDir: Path
-    ): Compilation.Error {
-        val fixture = ValidationTestFixture(descriptor, workingDir)
-        val pipeline = fixture.setup.createPipeline()
-        val error = assertThrows<Compilation.Error> {
-            // Redirect console output so that we don't print errors during the build.
-            tapConsole {
-                pipeline()
-            }
-        }
-        return error
+        error.message shouldContain unsupportedFieldType(field)
     }
 }
 
-private fun expected(field: Field) = "The field type `${field.type}` of `${field.qualifiedName}` " +
-        "is not supported by the `($REQUIRED)` option."
+private fun unsupportedFieldType(field: Field) =
+    "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+            " by the `($REQUIRED)` option."

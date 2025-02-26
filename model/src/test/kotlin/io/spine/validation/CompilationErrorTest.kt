@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,36 @@
 
 package io.spine.validation
 
-import io.spine.base.EntityState
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.ref
-import io.spine.protodata.plugin.ViewRepository
-import io.spine.server.route.EventRouting
+import io.spine.option.OptionsProto
+import io.spine.protodata.ast.filePattern
+import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.settings.SettingsDirectory
+import io.spine.protodata.settings.defaultConsumerId
+import io.spine.protodata.testing.AbstractCompilationErrorTest
+import io.spine.protodata.util.Format
 
 /**
- * A repository for a view on a field marked with a boolean validation option.
- *
- * @param V The type of the views managed by the repository.
- * @param S The type of the view entity state.
+ * An abstract base for compilation error tests of [ValidationPlugin].
  */
-internal abstract class BoolFieldOptionRepo<
-        V : BoolFieldOptionView<S, *>,
-        S : EntityState<FieldRef>
-        > : ViewRepository<FieldRef, V, S>() {
+internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
 
-    override fun setupEventRouting(routing: EventRouting<FieldRef>) {
-        super.setupEventRouting(routing)
-        routing.unicast<FieldOptionDiscovered> { e, _ ->
-            e.subject.ref
+    override fun plugins(): List<Plugin> = listOf(
+        object : ValidationPlugin() {}
+    )
+
+    override fun writeSettings(settings: SettingsDirectory) {
+        val config = validationConfig {
+            messageMarkers = messageMarkers {
+                commandPattern.add(filePattern { suffix = "commands.proto" })
+                eventPattern.add(filePattern { suffix = "events.proto" })
+                rejectionPattern.add(filePattern { suffix = "rejections.proto" })
+                entityOptionName.add(OptionsProto.entity.descriptor.name)
+            }
         }
+        settings.write(
+            ValidationPlugin::class.java.defaultConsumerId,
+            Format.PROTO_JSON,
+            config.toByteArray()
+        )
     }
 }

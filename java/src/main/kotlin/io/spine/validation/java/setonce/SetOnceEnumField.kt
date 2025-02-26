@@ -118,7 +118,12 @@ internal class SetOnceEnumField(
         asEnumConstant(fieldValue)
 
     /**
-     * Returns a string representation of the corresponding Java enum constant.
+     * Converts the given [fieldValue] to string for a diagnostics message.
+     *
+     * We have to override this method because within the builder, an enum constant
+     * is stored as [Int], but the [field] type is enum. This confuses the default
+     * implementation of [asString], which yields an expression to convert to [String]
+     * depending on the [field] type.
      */
     override fun asString(fieldValue: Expression<Int>): Expression<String> =
         fieldTypeClass

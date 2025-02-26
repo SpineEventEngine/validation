@@ -69,7 +69,7 @@ message MessageWideRuleAdded {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message RequiredFieldDiscovered {
 
-    spine.validation.FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -82,7 +82,7 @@ message RequiredFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message PatternFieldDiscovered {
 
-    spine.validation.FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -95,4 +95,20 @@ message PatternFieldDiscovered {
 
     // The field in which the option was discovered.
     protodata.Field subject = 5;
+}
+
+// The event emitted whenever a field with `(goes)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message GoesFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The name of the required companion field.
+    protodata.Field companion = 3;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 4;
 }

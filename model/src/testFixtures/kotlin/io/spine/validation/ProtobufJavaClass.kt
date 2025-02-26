@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,43 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.options.goes.given
+package io.spine.validation
 
 import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Descriptors.FieldDescriptor
-import com.google.protobuf.DynamicMessage
 import com.google.protobuf.Message
+import kotlin.reflect.KClass
 
 /**
- * Returns a Protobuf descriptor for the given message class.
+ * Returns a Protobuf descriptor for this message [Class].
  */
-internal fun Class<out Message>.protoDescriptor() =
+fun Class<out Message>.getDescriptor() =
     getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
 
 /**
- * Creates a new builder of the given message class.
+ * Returns a Protobuf descriptor for this message [KClass].
  */
-internal fun Class<out Message>.newBuilder() =
+fun KClass<out Message>.getDescriptor() = java.getDescriptor()
+
+/**
+ * Creates a new builder for this message [Class].
+ */
+fun Class<out Message>.newBuilder() =
     getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
 
 /**
- * Converts the given [value] to Protobuf equivalent, if needed.
- *
- * The method makes the given value compatible with [Message.Builder.setField] method.
- *
- * Kotlin's [Map] is converted to Protobuf map entries, which are message-specific.
- * Other values are passed "as is".
+ * Creates a new builder for this message [KClass].
  */
-internal fun protoValue(field: FieldDescriptor, value: Any): Any =
-    if (value is Map<*, *>) {
-        val descriptor = field.messageType
-        value.map { descriptor.newMapEntry(it.key, it.value) }
-    } else {
-        value
-    }
-
-private fun Descriptor.newMapEntry(key: Any?, value: Any?) =
-    DynamicMessage.newBuilder(this)
-        .setField(this.findFieldByName("key"), key)
-        .setField(this.findFieldByName("value"), value)
-        .build()
+fun KClass<out Message>.newBuilder() = java.newBuilder()

@@ -31,6 +31,7 @@ import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.FieldExited
+import io.spine.protodata.ast.fieldRef
 import io.spine.protodata.ast.qualifiedName
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -54,7 +55,7 @@ internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
 
     @React
     override fun whenever(@External event: FieldExited): EitherOf2<RuleAdded, NoReaction> {
-        val id = fieldId {
+        val id = fieldRef {
             name = event.field
             type = event.type
         }

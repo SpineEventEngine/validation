@@ -38,7 +38,9 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
+import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
@@ -67,10 +69,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
         val option = event.option.unpack<PatternOption>()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return patternFieldDiscovered {
-            id = fieldId {
-                type = field.declaringType
-                name = field.name
-            }
+            id = field.ref
             errorMessage = message
             pattern = option.regex
             modifier = option.modifier
@@ -79,16 +78,14 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-private fun checkFieldType(field: Field, file: File) {
-    val type = field.type
-    if (!(type.isSingularString || type.isRepeatedString)) {
-        Compilation.error(file, field.span) {
-            "The field type `${field.type}` of `${field.qualifiedName}` is not supported " +
-                    "by the `($PATTERN)` option. Supported field types: strings and repeated " +
-                    "of strings."
-        }
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.isSupported(), file, field.span) {
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($PATTERN)` option. Supported field types: strings and repeated" +
+                " of strings."
     }
-}
+
+private fun FieldType.isSupported(): Boolean = isSingularString || isRepeatedString
 
 /**
  * Tells if this [FieldType] represents a `repeated string` field.

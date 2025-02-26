@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,34 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java
 
-syntax = "proto3";
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.GoesField
 
-package spine.validation.given.required;
+/**
+ * The generator for `(goes)` option.
+ */
+internal class GoesGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
 
-import "spine/options.proto";
+    /**
+     * All goes fields in the current compilation process.
+     */
+    private val allGoesFields by lazy {
+        querying.select<GoesField>()
+            .all()
+    }
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.given.required";
-option java_outer_classname = "RequiredPolicySpecProto";
-option java_multiple_files = true;
-
-// Provides a boolean field with the inapplicable `(required)` option.
-message WithBoolField {
-    bool really = 1 [(.required) = true];
-}
-
-// Provides an `int32` field with the inapplicable `(required)` option.
-message WithIntField {
-    int32 zero = 1 [(.required) = true];
-}
-
-// Provides a `sint64` field with the inapplicable `(required)` option.
-message WithSignedInt {
-    sint64 signed = 1 [(.required) = true];
-}
-
-// Provides a `double` field with the inapplicable `(required)` option.
-message WithDoubleField {
-    double temperature = 1 [(.required) = true];
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
+        val goesFields = allGoesFields.filter { it.id.type == type }
+        val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
+        return constraints
+    }
 }

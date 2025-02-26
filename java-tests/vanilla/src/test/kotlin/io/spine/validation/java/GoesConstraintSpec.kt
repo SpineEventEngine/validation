@@ -64,7 +64,7 @@ internal class GoesConstraintSpec {
             .comparingExpectedFieldsOnly()
             .isEqualTo(
                 ConstraintViolation.newBuilder()
-                    .setTypeName(TypeName.of(paper).toUrl().value())
+                    .setTypeName(paper.descriptorForType.fullName)
                     .setFieldPath(
                         FieldPath.newBuilder()
                             .addFieldName("when_archived")

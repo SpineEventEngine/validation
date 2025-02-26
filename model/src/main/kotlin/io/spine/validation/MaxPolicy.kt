@@ -46,7 +46,7 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
         @External @Where(field = OPTION_NAME, equals = MAX) event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
         val field = event.subject
-        val rules = from(field, event.option, typeSystem!!)
+        val rules = from(field, event.option, typeSystem)
         val rule = rules.maxRule(field.name)
         return simpleRuleAdded(field.declaringType, rule)
     }
