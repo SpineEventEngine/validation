@@ -87,7 +87,7 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return goesFieldDiscovered {
-            id = field.id()
+            id = field.ref
             errorMessage = message
             companion = companionField
             subject = field

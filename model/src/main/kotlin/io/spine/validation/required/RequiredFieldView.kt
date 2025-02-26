@@ -27,16 +27,16 @@
 package io.spine.validation.required
 
 import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.FieldId
 import io.spine.validation.RequiredField
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
  * A view of a field that is marked with `(required) = true` option.
  */
-internal class RequiredFieldView : View<FieldId, RequiredField, RequiredField.Builder>() {
+internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
 
     @Subscribe
     fun on(e: RequiredFieldDiscovered) = alter {

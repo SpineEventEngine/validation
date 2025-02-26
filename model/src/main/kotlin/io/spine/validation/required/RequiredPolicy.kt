@@ -38,6 +38,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
@@ -51,7 +52,6 @@ import io.spine.validation.boolValue
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.id
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -92,7 +92,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 
         val message = determineErrorMessage(field)
         return requiredFieldDiscovered {
-            id = field.id()
+            id = field.ref
             errorMessage = message
             subject = field
         }.asA()

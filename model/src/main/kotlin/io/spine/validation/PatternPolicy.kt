@@ -38,6 +38,7 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
@@ -68,7 +69,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
         val option = event.option.unpack<PatternOption>()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return patternFieldDiscovered {
-            id = field.id()
+            id = field.ref
             errorMessage = message
             pattern = option.regex
             modifier = option.modifier

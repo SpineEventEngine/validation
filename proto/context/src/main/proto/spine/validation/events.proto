@@ -69,7 +69,7 @@ message MessageWideRuleAdded {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message RequiredFieldDiscovered {
 
-    spine.validation.FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -82,7 +82,7 @@ message RequiredFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message PatternFieldDiscovered {
 
-    spine.validation.FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;
@@ -101,7 +101,7 @@ message PatternFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message GoesFieldDiscovered {
 
-    spine.validation.FieldId id = 1;
+    protodata.FieldRef id = 1;
 
     // The error message template.
     string error_message = 2;

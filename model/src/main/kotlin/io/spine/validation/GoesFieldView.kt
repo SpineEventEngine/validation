@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.event.GoesFieldDiscovered
@@ -34,7 +35,7 @@ import io.spine.validation.event.GoesFieldDiscovered
 /**
  * A view of a field that is marked with `(required)` option.
  */
-internal class GoesFieldView : View<FieldId, GoesField, GoesField.Builder>() {
+internal class GoesFieldView : View<FieldRef, GoesField, GoesField.Builder>() {
 
     @Subscribe
     fun on(e: GoesFieldDiscovered) = alter {

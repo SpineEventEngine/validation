@@ -27,7 +27,9 @@
 package io.spine.validation
 
 import io.spine.base.EntityState
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.ref
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.route.EventRouting
 
@@ -39,16 +41,13 @@ import io.spine.server.route.EventRouting
  */
 internal abstract class BoolFieldOptionRepo<
         V : BoolFieldOptionView<S, *>,
-        S : EntityState<FieldId>
-        > : ViewRepository<FieldId, V, S>() {
+        S : EntityState<FieldRef>
+        > : ViewRepository<FieldRef, V, S>() {
 
-    override fun setupEventRouting(routing: EventRouting<FieldId>) {
+    override fun setupEventRouting(routing: EventRouting<FieldRef>) {
         super.setupEventRouting(routing)
         routing.unicast<FieldOptionDiscovered> { e, _ ->
-            fieldId {
-                type = e.subject.declaringType
-                name = e.subject.name
-            }
+            e.subject.ref
         }
     }
 }

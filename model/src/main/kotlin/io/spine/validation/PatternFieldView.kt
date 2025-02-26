@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.event.PatternFieldDiscovered
@@ -34,7 +35,7 @@ import io.spine.validation.event.PatternFieldDiscovered
 /**
  * A view of a field that is marked with `(pattern)` option.
  */
-internal class PatternFieldView : View<FieldId, PatternField, PatternField.Builder>() {
+internal class PatternFieldView : View<FieldRef, PatternField, PatternField.Builder>() {
 
     @Subscribe
     fun on(e: PatternFieldDiscovered) = alter {
