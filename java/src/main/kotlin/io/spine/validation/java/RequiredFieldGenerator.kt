@@ -98,7 +98,8 @@ internal class RequiredFieldGenerator(
 
     private fun violation(fieldPath: Expression<FieldPath>): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(fieldPath)
-        val errorMessage = templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
+        val errorMessage =
+            templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
         return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue = null)
     }
 
