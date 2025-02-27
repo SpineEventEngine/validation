@@ -66,6 +66,9 @@ internal class GoesFieldGenerator(
     private val fieldType = field.type
     private val declaringType = field.declaringType
 
+    /**
+     * Generates code for a field represented by the [view].
+     */
     fun generate(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion

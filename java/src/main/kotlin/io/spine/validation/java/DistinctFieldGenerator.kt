@@ -61,6 +61,9 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     private val getter = message.field(field).getter<List<*>>()
     private val declaringType = field.declaringType
 
+    /**
+     * Generates code for a field represented by the [view].
+     */
     fun generate(): FieldOptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
