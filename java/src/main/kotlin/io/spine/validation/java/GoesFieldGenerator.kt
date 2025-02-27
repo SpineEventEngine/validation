@@ -49,6 +49,7 @@ import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
@@ -77,7 +78,7 @@ internal class GoesFieldGenerator(
         val constraint = CodeBlock(
             """
             if (!$fieldGetter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
-                var fieldPath = ${fieldPath(field.name.value, ValidationCodeInjector.ValidateScope.parentPath)};
+                var fieldPath = ${fieldPath(field.name.value, parentPath)};
                 var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
                 $violations.add(violation);
             }
