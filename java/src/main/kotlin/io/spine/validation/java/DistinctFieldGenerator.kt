@@ -62,16 +62,12 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     private val declaringType = field.declaringType
 
     fun generate(): FieldOptionCode {
-        val list = when {
-            fieldType.isList -> getter
-            fieldType.isMap -> getter.call("values")
-            else -> error("...")
-        }
-        val set = ImmutableSetClass.call<Set<*>>("copyOf", list)
+        val collection = validatedCollection()
+        val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
             """
-            if ($list.size() != $set.size()) {
-                var duplicates = ${extractDuplicates(list)};
+            if ($collection.size() != $set.size()) {
+                var duplicates = ${extractDuplicates(collection)};
                 var fieldPath = ${fieldPath(parentPath)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
                 violations.add(violation);
@@ -82,15 +78,34 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     }
 
     /**
-     * Returns an expression that extracts values occurring multiple times in the given [list].
+     * Returns an expression containing the collection that should not have duplicate values.
+     *
+     * The resulting expression depends on the [fieldType]:
+     *
+     * 1. For `repeated` fields, it is a field value itself.
+     * 2. For `map` fields, it is a collection of map values.
+     */
+    private fun validatedCollection(): Expression<Collection<*>> = when {
+        fieldType.isList -> getter
+        fieldType.isMap -> getter.call("values")
+        else -> error(
+            "Field type `${fieldType.name}` is not supported by `DistinctFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `DistinctPolicy` when validating the `DistinctFieldDiscovered` event."
+        )
+    }
+
+    /**
+     * Returns an expression that extracts values occurring multiple times
+     * in the provided [collection].
      *
      * This method uses Guava's [LinkedHashMultisetClass] to ensure that the resulting
-     * list preserves the order of element occurrences from the original list.
+     * list preserves the order of element occurrences from the original collection.
      */
-    private fun extractDuplicates(list: Expression<List<*>>): Expression<List<*>> =
+    private fun extractDuplicates(collection: Expression<Collection<*>>): Expression<List<*>> =
         Expression(
             """
-            $LinkedHashMultisetClass.create($list)
+            $LinkedHashMultisetClass.create($collection)
                 .entrySet()
                 .stream()
                 .filter(e -> e.getCount() > 1)
