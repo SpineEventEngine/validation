@@ -56,7 +56,8 @@ public enum class ErrorPlaceholder(public val value: String) {
     REGEX_PATTERN("regex.pattern"),
     REGEX_MODIFIERS("regex.modifiers"),
     GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value");
+    FIELD_PROPOSED_VALUE("field.proposed_value"),
+    FIELD_DUPLICATES("field.duplicates");
 
     override fun toString(): String = value
 }

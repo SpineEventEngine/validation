@@ -54,6 +54,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             RequiredGenerator(querying = this, valueConverter),
             PatternGenerator(querying = this),
             GoesGenerator(querying = this, valueConverter),
+            DistinctGenerator(querying = this),
         )
     }
 
