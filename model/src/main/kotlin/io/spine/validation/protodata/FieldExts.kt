@@ -30,7 +30,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.Option
 
 /**
- * Looks up a field option its [name].
+ * Looks up a field option by its [name].
  */
 public fun Field.findOption(name: String): Option? =
     optionList.find { it.name == name }
