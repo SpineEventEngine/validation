@@ -69,7 +69,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
             """
-            if ($collection.size() != $set.size()) {
+            if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
                 var fieldPath = ${fieldPath(parentPath)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
