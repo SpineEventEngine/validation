@@ -62,16 +62,16 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     private val declaringType = field.declaringType
 
     fun generate(): FieldOptionCode {
-        val collection = when {
+        val list = when {
             fieldType.isList -> getter
             fieldType.isMap -> getter.call("values")
             else -> error("...")
         }
-        val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
+        val set = ImmutableSetClass.call<Set<*>>("copyOf", list)
         val constraint = CodeBlock(
             """
-            if ($getter.size() != $set.size()) {
-                var duplicates = ${calculateDuplicates(collection)};
+            if ($list.size() != $set.size()) {
+                var duplicates = ${extractDuplicates(list)};
                 var fieldPath = ${fieldPath(parentPath)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
                 violations.add(violation);
@@ -81,8 +81,13 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
         return FieldOptionCode(constraint)
     }
 
-    // We would like to preserve ordering, so let's use `LinkedHashMultisetClass`.
-    private fun calculateDuplicates(list: Expression<List<*>>): Expression<List<*>> =
+    /**
+     * Returns an expression that extracts values occurring multiple times in the given [list].
+     *
+     * This method uses Guava's [LinkedHashMultisetClass] to ensure that the resulting
+     * list preserves the order of element occurrences from the original list.
+     */
+    private fun extractDuplicates(list: Expression<List<*>>): Expression<List<*>> =
         Expression(
             """
             $LinkedHashMultisetClass.create($list)
