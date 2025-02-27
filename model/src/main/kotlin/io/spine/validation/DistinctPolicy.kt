@@ -91,7 +91,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
         "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
-                " by the `($DISTINCT)` option. Supported field types: `map` and `repeated` fields."
+                " by the `($DISTINCT)` option. This options supports `map` and `repeated` fields."
     }
 
 private fun FieldType.isSupported(): Boolean = isMap || isList
