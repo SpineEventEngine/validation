@@ -71,7 +71,7 @@ internal val ImmutableListClass = ClassName(ImmutableList::class)
 internal val ImmutableSetClass = ClassName(ImmutableSet::class)
 
 /**
- * The [ClassName] of [HashMultiset].
+ * The [ClassName] of [LinkedHashMultiset].
  */
 internal val LinkedHashMultisetClass = ClassName(LinkedHashMultiset::class)
 
