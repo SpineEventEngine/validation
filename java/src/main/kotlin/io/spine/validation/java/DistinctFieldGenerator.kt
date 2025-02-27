@@ -103,7 +103,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
      * in the provided [collection].
      *
      * This method uses Guava's [LinkedHashMultisetClass] to ensure that the resulting
-     * list preserves the order of element occurrences from the original collection.
+     * list preserves the order of element occurrences in the original collection.
      */
     private fun extractDuplicates(collection: Expression<Collection<*>>): Expression<List<*>> =
         Expression(
