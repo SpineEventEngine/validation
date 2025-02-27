@@ -42,7 +42,7 @@ import org.junit.jupiter.api.assertThrows
 internal class DistinctITest {
 
     @Nested inner class
-    `when handling 'list'` {
+    `when handling 'list' field` {
 
         @Test
         fun `duplicated entries result in a violation`() {
@@ -82,7 +82,7 @@ internal class DistinctITest {
     }
 
     @Nested inner class
-    `when handling 'map'` {
+    `when handling 'map' field` {
 
         @Test
         fun `duplicated values result in a violation`() {
