@@ -106,7 +106,7 @@ message GoesFieldDiscovered {
     // The error message template.
     string error_message = 2;
 
-    // The the required companion field.
+    // The required companion field.
     protodata.Field companion = 3;
 
     // The field in which the option was discovered.
