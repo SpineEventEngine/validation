@@ -26,31 +26,11 @@
 
 package io.spine.validation.java
 
-import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
-import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.UnsetValue
-import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
  * The generator for `(required)` option.
@@ -70,62 +50,10 @@ internal class RequiredGenerator(
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val requiredFields = allRequiredFields.filter { it.id.type == type }
-        val constraints = requiredFields.map { constraints(it) }
-        val fieldOptions = constraints.map { FieldOptionCode(it) }
-        return fieldOptions
-    }
-
-    private fun constraints(view: RequiredField): CodeBlock {
-        val field = view.subject
-        val getter = message.field(field).getter<Any>()
-        val message = view.errorMessage
-        return CodeBlock(
-            """
-            if ($getter.equals(${defaultValue(field)})) {
-                var fieldPath = ${fieldPath(field.name.value, parentPath)};
-                var violation = ${violation(field, ReadVar("fieldPath"), message)};
-                $violations.add(violation);
-            }
-            """.trimIndent()
-        )
-    }
-
-    /**
-     * Returns the expression that yields a default value for the given field.
-     *
-     * Each field type has its own default value. The option considers the field
-     * to be missing if its current value equals to the default one.
-     */
-    private fun defaultValue(field: Field): Expression<*> {
-        val unsetValue = UnsetValue.forField(field)!!
-        val expression = converter.valueToCode(unsetValue)
-        return expression
-    }
-
-    private fun fieldPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
-            .chainBuild()
-
-    private fun violation(
-        field: Field,
-        fieldPath: Expression<FieldPath>,
-        message: String
-    ): Expression<ConstraintViolation> {
-        val placeholders = supportedPlaceholders(field, fieldPath)
-        val errorMessage = templateString(message, placeholders, IF_MISSING, field.qualifiedName)
-        return constraintViolation(errorMessage, field.declaringType, fieldPath, fieldValue = null)
-    }
-
-    private fun supportedPlaceholders(
-        field: Field,
-        fieldPath: Expression<FieldPath>
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_TYPE to StringLiteral(field.type.name),
-            PARENT_TYPE to StringLiteral(field.declaringType.qualifiedName)
-        )
+        val generatedFields = requiredFields.map {
+            RequiredFieldGenerator(it, converter)
+                .generate()
+        }
+        return generatedFields
     }
 }
