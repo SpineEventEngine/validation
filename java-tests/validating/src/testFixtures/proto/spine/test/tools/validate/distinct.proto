@@ -36,7 +36,7 @@ option java_multiple_files = true;
 
 import "google/protobuf/any.proto";
 
-message ProtoSet {
-
-    repeated google.protobuf.Any element = 1 [(distinct) = true];
+message UniqueCollections {
+    repeated int32 element = 1 [(distinct) = true];
+    map<string, int32> mapping = 2 [(distinct) = true];
 }

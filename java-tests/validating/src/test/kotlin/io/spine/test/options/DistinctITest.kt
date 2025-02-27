@@ -26,58 +26,106 @@
 
 package io.spine.test.options
 
-import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
-import io.kotest.matchers.optional.shouldBeEmpty
-import io.kotest.matchers.optional.shouldBePresent
-import io.spine.base.fieldPath
-import io.spine.protobuf.TypeConverter.toAny
-import io.spine.test.tools.validate.ProtoSet
-import io.spine.test.tools.validate.protoSet
-import io.spine.validate.constraintViolation
+import io.kotest.matchers.maps.shouldContain
+import io.kotest.matchers.shouldBe
+import io.spine.base.FieldPath
+import io.spine.test.tools.validate.UniqueCollections
+import io.spine.test.tools.validate.uniqueCollections
+import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(distinct)` option should be compiled, so that")
 internal class DistinctITest {
 
-    @Test
-    fun `duplicated entries result in a violation`() {
-        val msg = ProtoSet.newBuilder()
-            .addElement(toAny("123"))
-            .addElement(toAny("321"))
-            .addElement(toAny("123"))
-            .buildPartial()
+    @Nested inner class
+    `when handling 'list'` {
 
-        val error = msg.validate()
-        error.shouldBePresent()
+        @Test
+        fun `duplicated entries result in a violation`() {
+            val duplicate1 = 123
+            val duplicate2 = 321
 
-        val violations = error.get().constraintViolationList
-        val expected = constraintViolation {
-            fieldPath = fieldPath { fieldName.add("element") }
-        }
+            val exception = assertThrows<ValidationException> {
+                uniqueCollections {
+                    element.add(duplicate1)
+                    element.add(1)
+                    element.add(duplicate1)
+                    element.add(2)
+                    element.add(duplicate2)
+                    element.add(3)
+                    element.add(duplicate2)
+                }
+            }
 
-        assertThat(violations)
-            .comparingExpectedFieldsOnly()
-            .containsExactly(expected)
-    }
-
-    @Test
-    fun `unique elements do not result in a violation`() {
-        val msg = assertDoesNotThrow {
-            protoSet {
-                element.add(toAny("42"))
-                element.add(toAny(42))
+            val violation = exception.constraintViolations.first()
+            val duplicates = listOf(duplicate1, duplicate2)
+            with(violation) {
+                fieldPath shouldBe FieldPath("element")
+                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
             }
         }
-        msg.validate().shouldBeEmpty()
+
+        @Test
+        fun `unique elements do not result in a violation`() {
+            assertDoesNotThrow {
+                uniqueCollections {
+                    element.add(1)
+                    element.add(2)
+                    element.add(3)
+                }
+            }
+        }
+    }
+
+    @Nested inner class
+    `when handling 'map'` {
+
+        @Test
+        fun `duplicated values result in a violation`() {
+            val duplicate1 = 123
+            val duplicate2 = 321
+
+            val exception = assertThrows<ValidationException> {
+                uniqueCollections {
+                    mapping.put("key1", duplicate1)
+                    mapping.put("key2", 1)
+                    mapping.put("key3", duplicate1)
+                    mapping.put("key4", 2)
+                    mapping.put("key5", duplicate2)
+                    mapping.put("key6", 3)
+                    mapping.put("key7", duplicate2)
+                }
+            }
+
+            val violation = exception.constraintViolations.first()
+            val duplicates = listOf(duplicate1, duplicate2)
+            with(violation) {
+                fieldPath shouldBe FieldPath("mapping")
+                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+            }
+        }
+
+        @Test
+        fun `unique values do not result in a violation`() {
+            assertDoesNotThrow {
+                uniqueCollections {
+                    mapping.put("key1", 1)
+                    mapping.put("key2", 2)
+                    mapping.put("key3", 3)
+                }
+            }
+        }
     }
 
     @Test
-    fun `empty list does not result in a violation`() {
-        val msg = assertDoesNotThrow {
-            ProtoSet.newBuilder().build()
+    fun `empty list and map do not result in a violation`() {
+        assertDoesNotThrow {
+            UniqueCollections.newBuilder()
+                .build()
         }
-        msg.validate().shouldBeEmpty()
     }
 }
