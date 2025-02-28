@@ -49,9 +49,10 @@ import io.spine.protodata.protobuf.descriptor
  */
 internal inline fun <reified T : Message> resolveErrorMessage(field: Field): String {
     val descriptor = T::class.descriptor
-    val errorMessageField = descriptor.field(CUSTOM_MESSAGE_FIELD)
-    val customMessage = field.findOption<T>()?.getField(errorMessageField) as String?
-    return customMessage ?: descriptor.defaultMessage
+    val option = field.findOption<T>() ?: return descriptor.defaultMessage
+    val customMessageField = descriptor.field(CUSTOM_MESSAGE_FIELD)
+    val customMessage = option.getField(customMessageField) as String
+    return customMessage
 }
 
 /**
