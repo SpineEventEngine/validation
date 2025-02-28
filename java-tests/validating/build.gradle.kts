@@ -27,6 +27,7 @@
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
+import io.spine.dependency.local.ProtoData
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
@@ -57,8 +58,7 @@ dependencies {
     testImplementation(JUnit.params)
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
-    testImplementation(testFixtures(project(":model")))
-        ?.because("We need extensions from `ProtobufJavaClass.kt`")
+    testImplementation(ProtoData.api)
 }
 
 testProtoDataRemoteDebug(enabled = false)
