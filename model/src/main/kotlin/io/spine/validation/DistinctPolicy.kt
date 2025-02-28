@@ -29,7 +29,6 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
-import io.spine.protobuf.unpack
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldType
@@ -47,7 +46,6 @@ import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.DistinctFieldDiscovered
 import io.spine.validation.event.distinctFieldDiscovered
-import io.spine.validation.protodata.findOption
 
 /**
  * Controls whether a field should be validated as `(distinct)`.
@@ -79,7 +77,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val message = determineErrorMessage(field)
+        val message = resolveErrorMessage<IfHasDuplicatesOption>(field)
         return distinctFieldDiscovered {
             id = field.ref
             errorMessage = message
@@ -95,10 +93,3 @@ private fun checkFieldType(field: Field, file: File) =
     }
 
 private fun FieldType.isSupported(): Boolean = isMap || isList
-
-private fun determineErrorMessage(field: Field): String {
-    val customMessage = field.findOption(IF_HAS_DUPLICATES)
-        ?.value?.unpack<IfHasDuplicatesOption>()
-        ?.errorMsg
-    return customMessage ?: IfHasDuplicatesOption.getDescriptor().defaultMessage
-}
