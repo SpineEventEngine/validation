@@ -29,8 +29,8 @@ package io.spine.validation
 import com.google.protobuf.Message
 import io.spine.protobuf.field
 import io.spine.protodata.ast.Field
-import io.spine.validation.protodata.findOption
-import io.spine.validation.protodata.getDescriptor
+import io.spine.protodata.ast.findOption
+import io.spine.protodata.protobuf.descriptor
 
 /**
  * Resolves the error message against the field option of type [T] and the provided [field].
@@ -48,7 +48,7 @@ import io.spine.validation.protodata.getDescriptor
  * the [default error message][DefaultErrorMessage] for [T] is returned.
  */
 internal inline fun <reified T : Message> resolveErrorMessage(field: Field): String {
-    val descriptor = T::class.getDescriptor()
+    val descriptor = T::class.descriptor
     val errorMessageField = descriptor.field(CUSTOM_MESSAGE_FIELD)
     val customMessage = field.findOption<T>()?.getField(errorMessageField) as String?
     return customMessage ?: descriptor.defaultMessage

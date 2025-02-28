@@ -31,8 +31,8 @@ import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
-import io.spine.validation.protodata.getDescriptor
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -45,7 +45,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
     fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
-        val descriptor = message.getDescriptor()
+        val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("target")
         error.message shouldContain unsupportedFieldType(field)
@@ -54,7 +54,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedCompanion")
     @ParameterizedTest(name = "when companion's field type is `{0}`")
     fun whenCompanionFieldHasUnsupportedType(message: KClass<out Message>) {
-        val descriptor = message.getDescriptor()
+        val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("companion")
         error.message shouldContain unsupportedCompanionType(field)
