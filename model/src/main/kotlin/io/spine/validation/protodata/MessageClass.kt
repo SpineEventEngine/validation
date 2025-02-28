@@ -26,40 +26,17 @@
 
 package io.spine.validation.protodata
 
+import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
-import io.spine.protobuf.defaultInstance
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.findOption
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.ast.unpack
-import io.spine.string.simply
-import io.spine.type.typeName
+import kotlin.reflect.KClass
 
 /**
- * Finds the option with the given type [T] applied to this [Field].
- *
- * @param T The type of the option.
- * @return the option or `null` if there is no option with such a type applied to the field.
- * @see Field.option
+ * Returns a Protobuf descriptor for this message [Class].
  */
-public inline fun <reified T : Message> Field.findOption(): T? {
-    val typeUrl = T::class.java.defaultInstance.typeName.toUrl().value()
-    val option = optionList.find { opt ->
-        opt.value.typeUrl == typeUrl
-    }
-    return option?.unpack()
-}
+public fun Class<out Message>.getDescriptor(): Descriptor =
+    getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
 
 /**
- * Obtains the option with the given type [T] applied to this [Field].
- *
- * Invoke this function if you are sure the option with the type [T] is applied
- * to the receiver field. Otherwise, please use [findOption].
- *
- * @param T The type of the option.
- * @return the option.
- * @throws IllegalStateException if the option is not found.
- * @see Field.findOption
+ * Returns a Protobuf descriptor for this message [KClass].
  */
-public inline fun <reified T : Message> Field.option(): T = findOption<T>()
-    ?: error("The field `${qualifiedName}` must have the `${simply<T>()}` option.")
+public fun KClass<out Message>.getDescriptor(): Descriptor = java.getDescriptor()
