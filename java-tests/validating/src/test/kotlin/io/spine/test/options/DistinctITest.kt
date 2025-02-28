@@ -31,8 +31,6 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.Durations2.hoursAndMinutes
 import io.spine.protobuf.Durations2.minutes
-import io.spine.test.tools.validate.UniqueMessageCollections
-import io.spine.test.tools.validate.UniquePrimitiveCollections
 import io.spine.test.tools.validate.uniqueMessageCollections
 import io.spine.test.tools.validate.uniquePrimitiveCollections
 import io.spine.validate.ValidationException
@@ -212,10 +210,8 @@ internal class DistinctITest {
     @Test
     fun `empty list and map do not result in a violation`() {
         assertDoesNotThrow {
-            UniquePrimitiveCollections.newBuilder()
-                .build()
-            UniqueMessageCollections.newBuilder()
-                .build()
+            uniquePrimitiveCollections {  }
+            uniqueMessageCollections {  }
         }
     }
 }
