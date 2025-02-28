@@ -92,7 +92,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
         fieldType.isList -> getter
         fieldType.isMap -> getter.call("values")
         else -> error(
-            "Field type `${fieldType.name}` is not supported by `DistinctFieldGenerator`." +
+            "The field type `${fieldType.name}` is not supported by `DistinctFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
                     " used by `DistinctPolicy` when validating the `DistinctFieldDiscovered` event."
         )
