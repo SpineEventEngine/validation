@@ -49,7 +49,15 @@ import io.spine.validation.protodata.getDescriptor
  */
 internal inline fun <reified T : Message> resolveErrorMessage(field: Field): String {
     val descriptor = T::class.getDescriptor()
-    val errorMessageField = descriptor.field("error_msg")
+    val errorMessageField = descriptor.field(CUSTOM_MESSAGE_FIELD)
     val customMessage = field.findOption<T>()?.getField(errorMessageField) as String?
     return customMessage ?: descriptor.defaultMessage
 }
+
+/**
+ * The name of the field that contains a custom error message.
+ *
+ * This field name is a convention, which all companion error message options
+ * are expected to follow.
+ */
+private const val CUSTOM_MESSAGE_FIELD = "error_msg"
