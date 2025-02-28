@@ -29,8 +29,12 @@ package io.spine.test.options
 import io.kotest.matchers.maps.shouldContain
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
-import io.spine.test.tools.validate.UniqueCollections
-import io.spine.test.tools.validate.uniqueCollections
+import io.spine.protobuf.Durations2.hoursAndMinutes
+import io.spine.protobuf.Durations2.minutes
+import io.spine.test.tools.validate.UniqueMessageCollections
+import io.spine.test.tools.validate.UniquePrimitiveCollections
+import io.spine.test.tools.validate.uniqueMessageCollections
+import io.spine.test.tools.validate.uniquePrimitiveCollections
 import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -45,12 +49,12 @@ internal class DistinctITest {
     `when handling 'list' field` {
 
         @Test
-        fun `duplicated entries result in a violation`() {
+        fun `duplicated primitive entries result in a violation`() {
             val duplicate1 = 123
             val duplicate2 = 321
 
             val exception = assertThrows<ValidationException> {
-                uniqueCollections {
+                uniquePrimitiveCollections {
                     element.add(duplicate1)
                     element.add(1)
                     element.add(duplicate1)
@@ -70,12 +74,48 @@ internal class DistinctITest {
         }
 
         @Test
-        fun `unique elements do not result in a violation`() {
+        fun `duplicated message entries result in a violation`() {
+            val duplicate1 = hoursAndMinutes(2, 20)
+            val duplicate2 = hoursAndMinutes(18, 40)
+
+            val exception = assertThrows<ValidationException> {
+                uniqueMessageCollections {
+                    element.add(duplicate1)
+                    element.add(minutes(15))
+                    element.add(duplicate1)
+                    element.add(minutes(30))
+                    element.add(duplicate2)
+                    element.add(minutes(45))
+                    element.add(duplicate2)
+                }
+            }
+
+            val violation = exception.constraintViolations.first()
+            val duplicates = listOf(duplicate1, duplicate2)
+            with(violation) {
+                fieldPath shouldBe FieldPath("element")
+                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+            }
+        }
+
+        @Test
+        fun `unique primitive elements do not result in a violation`() {
             assertDoesNotThrow {
-                uniqueCollections {
+                uniquePrimitiveCollections {
                     element.add(1)
                     element.add(2)
                     element.add(3)
+                }
+            }
+        }
+
+        @Test
+        fun `unique message elements do not result in a violation`() {
+            assertDoesNotThrow {
+                uniqueMessageCollections {
+                    element.add(minutes(1))
+                    element.add(minutes(2))
+                    element.add(minutes(3))
                 }
             }
         }
@@ -85,12 +125,12 @@ internal class DistinctITest {
     `when handling 'map' field` {
 
         @Test
-        fun `duplicated values result in a violation`() {
+        fun `duplicated primitive values result in a violation`() {
             val duplicate1 = 123
             val duplicate2 = 321
 
             val exception = assertThrows<ValidationException> {
-                uniqueCollections {
+                uniquePrimitiveCollections {
                     mapping.put("key1", duplicate1)
                     mapping.put("key2", 1)
                     mapping.put("key3", duplicate1)
@@ -110,12 +150,48 @@ internal class DistinctITest {
         }
 
         @Test
-        fun `unique values do not result in a violation`() {
+        fun `duplicated message values result in a violation`() {
+            val duplicate1 = hoursAndMinutes(2, 20)
+            val duplicate2 = hoursAndMinutes(18, 40)
+
+            val exception = assertThrows<ValidationException> {
+                uniqueMessageCollections {
+                    mapping.put("key1", duplicate1)
+                    mapping.put("key2", minutes(15))
+                    mapping.put("key3", duplicate1)
+                    mapping.put("key4", minutes(30))
+                    mapping.put("key5", duplicate2)
+                    mapping.put("key6", minutes(45))
+                    mapping.put("key7", duplicate2)
+                }
+            }
+
+            val violation = exception.constraintViolations.first()
+            val duplicates = listOf(duplicate1, duplicate2)
+            with(violation) {
+                fieldPath shouldBe FieldPath("mapping")
+                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+            }
+        }
+
+        @Test
+        fun `unique primitive values do not result in a violation`() {
             assertDoesNotThrow {
-                uniqueCollections {
+                uniquePrimitiveCollections {
                     mapping.put("key1", 1)
                     mapping.put("key2", 2)
                     mapping.put("key3", 3)
+                }
+            }
+        }
+
+        @Test
+        fun `unique message values do not result in a violation`() {
+            assertDoesNotThrow {
+                uniqueMessageCollections {
+                    mapping.put("key1", minutes(1))
+                    mapping.put("key2", minutes(2))
+                    mapping.put("key3", minutes(3))
                 }
             }
         }
@@ -124,7 +200,9 @@ internal class DistinctITest {
     @Test
     fun `empty list and map do not result in a violation`() {
         assertDoesNotThrow {
-            UniqueCollections.newBuilder()
+            UniquePrimitiveCollections.newBuilder()
+                .build()
+            UniqueMessageCollections.newBuilder()
                 .build()
         }
     }

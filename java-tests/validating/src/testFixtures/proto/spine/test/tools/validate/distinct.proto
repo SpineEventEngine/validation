@@ -35,8 +35,16 @@ option java_outer_classname = "DistinctProto";
 option java_multiple_files = true;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
 
-message UniqueCollections {
+// Tests how `(distinct)` handles collections with primitives.
+message UniquePrimitiveCollections {
     repeated int32 element = 1 [(distinct) = true];
     map<string, int32> mapping = 2 [(distinct) = true];
+}
+
+// Tests how `(distinct)` handles collections with messages.
+message UniqueMessageCollections {
+    repeated google.protobuf.Duration element = 1 [(distinct) = true];
+    map<string, google.protobuf.Duration> mapping = 2 [(distinct) = true];
 }
