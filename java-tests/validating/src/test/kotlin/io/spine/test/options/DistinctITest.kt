@@ -55,13 +55,9 @@ internal class DistinctITest {
 
             val exception = assertThrows<ValidationException> {
                 uniquePrimitiveCollections {
-                    element.add(duplicate1)
-                    element.add(1)
-                    element.add(duplicate1)
-                    element.add(2)
-                    element.add(duplicate2)
-                    element.add(3)
-                    element.add(duplicate2)
+                    element.addAll(
+                        listOf(duplicate1, 1, duplicate1, 2, duplicate2, 3, duplicate2)
+                    )
                 }
             }
 
@@ -80,13 +76,17 @@ internal class DistinctITest {
 
             val exception = assertThrows<ValidationException> {
                 uniqueMessageCollections {
-                    element.add(duplicate1)
-                    element.add(minutes(15))
-                    element.add(duplicate1)
-                    element.add(minutes(30))
-                    element.add(duplicate2)
-                    element.add(minutes(45))
-                    element.add(duplicate2)
+                    element.addAll(
+                        listOf(
+                            duplicate1,
+                            minutes(15),
+                            duplicate1,
+                            minutes(30),
+                            duplicate2,
+                            minutes(45),
+                            duplicate2
+                        )
+                    )
                 }
             }
 
@@ -102,9 +102,7 @@ internal class DistinctITest {
         fun `unique primitive elements do not result in a violation`() {
             assertDoesNotThrow {
                 uniquePrimitiveCollections {
-                    element.add(1)
-                    element.add(2)
-                    element.add(3)
+                    element.addAll(listOf(1, 2, 3))
                 }
             }
         }
@@ -113,9 +111,7 @@ internal class DistinctITest {
         fun `unique message elements do not result in a violation`() {
             assertDoesNotThrow {
                 uniqueMessageCollections {
-                    element.add(minutes(1))
-                    element.add(minutes(2))
-                    element.add(minutes(3))
+                    element.addAll(listOf(minutes(1), minutes(2), minutes(3)))
                 }
             }
         }
@@ -131,13 +127,17 @@ internal class DistinctITest {
 
             val exception = assertThrows<ValidationException> {
                 uniquePrimitiveCollections {
-                    mapping.put("key1", duplicate1)
-                    mapping.put("key2", 1)
-                    mapping.put("key3", duplicate1)
-                    mapping.put("key4", 2)
-                    mapping.put("key5", duplicate2)
-                    mapping.put("key6", 3)
-                    mapping.put("key7", duplicate2)
+                    mapping.putAll(
+                        mapOf(
+                            "key1" to duplicate1,
+                            "key2" to 1,
+                            "key3" to duplicate1,
+                            "key4" to 2,
+                            "key5" to duplicate2,
+                            "key6" to 3,
+                            "key7" to duplicate2,
+                        )
+                    )
                 }
             }
 
@@ -156,13 +156,17 @@ internal class DistinctITest {
 
             val exception = assertThrows<ValidationException> {
                 uniqueMessageCollections {
-                    mapping.put("key1", duplicate1)
-                    mapping.put("key2", minutes(15))
-                    mapping.put("key3", duplicate1)
-                    mapping.put("key4", minutes(30))
-                    mapping.put("key5", duplicate2)
-                    mapping.put("key6", minutes(45))
-                    mapping.put("key7", duplicate2)
+                    mapping.putAll(
+                        mapOf(
+                            "key1" to duplicate1,
+                            "key2" to minutes(15),
+                            "key3" to duplicate1,
+                            "key4" to minutes(30),
+                            "key5" to duplicate2,
+                            "key6" to minutes(45),
+                            "key7" to duplicate2,
+                        )
+                    )
                 }
             }
 
@@ -178,9 +182,13 @@ internal class DistinctITest {
         fun `unique primitive values do not result in a violation`() {
             assertDoesNotThrow {
                 uniquePrimitiveCollections {
-                    mapping.put("key1", 1)
-                    mapping.put("key2", 2)
-                    mapping.put("key3", 3)
+                    mapping.putAll(
+                        mapOf(
+                            "key1" to 1,
+                            "key2" to 2,
+                            "key3" to 3,
+                        )
+                    )
                 }
             }
         }
@@ -189,9 +197,13 @@ internal class DistinctITest {
         fun `unique message values do not result in a violation`() {
             assertDoesNotThrow {
                 uniqueMessageCollections {
-                    mapping.put("key1", minutes(1))
-                    mapping.put("key2", minutes(2))
-                    mapping.put("key3", minutes(3))
+                    mapping.putAll(
+                        mapOf(
+                            "key1" to minutes(1),
+                            "key2" to minutes(2),
+                            "key3" to minutes(3),
+                        )
+                    )
                 }
             }
         }
