@@ -29,8 +29,8 @@ package io.spine.test.options.goes
 import com.google.protobuf.Message
 import io.spine.test.options.set
 import io.spine.validate.ValidationException
-import io.spine.validation.getDescriptor
 import io.spine.validation.newBuilder
+import io.spine.validation.protodata.getDescriptor
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

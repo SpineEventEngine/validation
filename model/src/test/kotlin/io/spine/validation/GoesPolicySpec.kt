@@ -32,6 +32,7 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
+import io.spine.validation.protodata.getDescriptor
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
