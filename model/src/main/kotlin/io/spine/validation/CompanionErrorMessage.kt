@@ -33,17 +33,17 @@ import io.spine.protodata.ast.findOption
 import io.spine.protodata.protobuf.descriptor
 
 /**
- * Resolves the error message against the field option of type [T] and the provided [field].
+ * Resolves the error message for the field option of type [T] and the provided [field].
  *
  * Boolean options declare their error messages using so-called companion options.
- * For example, `(required)` has `(if_missing)` companion that holds the default
- * error message template for `(required)` violations and allows specifying a custom
- * one as following: `(if_missing).error_msg = "Game is over!"`.
+ * For example, the `(required)` option has an `(if_missing)` companion that holds
+ * the default error message template for `(required)` violations and allows specifying
+ * a custom one as follows: `(if_missing).error_msg = "Game is over!"`.
  *
  * This method considers two cases:
  *
- * 1. If the passed [field] has the option of type [T] applied, the value of `error_msg`
- * field of [T] is returned. Companion options must have this field declared.
+ * 1. If the passed [field] has the option of type [T] applied, the value of its
+ * `error_msg` field is returned (companion options must declare this field).
  * 2. If the passed [field] does NOT have such an option applied,
  * the [default error message][DefaultErrorMessage] for [T] is returned.
  */
@@ -57,7 +57,7 @@ internal inline fun <reified T : Message> resolveErrorMessage(field: Field): Str
 /**
  * The name of the field that contains a custom error message.
  *
- * This field name is a convention, which all companion error message options
+ * This name is a convention, which all companion error message options
  * are expected to follow.
  */
 private const val CUSTOM_MESSAGE_FIELD = "error_msg"
