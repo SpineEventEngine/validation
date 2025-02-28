@@ -99,9 +99,9 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         }
 
         else -> error {
-            "Field type `${fieldType.name}` is not supported by `PatternFieldGenerator`. " +
-                    "Please ensure that the supported field types in this generator match those " +
-                    "used by `PatternPolicy` when validating the `PatternFieldDiscovered` event."
+            "The field type `${fieldType.name}` is not supported by `PatternFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `PatternPolicy` when validating the `PatternFieldDiscovered` event."
         }
     }
 
@@ -150,7 +150,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
-                    var fieldPath = ${fieldPath(ReadVar("parent"))};
+                    var fieldPath = ${fieldPath(parentPath)};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("element"))};
                     violations.add(violation);
                 }

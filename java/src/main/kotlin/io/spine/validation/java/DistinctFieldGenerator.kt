@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,64 +26,54 @@
 
 package io.spine.validation.java
 
-import com.google.protobuf.Message
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.GOES
-import io.spine.validation.GoesField
-import io.spine.validation.UnsetValue
+import io.spine.validation.DistinctField
+import io.spine.validation.PATTERN
+import io.spine.validation.java.ErrorPlaceholder.FIELD_DUPLICATES
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
 /**
- * The generator for `(goes)` option.
+ * The generator for `(distinct)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class GoesFieldGenerator(
-    private val view: GoesField,
-    private val converter: JavaValueConverter
-) {
+internal class DistinctFieldGenerator(private val view: DistinctField) {
 
     private val field = view.subject
     private val fieldType = field.type
+    private val getter = message.field(field).getter<List<*>>()
     private val declaringType = field.declaringType
 
     /**
      * Generates code for a field represented by the [view].
      */
     fun generate(): FieldOptionCode {
-        val field = view.subject
-        val companion = view.companion
-        val fieldGetter = This<Message>()
-            .field(field)
-            .getter<Any>()
-        val companionGetter = This<Message>()
-            .field(companion)
-            .getter<Any>()
+        val collection = validatedCollection()
+        val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
             """
-            if (!$fieldGetter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
-                var fieldPath = ${fieldPath(field.name.value, parentPath)};
-                var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
-                $violations.add(violation);
+            if (!$collection.isEmpty() && $collection.size() != $set.size()) {
+                var duplicates = ${extractDuplicates(collection)};
+                var fieldPath = ${fieldPath(parentPath)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
+                violations.add(violation);
             }
             """.trimIndent()
         )
@@ -91,43 +81,68 @@ internal class GoesFieldGenerator(
     }
 
     /**
-     * Returns the expression that yields a default value for the given field.
+     * Returns an expression containing the collection that should not have duplicate values.
      *
-     * Each field type has its own default value. The option considers the field
-     * to be missing if its current value equals to the default one.
+     * The resulting expression depends on the [fieldType]:
+     *
+     * 1. For `repeated` fields, it is a field value itself.
+     * 2. For `map` fields, it is a collection of map values.
      */
-    private fun defaultValue(field: Field): Expression<*> {
-        val unsetValue = UnsetValue.forField(field)!!
-        val expression = converter.valueToCode(unsetValue)
-        return expression
+    private fun validatedCollection(): Expression<Collection<*>> = when {
+        fieldType.isList -> getter
+        fieldType.isMap -> getter.call("values")
+        else -> error(
+            "The field type `${fieldType.name}` is not supported by `DistinctFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `DistinctPolicy` when validating the `DistinctFieldDiscovered` event."
+        )
     }
 
-    private fun fieldPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
+    /**
+     * Returns an expression that extracts values occurring multiple times
+     * in the provided [collection].
+     *
+     * This method uses Guava's [LinkedHashMultisetClass] to ensure that the resulting
+     * list preserves the order of element occurrences in the original collection.
+     */
+    private fun extractDuplicates(collection: Expression<Collection<*>>): Expression<List<*>> =
+        Expression(
+            """
+            $LinkedHashMultisetClass.create($collection)
+                .entrySet()
+                .stream()
+                .filter(e -> e.getCount() > 1)
+                .map($MultiSetEntryClass::getElement)
+                .collect($CollectorsClass.toList())
+            """.trimIndent()
+        )
+
+    private fun fieldPath(parent: Expression<FieldPath>): Expression<FieldPath> =
         parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
+            .chainAdd("field_name", StringLiteral(field.name.value))
             .chainBuild()
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
-        fieldValue: Expression<*>,
+        duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
+        val placeholders = supportedPlaceholders(fieldPath, duplicates)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        return constraintViolation(errorMessage, declaringType, fieldPath, getter)
     }
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
-        fieldValue: Expression<*>,
+        duplicates: Expression<List<*>>
     ): Map<ErrorPlaceholder, Expression<String>> {
         val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
         return mapOf(
             FIELD_PATH to pathAsString,
-            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+            FIELD_VALUE to fieldType.stringValueOf(getter),
             FIELD_TYPE to StringLiteral(fieldType.name),
             PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            GOES_COMPANION to StringLiteral(view.companion.name.value)
+            FIELD_DUPLICATES to duplicates.call("toString")
         )
     }
 }

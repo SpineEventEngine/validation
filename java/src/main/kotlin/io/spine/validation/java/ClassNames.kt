@@ -28,17 +28,27 @@
 
 package io.spine.validation.java
 
+import com.google.common.collect.HashMultiset
 import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableSet
+import com.google.common.collect.LinkedHashMultiset
+import com.google.common.collect.Multiset
 import io.spine.base.FieldPath
 import io.spine.protodata.java.ClassName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import java.util.regex.Pattern
+import java.util.stream.Collectors
 
 /**
  * The [ClassName] of [String].
  */
 internal val StringClass = ClassName(String::class)
+
+/**
+ * The [ClassName] of [Collectors].
+ */
+internal val CollectorsClass = ClassName(Collectors::class)
 
 /**
  * The [ClassName] of [TemplateString].
@@ -54,6 +64,21 @@ internal val PatternClass = ClassName(Pattern::class)
  * The [ClassName] of [ImmutableList].
  */
 internal val ImmutableListClass = ClassName(ImmutableList::class)
+
+/**
+ * The [ClassName] of [ImmutableSet].
+ */
+internal val ImmutableSetClass = ClassName(ImmutableSet::class)
+
+/**
+ * The [ClassName] of [LinkedHashMultiset].
+ */
+internal val LinkedHashMultisetClass = ClassName(LinkedHashMultiset::class)
+
+/**
+ * The [ClassName] of [Multiset.Entry] class.
+ */
+internal val MultiSetEntryClass = ClassName(Multiset.Entry::class)
 
 /**
  * The [ClassName] of [FieldPath].

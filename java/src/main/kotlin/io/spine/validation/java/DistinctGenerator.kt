@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,53 +26,26 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.ImmutableSet
-import io.spine.protodata.ast.isMap
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.MethodCall
-import io.spine.protodata.java.call
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.DistinctField
 
 /**
- * Generates the code for the [DistinctCollection][io.spine.validation.DistinctCollection] operator.
- *
- * If the generator serves a map, it checks the [values][Map.values] of the map to be distinct.
+ * The generator for `(distinct)` option.
  */
-internal class DistinctGenerator(ctx: GenerationContext) : SimpleRuleGenerator(ctx) {
+internal class DistinctGenerator(
+    private val querying: Querying,
+) : OptionGenerator {
 
-    /**
-     * Creates an expression checking that a repeated field or a map of a proto message
-     * has distinct values.
-     *
-     * If the field is a map, the generated code checks the values of the map to be distinct.
-     *
-     * The generated code assumes that if the field contains distinct values, the size of
-     * the original collection is equal to the size of the `ImmutableSet` created as a copy
-     * of the checked collection.
-     */
-    override fun condition(): Expression<Boolean> {
-        val values = fieldValues()
-        return equalityOf(
-            MethodCall(values, "size"),
-            ClassName(ImmutableSet::class)
-                .call<ImmutableSet<*>>("copyOf", values)
-                .chain("size")
-        )
+    private val allDistinctFields by lazy {
+        querying.select<DistinctField>()
+            .all()
     }
 
-    private fun fieldValues(): Expression<Collection<*>> {
-        val fieldIsMap = ctx.simpleRuleField.isMap
-        val fieldValue = ctx.fieldOrElement!!
-        return if (fieldIsMap) {
-            MethodCall(fieldValue, "values")
-        } else {
-            // `DistinctGenerator` can be instantiated only for repeated fields and maps in
-            // `io.spine.validation.java.generatorForCustom`. So, the cast is safe.
-            @Suppress("UNCHECKED_CAST")
-            fieldValue as Expression<Collection<*>>
-        }
+    override fun codeFor(type: TypeName): List<FieldOptionCode> {
+        val distinctFields = allDistinctFields.filter { it.id.type == type }
+        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).generate() }
+        return generatedFields
     }
-
-    private fun equalityOf(left: Expression<Int>, right: Expression<Int>): Expression<Boolean> =
-        Expression(left.toCode() + " == " + right.toCode())
 }

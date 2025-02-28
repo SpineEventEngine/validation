@@ -26,28 +26,20 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Message
-import kotlin.reflect.KClass
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.DistinctFieldDiscovered
 
 /**
- * Returns a Protobuf descriptor for this message [Class].
+ * A view of a field that is marked with `(distinct) = true` option.
  */
-fun Class<out Message>.getDescriptor() =
-    getDeclaredMethod("getDescriptor").invoke(null) as Descriptor
+internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
 
-/**
- * Returns a Protobuf descriptor for this message [KClass].
- */
-fun KClass<out Message>.getDescriptor() = java.getDescriptor()
-
-/**
- * Creates a new builder for this message [Class].
- */
-fun Class<out Message>.newBuilder() =
-    getDeclaredMethod("newBuilder").invoke(null) as Message.Builder
-
-/**
- * Creates a new builder for this message [KClass].
- */
-fun KClass<out Message>.newBuilder() = java.newBuilder()
+    @Subscribe
+    fun on(e: DistinctFieldDiscovered) = alter {
+        errorMessage = e.errorMessage
+        subject = e.subject
+    }
+}

@@ -28,58 +28,68 @@ package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Where
-import io.spine.protodata.ast.FieldName
+import io.spine.option.IfHasDuplicatesOption
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
+import io.spine.protodata.check
+import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.event.simpleRuleAdded
+import io.spine.validation.event.DistinctFieldDiscovered
+import io.spine.validation.event.distinctFieldDiscovered
 
 /**
- * A policy which, upon encountering a field with the `(distinct)` option,
- * generates a validation rule.
+ * Controls whether a field should be validated as `(distinct)`.
  *
- * The validation rule prohibits duplicate entries in the associated field.
+ * Whenever a field marked with `(distinct)` option is discovered
+ * emits [DistinctFieldDiscovered] if the following conditions are met:
+ *
+ * 1. The field type is `repeated` or `map`.
+ * 2. The option value is `true`.
+ *
+ * If (1) is violated, the policy reports a compilation error.
+ *
+ * Violation of (2) means that the `(distinct)` option is applied correctly,
+ * but disabled. In this case, the policy emits [NoReaction] because we
+ * actually have a non-distinct field, marked with `(distinct)`.
  */
-internal class DistinctPolicy : ValidationPolicy<FieldOptionDiscovered>() {
+internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = DISTINCT) event: FieldOptionDiscovered
-    ): EitherOf2<RuleAdded, NoReaction> {
+        @External @Where(field = OPTION_NAME, equals = DISTINCT)
+        event: FieldOptionDiscovered
+    ): EitherOf2<DistinctFieldDiscovered, NoReaction> {
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, file)
+
         if (!event.option.boolValue) {
             return ignore()
         }
-        val field = event.subject
-        val declaringType = field.declaringType
-        val fieldName = field.name
 
-        checkCollection(fieldName, declaringType, event.file)
-
-        val rule = SimpleRule(
-            fieldName, DistinctCollection.getDefaultInstance(), ERROR, ERROR, false
-        )
-        return simpleRuleAdded {
-            type = declaringType
-            this@simpleRuleAdded.rule = rule
+        val message = resolveErrorMessage<IfHasDuplicatesOption>(field)
+        return distinctFieldDiscovered {
+            id = field.ref
+            errorMessage = message
+            subject = field
         }.asA()
     }
-
-    private fun checkCollection(fieldName: FieldName, typeName: TypeName, file: File) {
-        val field = findField(fieldName, typeName, file)
-        if (field.type.isSingular) {
-            error("The field `${typeName.qualifiedName}.${fieldName.value}` is neither" +
-                    " a `repeated` nor a `map` and therefore cannot be `($DISTINCT)`.",)
-        }
-    }
-
-    companion object {
-        private const val ERROR = "A field with `($DISTINCT) = true` must not contain duplicates."
-    }
 }
+
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.isSupported(), file, field.span) {
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($DISTINCT)` option. This options supports `map` and `repeated` fields."
+    }
+
+private fun FieldType.isSupported(): Boolean = isMap || isList

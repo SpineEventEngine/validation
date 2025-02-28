@@ -81,9 +81,22 @@ message GoesField {
     // The error message template.
     string error_message = 2;
 
-    // The name of the required companion field.
+    // The required companion field.
     protodata.Field companion = 3;
 
     // The field in which the option was discovered.
     protodata.Field subject = 4;
+}
+
+// A view of a field that is marked with `(distinct) = true` option.
+message DistinctField {
+    option (entity).kind = PROJECTION;
+
+    protodata.FieldRef id = 1;
+
+    // The error message template.
+    string error_message = 2;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 3;
 }
