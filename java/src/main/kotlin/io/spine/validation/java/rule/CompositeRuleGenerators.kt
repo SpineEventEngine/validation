@@ -38,7 +38,6 @@ import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
 import io.spine.validation.java.GenerationContext
-import io.spine.validation.java.createCompositeViolation
 
 /**
  * Java code comparing two boolean values.

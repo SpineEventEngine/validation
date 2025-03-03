@@ -36,13 +36,13 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.newBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_SET_AGAIN
-import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.expression.constraintViolation
-import io.spine.validation.java.expression.templateString
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.

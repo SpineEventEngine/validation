@@ -32,6 +32,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.field
 import io.spine.validation.ErrorMessage
 import io.spine.validation.java.rule.CodeGenerator
+import io.spine.validation.java.rule.createViolation
 
 /**
  * A code generator for the `(is_required)` constraint.

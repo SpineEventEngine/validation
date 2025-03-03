@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,7 +26,7 @@
 
 @file:JvmName("ErrorMessages")
 
-package io.spine.validation.java
+package io.spine.validation.java.rule
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
@@ -41,6 +41,7 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
+import io.spine.validation.java.GenerationContext
 import io.spine.validation.java.expression.TemplateStringClass
 
 /**

@@ -41,23 +41,23 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.PATTERN
 import io.spine.validation.java.expression.CollectorsClass
-import io.spine.validation.java.ErrorPlaceholder
-import io.spine.validation.java.ErrorPlaceholder.FIELD_DUPLICATES
-import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.FieldOptionCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
 import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.expression.constraintViolation
-import io.spine.validation.java.fieldPath
-import io.spine.validation.java.joinToString
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.fieldPath
+import io.spine.validation.java.violation.joinToString
 import io.spine.validation.java.stringValueOf
-import io.spine.validation.java.expression.templateString
+import io.spine.validation.java.violation.templateString
 
 /**
  * The generator for `(distinct)` option.

@@ -53,6 +53,7 @@ import io.spine.validation.extractType
 import io.spine.validation.java.expression.StringClass
 import io.spine.validation.java.rule.CodeGenerator
 import io.spine.validation.java.rule.DistributingGenerator
+import io.spine.validation.java.rule.createViolation
 import io.spine.validation.java.rule.generatorForCustom
 
 /**
