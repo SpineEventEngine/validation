@@ -37,7 +37,7 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.DefaultValueExpression
+import io.spine.validation.java.expression.DefaultValueExpression
 import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE

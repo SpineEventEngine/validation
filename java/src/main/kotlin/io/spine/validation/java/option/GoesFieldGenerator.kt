@@ -40,7 +40,7 @@ import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.java.DefaultValueExpression
+import io.spine.validation.java.expression.DefaultValueExpression
 import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
