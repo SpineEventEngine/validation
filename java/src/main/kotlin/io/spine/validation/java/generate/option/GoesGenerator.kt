@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option
+package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.JavaValueConverter

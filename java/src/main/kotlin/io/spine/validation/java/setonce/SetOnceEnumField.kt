@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option.setonce
+package io.spine.validation.java.setonce
 
 import com.google.protobuf.Enum
 import com.google.protobuf.ProtocolMessageEnum

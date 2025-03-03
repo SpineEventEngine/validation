@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option
+package io.spine.validation.java.generate.option
 
+import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -34,13 +35,17 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.This
+import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_MISSING
-import io.spine.validation.RequiredField
+import io.spine.validation.GOES
+import io.spine.validation.GoesField
 import io.spine.validation.java.expression.DefaultValueExpression
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -48,30 +53,37 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.vi
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
+import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(required)` option.
+ * The generator for `(goes)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class RequiredFieldGenerator(
-    private val view: RequiredField,
+internal class GoesFieldGenerator(
+    private val view: GoesField,
     override val converter: JavaValueConverter
 ) : DefaultValueExpression {
 
     private val field = view.subject
+    private val fieldType = field.type
     private val declaringType = field.declaringType
 
     /**
      * Generates code for a field represented by the [view].
      */
     fun generate(): FieldOptionCode {
+        val field = view.subject
+        val companion = view.companion
+        val fieldGetter = This<Message>()
+            .field(field)
+            .getter<Any>()
         val constraint = CodeBlock(
             """
-            if (${field.hasDefaultValue()}) {
+            if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
                 var fieldPath = ${fieldPath(parentPath, field.name)};
-                var violation = ${violation(ReadVar("fieldPath"))};
+                var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -79,18 +91,24 @@ internal class RequiredFieldGenerator(
         return FieldOptionCode(constraint)
     }
 
-    private fun violation(fieldPath: Expression<FieldPath>): Expression<ConstraintViolation> {
-        val placeholders = supportedPlaceholders(fieldPath)
-        val errorMessage =
-            templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue = null)
+    private fun violation(
+        fieldPath: Expression<FieldPath>,
+        fieldValue: Expression<*>,
+    ): Expression<ConstraintViolation> {
+        val qualifiedName = field.qualifiedName
+        val placeholders = supportedPlaceholders(fieldPath, fieldValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(
-        fieldPath: Expression<FieldPath>
+        fieldPath: Expression<FieldPath>,
+        fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_TYPE to StringLiteral(field.type.name),
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName)
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        GOES_COMPANION to StringLiteral(view.companion.name.value)
     )
 }

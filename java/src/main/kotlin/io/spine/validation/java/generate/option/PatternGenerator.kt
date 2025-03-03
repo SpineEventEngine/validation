@@ -24,38 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option
+package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.RequiredField
+import io.spine.validation.PatternField
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * The generator for `(required)` option.
+ * The generator for `(pattern)` option.
  */
-internal class RequiredGenerator(
-    private val querying: Querying,
-    private val converter: JavaValueConverter
-) : OptionGenerator {
+internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All required fields in the current compilation process.
+     * All pattern fields in the current compilation process.
      */
-    private val allRequiredFields by lazy {
-        querying.select<RequiredField>()
+    private val allPatternFields by lazy {
+        querying.select<PatternField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val requiredFields = allRequiredFields.filter { it.id.type == type }
-        val generatedFields = requiredFields.map {
-            RequiredFieldGenerator(it, converter)
-                .generate()
-        }
+        val patternFields = allPatternFields.filter { it.id.type == type }
+        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
         return generatedFields
     }
 }

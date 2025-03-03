@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option.setonce
+package io.spine.validation.java.setonce
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
@@ -43,7 +43,7 @@ import io.spine.string.shortly
 import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
 import io.spine.validation.java.findMessageTypes
-import io.spine.validation.java.option.setonce.SetOnceNumberField.Companion.SupportedNumbers
+import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure

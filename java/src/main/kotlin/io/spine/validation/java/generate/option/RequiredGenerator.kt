@@ -24,30 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option
+package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.DistinctField
+import io.spine.validation.RequiredField
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * The generator for `(distinct)` option.
+ * The generator for `(required)` option.
  */
-internal class DistinctGenerator(
+internal class RequiredGenerator(
     private val querying: Querying,
+    private val converter: JavaValueConverter
 ) : OptionGenerator {
 
-    private val allDistinctFields by lazy {
-        querying.select<DistinctField>()
+    /**
+     * All required fields in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
+        querying.select<RequiredField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val distinctFields = allDistinctFields.filter { it.id.type == type }
-        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).generate() }
+        val requiredFields = allRequiredFields.filter { it.id.type == type }
+        val generatedFields = requiredFields.map {
+            RequiredFieldGenerator(it, converter)
+                .generate()
+        }
         return generatedFields
     }
 }

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option.setonce
+package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElementFactory

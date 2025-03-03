@@ -24,71 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.option.setonce
+package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.java.Expression
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given number [field].
+ * Renders Java code to support `(set_once)` option for the given boolean [field].
  *
- * @param field The number field that declared the option.
+ * @param field The boolean field that declared the option.
  * @param typeSystem The type system to resolve types.
  * @param errorMessage The error message pattern to use in case of the violation.
  */
-internal class SetOnceNumberField(
+internal class SetOnceBooleanField(
     field: Field,
     typeSystem: TypeSystem,
     errorMessage: String
-) : SetOnceJavaConstraints<Number>(field, typeSystem, errorMessage) {
-
-    companion object {
-        private val FieldReaders = mapOf(
-            TYPE_DOUBLE to "readDouble", TYPE_FLOAT to "readFloat",
-            TYPE_INT32 to "readInt32", TYPE_INT64 to "readInt64",
-            TYPE_UINT32 to "readUInt32", TYPE_UINT64 to "readUInt64",
-            TYPE_SINT32 to "readSInt32", TYPE_SINT64 to "readSInt64",
-            TYPE_FIXED32 to "readFixed32", TYPE_FIXED64 to "readFixed64",
-            TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
-        )
-        val SupportedNumbers = FieldReaders.keys
-    }
+) : SetOnceJavaConstraints<Boolean>(field, typeSystem, errorMessage) {
 
     init {
-        check(field.type.primitive in SupportedNumbers) {
-            "`${javaClass.simpleName}` handles only number fields. " +
+        check(field.type.primitive == PrimitiveType.TYPE_BOOL) {
+            "`${javaClass.simpleName}` handles only boolean fields. " +
                     "The passed field: `$field`."
         }
     }
 
-    private val fieldType = field.type.primitive
-    private val fieldReader = FieldReaders[fieldType]!!
-
     override fun defaultOrSame(
-        currentValue: Expression<Number>,
-        newValue: Expression<Number>
-    ): Expression<Boolean> = Expression("$currentValue == 0 || $currentValue == $newValue")
+        currentValue: Expression<Boolean>,
+        newValue: Expression<Boolean>
+    ): Expression<Boolean> = Expression("$currentValue == false || $currentValue == $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = "${fieldName}_ = input.$fieldReader();"
+            readerStartsWith = "${fieldName}_ = input.readBool();"
         )
     }
 
@@ -98,7 +72,7 @@ internal class SetOnceNumberField(
      * For example:
      *
      * ```
-     * public Builder setMyInt(int value)
+     * public Builder setMyBool(boolean value)
      * ```
      */
     private fun PsiClass.alterSetter() {
