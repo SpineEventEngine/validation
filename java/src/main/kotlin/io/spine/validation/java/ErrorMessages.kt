@@ -117,12 +117,3 @@ private fun pathOf(field: Field): Expression<FieldPath> =
     ClassName(FieldPath::class.java).newBuilder()
         .chainAdd("field_name", StringLiteral(field.name.value))
         .chainBuild()
-
-/**
- * Returns an expression that yields a new instance of [FieldPath],
- * appending the provided [field] name to the [parent] path.
- */
-internal fun fieldPath(parent: Expression<FieldPath>, field: FieldName): Expression<FieldPath> =
-    parent.toBuilder()
-        .chainAdd("field_name", StringLiteral(field.value))
-        .chainBuild()

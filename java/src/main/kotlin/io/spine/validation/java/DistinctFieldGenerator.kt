@@ -129,14 +129,11 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
         duplicates: Expression<List<*>>
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_VALUE to fieldType.stringValueOf(getter),
-            FIELD_TYPE to StringLiteral(fieldType.name),
-            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            FIELD_DUPLICATES to duplicates.call("toString")
-        )
-    }
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldType.stringValueOf(getter),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        FIELD_DUPLICATES to duplicates.call("toString")
+    )
 }

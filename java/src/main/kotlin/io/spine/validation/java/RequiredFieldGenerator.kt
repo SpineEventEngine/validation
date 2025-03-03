@@ -35,9 +35,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
@@ -100,12 +98,9 @@ internal class RequiredFieldGenerator(
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_TYPE to StringLiteral(field.type.name),
-            PARENT_TYPE to StringLiteral(declaringType.qualifiedName)
-        )
-    }
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_TYPE to StringLiteral(field.type.name),
+        PARENT_TYPE to StringLiteral(declaringType.qualifiedName)
+    )
 }

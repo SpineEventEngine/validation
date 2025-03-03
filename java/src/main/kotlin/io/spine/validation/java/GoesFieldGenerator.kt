@@ -37,7 +37,6 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
-import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
@@ -114,14 +113,11 @@ internal class GoesFieldGenerator(
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-            FIELD_TYPE to StringLiteral(fieldType.name),
-            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            GOES_COMPANION to StringLiteral(view.companion.name.value)
-        )
-    }
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        GOES_COMPANION to StringLiteral(view.companion.name.value)
+    )
 }

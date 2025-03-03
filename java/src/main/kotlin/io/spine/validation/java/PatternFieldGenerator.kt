@@ -206,17 +206,14 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
         fieldValue: Expression<String>,
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val pathAsString = FieldPathsClass.call<String>("getJoined", fieldPath)
-        return mapOf(
-            FIELD_PATH to pathAsString,
-            FIELD_VALUE to fieldValue,
-            FIELD_TYPE to StringLiteral(fieldType.name),
-            PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-            REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
-            REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
-        )
-    }
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldValue,
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
+        REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
+    )
 }
 
 /**
