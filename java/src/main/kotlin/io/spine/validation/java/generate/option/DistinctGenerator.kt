@@ -37,7 +37,7 @@ import io.spine.validation.java.generate.OptionGenerator
  * The generator for `(distinct)` option.
  */
 internal class DistinctGenerator(
-    private val querying: Querying,
+    private val querying: Querying
 ) : OptionGenerator {
 
     private val allDistinctFields by lazy {
