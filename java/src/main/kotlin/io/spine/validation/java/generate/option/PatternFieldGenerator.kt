@@ -59,9 +59,9 @@ import io.spine.validation.java.expression.FieldPathClass
 import io.spine.validation.java.expression.ImmutableListClass
 import io.spine.validation.java.expression.PatternClass
 import io.spine.validation.java.expression.StringClass
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.java
 
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
