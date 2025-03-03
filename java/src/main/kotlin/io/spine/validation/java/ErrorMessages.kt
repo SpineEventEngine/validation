@@ -31,6 +31,7 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
@@ -38,6 +39,7 @@ import io.spine.protodata.java.Literal
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
+import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
@@ -114,4 +116,13 @@ private fun ErrorMessage.buildViolation(
 private fun pathOf(field: Field): Expression<FieldPath> =
     ClassName(FieldPath::class.java).newBuilder()
         .chainAdd("field_name", StringLiteral(field.name.value))
+        .chainBuild()
+
+/**
+ * Returns an expression that yields a new instance of [FieldPath],
+ * appending the provided [field] name to the [parent] path.
+ */
+internal fun fieldPath(parent: Expression<FieldPath>, field: FieldName): Expression<FieldPath> =
+    parent.toBuilder()
+        .chainAdd("field_name", StringLiteral(field.value))
         .chainBuild()

@@ -37,7 +37,6 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.PATTERN
@@ -71,7 +70,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
             """
             if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
-                var fieldPath = ${fieldPath(parentPath)};
+                var fieldPath = ${fieldPath(parentPath, field.name)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
                 violations.add(violation);
             }
@@ -116,11 +115,6 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
                 .collect($CollectorsClass.toList())
             """.trimIndent()
         )
-
-    private fun fieldPath(parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(field.name.value))
-            .chainBuild()
 
     private fun violation(
         fieldPath: Expression<FieldPath>,

@@ -41,7 +41,6 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
@@ -111,7 +110,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     private fun singularStringConstraint(fieldValue: Expression<String>) = CodeBlock(
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
-            var fieldPath = ${fieldPath(parentPath)};
+            var fieldPath = ${fieldPath(parentPath, field.name)};
             var violation = ${violation(ReadVar("fieldPath"), fieldValue)};
             $violations.add(violation);
         }
@@ -150,7 +149,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
-                    var fieldPath = ${fieldPath(parentPath)};
+                    var fieldPath = ${fieldPath(parentPath, field.name)};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("element"))};
                     violations.add(violation);
                 }
@@ -193,11 +192,6 @@ internal class PatternFieldGenerator(private val view: PatternField) {
         val operation = if (partialMatch) "find" else "matches"
         return matcher.chain(operation)
     }
-
-    private fun fieldPath(parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(field.name.value))
-            .chainBuild()
 
     private fun violation(
         fieldPath: Expression<FieldPath>,

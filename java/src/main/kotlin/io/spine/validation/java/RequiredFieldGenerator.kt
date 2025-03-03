@@ -70,7 +70,7 @@ internal class RequiredFieldGenerator(
         val constraint = CodeBlock(
             """
             if ($getter.equals(${defaultValue(field)})) {
-                var fieldPath = ${fieldPath(parentPath)};
+                var fieldPath = ${fieldPath(parentPath, field.name)};
                 var violation = ${violation(ReadVar("fieldPath"))};
                 $violations.add(violation);
             }
@@ -90,11 +90,6 @@ internal class RequiredFieldGenerator(
         val expression = converter.valueToCode(unsetValue)
         return expression
     }
-
-    private fun fieldPath(parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(field.name.value))
-            .chainBuild()
 
     private fun violation(fieldPath: Expression<FieldPath>): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(fieldPath)

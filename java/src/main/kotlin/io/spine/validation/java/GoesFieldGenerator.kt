@@ -39,7 +39,6 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
@@ -81,7 +80,7 @@ internal class GoesFieldGenerator(
         val constraint = CodeBlock(
             """
             if (!$fieldGetter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
-                var fieldPath = ${fieldPath(field.name.value, parentPath)};
+                var fieldPath = ${fieldPath(parentPath, field.name)};
                 var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
                 $violations.add(violation);
             }
@@ -101,11 +100,6 @@ internal class GoesFieldGenerator(
         val expression = converter.valueToCode(unsetValue)
         return expression
     }
-
-    private fun fieldPath(fieldName: String, parent: Expression<FieldPath>): Expression<FieldPath> =
-        parent.toBuilder()
-            .chainAdd("field_name", StringLiteral(fieldName))
-            .chainBuild()
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
