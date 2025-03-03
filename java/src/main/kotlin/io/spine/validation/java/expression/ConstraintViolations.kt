@@ -26,7 +26,7 @@
 
 @file:JvmName("ConstraintViolations")
 
-package io.spine.validation.java
+package io.spine.validation.java.expression
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
@@ -40,6 +40,7 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
+import io.spine.validation.java.ErrorPlaceholder
 
 /**
  * Yields an expression that creates a new instance of [ConstraintViolation]

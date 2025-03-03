@@ -36,6 +36,7 @@ import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
+import io.spine.validation.java.expression.StringClass
 
 /**
  * Returns an expression that converts the provided field [value] to a [String].

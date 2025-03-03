@@ -32,6 +32,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.toBuilder
+import io.spine.validation.java.expression.FieldPathsClass
 
 /**
  * Returns an expression that yields this [FieldPath] as a string using

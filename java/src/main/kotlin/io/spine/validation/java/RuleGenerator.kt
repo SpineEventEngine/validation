@@ -38,6 +38,7 @@ import io.spine.server.query.select
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.rule.generatorFor
 import com.squareup.javapoet.CodeBlock as PoetCodeBlock
 import com.squareup.javapoet.FieldSpec as PoetField
 import com.squareup.javapoet.MethodSpec as PoetMethod

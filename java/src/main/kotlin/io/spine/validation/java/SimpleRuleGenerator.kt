@@ -33,7 +33,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.Type
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
 import io.spine.protodata.value.Value
@@ -51,6 +50,10 @@ import io.spine.validation.SimpleRule.OperatorKindCase.CUSTOM_OPERATOR
 import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
 import io.spine.validation.extractType
+import io.spine.validation.java.expression.StringClass
+import io.spine.validation.java.rule.CodeGenerator
+import io.spine.validation.java.rule.DistributingGenerator
+import io.spine.validation.java.rule.generatorForCustom
 
 /**
  * Java code comparing two objects.

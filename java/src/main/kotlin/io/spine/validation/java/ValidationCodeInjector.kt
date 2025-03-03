@@ -53,6 +53,7 @@ import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.expression.FieldPathClass
 
 /**
  * A [PsiClass] holding an instance of [Message].

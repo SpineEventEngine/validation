@@ -37,7 +37,7 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.DefaultValueChecker
+import io.spine.validation.java.DefaultValueExpression
 import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
@@ -45,10 +45,10 @@ import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.FieldOptionCode
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.constraintViolation
+import io.spine.validation.java.expression.constraintViolation
 import io.spine.validation.java.fieldPath
 import io.spine.validation.java.joinToString
-import io.spine.validation.java.templateString
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for `(required)` option.

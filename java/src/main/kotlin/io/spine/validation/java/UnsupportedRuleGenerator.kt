@@ -26,6 +26,8 @@
 
 package io.spine.validation.java
 
+import io.spine.validation.java.rule.CodeGenerator
+
 /**
  * A null-value generator which never produces code.
  *

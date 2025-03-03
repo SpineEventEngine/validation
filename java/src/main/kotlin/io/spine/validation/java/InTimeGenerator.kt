@@ -43,6 +43,7 @@ import io.spine.time.validation.Time.PAST
 import io.spine.time.validation.Time.TIME_UNDEFINED
 import io.spine.validation.InTime
 import io.spine.validation.WHEN
+import io.spine.validation.java.rule.CodeGenerator
 
 /**
  * Creates a code generator for the [InTime] feature.

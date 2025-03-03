@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ import io.spine.validation.java.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.constraintViolation
-import io.spine.validation.java.templateString
+import io.spine.validation.java.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.

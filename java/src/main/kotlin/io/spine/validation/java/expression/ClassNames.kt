@@ -26,7 +26,7 @@
 
 @file:JvmName("ClassNames")
 
-package io.spine.validation.java
+package io.spine.validation.java.expression
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet

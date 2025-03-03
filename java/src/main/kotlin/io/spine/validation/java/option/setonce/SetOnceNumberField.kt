@@ -40,13 +40,9 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.java.AnElement
-import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
-import io.spine.validation.java.StringClass
 
 /**
  * Renders Java code to support `(set_once)` option for the given number [field].

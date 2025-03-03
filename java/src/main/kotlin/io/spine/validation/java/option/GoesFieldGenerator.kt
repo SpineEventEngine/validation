@@ -40,7 +40,7 @@ import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.java.DefaultValueChecker
+import io.spine.validation.java.DefaultValueExpression
 import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
@@ -50,11 +50,11 @@ import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.FieldOptionCode
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.constraintViolation
+import io.spine.validation.java.expression.constraintViolation
 import io.spine.validation.java.fieldPath
 import io.spine.validation.java.joinToString
 import io.spine.validation.java.stringValueOf
-import io.spine.validation.java.templateString
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for `(goes)` option.

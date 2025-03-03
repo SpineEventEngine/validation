@@ -31,7 +31,6 @@ package io.spine.validation.java
 import com.squareup.javapoet.CodeBlock
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
@@ -39,10 +38,10 @@ import io.spine.protodata.java.Literal
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.newBuilder
 import io.spine.protodata.java.packToAny
-import io.spine.protodata.java.toBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
+import io.spine.validation.java.expression.TemplateStringClass
 
 /**
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it

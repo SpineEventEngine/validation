@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.rule
 
 import com.google.common.collect.ImmutableList
 import com.google.common.reflect.TypeToken
@@ -50,6 +50,7 @@ import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
+import io.spine.validation.java.GenerationContext
 import javax.lang.model.element.Modifier
 
 /**
