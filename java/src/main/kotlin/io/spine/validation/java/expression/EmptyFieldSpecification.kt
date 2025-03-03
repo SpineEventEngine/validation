@@ -34,11 +34,12 @@ import io.spine.validation.UnsetValue
 import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 
 /**
- * A trait that provides functionality to generate expressions to check
- * if a given [Field] holds its default (unset) value.
+ * Provides an expression to check if a given [Field] holds
+ * the default (unset) value.
  *
- * This specification takes a Protobuf instance of a default value for the field using
- * [UnsetValue] utility, and then converts it to an expression using [JavaValueConverter].
+ * It takes a Protobuf instance of a default value for the field type
+ * with [UnsetValue] utility, and then converts it to a Java expression
+ * using [JavaValueConverter].
  */
 internal interface EmptyFieldSpecification {
 
@@ -48,7 +49,7 @@ internal interface EmptyFieldSpecification {
     val converter: JavaValueConverter
 
     /**
-     * Returns an expression that checks if this [Field] has the default value.
+     * Returns an expression that checks if this [Field] has the default (unset) value.
      */
     fun Field.hasDefaultValue(): Expression<Boolean> {
         val getter = message.field(this).getter<List<*>>()
