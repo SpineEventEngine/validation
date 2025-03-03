@@ -52,10 +52,7 @@ internal class RequiredGenerator(
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val requiredFields = allRequiredFields.filter { it.id.type == type }
-        val generatedFields = requiredFields.map {
-            RequiredFieldGenerator(it, converter)
-                .generate()
-        }
+        val generatedFields = requiredFields.map { RequiredFieldGenerator(it, converter).code() }
         return generatedFields
     }
 }

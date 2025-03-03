@@ -48,7 +48,7 @@ internal class PatternGenerator(private val querying: Querying) : OptionGenerato
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val patternFields = allPatternFields.filter { it.id.type == type }
-        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
+        val generatedFields = patternFields.map { PatternFieldGenerator(it).code() }
         return generatedFields
     }
 }

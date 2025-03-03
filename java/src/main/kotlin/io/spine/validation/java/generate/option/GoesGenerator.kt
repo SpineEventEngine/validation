@@ -52,7 +52,7 @@ internal class GoesGenerator(
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
         val goesFields = allGoesFields.filter { it.id.type == type }
-        val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
+        val constraints = goesFields.map { GoesFieldGenerator(it, converter).code() }
         return constraints
     }
 }

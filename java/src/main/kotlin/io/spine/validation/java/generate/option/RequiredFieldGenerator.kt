@@ -37,7 +37,7 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.expression.DefaultValueExpression
+import io.spine.validation.java.expression.EmptyFieldSpecification
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -45,6 +45,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
@@ -58,7 +59,7 @@ import io.spine.validation.java.violation.templateString
 internal class RequiredFieldGenerator(
     private val view: RequiredField,
     override val converter: JavaValueConverter
-) : DefaultValueExpression {
+) : FieldOptionGenerator, EmptyFieldSpecification {
 
     private val field = view.subject
     private val declaringType = field.declaringType
@@ -66,7 +67,7 @@ internal class RequiredFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    fun generate(): FieldOptionCode {
+    override fun code(): FieldOptionCode {
         val constraint = CodeBlock(
             """
             if (${field.hasDefaultValue()}) {

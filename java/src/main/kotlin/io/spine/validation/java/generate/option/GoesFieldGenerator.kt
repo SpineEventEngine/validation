@@ -40,7 +40,7 @@ import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.java.expression.DefaultValueExpression
+import io.spine.validation.java.expression.EmptyFieldSpecification
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -54,6 +54,7 @@ import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
 import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -64,7 +65,7 @@ import io.spine.validation.java.violation.templateString
 internal class GoesFieldGenerator(
     private val view: GoesField,
     override val converter: JavaValueConverter
-) : DefaultValueExpression {
+) : FieldOptionGenerator, EmptyFieldSpecification {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -73,7 +74,7 @@ internal class GoesFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    fun generate(): FieldOptionCode {
+    override fun code(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion
         val fieldGetter = This<Message>()

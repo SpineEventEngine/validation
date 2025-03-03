@@ -24,30 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
-
-import io.spine.protodata.ast.TypeName
-import io.spine.server.query.Querying
-import io.spine.server.query.select
-import io.spine.validation.DistinctField
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.OptionGenerator
+package io.spine.validation.java.generate
 
 /**
- * The generator for `(distinct)` option.
+ * Generates Java code for a specific option applied to a specific field.
  */
-internal class DistinctGenerator(
-    private val querying: Querying,
-) : OptionGenerator {
+internal interface FieldOptionGenerator {
 
-    private val allDistinctFields by lazy {
-        querying.select<DistinctField>()
-            .all()
-    }
-
-    override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val distinctFields = allDistinctFields.filter { it.id.type == type }
-        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).code() }
-        return generatedFields
-    }
+    /**
+     * Generates validation code for the application of a specific option
+     * to a single message field.
+     */
+    fun code(): FieldOptionCode
 }

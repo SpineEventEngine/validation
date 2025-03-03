@@ -57,6 +57,7 @@ import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
 import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -64,7 +65,7 @@ import io.spine.validation.java.violation.templateString
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class DistinctFieldGenerator(private val view: DistinctField) {
+internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -74,7 +75,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) {
     /**
      * Generates code for a field represented by the [view].
      */
-    fun generate(): FieldOptionCode {
+    override fun code(): FieldOptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(

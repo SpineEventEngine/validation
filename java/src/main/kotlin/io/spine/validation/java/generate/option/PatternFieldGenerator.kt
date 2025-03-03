@@ -62,6 +62,7 @@ import io.spine.validation.java.expression.StringClass
 import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
@@ -82,7 +83,7 @@ private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialM
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class PatternFieldGenerator(private val view: PatternField) {
+internal class PatternFieldGenerator(private val view: PatternField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -94,7 +95,7 @@ internal class PatternFieldGenerator(private val view: PatternField) {
     /**
      * Generates code for a field represented by the [view].
      */
-    fun generate(): FieldOptionCode = when {
+    override fun code(): FieldOptionCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)
