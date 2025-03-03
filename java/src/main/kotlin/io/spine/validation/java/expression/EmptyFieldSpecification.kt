@@ -37,10 +37,10 @@ import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
  * A trait that provides functionality to generate expressions to check
  * if a given [Field] holds its default (unset) value.
  *
- * This trait takes a Protobuf instance of a default value for the field using
+ * This specification takes a Protobuf instance of a default value for the field using
  * [UnsetValue] utility, and then converts it to an expression using [JavaValueConverter].
  */
-internal interface DefaultValueExpression {
+internal interface EmptyFieldSpecification {
 
     /**
      * Converts Protobuf values to Java expressions.
