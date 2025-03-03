@@ -57,8 +57,8 @@ import io.spine.validation.java.expression.templateString
  */
 internal class RequiredFieldGenerator(
     private val view: RequiredField,
-    converter: JavaValueConverter,
-) : DefaultValueChecker(converter) {
+    override val converter: JavaValueConverter
+) : DefaultValueExpression {
 
     private val field = view.subject
     private val declaringType = field.declaringType

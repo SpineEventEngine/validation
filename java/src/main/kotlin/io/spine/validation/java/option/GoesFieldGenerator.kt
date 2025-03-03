@@ -63,8 +63,8 @@ import io.spine.validation.java.expression.templateString
  */
 internal class GoesFieldGenerator(
     private val view: GoesField,
-    converter: JavaValueConverter
-) : DefaultValueChecker(converter) {
+    override val converter: JavaValueConverter
+) : DefaultValueExpression {
 
     private val field = view.subject
     private val fieldType = field.type
