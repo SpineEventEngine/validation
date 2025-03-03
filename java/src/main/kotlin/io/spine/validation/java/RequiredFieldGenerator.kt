@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
@@ -35,15 +34,12 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.UnsetValue
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
 
@@ -54,8 +50,8 @@ import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
  */
 internal class RequiredFieldGenerator(
     private val view: RequiredField,
-    private val converter: JavaValueConverter,
-) {
+    converter: JavaValueConverter,
+) : DefaultValueChecker(converter) {
 
     private val field = view.subject
     private val declaringType = field.declaringType
@@ -64,10 +60,9 @@ internal class RequiredFieldGenerator(
      * Generates code for a field represented by the [view].
      */
     fun generate(): FieldOptionCode {
-        val getter = message.field(field).getter<Any>()
         val constraint = CodeBlock(
             """
-            if ($getter.equals(${defaultValue(field)})) {
+            if (${field.hasDefaultValue()}) {
                 var fieldPath = ${fieldPath(parentPath, field.name)};
                 var violation = ${violation(ReadVar("fieldPath"))};
                 $violations.add(violation);
@@ -75,18 +70,6 @@ internal class RequiredFieldGenerator(
             """.trimIndent()
         )
         return FieldOptionCode(constraint)
-    }
-
-    /**
-     * Returns the expression that yields a default value for the given field.
-     *
-     * Each field type has its own default value. The option considers the field
-     * to be missing if its current value equals to the default one.
-     */
-    private fun defaultValue(field: Field): Expression<*> {
-        val unsetValue = UnsetValue.forField(field)!!
-        val expression = converter.valueToCode(unsetValue)
-        return expression
     }
 
     private fun violation(fieldPath: Expression<FieldPath>): Expression<ConstraintViolation> {

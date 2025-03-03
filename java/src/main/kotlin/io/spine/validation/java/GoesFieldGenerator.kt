@@ -28,7 +28,6 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
@@ -41,7 +40,6 @@ import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.UnsetValue
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
@@ -57,8 +55,8 @@ import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
  */
 internal class GoesFieldGenerator(
     private val view: GoesField,
-    private val converter: JavaValueConverter
-) {
+    converter: JavaValueConverter
+) : DefaultValueChecker(converter) {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -73,12 +71,9 @@ internal class GoesFieldGenerator(
         val fieldGetter = This<Message>()
             .field(field)
             .getter<Any>()
-        val companionGetter = This<Message>()
-            .field(companion)
-            .getter<Any>()
         val constraint = CodeBlock(
             """
-            if (!$fieldGetter.equals(${defaultValue(field)}) && $companionGetter.equals(${defaultValue(companion)})) {
+            if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
                 var fieldPath = ${fieldPath(parentPath, field.name)};
                 var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
                 $violations.add(violation);
@@ -86,18 +81,6 @@ internal class GoesFieldGenerator(
             """.trimIndent()
         )
         return FieldOptionCode(constraint)
-    }
-
-    /**
-     * Returns the expression that yields a default value for the given field.
-     *
-     * Each field type has its own default value. The option considers the field
-     * to be missing if its current value equals to the default one.
-     */
-    private fun defaultValue(field: Field): Expression<*> {
-        val unsetValue = UnsetValue.forField(field)!!
-        val expression = converter.valueToCode(unsetValue)
-        return expression
     }
 
     private fun violation(
