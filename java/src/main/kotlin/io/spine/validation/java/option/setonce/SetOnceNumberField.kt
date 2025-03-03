@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,52 +24,75 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.setonce
+package io.spine.validation.java.option.setonce
 
-import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
+import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.java.AnElement
+import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.call
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
+import io.spine.validation.java.StringClass
 
 /**
- * Renders Java code to support `(set_once)` option for the given byte array [field].
+ * Renders Java code to support `(set_once)` option for the given number [field].
  *
- * Please note, in the generated Java code, Protobuf uses [ByteString] to represent
- * an array of bytes.
- *
- * @param field The byte array field that declared the option.
+ * @param field The number field that declared the option.
  * @param typeSystem The type system to resolve types.
  * @param errorMessage The error message pattern to use in case of the violation.
  */
-internal class SetOnceBytesField(
+internal class SetOnceNumberField(
     field: Field,
     typeSystem: TypeSystem,
     errorMessage: String
-) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
+) : SetOnceJavaConstraints<Number>(field, typeSystem, errorMessage) {
+
+    companion object {
+        private val FieldReaders = mapOf(
+            TYPE_DOUBLE to "readDouble", TYPE_FLOAT to "readFloat",
+            TYPE_INT32 to "readInt32", TYPE_INT64 to "readInt64",
+            TYPE_UINT32 to "readUInt32", TYPE_UINT64 to "readUInt64",
+            TYPE_SINT32 to "readSInt32", TYPE_SINT64 to "readSInt64",
+            TYPE_FIXED32 to "readFixed32", TYPE_FIXED64 to "readFixed64",
+            TYPE_SFIXED32 to "readSFixed32", TYPE_SFIXED64 to "readSFixed64",
+        )
+        val SupportedNumbers = FieldReaders.keys
+    }
 
     init {
-        check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
-            "`${javaClass.simpleName}` handles only byte array fields. " +
+        check(field.type.primitive in SupportedNumbers) {
+            "`${javaClass.simpleName}` handles only number fields. " +
                     "The passed field: `$field`."
         }
     }
 
+    private val fieldType = field.type.primitive
+    private val fieldReader = FieldReaders[fieldType]!!
+
     override fun defaultOrSame(
-        currentValue: Expression<ByteString>,
-        newValue: Expression<ByteString>
-    ): Expression<Boolean> = Expression(
-        "$currentValue == com.google.protobuf.ByteString.EMPTY || $currentValue.equals($newValue)"
-    )
+        currentValue: Expression<Number>,
+        newValue: Expression<Number>
+    ): Expression<Boolean> = Expression("$currentValue == 0 || $currentValue == $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = "${fieldName}_ = input.readBytes();"
+            readerStartsWith = "${fieldName}_ = input.$fieldReader();"
         )
     }
 
@@ -79,7 +102,7 @@ internal class SetOnceBytesField(
      * For example:
      *
      * ```
-     * public Builder setMyBytes(ByteString value)
+     * public Builder setMyInt(int value)
      * ```
      */
     private fun PsiClass.alterSetter() {
