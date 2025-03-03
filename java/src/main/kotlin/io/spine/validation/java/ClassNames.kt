@@ -28,7 +28,6 @@
 
 package io.spine.validation.java
 
-import com.google.common.collect.HashMultiset
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.LinkedHashMultiset
