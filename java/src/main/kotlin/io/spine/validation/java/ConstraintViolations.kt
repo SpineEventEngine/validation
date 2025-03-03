@@ -53,7 +53,7 @@ import io.spine.validate.checkPlaceholdersHasValue
  *   the invalid field value for this option is the field type's default value,
  *   which is treated as "no value" at all.
  */
-public fun constraintViolation(
+internal fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     declaringType: TypeName,
     fieldPath: Expression<FieldPath>,
@@ -78,7 +78,7 @@ public fun constraintViolation(
  * @param optionName The name of the option, which declared the provided [placeholders].
  * @param fieldName The fully qualified name of the field, which passed the provided [template].
  */
-public fun templateString(
+internal fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
     optionName: String,
