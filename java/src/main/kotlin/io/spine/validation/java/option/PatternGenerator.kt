@@ -24,33 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.GoesField
+import io.spine.validation.PatternField
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.OptionGenerator
 
 /**
- * The generator for `(goes)` option.
+ * The generator for `(pattern)` option.
  */
-internal class GoesGenerator(
-    private val querying: Querying,
-    private val converter: JavaValueConverter
-) : OptionGenerator {
+internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All goes fields in the current compilation process.
+     * All pattern fields in the current compilation process.
      */
-    private val allGoesFields by lazy {
-        querying.select<GoesField>()
+    private val allPatternFields by lazy {
+        querying.select<PatternField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val goesFields = allGoesFields.filter { it.id.type == type }
-        val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
-        return constraints
+        val patternFields = allPatternFields.filter { it.id.type == type }
+        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
+        return generatedFields
     }
 }

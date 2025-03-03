@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
@@ -46,15 +46,27 @@ import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
+import io.spine.validation.java.ConstraintViolationClass
+import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.java.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.FieldPathClass
+import io.spine.validation.java.ImmutableListClass
+import io.spine.validation.java.PatternClass
+import io.spine.validation.java.StringClass
 import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.constraintViolation
+import io.spine.validation.java.fieldPath
+import io.spine.validation.java.joinToString
+import io.spine.validation.java.mangled
+import io.spine.validation.java.templateString
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.apache.commons.lang.StringEscapeUtils.escapeJava

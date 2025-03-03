@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,28 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.DistinctField
+import io.spine.validation.GoesField
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.OptionGenerator
 
 /**
- * The generator for `(distinct)` option.
+ * The generator for `(goes)` option.
  */
-internal class DistinctGenerator(
+internal class GoesGenerator(
     private val querying: Querying,
+    private val converter: JavaValueConverter
 ) : OptionGenerator {
 
-    private val allDistinctFields by lazy {
-        querying.select<DistinctField>()
+    /**
+     * All goes fields in the current compilation process.
+     */
+    private val allGoesFields by lazy {
+        querying.select<GoesField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val distinctFields = allDistinctFields.filter { it.id.type == type }
-        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).generate() }
-        return generatedFields
+        val goesFields = allGoesFields.filter { it.id.type == type }
+        val constraints = goesFields.map { GoesFieldGenerator(it, converter).generate() }
+        return constraints
     }
 }

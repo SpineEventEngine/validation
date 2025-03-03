@@ -24,29 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.PatternField
+import io.spine.validation.DistinctField
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.OptionGenerator
 
 /**
- * The generator for `(pattern)` option.
+ * The generator for `(distinct)` option.
  */
-internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
+internal class DistinctGenerator(
+    private val querying: Querying,
+) : OptionGenerator {
 
-    /**
-     * All pattern fields in the current compilation process.
-     */
-    private val allPatternFields by lazy {
-        querying.select<PatternField>()
+    private val allDistinctFields by lazy {
+        querying.select<DistinctField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val patternFields = allPatternFields.filter { it.id.type == type }
-        val generatedFields = patternFields.map { PatternFieldGenerator(it).generate() }
+        val distinctFields = allDistinctFields.filter { it.id.type == type }
+        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).generate() }
         return generatedFields
     }
 }

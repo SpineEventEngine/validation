@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.isList
@@ -40,13 +40,24 @@ import io.spine.protodata.java.field
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.PATTERN
+import io.spine.validation.java.CollectorsClass
+import io.spine.validation.java.ErrorPlaceholder
 import io.spine.validation.java.ErrorPlaceholder.FIELD_DUPLICATES
 import io.spine.validation.java.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.ImmutableSetClass
+import io.spine.validation.java.LinkedHashMultisetClass
+import io.spine.validation.java.MultiSetEntryClass
 import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.constraintViolation
+import io.spine.validation.java.fieldPath
+import io.spine.validation.java.joinToString
+import io.spine.validation.java.stringValueOf
+import io.spine.validation.java.templateString
 
 /**
  * The generator for `(distinct)` option.

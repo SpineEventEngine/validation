@@ -24,13 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.option
 
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.RequiredField
+import io.spine.validation.java.FieldOptionCode
+import io.spine.validation.java.OptionGenerator
 
 /**
  * The generator for `(required)` option.
