@@ -27,10 +27,10 @@
 package io.spine.test.options.goes
 
 import com.google.protobuf.Message
+import io.spine.protobuf.newBuilder
+import io.spine.protodata.protobuf.descriptor
 import io.spine.test.options.set
 import io.spine.validate.ValidationException
-import io.spine.validation.getDescriptor
-import io.spine.validation.newBuilder
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -53,7 +53,7 @@ internal class GoesOneWayITest {
     @MethodSource("io.spine.test.options.goes.GoesOneWayTestEnv#onlyTargetFields")
     @ParameterizedTest(name = "throw if only the target `{1}` field is set")
     fun throwIfOnlyTargetFieldSet(message: Class<Message>, fieldName: String, fieldValue: Any) {
-        val descriptor = message.getDescriptor()
+        val descriptor = message.descriptor
         val field = descriptor.findFieldByName(fieldName)!!
         assertThrows<ValidationException> {
             message.newBuilder()
@@ -69,7 +69,7 @@ internal class GoesOneWayITest {
         fieldName: String,
         fieldValue: Any
     ) {
-        val descriptor = message.getDescriptor()
+        val descriptor = message.descriptor
         val companionField = descriptor.findFieldByName(fieldName)!!
         assertDoesNotThrow {
             message.newBuilder()
@@ -88,7 +88,7 @@ internal class GoesOneWayITest {
         fieldName: String,
         fieldValue: Any
     ) {
-        val descriptor = message.getDescriptor()
+        val descriptor = message.descriptor
         val field = descriptor.findFieldByName(fieldName)!!
         val companionField = descriptor.findFieldByName(companionName)!!
         assertDoesNotThrow {
