@@ -31,8 +31,8 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.RequiredField
-import io.spine.validation.java.FieldOptionCode
-import io.spine.validation.java.OptionGenerator
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
  * The generator for `(required)` option.

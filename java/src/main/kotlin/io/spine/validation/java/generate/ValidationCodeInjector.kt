@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.generate
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
@@ -52,7 +52,7 @@ import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.expression.FieldPathClass
 
 /**

@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.rule
 
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
@@ -43,7 +43,6 @@ import io.spine.time.validation.Time.PAST
 import io.spine.time.validation.Time.TIME_UNDEFINED
 import io.spine.validation.InTime
 import io.spine.validation.WHEN
-import io.spine.validation.java.rule.CodeGenerator
 
 /**
  * Creates a code generator for the [InTime] feature.

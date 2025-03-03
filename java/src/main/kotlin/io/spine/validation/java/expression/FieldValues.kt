@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.expression
 
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.PrimitiveType
@@ -36,7 +36,6 @@ import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
-import io.spine.validation.java.expression.StringClass
 
 /**
  * Returns an expression that converts the provided field [value] to a [String].

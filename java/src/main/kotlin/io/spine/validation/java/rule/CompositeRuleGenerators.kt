@@ -37,7 +37,6 @@ import io.spine.validation.ErrorMessage
 import io.spine.validation.LogicalOperator.AND
 import io.spine.validation.LogicalOperator.OR
 import io.spine.validation.LogicalOperator.XOR
-import io.spine.validation.java.GenerationContext
 
 /**
  * Java code comparing two boolean values.

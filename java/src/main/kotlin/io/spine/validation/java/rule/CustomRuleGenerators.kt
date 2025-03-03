@@ -33,11 +33,6 @@ import io.spine.validation.RecursiveValidation
 import io.spine.validation.RequiredOneof
 import io.spine.validation.isMessageWide
 import io.spine.validation.isSimple
-import io.spine.validation.java.GenerationContext
-import io.spine.validation.java.RequiredOneofGenerator
-import io.spine.validation.java.UnsupportedRuleGenerator
-import io.spine.validation.java.ValidateGenerator
-import io.spine.validation.java.inTimeGenerator
 
 /**
  * Creates a [CodeGenerator] for a custom validation operator for the given context.

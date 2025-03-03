@@ -38,8 +38,6 @@ import io.spine.validation.ErrorMessage
 import io.spine.validation.Rule.KindCase.COMPOSITE
 import io.spine.validation.Rule.KindCase.MESSAGE_WIDE
 import io.spine.validation.Rule.KindCase.SIMPLE
-import io.spine.validation.java.GenerationContext
-import io.spine.validation.java.generatorForSimple
 
 /**
  * A Java code generator for a validation rule.

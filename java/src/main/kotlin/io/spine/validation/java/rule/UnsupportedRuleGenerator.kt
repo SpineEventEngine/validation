@@ -24,20 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
-
-import io.spine.protodata.ast.TypeName
+package io.spine.validation.java.rule
 
 /**
- * Generates Java code for a specific option.
+ * A null-value generator which never produces code.
+ *
+ * Use this generator when an unknown custom validation operator is encountered.
  */
-internal interface OptionGenerator {
+internal class UnsupportedRuleGenerator(
+    private val ruleName: String,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
 
-    /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     */
-    fun codeFor(type: TypeName): List<FieldOptionCode>
+    override val canGenerate: Boolean = false
+
+    override fun condition(): Nothing = unsupported()
+
+    override fun error(): Nothing = unsupported()
+
+    override fun createViolation(): Nothing = unsupported()
+
+    private fun unsupported(): Nothing {
+        throw UnsupportedOperationException("Rule `$ruleName` is not supported.")
+    }
 }

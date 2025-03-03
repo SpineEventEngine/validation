@@ -37,10 +37,13 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
+import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.option.DistinctGenerator
 import io.spine.validation.java.option.GoesGenerator
 import io.spine.validation.java.option.PatternGenerator
 import io.spine.validation.java.option.RequiredGenerator
+import io.spine.validation.java.rule.RuleGenerator
 
 /**
  * The main Java renderer of the validation library.

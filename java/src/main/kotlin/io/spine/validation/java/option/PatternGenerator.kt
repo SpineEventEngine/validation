@@ -30,8 +30,8 @@ import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.PatternField
-import io.spine.validation.java.FieldOptionCode
-import io.spine.validation.java.OptionGenerator
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
  * The generator for `(pattern)` option.

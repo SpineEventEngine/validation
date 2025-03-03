@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.rule
 
 import com.squareup.javapoet.CodeBlock
 import io.spine.protodata.ast.Field
@@ -51,10 +51,6 @@ import io.spine.validation.SimpleRule.OperatorKindCase.OPERATOR
 import io.spine.validation.UnsetValue
 import io.spine.validation.extractType
 import io.spine.validation.java.expression.StringClass
-import io.spine.validation.java.rule.CodeGenerator
-import io.spine.validation.java.rule.DistributingGenerator
-import io.spine.validation.java.rule.createViolation
-import io.spine.validation.java.rule.generatorForCustom
 
 /**
  * Java code comparing two objects.

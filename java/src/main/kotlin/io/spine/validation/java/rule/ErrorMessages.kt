@@ -41,7 +41,6 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorMessage
-import io.spine.validation.java.GenerationContext
 import io.spine.validation.java.expression.TemplateStringClass
 
 /**

@@ -50,7 +50,6 @@ import io.spine.tools.java.codeBlock
 import io.spine.tools.java.methodSpec
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorMessage
-import io.spine.validation.java.GenerationContext
 import javax.lang.model.element.Modifier
 
 /**

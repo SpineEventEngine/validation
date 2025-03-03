@@ -47,13 +47,13 @@ import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.FieldOptionCode
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
-import io.spine.validation.java.stringValueOf
+import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.violation.templateString
 
 /**

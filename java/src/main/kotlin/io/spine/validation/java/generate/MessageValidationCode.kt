@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.generate
 
-import io.spine.validation.java.rule.CodeGenerator
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
 /**
- * A null-value generator which never produces code.
+ * Holds all generated validation code for a specific message type.
  *
- * Use this generator when an unknown custom validation operator is encountered.
+ * @property message The class name of the target message.
+ * @property constraints Code blocks to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-internal class UnsupportedRuleGenerator(
-    private val ruleName: String,
-    ctx: GenerationContext
-) : CodeGenerator(ctx) {
-
-    override val canGenerate: Boolean = false
-
-    override fun condition(): Nothing = unsupported()
-
-    override fun error(): Nothing = unsupported()
-
-    override fun createViolation(): Nothing = unsupported()
-
-    private fun unsupported(): Nothing {
-        throw UnsupportedOperationException("Rule `$ruleName` is not supported.")
-    }
-}
+internal class MessageValidationCode(
+    val message: ClassName,
+    val constraints: List<CodeBlock>,
+    val fields: List<FieldDeclaration<*>>,
+    val methods: List<MethodDeclaration>,
+)

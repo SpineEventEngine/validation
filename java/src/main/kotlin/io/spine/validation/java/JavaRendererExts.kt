@@ -33,11 +33,10 @@ import io.spine.protodata.java.render.JavaRenderer
  * Obtains all the messages known to the current compilation process
  * along with the corresponding file headers.
  */
-internal fun JavaRenderer.findMessageTypes(): Set<MessageWithFile> {
-    return select(ProtobufSourceFile::class.java).all()
+internal fun JavaRenderer.findMessageTypes(): Set<MessageWithFile> =
+    select(ProtobufSourceFile::class.java).all()
         .flatMap { it.messages() }
         .toSet()
-}
 
 /**
  * Obtains a collection of messages from the given source file paired with the file header.
