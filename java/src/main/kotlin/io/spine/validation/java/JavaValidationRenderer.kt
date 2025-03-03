@@ -48,13 +48,14 @@ public class JavaValidationRenderer : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
+    private val querying = this@JavaValidationRenderer
     private val generators by lazy {
         listOf(
-            RuleGenerator(querying = this, typeSystem),
-            RequiredGenerator(querying = this, valueConverter),
-            PatternGenerator(querying = this),
-            GoesGenerator(querying = this, valueConverter),
-            DistinctGenerator(querying = this),
+            RuleGenerator(querying, typeSystem),
+            RequiredGenerator(querying, valueConverter),
+            PatternGenerator(querying),
+            GoesGenerator(querying, valueConverter),
+            DistinctGenerator(querying),
         )
     }
 
