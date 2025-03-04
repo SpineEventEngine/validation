@@ -74,7 +74,6 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         findMessageTypes()
-            .map { it.message }
             .forEach { message ->
                 val code = generateCode(message.name)
                 val file = sources.javaFileOf(message)

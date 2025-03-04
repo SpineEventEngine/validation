@@ -26,6 +26,7 @@
 
 package io.spine.validation.java
 
+import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.ProtobufSourceFile
 import io.spine.protodata.java.render.JavaRenderer
 
@@ -33,18 +34,7 @@ import io.spine.protodata.java.render.JavaRenderer
  * Obtains all the messages known to the current compilation process
  * along with the corresponding file headers.
  */
-internal fun JavaRenderer.findMessageTypes(): Set<MessageWithFile> =
+internal fun JavaRenderer.findMessageTypes(): Set<MessageType> =
     select(ProtobufSourceFile::class.java).all()
-        .flatMap { it.messages() }
+        .flatMap { it.typeMap.values }
         .toSet()
-
-/**
- * Obtains a collection of messages from the given source file paired with the file header.
- */
-private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
-    typeMap.values.map {
-        messageWithFile {
-            message = it
-            fileHeader = header
-        }
-    }
