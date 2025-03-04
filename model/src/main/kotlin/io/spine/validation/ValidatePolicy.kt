@@ -37,6 +37,7 @@ import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
+import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.ValidatedFieldDiscovered
@@ -60,6 +61,7 @@ import io.spine.validation.event.validatedFieldDiscovered
  */
 internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
 
+    @React
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = VALIDATE)
         event: FieldOptionDiscovered,
