@@ -28,15 +28,23 @@ package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Where
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
+import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
+import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.ValidatedFieldDiscovered
+import io.spine.validation.event.validatedFieldDiscovered
 
 /**
- * Controls whether a field should be validated in-depth with
- * the `(validate)` option.
+ * Controls whether a field with the `(validate)` option should be
+ * validated in-depth.
  *
  * Whenever a field marked with `(validate)` option is discovered, emits
  * [ValidatedFieldDiscovered] event if the following conditions are met:
@@ -56,6 +64,24 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
         @External @Where(field = OPTION_NAME, equals = VALIDATE)
         event: FieldOptionDiscovered,
     ): EitherOf2<ValidatedFieldDiscovered, NoReaction> {
-        TODO("Not yet implemented")
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, file)
+
+        if (!event.option.boolValue) {
+            return ignore()
+        }
+
+        return validatedFieldDiscovered {
+            id = field.ref
+            subject = field
+        }.asA()
     }
 }
+
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.refersToMessage(), file, field.span) {
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($VALIDATE)` option. Supported field types: messages, repeated of" +
+                " messages, and maps with message values."
+    }
