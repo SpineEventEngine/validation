@@ -74,7 +74,7 @@ internal class GoesFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode {
+    override fun generate(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion
         val fieldGetter = This<Message>()

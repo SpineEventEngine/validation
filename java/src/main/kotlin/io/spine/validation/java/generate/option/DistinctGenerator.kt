@@ -36,18 +36,18 @@ import io.spine.validation.java.generate.OptionGenerator
 /**
  * The generator for `(distinct)` option.
  */
-internal class DistinctGenerator(
-    private val querying: Querying
-) : OptionGenerator {
+internal class DistinctGenerator(private val querying: Querying) : OptionGenerator {
 
+    /**
+     * All `(distinct)` fields in the current compilation process.
+     */
     private val allDistinctFields by lazy {
         querying.select<DistinctField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val distinctFields = allDistinctFields.filter { it.id.type == type }
-        val generatedFields = distinctFields.map { DistinctFieldGenerator(it).code() }
-        return generatedFields
-    }
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allDistinctFields
+            .filter { it.id.type == type }
+            .map { DistinctFieldGenerator(it).generate() }
 }

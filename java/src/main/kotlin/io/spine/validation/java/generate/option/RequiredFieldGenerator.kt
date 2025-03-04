@@ -67,7 +67,7 @@ internal class RequiredFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode {
+    override fun generate(): FieldOptionCode {
         val constraint = CodeBlock(
             """
             if (${field.hasDefaultValue()}) {

@@ -43,16 +43,15 @@ internal class GoesGenerator(
 ) : OptionGenerator {
 
     /**
-     * All goes fields in the current compilation process.
+     * All `(goes) fields in the current compilation process.
      */
     private val allGoesFields by lazy {
         querying.select<GoesField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val goesFields = allGoesFields.filter { it.id.type == type }
-        val constraints = goesFields.map { GoesFieldGenerator(it, converter).code() }
-        return constraints
-    }
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allGoesFields
+            .filter { it.id.type == type }
+            .map { GoesFieldGenerator(it, converter).generate() }
 }

@@ -95,7 +95,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode = when {
+    override fun generate(): FieldOptionCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)

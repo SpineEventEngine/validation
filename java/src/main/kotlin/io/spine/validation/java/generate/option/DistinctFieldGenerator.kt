@@ -75,7 +75,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode {
+    override fun generate(): FieldOptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
