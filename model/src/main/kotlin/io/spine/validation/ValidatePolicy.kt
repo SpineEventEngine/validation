@@ -29,8 +29,8 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
-import io.spine.server.event.Policy
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.ValidatedFieldDiscovered
 
