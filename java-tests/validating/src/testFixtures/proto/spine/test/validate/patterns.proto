@@ -60,4 +60,22 @@ message AllThePatterns {
         (pattern).regex = ".*",
         (pattern).modifier.dot_all = true
     ];
+
+    // The `regex` option currently used in `TypeName` in ProtoData.
+    //
+    // The current value is accepted by Protobuf without escaping the slash character.
+    // Single backslash before the slash character is not accepted by Protobuf compiler.
+    //
+    string current_type_url_prefix = 6 [(pattern).regex = "^.*[^/]$"];
+
+    // The regex we are going to use for `TypeName` in ProtoData.
+    //
+    // This uses double backslash as it should be accepted in Java, and
+    // it is accepted by Protobuf too.
+    //
+    // The current problem with both last `regex` values that they are unnecessary
+    // escaped with yet another backslash character which causes error when Java compiles
+    // the generated code.
+    //
+    string new_type_url_prefix = 7 [(pattern).regex = "^(.*[^\\/])?$"];
 }
