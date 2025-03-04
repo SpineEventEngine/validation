@@ -38,7 +38,7 @@ import io.spine.server.query.select
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.OptionGenerator
 import com.squareup.javapoet.CodeBlock as PoetCodeBlock
 import com.squareup.javapoet.FieldSpec as PoetField

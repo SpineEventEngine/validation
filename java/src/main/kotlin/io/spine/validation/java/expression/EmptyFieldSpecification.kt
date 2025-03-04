@@ -31,7 +31,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.field
 import io.spine.validation.UnsetValue
-import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 
 /**
  * Provides an expression to check if a given [Field] holds

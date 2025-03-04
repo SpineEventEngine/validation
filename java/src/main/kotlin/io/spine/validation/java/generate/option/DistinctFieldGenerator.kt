@@ -51,8 +51,8 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
-import io.spine.validation.java.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.fieldPath
 import io.spine.validation.java.violation.joinToString
