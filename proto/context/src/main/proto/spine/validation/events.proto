@@ -125,3 +125,13 @@ message DistinctFieldDiscovered {
     // The field in which the option was discovered.
     protodata.Field subject = 3;
 }
+
+// The event emitted whenever a field with `(validate) = true` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message ValidatedFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+}
