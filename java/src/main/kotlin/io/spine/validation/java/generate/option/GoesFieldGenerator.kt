@@ -51,8 +51,8 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.fieldPath
-import io.spine.validation.java.violation.joinToString
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.templateString
@@ -74,7 +74,7 @@ internal class GoesFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode {
+    override fun generate(): FieldOptionCode {
         val field = view.subject
         val companion = view.companion
         val fieldGetter = This<Message>()
@@ -83,7 +83,7 @@ internal class GoesFieldGenerator(
         val constraint = CodeBlock(
             """
             if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
-                var fieldPath = ${fieldPath(parentPath, field.name)};
+                var fieldPath = ${parentPath.resolve(field.name)};
                 var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
                 $violations.add(violation);
             }

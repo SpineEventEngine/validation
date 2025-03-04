@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation.java.expression
 
-package spine.validation.java;
+import io.spine.base.FieldPath
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
+import io.spine.protodata.java.toBuilder
 
-import "spine/options.proto";
+/**
+ * Returns an expression that yields this [FieldPath] as a string using
+ * `FieldPath.joined` extension property.
+ *
+ * Note that in Java, this extension becomes a static method upon [FieldPathsClass]
+ * with `get` prefix.
+ */
+internal fun Expression<FieldPath>.joinToString(): Expression<String> =
+    FieldPathsClass.call("getJoined", this)
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.java";
-option java_outer_classname = "TypeProto";
-option java_multiple_files = true;
-option (internal_all) = true;
-
-import "spine/protodata/ast.proto";
-import "spine/protodata/source.proto";
-
-// A tuple of a message type and the header of the file where it is declared.
-message MessageWithFile {
-
-    // The type of the message.
-    spine.protodata.MessageType message = 1;
-
-    // The header of the file where the `message` is declared.
-    spine.protodata.ProtoFileHeader file_header = 2;
-}
+/**
+ * Returns an expression that yields a new instance of [FieldPath] by appending
+ * the provided [field] name to this parental [FieldPath] expression.
+ */
+internal fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
+    toBuilder()
+        .chainAdd("field_name", StringLiteral(field.value))
+        .chainBuild()

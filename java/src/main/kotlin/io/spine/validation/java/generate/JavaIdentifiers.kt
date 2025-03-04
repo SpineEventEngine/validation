@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.java.generate
 
-import io.spine.protodata.ast.ProtobufSourceFile
-import io.spine.protodata.java.render.JavaRenderer
-
-/**
- * Obtains all the messages known to the current compilation process
- * along with the corresponding file headers.
- */
-internal fun JavaRenderer.findMessageTypes(): Set<MessageWithFile> =
-    select(ProtobufSourceFile::class.java).all()
-        .flatMap { it.messages() }
-        .toSet()
+import io.spine.protodata.backend.SecureRandomString
 
 /**
- * Obtains a collection of messages from the given source file paired with the file header.
+ * Returns a Java identifier with an appended hash in the format `<javaIdentifier>_<hash>`.
+ *
+ * The random hash is filtered to include only valid Java identifier chars.
+ * Appending this hash ensures that the generated field or method name does
+ * not conflict with existing declarations in the target class.
  */
-private fun ProtobufSourceFile.messages(): Collection<MessageWithFile> =
-    typeMap.values.map {
-        messageWithFile {
-            message = it
-            fileHeader = header
-        }
-    }
+internal fun mangled(javaIdentifier: String): String {
+    val hash = SecureRandomString.generate(HASH_LENGTH)
+        .filter(Char::isJavaIdentifierPart)
+    return "${javaIdentifier}_$hash"
+}
+
+private const val HASH_LENGTH = 10

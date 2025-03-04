@@ -54,8 +54,8 @@ import io.spine.validation.java.expression.MultiSetEntryClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.fieldPath
-import io.spine.validation.java.violation.joinToString
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.templateString
@@ -75,14 +75,14 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun code(): FieldOptionCode {
+    override fun generate(): FieldOptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
             """
             if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
-                var fieldPath = ${fieldPath(parentPath, field.name)};
+                var fieldPath = ${parentPath.resolve(field.name)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
                 violations.add(violation);
             }

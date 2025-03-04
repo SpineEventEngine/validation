@@ -34,5 +34,5 @@ internal interface FieldOptionGenerator {
     /**
      * Generates validation code for a single option application.
      */
-    fun code(): FieldOptionCode
+    fun generate(): FieldOptionCode
 }

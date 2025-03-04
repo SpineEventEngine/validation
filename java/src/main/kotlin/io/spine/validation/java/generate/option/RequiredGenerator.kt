@@ -43,16 +43,15 @@ internal class RequiredGenerator(
 ) : OptionGenerator {
 
     /**
-     * All required fields in the current compilation process.
+     * All `(required)` fields in the current compilation process.
      */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val requiredFields = allRequiredFields.filter { it.id.type == type }
-        val generatedFields = requiredFields.map { RequiredFieldGenerator(it, converter).code() }
-        return generatedFields
-    }
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { RequiredFieldGenerator(it, converter).generate() }
 }

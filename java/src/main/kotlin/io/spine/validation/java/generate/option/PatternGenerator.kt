@@ -39,16 +39,15 @@ import io.spine.validation.java.generate.OptionGenerator
 internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All pattern fields in the current compilation process.
+     * All `(pattern)` fields in the current compilation process.
      */
     private val allPatternFields by lazy {
         querying.select<PatternField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> {
-        val patternFields = allPatternFields.filter { it.id.type == type }
-        val generatedFields = patternFields.map { PatternFieldGenerator(it).code() }
-        return generatedFields
-    }
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allPatternFields
+            .filter { it.id.type == type }
+            .map { PatternFieldGenerator(it).generate() }
 }

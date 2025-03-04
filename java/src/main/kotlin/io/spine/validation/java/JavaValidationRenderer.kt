@@ -34,6 +34,7 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
@@ -74,7 +75,6 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         findMessageTypes()
-            .map { it.message }
             .forEach { message ->
                 val code = generateCode(message.name)
                 val file = sources.javaFileOf(message)
