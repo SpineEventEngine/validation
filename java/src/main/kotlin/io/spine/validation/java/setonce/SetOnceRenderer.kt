@@ -36,13 +36,13 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFileSet
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.string.shortly
 import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.findMessageTypes
 import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 
 /**
