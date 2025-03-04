@@ -41,7 +41,7 @@ import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.mes
  * with [UnsetValue] utility, and then converts it to a Java expression
  * using [JavaValueConverter].
  */
-internal interface EmptyFieldSpecification {
+internal interface EmptyFieldCheck {
 
     /**
      * Converts Protobuf values to Java expressions.

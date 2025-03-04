@@ -37,7 +37,7 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.expression.EmptyFieldSpecification
+import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -59,7 +59,7 @@ import io.spine.validation.java.violation.templateString
 internal class RequiredFieldGenerator(
     private val view: RequiredField,
     override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldSpecification {
+) : FieldOptionGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val declaringType = field.declaringType
