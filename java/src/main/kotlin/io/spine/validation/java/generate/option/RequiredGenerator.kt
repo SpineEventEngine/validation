@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.generate.option
+
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RequiredField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * The generator for `(required)` option.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal class RequiredGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
+
+    /**
+     * All `(required)` fields in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
+        querying.select<RequiredField>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { RequiredFieldGenerator(it, converter).generate() }
+}

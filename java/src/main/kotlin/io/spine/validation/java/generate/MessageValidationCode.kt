@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.generate
+
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
+
 /**
- * The version of the Validation SDK to publish.
+ * Holds all generated validation code for a specific message type.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * @property message The class name of the target message.
+ * @property constraints Code blocks to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal class MessageValidationCode(
+    val message: ClassName,
+    val constraints: List<CodeBlock>,
+    val fields: List<FieldDeclaration<*>>,
+    val methods: List<MethodDeclaration>,
+)

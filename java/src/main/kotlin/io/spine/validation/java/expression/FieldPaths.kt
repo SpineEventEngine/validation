@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.expression
+
+import io.spine.base.FieldPath
+import io.spine.protodata.ast.FieldName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
+import io.spine.protodata.java.toBuilder
+
 /**
- * The version of the Validation SDK to publish.
+ * Returns an expression that yields this [FieldPath] as a string using
+ * `FieldPath.joined` extension property.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * Note that in Java, this extension becomes a static method upon [FieldPathsClass]
+ * with `get` prefix.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal fun Expression<FieldPath>.joinToString(): Expression<String> =
+    FieldPathsClass.call("getJoined", this)
+
+/**
+ * Returns an expression that yields a new instance of [FieldPath] by appending
+ * the provided [field] name to this parental [FieldPath] expression.
+ */
+internal fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
+    toBuilder()
+        .chainAdd("field_name", StringLiteral(field.value))
+        .chainBuild()

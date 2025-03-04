@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.generate
+
+import io.spine.protodata.backend.SecureRandomString
+
 /**
- * The version of the Validation SDK to publish.
+ * Returns a Java identifier with an appended hash in the format `<javaIdentifier>_<hash>`.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * The random hash is filtered to include only valid Java identifier chars.
+ * Appending this hash ensures that the generated field or method name does
+ * not conflict with existing declarations in the target class.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal fun mangled(javaIdentifier: String): String {
+    val hash = SecureRandomString.generate(HASH_LENGTH)
+        .filter(Char::isJavaIdentifierPart)
+    return "${javaIdentifier}_$hash"
+}
+
+private const val HASH_LENGTH = 10

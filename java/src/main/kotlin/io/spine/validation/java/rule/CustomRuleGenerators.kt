@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.rule
+
+import com.google.protobuf.Message
+import io.spine.protobuf.unpackGuessingType
+import io.spine.validation.InTime
+import io.spine.validation.RecursiveValidation
+import io.spine.validation.RequiredOneof
+import io.spine.validation.isMessageWide
+import io.spine.validation.isSimple
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * Creates a [CodeGenerator] for a custom validation operator for the given context.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
+    when (val feature = ctx.feature()) {
+        is RecursiveValidation -> ValidateGenerator(ctx)
+        is RequiredOneof -> RequiredOneofGenerator(feature.name, ctx)
+        is InTime -> inTimeGenerator(feature, ctx)
+        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
+    }
+
+private fun GenerationContext.feature(): Message = when {
+    rule.isSimple -> rule.simple.customOperator.feature.unpackGuessingType()
+    rule.isMessageWide -> rule.messageWide.operator.feature.unpackGuessingType()
+    else -> error("The rule has no custom operator: `$rule`.")
+}

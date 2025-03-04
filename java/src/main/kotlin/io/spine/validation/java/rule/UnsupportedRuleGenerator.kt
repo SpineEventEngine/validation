@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.rule
+
 /**
- * The version of the Validation SDK to publish.
+ * A null-value generator which never produces code.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * Use this generator when an unknown custom validation operator is encountered.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.197")
+internal class UnsupportedRuleGenerator(
+    private val ruleName: String,
+    ctx: GenerationContext
+) : CodeGenerator(ctx) {
+
+    override val canGenerate: Boolean = false
+
+    override fun condition(): Nothing = unsupported()
+
+    override fun error(): Nothing = unsupported()
+
+    override fun createViolation(): Nothing = unsupported()
+
+    private fun unsupported(): Nothing {
+        throw UnsupportedOperationException("Rule `$ruleName` is not supported.")
+    }
+}

@@ -34,9 +34,17 @@ import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.java.render.findClass
+import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
+import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.java.generate.ValidationCodeInjector
+import io.spine.validation.java.generate.option.DistinctGenerator
+import io.spine.validation.java.generate.option.GoesGenerator
+import io.spine.validation.java.generate.option.PatternGenerator
+import io.spine.validation.java.generate.option.RequiredGenerator
+import io.spine.validation.java.rule.RuleGenerator
 
 /**
  * The main Java renderer of the validation library.
@@ -48,13 +56,14 @@ public class JavaValidationRenderer : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
+    private val querying = this@JavaValidationRenderer
     private val generators by lazy {
         listOf(
-            RuleGenerator(querying = this, typeSystem),
-            RequiredGenerator(querying = this, valueConverter),
-            PatternGenerator(querying = this),
-            GoesGenerator(querying = this, valueConverter),
-            DistinctGenerator(querying = this),
+            RuleGenerator(querying, typeSystem),
+            RequiredGenerator(querying, valueConverter),
+            PatternGenerator(querying),
+            GoesGenerator(querying, valueConverter),
+            DistinctGenerator(querying),
         )
     }
 
@@ -66,7 +75,6 @@ public class JavaValidationRenderer : JavaRenderer() {
         }
 
         findMessageTypes()
-            .map { it.message }
             .forEach { message ->
                 val code = generateCode(message.name)
                 val file = sources.javaFileOf(message)
