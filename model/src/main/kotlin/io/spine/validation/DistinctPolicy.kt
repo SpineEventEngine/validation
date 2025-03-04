@@ -50,8 +50,8 @@ import io.spine.validation.event.distinctFieldDiscovered
 /**
  * Controls whether a field should be validated as `(distinct)`.
  *
- * Whenever a field marked with `(distinct)` option is discovered
- * emits [DistinctFieldDiscovered] if the following conditions are met:
+ * Whenever a field marked with `(distinct)` option is discovered, emits
+ * [DistinctFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is `repeated` or `map`.
  * 2. The option value is `true`.
