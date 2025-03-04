@@ -47,8 +47,8 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.pa
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.fieldPath
-import io.spine.validation.java.violation.joinToString
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -71,7 +71,7 @@ internal class RequiredFieldGenerator(
         val constraint = CodeBlock(
             """
             if (${field.hasDefaultValue()}) {
-                var fieldPath = ${fieldPath(parentPath, field.name)};
+                var fieldPath = ${parentPath.resolve(field.name)};
                 var violation = ${violation(ReadVar("fieldPath"))};
                 $violations.add(violation);
             }

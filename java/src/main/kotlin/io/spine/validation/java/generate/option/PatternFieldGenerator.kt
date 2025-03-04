@@ -64,8 +64,8 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.pa
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.fieldPath
-import io.spine.validation.java.violation.joinToString
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.mangled
 import io.spine.validation.java.violation.templateString
 import java.util.regex.Matcher
@@ -123,7 +123,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private fun singularStringConstraint(fieldValue: Expression<String>) = CodeBlock(
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
-            var fieldPath = ${fieldPath(parentPath, field.name)};
+            var fieldPath = ${parentPath.resolve(field.name)};
             var violation = ${violation(ReadVar("fieldPath"), fieldValue)};
             $violations.add(violation);
         }
@@ -162,7 +162,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
-                    var fieldPath = ${fieldPath(parentPath, field.name)};
+                    var fieldPath = ${parentPath.resolve(field.name)};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("element"))};
                     violations.add(violation);
                 }
