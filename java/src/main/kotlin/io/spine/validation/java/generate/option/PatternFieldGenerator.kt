@@ -66,7 +66,7 @@ import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.mangled
+import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.templateString
 import java.util.regex.Matcher
 import java.util.regex.Pattern
