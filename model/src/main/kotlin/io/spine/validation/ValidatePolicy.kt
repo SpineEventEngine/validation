@@ -40,15 +40,15 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.ValidatedFieldDiscovered
-import io.spine.validation.event.validatedFieldDiscovered
+import io.spine.validation.event.ValidateFieldDiscovered
+import io.spine.validation.event.validateFieldDiscovered
 
 /**
  * Controls whether a field with the `(validate)` option should be
  * validated in-depth.
  *
  * Whenever a field marked with `(validate)` option is discovered, emits
- * [ValidatedFieldDiscovered] event if the following conditions are met:
+ * [ValidateFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
@@ -65,7 +65,7 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = VALIDATE)
         event: FieldOptionDiscovered,
-    ): EitherOf2<ValidatedFieldDiscovered, NoReaction> {
+    ): EitherOf2<ValidateFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -74,7 +74,7 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        return validatedFieldDiscovered {
+        return validateFieldDiscovered {
             id = field.ref
             subject = field
         }.asA()

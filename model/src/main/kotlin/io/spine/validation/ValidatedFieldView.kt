@@ -30,15 +30,15 @@ import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.event.ValidatedFieldDiscovered
+import io.spine.validation.event.ValidateFieldDiscovered
 
 /**
  * A view of a field that is marked with `(validate) = true` option.
  */
-internal class ValidatedFieldView : View<FieldRef, ValidatedField, ValidatedField.Builder>() {
+internal class ValidatedFieldView : View<FieldRef, ValidateField, ValidateField.Builder>() {
 
     @Subscribe
-    fun on(e: ValidatedFieldDiscovered) = alter {
+    fun on(e: ValidateFieldDiscovered) = alter {
         subject = e.subject
     }
 }

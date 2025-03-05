@@ -25,7 +25,7 @@ message RequiredField {
 }
 
 // A view on a field that is marked with `(validate) = true` option.
-message ValidatedField {
+message ValidateField {
     option (entity).kind = PROJECTION;
 
     protodata.FieldRef id = 1;
