@@ -36,6 +36,7 @@ import io.spine.base.FieldPath
 import io.spine.protodata.java.ClassName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
+import io.spine.validate.ValidationError
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
@@ -97,3 +98,8 @@ internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
  * So, we specify it as a string literal here.
  */
 internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")
+
+/**
+ * The [ClassName] of [ValidationError].
+ */
+internal val ValidationErrorClass = ClassName(ValidationError::class)
