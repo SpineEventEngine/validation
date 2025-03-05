@@ -70,7 +70,6 @@ import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.templateString
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import org.apache.commons.lang.StringEscapeUtils.escapeJava
 
 /**
  * Stores the generated Java field that contains the compiled [Pattern]
@@ -184,7 +183,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private fun compilePattern(): CompiledPattern {
         val modifiers = view.modifier
         val compilationArgs = listOf(
-            StringLiteral(escapeJava(view.pattern)),
+            StringLiteral(reEscapeProtobuf(view.pattern)),
             Literal(modifiers.asFlagsMask())
         )
         val field = FieldDeclaration<Pattern>(
@@ -224,8 +223,8 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         FIELD_VALUE to fieldValue,
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-        REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
-        REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
+        REGEX_PATTERN to StringLiteral(reEscapeProtobuf(view.pattern)),
+        REGEX_MODIFIERS to StringLiteral(reEscapeProtobuf("${view.modifier}")),
     )
 }
 
@@ -252,3 +251,52 @@ private fun PatternOption.Modifier.asFlagsMask(): Int {
     }
     return mask
 }
+
+/**
+ * ASCII control characters escaped by Protobuf compiler when parsing string literals.
+ *
+ * Escaping rules may differ from compiler to compiler, so a more reliable approach is
+ * to re-escape strings in accordance to the specs of a particular tool that previously
+ * performed this escaping.
+ *
+ * Note we don't touch question marks because Protobuf compiler actually accepts both `?`
+ * and `\?` as a question mark. So, it is unclear when we should prepend the leading `/`
+ * to restore the original literal.
+ *
+ * Source: [Text Format Langauge Specification | String Literals](https://protobuf.dev/reference/protobuf/textformat-spec/#string).
+ */
+@Suppress("MagicNumber") // ASCII codes.
+private val ProtobufEscape = mapOf(
+    7 to "\\a",
+    8 to "\\b",
+    12 to "\\f",
+    10 to "\\n",
+    13 to "\\r",
+    9 to "\\t",
+    11 to "\\v",
+    92 to "\\\\",
+    39 to "\\'",
+    34 to "\\\""
+)
+
+/**
+ * Undoes [ASCII escaping][ProtobufEscape] that Protobuf compiler performs for string literals,
+ * allowing the passed [value] to be used as a string literal in Java code.
+ *
+ * Consider the following example:
+ *
+ * 1. A string literal is defined in a proto file as the following: `[^\\/]`.
+ * 2. Runtime string representation would be the following: `[^\/]`.
+ * 3. This method would re-escape this string to the following: `[^\\/]`.
+ *
+ * (2) string is not a valid literal because `\` symbol cannot be used directly without escaping.
+ *
+ * Note that this method does not roll back Unicode codes, octal and hexadecimal byte values.
+ * Only ASCII control characters are re-escaped.
+ */
+private fun reEscapeProtobuf(value: String): String =
+    buildString {
+        value.forEach {
+            append(ProtobufEscape[it.code] ?: it)
+        }
+    }
