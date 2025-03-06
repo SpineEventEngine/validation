@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Module_gradle.Module
 import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.lib.Jackson
@@ -51,7 +50,7 @@ import io.spine.gradle.testing.configureLogging
 import io.spine.gradle.testing.registerTestTasks
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.invoke
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     java
@@ -211,12 +210,8 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
         applyJvmToolchain(javaVersion.asInt())
     }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = javaVersion.toString()
-
-        setFreeCompilerArgs()
-        // https://stackoverflow.com/questions/38298695/gradle-disable-all-incremental-compilation-and-parallel-builds
-        incremental = false
+    tasks.withType<KotlinJvmCompile>().configureEach {
+        compilerOptions.setFreeCompilerArgs()
     }
 }
 

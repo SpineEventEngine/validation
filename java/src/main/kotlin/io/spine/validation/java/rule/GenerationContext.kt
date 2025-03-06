@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -43,9 +43,7 @@ import io.spine.validation.isSimple
 /**
  * Context of a [CodeGenerator].
  */
-public data class GenerationContext
-@JvmOverloads
-internal constructor(
+internal data class GenerationContext(
 
     /**
      * The Protobuf types known to the application.
@@ -149,7 +147,7 @@ internal constructor(
     /**
      * The reference to the associated field, or `null` if there is no such field.
      */
-    val fieldValue: Expression<*>?
+    private val fieldValue: Expression<*>?
         get() {
             val protoField = fieldFromSimpleRule ?: return null
             return getterFor(protoField)
@@ -166,7 +164,7 @@ internal constructor(
      *
      * The [field] should be a field of the message referenced in [msg].
      */
-    public fun getterFor(field: Field): Expression<*> =
+    fun getterFor(field: Field): Expression<*> =
         msg.field(field).getter<Any>()
 
     /**
@@ -174,7 +172,7 @@ internal constructor(
      *
      * @throws IllegalArgumentException if there is no such field
      */
-    public fun lookUpField(name: FieldName): Field =
+    fun lookUpField(name: FieldName): Field =
         typeSystem.findMessage(validatedType)!!
             .first.fieldList
             .first { it.name == name }
