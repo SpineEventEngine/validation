@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@ package io.spine.gradle.javascript
 
 import java.io.File
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.process.ExecOperations
+import org.gradle.process.ExecResult
 
 /**
  * Provides access to the current [JsEnvironment] and shortcuts for running `npm` tool.
@@ -47,15 +50,15 @@ open class JsContext(jsEnv: JsEnvironment, internal val project: Project)
      *
      * This [File] is used as a working directory.
      */
-    fun File.npm(vararg args: String) = project.exec {
+    fun File.npm(vararg args: String): ExecResult = project.serviceOf<ExecOperations>()
+        .exec {
+            workingDir(this@npm)
+            commandLine(npmExecutable)
+            args(*args)
 
-        workingDir(this@npm)
-        commandLine(npmExecutable)
-        args(*args)
+            // Using private packages in a CI/CD workflow | npm Docs
+            // https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow
 
-        // Using private packages in a CI/CD workflow | npm Docs
-        // https://docs.npmjs.com/using-private-packages-in-a-ci-cd-workflow
-
-        environment["NPM_TOKEN"] = npmAuthToken
-    }
+            environment["NPM_TOKEN"] = npmAuthToken
+        }
 }
