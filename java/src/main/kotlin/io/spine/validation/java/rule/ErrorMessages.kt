@@ -47,7 +47,7 @@ import io.spine.validation.java.expression.TemplateStringClass
  * Constructs code which creates a [ConstraintViolation] of a simple validation rule and adds it
  * to the mutable list of violations from the given [ctx].
  */
-public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
+internal fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = with(ctx) {
     val violation = buildViolation(validatedType, fieldFromSimpleRule, fieldOrElement)
     return addViolation(violation, violationList)
 }
@@ -69,7 +69,7 @@ public fun ErrorMessage.createViolation(ctx: GenerationContext): CodeBlock = wit
  *         if there is no common field.
  *         If this parameter is `null`, `field` must also be `null`.
  */
-public fun ErrorMessage.createCompositeViolation(
+internal fun ErrorMessage.createCompositeViolation(
     type: TypeName,
     violationsList: Expression<MutableList<ConstraintViolation>>,
     field: Field?,
