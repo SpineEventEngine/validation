@@ -180,6 +180,10 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
      * everything we need to yield an expression for [Pattern.matcher] invocation
      * under a single object. Otherwise, the [matches] method would have to accept
      * `partialMatch` parameter along with the string value to check.
+     *
+     * Note that [PatternField.pattern_] string should not contain unprintable
+     * characters to be used as a string literal. We have to [restore][restoreProtobufEscapes]
+     * escape sequences for them, if any.
      */
     private fun compilePattern(): CompiledPattern {
         val modifiers = view.modifier
