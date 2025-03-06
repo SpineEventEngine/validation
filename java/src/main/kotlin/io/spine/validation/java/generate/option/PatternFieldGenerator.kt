@@ -28,6 +28,7 @@ package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.option.PatternOption
+import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -70,7 +71,6 @@ import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.templateString
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import org.apache.commons.lang.StringEscapeUtils.escapeJava
 
 /**
  * Stores the generated Java field that contains the compiled [Pattern]
@@ -184,7 +184,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private fun compilePattern(): CompiledPattern {
         val modifiers = view.modifier
         val compilationArgs = listOf(
-            StringLiteral(escapeJava(view.pattern)),
+            StringLiteral(restoreProtobufEscapes(view.pattern)),
             Literal(modifiers.asFlagsMask())
         )
         val field = FieldDeclaration<Pattern>(
@@ -224,8 +224,8 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         FIELD_VALUE to fieldValue,
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
-        REGEX_PATTERN to StringLiteral(escapeJava(view.pattern)),
-        REGEX_MODIFIERS to StringLiteral(escapeJava("${view.modifier}")),
+        REGEX_PATTERN to StringLiteral(restoreProtobufEscapes(view.pattern)),
+        REGEX_MODIFIERS to StringLiteral(restoreProtobufEscapes("${view.modifier}")),
     )
 }
 
