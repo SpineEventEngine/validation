@@ -57,7 +57,7 @@ internal class ValidateFieldGenerator(
             if (!${field.hasDefaultValue()}) {
                 $getter.validate()
                        .map($ValidationErrorClass::getConstraintViolationList)
-                       .ifPresent($violations::addAll)
+                       .ifPresent($violations::addAll);
             }
         """.trimIndent()
         )
