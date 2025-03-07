@@ -26,12 +26,15 @@
 
 package io.spine.validation.java.generate.option
 
-import com.google.protobuf.Message
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.field
 import io.spine.validation.ValidateField
+import io.spine.validation.java.expression.AnyPackerClass
 import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
@@ -49,18 +52,58 @@ internal class ValidateFieldGenerator(
 ) : FieldOptionGenerator, EmptyFieldCheck {
 
     private val field = view.subject
+    private val fieldType = field.type
+    private val getter = message.field(field).getter<Any>()
 
-    override fun generate(): FieldOptionCode {
-        val getter = message.field(field).getter<Message>()
-        val constraint = CodeBlock(
-            """
-            if (!${field.hasDefaultValue()}) {
-                $getter.validate()
-                       .map($ValidationErrorClass::getConstraintViolationList)
-                       .ifPresent($violations::addAll);
-            }
-        """.trimIndent()
-        )
-        return FieldOptionCode(constraint)
+    override fun generate(): FieldOptionCode = when {
+        fieldType.isAny -> {
+            val constraint = CodeBlock(
+                """
+                if (!${field.hasDefaultValue()}) {
+                    var unpacked = $AnyPackerClass.unpack($getter);
+                    if (unpacked instanceof $ValidatableMessageClass) {
+                        (($ValidatableMessageClass) unpacked).validate()
+                            .map($ValidationErrorClass::getConstraintViolationList)
+                            .ifPresent($violations::addAll);
+                    }
+                }
+                """.trimIndent()
+            )
+            FieldOptionCode(constraint)
+        }
+
+        fieldType.isMessage -> {
+            val constraint = CodeBlock(
+                """
+                if (!${field.hasDefaultValue()}) {
+                    $getter.validate()
+                        .map($ValidationErrorClass::getConstraintViolationList)
+                        .ifPresent($violations::addAll);
+                }
+                """.trimIndent()
+            )
+            FieldOptionCode(constraint)
+        }
+
+        fieldType.isList -> {
+            val constraint = CodeBlock(
+                """
+                if (!${field.hasDefaultValue()}) {
+                    for (var element : $getter) {
+                        element.validate()
+                               .map($ValidationErrorClass::getConstraintViolationList)
+                               .ifPresent($violations::addAll);
+                    }
+                }
+                """.trimIndent()
+            )
+            FieldOptionCode(constraint)
+        }
+
+        else -> error {
+            "The field type `${fieldType.name}` is not supported by `ValidateFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
+        }
     }
 }

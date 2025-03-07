@@ -33,9 +33,11 @@ import com.google.common.collect.ImmutableSet
 import com.google.common.collect.LinkedHashMultiset
 import com.google.common.collect.Multiset
 import io.spine.base.FieldPath
+import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
+import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
 import java.util.regex.Pattern
 import java.util.stream.Collectors
@@ -103,3 +105,13 @@ internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")
  * The [ClassName] of [ValidationError].
  */
 internal val ValidationErrorClass = ClassName(ValidationError::class)
+
+/**
+ * The [ClassName] of [ValidatableMessage].
+ */
+internal val ValidatableMessageClass = ClassName(ValidatableMessage::class)
+
+/**
+ * The [ClassName] of [AnyPacker].
+ */
+internal val AnyPackerClass = ClassName(AnyPacker::class)
