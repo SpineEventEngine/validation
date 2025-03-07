@@ -60,4 +60,6 @@ message AllThePatterns {
              (pattern).regex = ".*",
              (pattern).modifier.dot_all = true
     ];
+
+    string without_slash = 6 [(pattern).regex = "^[^\\\\/]*$"];
 }

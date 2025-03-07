@@ -67,7 +67,11 @@ modelCompiler {
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
-    val kspKotlin by tasks.getting
     val launchProtoData by tasks.getting
-    kspKotlin.dependsOn(launchProtoData)
+    val kspKotlin by tasks.getting {
+        dependsOn(launchProtoData)
+    }
+    val compileKotlin by tasks.getting {
+        dependsOn(kspKotlin)
+    }
 }

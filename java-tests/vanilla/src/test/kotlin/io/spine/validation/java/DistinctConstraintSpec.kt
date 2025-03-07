@@ -76,13 +76,13 @@ internal class DistinctConstraintSpec {
 
 private fun protoSet(): @Validated ProtoSet = ProtoSet.newBuilder().build()
 
-private fun <T> protoSet(vararg element: T): @Validated ProtoSet {
+private fun <T : Any> protoSet(vararg element: T): @Validated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.build()
 }
 
-private fun <T> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
+private fun <T : Any> protoSetPartial(vararg element: T): @NonValidated ProtoSet {
     val result = ProtoSet.newBuilder()
     element.forEach { result.addElement(toAny(it)) }
     return result.buildPartial()

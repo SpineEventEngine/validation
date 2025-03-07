@@ -125,6 +125,25 @@ internal class PatternSpec : ValidationOfConstraintTest() {
             .buildPartial()
         assertValid(message)
     }
+
+    @Test
+    fun `validate with forward and backward slashes`() {
+        assertValid(
+            AllThePatterns.newBuilder()
+                .setWithoutSlash("abc")
+                .buildPartial()
+        )
+        assertNotValid(
+            AllThePatterns.newBuilder()
+                .setWithoutSlash("ab/c")
+                .buildPartial()
+        )
+        assertNotValid(
+            AllThePatterns.newBuilder()
+                .setWithoutSlash("ab\\c")
+                .buildPartial()
+        )
+    }
 }
 
 private fun patternStringFor(email: String): @NonValidated PatternStringFieldValue =
