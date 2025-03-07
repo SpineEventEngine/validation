@@ -31,7 +31,7 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.op";
 option java_package = "io.spine.test.protobuf";
-option java_outer_classname = "ValidatingBuilderTestProto";
+option java_outer_classname = "SmokeTestProto";
 option java_multiple_files = true;
 
 message CardNumber {
