@@ -44,6 +44,7 @@ import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator
 import io.spine.validation.java.generate.option.PatternGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
+import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.rule.RuleGenerator
 
 /**
@@ -64,6 +65,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             PatternGenerator(querying),
             GoesGenerator(querying, valueConverter),
             DistinctGenerator(querying),
+            ValidateGenerator(querying, valueConverter),
         )
     }
 

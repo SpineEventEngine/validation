@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,18 +23,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.protobuf;
+package io.spine.validation.java.generate.option
 
-import "spine/options.proto";
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RequiredField
+import io.spine.validation.ValidateField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
-option (type_url_prefix) = "type.spine.op";
-option java_package = "io.spine.test.protobuf";
-option java_outer_classname = "ValidatingBuilderTestProto";
-option java_multiple_files = true;
+/**
+ * The generator for `(validate)` option.
+ */
+internal class ValidateGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
 
-message CardNumber {
+    /**
+     * All `(validate)` fields in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
+        querying.select<ValidateField>()
+            .all()
+    }
 
-    string digits = 1 [(pattern).regex = "\\d{4}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4}"];
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { ValidateFieldGenerator(it, converter).generate() }
 }
