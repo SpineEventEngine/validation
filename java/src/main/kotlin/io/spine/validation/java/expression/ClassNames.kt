@@ -37,6 +37,8 @@ import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
+import io.spine.type.KnownTypes
+import io.spine.type.TypeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.ValidatableMessage
@@ -127,3 +129,13 @@ internal val MessageClass = ClassName(Message::class)
  * The [ClassName] of Protobuf [Any].
  */
 internal val AnyClass = ClassName(Any::class)
+
+/**
+ * The [ClassName] of [KnownTypes].
+ */
+internal val KnownTypesClass = ClassName(KnownTypes::class)
+
+/**
+ * The [ClassName] of [TypeUrl].
+ */
+internal val TypeUrlClass = ClassName(TypeUrl::class)

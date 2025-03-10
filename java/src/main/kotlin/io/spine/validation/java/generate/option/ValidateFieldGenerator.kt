@@ -39,7 +39,9 @@ import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
 import io.spine.validation.java.expression.AnyClass
 import io.spine.validation.java.expression.AnyPackerClass
+import io.spine.validation.java.expression.KnownTypesClass
 import io.spine.validation.java.expression.MessageClass
+import io.spine.validation.java.expression.TypeUrlClass
 import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
 import io.spine.validation.java.generate.FieldOptionCode
@@ -97,16 +99,18 @@ internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOp
      *
      * Implementation notes are the following:
      *
-     * 1) Unpacking of the default instance of [com.google.protobuf.Any] is impossible.
-     *    Such an instance should always be considered valid.
-     * 2) The default instances of [com.google.protobuf.Message] are not considered valid
-     *    by default. They may have required fields.
-     * 3) Cast of [message] to the parental [com.google.protobuf.Message] interface is required
+     * 1) Unpacking of the default instance of [com.google.protobuf.Any] and instances with unknown
+     *    type URLs is impossible. Such instances should always be considered valid.
+     * 2) The default instances of [com.google.protobuf.Message] are not considered valid.
+     *    They may have required fields.
+     * 3) Cast of the [message] to the parental [com.google.protobuf.Message] interface is required
      *    because the Java compiler will fail the compilation if the result of `instanceof`
      *    invocation is known at the compile time. Unfortunately, we cannot check it during
      *    the codegen. For example, if the field type is proto's `Timestamp`, it does not make
      *    sense to write `getTimestamp() instanceof ValidatableMessage`. The compilation will fail
-     *    because this expression is always `false`.
+     *    because this expression is always `false`. During the codegen, we know that all messages
+     *    within the compilation process will have this interface. But we cannot check it for
+     *    the messages that come from dependencies.
      * 4) The returned expression uses an improved version of the `instanceof` that both tests
      *    the parameter and assigns it to a variable of the proper type. This eliminates the need
      *    of an additional cast to the tested type. This feature requires Java 14 and more.
@@ -118,7 +122,9 @@ internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOp
     private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
         val isValidatable =
             if (isAny)
-                "$message != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
+                "$message != ${AnyClass.getDefaultInstance()} &&" +
+                        "$KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
+                        "$AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
             else
                 "(($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
         return CodeBlock(

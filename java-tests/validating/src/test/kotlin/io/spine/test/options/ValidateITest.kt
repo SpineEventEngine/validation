@@ -27,6 +27,7 @@
 package io.spine.test.options
 
 import com.google.protobuf.Any
+import com.google.protobuf.any
 import com.google.protobuf.util.Timestamps
 import io.spine.protobuf.AnyPacker
 import io.spine.test.tools.validate.PersonName
@@ -82,7 +83,7 @@ internal class ValidateITest {
         fun `reject an invalid enclosed message`() {
             assertThrows<ValidationException> {
                 inDepthValidatedMessage {
-                    any = invalidAny
+                    any = invalidAnyName
                 }
             }
         }
@@ -91,7 +92,7 @@ internal class ValidateITest {
         fun `accept a valid enclosed message`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
-                    any = validAny
+                    any = validAnyName
                 }
             }
         }
@@ -100,7 +101,7 @@ internal class ValidateITest {
         fun `accept a non-validatable enclosed message`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
-                    any = timestampAny
+                    any = anyTimestamp
                 }
             }
         }
@@ -110,6 +111,15 @@ internal class ValidateITest {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
                     any = defaultAny
+                }
+            }
+        }
+
+        @Test
+        fun `accept an unknown enclosed message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessage {
+                    any = unknownAny
                 }
             }
         }
@@ -160,7 +170,7 @@ internal class ValidateITest {
             assertThrows<ValidationException> {
                 inDepthValidatedRepeated {
                     any.addAll(
-                        listOf(validAny, invalidAny, validAny)
+                        listOf(validAnyName, invalidAnyName, validAnyName)
                     )
                 }
             }
@@ -171,7 +181,7 @@ internal class ValidateITest {
             assertDoesNotThrow {
                 inDepthValidatedRepeated {
                     any.addAll(
-                        listOf(validAny, validAny, validAny)
+                        listOf(validAnyName, validAnyName, validAnyName)
                     )
                 }
             }
@@ -182,7 +192,7 @@ internal class ValidateITest {
             assertDoesNotThrow {
                 inDepthValidatedRepeated {
                     any.addAll(
-                        listOf(timestampAny, timestampAny, timestampAny)
+                        listOf(anyTimestamp, anyTimestamp, anyTimestamp)
                     )
                 }
             }
@@ -194,6 +204,17 @@ internal class ValidateITest {
                 inDepthValidatedRepeated {
                     any.addAll(
                         listOf(defaultAny, defaultAny, defaultAny)
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun `accept unknown enclosed messages`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(unknownAny, unknownAny, unknownAny)
                     )
                 }
             }
@@ -258,9 +279,9 @@ internal class ValidateITest {
                 inDepthValidatedMaps {
                     any.putAll(
                         mapOf(
-                            "k1" to validAny,
-                            "k2" to invalidAny,
-                            "k3" to validAny,
+                            "k1" to validAnyName,
+                            "k2" to invalidAnyName,
+                            "k3" to validAnyName,
                         )
                     )
                 }
@@ -273,9 +294,9 @@ internal class ValidateITest {
                 inDepthValidatedMaps {
                     any.putAll(
                         mapOf(
-                            "k1" to validAny,
-                            "k2" to validAny,
-                            "k3" to validAny,
+                            "k1" to validAnyName,
+                            "k2" to validAnyName,
+                            "k3" to validAnyName,
                         )
                     )
                 }
@@ -288,9 +309,9 @@ internal class ValidateITest {
                 inDepthValidatedMaps {
                     any.putAll(
                         mapOf(
-                            "k1" to timestampAny,
-                            "k2" to timestampAny,
-                            "k3" to timestampAny,
+                            "k1" to anyTimestamp,
+                            "k2" to anyTimestamp,
+                            "k3" to anyTimestamp,
                         )
                     )
                 }
@@ -306,6 +327,21 @@ internal class ValidateITest {
                             "k1" to defaultAny,
                             "k2" to defaultAny,
                             "k3" to defaultAny,
+                        )
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun `accept unknown enclosed message values`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to unknownAny,
+                            "k2" to unknownAny,
+                            "k3" to unknownAny,
                         )
                     )
                 }
@@ -332,7 +368,10 @@ private val validName = personName {
     value = "Jack Chan"
 }
 
-private val invalidAny = AnyPacker.pack(invalidName)
-private val validAny = AnyPacker.pack(validName)
-private val timestampAny = AnyPacker.pack(timestamp)
+private val invalidAnyName = AnyPacker.pack(invalidName)
+private val validAnyName = AnyPacker.pack(validName)
+private val anyTimestamp = AnyPacker.pack(timestamp)
 private val defaultAny = Any.getDefaultInstance()
+private val unknownAny = any {
+    typeUrl = "foo/bar"
+}
