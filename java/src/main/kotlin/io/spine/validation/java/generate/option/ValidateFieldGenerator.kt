@@ -26,11 +26,14 @@
 
 package io.spine.validation.java.generate.option
 
+import com.google.protobuf.Message
 import io.spine.protodata.ast.isAny
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
@@ -53,79 +56,79 @@ internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOp
 
     private val field = view.subject
     private val fieldType = field.type
-    private val getter = message.field(field).getter<Any>()
+    private val getter = message.field(field).getter<Message>()
 
-    override fun generate(): FieldOptionCode = FieldOptionCode(constraint())
+    override fun generate(): FieldOptionCode = when {
+        fieldType.isMessage -> validate(getter, fieldType.message.isAny)
 
-    private fun constraint() = when {
-        fieldType.isMessage -> {
-            val condition =
-                if (fieldType.message.isAny)
-                    "$getter != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack($getter) instanceof $ValidatableMessageClass $validatable"
-                else
-                    "(($MessageClass) $getter) instanceof $ValidatableMessageClass $validatable"
-            CodeBlock(
-                """
-                if ($condition) {
-                    $VALIDATE_VALIDATABLE
-                }
-                """.trimIndent()
-            )
-        }
-
-        fieldType.isList -> {
-            val condition =
-                if (fieldType.list.isAny)
-                    "element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass $validatable"
-                else
-                    "(($MessageClass) element) instanceof $ValidatableMessageClass $validatable"
+        fieldType.isList ->
             CodeBlock(
                 """
                 for (var element : $getter) {
-                    if ($condition) {
-                        $VALIDATE_VALIDATABLE
-                    }
+                    ${validate(ReadVar("element"), fieldType.list.isAny)}
                 }
                 """.trimIndent()
             )
-        }
 
-        fieldType.isMap -> {
-            val condition =
-                if (fieldType.map.valueType.isAny)
-                    "element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass $validatable"
-                else
-                    "(($MessageClass) element) instanceof $ValidatableMessageClass $validatable"
+        fieldType.isMap ->
             CodeBlock(
                 """
                 for (var element : $getter.values()) {
-                    if ($condition) {
-                        $VALIDATE_VALIDATABLE
-                    }
+                    ${validate(ReadVar("element"), fieldType.map.valueType.isAny)}
                 }     
                 """.trimIndent()
             )
-        }
 
         else -> error(
             "The field type `${fieldType.name}` is not supported by `ValidateFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
                     " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
         )
+    }.run { FieldOptionCode(this) }
+
+    /**
+     * Yields an expression to validate the provided [message] if it implements
+     * [io.spine.validate.ValidatableMessage] interface.
+     *
+     * The reported violations are appended to [violations] list, if any.
+     *
+     * If the passed [message] represents [com.google.protobuf.Any], the method will firstly
+     * unpack the enclosed message, and only then validate it.
+     *
+     * Implementation notes are the following:
+     *
+     * 1) Unpacking of the default instance of [com.google.protobuf.Any] is impossible.
+     *    Such an instance should always be considered valid.
+     * 2) The default instances of [com.google.protobuf.Message] are not considered valid
+     *    by default. They may have required fields.
+     * 3) Cast of [message] to the parental [com.google.protobuf.Message] interface is required
+     *    because the Java compiler will fail the compilation if the result of `instanceof`
+     *    invocation is known at the compile time. Unfortunately, we cannot check it during
+     *    the codegen. For example, if the field type is proto's `Timestamp`, it does not make
+     *    sense to write `getTimestamp() instanceof ValidatableMessage`. The compilation will fail
+     *    because this expression is always `false`.
+     * 4) The returned expression uses an improved version of the `instanceof` that both tests
+     *    the parameter and assigns it to a variable of the proper type. This eliminates the need
+     *    of an additional cast to the tested type. This feature requires Java 14 and more.
+     *
+     * @param message An instance of a Protobuf message to validate.
+     * @param isAny Must return `true` if the provided [message] is [com.google.protobuf.Any].
+     *  In this case, the method will firstly do the unpacking.
+     */
+    private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
+        val isValidatable =
+            if (isAny)
+                "$message != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
+            else
+                "(($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+        return CodeBlock(
+            """
+            if ($isValidatable) {
+                validatable.validate()
+                    .map($ValidationErrorClass::getConstraintViolationList)
+                    .ifPresent($violations::addAll);
+            }
+            """.trimIndent()
+        )
     }
 }
-
-/**
- * The name of a variable containing an instance of [io.spine.validate.ValidatableMessage].
- */
-private const val validatable = "validatable"
-
-/**
- * Invokes [io.spine.validate.ValidatableMessage.validate] method upon [validatable]
- * instance and appends all discovered violations to [violations] list.
- */
-private val VALIDATE_VALIDATABLE = """
-    $validatable.validate()
-        .map($ValidationErrorClass::getConstraintViolationList)
-        .ifPresent($violations::addAll);
-"""
