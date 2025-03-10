@@ -60,91 +60,56 @@ internal class ValidateFieldGenerator(
     private val fieldType = field.type
     private val getter = message.field(field).getter<Any>()
 
-    override fun generate(): FieldOptionCode = when {
-        fieldType.isMessage && fieldType.message.isAny-> {
-            val constraint = CodeBlock(
-                """
-                if (!${field.hasDefaultValue()} && $AnyPackerClass.unpack($getter) instanceof $ValidatableMessageClass validatable) {
-                    validatable.validate()
-                        .map($ValidationErrorClass::getConstraintViolationList)
-                        .ifPresent($violations::addAll);
-                }
-                """.trimIndent()
-            )
-            FieldOptionCode(constraint)
-        }
+    override fun generate(): FieldOptionCode = FieldOptionCode(constraint())
 
+    private fun constraint() = when {
         fieldType.isMessage -> {
-            val constraint = CodeBlock(
+            val condition =
+                if (fieldType.message.isAny)
+                    "!${field.hasDefaultValue()} && $AnyPackerClass.unpack($getter) instanceof $ValidatableMessageClass $validatable"
+                else
+                    "(($MessageClass) $getter) instanceof $ValidatableMessageClass $validatable"
+            CodeBlock(
                 """
-                if ((($MessageClass) $getter) instanceof $ValidatableMessageClass validatable) {
-                    validatable.validate()
-                        .map($ValidationErrorClass::getConstraintViolationList)
-                        .ifPresent($violations::addAll);
+                if ($condition) {
+                    $VALIDATE_VALIDATABLE
                 }
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
-        }
-
-        fieldType.isList && fieldType.list.isAny -> {
-            val constraint = CodeBlock(
-                """
-                for (var element : $getter) {
-                    if (element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass validatable) {
-                        validatable.validate()
-                            .map($ValidationErrorClass::getConstraintViolationList)
-                            .ifPresent($violations::addAll);
-                    }
-                }
-                """.trimIndent()
-            )
-            FieldOptionCode(constraint)
         }
 
         fieldType.isList -> {
-            val constraint = CodeBlock(
+            val condition =
+                if (fieldType.list.isAny)
+                    "element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass $validatable"
+                else
+                    "(($MessageClass) element) instanceof $ValidatableMessageClass $validatable"
+            CodeBlock(
                 """
                 for (var element : $getter) {
-                    if ((($MessageClass) element) instanceof $ValidatableMessageClass validatable) {
-                        validatable.validate()
-                            .map($ValidationErrorClass::getConstraintViolationList)
-                            .ifPresent($violations::addAll);
+                    if ($condition) {
+                        $VALIDATE_VALIDATABLE
                     }
                 }
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
-        }
-
-        fieldType.isMap && fieldType.map.valueType.isAny -> {
-            val constraint = CodeBlock(
-                """
-                for (var element : $getter.values()) {
-                    if (element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass validatable) {
-                        validatable.validate()
-                            .map($ValidationErrorClass::getConstraintViolationList)
-                            .ifPresent($violations::addAll);
-                    }
-                }
-                """.trimIndent()
-            )
-            FieldOptionCode(constraint)
         }
 
         fieldType.isMap -> {
-            val constraint = CodeBlock(
+            val condition =
+                if (fieldType.map.valueType.isAny)
+                    "element != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack(element) instanceof $ValidatableMessageClass $validatable"
+                else
+                    "(($MessageClass) element) instanceof $ValidatableMessageClass $validatable"
+            CodeBlock(
                 """
                 for (var element : $getter.values()) {
-                    if ((($MessageClass) element) instanceof $ValidatableMessageClass validatable) {
-                        validatable.validate()
-                            .map($ValidationErrorClass::getConstraintViolationList)
-                            .ifPresent($violations::addAll);
+                    if ($condition) {
+                        $VALIDATE_VALIDATABLE
                     }
-                }
+                }     
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
         }
 
         else -> error(
@@ -154,3 +119,20 @@ internal class ValidateFieldGenerator(
         )
     }
 }
+
+/**
+ * The name of the variable containing an instance of [io.spine.validate.ValidatableMessage].
+ */
+private const val validatable = "validatable"
+
+/**
+ * Invokes [io.spine.validate.ValidatableMessage.validate] method upon `validatable` object,
+ * supposing it implements the corresponding interface.
+ *
+ * All discovered violations are appended to [violations] list.
+ */
+private val VALIDATE_VALIDATABLE = """
+    $validatable.validate()
+        .map($ValidationErrorClass::getConstraintViolationList)
+        .ifPresent($violations::addAll);
+"""
