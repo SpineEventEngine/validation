@@ -26,7 +26,9 @@
 
 package io.spine.validation.java.generate.option
 
+import com.google.rpc.Code
 import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.JavaValueConverter
@@ -69,7 +71,7 @@ internal class ValidateFieldGenerator(
                 }
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
+            FieldOptionCode(CodeBlock(""))
         }
 
         fieldType.isMessage -> {
@@ -82,7 +84,7 @@ internal class ValidateFieldGenerator(
                 }
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
+            FieldOptionCode(CodeBlock(""))
         }
 
         fieldType.isList -> {
@@ -97,7 +99,11 @@ internal class ValidateFieldGenerator(
                 }
                 """.trimIndent()
             )
-            FieldOptionCode(constraint)
+            FieldOptionCode(CodeBlock(""))
+        }
+
+        fieldType.isMap -> {
+            FieldOptionCode(CodeBlock(""))
         }
 
         else -> error {

@@ -26,9 +26,20 @@
 
 package io.spine.test.options
 
+import com.google.protobuf.Any
+import com.google.protobuf.util.Timestamps
+import io.spine.protobuf.AnyPacker
+import io.spine.test.tools.validate.PersonName
+import io.spine.test.tools.validate.inDepthValidatedMaps
+import io.spine.test.tools.validate.inDepthValidatedMessages
+import io.spine.test.tools.validate.inDepthValidatedRepeated
+import io.spine.test.tools.validate.personName
+import io.spine.validate.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(validate)` constraint should be compiled so that")
 internal class ValidateITest {
@@ -38,18 +49,29 @@ internal class ValidateITest {
 
         @Test
         fun `reject an invalid message`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMessages {
+                    validatable = invalidName
+                }
+            }
         }
 
         @Test
         fun `accept a valid message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessages {
+                    validatable = validName
+                }
+            }
         }
 
         @Test
-        fun `accept any non-validatable message`() {
-        }
-
-        @Test
-        fun `skip validation if the field is empty`() {
+        fun `accept a non-validatable message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessages {
+                    nonValidatable = timestamp
+                }
+            }
         }
     }
 
@@ -58,18 +80,38 @@ internal class ValidateITest {
 
         @Test
         fun `reject an invalid enclosed message`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMessages {
+                    any = invalidAny
+                }
+            }
         }
 
         @Test
         fun `accept a valid enclosed message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessages {
+                    any = validAny
+                }
+            }
         }
 
         @Test
-        fun `accept any non-validatable enclosed message`() {
+        fun `accept a non-validatable enclosed message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessages {
+                    any = timestampAny
+                }
+            }
         }
 
         @Test
-        fun `skip validation if the field is empty`() {
+        fun `accept a default instance`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessages {
+                    any = defaultAny
+                }
+            }
         }
     }
 
@@ -78,18 +120,35 @@ internal class ValidateITest {
 
         @Test
         fun `reject invalid messages`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedRepeated {
+                    validatable.addAll(
+                        listOf(validName, invalidName, validName)
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept if all messages are valid`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    validatable.addAll(
+                        listOf(validName, validName, validName)
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept non-validatable messages`() {
-        }
-
-        @Test
-        fun `skip validation if the field is empty`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    nonValidatable.addAll(
+                        listOf(timestamp, timestamp, timestamp)
+                    )
+                }
+            }
         }
     }
 
@@ -98,18 +157,46 @@ internal class ValidateITest {
 
         @Test
         fun `reject invalid enclosed messages`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(validAny, invalidAny, validAny)
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept if all enclosed messages are valid`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(validAny, validAny, validAny)
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept non-validatable enclosed messages`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(timestampAny, timestampAny, timestampAny)
+                    )
+                }
+            }
         }
 
         @Test
-        fun `skip validation if the field is empty`() {
+        fun `accept default instances`() {
+            assertDoesNotThrow {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(defaultAny, defaultAny, defaultAny)
+                    )
+                }
+            }
         }
     }
 
@@ -118,18 +205,47 @@ internal class ValidateITest {
 
         @Test
         fun `reject invalid message values`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMaps {
+                    validatable.putAll(
+                        mapOf(
+                            "k1" to validName,
+                            "k2" to invalidName,
+                            "k3" to validName,
+                        )
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept if all message values are valid`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    validatable.putAll(
+                        mapOf(
+                            "k1" to validName,
+                            "k2" to validName,
+                            "k3" to validName,
+                        )
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept non-validatable message values`() {
-        }
-
-        @Test
-        fun `skip validation if the field is empty`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    nonValidatable.putAll(
+                        mapOf(
+                            "k1" to timestamp,
+                            "k2" to timestamp,
+                            "k3" to timestamp,
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -138,18 +254,85 @@ internal class ValidateITest {
 
         @Test
         fun `reject invalid enclosed message values`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to validAny,
+                            "k2" to invalidAny,
+                            "k3" to validAny,
+                        )
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept if all enclosed message values are valid`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to validAny,
+                            "k2" to invalidAny,
+                            "k3" to validAny,
+                        )
+                    )
+                }
+            }
         }
 
         @Test
         fun `accept non-validatable enclosed message values`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to timestampAny,
+                            "k2" to timestampAny,
+                            "k3" to timestampAny,
+                        )
+                    )
+                }
+            }
         }
 
         @Test
-        fun `skip validation if the field is empty`() {
+        fun `accept default instances`() {
+            assertDoesNotThrow {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to defaultAny,
+                            "k2" to defaultAny,
+                            "k3" to defaultAny,
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `accept empty repeated and maps`() {
+        assertDoesNotThrow {
+            inDepthValidatedRepeated {}
+        }
+        assertDoesNotThrow {
+            inDepthValidatedMaps {}
         }
     }
 }
+
+private val timestamp = Timestamps.now()
+private val invalidName = PersonName.newBuilder()
+    .setValue("Jack_Chan")
+    .buildPartial()
+private val validName = personName {
+    value = "Jack Chan"
+}
+
+private val invalidAny = AnyPacker.pack(invalidName)
+private val validAny = AnyPacker.pack(validName)
+private val timestampAny = AnyPacker.pack(timestamp)
+private val defaultAny = Any.getDefaultInstance()
