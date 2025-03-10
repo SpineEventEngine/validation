@@ -27,10 +27,8 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.RequiredField
 import io.spine.validation.ValidateField
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
@@ -38,10 +36,7 @@ import io.spine.validation.java.generate.OptionGenerator
 /**
  * The generator for `(validate)` option.
  */
-internal class ValidateGenerator(
-    private val querying: Querying,
-    private val converter: JavaValueConverter
-) : OptionGenerator {
+internal class ValidateGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
      * All `(validate)` fields in the current compilation process.
@@ -54,5 +49,5 @@ internal class ValidateGenerator(
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
-            .map { ValidateFieldGenerator(it, converter).generate() }
+            .map { ValidateFieldGenerator(it).generate() }
 }

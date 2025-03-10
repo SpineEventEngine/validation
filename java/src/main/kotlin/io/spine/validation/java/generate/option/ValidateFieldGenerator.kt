@@ -31,13 +31,11 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
 import io.spine.validation.java.expression.AnyClass
 import io.spine.validation.java.expression.AnyPackerClass
-import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.MessageClass
 import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
@@ -51,10 +49,7 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.vi
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class ValidateFieldGenerator(
-    private val view: ValidateField,
-    override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldCheck {
+internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -66,7 +61,7 @@ internal class ValidateFieldGenerator(
         fieldType.isMessage -> {
             val condition =
                 if (fieldType.message.isAny)
-                    "!${field.hasDefaultValue()} && $AnyPackerClass.unpack($getter) instanceof $ValidatableMessageClass $validatable"
+                    "$getter != ${AnyClass.getDefaultInstance()} && $AnyPackerClass.unpack($getter) instanceof $ValidatableMessageClass $validatable"
                 else
                     "(($MessageClass) $getter) instanceof $ValidatableMessageClass $validatable"
             CodeBlock(
@@ -121,15 +116,13 @@ internal class ValidateFieldGenerator(
 }
 
 /**
- * The name of the variable containing an instance of [io.spine.validate.ValidatableMessage].
+ * The name of a variable containing an instance of [io.spine.validate.ValidatableMessage].
  */
 private const val validatable = "validatable"
 
 /**
- * Invokes [io.spine.validate.ValidatableMessage.validate] method upon `validatable` object,
- * supposing it implements the corresponding interface.
- *
- * All discovered violations are appended to [violations] list.
+ * Invokes [io.spine.validate.ValidatableMessage.validate] method upon [validatable]
+ * instance and appends all discovered violations to [violations] list.
  */
 private val VALIDATE_VALIDATABLE = """
     $validatable.validate()
