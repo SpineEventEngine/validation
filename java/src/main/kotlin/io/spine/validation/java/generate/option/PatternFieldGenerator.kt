@@ -110,11 +110,11 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
             FieldOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
         }
 
-        else -> error {
+        else -> error(
             "The field type `${fieldType.name}` is not supported by `PatternFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
                     " used by `PatternPolicy` when validating the `PatternFieldDiscovered` event."
-        }
+        )
     }
 
     /**
