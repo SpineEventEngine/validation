@@ -26,40 +26,19 @@
 
 package io.spine.validation
 
-import io.spine.core.External
 import io.spine.core.Subscribe
-import io.spine.core.Where
-import io.spine.protodata.ast.Option
-import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.event.ValidateFieldDiscovered
 
 /**
- * A view of a field marked with `(validate)`.
- *
- * Note: this option [does not have][NO_ERROR_MESSAGE] an error message. It triggers
- * in-depth validation and directly propagates the occurred errors.
+ * A view of a field that is marked with `(validate) = true` option.
  */
-internal class ValidatedFieldView :
-    BoolFieldOptionView<ValidatedField, ValidatedField.Builder>(NO_ERROR_MESSAGE) {
+internal class ValidatedFieldView : View<FieldRef, ValidateField, ValidateField.Builder>() {
 
     @Subscribe
-    override fun onConstraint(
-        @External @Where(field = OPTION_NAME, equals = VALIDATE) e: FieldOptionDiscovered
-    ) = super.onConstraint(e)
-
-    override fun enableValidation() {
-        builder()!!.setValidate(true)
-    }
-
-    override fun extractErrorMessage(option: Option): String = error(
-        "Cannot extract custom error message for `($VALIDATE)` option using `$option`. " +
-                "`($VALIDATE)` does not support custom error messages."
-    )
-
-    override fun saveErrorMessage(errorMessage: String) {
-        // No op.
-    }
-
-    private companion object {
-        const val NO_ERROR_MESSAGE = ""
+    fun on(e: ValidateFieldDiscovered) = alter {
+        subject = e.subject
     }
 }

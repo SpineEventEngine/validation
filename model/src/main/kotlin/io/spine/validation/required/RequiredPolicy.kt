@@ -54,8 +54,8 @@ import io.spine.validation.event.requiredFieldDiscovered
 /**
  * Controls whether a field should be validated as `(required)`.
  *
- * Whenever a filed marked with `(required)` option is discovered,
- * emits [RequiredFieldDiscovered] if the following conditions are met:
+ * Whenever a field marked with `(required)` option is discovered, emits
+ * [RequiredFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.

@@ -29,6 +29,7 @@
 package io.spine.validation.java.violation
 
 import io.spine.base.FieldPath
+import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
@@ -95,8 +96,9 @@ internal fun templateString(
         StringClass, StringClass,
         placeholders.mapKeys { StringLiteral(it.key.toString()) }
     )
+    val escapedTemplate = restoreProtobufEscapes(template)
     return TemplateStringClass.newBuilder()
-        .chainSet("withPlaceholders", StringLiteral(template))
+        .chainSet("withPlaceholders", StringLiteral(escapedTemplate))
         .chainPutAll("placeholderValue", placeholderEntries)
         .chainBuild()
 }

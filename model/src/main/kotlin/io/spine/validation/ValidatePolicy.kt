@@ -27,67 +27,63 @@
 package io.spine.validation
 
 import io.spine.core.External
-import io.spine.protodata.ast.FieldName
+import io.spine.core.Where
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.event.FieldExited
-import io.spine.protodata.ast.fieldRef
+import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.ref
+import io.spine.protodata.check
+import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
-import io.spine.server.query.select
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.event.simpleRuleAdded
+import io.spine.validation.event.ValidateFieldDiscovered
+import io.spine.validation.event.validateFieldDiscovered
 
 /**
- * A policy which, upon encountering a field with the `(validate)` option, generates
- * a validation rule.
+ * Controls whether a field with the `(validate)` option should be
+ * validated in-depth.
  *
- * The validation rule enforces recursive validation for the associated message field.
+ * Whenever a field marked with `(validate)` option is discovered, emits
+ * [ValidateFieldDiscovered] event if the following conditions are met:
  *
- * If the field is a list or a map, all the elements (values of map entries) are validated.
+ * 1. The field type is supported by the option.
+ * 2. The option value is `true`.
  *
- * If the message field is invalid, the containing message is invalid as well.
+ * If (1) is violated, the policy reports a compilation error.
+ *
+ * Violation of (2) means that the `(validate)` option is applied correctly,
+ * but disabled. In this case, the policy emits [NoReaction] because we
+ * actually have a non-validated field, marked with `(validate)`.
  */
-internal class ValidatePolicy : ValidationPolicy<FieldExited>() {
+internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
 
     @React
-    override fun whenever(@External event: FieldExited): EitherOf2<RuleAdded, NoReaction> {
-        val id = fieldRef {
-            name = event.field
-            type = event.type
-        }
-        val field = select<ValidatedField>().findById(id)
-        if (field != null) {
-            ensureMessageField(event.field, event.type, event.file)
-        }
-        val shouldValidate = field != null && field.validate
-        if (!shouldValidate) {
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = VALIDATE)
+        event: FieldOptionDiscovered,
+    ): EitherOf2<ValidateFieldDiscovered, NoReaction> {
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, file)
+
+        if (!event.option.boolValue) {
             return ignore()
         }
-        val rule = SimpleRule(
-            field = event.field,
-            customFeature = RecursiveValidation.getDefaultInstance(),
-            description = "A message field is validated by its validation rules. " +
-                    "If the field is invalid, the container message is invalid as well.",
-            errorMessage = "", // `(validate)` doesn't create an error on its own.
-            distribute = true
-        )
-        return simpleRuleAdded {
-            type = event.type
-            this.rule = rule
+
+        return validateFieldDiscovered {
+            id = field.ref
+            subject = field
         }.asA()
     }
-
-    private fun ensureMessageField(fieldName: FieldName, typeName: TypeName, file: File) {
-        val field = findField(fieldName, typeName, file)
-        if (!field.type.refersToMessage()) {
-            error(
-                "The field `${typeName.qualifiedName}.${fieldName.value}` does not refer" +
-                        " to a message type and, therefore, cannot have the `$VALIDATE` option.",
-            )
-        }
-    }
 }
+
+private fun checkFieldType(field: Field, file: File) =
+    Compilation.check(field.type.refersToMessage(), file, field.span) {
+        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+                " by the `($VALIDATE)` option. Supported field types: messages, repeated of" +
+                " messages, and maps with message values."
+    }

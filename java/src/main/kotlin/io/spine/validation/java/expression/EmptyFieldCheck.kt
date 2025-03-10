@@ -52,7 +52,7 @@ internal interface EmptyFieldCheck {
      * Returns an expression that checks if this [Field] has the default (unset) value.
      */
     fun Field.hasDefaultValue(): Expression<Boolean> {
-        val getter = message.field(this).getter<List<*>>()
+        val getter = message.field(this).getter<Any>()
         return Expression("$getter.equals(${defaultValue()})")
     }
 
