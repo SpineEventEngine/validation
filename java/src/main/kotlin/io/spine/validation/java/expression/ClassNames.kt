@@ -32,6 +32,8 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.LinkedHashMultiset
 import com.google.common.collect.Multiset
+import com.google.protobuf.Any
+import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
@@ -115,3 +117,13 @@ internal val ValidatableMessageClass = ClassName(ValidatableMessage::class)
  * The [ClassName] of [AnyPacker].
  */
 internal val AnyPackerClass = ClassName(AnyPacker::class)
+
+/**
+ * The [ClassName] of [Message].
+ */
+internal val MessageClass = ClassName(Message::class)
+
+/**
+ * The [ClassName] of Protobuf [Any].
+ */
+internal val AnyClass = ClassName(Any::class)

@@ -38,7 +38,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 // Tests how `(validate)` handles singular message fields.
-message InDepthValidatedMessages {
+message InDepthValidatedMessage {
 
     PersonName validatable = 1 [(.validate) = true];
 
@@ -69,5 +69,5 @@ message InDepthValidatedMaps {
 
 // Must contain only English letters.
 message PersonName {
-    string value = 1 [(pattern).regex = "^[A-Za-z]+$"];
+    string value = 1 [(pattern).regex = "^[A-Za-z ]+$"];
 }

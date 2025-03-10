@@ -31,7 +31,7 @@ import com.google.protobuf.util.Timestamps
 import io.spine.protobuf.AnyPacker
 import io.spine.test.tools.validate.PersonName
 import io.spine.test.tools.validate.inDepthValidatedMaps
-import io.spine.test.tools.validate.inDepthValidatedMessages
+import io.spine.test.tools.validate.inDepthValidatedMessage
 import io.spine.test.tools.validate.inDepthValidatedRepeated
 import io.spine.test.tools.validate.personName
 import io.spine.validate.ValidationException
@@ -50,7 +50,7 @@ internal class ValidateITest {
         @Test
         fun `reject an invalid message`() {
             assertThrows<ValidationException> {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     validatable = invalidName
                 }
             }
@@ -59,7 +59,7 @@ internal class ValidateITest {
         @Test
         fun `accept a valid message`() {
             assertDoesNotThrow {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     validatable = validName
                 }
             }
@@ -68,7 +68,7 @@ internal class ValidateITest {
         @Test
         fun `accept a non-validatable message`() {
             assertDoesNotThrow {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     nonValidatable = timestamp
                 }
             }
@@ -81,7 +81,7 @@ internal class ValidateITest {
         @Test
         fun `reject an invalid enclosed message`() {
             assertThrows<ValidationException> {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     any = invalidAny
                 }
             }
@@ -90,7 +90,7 @@ internal class ValidateITest {
         @Test
         fun `accept a valid enclosed message`() {
             assertDoesNotThrow {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     any = validAny
                 }
             }
@@ -99,7 +99,7 @@ internal class ValidateITest {
         @Test
         fun `accept a non-validatable enclosed message`() {
             assertDoesNotThrow {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     any = timestampAny
                 }
             }
@@ -108,7 +108,7 @@ internal class ValidateITest {
         @Test
         fun `accept a default instance`() {
             assertDoesNotThrow {
-                inDepthValidatedMessages {
+                inDepthValidatedMessage {
                     any = defaultAny
                 }
             }
@@ -274,7 +274,7 @@ internal class ValidateITest {
                     any.putAll(
                         mapOf(
                             "k1" to validAny,
-                            "k2" to invalidAny,
+                            "k2" to validAny,
                             "k3" to validAny,
                         )
                     )
