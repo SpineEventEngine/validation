@@ -28,6 +28,7 @@ package io.spine.validate;
 
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Message;
+import io.spine.base.FieldPath;
 
 import java.util.Optional;
 
@@ -45,4 +46,18 @@ public interface ValidatableMessage extends Message {
      * @return an error or {@link Optional#empty()} if no violations found
      */
     Optional<ValidationError> validate();
+
+    /**
+     * Validates this message according to the rules in the Protobuf definition.
+     *
+     * <p>Use this overload when validating a message as part of another message's validation.
+     * In this case, any constraint violations reported by this method will include the path
+     * to the original field that triggered in-depth validation.
+     *
+     * @param parent
+     *         the path to the parent field that triggered in-depth validation
+     *
+     * @return an error or {@link Optional#empty()} if no violations found
+     */
+    Optional<ValidationError> validate(FieldPath parent);
 }
