@@ -89,7 +89,6 @@ internal class ValidationCodeInjector {
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declareNoParentValidateMethod()
                 declareValidateMethod(code.constraints)
                 declareSupportingFields(code.fields)
                 declareSupportingMethods(code.methods)
@@ -127,25 +126,6 @@ private fun MessagePsiClass.implementValidatableMessage() {
     val qualifiedName = ValidatableMessage::class.java.canonicalName
     val reference = elementFactory.createInterfaceReference(qualifiedName)
     implement(reference)
-}
-
-/**
- * Declares the `validate()` method in this [MessagePsiClass].
- *
- * This is a no-parent implementation of [ValidatableMessage.validate] that delegates
- * the actual work to `validate(FieldPath)`.
- */
-private fun MessagePsiClass.declareNoParentValidateMethod() {
-    val psiMethod = elementFactory.createMethodFromText(
-        """
-        public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParentFieldPath = ${FieldPathClass.getDefaultInstance()};
-            var noParentTypeName = "";
-            return validate(noParentFieldPath, noParentTypeName);
-        }
-        """.trimIndent(), this)
-    psiMethod.annotate(Override::class.java)
-    addLast(psiMethod)
 }
 
 /**

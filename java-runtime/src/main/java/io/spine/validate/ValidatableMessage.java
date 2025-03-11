@@ -45,7 +45,11 @@ public interface ValidatableMessage extends Message {
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
-    Optional<ValidationError> validate();
+    default Optional<ValidationError> validate() {
+        var noParentFieldPath = FieldPath.getDefaultInstance();
+        var noParentTypeName = "";
+        return validate(noParentFieldPath, noParentTypeName);
+    }
 
     /**
      * Validates this message according to the rules in the Protobuf definition.
