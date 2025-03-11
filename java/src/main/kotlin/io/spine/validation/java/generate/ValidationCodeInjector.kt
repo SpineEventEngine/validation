@@ -89,8 +89,8 @@ internal class ValidationCodeInjector {
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declarePublicValidateMethod()
-                declarePrivateValidateMethod(code.constraints)
+                declareNoParentValidateMethod()
+                declareValidateMethod(code.constraints)
                 declareSupportingFields(code.fields)
                 declareSupportingMethods(code.methods)
             }
@@ -129,15 +129,12 @@ private fun MessagePsiClass.implementValidatableMessage() {
 }
 
 /**
- * Declares `validate()` method in this [MessagePsiClass].
+ * Declares the `validate()` method in this [MessagePsiClass].
  *
- * This is a `public` implementation of [ValidatableMessage.validate] with
- * [Override] annotation. The actual constraints are contained in its
- * private overloading, that accepts the field path.
- *
- *  @see declarePrivateValidateMethod
+ * This is a no-parent implementation of [ValidatableMessage.validate] that delegates
+ * the actual work to `validate(FieldPath)`.
  */
-private fun MessagePsiClass.declarePublicValidateMethod() {
+private fun MessagePsiClass.declareNoParentValidateMethod() {
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate() {
@@ -150,28 +147,28 @@ private fun MessagePsiClass.declarePublicValidateMethod() {
 }
 
 /**
- * Declares a private `validate(FieldPath)` method that performs all constraint
- * checks for the message.
+ * Declares the `validate(FieldPath)` method in this [MessagePsiClass],
+ * which accepts the parent field path.
  *
- * This method implements the actual logic for verifying that the message’s
- * constraints are met. It takes a [FieldPath] parameter that represents the path
- * to the parent field, which triggered the validation, if any. This path is used
- * when constructing constraint violation errors.
+ * This method implements the logic for verifying that the message’s constraints are met.
+ * It takes a [FieldPath] parameter that represents the path to the parent field, which triggered
+ * the validation. This path is used when constructing constraint violation errors.
  *
- * In typical (top-level) validations, the public `validate()` method is called,
- * which passes an empty field path. However, when validating a nested message
- * (a message field marked with `(validate) = true`), a non-empty field path
- * should be provided. In that case, any constraint violations reported by this
- * method will include the parent field, which actually triggered validation.
+ * In typical (top-level) validations, the [ValidatableMessage.validate] method is called,
+ * which does not need a path. However, when validating a nested message (a message field
+ * marked with `(validate) = true`), a non-empty field path should be provided. In that case,
+ * any constraint violations reported by this method will include the parent field,
+ * which triggered validation.
  */
-private fun MessagePsiClass.declarePrivateValidateMethod(constraints: List<CodeBlock>) {
+private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
+        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this
     )
+    psiMethod.annotate(Override::class.java)
     addLast(psiMethod)
 }
 
