@@ -37,6 +37,7 @@ import io.spine.protodata.ast.event.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
+import io.spine.server.entity.state
 import io.spine.server.route.EventRouting
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.test.money.Currency
@@ -47,28 +48,52 @@ import io.spine.validation.test.money.CurrencyType
  */
 public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
-    @Subscribe
-    internal fun on(@External @Where(field = OPTION_NAME, equals = "currency")
-                    event: TypeOptionDiscovered) = alter {
-        val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
-        this.currency = currency
-    }
+    // TODO:2025-03-11:yevhenii.nadtochii: This transaction does not commit for some reason.
+    //  Very odd behavior, depends on whether `ValidationCodeInjector` overrides `validate()`.
 
     @Subscribe
-    internal fun on(@External event: FieldEntered) = alter {
-        val field = event.field
-        if (field.orderOfDeclaration == 0) {
-            majorUnitField = field
-        } else if (field.orderOfDeclaration == 1) {
-            minorUnitField = field
+    internal fun on(
+        @External @Where(field = OPTION_NAME, equals = "currency")
+        event: TypeOptionDiscovered
+    ) {
+        val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
+        println("CurrencyTypeView.TypeOptionDiscovered state `${state().type}`.")
+        println("CurrencyTypeView.TypeOptionDiscovered builder `${builder().type}`.")
+        println("CurrencyTypeView.TypeOptionDiscovered event `${event.type}`.")
+        println("CurrencyTypeView.TypeOptionDiscovered currency `${currency}`.")
+        println()
+        alter {
+            this.currency = currency
         }
     }
 
     @Subscribe
-    internal fun on(@Suppress("UNUSED_PARAMETER") @External e: TypeExited) {
+    internal fun on(@External event: FieldEntered) {
+        println("CurrencyTypeView.FieldEntered state `${state().type}`.")
+        println("CurrencyTypeView.FieldEntered builder `${builder().type}`.")
+        println("CurrencyTypeView.FieldEntered event `${event.type}`.")
+        println("CurrencyTypeView.FieldEntered currency `${state.currency}`.")
+        println()
+        val field = event.field
+        alter {
+            when (field.orderOfDeclaration) {
+                0 -> majorUnitField = field
+                1 -> minorUnitField = field
+            }
+        }
+    }
+
+    @Subscribe
+    internal fun on(@External event: TypeExited) {
+        println("CurrencyTypeView.TypeExited state `${state().type}`.")
+        println("CurrencyTypeView.TypeExited builder `${builder().type}`.")
+        println("CurrencyTypeView.TypeExited event `${event.type}`.")
+        println("CurrencyTypeView.TypeExited currency `${state.currency}`.")
         if (!builder().hasCurrency()) {
+            println("CurrencyTypeView.TypeExited deleting `${state().type}`.")
             deleted = true
         }
+        println()
     }
 
     internal class Repo : ViewRepository<TypeName, CurrencyTypeView, CurrencyType>() {

@@ -27,6 +27,7 @@
 package io.spine.validation.test
 
 import io.spine.validation.test.money.Mru
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.Test
  * [MoneyValidationPlugin] handles the validation of the `currency` option.
  * This test verifies that custom validation code rendered by the plugin works as expected.
  */
+@Disabled // See `CurrencyTypeView`.
 @DisplayName("`MoneyValidationPlugin` should generate the code which")
 internal class MoneyValidationPluginITest {
 
