@@ -38,16 +38,6 @@ option java_multiple_files = true;
 import "spine/protodata/ast.proto";
 import "spine/time_options.proto";
 
-// The associated message field must be validated. If violations are found, the containing message
-// itself is invalid.
-//
-// If the field is a list, all the elements must be valid.
-//
-// If the field is a map, all the values of the map must be valid.
-//
-message RecursiveValidation {
-}
-
 // The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
 //
 // Generated code must check the `oneof` case in order to avoid comparisons to default values for
