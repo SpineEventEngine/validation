@@ -67,7 +67,16 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept a non-validatable message`() {
+        fun `accept a default instance of message with '(required)' field`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessage {
+                    validatable = defaultName
+                }
+            }
+        }
+
+        @Test
+        fun `accept any non-validatable message`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
                     nonValidatable = timestamp
@@ -89,6 +98,15 @@ internal class ValidateITest {
         }
 
         @Test
+        fun `reject a default instance of enclosed message with '(required)' field`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMessage {
+                    any = defaultAnyName
+                }
+            }
+        }
+
+        @Test
         fun `accept a valid enclosed message`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
@@ -98,16 +116,7 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept a non-validatable enclosed message`() {
-            assertDoesNotThrow {
-                inDepthValidatedMessage {
-                    any = anyTimestamp
-                }
-            }
-        }
-
-        @Test
-        fun `accept a default instance`() {
+        fun `accept a default instance of 'Any'`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
                     any = defaultAny
@@ -116,7 +125,16 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept an unknown enclosed message`() {
+        fun `accept any non-validatable enclosed message`() {
+            assertDoesNotThrow {
+                inDepthValidatedMessage {
+                    any = anyTimestamp
+                }
+            }
+        }
+
+        @Test
+        fun `accept any unknown enclosed message`() {
             assertDoesNotThrow {
                 inDepthValidatedMessage {
                     any = unknownAny
@@ -134,6 +152,17 @@ internal class ValidateITest {
                 inDepthValidatedRepeated {
                     validatable.addAll(
                         listOf(validName, invalidName, validName)
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun `reject default instances with '(required)' fields`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedRepeated {
+                    validatable.addAll(
+                        listOf(validName, defaultName, validName)
                     )
                 }
             }
@@ -177,6 +206,17 @@ internal class ValidateITest {
         }
 
         @Test
+        fun `reject default instances of enclosed messages with '(required)' fields`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedRepeated {
+                    any.addAll(
+                        listOf(validAnyName, defaultAnyName, validAnyName)
+                    )
+                }
+            }
+        }
+
+        @Test
         fun `accept if all enclosed messages are valid`() {
             assertDoesNotThrow {
                 inDepthValidatedRepeated {
@@ -199,7 +239,7 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept default instances`() {
+        fun `accept default instances of 'Any'`() {
             assertDoesNotThrow {
                 inDepthValidatedRepeated {
                     any.addAll(
@@ -232,6 +272,21 @@ internal class ValidateITest {
                         mapOf(
                             "k1" to validName,
                             "k2" to invalidName,
+                            "k3" to validName,
+                        )
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun `reject default instances of message values with '(required)' fields`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMaps {
+                    validatable.putAll(
+                        mapOf(
+                            "k1" to validName,
+                            "k2" to defaultName,
                             "k3" to validName,
                         )
                     )
@@ -289,6 +344,21 @@ internal class ValidateITest {
         }
 
         @Test
+        fun `reject default instances of enclosed message values with '(required)' fields`() {
+            assertThrows<ValidationException> {
+                inDepthValidatedMaps {
+                    any.putAll(
+                        mapOf(
+                            "k1" to validAnyName,
+                            "k2" to defaultAnyName,
+                            "k3" to validAnyName,
+                        )
+                    )
+                }
+            }
+        }
+
+        @Test
         fun `accept if all enclosed message values are valid`() {
             assertDoesNotThrow {
                 inDepthValidatedMaps {
@@ -319,7 +389,7 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept default instances`() {
+        fun `accept default instances of 'Any'`() {
             assertDoesNotThrow {
                 inDepthValidatedMaps {
                     any.putAll(
@@ -361,6 +431,7 @@ internal class ValidateITest {
 }
 
 private val timestamp = Timestamps.now()
+private val defaultName = PersonName.getDefaultInstance()
 private val invalidName = PersonName.newBuilder()
     .setValue("Jack_Chan")
     .buildPartial()
@@ -369,6 +440,7 @@ private val validName = personName {
 }
 
 private val invalidAnyName = AnyPacker.pack(invalidName)
+private val defaultAnyName = AnyPacker.pack(defaultName)
 private val validAnyName = AnyPacker.pack(validName)
 private val anyTimestamp = AnyPacker.pack(timestamp)
 private val defaultAny = Any.getDefaultInstance()

@@ -69,5 +69,5 @@ message InDepthValidatedMaps {
 
 // Must contain only English letters.
 message PersonName {
-    string value = 1 [(pattern).regex = "^[A-Za-z ]+$"];
+    string value = 1 [(required) = true, (pattern).regex = "^[A-Za-z ]+$"];
 }

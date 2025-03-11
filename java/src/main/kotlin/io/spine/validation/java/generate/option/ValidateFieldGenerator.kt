@@ -133,7 +133,8 @@ internal class ValidateFieldGenerator(
                         " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
                         " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
             else
-                "(($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+                "!${field.hasDefaultValue()} &&" +
+                        " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
         return CodeBlock(
             """
             if ($isValidatable) {
