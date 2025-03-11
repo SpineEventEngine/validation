@@ -30,8 +30,6 @@ package io.spine.validation.java.violation
 
 import io.spine.base.FieldPath
 import io.spine.protobuf.restoreProtobufEscapes
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
@@ -58,13 +56,13 @@ import io.spine.validation.java.expression.TemplateStringClass
  */
 internal fun constraintViolation(
     errorMessage: Expression<TemplateString>,
-    declaringType: TypeName,
+    declaringType: Expression<String>,
     fieldPath: Expression<FieldPath>,
     fieldValue: Expression<*>?
 ): Expression<ConstraintViolation> {
     var builder = ClassName(ConstraintViolation::class).newBuilder()
         .chainSet("message", errorMessage)
-        .chainSet("type_name", StringLiteral(declaringType.qualifiedName))
+        .chainSet("type_name", declaringType)
         .chainSet("field_path", fieldPath)
     fieldValue?.let {
         builder = builder.chainSet("field_value", fieldValue.packToAny())

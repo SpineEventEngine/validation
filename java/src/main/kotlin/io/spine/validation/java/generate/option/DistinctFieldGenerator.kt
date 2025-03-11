@@ -58,6 +58,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -70,7 +71,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     private val field = view.subject
     private val fieldType = field.type
     private val getter = message.field(field).getter<List<*>>()
-    private val declaringType = field.declaringType
+    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     /**
      * Generates code for a field represented by the [view].
@@ -83,7 +84,8 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
             if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var violation = ${violation(ReadVar("fieldPath"), ReadVar("duplicates"))};
+                var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("duplicates"))};
                 violations.add(violation);
             }
             """.trimIndent()
@@ -130,22 +132,24 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
         duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, duplicates)
+        val placeholders = supportedPlaceholders(fieldPath, typeName, duplicates)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, getter)
+        return constraintViolation(errorMessage, typeName, fieldPath, getter)
     }
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
         duplicates: Expression<List<*>>
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_VALUE to fieldType.stringValueOf(getter),
         FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        PARENT_TYPE to typeName,
         FIELD_DUPLICATES to duplicates.call("toString")
     )
 }

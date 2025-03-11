@@ -31,10 +31,12 @@ import io.spine.protodata.ast.isAny
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
@@ -50,6 +52,7 @@ import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 
@@ -66,6 +69,7 @@ internal class ValidateFieldGenerator(
     private val field = view.subject
     private val fieldType = field.type
     private val getter = message.field(field).getter<Message>()
+    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     override fun generate(): FieldOptionCode = when {
         fieldType.isMessage -> validate(getter, fieldType.message.isAny)
@@ -104,28 +108,39 @@ internal class ValidateFieldGenerator(
      * If the passed [message] represents [com.google.protobuf.Any], the method will firstly
      * unpack the enclosed message, and only then validate it.
      *
-     * Implementation notes are the following:
+     * Note that not all instances of [com.google.protobuf.Any] can be unpacked:
      *
-     * 1) Unpacking of the default instance of [com.google.protobuf.Any] and instances with unknown
-     *    type URLs is impossible. Such instances are always considered valid.
-     * 2) The default instance of [com.google.protobuf.Message] are also considered valid.
-     *    They may have required fields.
-     * 3) Cast of the [message] to the parental [com.google.protobuf.Message] interface is required
+     * 1) Unpacking of the default instance is impossible.
+     * 2) Unpacking of instances with unknown type URLs is also impossible.
+     *
+     * Such instances are always considered valid.
+     *
+     * The default instances of [com.google.protobuf.Message] are considered valid
+     * for singular fields even if the checked message has one or more required fields.
+     * In this case, it is impossible to determine whether the field itself is set
+     * with an invalid message instance or empty. This rule doesn't apply to repeated and
+     * map fields. Within collections, default instances are considered invalid.
+     *
+     * Details regarding the generated code:
+     *
+     * 1) Cast of the [message] to the parental [com.google.protobuf.Message] interface is required
      *    because the Java compiler will fail the compilation if the result of `instanceof`
-     *    invocation is known at the compile time. Unfortunately, we cannot check it during
-     *    the codegen. For example, if the field type is proto's `Timestamp`, it does not make
-     *    sense to write `getTimestamp() instanceof ValidatableMessage`. The compilation will fail
-     *    because this expression is always `false`. During the codegen, we know that all messages
-     *    within the compilation process will have this interface. But we cannot check it for
-     *    the messages that come from dependencies.
-     * 4) The returned expression uses an improved version of the `instanceof` that both tests
+     *    invocation is known at the compile time. For example, if the field type is proto's
+     *    `Timestamp`, it makes no sense to render `getTimestamp() instanceof ValidatableMessage`.
+     *    The compilation will fail because this expression is always `false`. Unfortunately,
+     *    we cannot check whether a message type is validatable during the codegen.
+     *    During the codegen, we know that all messages within the compilation process will have
+     *    this interface. But we cannot check it for the messages that come from dependencies,
+     *    which may use the `validation` library as well.
+     * 2) The yielded condition checks use an improved version of the `instanceof` that both tests
      *    the parameter and assigns it to a variable of the proper type. This eliminates the need
-     *    of an additional cast to the tested type. This feature requires Java 14 and more.
+     *    of an additional cast to the tested type. This feature is supported from Java 14.
      *
      * @param message An instance of a Protobuf message to validate.
      * @param isAny Must return `true` if the provided [message] is [com.google.protobuf.Any].
      *  In this case, the method will firstly do the unpacking.
      */
+    @Suppress("MaxLineLength") // For better readability of the rendered conditions.
     private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
         val isValidatable =
             if (isAny)
@@ -139,7 +154,8 @@ internal class ValidateFieldGenerator(
             """
             if ($isValidatable) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                validatable.validate(fieldPath)
+                var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                validatable.validate(fieldPath, typeName)
                     .map($ValidationErrorClass::getConstraintViolationList)
                     .ifPresent($violations::addAll);
             }

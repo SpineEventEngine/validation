@@ -26,6 +26,7 @@
 
 package io.spine.test.options
 
+import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
@@ -69,9 +70,10 @@ internal class ExternalConstraintITest {
         error.shouldBePresent()
 
         val violations = error.get().constraintViolationList
-
         violations.size shouldBe 1
-        violations[0].fieldPath.fieldNameList[0] shouldBe "first_line"
+
+        val fieldPath = violations[0].fieldPath
+        fieldPath.fieldNameList shouldContainInOrder listOf("shipping_address", "first_line")
     }
 
     @Test

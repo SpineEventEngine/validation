@@ -108,7 +108,8 @@ internal class ValidationCodeInjector {
      */
     object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parent")
+        val parentPath = ReadVar<FieldPath>("parentFieldPath")
+        val parentName = ReadVar<FieldPath>("parentTypeName")
     }
 
     /**
@@ -138,8 +139,9 @@ private fun MessagePsiClass.declareNoParentValidateMethod() {
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParent = ${FieldPathClass.getDefaultInstance()};
-            return validate(noParent);
+            var noParentFieldPath = ${FieldPathClass.getDefaultInstance()};
+            var noParentTypeName = "";
+            return validate(noParentFieldPath, noParentTypeName);
         }
         """.trimIndent(), this)
     psiMethod.annotate(Override::class.java)
@@ -163,7 +165,7 @@ private fun MessagePsiClass.declareNoParentValidateMethod() {
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
+        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parentFieldPath, String parentTypeName) {
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this

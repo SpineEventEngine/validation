@@ -67,6 +67,7 @@ import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.templateString
 import java.util.regex.Matcher
@@ -88,7 +89,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private val field = view.subject
     private val fieldType = field.type
     private val fieldAccess = message.field(field)
-    private val declaringType = field.declaringType
+    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
     private val camelFieldName = field.name.camelCase
     private val pattern = compilePattern()
 
@@ -124,7 +125,8 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
             var fieldPath = ${parentPath.resolve(field.name)};
-            var violation = ${violation(ReadVar("fieldPath"), fieldValue)};
+            var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+            var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
             $violations.add(violation);
         }
         """.trimIndent()
@@ -140,7 +142,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     ) = CodeBlock(
         """
         if (!$fieldValues.isEmpty()) {
-            var fieldViolations = $validateRepeated($parentPath);
+            var fieldViolations = $validateRepeated($parentPath, $parentName);
             $violations.addAll(fieldViolations);
         }
         """.trimIndent()
@@ -158,12 +160,13 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         methodName: String
     ) = MethodDeclaration(
         """
-        private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass parent) {
+        private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass $parentPath, String $parentName) {
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
                     var fieldPath = ${parentPath.resolve(field.name)};
-                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("element"))};
+                    var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
                     violations.add(violation);
                 }
             }
@@ -212,22 +215,24 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, fieldValue)
+        val placeholders = supportedPlaceholders(fieldPath, typeName, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
+        return constraintViolation(errorMessage, typeName, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
         fieldValue: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_VALUE to fieldValue,
         FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        PARENT_TYPE to typeName,
         REGEX_PATTERN to StringLiteral(restoreProtobufEscapes(view.pattern)),
         REGEX_MODIFIERS to StringLiteral(restoreProtobufEscapes("${view.modifier}")),
     )
