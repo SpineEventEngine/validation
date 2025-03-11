@@ -118,8 +118,10 @@ internal class ValidateFieldGenerator(
      * The default instances of [com.google.protobuf.Message] are considered valid
      * for singular fields even if the checked message has one or more required fields.
      * In this case, it is impossible to determine whether the field itself is set
-     * with an invalid message instance or empty. This rule doesn't apply to repeated and
-     * map fields. Within collections, default instances are considered invalid.
+     * with an invalid message instance or just empty.
+     *
+     * The above statement doesn't apply to repeated and map fields. Within collections,
+     * default instances are considered invalid.
      *
      * Details regarding the generated code:
      *
@@ -128,17 +130,17 @@ internal class ValidateFieldGenerator(
      *    invocation is known at the compile time. For example, if the field type is proto's
      *    `Timestamp`, it makes no sense to render `getTimestamp() instanceof ValidatableMessage`.
      *    The compilation will fail because this expression is always `false`. Unfortunately,
-     *    we cannot check whether a message type is validatable during the codegen.
-     *    During the codegen, we know that all messages within the compilation process will have
-     *    this interface. But we cannot check it for the messages that come from dependencies,
-     *    which may use the `validation` library as well.
-     * 2) The yielded condition checks use an improved version of the `instanceof` that both tests
-     *    the parameter and assigns it to a variable of the proper type. This eliminates the need
-     *    of an additional cast to the tested type. This feature is supported from Java 14.
+     *    we cannot check whether a message type is validatable during the code generation.
+     *    We know that all messages within the compilation process have this interface.
+     *    But we cannot say this about the messages that come from dependencies. They may
+     *    or may not use the `validation` library.
+     * 2) The `if` conditions use an improved version of the `instanceof` that both tests
+     *    the parameter and assigns it to a variable of the proper type. This eliminates
+     *    the need of an additional cast to the confirmed type. Available since Java 14.
      *
      * @param message An instance of a Protobuf message to validate.
-     * @param isAny Must return `true` if the provided [message] is [com.google.protobuf.Any].
-     *  In this case, the method will firstly do the unpacking.
+     * @param isAny Must be `true` if the provided [message] is [com.google.protobuf.Any].
+     *  In this case, the method will do the unpacking in the first place.
      */
     @Suppress("MaxLineLength") // For better readability of the rendered conditions.
     private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {

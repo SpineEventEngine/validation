@@ -129,18 +129,17 @@ private fun MessagePsiClass.implementValidatableMessage() {
 }
 
 /**
- * Declares the `validate(FieldPath)` method in this [MessagePsiClass],
- * which accepts the parent field path.
+ * Declares the `validate(parentPath, parentName)` method in this [MessagePsiClass].
  *
  * This method implements the logic for verifying that the message’s constraints are met.
- * It takes a [FieldPath] parameter that represents the path to the parent field, which triggered
- * the validation. This path is used when constructing constraint violation errors.
+ * It takes the parent path and name as arguments to preserve this information for cases
+ * when in-depth validation takes place. This data is used to construct constraint violations.
  *
  * In typical (top-level) validations, the [ValidatableMessage.validate] method is called,
- * which does not need a path. However, when validating a nested message (a message field
- * marked with `(validate) = true`), a non-empty field path should be provided. In that case,
- * any constraint violations reported by this method will include the parent field,
- * which triggered validation.
+ * which does not need the parent info. However, when validating a nested message (a message field
+ * marked with `(validate) = true`), a non-empty field path and parent name should be provided.
+ * In that case, any constraint violations reported by this method will include the parent field
+ * and name.
  */
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
