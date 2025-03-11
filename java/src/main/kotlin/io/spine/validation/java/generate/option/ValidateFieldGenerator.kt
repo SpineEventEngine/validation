@@ -33,20 +33,24 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
 import io.spine.validation.java.expression.AnyClass
 import io.spine.validation.java.expression.AnyPackerClass
+import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.KnownTypesClass
 import io.spine.validation.java.expression.MessageClass
 import io.spine.validation.java.expression.TypeUrlClass
 import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 
 /**
@@ -54,7 +58,10 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.vi
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOptionGenerator {
+internal class ValidateFieldGenerator(
+    private val view: ValidateField,
+    override val converter: JavaValueConverter
+) : FieldOptionGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -100,8 +107,8 @@ internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOp
      * Implementation notes are the following:
      *
      * 1) Unpacking of the default instance of [com.google.protobuf.Any] and instances with unknown
-     *    type URLs is impossible. Such instances should always be considered valid.
-     * 2) The default instances of [com.google.protobuf.Message] are not considered valid.
+     *    type URLs is impossible. Such instances are always considered valid.
+     * 2) The default instance of [com.google.protobuf.Message] are also considered valid.
      *    They may have required fields.
      * 3) Cast of the [message] to the parental [com.google.protobuf.Message] interface is required
      *    because the Java compiler will fail the compilation if the result of `instanceof`
@@ -123,21 +130,19 @@ internal class ValidateFieldGenerator(private val view: ValidateField) : FieldOp
         val isValidatable =
             if (isAny)
                 "$message != ${AnyClass.getDefaultInstance()} &&" +
-                        "$KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
-                        "$AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
+                        " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
+                        " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
             else
                 "(($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
         return CodeBlock(
             """
             if ($isValidatable) {
-                validatable.validate()
+                var fieldPath = ${parentPath.resolve(field.name)};
+                validatable.validate(fieldPath)
                     .map($ValidationErrorClass::getConstraintViolationList)
                     .ifPresent($violations::addAll);
             }
             """.trimIndent()
         )
     }
-
-    // TODO:2025-03-10:yevhenii.nadtochii: Bypass `parent` path.
-    // TODO:2025-03-10:yevhenii.nadtochii: Should we really consider default instances as valid?
 }
