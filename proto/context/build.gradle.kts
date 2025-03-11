@@ -24,8 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.ProtoData
-import io.spine.dependency.local.Spine
 
 plugins {
     `build-proto-model`
@@ -33,8 +33,7 @@ plugins {
 
 dependencies {
     api(ProtoData.backend)
-    implementation(Spine.base)
-    implementation(project(":java-runtime"))
+    implementation(Base.lib)
 }
 
 protoDataRemoteDebug(enabled = false)

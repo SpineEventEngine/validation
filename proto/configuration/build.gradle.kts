@@ -32,5 +32,4 @@ plugins {
 
 dependencies {
     api(ProtoData.api)
-    implementation(project(":java-runtime"))
 }
