@@ -62,6 +62,28 @@ message ConstraintViolation {
     spine.validate.TemplateString message = 8;
 
     // The name of the validated message type.
+    //
+    // If the `(validate)` option is applied and a nested field contains an invalid value,
+    // this property holds the name of the root message, which triggered the validation.
+    //
+    // Example:
+    //
+    // ```
+    // message Student {
+    //     Contacts contacts = 1 [(validate) = true];
+    // }
+    // message Contacts {
+    //     Email email = 1 [(validate) = true];
+    // }
+    // message Email {
+    //     string value = 1 [(pattern).regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"];
+    // }
+    // ```
+    //
+    // When the `Student` message is validated and the `value` field in the nested `Email`
+    // message is invalid, this property will contain the `Student` type name, not `Email`.
+    // This is so because this type is an entry point to the nested validation.
+    //
     string type_name = 7;
 
     // A path to the field containing an invalid value.

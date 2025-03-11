@@ -52,12 +52,14 @@ public interface ValidatableMessage extends Message {
      *
      * <p>Use this overload when validating a message as part of another message's validation.
      * In this case, any constraint violations reported by this method will include the path
-     * to the original field that triggered in-depth validation.
+     * to the original field that initiated in-depth validation.
      *
-     * @param parent
-     *         the path to the parent field that triggered in-depth validation
+     * @param parentFieldPath
+     *         the path to the parent field that initiated in-depth validation
+     * @param parentTypeName
+     *         the name of the parent type that initiated in-depth validation
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
-    Optional<ValidationError> validate(FieldPath parent);
+    Optional<ValidationError> validate(FieldPath parentFieldPath, String parentTypeName);
 }
