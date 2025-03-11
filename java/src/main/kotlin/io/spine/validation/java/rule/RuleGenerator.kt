@@ -49,8 +49,9 @@ import com.squareup.javapoet.MethodSpec as PoetMethod
  *
  * Despite implementing [OptionGenerator], this generator is not responsible
  * for a specific option. It generates code for constraints represented by `Rule`.
- * Having rule generation as [OptionGenerator] allows the renderer treat all generators
- * in a unified manner, significantly simplifying the class implementation.
+ * Having rule generation as [OptionGenerator] allows
+ * [JavaValidationRenderer][io.spine.validation.java.JavaValidationRenderer] to treat
+ * all generators in a unified manner, significantly simplifying the class implementation.
  */
 @Deprecated("Will be removed as we complete our migration to standalone generators.")
 internal class RuleGenerator(
