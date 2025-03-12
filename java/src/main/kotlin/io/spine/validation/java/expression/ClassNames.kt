@@ -38,6 +38,7 @@ import io.spine.base.FieldPath
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
 import io.spine.type.KnownTypes
+import io.spine.type.TypeName
 import io.spine.type.TypeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
@@ -139,3 +140,8 @@ internal val KnownTypesClass = ClassName(KnownTypes::class)
  * The [ClassName] of [TypeUrl].
  */
 internal val TypeUrlClass = ClassName(TypeUrl::class)
+
+/**
+ * The [ClassName] of [TypeName] from `java-base`.
+ */
+internal val TypeNameClass = ClassName(TypeName::class)

@@ -42,6 +42,7 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
@@ -60,6 +61,7 @@ import io.spine.validation.java.expression.FieldPathClass
 import io.spine.validation.java.expression.ImmutableListClass
 import io.spine.validation.java.expression.PatternClass
 import io.spine.validation.java.expression.StringClass
+import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
@@ -89,7 +91,6 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private val field = view.subject
     private val fieldType = field.type
     private val fieldAccess = message.field(field)
-    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
     private val camelFieldName = field.name.camelCase
     private val pattern = compilePattern()
 
@@ -125,7 +126,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
             var fieldPath = ${parentPath.resolve(field.name)};
-            var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+            var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
             var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
             $violations.add(violation);
         }
@@ -160,12 +161,12 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         methodName: String
     ) = MethodDeclaration(
         """
-        private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass $parentPath, String $parentName) {
+        private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass $parentPath, $TypeNameClass $parentName) {
             var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
                     var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                    var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
                     violations.add(violation);
                 }
@@ -215,13 +216,14 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
-        typeName: Expression<String>,
+        typeName: Expression<TypeName>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, typeName, fieldValue)
+        val typeNameStr = typeName.call<String>("toString")
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
-        return constraintViolation(errorMessage, typeName, fieldPath, fieldValue)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(

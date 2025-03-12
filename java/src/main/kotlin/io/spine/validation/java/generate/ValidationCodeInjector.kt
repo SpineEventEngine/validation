@@ -53,6 +53,7 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.expression.FieldPathClass
+import io.spine.validation.java.expression.TypeNameClass
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -107,8 +108,8 @@ internal class ValidationCodeInjector {
      */
     object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parentFieldPath")
-        val parentName = ReadVar<FieldPath>("parentTypeName")
+        val parentPath = ReadVar<FieldPath>("parentPath")
+        val parentName = ReadVar<FieldPath>("parentName")
     }
 
     /**
@@ -142,9 +143,8 @@ private fun MessagePsiClass.declareDefaultValidateMethod() {
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParentFieldPath = $FieldPathClass.getDefaultInstance();
-            var noParentTypeName = "";
-            return validate(noParentFieldPath, noParentTypeName);
+            var noParentPath = $FieldPathClass.getDefaultInstance();
+            return validate(noParentPath, null);
         }
         """.trimIndent(), this)
     psiMethod.annotate(Override::class.java)
@@ -167,7 +167,7 @@ private fun MessagePsiClass.declareDefaultValidateMethod() {
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parentFieldPath, String parentTypeName) {
+        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parentPath, $TypeNameClass parentName) {
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this

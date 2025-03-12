@@ -37,6 +37,7 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.PATTERN
@@ -51,6 +52,7 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
+import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.violation.constraintViolation
@@ -71,7 +73,6 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     private val field = view.subject
     private val fieldType = field.type
     private val getter = message.field(field).getter<List<*>>()
-    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     /**
      * Generates code for a field represented by the [view].
@@ -84,7 +85,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
             if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("duplicates"))};
                 violations.add(violation);
             }
@@ -132,13 +133,14 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
-        typeName: Expression<String>,
+        typeName: Expression<TypeName>,
         duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, typeName, duplicates)
+        val typeNameStr = typeName.call<String>("toString")
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, duplicates)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
-        return constraintViolation(errorMessage, typeName, fieldPath, getter)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, getter)
     }
 
     private fun supportedPlaceholders(

@@ -29,6 +29,8 @@ package io.spine.validate;
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Message;
 import io.spine.base.FieldPath;
+import io.spine.type.TypeName;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Optional;
 
@@ -46,9 +48,8 @@ public interface ValidatableMessage extends Message {
      * @return an error or {@link Optional#empty()} if no violations found
      */
     default Optional<ValidationError> validate() {
-        var noParentFieldPath = FieldPath.getDefaultInstance();
-        var noParentTypeName = "";
-        return validate(noParentFieldPath, noParentTypeName);
+        var noParentPath = FieldPath.getDefaultInstance();
+        return validate(noParentPath, null);
     }
 
     /**
@@ -58,12 +59,12 @@ public interface ValidatableMessage extends Message {
      * In this case, any constraint violations reported by this method will include the path
      * to the original field that initiated in-depth validation.
      *
-     * @param parentFieldPath
+     * @param parentPath
      *         the path to the parent field that initiated in-depth validation
-     * @param parentTypeName
+     * @param parentName
      *         the name of the parent type that initiated in-depth validation
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
-    Optional<ValidationError> validate(FieldPath parentFieldPath, String parentTypeName);
+    Optional<ValidationError> validate(FieldPath parentPath, @Nullable TypeName parentName);
 }

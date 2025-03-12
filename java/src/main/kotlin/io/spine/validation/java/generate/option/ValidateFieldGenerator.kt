@@ -31,12 +31,10 @@ import io.spine.protodata.ast.isAny
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.validation.ValidateField
@@ -45,6 +43,7 @@ import io.spine.validation.java.expression.AnyPackerClass
 import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.KnownTypesClass
 import io.spine.validation.java.expression.MessageClass
+import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.expression.TypeUrlClass
 import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
@@ -69,7 +68,6 @@ internal class ValidateFieldGenerator(
     private val field = view.subject
     private val fieldType = field.type
     private val getter = message.field(field).getter<Message>()
-    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     override fun generate(): FieldOptionCode = when {
         fieldType.isMessage -> validate(getter, fieldType.message.isAny)
@@ -141,7 +139,7 @@ internal class ValidateFieldGenerator(
             """
             if ($isValidatable) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  $parentName.isEmpty() ? $declaringType : $parentName;
+                var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
                 validatable.validate(fieldPath, typeName)
                     .map($ValidationErrorClass::getConstraintViolationList)
                     .ifPresent($violations::addAll);
