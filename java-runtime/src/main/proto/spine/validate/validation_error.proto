@@ -72,9 +72,11 @@ message ConstraintViolation {
     // message Student {
     //     Contacts contacts = 1 [(validate) = true];
     // }
+    //
     // message Contacts {
     //     Email email = 1 [(validate) = true];
     // }
+    //
     // message Email {
     //     string value = 1 [(pattern).regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"];
     // }
@@ -98,9 +100,11 @@ message ConstraintViolation {
     // message Student {
     //     Contacts contacts = 1 [(validate) = true];
     // }
+    //
     // message Contacts {
     //     Email email = 1 [(validate) = true];
     // }
+    //
     // message Email {
     //     string value = 1 [(pattern).regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"];
     // }
