@@ -158,10 +158,10 @@ private fun MessagePsiClass.declareDefaultValidateMethod() {
  * It takes the parent path and name as arguments to preserve this information for cases
  * when in-depth validation takes place. This data is used to construct constraint violations.
  *
- * In typical (top-level) validations, the [ValidatableMessage.validate] method is called,
- * which does not need the parent info. However, when validating a nested message (a message field
- * marked with `(validate) = true`), a non-empty field path and parent name should be provided.
- * In that case, any constraint violations reported by this method will include the parent field
+ * In typical use cases of validating the top-level messages, the [ValidatableMessage.validate]
+ * method is called, which does not need the parent info. However, when validating a nested message
+ * (a message field marked with `(validate) = true`), a non-empty field path and parent name should
+ * be provided. In that case, the reported constraint violations will include the parent field
  * and name.
  */
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
