@@ -41,6 +41,8 @@ import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.mes
  * with [UnsetValue] utility, and then converts it to a Java expression
  * using [JavaValueConverter].
  */
+// TODO:2025-03-12:yevhenii.nadtochii: This trait can go without `JavaValueConverter`.
+//  See issue: https://github.com/SpineEventEngine/validation/issues/199
 internal interface EmptyFieldCheck {
 
     /**
