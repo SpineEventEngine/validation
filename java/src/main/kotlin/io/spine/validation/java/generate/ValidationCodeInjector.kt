@@ -142,7 +142,7 @@ private fun MessagePsiClass.declareDefaultValidateMethod() {
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParentFieldPath = FieldPath.getDefaultInstance();
+            var noParentFieldPath = $FieldPathClass.getDefaultInstance();
             var noParentTypeName = "";
             return validate(noParentFieldPath, noParentTypeName);
         }
