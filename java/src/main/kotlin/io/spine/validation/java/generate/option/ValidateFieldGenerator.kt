@@ -123,21 +123,6 @@ internal class ValidateFieldGenerator(
      * The above statement doesn't apply to repeated and map fields. Within collections,
      * default instances are considered invalid.
      *
-     * Details regarding the generated code:
-     *
-     * 1) Cast of the [message] to the parental [com.google.protobuf.Message] interface is required
-     *    because the Java compiler will fail the compilation if the result of `instanceof`
-     *    invocation is known at the compile time. For example, if the field type is proto's
-     *    `Timestamp`, it makes no sense to render `getTimestamp() instanceof ValidatableMessage`.
-     *    The compilation will fail because this expression is always `false`. Unfortunately,
-     *    we cannot check whether a message type is validatable during the code generation.
-     *    We know that all messages within the compilation process have this interface.
-     *    But we cannot say this about the messages that come from dependencies. They may
-     *    or may not use the `validation` library.
-     * 2) The `if` conditions use an improved version of the `instanceof` that both tests
-     *    the parameter and assigns it to a variable of the proper type. This eliminates
-     *    the need of an additional cast to the confirmed type. Available since Java 14.
-     *
      * @param message An instance of a Protobuf message to validate.
      * @param isAny Must be `true` if the provided [message] is [com.google.protobuf.Any].
      *  In this case, the method will do the unpacking in the first place.
