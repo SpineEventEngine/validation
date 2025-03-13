@@ -39,6 +39,7 @@ option (every_is).java_type = "io.spine.validation.event.RuleAdded";
 
 import "spine/validation/field_views.proto";
 import "spine/protodata/ast.proto";
+import "spine/validation/range.proto";
 import "spine/validation/rule.proto";
 
 // The event emitted whenever a simple validation rule is attached to a message type.
@@ -134,4 +135,23 @@ message ValidateFieldDiscovered {
 
     // The field in which the option was discovered.
     protodata.Field subject = 2;
+}
+
+// The event emitted whenever a field with `(range)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message RangeFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // A minimum value that a numeric field can have.
+    spine.validation.MinValue min_value = 4;
+
+    // A maximum value that a numeric field can have.
+    spine.validation.MaxValue max_value = 5;
 }
