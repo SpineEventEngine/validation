@@ -71,11 +71,11 @@ message RequiredFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
-    // The error message template.
-    string error_message = 2;
-
     // The field in which the option was discovered.
-    protodata.Field subject = 3;
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
 }
 
 // The event emitted whenever a field with `(pattern)` option is discovered
@@ -84,17 +84,17 @@ message PatternFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
 
     // The regular expression to match.
-    string pattern = 3;
+    string pattern = 4;
 
     // Regular expression modifiers.
-    PatternOption.Modifier modifier = 4;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 5;
+    PatternOption.Modifier modifier = 5;
 }
 
 // The event emitted whenever a field with `(goes)` option is discovered
@@ -103,14 +103,14 @@ message GoesFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
 
     // The required companion field.
-    protodata.Field companion = 3;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 4;
+    protodata.Field companion = 4;
 }
 
 // The event emitted whenever a field with `(distinct) = true` option is discovered
@@ -119,11 +119,11 @@ message DistinctFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
-    // The error message template.
-    string error_message = 2;
-
     // The field in which the option was discovered.
-    protodata.Field subject = 3;
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
 }
 
 // The event emitted whenever a field with `(validate) = true` option is discovered
