@@ -56,13 +56,18 @@ public interface ValidatableMessage extends Message {
      * Validates this message according to the rules in the Protobuf definition.
      *
      * <p>Use this overload when validating a message as part of another message's validation.
-     * In this case, any constraint violations reported by this method will include the path
-     * to the original field that initiated in-depth validation.
+     * Any constraint violations reported by this method will include the path to the original
+     * field and the name of the message that initiated in-depth validation.
+     *
+     * <p>Note: passing {@code parentPath} without {@code parentName}, or vice versa,
+     * does not make sense. Both must either be provided or omitted together.
      *
      * @param parentPath
-     *         the path to the parent field that initiated in-depth validation
+     *         the path to the parent field that initiated in-depth validation.
+     *         Can be the default instance, which means no parent path.
      * @param parentName
      *         the name of the parent type that initiated in-depth validation
+     *         Can be {@code null}, which means no parent name.
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
