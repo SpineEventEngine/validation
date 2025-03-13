@@ -46,6 +46,7 @@ import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
 import io.spine.tools.psi.java.nested
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
@@ -109,7 +110,7 @@ internal class ValidationCodeInjector {
     object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
         val parentPath = ReadVar<FieldPath>("parentPath")
-        val parentName = ReadVar<FieldPath>("parentName")
+        val parentName = ReadVar<TypeName?>("parentName")
     }
 
     /**

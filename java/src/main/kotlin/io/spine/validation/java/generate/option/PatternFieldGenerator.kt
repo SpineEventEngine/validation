@@ -68,7 +68,9 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.vi
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.templateString
@@ -91,6 +93,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     private val field = view.subject
     private val fieldType = field.type
     private val fieldAccess = message.field(field)
+    private val declaringType = field.declaringType
     private val camelFieldName = field.name.camelCase
     private val pattern = compilePattern()
 
@@ -126,7 +129,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         """
         if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
             var fieldPath = ${parentPath.resolve(field.name)};
-            var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
+            var typeName =  ${parentName.orElse(declaringType)};
             var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
             $violations.add(violation);
         }
@@ -166,7 +169,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
             for ($StringClass element : $fieldValues) {
                 if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
                     var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
+                    var typeName =  ${parentName.orElse(declaringType)};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
                     violations.add(violation);
                 }
@@ -220,7 +223,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val typeNameStr = typeName.call<String>("toString")
+        val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)

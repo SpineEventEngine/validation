@@ -84,5 +84,3 @@ private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
         TYPE_BYTES -> stringify()
         else -> StringClass.call("valueOf", this)
     }
-
-private fun Expression<*>.stringify(): Expression<String> = call("toString")

@@ -52,13 +52,14 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
-import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.violation.templateString
@@ -73,6 +74,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     private val field = view.subject
     private val fieldType = field.type
     private val getter = message.field(field).getter<List<*>>()
+    private val declaringType = field.declaringType
 
     /**
      * Generates code for a field represented by the [view].
@@ -85,7 +87,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
             if (!$collection.isEmpty() && $collection.size() != $set.size()) {
                 var duplicates = ${extractDuplicates(collection)};
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
+                var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("duplicates"))};
                 violations.add(violation);
             }
@@ -137,7 +139,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
         duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val typeNameStr = typeName.call<String>("toString")
+        val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, duplicates)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, getter)

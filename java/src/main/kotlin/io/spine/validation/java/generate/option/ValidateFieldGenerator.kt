@@ -43,10 +43,10 @@ import io.spine.validation.java.expression.AnyPackerClass
 import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.KnownTypesClass
 import io.spine.validation.java.expression.MessageClass
-import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.expression.TypeUrlClass
 import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
+import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
@@ -67,6 +67,7 @@ internal class ValidateFieldGenerator(
 
     private val field = view.subject
     private val fieldType = field.type
+    private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Message>()
 
     override fun generate(): FieldOptionCode = when {
@@ -139,7 +140,7 @@ internal class ValidateFieldGenerator(
             """
             if ($isValidatable) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
+                var typeName =  ${parentName.orElse(declaringType)};
                 validatable.validate(fieldPath, typeName)
                     .map($ValidationErrorClass::getConstraintViolationList)
                     .ifPresent($violations::addAll);

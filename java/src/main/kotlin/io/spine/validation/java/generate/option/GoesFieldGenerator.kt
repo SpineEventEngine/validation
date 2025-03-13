@@ -36,30 +36,29 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
-import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
 import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.TypeNameClass
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.generate.FieldOptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -74,6 +73,7 @@ internal class GoesFieldGenerator(
 
     private val field = view.subject
     private val fieldType = field.type
+    private val declaringType = field.declaringType
 
     /**
      * Generates code for a field represented by the [view].
@@ -88,7 +88,7 @@ internal class GoesFieldGenerator(
             """
             if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  $parentName != null ? $parentName : $TypeNameClass.of(this);
+                var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldGetter)};
                 $violations.add(violation);
             }
@@ -103,7 +103,7 @@ internal class GoesFieldGenerator(
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val typeNameStr = typeName.call<String>("toString")
+        val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
