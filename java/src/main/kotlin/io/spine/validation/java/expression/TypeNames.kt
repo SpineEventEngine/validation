@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.java.expression
+
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+import io.spine.type.TypeName
+import io.spine.protodata.ast.TypeName as AstTypeName
 
 /**
- * A repository for the [ValidatedFieldView]s.
+ * Returns an expression that ensures a non-`null` [TypeName] value.
+ *
+ * If this [Expression] is non-`null`, it remains unchanged.
+ * Otherwise, it is replaced with the specified [typeName].
  */
-internal class ValidatedFieldRepository : BoolFieldOptionRepo<ValidatedFieldView, ValidatedField>()
+internal fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
+    val nameLiteral = StringLiteral(typeName.qualifiedName)
+    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
+}

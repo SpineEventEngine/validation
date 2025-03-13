@@ -32,10 +32,18 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.LinkedHashMultiset
 import com.google.common.collect.Multiset
+import com.google.protobuf.Any
+import com.google.protobuf.Message
 import io.spine.base.FieldPath
+import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
+import io.spine.type.KnownTypes
+import io.spine.type.TypeName
+import io.spine.type.TypeUrl
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
+import io.spine.validate.ValidatableMessage
+import io.spine.validate.ValidationError
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
@@ -97,3 +105,43 @@ internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
  * So, we specify it as a string literal here.
  */
 internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")
+
+/**
+ * The [ClassName] of [ValidationError].
+ */
+internal val ValidationErrorClass = ClassName(ValidationError::class)
+
+/**
+ * The [ClassName] of [ValidatableMessage].
+ */
+internal val ValidatableMessageClass = ClassName(ValidatableMessage::class)
+
+/**
+ * The [ClassName] of [AnyPacker].
+ */
+internal val AnyPackerClass = ClassName(AnyPacker::class)
+
+/**
+ * The [ClassName] of [Message].
+ */
+internal val MessageClass = ClassName(Message::class)
+
+/**
+ * The [ClassName] of Protobuf [Any].
+ */
+internal val AnyClass = ClassName(Any::class)
+
+/**
+ * The [ClassName] of [KnownTypes].
+ */
+internal val KnownTypesClass = ClassName(KnownTypes::class)
+
+/**
+ * The [ClassName] of [TypeUrl].
+ */
+internal val TypeUrlClass = ClassName(TypeUrl::class)
+
+/**
+ * The [ClassName] of [TypeName] from `java-base`.
+ */
+internal val TypeNameClass = ClassName(TypeName::class)

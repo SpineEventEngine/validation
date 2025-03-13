@@ -1,5 +1,5 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,35 +23,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 syntax = "proto3";
 
-package spine.validation;
+package spine.test.protobuf;
 
 import "spine/options.proto";
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "StandardFeaturesProto";
+option (type_url_prefix) = "type.spine.op";
+option java_package = "io.spine.test.protobuf";
+option java_outer_classname = "SmokeTestProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
-import "spine/time_options.proto";
+message CardNumber {
 
-// The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
-//
-// Generated code must check the `oneof` case in order to avoid comparisons to default values for
-// types which do not support the `required` constraint, such as numerical types.
-//
-message RequiredOneof {
-
-    protodata.OneofName name = 1;
-}
-
-// The associated temporal message must be either in the past or in the future from
-// the current time.
-//
-message InTime {
-
-    Time time = 1;
+    string digits = 1 [(pattern).regex = "\\d{4}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4}"];
 }

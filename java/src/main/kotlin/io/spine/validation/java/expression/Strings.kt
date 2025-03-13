@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,18 +23,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.protobuf;
+package io.spine.validation.java.expression
 
-import "spine/options.proto";
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
 
-option (type_url_prefix) = "type.spine.op";
-option java_package = "io.spine.test.protobuf";
-option java_outer_classname = "ValidatingBuilderTestProto";
-option java_multiple_files = true;
-
-message CardNumber {
-
-    string digits = 1 [(pattern).regex = "\\d{4}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4}"];
-}
+/**
+ * Converts this [Expression] to its string representation by invoking `toString()`.
+ */
+internal fun Expression<*>.stringify(): Expression<String> = call("toString")

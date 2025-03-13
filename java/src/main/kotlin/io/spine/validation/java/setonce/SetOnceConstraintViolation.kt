@@ -58,7 +58,7 @@ internal class SetOnceConstraintViolation(
     private val fieldName = field.name.value
     private val fieldType = field.type.name
     private val qualifiedName = field.qualifiedName
-    private val declaringType = field.declaringType
+    private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     /**
      * Builds an expression that returns a new instance of [ConstraintViolation]
@@ -94,6 +94,6 @@ internal class SetOnceConstraintViolation(
         FIELD_TYPE to StringLiteral(fieldType),
         FIELD_VALUE to currentValue,
         FIELD_PROPOSED_VALUE to newValue,
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName)
+        PARENT_TYPE to declaringType
     )
 }

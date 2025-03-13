@@ -34,21 +34,25 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
 import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -72,7 +76,8 @@ internal class RequiredFieldGenerator(
             """
             if (${field.hasDefaultValue()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var violation = ${violation(ReadVar("fieldPath"))};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -80,18 +85,23 @@ internal class RequiredFieldGenerator(
         return FieldOptionCode(constraint)
     }
 
-    private fun violation(fieldPath: Expression<FieldPath>): Expression<ConstraintViolation> {
-        val placeholders = supportedPlaceholders(fieldPath)
+    private fun violation(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<TypeName>
+    ): Expression<ConstraintViolation> {
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
         val errorMessage =
             templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue = null)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
     }
 
     private fun supportedPlaceholders(
-        fieldPath: Expression<FieldPath>
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_TYPE to StringLiteral(field.type.name),
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName)
+        PARENT_TYPE to typeName
     )
 }

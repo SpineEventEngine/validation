@@ -24,7 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.TestLib
 
 protoData {
     plugins(
@@ -38,8 +39,8 @@ dependencies {
     protoData(project(":java"))
     implementation(project(":java-runtime"))
 
-    testImplementation(Spine.base)
-    testImplementation(Spine.testlib)
+    testImplementation(Base.lib)
+    testImplementation(TestLib.lib)
 }
 
 /*
@@ -51,7 +52,7 @@ dependencies {
 sourceSets {
     all {
         java.setSrcDirs(java.filter {
-            !it.absolutePath.startsWith("${buildDir.absolutePath}/generated")
+            !it.absolutePath.startsWith("${layout.buildDirectory}/generated")
         })
     }
 }

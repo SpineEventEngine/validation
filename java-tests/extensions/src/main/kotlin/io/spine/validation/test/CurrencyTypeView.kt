@@ -29,7 +29,7 @@ package io.spine.validation.test
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.protobuf.AnyPacker
+import io.spine.protobuf.unpack
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.FieldEntered
 import io.spine.protodata.ast.event.TypeExited
@@ -48,24 +48,30 @@ import io.spine.validation.test.money.CurrencyType
 public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
 
     @Subscribe
-    internal fun on(@External @Where(field = OPTION_NAME, equals = "currency")
-                    event: TypeOptionDiscovered) = alter {
-        val currency = AnyPacker.unpack(event.option.value, Currency::class.java)
-        this.currency = currency
-    }
-
-    @Subscribe
-    internal fun on(@External event: FieldEntered) = alter {
-        val field = event.field
-        if (field.orderOfDeclaration == 0) {
-            majorUnitField = field
-        } else if (field.orderOfDeclaration == 1) {
-            minorUnitField = field
+    internal fun on(
+        @External @Where(field = OPTION_NAME, equals = "currency")
+        event: TypeOptionDiscovered
+    ) {
+        val option = event.option.value.unpack<Currency>()
+        alter {
+            currency = option
         }
     }
 
     @Subscribe
-    internal fun on(@Suppress("UNUSED_PARAMETER") @External e: TypeExited) {
+    internal fun on(@External event: FieldEntered) {
+        val field = event.field
+        alter {
+            when (field.orderOfDeclaration) {
+                0 -> majorUnitField = field
+                1 -> minorUnitField = field
+            }
+        }
+    }
+
+    @Subscribe
+    @Suppress("UNUSED_PARAMETER")
+    internal fun on(@External event: TypeExited) {
         if (!builder().hasCurrency()) {
             deleted = true
         }

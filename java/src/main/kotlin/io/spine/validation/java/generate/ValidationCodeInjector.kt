@@ -34,7 +34,6 @@ import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.This
-import io.spine.protodata.java.getDefaultInstance
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore
@@ -47,6 +46,7 @@ import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
 import io.spine.tools.psi.java.nested
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
@@ -54,6 +54,7 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.expression.FieldPathClass
+import io.spine.validation.java.expression.TypeNameClass
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -89,8 +90,8 @@ internal class ValidationCodeInjector {
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declarePublicValidateMethod()
-                declarePrivateValidateMethod(code.constraints)
+                declareDefaultValidateMethod()
+                declareValidateMethod(code.constraints)
                 declareSupportingFields(code.fields)
                 declareSupportingMethods(code.methods)
             }
@@ -108,7 +109,8 @@ internal class ValidationCodeInjector {
      */
     object ValidateScope {
         val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parent")
+        val parentPath = ReadVar<FieldPath>("parentPath")
+        val parentName = ReadVar<TypeName?>("parentName")
     }
 
     /**
@@ -129,20 +131,21 @@ private fun MessagePsiClass.implementValidatableMessage() {
 }
 
 /**
- * Declares `validate()` method in this [MessagePsiClass].
+ * Declares the `validate()` method in this [MessagePsiClass].
  *
- * This is a `public` implementation of [ValidatableMessage.validate] with
- * [Override] annotation. The actual constraints are contained in its
- * private overloading, that accepts the field path.
- *
- *  @see declarePrivateValidateMethod
+ * This is an implementation of [ValidatableMessage.validate] that doesn't accept
+ * any parameters. The actual constraints are contained in its [overload][declareValidateMethod],
+ * to which this method delegates.
  */
-private fun MessagePsiClass.declarePublicValidateMethod() {
+// TODO:2025-03-12:yevhenii.nadtochii: Remove it in a favour of the default implementation
+//  provided in the `ValidatableMessage` interface.
+//  See issue: https://github.com/SpineEventEngine/validation/issues/198
+private fun MessagePsiClass.declareDefaultValidateMethod() {
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParent = ${FieldPathClass.getDefaultInstance()};
-            return validate(noParent);
+            var noParentPath = $FieldPathClass.getDefaultInstance();
+            return validate(noParentPath, null);
         }
         """.trimIndent(), this)
     psiMethod.annotate(Override::class.java)
@@ -150,28 +153,27 @@ private fun MessagePsiClass.declarePublicValidateMethod() {
 }
 
 /**
- * Declares a private `validate(FieldPath)` method that performs all constraint
- * checks for the message.
+ * Declares the `validate(parentPath, parentName)` method in this [MessagePsiClass].
  *
- * This method implements the actual logic for verifying that the message’s
- * constraints are met. It takes a [FieldPath] parameter that represents the path
- * to the parent field, which triggered the validation, if any. This path is used
- * when constructing constraint violation errors.
+ * This method implements the logic for verifying that the message’s constraints are met.
+ * It takes the parent path and name as arguments to preserve this information for cases
+ * when in-depth validation takes place. This data is used to construct constraint violations.
  *
- * In typical (top-level) validations, the public `validate()` method is called,
- * which passes an empty field path. However, when validating a nested message
- * (a message field marked with `(validate) = true`), a non-empty field path
- * should be provided. In that case, any constraint violations reported by this
- * method will include the parent field, which actually triggered validation.
+ * In typical use cases of validating the top-level messages, the [ValidatableMessage.validate]
+ * method is called, which does not need the parent info. However, when validating a nested message
+ * (a message field marked with `(validate) = true`), a non-empty field path and parent name should
+ * be provided. In that case, the reported constraint violations will include the parent field
+ * and name.
  */
-private fun MessagePsiClass.declarePrivateValidateMethod(constraints: List<CodeBlock>) {
+private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        private java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parent) {
+        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parentPath, $TypeNameClass parentName) {
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this
     )
+    psiMethod.annotate(Override::class.java)
     addLast(psiMethod)
 }
 

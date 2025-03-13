@@ -28,6 +28,9 @@ package io.spine.validate;
 
 import com.google.errorprone.annotations.Immutable;
 import com.google.protobuf.Message;
+import io.spine.base.FieldPath;
+import io.spine.type.TypeName;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Optional;
 
@@ -44,5 +47,29 @@ public interface ValidatableMessage extends Message {
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
-    Optional<ValidationError> validate();
+    default Optional<ValidationError> validate() {
+        var noParentPath = FieldPath.getDefaultInstance();
+        return validate(noParentPath, null);
+    }
+
+    /**
+     * Validates this message according to the rules in the Protobuf definition.
+     *
+     * <p>Use this overload when validating a message as part of another message's validation.
+     * Any constraint violations reported by this method will include the path to the original
+     * field and the name of the message that initiated in-depth validation.
+     *
+     * <p>Note: passing {@code parentPath} without {@code parentName}, or vice versa,
+     * does not make sense. Both must either be provided or omitted together.
+     *
+     * @param parentPath
+     *         the path to the parent field that initiated in-depth validation.
+     *         Can be the default instance, which means no parent path.
+     * @param parentName
+     *         the name of the parent type that initiated in-depth validation
+     *         Can be {@code null}, which means no parent name.
+     *
+     * @return an error or {@link Optional#empty()} if no violations found
+     */
+    Optional<ValidationError> validate(FieldPath parentPath, @Nullable TypeName parentName);
 }

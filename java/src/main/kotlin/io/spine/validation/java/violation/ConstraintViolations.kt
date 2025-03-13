@@ -29,8 +29,7 @@
 package io.spine.validation.java.violation
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.qualifiedName
+import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
@@ -48,7 +47,8 @@ import io.spine.validation.java.expression.TemplateStringClass
  * with the given parameters.
  *
  * @param errorMessage The error message template string.
- * @param declaringType The message type being validated.
+ * @param typeName The message type being validated. In the case of in-depth validation,
+ *  contains the root message name.
  * @param fieldPath The path to the field containing an invalid value.
  * @param fieldValue The field value that violated the constraint, if any.
  *   For example, the `(required)` option uses `null` for this parameter because
@@ -57,13 +57,13 @@ import io.spine.validation.java.expression.TemplateStringClass
  */
 internal fun constraintViolation(
     errorMessage: Expression<TemplateString>,
-    declaringType: TypeName,
+    typeName: Expression<String>,
     fieldPath: Expression<FieldPath>,
     fieldValue: Expression<*>?
 ): Expression<ConstraintViolation> {
     var builder = ClassName(ConstraintViolation::class).newBuilder()
         .chainSet("message", errorMessage)
-        .chainSet("type_name", StringLiteral(declaringType.qualifiedName))
+        .chainSet("type_name", typeName)
         .chainSet("field_path", fieldPath)
     fieldValue?.let {
         builder = builder.chainSet("field_value", fieldValue.packToAny())
@@ -95,8 +95,9 @@ internal fun templateString(
         StringClass, StringClass,
         placeholders.mapKeys { StringLiteral(it.key.toString()) }
     )
+    val escapedTemplate = restoreProtobufEscapes(template)
     return TemplateStringClass.newBuilder()
-        .chainSet("withPlaceholders", StringLiteral(template))
+        .chainSet("withPlaceholders", StringLiteral(escapedTemplate))
         .chainPutAll("placeholderValue", placeholderEntries)
         .chainBuild()
 }

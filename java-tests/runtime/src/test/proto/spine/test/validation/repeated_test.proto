@@ -42,16 +42,16 @@ message RepeatedNotRequired {
     repeated string unchecked = 1;
 }
 
-message RepeatedValidateRegex {
-    repeated string validated = 1 [(validate) = true, (pattern).regex = "\\w+"];
+message RepeatedRegex {
+    repeated string regex = 1 [(pattern).regex = "\\w+"];
 }
 
 message RepeatedRequired {
     repeated string required_field = 1 [(required) = true];
 }
 
-message RepeatedRequiredValidateRegex {
-    repeated string bound = 1 [(validate) = true, (required) = true, (pattern).regex = "\\w+"];
+message RepeatedRequiredRegex {
+    repeated string bound = 1 [(required) = true, (pattern).regex = "\\w+"];
 }
 
 message RepeatedNotRequiredInvalidItem {

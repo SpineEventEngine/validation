@@ -37,24 +37,28 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.This
 import io.spine.protodata.java.field
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
 import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.templateString
 
 /**
@@ -84,7 +88,8 @@ internal class GoesFieldGenerator(
             """
             if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
-                var violation = ${violation(ReadVar("fieldPath"), fieldGetter)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldGetter)};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -94,22 +99,25 @@ internal class GoesFieldGenerator(
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<TypeName>,
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
-        val placeholders = supportedPlaceholders(fieldPath, fieldValue)
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
-        return constraintViolation(errorMessage, declaringType, fieldPath, fieldValue)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to StringLiteral(declaringType.qualifiedName),
+        PARENT_TYPE to typeName,
         GOES_COMPANION to StringLiteral(view.companion.name.value)
     )
 }

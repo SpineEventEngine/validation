@@ -11,7 +11,7 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
-// A view on a field that is marked with `(required) = true`.
+// A view on a field that is marked with `(required) = true` option.
 message RequiredField {
     option (entity).kind = PROJECTION;
 
@@ -24,17 +24,14 @@ message RequiredField {
     protodata.Field subject = 3;
 }
 
-// A view on a field that is marked with `(validate)`.
-message ValidatedField {
+// A view on a field that is marked with `(validate) = true` option.
+message ValidateField {
     option (entity).kind = PROJECTION;
 
     protodata.FieldRef id = 1;
 
-    // Deprecated: this option does not have its own error message.
-    string error_message = 2 [deprecated = true];
-
-    // `true` if the field is marked with `(validate) = true`, `false` otherwise.
-    bool validate = 3;
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
 }
 
 // A view of a field that is marked with `(set_once)` option.

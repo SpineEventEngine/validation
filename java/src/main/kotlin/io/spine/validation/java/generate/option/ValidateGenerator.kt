@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,34 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation.java.generate.option
 
-package spine.validation;
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.ValidateField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
-import "spine/options.proto";
+/**
+ * The generator for `(validate)` option.
+ */
+internal class ValidateGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "StandardFeaturesProto";
-option java_multiple_files = true;
+    /**
+     * All `(validate)` fields in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
+        querying.select<ValidateField>()
+            .all()
+    }
 
-import "spine/protodata/ast.proto";
-import "spine/time_options.proto";
-
-// The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
-//
-// Generated code must check the `oneof` case in order to avoid comparisons to default values for
-// types which do not support the `required` constraint, such as numerical types.
-//
-message RequiredOneof {
-
-    protodata.OneofName name = 1;
-}
-
-// The associated temporal message must be either in the past or in the future from
-// the current time.
-//
-message InTime {
-
-    Time time = 1;
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { ValidateFieldGenerator(it, converter).generate() }
 }
