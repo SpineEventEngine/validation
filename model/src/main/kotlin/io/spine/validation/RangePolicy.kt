@@ -75,18 +75,19 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val numberType = checkFieldType(field, file)
 
         val option = event.option.unpack<RangeOption>()
-        val range = option.value
-        checkRangeSyntax(range, numberType, field, file)
+        val rangeValue = option.value
+        checkRangeSyntax(rangeValue, numberType, field, file)
 
-        val (left, right) = range.split(RANGE_DELIMITER)
+        val (left, right) = rangeValue.split(RANGE_DELIMITER)
         val (min, max) = numberType.toMinMax(left, right)
-        numberType.checkMinLessMax(min, max, range, field, file)
+        numberType.checkMinLessMax(min, max, rangeValue, field, file)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return rangeFieldDiscovered {
             id = field.ref
             subject = field
             errorMessage = message
+            range = rangeValue
             minValue = min
             maxValue = max
         }.just()

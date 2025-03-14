@@ -149,9 +149,12 @@ message RangeFieldDiscovered {
     // The error message template.
     string error_message = 3;
 
+    // The range value.
+    string range = 4;
+
     // A minimum value that a numeric field can have.
-    spine.validation.MinValue min_value = 4;
+    spine.validation.MinValue min_value = 5;
 
     // A maximum value that a numeric field can have.
-    spine.validation.MaxValue max_value = 5;
+    spine.validation.MaxValue max_value = 6;
 }

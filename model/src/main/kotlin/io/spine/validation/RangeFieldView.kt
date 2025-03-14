@@ -43,6 +43,7 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
     fun on(e: RangeFieldDiscovered) = alter {
         subject = e.subject
         errorMessage = e.errorMessage
+        range = e.range
         minValue = e.minValue
         maxValue = e.maxValue
     }
