@@ -92,21 +92,19 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         }.just()
     }
 
-    private fun NumberType.toMinMax(left: String, right: String): Pair<MinValue, MaxValue> {
-        return when (this) {
+    private fun NumberType.toMinMax(left: String, right: String): Pair<MinValue, MaxValue> =
+        when (this) {
             INTEGER -> {
-                val min = min(left.substring(1).toLong(), left.contains("("))
-                val max = max(right.dropLast(1).toLong(), right.contains(")"))
+                val min = min(left.trim().substring(1).toLong(), left.contains("("))
+                val max = max(right.trim().dropLast(1).toLong(), right.contains(")"))
                 min to max
             }
-
             FLOATING_POINT -> {
-                val min = min(left.substring(1).toDouble(), left.contains("("))
-                val max = max(right.dropLast(1).toDouble(), right.contains(")"))
+                val min = min(left.trim().substring(1).toDouble(), left.contains("("))
+                val max = max(right.trim().dropLast(1).toDouble(), right.contains(")"))
                 min to max
             }
         }
-    }
 }
 
 private fun checkFieldType(field: Field, file: File): NumberType =
@@ -157,8 +155,8 @@ private enum class NumberType {
 
 private object RangeSyntax {
 
-    private val IntegerRange = Regex("""[\[(][+-]?\d+\.\.[+-]?\d+[\])]""")
-    private val FloatingRange = Regex("""[\[(][+-]?\d+(\.\d+)?\.\.[+-]?\d+(\.\d+)?[\])]""")
+    private val IntegerRange = Regex("""[\[(][+-]?\d+\s?\.\.\s?[+-]?\d+[\])]""")
+    private val FloatingRange = Regex("""[\[(][+-]?\d+(\.\d+)?\s?\.\.\s?[+-]?\d+(\.\d+)?[\])]""")
 
     const val RANGE_DELIMITER = ".."
 
