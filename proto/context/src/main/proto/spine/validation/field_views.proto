@@ -9,6 +9,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "FieldViewsProto";
 option java_multiple_files = true;
 
+import "spine/validation/range.proto";
 import "spine/protodata/ast.proto";
 
 // A view on a field that is marked with `(required) = true` option.
@@ -17,11 +18,11 @@ message RequiredField {
 
     protodata.FieldRef id = 1;
 
-    // The error message template.
-    string error_message = 2;
-
     // The field in which the option was discovered.
-    protodata.Field subject = 3;
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
 }
 
 // A view on a field that is marked with `(validate) = true` option.
@@ -40,14 +41,14 @@ message SetOnceField {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
 
     // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
-    bool set_once = 3;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 4;
+    bool set_once = 4;
 }
 
 // A view of a field that is marked with `(pattern)` option.
@@ -56,17 +57,17 @@ message PatternField {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
 
     // The regular expression to match.
-    string pattern = 3;
+    string pattern = 4;
 
     // Regular expression modifiers.
-    PatternOption.Modifier modifier = 4;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 5;
+    PatternOption.Modifier modifier = 5;
 }
 
 // A view of a field that is marked with `(goes)` option.
@@ -75,14 +76,14 @@ message GoesField {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
 
     // The required companion field.
-    protodata.Field companion = 3;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 4;
+    protodata.Field companion = 4;
 }
 
 // A view of a field that is marked with `(distinct) = true` option.
@@ -91,9 +92,28 @@ message DistinctField {
 
     protodata.FieldRef id = 1;
 
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
     // The error message template.
-    string error_message = 2;
+    string error_message = 3;
+}
+
+// A view of a field that is marked with `(range)` option.
+message RangeField {
+    option (entity).kind = PROJECTION;
+
+    protodata.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 3;
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // A minimum value that a numeric field can have.
+    spine.validation.MinValue min_value = 4;
+
+    // A maximum value that a numeric field can have.
+    spine.validation.MaxValue max_value = 5;
 }
