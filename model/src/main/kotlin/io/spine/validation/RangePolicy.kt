@@ -33,6 +33,7 @@ import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
 import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
 import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
@@ -55,6 +56,9 @@ import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.NumberType.FLOATING_POINT
+import io.spine.validation.NumberType.INTEGER
+import io.spine.validation.RangeSyntax.RANGE_DELIMITER
 import io.spine.validation.event.RangeFieldDiscovered
 import io.spine.validation.event.rangeFieldDiscovered
 
@@ -62,51 +66,21 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = RANGE)
+        @External
+        @Where(field = OPTION_NAME, equals = RANGE)
         event: FieldOptionDiscovered
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
-        val fieldType = field.type
         val file = event.file
-        checkFieldType(fieldType, field, file)
+        val numberType = checkFieldType(field, file)
 
         val option = event.option.unpack<RangeOption>()
         val range = option.value
-        val bounds = range.split(RANGE_DELIMITER)
-        checkDelimiter(bounds, range, field, file)
+        checkRangeSyntax(range, numberType, field, file)
 
-        val numberType = if (fieldType.isList) fieldType.list.primitive else fieldType.primitive
-        val (left, right) = bounds
-        val (min, max) =
-            if (numberType in integerPrimitives) {
-                val min = minValue {
-                    bound = numericBound {
-                        int64Value = left.toLong()
-                    }
-                    exclusive = left.contains("(")
-                }
-                val max = maxValue {
-                    bound = numericBound {
-                        int64Value = right.toLong()
-                    }
-                    exclusive = right.contains(")")
-                }
-                min to max
-            } else {
-                val min = minValue {
-                    bound = numericBound {
-                        doubleValue = left.toDouble()
-                    }
-                    exclusive = left.contains("(")
-                }
-                val max = maxValue {
-                    bound = numericBound {
-                        doubleValue = right.toDouble()
-                    }
-                    exclusive = right.contains(")")
-                }
-                min to max
-            }
+        val (left, right) = range.split(RANGE_DELIMITER)
+        val (min, max) = numberType.toMinMax(left, right)
+        numberType.checkMinLessMax(min, max, range, field, file)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return rangeFieldDiscovered {
@@ -117,31 +91,75 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             maxValue = max
         }.just()
     }
+
+    private fun NumberType.toMinMax(left: String, right: String): Pair<MinValue, MaxValue> =
+        when (this) {
+            INTEGER -> {
+                val min = min(left.toLong(), left.contains("("))
+                val max = max(right.toLong(), right.contains(")"))
+                min to max
+            }
+            FLOATING_POINT -> {
+                val min = min(left.toDouble(), left.contains("("))
+                val max = max(right.toDouble(), right.contains(")"))
+                min to max
+            }
+        }
 }
 
-private fun checkFieldType(type: FieldType, field: Field, file: File) =
-    Compilation.check(type.isSupported(), file, field.span) {
-        "The field type `$field.type` of `${field.qualifiedName}` is not supported" +
-                " by the `($RANGE)` option. Supported field types: numbers and repeated" +
-                " of numbers."
+private fun checkFieldType(field: Field, file: File): NumberType =
+    when (val type = field.type.extractPrimitive()) {
+        in integerPrimitives -> INTEGER
+        in floatingPrimitives -> FLOATING_POINT
+        else -> Compilation.error(file, field.span) {
+            "The field type `$type` of `${field.qualifiedName}` is not supported by" +
+                    " the `($RANGE)` option. Supported field types: numbers and repeated" +
+                    " of numbers."
+        }
     }
 
-private fun checkDelimiter(bounds: List<String>, range: String, field: Field, file: File) =
-    Compilation.check(bounds.size == 2, file, field.span) {
-        "The passed range has an incorrect format: `$range`. The `($RANGE)` option requires" +
-                " `$RANGE_DELIMITER` to be used as a delimiter between left and right numeric bounds." +
-                " For example, `(0${RANGE_DELIMITER}10]`."
+private fun checkRangeSyntax(range: String, type: NumberType, field: Field, file: File) =
+    Compilation.check(RangeSyntax.check(range, type), file, field.span) {
+        "The passed range has an incorrect syntax: `$range`. Examples of the correct ranges:" +
+                " `(0..10)`, `[-10..+32)`, `[0.5..2.5]`. Please see docs to `($RANGE)` for" +
+                " the full syntax description."
     }
 
-private const val RANGE_DELIMITER = ".."
+private fun NumberType.checkMinLessMax(min: MinValue, max: MaxValue, range: String, field: Field, file: File)  {
+    val minLessMax = when (this) {
+        INTEGER -> min.bound.int64Value < max.bound.int64Value
+        FLOATING_POINT -> min.bound.doubleValue < max.bound.doubleValue
+    }
+    Compilation.check(minLessMax, file, field.span) {
+        "The passed range `$range` has its lower bound equal or more than the upper one." +
+                " The `($RANGE)` option requires the lower bound be strictly less than" +
+                " the upper one."
+    }
+}
 
-private fun FieldType.isSupported(): Boolean = isSingularNumber || isRepeatedNumber
+private fun FieldType.extractPrimitive(): PrimitiveType? = when {
+    isPrimitive -> primitive
+    isList -> list.primitive
+    else -> null
+}
 
-private val FieldType.isSingularNumber
-    get() = primitive in numberPrimitives
+private enum class NumberType {
+    FLOATING_POINT, INTEGER;
+}
 
-private val FieldType.isRepeatedNumber
-    get() = list.primitive in numberPrimitives
+private object RangeSyntax {
+
+    private val IntegerRange = Regex("""[\[(][+-]?\d+\.\.[+-]?\d+[\])]""")
+    private val FloatingRange = Regex("""[\[(][+-]?\d+(\.\d+)?\.\.[+-]?\d+(\.\d+)?[\])]""")
+
+    const val RANGE_DELIMITER = ".."
+
+    fun check(range: String, numberType: NumberType): Boolean =
+        when(numberType) {
+            INTEGER -> IntegerRange.matches(range)
+            FLOATING_POINT -> FloatingRange.matches(range)
+        }
+}
 
 private val floatingPrimitives = listOf(
     TYPE_DOUBLE,
@@ -155,5 +173,3 @@ private val integerPrimitives = listOf(
     TYPE_FIXED32, TYPE_FIXED64,
     TYPE_SFIXED32, TYPE_SFIXED64,
 )
-
-private val numberPrimitives = floatingPrimitives + integerPrimitives
