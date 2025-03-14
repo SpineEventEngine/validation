@@ -50,6 +50,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         GoesFieldView::class.java,
         DistinctFieldView::class.java,
         ValidatedFieldView::class.java,
+        RangeFieldView::class.java
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompiledMessageRepository(),

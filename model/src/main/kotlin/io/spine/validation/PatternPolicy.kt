@@ -35,8 +35,6 @@ import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -93,7 +91,7 @@ private fun FieldType.isSupported(): Boolean = isSingularString || isRepeatedStr
  * The property is `public` because the option generator also uses it.
  */
 public val FieldType.isRepeatedString: Boolean
-    get() = isList && list.primitive == TYPE_STRING
+    get() = list.primitive == TYPE_STRING
 
 /**
  * Tells if this [FieldType] represents a `string` field.
@@ -101,4 +99,4 @@ public val FieldType.isRepeatedString: Boolean
  * The property is `public` because the option generator also uses it.
  */
 public val FieldType.isSingularString: Boolean
-    get() = isSingular && primitive == TYPE_STRING
+    get() = primitive == TYPE_STRING

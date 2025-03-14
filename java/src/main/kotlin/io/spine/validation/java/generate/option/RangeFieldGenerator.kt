@@ -26,22 +26,22 @@
 
 package io.spine.validation.java.generate.option
 
-import com.google.protobuf.Message
 import io.spine.base.FieldPath
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.Literal
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.This
 import io.spine.protodata.java.field
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
-import io.spine.validation.GoesField
-import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.NumericBound
+import io.spine.validation.RangeField
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
@@ -49,57 +49,75 @@ import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(goes)` option.
+ * The generator for `(range)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class GoesFieldGenerator(
-    private val view: GoesField,
-    override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldCheck {
+internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
     private val declaringType = field.declaringType
+    private val getter = message.field(field).getter<Any>()
+
+    private val min = view.minValue
+    private val max = view.maxValue
+
 
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
-        val companion = view.companion
-        val fieldGetter = This<Message>()
-            .field(field)
-            .getter<Any>()
-        val constraint = CodeBlock(
+    override fun generate(): FieldOptionCode = when {
+        fieldType.isSingular -> CodeBlock(
             """
-            if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
+            if ($getter ${if (min.exclusive) "<=" else "<"} ${min.bound.asLiteral()} || $getter ${if (max.exclusive) ">=" else ">"} ${max.bound.asLiteral()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
-                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldGetter)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), getter)};
                 $violations.add(violation);
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
-    }
+
+        fieldType.isList ->
+            CodeBlock(
+                """
+                for (var element : $getter) {
+                    if (element ${if (min.exclusive) "<=" else "<"} ${min.bound.asLiteral()} || element ${if (max.exclusive) ">=" else ">"} ${max.bound.asLiteral()}) {
+                        var fieldPath = ${parentPath.resolve(field.name)};
+                        var typeName =  ${parentName.orElse(declaringType)};
+                        var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
+                        $violations.add(violation);
+                    }
+                }
+                """.trimIndent()
+            )
+
+        else -> error(
+            "The field type `${fieldType.name}` is not supported by `RangeFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `RangePolicy` when validating the `RangeFieldDiscovered` event."
+        )
+    }.run { FieldOptionCode(this) }
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<TypeName>,
-        fieldValue: Expression<*>,
+        fieldValue: Expression<Any>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
@@ -117,6 +135,9 @@ internal class GoesFieldGenerator(
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        GOES_COMPANION to StringLiteral(view.companion.name.value)
+        RANGE_VALUE to StringLiteral(view.range)
     )
 }
+
+private fun NumericBound.asLiteral() =
+    Literal(if (hasInt64Value()) "${int64Value}L" else doubleValue)

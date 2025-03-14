@@ -68,10 +68,11 @@ internal class ValidateFieldGenerator(
     private val field = view.subject
     private val fieldType = field.type
     private val declaringType = field.declaringType
-    private val getter = message.field(field).getter<Message>()
+    private val getter = message.field(field).getter<Any>()
 
+    @Suppress("UNCHECKED_CAST") // Safe due to the field type check.
     override fun generate(): FieldOptionCode = when {
-        fieldType.isMessage -> validate(getter, fieldType.message.isAny)
+        fieldType.isMessage -> validate(getter as Expression<Message>, fieldType.message.isAny)
 
         fieldType.isList ->
             CodeBlock(
