@@ -125,7 +125,13 @@ private fun checkRangeSyntax(range: String, type: NumberType, field: Field, file
                 " the full syntax description."
     }
 
-private fun NumberType.checkMinLessMax(min: MinValue, max: MaxValue, range: String, field: Field, file: File)  {
+private fun NumberType.checkMinLessMax(
+    min: MinValue,
+    max: MaxValue,
+    range: String,
+    field: Field,
+    file: File
+) {
     val minLessMax = when (this) {
         INTEGER -> min.bound.int64Value < max.bound.int64Value
         FLOATING_POINT -> min.bound.doubleValue < max.bound.doubleValue
