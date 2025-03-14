@@ -92,19 +92,21 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         }.just()
     }
 
-    private fun NumberType.toMinMax(left: String, right: String): Pair<MinValue, MaxValue> =
-        when (this) {
+    private fun NumberType.toMinMax(left: String, right: String): Pair<MinValue, MaxValue> {
+        return when (this) {
             INTEGER -> {
-                val min = min(left.toLong(), left.contains("("))
-                val max = max(right.toLong(), right.contains(")"))
+                val min = min(left.substring(1).toLong(), left.contains("("))
+                val max = max(right.dropLast(1).toLong(), right.contains(")"))
                 min to max
             }
+
             FLOATING_POINT -> {
-                val min = min(left.toDouble(), left.contains("("))
-                val max = max(right.toDouble(), right.contains(")"))
+                val min = min(left.substring(1).toDouble(), left.contains("("))
+                val max = max(right.dropLast(1).toDouble(), right.contains(")"))
                 min to max
             }
         }
+    }
 }
 
 private fun checkFieldType(field: Field, file: File): NumberType =
