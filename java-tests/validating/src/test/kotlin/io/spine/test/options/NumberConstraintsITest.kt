@@ -36,6 +36,7 @@ import io.spine.test.tools.validate.Year
 import io.spine.validate.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -77,6 +78,7 @@ internal class NumberConstraintsITest {
     }
 
     @Test
+    @Disabled // TODO:2025-03-17:yevhenii.nadtochii: Enable back when `base` is ready.
     fun `numerical range is checked`() {
         assertViolation(
             Probability.newBuilder()
