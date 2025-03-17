@@ -1,0 +1,146 @@
+/*
+ * Copyright 2025, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "RangeInvalidOverflowProto";
+option java_multiple_files = true;
+
+// This file contains messages that should cause a compilation error
+// because the passed range contains a number, which is out of range
+// for the target field type.
+//
+// The following cases are covered:
+// 1. The left boundary is too small.
+// 2. The right boundary is too big.
+//
+// Covering a case where the both boundaries are out of range does not
+// make sense because the compilation error will be initiated by the left
+// boundary, failing in the first place.
+//
+
+message RangeFloatLeftOverflow {
+    float value = 1 [(range).value = "[-1.4E-46 .. 3.4028235E38]"];
+}
+
+message RangeFloatRightOverflow {
+    float value = 1 [(range).value = "[-1.4E-45 .. 3.4028235E39]"];
+}
+
+message RangeDoubleLeftOverflow {
+    double value = 1 [(range).value = "[-4.9E-325 .. 1.7976931348623157E308]"];
+}
+
+message RangeDoubleRightOverflow {
+    double value = 1 [(range).value = "[-4.9E-324 .. 1.7976931348623157E309]"];
+}
+
+message RangeInt32LeftOverflow {
+    int32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
+}
+
+message RangeInt32RightOverflow {
+    int32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
+}
+
+message RangeInt64LeftOverflow {
+    int64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
+}
+
+message RangeInt64RightOverflow {
+    int64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
+}
+
+message RangeUInt32LeftOverflow {
+    uint32 value = 1 [(range).value = "[-1 .. 4294967295]"];
+}
+
+message RangeUInt32RightOverflow {
+    uint32 value = 1 [(range).value = "[0 .. 4294967296]"];
+}
+
+message RangeUInt64LeftOverflow {
+    uint64 value = 1 [(range).value = "[-1 .. 18446744073709551615]"];
+}
+
+message RangeUInt64RightOverflow {
+    uint64 value = 1 [(range).value = "[0 .. 18446744073709551616]"];
+}
+
+message RangeSInt32LeftOverflow {
+    sint32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
+}
+
+message RangeSInt32RightOverflow {
+    sint32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
+}
+
+message RangeSInt64LeftOverflow {
+    sint64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
+}
+
+message RangeSInt64RightOverflow {
+    sint64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
+}
+
+message RangeFixed32LeftOverflow {
+    fixed32 value = 1 [(range).value = "[-1 .. 4294967295]"];
+}
+
+message RangeFixed32RightOverflow {
+    fixed32 value = 1 [(range).value = "[0 .. 4294967296]"];
+}
+
+message RangeFixed64LeftOverflow {
+    fixed64 value = 1 [(range).value = "[-1 .. 18446744073709551615]"];
+}
+
+message RangeFixed64RightOverflow {
+    fixed64 value = 1 [(range).value = "[0 .. 18446744073709551616]"];
+}
+
+message RangeSFixed32LeftOverflow {
+    sfixed32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
+}
+
+message RangeSFixed32RightOverflow {
+    sfixed32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
+}
+
+message RangeSFixed64LeftOverflow {
+    sfixed64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
+}
+
+message RangeSFixed64RightOverflow {
+    sfixed64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
+}
