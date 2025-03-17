@@ -45,10 +45,28 @@ message RangeOnString {
     string value = 1 [(range).value = "[5 .. 10]"];
 }
 
+message RangeOnBool {
+    bool value = 1 [(range).value = "[5 .. 10]"];
+}
+
 message RangeOnBytes {
     bytes value = 1 [(range).value = "[5 .. 10]"];
 }
 
 message RangeOnMessage {
     google.protobuf.Timestamp value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnEnum {
+    Status value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnMap {
+    map<string, int32> value = 1 [(range).value = "[5 .. 10]"];
+}
+
+enum Status {
+    STATUS_UNKNOWN = 0;  // Required zero value
+    STATUS_ACTIVE = 1;
+    STATUS_INACTIVE = 2;
 }

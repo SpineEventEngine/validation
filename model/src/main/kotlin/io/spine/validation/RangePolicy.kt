@@ -113,7 +113,7 @@ private fun checkFieldType(field: Field, file: File): NumberType =
         in integerPrimitives -> INTEGER
         in floatingPrimitives -> FLOATING_POINT
         else -> Compilation.error(file, field.span) {
-            "The field type `$type` of `${field.qualifiedName}` is not supported by" +
+            "The field type `${field.type}` of `${field.qualifiedName}` is not supported by" +
                     " the `($RANGE)` option. Supported field types: numbers and repeated" +
                     " of numbers."
         }
