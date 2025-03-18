@@ -26,61 +26,26 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
+import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`RangePolicy` should reject when the option is applied to")
-internal class RangeFieldTypeSpec : CompilationErrorTest() {
+@DisplayName("`RangePolicy` should")
+internal class RangePolicySpec : CompilationErrorTest() {
 
-    @Test
-    fun `'string' field`() {
-        val message = RangeOnString.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `'bool' field`() {
-        val message = RangeOnBool.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `'bytes' field`() {
-        val message = RangeOnBytes.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `the message field`() {
-        val message = RangeOnMessage.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `the enum field`() {
-        val message = RangeOnEnum.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `the map field`() {
-        val message = RangeOnMap.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
+    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithUnsupportedFieldType")
+    @ParameterizedTest(name = "reject when the field type is `{0}`")
+    fun rejectWhenFieldHasUnsupportedType(message: KClass<out Message>) {
+        val descriptor = message.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
         error.message shouldContain unsupportedFieldType(field)
     }
 }

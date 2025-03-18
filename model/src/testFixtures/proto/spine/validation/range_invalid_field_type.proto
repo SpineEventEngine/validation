@@ -61,8 +61,36 @@ message RangeOnEnum {
     Status value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeOnMap {
+message RangeOnStringRepeated {
+    repeated string value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnBoolRepeated {
+    repeated bool value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnBytesRepeated {
+    repeated bytes value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnMessageRepeated {
+    repeated google.protobuf.Timestamp value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnEnumRepeated {
+    repeated Status value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnIntMap {
     map<string, int32> value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnDoubleMap {
+    map<string, double> value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnStringMap {
+    map<string, string> value = 1 [(range).value = "[5 .. 10]"];
 }
 
 enum Status {
