@@ -41,18 +41,14 @@ message NumericBound {
     // Whether the bound value itself should be included into the range.
     bool inclusive = 1;
 
+    // We do not cover other integer types. The rest of integers do not introduce new
+    // ranges, but change the way data is represented in serialized form.
     oneof value {
-        float float = 2;
-        double double = 3;
-        int32 int32 = 4;
-        int64 int64 = 5;
-        uint32 uint32 = 6;
-        uint64 uint64 = 7;
-        sint32 sint32 = 8;
-        sint64 sint64 = 9;
-        fixed32 fixed32 = 10;
-        fixed64 fixed64 = 11;
-        sfixed32 sfixed32 = 12;
-        sfixed64 sfixed64 = 13;
+        float float_value = 2;
+        double double_value = 3;
+        int32 int32_value = 4;
+        int64 int64_value = 5;
+        uint32 uint32_value = 6;
+        uint64 uint64_value = 7;
     }
 }
