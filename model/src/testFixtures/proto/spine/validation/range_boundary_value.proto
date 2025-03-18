@@ -21,7 +21,7 @@
  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE kPOSSIBILITY OF SUCH DAMAGE.
  */
 
 
@@ -40,8 +40,8 @@ option java_multiple_files = true;
 // field types. These values represent the minimum and maximum a specific field type
 // can be assigned.
 message RangeBoundaryValues {
-    float float = 1 [(range).value = "[-1.4E-45 .. 3.4028235E38]"];
-    double double = 2 [(range).value ="[-4.9E-324 .. 1.7976931348623157E308]"];
+    float float = 1 [(range).value = "[-3.4028235E38 .. 3.4028235E38]"];
+    double double = 2 [(range).value ="[-1.7976931348623157E308 .. 1.7976931348623157E308]"];
     int32 int32 = 3 [(range).value = "[-2147483648 .. 2147483647]"];
     int64 int64 = 4 [(range).value = "[-9223372036854775808 .. 9223372036854775807]"];
     uint32 uint32 = 5 [(range).value = "[0 .. 4294967295]"];

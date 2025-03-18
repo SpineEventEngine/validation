@@ -50,19 +50,19 @@ option java_multiple_files = true;
 //
 
 message RangeFloatLeftOverflow {
-    float value = 1 [(range).value = "[-1.4E-46 .. 3.4028235E38]"];
+    float value = 1 [(range).value = "[-3.5028235E38 .. 3.4028235E38]"];
 }
 
 message RangeFloatRightOverflow {
-    float value = 1 [(range).value = "[-1.4E-45 .. 3.4028235E39]"];
+    float value = 1 [(range).value = "[-3.4028235E38 .. 3.5028235E38]"];
 }
 
 message RangeDoubleLeftOverflow {
-    double value = 1 [(range).value = "[-4.9E-325 .. 1.7976931348623157E308]"];
+    double value = 1 [(range).value = "[-1.8976931348623157E308 .. 1.7976931348623157E308]"];
 }
 
 message RangeDoubleRightOverflow {
-    double value = 1 [(range).value = "[-4.9E-324 .. 1.7976931348623157E309]"];
+    double value = 1 [(range).value = "[-1.7976931348623157E308 .. 1.8976931348623157E308]"];
 }
 
 message RangeInt32LeftOverflow {
