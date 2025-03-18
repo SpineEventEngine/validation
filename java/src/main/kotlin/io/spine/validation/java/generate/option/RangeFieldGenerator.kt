@@ -41,6 +41,12 @@ import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.GOES
 import io.spine.validation.NumericBound
+import io.spine.validation.NumericBound.ValueCase.DOUBLE_VALUE
+import io.spine.validation.NumericBound.ValueCase.FLOAT_VALUE
+import io.spine.validation.NumericBound.ValueCase.INT32_VALUE
+import io.spine.validation.NumericBound.ValueCase.INT64_VALUE
+import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.RangeField
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
@@ -74,9 +80,8 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
 
-    private val min = view.minValue
-    private val max = view.maxValue
-
+    private val lower = view.lowerBound
+    private val upper = view.upperBound
 
     /**
      * Generates code for a field represented by the [view].
@@ -84,7 +89,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     override fun generate(): FieldOptionCode = when {
         fieldType.isSingular -> CodeBlock(
             """
-            if ($getter ${if (min.exclusive) "<=" else "<"} ${min.bound.asLiteral()} || $getter ${if (max.exclusive) ">=" else ">"} ${max.bound.asLiteral()}) {
+            if ($getter ${if (lower.inclusive) "<" else "<="} ${lower.asLiteral()} || $getter ${if (upper.inclusive) ">" else ">="} ${upper.asLiteral()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), getter)};
@@ -97,7 +102,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
             CodeBlock(
                 """
                 for (var element : $getter) {
-                    if (element ${if (min.exclusive) "<=" else "<"} ${min.bound.asLiteral()} || element ${if (max.exclusive) ">=" else ">"} ${max.bound.asLiteral()}) {
+                    if (element ${if (lower.inclusive) "<" else "<="} ${lower.asLiteral()} || element ${if (upper.inclusive) ">" else ">="} ${upper.asLiteral()}) {
                         var fieldPath = ${parentPath.resolve(field.name)};
                         var typeName =  ${parentName.orElse(declaringType)};
                         var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
@@ -140,4 +145,15 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
 }
 
 private fun NumericBound.asLiteral() =
-    Literal(if (hasInt64Value()) "${int64Value}L" else doubleValue)
+    when (valueCase) {
+        FLOAT_VALUE -> Literal("${floatValue}F")
+        DOUBLE_VALUE -> Literal("$doubleValue")
+        INT32_VALUE -> Literal("$int32Value")
+        INT64_VALUE -> Literal("${int64Value}L")
+        UINT32_VALUE -> Literal("$uint32Value") // Possible overflow.
+        UINT64_VALUE -> Literal("$uint64Value") // Possible overflow.
+        else -> error(
+            "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
+                    " Make sure `RangePolicy` correctly filtered out unsupported field types."
+        )
+    }
