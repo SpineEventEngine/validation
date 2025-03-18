@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.range
 
-import io.spine.core.Subscribe
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.RequiredField
-import io.spine.validation.event.RangeFieldDiscovered
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType
 
-/**
- * A view of a field that is marked with `(range)` option.
- */
-internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
-
-    @Subscribe
-    fun on(e: RangeFieldDiscovered) = alter {
-        subject = e.subject
-        errorMessage = e.errorMessage
-        range = e.range
-        minValue = e.minValue
-        maxValue = e.maxValue
-    }
-}
+internal data class ParsingContext(
+    val range: String,
+    val primitiveType: PrimitiveType,
+    val field: Field,
+    val file: File
+)

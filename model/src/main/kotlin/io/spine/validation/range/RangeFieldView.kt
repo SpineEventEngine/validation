@@ -24,36 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.range
 
-internal fun min(value: Double, exclusive: Boolean) =
-    minValue {
-        bound = numericBound {
-            doubleValue = value
-        }
-        this.exclusive = exclusive
-    }
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.RangeField
+import io.spine.validation.event.RangeFieldDiscovered
 
-internal fun min(value: Long, exclusive: Boolean) =
-    minValue {
-        bound = numericBound {
-            int64Value = value
-        }
-        this.exclusive = exclusive
-    }
+/**
+ * A view of a field that is marked with `(range)` option.
+ */
+internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
 
-internal fun max(value: Double, exclusive: Boolean) =
-    maxValue {
-        bound = numericBound {
-            doubleValue = value
-        }
-        this.exclusive = exclusive
+    @Subscribe
+    fun on(e: RangeFieldDiscovered) = alter {
+        subject = e.subject
+        errorMessage = e.errorMessage
+        range = e.range
+        lowerBound = e.lowerBound
+        upperBound = e.upperBound
     }
-
-internal fun max(value: Long, exclusive: Boolean) =
-    maxValue {
-        bound = numericBound {
-            int64Value = value
-        }
-        this.exclusive = exclusive
-    }
+}
