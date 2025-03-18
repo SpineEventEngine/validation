@@ -32,38 +32,27 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "RangeProto";
+option java_outer_classname = "NumericBoundProto";
 option java_multiple_files = true;
-
-// Describes a minimum value that a numeric field can have.
-message MinValue {
-
-    // This is the value below which the numeric field cannot go.
-    NumericBound bound = 1;
-
-    // Whether the bound value itself should be excluded from the valid range of the field.
-    bool exclusive = 2;
-}
-
-// Describes a maximum value that a numeric field can have.
-message MaxValue {
-
-    // This is the value above which the numeric field cannot go.
-    NumericBound bound = 1;
-
-    // Whether the bound value itself should be excluded from the valid range of the field.
-    bool exclusive = 2;
-}
 
 // A numeric value that restricts the range of numeric fields.
 message NumericBound {
 
+    // Whether the bound value itself should be included into the range.
+    bool inclusive = 1;
+
     oneof value {
-
-        // Integer bound.
-        int64 int64_value = 1;
-
-        // Floating-point bound.
-        double double_value = 2;
+        float float = 2;
+        double double = 3;
+        int32 int32 = 4;
+        int64 int64 = 5;
+        uint32 uint32 = 6;
+        uint64 uint64 = 7;
+        sint32 sint32 = 8;
+        sint64 sint64 = 9;
+        fixed32 fixed32 = 10;
+        fixed64 fixed64 = 11;
+        sfixed32 sfixed32 = 12;
+        sfixed64 sfixed64 = 13;
     }
 }
