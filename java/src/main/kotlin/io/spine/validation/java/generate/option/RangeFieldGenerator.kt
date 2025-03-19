@@ -128,7 +128,10 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         // TODO:2025-03-19:yevhenii.nadtochii: Temporarily to make tests pass.
-        val errorMessage = templateString(view.errorMessage + "The passed value: `\${field.value}`.", placeholders, RANGE, qualifiedName)
+        val errorMessage = templateString(
+            view.errorMessage + "The passed value: `\${field.value}`.",
+            placeholders, RANGE, qualifiedName
+        )
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
