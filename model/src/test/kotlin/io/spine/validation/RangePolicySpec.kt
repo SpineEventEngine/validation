@@ -34,6 +34,7 @@ import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
@@ -50,6 +51,85 @@ internal class RangePolicySpec : CompilationErrorTest() {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
+        }
+    }
+
+    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithInvalidDelimiters")
+    @ParameterizedTest(name = "reject the range with an invalid delimiter")
+    fun rejectInvalidDelimiters(message: KClass<out Message>) {
+        val descriptor = message.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The lower and upper bounds should be separated")
+        }
+    }
+
+    @Test
+    fun `reject the range with an invalid opening symbol`() {
+        val descriptor = RangeInvalidOpening::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The lower bound should begin either")
+        }
+    }
+
+    @Test
+    fun `reject the range with an invalid closing symbol`() {
+        val descriptor = RangeInvalidClosing::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The upper bound should end either")
+        }
+    }
+
+    @Test
+    fun `reject the range with integer values on 'double' field`() {
+        var descriptor = RangeInvalidLeftInt::class.descriptor
+        var error = assertCompilationFails(descriptor)
+        var field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The lower bound should be within the range of the field")
+        }
+
+        descriptor = RangeInvalidRightInt::class.descriptor
+        error = assertCompilationFails(descriptor)
+        field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The upper bound should be within the range of the field")
+        }
+    }
+
+    @Test
+    fun `reject the range with floating-point values on integer field`() {
+        var descriptor = RangeInvalidLeftInt::class.descriptor
+        var error = assertCompilationFails(descriptor)
+        var field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The lower bound should be within the range of the field")
+        }
+
+        descriptor = RangeInvalidRightInt::class.descriptor
+        error = assertCompilationFails(descriptor)
+        field = descriptor.field("value")
+        error.message.run {
+            shouldContain("could not parse the range")
+            shouldContain(field.qualifiedName)
+            shouldContain("The upper bound should be within the range of the field")
         }
     }
 }

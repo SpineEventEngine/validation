@@ -109,16 +109,13 @@ private fun checkFieldType(field: Field, file: File): PrimitiveType {
 }
 
 private fun checkDelimiter(range: String, field: Field, file: File): String =
-    when {
-        range.contains(RANGE_DELIMITER) -> RANGE_DELIMITER
-        range.contains(RANGE_DELIMITER_SPACED) -> RANGE_DELIMITER_SPACED
-        else -> Compilation.error(file, field.span) {
+    DELIMITER.find(range)?.value
+        ?: Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The minimum and maximum bound values" +
-                    " should be separated either with `..` or ` .. ` delimiter. Examples of" +
-                    " the correct ranges: `(0..10]`, `[0 .. 10)`."
+                    " `${field.qualifiedName}` field. The lower and upper bounds should be" +
+                    " separated either with `..` or ` .. ` delimiter. Examples of the correct " +
+                    " ranges: `(0..10]`, `[0 .. 10)`."
         }
-    }
 
 private fun checkBoundTypes(
     left: String,
@@ -156,8 +153,7 @@ private fun FieldType.extractPrimitive(): PrimitiveType? = when {
     else -> null
 }
 
-private const val RANGE_DELIMITER = ".."
-private const val RANGE_DELIMITER_SPACED = " .. "
+private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=\d)""")
 
 private val supportedPrimitives = listOf(
     TYPE_FLOAT, TYPE_DOUBLE,

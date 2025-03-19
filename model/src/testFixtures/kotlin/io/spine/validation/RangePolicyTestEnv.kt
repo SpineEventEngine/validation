@@ -54,4 +54,15 @@ object RangePolicyTestEnv {
         "map of double" to RangeOnDoubleMap::class,
         "map of string" to RangeOnStringMap::class,
     ).map { arguments(named(it.first, it.second)) }
+
+    /**
+     * Test data for [io.spine.validation.RangePolicySpec.rejectInvalidDelimiters].
+     */
+    @JvmStatic
+    fun messagesWithInvalidDelimiters() = listOf(
+        RangeInvalidDelimiter1::class,
+        RangeInvalidDelimiter2::class,
+        RangeInvalidDelimiter3::class,
+        RangeInvalidDelimiter4::class,
+    ).map { arguments(it) }
 }

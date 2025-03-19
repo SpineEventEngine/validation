@@ -50,15 +50,19 @@ message RangeInvalidDelimiter3 {
     int32 value = 1 [(range).value = "[-5, 10]"];
 }
 
+message RangeInvalidDelimiter4 {
+    int32 value = 1 [(range).value = "[-5; 10]"];
+}
+
 
 // Invalid opening or closing symbol.
 
 message RangeInvalidOpening {
-    int32 value = 1 [(range).value = "{-5 ... 10]"];
+    int32 value = 1 [(range).value = "{-5 .. 10]"];
 }
 
 message RangeInvalidClosing {
-    int32 value = 1 [(range).value = "[-5  ..  10"];
+    int32 value = 1 [(range).value = "[-5 .. 10"];
 }
 
 
@@ -72,10 +76,18 @@ message RangeInvalidRightDouble {
     double value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
+message RangeInvalidLeftFloat {
+    float value = 1 [(range).value = "[0 .. 15.0]"];
+}
+
+message RangeInvalidRightFloat {
+    float value = 1 [(range).value = "[0.0 .. 15]"];
+}
+
 message RangeInvalidLeftInt {
     int32 value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
 message RangeInvalidRightInt {
-    int32 value = 1 [(range).value = "[0 .. 15.0"];
+    int32 value = 1 [(range).value = "[0 .. 15.0]"];
 }
