@@ -77,14 +77,15 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<RangeOption>()
         val range = option.value
-        val delimiter = checkDelimiter(range, field, file)
+        val context = ParsingContext(range, primitiveType, field, file)
+        val delimiter = context.checkDelimiter()
 
         val (left, right) = range.split(delimiter)
-        val (minInclusive, maxInclusive) = checkBoundTypes(left, right, range, field, file)
+        val (minInclusive, maxInclusive) = context.checkBoundTypes(left, right)
 
-        val context = ParsingContext(range, primitiveType, field, file)
-        val (min, max) = left.substring(1) to right.dropLast(1)
-        val (lower, upper) = context.numericBounds(min, minInclusive, max, maxInclusive)
+        val lower = context.numericBound(left.substring(1), minInclusive)
+        val upper = context.numericBound(right.dropLast(1), maxInclusive)
+        context.checkRelation(lower, upper)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return rangeFieldDiscovered {
@@ -92,8 +93,8 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             subject = field
             errorMessage = message
             this.range = range
-            lowerBound = lower
-            upperBound = upper
+            lowerBound = lower.toProto()
+            upperBound = upper.toProto()
         }.just()
     }
 }
@@ -108,7 +109,7 @@ private fun checkFieldType(field: Field, file: File): PrimitiveType {
     return primitive!!
 }
 
-private fun checkDelimiter(range: String, field: Field, file: File): String =
+private fun ParsingContext.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
@@ -117,13 +118,7 @@ private fun checkDelimiter(range: String, field: Field, file: File): String =
                     " ranges: `(0..10]`, `[0 .. 10)`."
         }
 
-private fun checkBoundTypes(
-    left: String,
-    right: String,
-    range: String,
-    field: Field,
-    file: File
-): Pair<Boolean, Boolean> {
+private fun ParsingContext.checkBoundTypes(left: String, right: String): Pair<Boolean, Boolean> {
     val leftInclusive = when {
         left.startsWith("(") -> false
         left.startsWith("[") -> true
@@ -145,6 +140,14 @@ private fun checkBoundTypes(
         }
     }
     return leftInclusive to rightInclusive
+}
+
+private fun ParsingContext.checkRelation(lower: NumericBound, upper: NumericBound) {
+    Compilation.check(lower < upper, file, field.span) {
+        "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +
+                " less than the upper `${upper.value}`."
+    }
 }
 
 private fun FieldType.extractPrimitive(): PrimitiveType? = when {
