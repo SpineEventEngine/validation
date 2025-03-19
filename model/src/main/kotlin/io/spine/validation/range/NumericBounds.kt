@@ -44,6 +44,7 @@ import io.spine.protodata.check
 import io.spine.validation.NumericBound
 import io.spine.validation.RANGE
 
+@Suppress("CyclomaticComplexMethod") // "You have no choice, you have to choose".
 internal fun ParsingContext.numericBounds(
     min: String,
     minInclusive: Boolean,
