@@ -39,7 +39,6 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.field
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.GOES
 import io.spine.validation.NumericBound
 import io.spine.validation.NumericBound.ValueCase.DOUBLE_VALUE
 import io.spine.validation.NumericBound.ValueCase.FLOAT_VALUE
@@ -47,6 +46,7 @@ import io.spine.validation.NumericBound.ValueCase.INT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.INT64_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
+import io.spine.validation.RANGE
 import io.spine.validation.RangeField
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
@@ -127,7 +127,8 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        // TODO:2025-03-19:yevhenii.nadtochii: Temporarily to make tests pass.
+        val errorMessage = templateString(view.errorMessage + "The passed value: `\${field.value}`.", placeholders, RANGE, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

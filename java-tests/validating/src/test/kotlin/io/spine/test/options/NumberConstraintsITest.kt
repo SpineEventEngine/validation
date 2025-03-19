@@ -34,9 +34,9 @@ import io.spine.test.tools.validate.InterestRate
 import io.spine.test.tools.validate.Probability
 import io.spine.test.tools.validate.Year
 import io.spine.validate.format
+import io.spine.validation.RangeFieldExtrema
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -78,7 +78,6 @@ internal class NumberConstraintsITest {
     }
 
     @Test
-    @Disabled // TODO:2025-03-17:yevhenii.nadtochii: Enable back when `base` is ready.
     fun `numerical range is checked`() {
         assertViolation(
             Probability.newBuilder()
@@ -97,6 +96,40 @@ internal class NumberConstraintsITest {
         assertValid(
             Probability.newBuilder()
                 .setValue(1.0)
+        )
+    }
+
+    @Test
+    fun `numerical range covers minimum values of the field type`() {
+        val intMinValue = Int.MIN_VALUE
+        val longMinValue = Long.MIN_VALUE
+        assertValid(
+            RangeFieldExtrema.newBuilder()
+                .setFloat(-Float.MAX_VALUE)
+                .setDouble(-Double.MAX_VALUE)
+                .setInt32(intMinValue)
+                .setInt64(longMinValue)
+                .setSint32(intMinValue)
+                .setSint64(longMinValue)
+                .setSfixed32(intMinValue)
+                .setSfixed64(longMinValue)
+        )
+    }
+
+    @Test
+    fun `numerical range covers maximum values of the field type`() {
+        val intMaxValue = Int.MAX_VALUE
+        val longMaxValue = Long.MAX_VALUE
+        assertValid(
+            RangeFieldExtrema.newBuilder()
+                .setFloat(Float.MAX_VALUE)
+                .setDouble(Double.MAX_VALUE)
+                .setInt32(intMaxValue)
+                .setInt64(longMaxValue)
+                .setSint32(intMaxValue)
+                .setSint64(longMaxValue)
+                .setSfixed32(intMaxValue)
+                .setSfixed64(longMaxValue)
         )
     }
 }
