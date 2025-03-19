@@ -65,4 +65,35 @@ object RangePolicyTestEnv {
         RangeInvalidDelimiter3::class,
         RangeInvalidDelimiter4::class,
     ).map { arguments(it) }
+
+    /**
+     * Test data for [io.spine.validation.RangePolicySpec.rejectOverflowValue].
+     */
+    @JvmStatic
+    fun messagesWithOverflowValues() = listOf(
+        RangeFloatLowerOverflow::class to "-3.5028235E38",
+        RangeFloatUpperOverflow::class to "3.5028235E38",
+        RangeDoubleLowerOverflow::class to "-1.8976931348623157E308",
+        RangeDoubleUpperOverflow::class to "1.8976931348623157E308",
+        RangeInt32LowerOverflow::class to "-2147483649",
+        RangeInt32UpperOverflow::class to "2147483648",
+        RangeInt64LowerOverflow::class to "-9223372036854775809",
+        RangeInt64UpperOverflow::class to "9223372036854775808",
+        RangeUInt32LowerOverflow::class to "-1",
+        RangeUInt32UpperOverflow::class to "4294967296",
+        RangeUInt64LowerOverflow::class to "-1",
+        RangeUInt64UpperOverflow::class to "18446744073709551616",
+        RangeSInt32LowerOverflow::class to "-2147483649",
+        RangeSInt32UpperOverflow::class to "2147483648",
+        RangeSInt64LowerOverflow::class to "-9223372036854775809",
+        RangeSInt64UpperOverflow::class to "9223372036854775808",
+        RangeFixed32LowerOverflow::class to "-1",
+        RangeFixed32UpperOverflow::class to "4294967296",
+        RangeFixed64LowerOverflow::class to "-1",
+        RangeFixed64UpperOverflow::class to "18446744073709551616",
+        RangeSFixed32LowerOverflow::class to "-2147483649",
+        RangeSFixed32UpperOverflow::class to "2147483648",
+        RangeSFixed64LowerOverflow::class to "-9223372036854775809",
+        RangeSFixed64UpperOverflow::class to "9223372036854775808",
+    ).map { arguments(it.first, it.second) }
 }

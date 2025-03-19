@@ -49,98 +49,98 @@ option java_multiple_files = true;
 // boundary, failing in the first place.
 //
 
-message RangeFloatLeftOverflow {
+message RangeFloatLowerOverflow {
     float value = 1 [(range).value = "[-3.5028235E38 .. 3.4028235E38]"];
 }
 
-message RangeFloatRightOverflow {
+message RangeFloatUpperOverflow {
     float value = 1 [(range).value = "[-3.4028235E38 .. 3.5028235E38]"];
 }
 
-message RangeDoubleLeftOverflow {
+message RangeDoubleLowerOverflow {
     double value = 1 [(range).value = "[-1.8976931348623157E308 .. 1.7976931348623157E308]"];
 }
 
-message RangeDoubleRightOverflow {
-    double value = 1 [(range).value = "[-1.7976931348623157E308 .. 1.8976931348623157E308]"];
+message RangeDoubleUpperOverflow {
+    double value = 1 [(range).value = "[-1.7976931348623157E308.. 1.8976931348623157E308]"];
 }
 
-message RangeInt32LeftOverflow {
+message RangeInt32LowerOverflow {
     int32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
 }
 
-message RangeInt32RightOverflow {
+message RangeInt32UpperOverflow {
     int32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
 }
 
-message RangeInt64LeftOverflow {
+message RangeInt64LowerOverflow {
     int64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
 }
 
-message RangeInt64RightOverflow {
+message RangeInt64UpperOverflow {
     int64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
 }
 
-message RangeUInt32LeftOverflow {
+message RangeUInt32LowerOverflow {
     uint32 value = 1 [(range).value = "[-1 .. 4294967295]"];
 }
 
-message RangeUInt32RightOverflow {
+message RangeUInt32UpperOverflow {
     uint32 value = 1 [(range).value = "[0 .. 4294967296]"];
 }
 
-message RangeUInt64LeftOverflow {
+message RangeUInt64LowerOverflow {
     uint64 value = 1 [(range).value = "[-1 .. 18446744073709551615]"];
 }
 
-message RangeUInt64RightOverflow {
+message RangeUInt64UpperOverflow {
     uint64 value = 1 [(range).value = "[0 .. 18446744073709551616]"];
 }
 
-message RangeSInt32LeftOverflow {
+message RangeSInt32LowerOverflow {
     sint32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
 }
 
-message RangeSInt32RightOverflow {
+message RangeSInt32UpperOverflow {
     sint32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
 }
 
-message RangeSInt64LeftOverflow {
+message RangeSInt64LowerOverflow {
     sint64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
 }
 
-message RangeSInt64RightOverflow {
+message RangeSInt64UpperOverflow {
     sint64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
 }
 
-message RangeFixed32LeftOverflow {
+message RangeFixed32LowerOverflow {
     fixed32 value = 1 [(range).value = "[-1 .. 4294967295]"];
 }
 
-message RangeFixed32RightOverflow {
+message RangeFixed32UpperOverflow {
     fixed32 value = 1 [(range).value = "[0 .. 4294967296]"];
 }
 
-message RangeFixed64LeftOverflow {
+message RangeFixed64LowerOverflow {
     fixed64 value = 1 [(range).value = "[-1 .. 18446744073709551615]"];
 }
 
-message RangeFixed64RightOverflow {
+message RangeFixed64UpperOverflow {
     fixed64 value = 1 [(range).value = "[0 .. 18446744073709551616]"];
 }
 
-message RangeSFixed32LeftOverflow {
+message RangeSFixed32LowerOverflow {
     sfixed32 value = 1 [(range).value = "[-2147483649 .. 2147483647]"];
 }
 
-message RangeSFixed32RightOverflow {
+message RangeSFixed32UpperOverflow {
     sfixed32 value = 1 [(range).value = "[-2147483648 .. 2147483648]"];
 }
 
-message RangeSFixed64LeftOverflow {
+message RangeSFixed64LowerOverflow {
     sfixed64 value = 1 [(range).value = "[-9223372036854775809 .. 9223372036854775807]"];
 }
 
-message RangeSFixed64RightOverflow {
+message RangeSFixed64UpperOverflow {
     sfixed64 value = 1 [(range).value = "[-9223372036854775808 .. 9223372036854775808]"];
 }

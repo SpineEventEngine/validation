@@ -56,15 +56,28 @@ internal class RangePolicySpec : CompilationErrorTest() {
     }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithInvalidDelimiters")
-    @ParameterizedTest(name = "reject the range with an invalid delimiter")
+    @ParameterizedTest(name = "reject the range with an invalid delimiter in `{0}`")
     fun rejectInvalidDelimiters(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
         error.message.run {
-            shouldContain("could not parse the range")
             shouldContain(field.qualifiedName)
+            shouldContain("could not parse the range")
             shouldContain("The lower and upper bounds should be separated")
+        }
+    }
+
+    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithOverflowValues")
+    @ParameterizedTest(name = "reject the range with a value causing an overflow in `{0}`")
+    fun rejectOverflowValue(message: KClass<out Message>, value: String) {
+        val descriptor = message.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("could not parse the range")
+            shouldContain(value)
         }
     }
 

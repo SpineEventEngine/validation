@@ -65,5 +65,12 @@ internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): Num
                     " the option is applied to."
         }
     }
+    if ("$number".contains("Infinity")) {
+        Compilation.error(file, field.span) {
+            "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                    " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
+                    " for the field type (`${field.type.name}`) the option is applied to."
+        }
+    }
     return NumericBound(number, inclusive)
 }
