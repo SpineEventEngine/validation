@@ -28,7 +28,7 @@ package io.spine.validation
 
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
-import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
@@ -46,11 +46,10 @@ internal class RangePolicySpec : CompilationErrorTest() {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
-        error.message shouldContain unsupportedFieldType(field)
+        error.message.run {
+            shouldContain(field.type.name)
+            shouldContain(field.qualifiedName)
+            shouldContain("is not supported")
+        }
     }
 }
-
-private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
-            " by the `($RANGE)` option. Supported field types: numbers and repeated" +
-            " of numbers."

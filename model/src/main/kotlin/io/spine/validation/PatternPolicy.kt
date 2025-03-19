@@ -35,6 +35,7 @@ import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -78,7 +79,7 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
                 " by the `($PATTERN)` option. Supported field types: strings and repeated" +
                 " of strings."
     }

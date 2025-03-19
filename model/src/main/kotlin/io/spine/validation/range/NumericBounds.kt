@@ -39,6 +39,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validation.NumericBound
@@ -124,7 +125,7 @@ private fun ParsingContext.checkBound(boundName: String, condition: Boolean) {
     Compilation.check(condition, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The $boundName bound should be" +
-                " within the range of the field (`${field.type}`)" +
+                " within the range of the field (`${field.type.name}`)" +
                 " the option is applied to."
     }
 }

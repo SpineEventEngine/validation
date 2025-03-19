@@ -48,6 +48,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -100,7 +101,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 private fun checkFieldType(field: Field, file: File): PrimitiveType {
     val primitive = field.type.extractPrimitive()
     Compilation.check(primitive in supportedPrimitives, file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported by" +
+        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
                 " the `($RANGE)` option. Supported field types: numbers and repeated" +
                 " of numbers."
     }
