@@ -43,58 +43,66 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validation.NumericBound
 import io.spine.validation.RANGE
-import kotlin.contracts.contract
 
-internal fun ParsingContext.lowerBound(value: String, inclusive: Boolean): NumericBound =
-    numericBound("lower", value, inclusive)
-
-internal fun ParsingContext.upperBound(value: String, inclusive: Boolean): NumericBound =
-    numericBound("upper", value, inclusive)
-
-private fun ParsingContext.numericBound(
-    boundName: String,
-    value: String,
-    inclusive: Boolean
-): NumericBound {
-    val bound = NumericBound.newBuilder()
+internal fun ParsingContext.numericBounds(
+    min: String,
+    minInclusive: Boolean,
+    max: String,
+    maxInclusive: Boolean
+): Pair<NumericBound, NumericBound> {
+    val lowerBound = NumericBound.newBuilder()
+    val upperBound = NumericBound.newBuilder()
     when (primitiveType) {
         TYPE_FLOAT -> {
-            val float = value.toFloatOrNull()
-            compilationCheck(boundName, float != null)
-            bound.setFloatValue(float)
+            val lower = min.toFloatOrNull().also { checkLower(it) }
+            val upper = max.toFloatOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+            lowerBound.setFloatValue(lower)
+            upperBound.setFloatValue(upper)
         }
 
         TYPE_DOUBLE -> {
-            val double = value.toDoubleOrNull()
-            compilationCheck(boundName, double != null)
-            bound.setDoubleValue(double)
+            val lower = min.toDoubleOrNull().also { checkLower(it) }
+            val upper = max.toDoubleOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+            lowerBound.setDoubleValue(lower)
+            upperBound.setDoubleValue(upper)
         }
 
         TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> {
-            val int32 = value.toIntOrNull()
-            compilationCheck(boundName, int32 != null)
-            bound.setInt32Value(int32)
+            val lower = min.toIntOrNull().also { checkLower(it) }
+            val upper = max.toIntOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+            lowerBound.setInt32Value(lower)
+            upperBound.setInt32Value(upper)
         }
 
         TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> {
-            val int64 = value.toLongOrNull()
-            compilationCheck(boundName, int64 != null)
-            bound.setInt64Value(int64)
+            val lower = min.toLongOrNull().also { checkLower(it) }
+            val upper = max.toLongOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+            lowerBound.setInt64Value(lower)
+            upperBound.setInt64Value(upper)
         }
 
         TYPE_UINT32, TYPE_FIXED32 -> {
-            val uint32 = value.toUIntOrNull()
-            compilationCheck(boundName, uint32 != null)
-            bound.setUint32Value(uint32.toInt()) // The resulting `Int` value has the same binary
-                                                 // representation as this `UInt` value.
+            val lower = min.toUIntOrNull().also { checkLower(it) }
+            val upper = max.toUIntOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+
+            // The resulting `Int` value has the same binary representation as this `UInt` value.
+            lowerBound.setUint32Value(lower.toInt())
+            upperBound.setUint32Value(upper.toInt())
         }
 
-
         TYPE_UINT64, TYPE_FIXED64 -> {
-            val uint64 = value.toULongOrNull()
-            compilationCheck(boundName, uint64 != null)
-            bound.setUint64Value(uint64.toLong()) // The resulting `Long` value has the same binary
-                                                  // representation as this `ULong` value.
+            val lower = min.toULongOrNull().also { checkLower(it) }
+            val upper = max.toULongOrNull().also { checkUpper(it) }
+            checkRelation(lower!!, upper!!)
+
+            // The resulting `Long` value has the same binary representation as this `ULong` value.
+            lowerBound.setUint64Value(lower.toLong())
+            upperBound.setUint64Value(upper.toLong())
         }
 
         else -> error(
@@ -102,18 +110,28 @@ private fun ParsingContext.numericBound(
                     " Please make sure, `RangePolicy` correctly filtered unsupported field types."
         )
     }
-    return bound.setInclusive(inclusive)
-        .build()
+    lowerBound.setInclusive(minInclusive)
+    upperBound.setInclusive(maxInclusive)
+    return lowerBound.build() to upperBound.build()
 }
 
-private fun ParsingContext.compilationCheck(boundName: String, condition: Boolean) {
-    contract {
-        returns() implies condition
-    }
+private  fun ParsingContext.checkLower(value: Any?) = checkBound("lower", value != null)
+
+private  fun ParsingContext.checkUpper(value: Any?) = checkBound("upper", value != null)
+
+private fun ParsingContext.checkBound(boundName: String, condition: Boolean) {
     Compilation.check(condition, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The $boundName bound should be" +
                 " within the range of the field (`${field.type}`)" +
                 " the option is applied to."
+    }
+}
+
+private fun <T : Comparable<T>> ParsingContext.checkRelation(lower: T, upper: T) {
+    Compilation.check(lower < upper, file, field.span) {
+        "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                " `${field.qualifiedName}` field. The lower bound `$lower` should be strictly" +
+                " less than the upper `$upper`."
     }
 }

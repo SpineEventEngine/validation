@@ -83,8 +83,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
         val context = ParsingContext(range, primitiveType, field, file)
         val (min, max) = left.substring(1) to right.dropLast(1)
-        val lower = context.lowerBound(min, minInclusive)
-        val upper = context.upperBound(max, maxInclusive)
+        val (lower, upper) = context.numericBounds(min, minInclusive, max, maxInclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return rangeFieldDiscovered {
