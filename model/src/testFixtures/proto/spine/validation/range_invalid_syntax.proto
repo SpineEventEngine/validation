@@ -68,26 +68,26 @@ message RangeInvalidClosing {
 
 // Invalid number type.
 
-message RangeInvalidLeftDouble {
-    double value = 1 [(range).value = "[0 .. 15.0]"];
-}
-
-message RangeInvalidRightDouble {
-    double value = 1 [(range).value = "[0.0 .. 15]"];
-}
-
-message RangeInvalidLeftFloat {
+message RangeInvalidLowerFloat {
     float value = 1 [(range).value = "[0 .. 15.0]"];
 }
 
-message RangeInvalidRightFloat {
+message RangeInvalidUpperFloat {
     float value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
-message RangeInvalidLeftInt {
+message RangeInvalidLowerDouble {
+    double value = 1 [(range).value = "[0 .. 15.0]"];
+}
+
+message RangeInvalidUpperDouble {
+    double value = 1 [(range).value = "[0.0 .. 15]"];
+}
+
+message RangeInvalidLowerInt {
     int32 value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
-message RangeInvalidRightInt {
+message RangeInvalidUpperInt {
     int32 value = 1 [(range).value = "[0 .. 15.0]"];
 }

@@ -45,8 +45,8 @@ import io.spine.validation.RANGE
 
 internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): NumericBound {
     val number = when (primitiveType) {
-        TYPE_FLOAT -> value.toFloatOrNull()
-        TYPE_DOUBLE -> value.toDoubleOrNull()
+        TYPE_FLOAT -> if (value.contains(".")) value.toFloatOrNull() else null
+        TYPE_DOUBLE -> if (value.contains(".")) value.toDoubleOrNull() else null
         TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> value.toIntOrNull()
         TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> value.toLongOrNull()
         TYPE_UINT32, TYPE_FIXED32 -> value.toUIntOrNull()
@@ -60,7 +60,7 @@ internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): Num
         Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The `$value` bound value has" +
-                    " an incorrect format. Please make sure the number has a correct format" +
+                    " an invalid format. Please make sure the number has a correct format" +
                     " and it is within the range of the field type (`${field.type.name}`)" +
                     " the option is applied to."
         }
