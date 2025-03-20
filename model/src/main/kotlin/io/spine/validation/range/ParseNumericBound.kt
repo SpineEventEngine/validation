@@ -54,7 +54,7 @@ import io.spine.validation.RANGE
  *    for integer fields.
  * 2) The provided number fits into the range of the target field type.
  */
-internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): NumericBound {
+internal fun RangeContext.numericBound(value: String, inclusive: Boolean): NumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +

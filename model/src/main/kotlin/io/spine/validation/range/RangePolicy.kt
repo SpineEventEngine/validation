@@ -77,7 +77,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<RangeOption>()
         val range = option.value
-        val context = ParsingContext(range, primitiveType, field, file)
+        val context = RangeContext(range, primitiveType, field, file)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = range.split(delimiter)
@@ -109,7 +109,7 @@ private fun checkFieldType(field: Field, file: File): PrimitiveType {
     return primitive!!
 }
 
-private fun ParsingContext.checkDelimiter(): String =
+private fun RangeContext.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
@@ -118,7 +118,7 @@ private fun ParsingContext.checkDelimiter(): String =
                     " ranges: `(0..10]`, `[0 .. 10)`."
         }
 
-private fun ParsingContext.checkBoundTypes(left: String, right: String): Pair<Boolean, Boolean> {
+private fun RangeContext.checkBoundTypes(left: String, right: String): Pair<Boolean, Boolean> {
     val leftInclusive = when {
         left.startsWith("(") -> false
         left.startsWith("[") -> true
@@ -142,7 +142,7 @@ private fun ParsingContext.checkBoundTypes(left: String, right: String): Pair<Bo
     return leftInclusive to rightInclusive
 }
 
-private fun ParsingContext.checkRelation(lower: NumericBound, upper: NumericBound) {
+private fun RangeContext.checkRelation(lower: NumericBound, upper: NumericBound) {
     Compilation.check(lower < upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +

@@ -30,7 +30,10 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType
 
-internal data class ParsingContext(
+/**
+ * Data required to report a compilation error for the `(range)` option.
+ */
+internal data class RangeContext(
     val range: String,
     val primitiveType: PrimitiveType,
     val field: Field,
