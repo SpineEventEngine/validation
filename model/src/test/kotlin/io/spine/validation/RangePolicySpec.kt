@@ -34,17 +34,16 @@ import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`RangePolicy` should")
+@DisplayName("`RangePolicy` should reject the range")
 internal class RangePolicySpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithUnsupportedFieldType")
-    @ParameterizedTest(name = "reject when the field type is `{0}`")
-    fun rejectWhenFieldHasUnsupportedType(message: KClass<out Message>) {
+    @ParameterizedTest(name = "when the field type is `{0}`")
+    fun whenFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
@@ -56,8 +55,8 @@ internal class RangePolicySpec : CompilationErrorTest() {
     }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithInvalidDelimiters")
-    @ParameterizedTest(name = "reject the range with an invalid delimiter in `{0}`")
-    fun rejectInvalidDelimiters(message: KClass<out Message>) {
+    @ParameterizedTest(name = "with an invalid delimiter in `{0}`")
+    fun withInvalidDelimiters(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
@@ -68,8 +67,8 @@ internal class RangePolicySpec : CompilationErrorTest() {
     }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithOverflowValues")
-    @ParameterizedTest(name = "reject the range with a value causing an overflow in `{0}`")
-    fun rejectOverflowValue(message: KClass<out Message>, value: String) {
+    @ParameterizedTest(name = "with a value causing an overflow in `{0}`")
+    fun withOverflowValue(message: KClass<out Message>, value: String) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
@@ -80,101 +79,110 @@ internal class RangePolicySpec : CompilationErrorTest() {
         }
     }
 
-    @Nested inner class
-    `reject the range` {
-
-        @Test
-        fun `with an invalid opening symbol`() {
-            val descriptor = RangeInvalidOpening::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("The lower bound should begin either")
-            }
+    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithLowerEqualOrMoreThanUpper")
+    @ParameterizedTest(name = "if the lower bound is equal or more than the upper one in `{0}`")
+    fun withLowerEqualOrMoreThanUpper(message: KClass<out Message>, value: String) {
+        val descriptor = message.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(value)
+            shouldContain("should be less than the upper")
         }
+    }
 
-        @Test
-        fun `with an invalid closing symbol`() {
-            val descriptor = RangeInvalidClosing::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("The upper bound should end either")
-            }
+    @Test
+    fun `with an invalid opening symbol`() {
+        val descriptor = RangeInvalidOpening::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("The lower bound should begin either")
         }
+    }
 
-        @Test
-        fun `with integer number specified for lower bound of 'float' field`() {
-            val descriptor = RangeInvalidLowerFloat::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`0` bound value has an invalid format")
-                shouldContain("make sure the provided value is a floating-point number")
-            }
+    @Test
+    fun `with an invalid closing symbol`() {
+        val descriptor = RangeInvalidClosing::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("The upper bound should end either")
         }
+    }
 
-        @Test
-        fun `with integer number specified for upper bound of 'float' field`() {
-            val descriptor = RangeInvalidUpperFloat::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`15` bound value has an invalid format")
-                shouldContain("make sure the provided value is a floating-point number")
-            }
+    @Test
+    fun `with integer number specified for lower bound of 'float' field`() {
+        val descriptor = RangeInvalidLowerFloat::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`0` bound value has an invalid format")
+            shouldContain("make sure the provided value is a floating-point number")
         }
+    }
 
-        @Test
-        fun `with integer number specified for lower bound of 'double' field`() {
-            val descriptor = RangeInvalidLowerDouble::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`0` bound value has an invalid format")
-                shouldContain("make sure the provided value is a floating-point number")
-            }
+    @Test
+    fun `with integer number specified for upper bound of 'float' field`() {
+        val descriptor = RangeInvalidUpperFloat::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`15` bound value has an invalid format")
+            shouldContain("make sure the provided value is a floating-point number")
         }
+    }
 
-        @Test
-        fun `with integer number specified for upper bound of 'double' field`() {
-            val descriptor = RangeInvalidUpperDouble::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`15` bound value has an invalid format")
-                shouldContain("make sure the provided value is a floating-point number")
-            }
+    @Test
+    fun `with integer number specified for lower bound of 'double' field`() {
+        val descriptor = RangeInvalidLowerDouble::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`0` bound value has an invalid format")
+            shouldContain("make sure the provided value is a floating-point number")
         }
+    }
 
-        @Test
-        fun `with floating-point number specified for lower bound of 'int32' field`() {
-            val descriptor = RangeInvalidLowerInt::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`0.0` bound value has an invalid format")
-                shouldContain("make sure the provided value is an integer number")
-            }
+    @Test
+    fun `with integer number specified for upper bound of 'double' field`() {
+        val descriptor = RangeInvalidUpperDouble::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`15` bound value has an invalid format")
+            shouldContain("make sure the provided value is a floating-point number")
         }
+    }
 
-        @Test
-        fun `with floating-point number specified for upper bound of 'int32' field`() {
-            val descriptor = RangeInvalidUpperInt::class.descriptor
-            val error = assertCompilationFails(descriptor)
-            val field = descriptor.field("value")
-            error.message.run {
-                shouldContain(field.qualifiedName)
-                shouldContain("`15.0` bound value has an invalid format")
-                shouldContain("make sure the provided value is an integer number")
-            }
+    @Test
+    fun `with floating-point number specified for lower bound of 'int32' field`() {
+        val descriptor = RangeInvalidLowerInt::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`0.0` bound value has an invalid format")
+            shouldContain("make sure the provided value is an integer number")
+        }
+    }
+
+    @Test
+    fun `with floating-point number specified for upper bound of 'int32' field`() {
+        val descriptor = RangeInvalidUpperInt::class.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain("`15.0` bound value has an invalid format")
+            shouldContain("make sure the provided value is an integer number")
         }
     }
 }

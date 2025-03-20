@@ -156,7 +156,7 @@ private fun FieldType.extractPrimitive(): PrimitiveType? = when {
     else -> null
 }
 
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=\d)""")
+private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-])""")
 
 private val supportedPrimitives = listOf(
     TYPE_FLOAT, TYPE_DOUBLE,

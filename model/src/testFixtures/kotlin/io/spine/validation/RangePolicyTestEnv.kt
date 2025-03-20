@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 object RangePolicyTestEnv {
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.rejectWhenFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.RangePolicySpec.whenFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedFieldType() = listOf(
@@ -56,7 +56,7 @@ object RangePolicyTestEnv {
     ).map { arguments(named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.rejectInvalidDelimiters].
+     * Test data for [io.spine.validation.RangePolicySpec.withInvalidDelimiters].
      */
     @JvmStatic
     fun messagesWithInvalidDelimiters() = listOf(
@@ -67,7 +67,7 @@ object RangePolicyTestEnv {
     ).map { arguments(it) }
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.rejectOverflowValue].
+     * Test data for [io.spine.validation.RangePolicySpec.withOverflowValue].
      */
     @JvmStatic
     fun messagesWithOverflowValues() = listOf(
@@ -95,5 +95,24 @@ object RangePolicyTestEnv {
         RangeSFixed32UpperOverflow::class to "2147483648",
         RangeSFixed64LowerOverflow::class to "-9223372036854775809",
         RangeSFixed64UpperOverflow::class to "9223372036854775808",
+    ).map { arguments(it.first, it.second) }
+
+    /**
+     * Test data for [io.spine.validation.RangePolicySpec.withLowerEqualOrMoreThanUpper].
+     */
+    @JvmStatic
+    fun messagesWithLowerEqualOrMoreThanUpper() = listOf(
+        RangeFloatMinMax::class to "5.5",
+        RangeDoubleMinMax::class to "-5.5",
+        RangeInt32MinMax::class to "5",
+        RangeInt64MinMax::class to "-5",
+        RangeUInt32MinMax::class to "8",
+        RangeUInt64MinMax::class to "8",
+        RangeSInt32MinMax::class to "5",
+        RangeSInt64MinMax::class to "5",
+        RangeFixed32MinMax::class to "8",
+        RangeFixed64MinMax::class to "8",
+        RangeSFixed32MinMax::class to "5",
+        RangeSFixed64MinMax::class to "5",
     ).map { arguments(it.first, it.second) }
 }

@@ -36,50 +36,50 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "RangeInvalidMinMaxProto";
 option java_multiple_files = true;
 
-message RangeFloatMinMoreMax {
-    float negative = 1 [(range).value = "[5.5 .. -8.0]"];
+message RangeFloatMinMax {
+    float value = 1 [(range).value = "[5.5 .. -8.0]"];
 }
 
-message RangeDoubleMinMoreMax {
-    double value = 1 [(range).value = "[5.5 .. -8.0]"];
+message RangeDoubleMinMax {
+    double value = 1 [(range).value = "[-5.5 .. -10.0]"];
 }
 
-message RangeInt32MinMoreMax {
+message RangeInt32MinMax {
     int32 value = 1 [(range).value = "[5 .. -8]"];
 }
 
-message RangeInt64MinMoreMax {
-    int64 value = 1 [(range).value = "[5 .. -8]"];
+message RangeInt64MinMax {
+    int64 value = 1 [(range).value = "[-5 .. -10]"];
 }
 
-message RangeUInt32MinMoreMax {
+message RangeUInt32MinMax {
     uint32 value = 1 [(range).value = "[8 .. 5]"];
 }
 
-message RangeUInt64MinMoreMax {
+message RangeUInt64MinMax {
     uint64 value = 1 [(range).value = "[8 .. 5]"];
 }
 
-message RangeSInt32MinMoreMax {
+message RangeSInt32MinMax {
     sint32 value = 1 [(range).value = "[5 .. -8]"];
 }
 
-message RangeSInt64MinMoreMax {
+message RangeSInt64MinMax {
     sint64 value = 1 [(range).value = "[5 .. -8]"];
 }
 
-message RangeFixed32MinMoreMax {
+message RangeFixed32MinMax {
     fixed32 value = 1 [(range).value = "[8 .. 5]"];
 }
 
-message RangeFixed64MinMoreMax {
+message RangeFixed64MinMax {
     fixed64 value = 1 [(range).value = "[8 .. 5]"];
 }
 
-message RangeSFixed32MinMoreMax {
+message RangeSFixed32MinMax {
     sfixed32 value = 1 [(range).value = "[5 .. -8]"];
 }
 
-message RangeSFixed64MinMoreMax {
+message RangeSFixed64MinMax {
     sfixed64 value = 1 [(range).value = "[5 .. -8]"];
 }
