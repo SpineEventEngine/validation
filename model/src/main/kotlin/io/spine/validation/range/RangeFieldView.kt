@@ -34,7 +34,7 @@ import io.spine.validation.RangeField
 import io.spine.validation.event.RangeFieldDiscovered
 
 /**
- * A view of a field that is marked with `(range)` option.
+ * A view of a field that is marked with the `(range)` option.
  */
 internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
 
