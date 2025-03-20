@@ -45,6 +45,15 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validation.RANGE
 
+/**
+ * Parses the given string [value] to a [NumericBound].
+ *
+ * This method checks the following:
+ *
+ * 1) The provided number has `.` for floating-point fields, and does not have `.`
+ *    for integer fields.
+ * 2) The provided number fits into the range of the target field type.
+ */
 internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): NumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
