@@ -141,6 +141,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val lowerOperator = if (lower.inclusive) "<" else "<="
         val upperLiteral = upper.asLiteral()
         val upperOperator = if (upper.inclusive) ">" else ">="
+        // TODO:2025-03-20:yevhenii.nadtochii: Leave a warning. We need an overload from ProtoData.
         return when (valueCase) {
             UINT32_VALUE -> Expression(
                 "$IntegerClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
