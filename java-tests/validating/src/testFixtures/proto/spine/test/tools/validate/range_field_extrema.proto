@@ -44,12 +44,12 @@ message RangeFieldExtrema {
     double double = 2 [(range).value ="[-1.7976931348623157E308 .. 1.7976931348623157E308]"];
     int32 int32 = 3 [(range).value = "[-2147483648 .. 2147483647]"];
     int64 int64 = 4 [(range).value = "[-9223372036854775808 .. 9223372036854775807]"];
-    // `uint32` cannot be asserted with Java.
-    // `uint64` cannot be asserted with Java.
+    uint32 uint32 = 5 [(range).value = "[0 .. 4294967295]"];
+    uint64 uint64 = 6 [(range).value = "[0 .. 18446744073709551615]"];
     sint32 sint32 = 7 [(range).value = "[-2147483648 .. 2147483647]"];
     sint64 sint64 = 8 [(range).value = "[-9223372036854775808 .. 9223372036854775807]"];
-    // `fixed32` cannot be asserted with Java.
-    // `fixed64` cannot be asserted with Java.
+    fixed32 fixed32 = 9 [(range).value = "[0 .. 4294967295]"];
+    fixed64 fixed64 = 10 [(range).value = "[0 .. 18446744073709551615]"];
     sfixed32 sfixed32 = 11 [(range).value = "[-2147483648 .. 2147483647]"];
     sfixed64 sfixed64 = 12 [(range).value = "[-9223372036854775808 .. 9223372036854775807]"];
 }

@@ -48,6 +48,8 @@ import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.RANGE
 import io.spine.validation.RangeField
+import io.spine.validation.java.expression.IntegerClassName
+import io.spine.validation.java.expression.LongClassName
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
@@ -79,35 +81,21 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     private val fieldType = field.type
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
-
     private val lower = view.lowerBound
     private val upper = view.upperBound
 
     /**
      * Generates code for a field represented by the [view].
      */
+    @Suppress("UNCHECKED_CAST") // Safe due to the field type check.
     override fun generate(): FieldOptionCode = when {
-        fieldType.isSingular -> CodeBlock(
-            """
-            if ($getter ${if (lower.inclusive) "<" else "<="} ${lower.asLiteral()} || $getter ${if (upper.inclusive) ">" else ">="} ${upper.asLiteral()}) {
-                var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  ${parentName.orElse(declaringType)};
-                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), getter)};
-                $violations.add(violation);
-            }
-            """.trimIndent()
-        )
+        fieldType.isSingular -> checkWithinTheRange(getter as Expression<Number>)
 
         fieldType.isList ->
             CodeBlock(
                 """
                 for (var element : $getter) {
-                    if (element ${if (lower.inclusive) "<" else "<="} ${lower.asLiteral()} || element ${if (upper.inclusive) ">" else ">="} ${upper.asLiteral()}) {
-                        var fieldPath = ${parentPath.resolve(field.name)};
-                        var typeName =  ${parentName.orElse(declaringType)};
-                        var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
-                        $violations.add(violation);
-                    }
+                    ${checkWithinTheRange(ReadVar("element"))}
                 }
                 """.trimIndent()
             )
@@ -119,10 +107,46 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         )
     }.run { FieldOptionCode(this) }
 
+    private fun checkWithinTheRange(value: Expression<Number>): CodeBlock =
+        CodeBlock(
+            """
+            if (${doesNotBelongToRange(value)}) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), value)};
+                $violations.add(violation);
+            }    
+            """.trimIndent()
+        )
+
+    /**
+     * Returns a boolean expression that checks if the given [value] is within
+     * the [lower] and [upper] bounds.
+     */
+    private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
+        val valueCase = lower.valueCase // This case is the same for both bounds.
+        val lowerLiteral = lower.asLiteral()
+        val upperLiteral = upper.asLiteral()
+        return when (valueCase) {
+            UINT32_VALUE -> Expression(
+                "$IntegerClassName.compareUnsigned($value, $lowerLiteral) ${if (lower.inclusive) "<" else "<="} 0 ||" +
+                        "$IntegerClassName.compareUnsigned($value, $upperLiteral) ${if (upper.inclusive) ">" else ">="} 0"
+            )
+            UINT64_VALUE -> Expression(
+                "$LongClassName.compareUnsigned($value, $lowerLiteral) ${if (lower.inclusive) "<" else "<="} 0 ||" +
+                        "$LongClassName.compareUnsigned($value, $upperLiteral) ${if (upper.inclusive) ">" else ">="} 0"
+            )
+            else -> Expression(
+                "$value ${if (lower.inclusive) "<" else "<="} $lowerLiteral ||" +
+                        " $value ${if (upper.inclusive) ">" else ">="} $upperLiteral"
+            )
+        }
+    }
+
     private fun violation(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<TypeName>,
-        fieldValue: Expression<Any>,
+        fieldValue: Expression<Number>,
     ): Expression<ConstraintViolation> {
         val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
