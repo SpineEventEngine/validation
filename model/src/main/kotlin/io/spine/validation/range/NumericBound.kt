@@ -28,8 +28,17 @@ package io.spine.validation.range
 
 import io.spine.validation.NumericBound as ProtoNumericBound
 
+/**
+ * One to one Kotlin representation of [ProtoNumericBound].
+ *
+ * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
+ * It eases the implementation of parsing and comparisons for such bounds.
+ * Otherwise, we would have to care for special cases with unsigned types (which are just `int`
+ * and `long` in Protobuf) when parsing and comparing such bounds. With this class,
+ * Kotlin unsigned classes do it for us.
+ */
 internal data class NumericBound(
-    val value: Any, // Cannot use `Number` due to Kotlin's `UInt` and `ULong`.
+    val value: Any, // Cannot use `Number` because Kotlin's `UInt` and `ULong` are not numbers.
     val inclusive: Boolean
 ) : Comparable<NumericBound> {
 
@@ -57,6 +66,9 @@ internal data class NumericBound(
     }
 }
 
+/**
+ * Creates an instance of [ProtoNumericBound] from this [NumericBound].
+ */
 internal fun NumericBound.toProto(): ProtoNumericBound {
     val builder = ProtoNumericBound.newBuilder()
         .setInclusive(inclusive)
@@ -66,10 +78,10 @@ internal fun NumericBound.toProto(): ProtoNumericBound {
         is Int -> builder.setInt32Value(value)
         is Long -> builder.setInt64Value(value)
 
-        // The resulting `Int` value has the same binary representation as this `UInt` value.
+        // The resulting `int` value will have the same binary representation as `UInt` value.
         is UInt -> builder.setUint32Value(value.toInt())
 
-        // The resulting `Long` value has the same binary representation as this `ULong` value.
+        // The resulting `long` value will have the same binary representation as `ULong` value.
         is ULong -> builder.setUint64Value(value.toLong())
 
         else -> error(
