@@ -27,6 +27,7 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
@@ -126,19 +127,21 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
         val valueCase = lower.valueCase // This case is the same for both bounds.
         val lowerLiteral = lower.asLiteral()
+        val lowerOperator = if (lower.inclusive) "<" else "<="
         val upperLiteral = upper.asLiteral()
+        val upperOperator = if (upper.inclusive) ">" else ">="
         return when (valueCase) {
             UINT32_VALUE -> Expression(
-                "$IntegerClassName.compareUnsigned($value, $lowerLiteral) ${if (lower.inclusive) "<" else "<="} 0 ||" +
-                        "$IntegerClassName.compareUnsigned($value, $upperLiteral) ${if (upper.inclusive) ">" else ">="} 0"
+                "$IntegerClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$IntegerClassName.compareUnsigned($value, $upperLiteral) $upperOperator 0"
             )
             UINT64_VALUE -> Expression(
-                "$LongClassName.compareUnsigned($value, $lowerLiteral) ${if (lower.inclusive) "<" else "<="} 0 ||" +
-                        "$LongClassName.compareUnsigned($value, $upperLiteral) ${if (upper.inclusive) ">" else ">="} 0"
+                "$LongClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$LongClassName.compareUnsigned($value, $upperLiteral) $upperOperator 0"
             )
             else -> Expression(
-                "$value ${if (lower.inclusive) "<" else "<="} $lowerLiteral ||" +
-                        " $value ${if (upper.inclusive) ">" else ">="} $upperLiteral"
+                "$value $lowerOperator $lowerLiteral ||" +
+                        " $value $upperOperator $upperLiteral"
             )
         }
     }
