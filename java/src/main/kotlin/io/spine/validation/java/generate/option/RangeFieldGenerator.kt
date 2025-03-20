@@ -27,7 +27,6 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.Compilation
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
@@ -108,6 +107,13 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         )
     }.run { FieldOptionCode(this) }
 
+    /**
+     * Returns a [CodeBlock] that checks that the given [value] is within the [lower]
+     * and [upper] bounds.
+     *
+     * If the passed value is out of the range, creates an instance of [ConstraintViolation]
+     * adding it to the [violations] list.
+     */
     private fun checkWithinTheRange(value: Expression<Number>): CodeBlock =
         CodeBlock(
             """
@@ -123,9 +129,14 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     /**
      * Returns a boolean expression that checks if the given [value] is within
      * the [lower] and [upper] bounds.
+     *
+     * Unsigned values are handled in a special way because Java does not support them natively.
+     * [IntegerClassName] and [LongClassName] classes provide static methods to treat signed
+     * types as unsigned, including parsing, printing, comparison and math operations.
+     * Outside of these methods, these primitives remain just signed types.
      */
     private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
-        val valueCase = lower.valueCase // This case is the same for both bounds.
+        val valueCase = lower.valueCase // This case is the same for both `lower` and `upper`.
         val lowerLiteral = lower.asLiteral()
         val lowerOperator = if (lower.inclusive) "<" else "<="
         val upperLiteral = upper.asLiteral()
@@ -156,7 +167,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
         // TODO:2025-03-19:yevhenii.nadtochii: Temporarily to make tests pass.
         val errorMessage = templateString(
-            view.errorMessage + "The passed value: `\${field.value}`.",
+            view.errorMessage + " The passed value: `\${field.value}`.",
             placeholders, RANGE, qualifiedName
         )
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
@@ -175,14 +186,21 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     )
 }
 
+/**
+ * Returns a string representation of this [NumericBound].
+ *
+ * Note that unsigned types are printed as if they were signed. Therefore, values above `2^32`
+ * will become negative `int` constants. This is acceptable because static methods for unsigned
+ * values in [IntegerClassName] and [LongClassName] will handle them gracefully.
+ */
 private fun NumericBound.asLiteral() =
     when (valueCase) {
         FLOAT_VALUE -> Literal("${floatValue}F")
         DOUBLE_VALUE -> Literal("$doubleValue")
         INT32_VALUE -> Literal("$int32Value")
         INT64_VALUE -> Literal("${int64Value}L")
-        UINT32_VALUE -> Literal("$uint32Value") // Possible overflow.
-        UINT64_VALUE -> Literal("$uint64Value") // Possible overflow.
+        UINT32_VALUE -> Literal("$uint32Value")
+        UINT64_VALUE -> Literal("$uint64Value")
         else -> error(
             "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
                     " Make sure `RangePolicy` correctly filtered out unsupported field types."
