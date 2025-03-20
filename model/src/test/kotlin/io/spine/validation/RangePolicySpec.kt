@@ -63,7 +63,6 @@ internal class RangePolicySpec : CompilationErrorTest() {
         val field = descriptor.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the range")
             shouldContain("The lower and upper bounds should be separated")
         }
     }
@@ -76,8 +75,8 @@ internal class RangePolicySpec : CompilationErrorTest() {
         val field = descriptor.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the range")
             shouldContain(value)
+            shouldContain("bound value is out of range")
         }
     }
 
@@ -90,7 +89,6 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("The lower bound should begin either")
             }
@@ -102,7 +100,6 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("The upper bound should end either")
             }
@@ -114,9 +111,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`0` bound value has an invalid format")
+                shouldContain("make sure the provided value is a floating-point number")
             }
         }
 
@@ -126,9 +123,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`15` bound value has an invalid format")
+                shouldContain("make sure the provided value is a floating-point number")
             }
         }
 
@@ -138,9 +135,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`0` bound value has an invalid format")
+                shouldContain("make sure the provided value is a floating-point number")
             }
         }
 
@@ -150,9 +147,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`15` bound value has an invalid format")
+                shouldContain("make sure the provided value is a floating-point number")
             }
         }
 
@@ -162,9 +159,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`0.0` bound value has an invalid format")
+                shouldContain("make sure the provided value is an integer number")
             }
         }
 
@@ -174,9 +171,9 @@ internal class RangePolicySpec : CompilationErrorTest() {
             val error = assertCompilationFails(descriptor)
             val field = descriptor.field("value")
             error.message.run {
-                shouldContain("could not parse the range")
                 shouldContain(field.qualifiedName)
                 shouldContain("`15.0` bound value has an invalid format")
+                shouldContain("make sure the provided value is an integer number")
             }
         }
     }

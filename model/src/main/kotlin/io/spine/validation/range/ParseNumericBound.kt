@@ -27,6 +27,7 @@
 package io.spine.validation.range
 
 import io.spine.protodata.Compilation
+import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
 import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
 import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
@@ -41,36 +42,47 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.check
 import io.spine.validation.RANGE
 
 internal fun ParsingContext.numericBound(value: String, inclusive: Boolean): NumericBound {
+    if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
+        Compilation.check(FLOAT.matches(value), file, field.span) {
+            "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                    " `${field.qualifiedName}` field. The `$value` bound value has" +
+                    " an invalid format. Please make sure the provided value is" +
+                    " a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
+        }
+    } else {
+        Compilation.check(INTEGER.matches(value), file, field.span) {
+            "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                    " `${field.qualifiedName}` field. The `$value` bound value has" +
+                    " an invalid format. Please make sure the provided value is" +
+                    " an integer number. Examples: `123`, `-567823`."
+        }
+    }
     val number = when (primitiveType) {
-        TYPE_FLOAT -> if (value.contains(".")) value.toFloatOrNull() else null
-        TYPE_DOUBLE -> if (value.contains(".")) value.toDoubleOrNull() else null
+        TYPE_FLOAT -> value.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_DOUBLE -> value.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
         TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> value.toIntOrNull()
         TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> value.toLongOrNull()
         TYPE_UINT32, TYPE_FIXED32 -> value.toUIntOrNull()
         TYPE_UINT64, TYPE_FIXED64 -> value.toULongOrNull()
-        else -> error(
-            "`NumericBound` cannot be created for `$primitiveType` field type." +
-                    " Please make sure `RangePolicy` correctly filtered unsupported field types."
-        )
+        else -> unexpectedPrimitiveType(primitiveType)
     }
-    if (number == null) {
-        Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The `$value` bound value has" +
-                    " an invalid format. Please make sure the number has a correct format" +
-                    " and it is within the range of the field type (`${field.type.name}`)" +
-                    " the option is applied to."
-        }
+    Compilation.check(number != null, file, field.span) {
+        "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
+                " for the field type (`${field.type.name}`) the option is applied to."
     }
-    if ("$number".contains("Infinity")) {
-        Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
-                    " for the field type (`${field.type.name}`) the option is applied to."
-        }
-    }
-    return NumericBound(number, inclusive)
+    return NumericBound(number!!, inclusive)
 }
+
+private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
+    error(
+        "`NumericBound` cannot be created for `$primitiveType` field type." +
+                " Please make sure `RangePolicy` correctly filtered unsupported field types."
+    )
+
+private val INTEGER = Regex("[-+]?\\d+")
+private val FLOAT = Regex("[-+]?\\d+\\.\\d+([eE][-+]?\\d+)?")
