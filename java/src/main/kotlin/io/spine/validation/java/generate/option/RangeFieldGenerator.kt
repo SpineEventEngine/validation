@@ -87,7 +87,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     /**
      * Generates code for a field represented by the [view].
      */
-    @Suppress("UNCHECKED_CAST") // Safe due to the field type check.
+    @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
     override fun generate(): FieldOptionCode = when {
         fieldType.isSingular -> checkWithinTheRange(getter as Expression<Number>)
 
