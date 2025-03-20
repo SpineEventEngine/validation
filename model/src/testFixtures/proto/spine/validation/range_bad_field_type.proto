@@ -33,61 +33,68 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "RangeInvalidSyntaxProto";
+option java_outer_classname = "RangeBadFieldTypeProto";
 option java_multiple_files = true;
 
-// Invalid delimiter.
+import "google/protobuf/timestamp.proto";
 
-message RangeInvalidDelimiter1 {
-    int32 value = 1 [(range).value = "[-5 ... 10]"];
+// This file contains messages that apply `(range)` option to fields,
+// which do not support it.
+
+message RangeOnString {
+    string value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidDelimiter2 {
-    int32 value = 1 [(range).value = "[-5  ..  10]"];
+message RangeOnBool {
+    bool value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidDelimiter3 {
-    int32 value = 1 [(range).value = "[-5, 10]"];
+message RangeOnBytes {
+    bytes value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidDelimiter4 {
-    int32 value = 1 [(range).value = "[-5; 10]"];
+message RangeOnMessage {
+    google.protobuf.Timestamp value = 1 [(range).value = "[5 .. 10]"];
 }
 
-
-// Invalid opening or closing symbol.
-
-message RangeInvalidOpening {
-    int32 value = 1 [(range).value = "{-5 .. 10]"];
+message RangeOnEnum {
+    Status value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidClosing {
-    int32 value = 1 [(range).value = "[-5 .. 10"];
+message RangeOnStringRepeated {
+    repeated string value = 1 [(range).value = "[5 .. 10]"];
 }
 
-
-// Invalid number type.
-
-message RangeInvalidLowerFloat {
-    float value = 1 [(range).value = "[0 .. 15.0]"];
+message RangeOnBoolRepeated {
+    repeated bool value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidUpperFloat {
-    float value = 1 [(range).value = "[0.0 .. 15]"];
+message RangeOnBytesRepeated {
+    repeated bytes value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidLowerDouble {
-    double value = 1 [(range).value = "[0 .. 15.0]"];
+message RangeOnMessageRepeated {
+    repeated google.protobuf.Timestamp value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidUpperDouble {
-    double value = 1 [(range).value = "[0.0 .. 15]"];
+message RangeOnEnumRepeated {
+    repeated Status value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidLowerInt {
-    int32 value = 1 [(range).value = "[0.0 .. 15]"];
+message RangeOnIntMap {
+    map<string, int32> value = 1 [(range).value = "[5 .. 10]"];
 }
 
-message RangeInvalidUpperInt {
-    int32 value = 1 [(range).value = "[0 .. 15.0]"];
+message RangeOnDoubleMap {
+    map<string, double> value = 1 [(range).value = "[5 .. 10]"];
+}
+
+message RangeOnStringMap {
+    map<string, string> value = 1 [(range).value = "[5 .. 10]"];
+}
+
+enum Status {
+    STATUS_UNKNOWN = 0;  // Required zero value
+    STATUS_ACTIVE = 1;
+    STATUS_INACTIVE = 2;
 }

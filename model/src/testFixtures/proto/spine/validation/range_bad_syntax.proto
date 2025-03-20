@@ -33,53 +33,61 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "RangeInvalidMinMaxProto";
+option java_outer_classname = "RangeBadSyntaxProto";
 option java_multiple_files = true;
 
-message RangeFloatMinMax {
-    float value = 1 [(range).value = "[5.5 .. -8.0]"];
+// Invalid delimiter.
+
+message RangeInvalidDelimiter1 {
+    int32 value = 1 [(range).value = "[-5 ... 10]"];
 }
 
-message RangeDoubleMinMax {
-    double value = 1 [(range).value = "[-5.5 .. -10.0]"];
+message RangeInvalidDelimiter2 {
+    int32 value = 1 [(range).value = "[-5  ..  10]"];
 }
 
-message RangeInt32MinMax {
-    int32 value = 1 [(range).value = "[5 .. -8]"];
+message RangeInvalidDelimiter3 {
+    int32 value = 1 [(range).value = "[-5, 10]"];
 }
 
-message RangeInt64MinMax {
-    int64 value = 1 [(range).value = "[-5 .. -10]"];
+message RangeInvalidDelimiter4 {
+    int32 value = 1 [(range).value = "[-5; 10]"];
 }
 
-message RangeUInt32MinMax {
-    uint32 value = 1 [(range).value = "[8 .. 5]"];
+
+// Invalid opening or closing symbol.
+
+message RangeInvalidOpening {
+    int32 value = 1 [(range).value = "{-5 .. 10]"];
 }
 
-message RangeUInt64MinMax {
-    uint64 value = 1 [(range).value = "[8 .. 5]"];
+message RangeInvalidClosing {
+    int32 value = 1 [(range).value = "[-5 .. 10"];
 }
 
-message RangeSInt32MinMax {
-    sint32 value = 1 [(range).value = "[5 .. -8]"];
+
+// Invalid number type.
+
+message RangeInvalidLowerFloat {
+    float value = 1 [(range).value = "[0 .. 15.0]"];
 }
 
-message RangeSInt64MinMax {
-    sint64 value = 1 [(range).value = "[5 .. -8]"];
+message RangeInvalidUpperFloat {
+    float value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
-message RangeFixed32MinMax {
-    fixed32 value = 1 [(range).value = "[8 .. 5]"];
+message RangeInvalidLowerDouble {
+    double value = 1 [(range).value = "[0 .. 15.0]"];
 }
 
-message RangeFixed64MinMax {
-    fixed64 value = 1 [(range).value = "[8 .. 5]"];
+message RangeInvalidUpperDouble {
+    double value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
-message RangeSFixed32MinMax {
-    sfixed32 value = 1 [(range).value = "[5 .. -8]"];
+message RangeInvalidLowerInt {
+    int32 value = 1 [(range).value = "[0.0 .. 15]"];
 }
 
-message RangeSFixed64MinMax {
-    sfixed64 value = 1 [(range).value = "[5 .. -8]"];
+message RangeInvalidUpperInt {
+    int32 value = 1 [(range).value = "[0 .. 15.0]"];
 }
