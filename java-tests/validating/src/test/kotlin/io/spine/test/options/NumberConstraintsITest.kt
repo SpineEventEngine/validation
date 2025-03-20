@@ -100,7 +100,7 @@ internal class NumberConstraintsITest {
     }
 
     @Test
-    fun `numerical range covers minimum values of the field type`() {
+    fun `numerical range handles minimum values of the field type`() {
         val intMinValue = Int.MIN_VALUE
         val longMinValue = Long.MIN_VALUE
         val uintMinValue = UInt.MIN_VALUE.toInt()
@@ -123,7 +123,7 @@ internal class NumberConstraintsITest {
     }
 
     @Test
-    fun `numerical range covers maximum values of the field type`() {
+    fun `numerical range handles maximum values of the field type`() {
         val intMaxValue = Int.MAX_VALUE
         val longMaxValue = Long.MAX_VALUE
         val uintMaxValue = UInt.MAX_VALUE.toInt()
