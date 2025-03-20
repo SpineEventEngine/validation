@@ -103,8 +103,11 @@ internal class NumberConstraintsITest {
     fun `numerical range handles minimum values of the field type`() {
         val intMinValue = Int.MIN_VALUE
         val longMinValue = Long.MIN_VALUE
+
+        // Protobuf API expects `int` and `long` for unsigned fields.
         val uintMinValue = UInt.MIN_VALUE.toInt()
         val ulongMinValue = ULong.MIN_VALUE.toLong()
+
         assertValid(
             RangeFieldExtrema.newBuilder()
                 .setFloat(-Float.MAX_VALUE)
@@ -126,8 +129,11 @@ internal class NumberConstraintsITest {
     fun `numerical range handles maximum values of the field type`() {
         val intMaxValue = Int.MAX_VALUE
         val longMaxValue = Long.MAX_VALUE
+
+        // Protobuf API expects `int` and `long` for unsigned fields.
         val uintMaxValue = UInt.MAX_VALUE.toInt()
         val ulongMaxValue = ULong.MAX_VALUE.toLong()
+
         assertValid(
             RangeFieldExtrema.newBuilder()
                 .setFloat(Float.MAX_VALUE)
