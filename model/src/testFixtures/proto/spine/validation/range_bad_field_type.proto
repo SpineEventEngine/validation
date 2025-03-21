@@ -38,7 +38,7 @@ option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
 
-// This file contains messages that apply `(range)` option to fields,
+// This file contains messages that apply the `(range)` option to fields,
 // which do not support it.
 
 message RangeOnString {
@@ -94,7 +94,7 @@ message RangeOnStringMap {
 }
 
 enum Status {
-    STATUS_UNKNOWN = 0;  // Required zero value
+    STATUS_UNKNOWN = 0;
     STATUS_ACTIVE = 1;
     STATUS_INACTIVE = 2;
 }

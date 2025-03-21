@@ -36,6 +36,8 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "RangeBadSyntaxProto";
 option java_multiple_files = true;
 
+// This file contains messages with the `(range)` option having an invalid syntax.
+
 // Invalid delimiter.
 
 message RangeInvalidDelimiter1 {

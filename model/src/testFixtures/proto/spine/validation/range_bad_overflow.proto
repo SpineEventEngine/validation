@@ -36,17 +36,16 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "RangeBadOverflowProto";
 option java_multiple_files = true;
 
-// This file contains messages that should cause a compilation error
-// because the passed range contains a number, which is out of range
-// for the target field type.
+// This file contains messages with the `(range)` option having boundary values,
+// which are out of the range for the field type.
 //
 // The following cases are covered:
-// 1. The left boundary is too small.
-// 2. The right boundary is too big.
+//  1. The left boundary is too small.
+//  2. The right boundary is too large.
 //
 // Covering a case where the both boundaries are out of range does not
-// make sense because the compilation error will be initiated by the left
-// boundary, failing in the first place.
+// make sense because the compilation error will always be initiated by
+// the left boundary, failing the compilation immediately.
 //
 
 message RangeFloatLowerOverflow {
