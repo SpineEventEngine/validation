@@ -63,12 +63,28 @@ import io.spine.validation.defaultMessage
 import io.spine.validation.event.RangeFieldDiscovered
 import io.spine.validation.event.rangeFieldDiscovered
 
+/**
+ * Controls whether a field should be validated with the `(range)` option.
+ *
+ * Whenever a field marked with `(range)` option is discovered, emits
+ * [RangeFieldDiscovered] event if the following conditions are met:
+ *
+ * 1. The field type is supported by the option.
+ * 2. The passed regex has the correct syntax and is compatible with the target field type.
+ *    2.1. Either `..` or ` .. ` is used as a range delimiter.
+ *    2.2. Either `()` for exclusive or `[]` for inclusive bounds is used.
+ *    2.3. The provided number has `.` for floating-point fields, and does not have `.`
+ *         for integer fields.
+ *    2.4. The provided bounds fit into the range of the target field type.
+ *    2.5. The lower bound is strictly less than the upper one.
+ *
+ * Any violation of the above conditions leads to a compilation error.
+ */
 internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External
-        @Where(field = OPTION_NAME, equals = RANGE)
+        @External @Where(field = OPTION_NAME, equals = RANGE)
         event: FieldOptionDiscovered
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
@@ -76,15 +92,13 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val primitiveType = checkFieldType(field, file)
 
         val option = event.option.unpack<RangeOption>()
-        val range = option.value
-        val context = RangeContext(range, primitiveType, field, file)
+        val context = RangeContext(option.value, primitiveType, field, file)
         val delimiter = context.checkDelimiter()
 
-        val (left, right) = range.split(delimiter)
-        val (minInclusive, maxInclusive) = context.checkBoundTypes(left, right)
-
-        val lower = context.numericBound(left.substring(1), minInclusive)
-        val upper = context.numericBound(right.dropLast(1), maxInclusive)
+        val (left, right) = context.range.split(delimiter)
+        val (lowerInclusive, upperInclusive) = context.checkBoundTypes(left, right)
+        val lower = context.checkNumericBound(left.substring(1), lowerInclusive)
+        val upper = context.checkNumericBound(right.dropLast(1), upperInclusive)
         context.checkRelation(lower, upper)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -118,10 +132,10 @@ private fun RangeContext.checkDelimiter(): String =
                     " ranges: `(0..10]`, `[0 .. 10)`."
         }
 
-private fun RangeContext.checkBoundTypes(left: String, right: String): Pair<Boolean, Boolean> {
-    val leftInclusive = when {
-        left.startsWith("(") -> false
-        left.startsWith("[") -> true
+private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
+    val lowerInclusive = when (lower.first()) {
+        '(' -> false
+        '[' -> true
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The lower bound should begin either" +
@@ -129,9 +143,9 @@ private fun RangeContext.checkBoundTypes(left: String, right: String): Pair<Bool
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    val rightInclusive = when {
-        right.endsWith(")") -> false
-        right.endsWith("]") -> true
+    val upperInclusive = when (upper.last()) {
+        ')' -> false
+        ']' -> true
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The upper bound should end either" +
@@ -139,7 +153,7 @@ private fun RangeContext.checkBoundTypes(left: String, right: String): Pair<Bool
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    return leftInclusive to rightInclusive
+    return lowerInclusive to upperInclusive
 }
 
 private fun RangeContext.checkRelation(lower: NumericBound, upper: NumericBound) {
@@ -150,6 +164,11 @@ private fun RangeContext.checkRelation(lower: NumericBound, upper: NumericBound)
     }
 }
 
+/**
+ * Extracts a primitive type if this [FieldType] is singular or repeated field.
+ *
+ * The option does not support maps, so we cannot use a similar extension from ProtoData.
+ */
 private fun FieldType.extractPrimitive(): PrimitiveType? = when {
     isPrimitive -> primitive
     isList -> list.primitive
