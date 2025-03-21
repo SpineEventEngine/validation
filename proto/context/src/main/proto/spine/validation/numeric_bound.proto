@@ -41,8 +41,14 @@ message NumericBound {
     // Whether the bound value itself should be included into the range.
     bool inclusive = 1;
 
-    // We do not cover other integer types. The rest of integers do not introduce new
-    // ranges, but change the way data is represented in serialized form.
+    // A numeric value itself.
+    //
+    // Note that we do not cover all integer types. The remaining integers do not introduce
+    // their own ranges. They introduce alternative binary representations.
+    //
+    // For example, `sfixed32` has the same range of values as `int32`. But uses always 4
+    // bytes of spaces in comparison to `int32`, which uses variable-length encoding.
+    //
     oneof value {
         float float_value = 2;
         double double_value = 3;
