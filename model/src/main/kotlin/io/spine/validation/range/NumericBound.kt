@@ -26,6 +26,24 @@
 
 package io.spine.validation.range
 
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
+import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.check
+import io.spine.validation.RANGE
 import io.spine.validation.NumericBound as ProtoNumericBound
 
 /**
@@ -91,3 +109,58 @@ internal fun NumericBound.toProto(): ProtoNumericBound {
     }
     return builder.build()
 }
+
+/**
+ * Parses the given string [value] to a [NumericBound].
+ *
+ * This method checks the following:
+ *
+ * 1) The provided number has `.` for floating-point fields, and does not have `.`
+ *    for integer fields.
+ * 2) The provided number fits into the range of the target field type.
+ *
+ * Any violation of the above conditions leads to a compilation error.
+ *
+ * @return The parsed numeric bound.
+ */
+internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): NumericBound {
+    if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
+        Compilation.check(FLOAT.matches(value), file, field.span) {
+            "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                    " `${field.qualifiedName}` field. The `$value` bound value has" +
+                    " an invalid format. Please make sure the provided value is" +
+                    " a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
+        }
+    } else {
+        Compilation.check(INTEGER.matches(value), file, field.span) {
+            "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                    " `${field.qualifiedName}` field. The `$value` bound value has" +
+                    " an invalid format. Please make sure the provided value is" +
+                    " an integer number. Examples: `123`, `-567823`."
+        }
+    }
+    val number = when (primitiveType) {
+        TYPE_FLOAT -> value.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_DOUBLE -> value.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> value.toIntOrNull()
+        TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> value.toLongOrNull()
+        TYPE_UINT32, TYPE_FIXED32 -> value.toUIntOrNull()
+        TYPE_UINT64, TYPE_FIXED64 -> value.toULongOrNull()
+        else -> unexpectedPrimitiveType(primitiveType)
+    }
+    Compilation.check(number != null, file, field.span) {
+        "The `($RANGE)` option could not parse the range value `$range` specified for" +
+                " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
+                " for the field type (`${field.type.name}`) the option is applied to."
+    }
+    return NumericBound(number!!, inclusive)
+}
+
+private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
+    error(
+        "`NumericBound` cannot be created for `$primitiveType` field type." +
+                " Please make sure `RangePolicy` correctly filtered unsupported field types."
+    )
+
+private val INTEGER = Regex("[-+]?\\d+")
+private val FLOAT = Regex("[-+]?\\d+\\.\\d+([eE][-+]?\\d+)?")
