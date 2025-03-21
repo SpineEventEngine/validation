@@ -38,6 +38,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -96,14 +97,14 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of the `${field.qualifiedName}` field" +
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
                 " is not supported by the `($GOES)` option."
     }
 
 private fun checkCompanionType(companion: Field, file: File) =
     Compilation.check(companion.type.isSupported(), file, companion.span) {
-        "The field type `${companion.type}` of the companion `${companion.qualifiedName}` field" +
-                " is not supported by the `($GOES)` option."
+        "The field type `${companion.type.name}` of the companion `${companion.qualifiedName}`" +
+                " field is not supported by the `($GOES)` option."
     }
 
 private fun checkFieldExists(message: MessageType, companion: String, field: Field, file: File) =

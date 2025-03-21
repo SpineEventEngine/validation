@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,35 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.range
 
-import io.spine.core.External
-import io.spine.core.Where
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.just
-import io.spine.server.event.React
-import io.spine.validation.NumberRules.Companion.from
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.compositeRuleAdded
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType
 
 /**
- * A policy to add validation rules to a type whenever the `(range)` field option
- * is discovered.
+ * Data required to report a compilation error for the `(range)` option.
  */
-internal class RangePolicy : Policy<FieldOptionDiscovered>() {
-
-    @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = RANGE)
-        event: FieldOptionDiscovered
-    ): Just<CompositeRuleAdded> {
-        val field = event.subject
-        val rules = from(field, event.option, typeSystem)
-        return just(compositeRuleAdded {
-                type = field.declaringType
-                rule = rules.rangeRule(field.name)
-        })
-    }
-}
+internal data class RangeContext(
+    val range: String,
+    val primitiveType: PrimitiveType,
+    val field: Field,
+    val file: File
+)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,34 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.java.generate.option
+
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RangeField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * A template placeholder that can be used in error messages.
- *
- * Enumerates placeholder names that can be used within Protobuf definitions.
- * Each validation option declares the supported placeholders within `options.proto`.
- *
- * Important Note: this enum is an exact copy of `io.spine.validation.java.ErrorPlaceholder`.
- * Please keep them in sync. Take a look at docs to the original enum for details.
- *
- * @see TemplateString
+ * The generator for `(range)` option.
  */
-public enum class RuntimeErrorPlaceholder(public val value: String) {
+internal class RangeGenerator(private val querying: Querying) : OptionGenerator {
 
-    // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    PARENT_TYPE("parent.type"),
+    /**
+     * All `(range)` fields in the current compilation process.
+     */
+    private val allRangeFields by lazy {
+        querying.select<RangeField>()
+            .all()
+    }
 
-    // Option-specific placeholders.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value");
-
-    override fun toString(): String = value
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRangeFields
+            .filter { it.id.type == type }
+            .map { RangeFieldGenerator(it).generate() }
 }

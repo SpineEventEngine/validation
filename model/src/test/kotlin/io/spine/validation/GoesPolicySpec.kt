@@ -30,6 +30,7 @@ import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
@@ -78,11 +79,11 @@ internal class GoesPolicySpec : CompilationErrorTest() {
 }
 
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type}` of the `${field.qualifiedName}` field" +
+    "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
             " is not supported by the `($GOES)` option."
 
 private fun unsupportedCompanionType(field: Field) =
-    "The field type `${field.type}` of the companion `${field.qualifiedName}` field" +
+    "The field type `${field.type.name}` of the companion `${field.qualifiedName}` field" +
             " is not supported by the `($GOES)` option."
 
 private fun nonExistingCompanion(message: Descriptor, companionName: String) =

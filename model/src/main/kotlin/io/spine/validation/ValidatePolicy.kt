@@ -32,6 +32,7 @@ import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
@@ -83,7 +84,7 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.refersToMessage(), file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
                 " by the `($VALIDATE)` option. Supported field types: messages, repeated of" +
                 " messages, and maps with message values."
     }

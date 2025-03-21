@@ -145,3 +145,13 @@ internal val TypeUrlClass = ClassName(TypeUrl::class)
  * The [ClassName] of [TypeName] from `java-base`.
  */
 internal val TypeNameClass = ClassName(TypeName::class)
+
+/**
+ * The [ClassName] of [java.lang.Integer].
+ */
+internal val IntegerClassName = ClassName(Integer::class)
+
+/**
+ * The [ClassName] of [java.lang.Long].
+ */
+internal val LongClassName = ClassName(java.lang.Long::class)

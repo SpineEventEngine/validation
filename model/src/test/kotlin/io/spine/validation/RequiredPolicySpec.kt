@@ -28,6 +28,7 @@ package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
 import io.spine.validation.given.required.WithBoolField
@@ -74,5 +75,5 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 }
 
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+    "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
             " by the `($REQUIRED)` option."

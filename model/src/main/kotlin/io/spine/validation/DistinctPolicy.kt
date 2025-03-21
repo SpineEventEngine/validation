@@ -36,6 +36,7 @@ import io.spine.protodata.ast.File
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
@@ -88,7 +89,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type}` of `${field.qualifiedName}` is not supported" +
+        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
                 " by the `($DISTINCT)` option. This options supports `map` and `repeated` fields."
     }
 
