@@ -109,6 +109,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             this.range = range
             lowerBound = lower.toProto()
             upperBound = upper.toProto()
+            this.file = file
         }.just()
     }
 }

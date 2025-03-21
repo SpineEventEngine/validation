@@ -39,6 +39,7 @@ option (every_is).java_type = "io.spine.validation.event.RuleAdded";
 
 import "spine/validation/field_views.proto";
 import "spine/protodata/ast.proto";
+import "spine/protodata/file.proto";
 import "spine/validation/numeric_bound.proto";
 import "spine/validation/rule.proto";
 
@@ -157,4 +158,7 @@ message RangeFieldDiscovered {
 
     // The maximum value that a numeric field can have.
     spine.validation.NumericBound upper_bound = 6;
+
+    // The file in which the option was discovered.
+    protodata.File file = 7;
 }

@@ -11,6 +11,7 @@ option java_multiple_files = true;
 
 import "spine/validation/numeric_bound.proto";
 import "spine/protodata/ast.proto";
+import "spine/protodata/file.proto";
 
 // A view on a field that is marked with `(required) = true` option.
 message RequiredField {
@@ -119,4 +120,7 @@ message RangeField {
 
     // The maximum value that a numeric field can have.
     spine.validation.NumericBound upper_bound = 6;
+
+    // The file in which the option was discovered.
+    protodata.File file = 7;
 }

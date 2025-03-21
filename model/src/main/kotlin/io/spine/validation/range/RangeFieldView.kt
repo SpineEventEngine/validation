@@ -45,5 +45,6 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
         range = e.range
         lowerBound = e.lowerBound
         upperBound = e.upperBound
+        file = e.file
     }
 }

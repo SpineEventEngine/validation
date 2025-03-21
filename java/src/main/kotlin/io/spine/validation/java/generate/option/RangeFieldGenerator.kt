@@ -141,7 +141,15 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val lowerOperator = if (lower.inclusive) "<" else "<="
         val upperLiteral = upper.asLiteral()
         val upperOperator = if (upper.inclusive) ">" else ">="
-        // TODO:2025-03-20:yevhenii.nadtochii: Leave a warning. We need an overload from ProtoData.
+        if (valueCase in listOf(UINT32_VALUE, UINT64_VALUE)) {
+            Compilation.warning(view.file, field.span) {
+                "Unsigned integer types are not natively supported in Java." +
+                        " Operations on unsigned values rely on static utility methods from" +
+                        " `$IntegerClassName` and `$LongClassName` classes. Be cautious when" +
+                        " dealing with unsigned values outside of these methods, as Java" +
+                        " treats all primitive integers as signed."
+            }
+        }
         return when (valueCase) {
             UINT32_VALUE -> Expression(
                 "$IntegerClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
