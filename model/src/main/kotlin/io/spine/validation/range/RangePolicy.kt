@@ -157,7 +157,7 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
 }
 
 private fun RangeContext.checkRelation(lower: NumericBound, upper: NumericBound) {
-    Compilation.check(lower < upper, file, field.span) {
+    Compilation.check(lower <= upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +
                 " less than the upper `${upper.value}`."

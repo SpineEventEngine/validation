@@ -72,7 +72,7 @@ message RangeSInt64MinMax {
 }
 
 message RangeFixed32MinMax {
-    fixed32 value = 1 [(range).value = "[8 .. 8]"];
+    fixed32 value = 1 [(range).value = "[1200 .. 8]"];
 }
 
 message RangeFixed64MinMax {
