@@ -27,6 +27,7 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
@@ -174,11 +175,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        // TODO:2025-03-19:yevhenii.nadtochii: Temporarily to make tests pass.
-        val errorMessage = templateString(
-            view.errorMessage + " The passed value: `\${field.value}`.",
-            placeholders, RANGE, qualifiedName
-        )
+        val errorMessage = templateString(view.errorMessage, placeholders, RANGE, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
