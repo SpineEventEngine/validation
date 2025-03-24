@@ -31,7 +31,9 @@ import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType
 
 /**
- * Data required to report a compilation error for the `(range)` option.
+ * The context of validating the `(range)` option.
+ *
+ * Contains the data required to report a compilation error for the option
  */
 internal data class RangeContext(
     val range: String,
