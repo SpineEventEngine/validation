@@ -217,6 +217,7 @@ private fun NumericBound.asLiteral() =
         )
     }
 
+@Suppress("MaxLineLength") // Long links.
 private object Docs {
     const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
     const val UNSIGNED_API = "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
