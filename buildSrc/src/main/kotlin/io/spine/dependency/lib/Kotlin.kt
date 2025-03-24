@@ -36,7 +36,7 @@ object Kotlin {
      * depend on Gradle and the version of embedded Kotlin.
      */
     @Suppress("MemberVisibilityCanBePrivate") // used directly from the outside.
-    const val runtimeVersion = "2.1.10"
+    const val runtimeVersion = "2.1.20"
 
     /**
      * This is the version of
@@ -50,12 +50,15 @@ object Kotlin {
      *
      * @see <a href="https://github.com/JetBrains/java-annotations">Java Annotations</a>
      */
-    private const val annotationsVersion = "24.0.1"
+    private const val annotationsVersion = "26.0.2"
 
     private const val group = "org.jetbrains.kotlin"
 
+    const val scriptRuntime = "$group:kotlin-script-runtime:$runtimeVersion"
     const val stdLib       = "$group:kotlin-stdlib:$runtimeVersion"
     const val stdLibCommon = "$group:kotlin-stdlib-common:$runtimeVersion"
+
+    const val toolingCore = "$group:kotlin-tooling-core:$runtimeVersion"
 
     @Deprecated("Please use `stdLib` instead.")
     const val stdLibJdk7   = "$group:kotlin-stdlib-jdk7:$runtimeVersion"
@@ -66,12 +69,22 @@ object Kotlin {
     const val reflect    = "$group:kotlin-reflect:$runtimeVersion"
     const val testJUnit5 = "$group:kotlin-test-junit5:$runtimeVersion"
 
+    @Deprecated(message = "Please use `GradlePlugin.api` instead.", ReplaceWith("GradlePlugin.api"))
     const val gradlePluginApi = "$group:kotlin-gradle-plugin-api:$runtimeVersion"
+
+    @Deprecated(message = "Please use `GradlePlugin.lib` instead.", ReplaceWith("GradlePlugin.lib"))
     const val gradlePluginLib = "$group:kotlin-gradle-plugin:$runtimeVersion"
 
     const val jetbrainsAnnotations = "org.jetbrains:annotations:$annotationsVersion"
 
     object Compiler {
-        const val embeddable = "$group:kotlin-compiler-embeddable:$embeddedVersion"
+        const val embeddable = "$group:kotlin-compiler-embeddable:$runtimeVersion"
+    }
+
+    object GradlePlugin {
+        const val version = runtimeVersion
+        const val api = "$group:kotlin-gradle-plugin-api:$version"
+        const val lib = "$group:kotlin-gradle-plugin:$version"
+        const val model = "$group:kotlin-gradle-model:$version"
     }
 }
