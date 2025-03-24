@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.McJava
@@ -32,8 +33,8 @@ buildscript {
     forceCodegenPlugins()
 }
 
-plugins {
-    ksp
+apply {
+    plugin(Ksp.id)
 }
 
 dependencies {
