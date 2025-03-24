@@ -62,6 +62,8 @@ import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.mes
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.option.Docs.SCALAR_TYPES
+import io.spine.validation.java.generate.option.Docs.UNSIGNED_API
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -144,11 +146,12 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         val upperOperator = if (upper.inclusive) ">" else ">="
         if (valueCase in listOf(UINT32_VALUE, UINT64_VALUE)) {
             Compilation.warning(view.file, field.span) {
-                "Unsigned integer types are not natively supported in Java." +
+                "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
+                        " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
                         " Operations on unsigned values rely on static utility methods from" +
-                        " `$IntegerClassName` and `$LongClassName` classes. Be cautious when" +
-                        " dealing with unsigned values outside of these methods, as Java" +
-                        " treats all primitive integers as signed."
+                        " `$IntegerClassName` and `$LongClassName` classes ($UNSIGNED_API)." +
+                        " Be cautious when dealing with unsigned values outside of these methods," +
+                        " as Java treats all primitive integers as signed."
             }
         }
         return when (valueCase) {
@@ -213,3 +216,8 @@ private fun NumericBound.asLiteral() =
                     " Make sure `RangePolicy` correctly filtered out unsupported field types."
         )
     }
+
+private object Docs {
+    const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
+    const val UNSIGNED_API = "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
+}
