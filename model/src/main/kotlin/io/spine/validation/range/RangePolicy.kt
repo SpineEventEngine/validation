@@ -70,13 +70,12 @@ import io.spine.validation.event.rangeFieldDiscovered
  * [RangeFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
- * 2. The passed regex has the correct syntax and is compatible with the target field type.
- *    2.1. Either `..` or ` .. ` is used as a range delimiter.
- *    2.2. Either `()` for exclusive or `[]` for inclusive bounds is used.
- *    2.3. The provided number has `.` for floating-point fields, and does not have `.`
- *         for integer fields.
- *    2.4. The provided bounds fit into the range of the target field type.
- *    2.5. The lower bound is strictly less than the upper one.
+ * 2. Either `..` or ` .. ` is used as a range delimiter.
+ * 3. Either `()` for exclusive or `[]` for inclusive bounds is used.
+ * 4. The provided number has `.` for floating-point fields, and does not have `.`
+ *    for integer fields.
+ * 5. The provided bounds fit into the range of the target field type.
+ * 6. The lower bound is strictly less than the upper one.
  *
  * Any violation of the above conditions leads to a compilation error.
  */
