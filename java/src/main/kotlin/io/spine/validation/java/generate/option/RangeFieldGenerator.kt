@@ -195,9 +195,10 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
 /**
  * Returns a string representation of this [NumericBound].
  *
- * Note that unsigned types are printed as if they were signed. Therefore, values above `2^32`
- * will become negative `int` constants. This is acceptable because static methods for unsigned
- * values in [IntegerClassName] and [LongClassName] will handle them gracefully.
+ * Note that `int` and `long` values that represent unsigned primitives are printed as is.
+ * In the rendered Java code, they can become negative number constants due to overflow,
+ * which is expected. [IntegerClassName] and [LongClassName] classes provide static methods
+ * to treat signed primitives as unsigned.
  */
 private fun NumericBound.asLiteral() =
     when (valueCase) {
