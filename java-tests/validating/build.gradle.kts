@@ -62,3 +62,16 @@ dependencies {
 }
 
 testProtoDataRemoteDebug(enabled = false)
+
+/**
+ * Sets a dependency for the KSP task to avoid the Gradle warning on a missing dependency.
+ *
+ * Note that this block uses [Task.mustRunAfter] because it does not require the task
+ * existence to declare a dependency.
+ */
+afterEvaluate {
+    tasks.named("kspTestFixturesKotlin") {
+        mustRunAfter("launchTestFixturesProtoData")
+    }
+}
+
