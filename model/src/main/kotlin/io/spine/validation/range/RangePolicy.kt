@@ -157,7 +157,7 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
     return lowerInclusive to upperInclusive
 }
 
-private fun RangeContext.checkRelation(lower: NumericBound, upper: NumericBound) {
+private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +

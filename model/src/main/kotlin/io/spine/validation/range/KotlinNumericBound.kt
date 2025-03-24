@@ -47,20 +47,20 @@ import io.spine.validation.RANGE
 import io.spine.validation.NumericBound as ProtoNumericBound
 
 /**
- * One to one Kotlin representation of [ProtoNumericBound].
+ * One-to-one Kotlin representation of [ProtoNumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
  * It eases the implementation of parsing and comparisons for such bounds.
- * Otherwise, we would have to care for special cases with unsigned types (which are just `int`
- * and `long` in Protobuf) when parsing and comparing such bounds. With this class,
- * Kotlin unsigned classes do it for us.
+ * Otherwise, we would have to care for special cases with unsigned types
+ * (which are just `int` and `long` in Protobuf) when parsing and comparing
+ * such bounds. With this data class, Kotlin unsigned classes do it for us.
  */
-internal data class NumericBound(
+internal data class KotlinNumericBound(
     val value: Any, // Cannot use `Number` because Kotlin's `UInt` and `ULong` are not numbers.
     val inclusive: Boolean
-) : Comparable<NumericBound> {
+) : Comparable<KotlinNumericBound> {
 
-    override fun compareTo(other: NumericBound): Int {
+    override fun compareTo(other: KotlinNumericBound): Int {
         val otherValue = other.value
         if (otherValue::class != value::class) {
             error(
@@ -85,9 +85,9 @@ internal data class NumericBound(
 }
 
 /**
- * Creates an instance of [ProtoNumericBound] from this [NumericBound].
+ * Creates an instance of [ProtoNumericBound] from this [KotlinNumericBound].
  */
-internal fun NumericBound.toProto(): ProtoNumericBound {
+internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
     val builder = ProtoNumericBound.newBuilder()
         .setInclusive(inclusive)
     when (value) {
@@ -111,7 +111,7 @@ internal fun NumericBound.toProto(): ProtoNumericBound {
 }
 
 /**
- * Parses the given string [value] to a [NumericBound].
+ * Parses the given string [value] to a [KotlinNumericBound].
  *
  * This method checks the following:
  *
@@ -123,7 +123,7 @@ internal fun NumericBound.toProto(): ProtoNumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): NumericBound {
+internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
@@ -153,7 +153,7 @@ internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): 
                 " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
                 " for the field type (`${field.type.name}`) the option is applied to."
     }
-    return NumericBound(number!!, inclusive)
+    return KotlinNumericBound(number!!, inclusive)
 }
 
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
