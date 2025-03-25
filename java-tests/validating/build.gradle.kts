@@ -74,4 +74,3 @@ afterEvaluate {
         mustRunAfter("launchTestFixturesProtoData")
     }
 }
-
