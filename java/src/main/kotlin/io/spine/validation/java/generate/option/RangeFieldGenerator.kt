@@ -49,8 +49,8 @@ import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.RANGE
 import io.spine.validation.RangeField
-import io.spine.validation.java.expression.IntegerClassName
-import io.spine.validation.java.expression.LongClassName
+import io.spine.validation.java.expression.IntegerClass
+import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
@@ -133,10 +133,11 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
      * Returns a boolean expression that checks if the given [value] is within
      * the [lower] and [upper] bounds.
      *
-     * Unsigned values are handled in a special way because Java does not support them natively.
-     * [IntegerClassName] and [LongClassName] classes provide static methods to treat signed
-     * types as unsigned, including parsing, printing, comparison and math operations.
-     * Outside of these methods, these primitives remain just signed types.
+     * Unsigned values are handled in a special way because Java does not support
+     * them natively. [IntegerClass] and [LongClass] classes provide static methods
+     * to treat signed types as unsigned, including parsing, printing, comparison
+     * and math operations. Outside of these methods, these primitives remain just
+     * signed types.
      */
     private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
         val valueCase = lower.valueCase // This case is the same for both `lower` and `upper`.
@@ -149,19 +150,19 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
                 "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
                         " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
                         " Operations on unsigned values rely on static utility methods from" +
-                        " `$IntegerClassName` and `$LongClassName` classes ($UNSIGNED_API)." +
-                        " Be cautious when dealing with unsigned values outside of these methods," +
-                        " as Java treats all primitive integers as signed."
+                        " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
+                        " when dealing with unsigned values outside of these methods, as Java" +
+                        " treats all primitive integers as signed."
             }
         }
         return when (valueCase) {
             UINT32_VALUE -> Expression(
-                "$IntegerClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$IntegerClassName.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$IntegerClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$IntegerClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
             )
             UINT64_VALUE -> Expression(
-                "$LongClassName.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$LongClassName.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$LongClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$LongClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
             )
             else -> Expression(
                 "$value $lowerOperator $lowerLiteral ||" +
@@ -200,8 +201,8 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
  *
  * Note that `int` and `long` values that represent unsigned primitives are printed as is.
  * In the rendered Java code, they can become negative number constants due to overflow,
- * which is expected. [IntegerClassName] and [LongClassName] classes provide static methods
- * to treat signed primitives as unsigned.
+ * which is expected. [IntegerClass] and [LongClass] classes provide static methods to treat
+ * signed primitives as unsigned.
  */
 private fun NumericBound.asLiteral() =
     when (valueCase) {

@@ -150,14 +150,14 @@ internal val TypeNameClass = ClassName(TypeName::class)
 /**
  * The [ClassName] of [java.lang.Integer].
  */
-internal val IntegerClassName = ClassName(Integer::class)
+internal val IntegerClass = ClassName(Integer::class)
 
 /**
  * The [ClassName] of [java.lang.Long].
  */
-internal val LongClassName = ClassName(java.lang.Long::class)
+internal val LongClass = ClassName(java.lang.Long::class)
 
 /**
  * The [ClassName] of [java.util.Objects].
  */
-internal val ObjectsClassName = ClassName(Objects::class)
+internal val ObjectsClass = ClassName(Objects::class)
