@@ -28,6 +28,7 @@
 
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.KotlinX
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.CoreJava
@@ -90,6 +91,7 @@ allprojects {
             force(
                 Roaster.api,
                 Roaster.jdt,
+                ProtoData.api,
                 ProtoData.pluginLib,
                 ProtoData.backend,
                 ProtoData.java,
@@ -105,7 +107,9 @@ allprojects {
                 Grpc.protobuf,
                 Grpc.stub,
                 Kotlin.stdLibJdk7,
+                KotlinPoet.lib,
                 KotlinX.Coroutines.core,
+                KotlinX.Coroutines.coreJvm,
                 KotlinX.Coroutines.jdk8
             )
         }
