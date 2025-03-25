@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,34 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.range
+
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.RangeField
+import io.spine.validation.event.RangeFieldDiscovered
 
 /**
- * A template placeholder that can be used in error messages.
- *
- * Enumerates placeholder names that can be used within Protobuf definitions.
- * Each validation option declares the supported placeholders within `options.proto`.
- *
- * Important Note: this enum is an exact copy of `io.spine.validation.java.ErrorPlaceholder`.
- * Please keep them in sync. Take a look at docs to the original enum for details.
- *
- * @see TemplateString
+ * A view of a field that is marked with the `(range)` option.
  */
-public enum class RuntimeErrorPlaceholder(public val value: String) {
+internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
 
-    // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    PARENT_TYPE("parent.type"),
-
-    // Option-specific placeholders.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value");
-
-    override fun toString(): String = value
+    @Subscribe
+    fun on(e: RangeFieldDiscovered) = alter {
+        subject = e.subject
+        errorMessage = e.errorMessage
+        range = e.range
+        lowerBound = e.lowerBound
+        upperBound = e.upperBound
+        file = e.file
+    }
 }

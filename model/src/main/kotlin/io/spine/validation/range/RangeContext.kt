@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,34 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.range
+
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType
 
 /**
- * A template placeholder that can be used in error messages.
+ * The context of validating the `(range)` option.
  *
- * Enumerates placeholder names that can be used within Protobuf definitions.
- * Each validation option declares the supported placeholders within `options.proto`.
- *
- * Important Note: this enum is an exact copy of `io.spine.validation.java.ErrorPlaceholder`.
- * Please keep them in sync. Take a look at docs to the original enum for details.
- *
- * @see TemplateString
+ * Contains the data required to report a compilation error for the option
  */
-public enum class RuntimeErrorPlaceholder(public val value: String) {
-
-    // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    PARENT_TYPE("parent.type"),
-
-    // Option-specific placeholders.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value");
-
-    override fun toString(): String = value
-}
+internal data class RangeContext(
+    val range: String,
+    val primitiveType: PrimitiveType,
+    val field: Field,
+    val file: File
+)

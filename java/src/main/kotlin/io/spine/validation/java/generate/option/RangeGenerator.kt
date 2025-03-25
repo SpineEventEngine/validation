@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,35 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.java.generate.option
 
-import io.spine.core.External
-import io.spine.core.Where
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.just
-import io.spine.server.event.React
-import io.spine.validation.NumberRules.Companion.from
-import io.spine.validation.event.CompositeRuleAdded
-import io.spine.validation.event.compositeRuleAdded
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RangeField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * A policy to add validation rules to a type whenever the `(range)` field option
- * is discovered.
+ * The generator for `(range)` option.
  */
-internal class RangePolicy : Policy<FieldOptionDiscovered>() {
+internal class RangeGenerator(private val querying: Querying) : OptionGenerator {
 
-    @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = RANGE)
-        event: FieldOptionDiscovered
-    ): Just<CompositeRuleAdded> {
-        val field = event.subject
-        val rules = from(field, event.option, typeSystem)
-        return just(compositeRuleAdded {
-                type = field.declaringType
-                rule = rules.rangeRule(field.name)
-        })
+    /**
+     * All `(range)` fields in the current compilation process.
+     */
+    private val allRangeFields by lazy {
+        querying.select<RangeField>()
+            .all()
     }
+
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allRangeFields
+            .filter { it.id.type == type }
+            .map { RangeFieldGenerator(it).generate() }
 }

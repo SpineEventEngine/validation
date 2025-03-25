@@ -34,6 +34,7 @@ import io.spine.test.tools.validate.InterestRate
 import io.spine.test.tools.validate.Probability
 import io.spine.test.tools.validate.Year
 import io.spine.validate.format
+import io.spine.validation.RangeFieldExtrema
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
 import org.junit.jupiter.api.DisplayName
@@ -95,6 +96,58 @@ internal class NumberConstraintsITest {
         assertValid(
             Probability.newBuilder()
                 .setValue(1.0)
+        )
+    }
+
+    @Test
+    fun `numerical range handles minimum values of the field type`() {
+        val intMinValue = Int.MIN_VALUE
+        val longMinValue = Long.MIN_VALUE
+
+        // Protobuf API expects `int` and `long` for unsigned fields.
+        val uintMinValue = UInt.MIN_VALUE.toInt()
+        val ulongMinValue = ULong.MIN_VALUE.toLong()
+
+        assertValid(
+            RangeFieldExtrema.newBuilder()
+                .setFloat(-Float.MAX_VALUE)
+                .setDouble(-Double.MAX_VALUE)
+                .setInt32(intMinValue)
+                .setInt64(longMinValue)
+                .setUint32(uintMinValue)
+                .setUint64(ulongMinValue)
+                .setSint32(intMinValue)
+                .setSint64(longMinValue)
+                .setFixed32(uintMinValue)
+                .setFixed64(ulongMinValue)
+                .setSfixed32(intMinValue)
+                .setSfixed64(longMinValue)
+        )
+    }
+
+    @Test
+    fun `numerical range handles maximum values of the field type`() {
+        val intMaxValue = Int.MAX_VALUE
+        val longMaxValue = Long.MAX_VALUE
+
+        // Protobuf API expects `int` and `long` for unsigned fields.
+        val uintMaxValue = UInt.MAX_VALUE.toInt()
+        val ulongMaxValue = ULong.MAX_VALUE.toLong()
+
+        assertValid(
+            RangeFieldExtrema.newBuilder()
+                .setFloat(Float.MAX_VALUE)
+                .setDouble(Double.MAX_VALUE)
+                .setInt32(intMaxValue)
+                .setInt64(longMaxValue)
+                .setUint32(uintMaxValue)
+                .setUint64(ulongMaxValue)
+                .setSint32(intMaxValue)
+                .setSint64(longMaxValue)
+                .setFixed32(uintMaxValue)
+                .setFixed64(ulongMaxValue)
+                .setSfixed32(intMaxValue)
+                .setSfixed64(longMaxValue)
         )
     }
 }
