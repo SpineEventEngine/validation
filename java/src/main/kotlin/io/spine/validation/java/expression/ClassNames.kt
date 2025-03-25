@@ -44,6 +44,7 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.ValidationError
+import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
@@ -155,3 +156,8 @@ internal val IntegerClassName = ClassName(Integer::class)
  * The [ClassName] of [java.lang.Long].
  */
 internal val LongClassName = ClassName(java.lang.Long::class)
+
+/**
+ * The [ClassName] of [java.util.Objects].
+ */
+internal val ObjectsClassName = ClassName(Objects::class)

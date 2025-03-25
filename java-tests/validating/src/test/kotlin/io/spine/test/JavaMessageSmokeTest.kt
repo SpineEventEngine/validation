@@ -73,6 +73,14 @@ internal class JavaMessageSmokeTest {
     }
 
     @Test
+    fun `throw 'NullPointerException' if given 'null' for the parent path`() {
+        val message = valid.build()
+        assertThrows<NullPointerException> {
+            message.validate(null, null)
+        }
+    }
+
+    @Test
     fun `ignore invalid message when skipping validation intentionally via 'buildPartial'`() {
         val number: @NonValidated Message = invalid.buildPartial()
         number shouldNotBe null

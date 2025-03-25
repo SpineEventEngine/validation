@@ -54,7 +54,10 @@ import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.expression.FieldPathClass
+import io.spine.validation.java.expression.ObjectsClassName
 import io.spine.validation.java.expression.TypeNameClass
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -168,7 +171,8 @@ private fun MessagePsiClass.declareDefaultValidateMethod() {
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass parentPath, $TypeNameClass parentName) {
+        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass $parentPath, $TypeNameClass $parentName) {
+            ${ObjectsClassName}.requireNonNull($parentPath);
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this
