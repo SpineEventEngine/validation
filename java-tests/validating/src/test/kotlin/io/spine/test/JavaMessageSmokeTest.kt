@@ -31,6 +31,7 @@ import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldNotBe
 import io.spine.test.protobuf.CardNumber
+import io.spine.type.TypeName
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validate.check
@@ -76,7 +77,7 @@ internal class JavaMessageSmokeTest {
     fun `throw 'NullPointerException' if given 'null' for the parent path`() {
         val message = valid.build()
         assertThrows<NullPointerException> {
-            message.validate(null, null)
+            message.validate(null, TypeName.of("Something"))
         }
     }
 
