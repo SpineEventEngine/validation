@@ -95,9 +95,9 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
-        val (lowerInclusive, upperInclusive) = context.checkBoundTypes(left, right)
-        val lower = context.checkNumericBound(left.substring(1), lowerInclusive)
-        val upper = context.checkNumericBound(right.dropLast(1), upperInclusive)
+        val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
+        val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
+        val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
         context.checkRelation(lower, upper)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -140,9 +140,9 @@ private fun RangeContext.checkDelimiter(): String =
         }
 
 private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
-    val lowerInclusive = when (lower.first()) {
-        '(' -> false
-        '[' -> true
+    val lowerExclusive = when (lower.first()) {
+        '(' -> true
+        '[' -> false
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The lower bound should begin either" +
@@ -150,9 +150,9 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    val upperInclusive = when (upper.last()) {
-        ')' -> false
-        ']' -> true
+    val upperExclusive = when (upper.last()) {
+        ')' -> true
+        ']' -> false
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The upper bound should end either" +
@@ -160,7 +160,7 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    return lowerInclusive to upperInclusive
+    return lowerExclusive to upperExclusive
 }
 
 private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {

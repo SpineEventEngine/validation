@@ -56,7 +56,7 @@ import io.spine.validation.NumericBound as ProtoNumericBound
  */
 internal data class KotlinNumericBound(
     val value: Any, // Cannot use `Number` because Kotlin's `UInt` and `ULong` are not numbers.
-    val inclusive: Boolean
+    val exclusive: Boolean
 ) : Comparable<KotlinNumericBound> {
 
     override fun compareTo(other: KotlinNumericBound): Int {
@@ -88,7 +88,7 @@ internal data class KotlinNumericBound(
  */
 internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
     val builder = ProtoNumericBound.newBuilder()
-        .setInclusive(inclusive)
+        .setExclusive(exclusive)
     when (value) {
         is Float -> builder.setFloatValue(value)
         is Double -> builder.setDoubleValue(value)
@@ -122,7 +122,7 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun NumericBoundContext.checkNumericBound(value: String, inclusive: Boolean): KotlinNumericBound {
+internal fun NumericBoundContext.checkNumericBound(value: String, exclusive: Boolean): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
             "The `($optionName)` option could not parse the `$value` bound value specified for" +
@@ -150,7 +150,7 @@ internal fun NumericBoundContext.checkNumericBound(value: String, inclusive: Boo
                 " `${field.qualifiedName}` field. The value is out of range for the field" +
                 " type `${field.type.name}` the option is applied to."
     }
-    return KotlinNumericBound(number!!, inclusive)
+    return KotlinNumericBound(number!!, exclusive)
 }
 
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =

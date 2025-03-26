@@ -144,9 +144,9 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
     private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
         val valueCase = lower.valueCase // This case is the same for both `lower` and `upper`.
         val lowerLiteral = lower.asLiteral()
-        val lowerOperator = if (lower.inclusive) "<" else "<="
+        val lowerOperator = if (lower.exclusive) "<=" else "<"
         val upperLiteral = upper.asLiteral()
-        val upperOperator = if (upper.inclusive) ">" else ">="
+        val upperOperator = if (upper.exclusive) ">=" else ">"
         if (valueCase in listOf(UINT32_VALUE, UINT64_VALUE)) {
             unsignedIntegerWarning(view.file, field.span)
         }

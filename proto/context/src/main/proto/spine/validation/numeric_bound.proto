@@ -38,8 +38,8 @@ option java_multiple_files = true;
 // A numeric value that restricts the range of numeric fields.
 message NumericBound {
 
-    // Whether the bound value itself should be included into the range.
-    bool inclusive = 1;
+    // Whether the bound value itself should be excluded from the range.
+    bool exclusive = 1;
 
     // A numeric value itself.
     //
