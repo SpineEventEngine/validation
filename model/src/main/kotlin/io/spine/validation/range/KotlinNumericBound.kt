@@ -122,7 +122,10 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun NumericBoundContext.checkNumericBound(value: String, exclusive: Boolean): KotlinNumericBound {
+internal fun NumericBoundContext.checkNumericBound(
+    value: String,
+    exclusive: Boolean
+): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
             "The `($optionName)` option could not parse the `$value` bound value specified for" +

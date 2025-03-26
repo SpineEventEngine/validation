@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,30 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.range
 
-import io.spine.core.External
-import io.spine.core.Where
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.validation.NumberRules.Companion.from
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.MaxField
+import io.spine.validation.MinField
+import io.spine.validation.event.MaxFieldDiscovered
+import io.spine.validation.event.MinFieldDiscovered
 
 /**
- * A policy to add a validation rule to a type whenever the `(max)` field option is discovered.
+ * A view of a field that is marked with the `(min)` option.
  */
-internal class MinPolicy : Policy<FieldOptionDiscovered>() {
+internal class MinFieldView : View<FieldRef, MinField, MinField.Builder>() {
 
-    @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = MIN)
-        event: FieldOptionDiscovered
-    ): Just<SimpleRuleAdded> {
-        val field = event.subject
-        val rules = from(field, event.option, typeSystem)
-        val rule = rules.minRule(field.name)
-        return simpleRuleAdded(field.declaringType, rule)
+    @Subscribe
+    fun on(e: MinFieldDiscovered) = alter {
+        subject = e.subject
+        errorMessage = e.errorMessage
+        min = e.min
+        bound = e.bound
+        file = e.file
     }
 }

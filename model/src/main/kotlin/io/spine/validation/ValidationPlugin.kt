@@ -32,6 +32,8 @@ import io.spine.protodata.plugin.ViewRepository
 import io.spine.protodata.render.Renderer
 import io.spine.validation.range.MaxFieldView
 import io.spine.validation.range.MaxPolicy
+import io.spine.validation.range.MinFieldView
+import io.spine.validation.range.MinPolicy
 import io.spine.validation.range.RangeFieldView
 import io.spine.validation.range.RangePolicy
 import io.spine.validation.required.RequiredFieldView
@@ -56,6 +58,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         ValidatedFieldView::class.java,
         RangeFieldView::class.java,
         MaxFieldView::class.java,
+        MinFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompiledMessageRepository(),
