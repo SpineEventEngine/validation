@@ -51,7 +51,9 @@ public enum class RuntimeErrorPlaceholder(public val value: String) {
     GOES_COMPANION("goes.companion"),
     FIELD_PROPOSED_VALUE("field.proposed_value"),
     FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value");
+    RANGE_VALUE("range.value"),
+    MAX_VALUE("max.value"),
+    MAX_OPERATOR("max.operator");
 
     override fun toString(): String = value
 }
