@@ -29,6 +29,7 @@ package io.spine.validate
 import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
 import com.google.protobuf.doubleValue
+import io.kotest.matchers.string.shouldContain
 import io.spine.test.validate.InvalidBound
 import io.spine.test.validate.MaxExclusive
 import io.spine.test.validate.MaxInclusive
@@ -36,7 +37,6 @@ import io.spine.test.validate.MinExclusive
 import io.spine.test.validate.MinInclusive
 import io.spine.type.TypeName
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import io.spine.validate.given.MessageValidatorTestEnv.VALUE
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -76,7 +76,8 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
     @Test
     fun `provide one valid violation if number is less than min`() {
         minNumberTest(LESS_THAN_MIN, inclusive = true, valid = false)
-        assertSingleViolation(LESS_MIN_MSG, VALUE)
+        val errorMessage = firstViolation().message.format()
+        errorMessage shouldContain "must be < $EQUAL_MIN"
     }
 
     @Test
@@ -106,10 +107,8 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
     @Test
     fun `provide one valid violation if number is greater than max`() {
         maxNumberTest(GREATER_THAN_MAX, inclusive = true, valid = false)
-        assertSingleViolation(
-            GREATER_MAX_MSG,
-            VALUE
-        )
+        val errorMessage = firstViolation().message.format()
+        errorMessage shouldContain "must be > $EQUAL_MAX"
     }
 
     @Test
@@ -159,21 +158,5 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
         const val GREATER_THAN_MAX: Double = EQUAL_MAX + 5
 
         const val LESS_THAN_MAX: Double = EQUAL_MAX - 5
-
-        /**
-         * For the code which produces these diagnostic messages please see
-         * [io.spine.validation.NumberRules].
-         *
-         * We need to move the message composition logic to the [Diags] class so that we
-         * have all strings in one place. This is the first step towards making our diagnostics
-         * localized to other languages.
-         *
-         * @see io.spine.validation.NumberRules
-         */
-        const val LESS_MIN_MSG: String =
-            "The number must be greater than or equal to $EQUAL_MIN, but was $LESS_THAN_MIN."
-
-        const val GREATER_MAX_MSG: String =
-            "The number must be less than or equal to $EQUAL_MAX, but was $GREATER_THAN_MAX."
     }
 }

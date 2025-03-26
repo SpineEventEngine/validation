@@ -118,7 +118,7 @@ abstract class ValidationOfConstraintTest {
     }
 
     /** Checks that a message is not valid and has a single violation.  */
-    protected fun assertSingleViolation(expectedErrMsg: String, invalidFieldName: String) {
+    private fun assertSingleViolation(expectedErrMsg: String, invalidFieldName: String) {
         val violation = firstViolation()
         val actualErrorMessage = violation.message.format()
         actualErrorMessage shouldBe expectedErrMsg
