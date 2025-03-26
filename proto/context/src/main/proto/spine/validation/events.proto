@@ -162,3 +162,25 @@ message RangeFieldDiscovered {
     // The file in which the option was discovered.
     protodata.File file = 7;
 }
+
+// The event emitted whenever a field with `(max)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message MaxFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // The max value.
+    string max = 4;
+
+    // The maximum value that a numeric field can have.
+    spine.validation.NumericBound upper_bound = 5;
+
+    // The file in which the option was discovered.
+    protodata.File file = 6;
+}
