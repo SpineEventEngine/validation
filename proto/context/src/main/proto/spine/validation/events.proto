@@ -184,3 +184,25 @@ message MaxFieldDiscovered {
     // The file in which the option was discovered.
     protodata.File file = 6;
 }
+
+// The event emitted whenever a field with `(min)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message MinFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // The min value.
+    string min = 4;
+
+    // The minimum value that a numeric field can have.
+    spine.validation.NumericBound bound = 5;
+
+    // The file in which the option was discovered.
+    protodata.File file = 6;
+}

@@ -125,7 +125,7 @@ message RangeField {
     protodata.File file = 7;
 }
 
-// A view of a field that is marked with `(range)` option.
+// A view of a field that is marked with `(max)` option.
 message MaxField {
     option (entity).kind = PROJECTION;
 
@@ -141,6 +141,28 @@ message MaxField {
     string max = 4;
 
     // The maximum value that a numeric field can have.
+    spine.validation.NumericBound bound = 5;
+
+    // The file in which the option was discovered.
+    protodata.File file = 6;
+}
+
+// A view of a field that is marked with `(min)` option.
+message MinField {
+    option (entity).kind = PROJECTION;
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // The min value.
+    string min = 4;
+
+    // The minimum value that a numeric field can have.
     spine.validation.NumericBound bound = 5;
 
     // The file in which the option was discovered.
