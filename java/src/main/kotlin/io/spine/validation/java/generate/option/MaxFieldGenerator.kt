@@ -76,7 +76,7 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
     private val fieldType = field.type
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
-    private val bound = view.upperBound
+    private val bound = view.bound
     private val operator = if (bound.inclusive) ">" else ">="
 
     /**

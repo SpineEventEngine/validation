@@ -179,7 +179,7 @@ message MaxFieldDiscovered {
     string max = 4;
 
     // The maximum value that a numeric field can have.
-    spine.validation.NumericBound upper_bound = 5;
+    spine.validation.NumericBound bound = 5;
 
     // The file in which the option was discovered.
     protodata.File file = 6;

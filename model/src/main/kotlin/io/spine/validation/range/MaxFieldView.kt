@@ -43,7 +43,7 @@ internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
         subject = e.subject
         errorMessage = e.errorMessage
         max = e.max
-        upperBound = e.upperBound
+        bound = e.bound
         file = e.file
     }
 }
