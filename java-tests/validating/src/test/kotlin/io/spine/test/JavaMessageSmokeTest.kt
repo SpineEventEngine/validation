@@ -30,6 +30,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldNotBe
+import io.spine.base.FieldPath
 import io.spine.test.protobuf.CardNumber
 import io.spine.type.TypeName
 import io.spine.validate.NonValidated
@@ -77,7 +78,9 @@ internal class JavaMessageSmokeTest {
     fun `throw 'NullPointerException' if given 'null' for the parent path`() {
         val message = valid.build()
         assertThrows<NullPointerException> {
-            message.validate(null, TypeName.of("Something"))
+            // The cast prevents the Kotlin compiler warning about passing `null`
+            // to a non-`@Nullable` Java parameter.
+            message.validate(null as FieldPath, TypeName.of("Something"))
         }
     }
 
