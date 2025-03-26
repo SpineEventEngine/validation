@@ -60,7 +60,9 @@ public enum class ErrorPlaceholder(public val value: String) {
     FIELD_DUPLICATES("field.duplicates"),
     RANGE_VALUE("range.value"),
     MAX_VALUE("max.value"),
-    MAX_OPERATOR("max.operator");
+    MAX_OPERATOR("max.operator"),
+    MIN_VALUE("min.value"),
+    MIN_OPERATOR("min.operator");
 
     override fun toString(): String = value
 }
