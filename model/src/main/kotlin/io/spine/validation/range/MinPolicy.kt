@@ -36,7 +36,6 @@ import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
-import io.spine.validation.MAX
 import io.spine.validation.MIN
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.defaultMessage
@@ -51,12 +50,12 @@ internal class MinPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = MAX)
+        @External @Where(field = OPTION_NAME, equals = MIN)
         event: FieldOptionDiscovered
     ): Just<MinFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, MAX)
+        val primitiveType = checkFieldType(field, file, MIN)
 
         val option = event.option.unpack<MinOption>()
         val context = NumericBoundContext(MIN, primitiveType, field, file)
