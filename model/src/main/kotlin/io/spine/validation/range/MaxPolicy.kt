@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.range
 
 import io.spine.core.External
 import io.spine.core.Where
@@ -36,12 +36,11 @@ import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.MAX
+import io.spine.validation.OPTION_NAME
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.MaxFieldDiscovered
 import io.spine.validation.event.maxFieldDiscovered
-import io.spine.validation.range.NumericBoundContext
-import io.spine.validation.range.checkFieldType
-import io.spine.validation.range.checkNumericBound
-import io.spine.validation.range.toProto
 
 /**
  * A policy to add a validation rule to a type whenever the `(max)` field option
