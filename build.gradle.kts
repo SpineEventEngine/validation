@@ -92,6 +92,7 @@ allprojects {
                 Roaster.api,
                 Roaster.jdt,
                 ProtoData.api,
+                ProtoData.params,
                 ProtoData.pluginLib,
                 ProtoData.backend,
                 ProtoData.java,

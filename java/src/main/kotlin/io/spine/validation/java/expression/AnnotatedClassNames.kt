@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.java.expression
+
+import io.spine.protodata.java.AnnotatedClassName
+import io.spine.protodata.java.ClassName
+import org.checkerframework.checker.nullness.qual.Nullable
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.305")
+internal val NullableAnnotation = ClassName(Nullable::class)
+
+/**
+ * The [TypeNameClass] annotated with [NullableAnnotation].
+ */
+internal val NullableTypeNameClass = AnnotatedClassName(TypeNameClass, NullableAnnotation)
