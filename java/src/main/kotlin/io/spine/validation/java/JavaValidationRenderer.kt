@@ -42,6 +42,7 @@ import io.spine.validation.java.generate.MessageValidationCode
 import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator
+import io.spine.validation.java.generate.option.MaxGenerator
 import io.spine.validation.java.generate.option.PatternGenerator
 import io.spine.validation.java.generate.option.RangeGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
@@ -68,6 +69,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             DistinctGenerator(querying),
             ValidateGenerator(querying, valueConverter),
             RangeGenerator(querying),
+            MaxGenerator(querying),
         )
     }
 

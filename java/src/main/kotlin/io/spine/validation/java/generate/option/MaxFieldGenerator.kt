@@ -27,30 +27,21 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.field
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.NumericBound
-import io.spine.validation.NumericBound.ValueCase.DOUBLE_VALUE
-import io.spine.validation.NumericBound.ValueCase.FLOAT_VALUE
-import io.spine.validation.NumericBound.ValueCase.INT32_VALUE
-import io.spine.validation.NumericBound.ValueCase.INT64_VALUE
+import io.spine.validation.MaxField
 import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.RANGE
-import io.spine.validation.RangeField
 import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
@@ -61,33 +52,32 @@ import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.option.Docs.SCALAR_TYPES
-import io.spine.validation.java.generate.option.Docs.UNSIGNED_API
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.MAX_OPERATOR
+import io.spine.validation.java.violation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(range)` option.
+ * The generator for `(max)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGenerator {
+internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
-    private val lower = view.lowerBound
-    private val upper = view.upperBound
+    private val bound = view.upperBound
+    private val operator = if (bound.inclusive) ">" else ">="
 
     /**
      * Generates code for a field represented by the [view].
@@ -106,15 +96,14 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
             )
 
         else -> error(
-            "The field type `${fieldType.name}` is not supported by `RangeFieldGenerator`." +
+            "The field type `${fieldType.name}` is not supported by `MaxFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by `RangePolicy` when validating the `RangeFieldDiscovered` event."
+                    " used by `MaxPolicy` when validating the `MaxFieldDiscovered` event."
         )
     }.run { FieldOptionCode(this) }
 
     /**
-     * Returns a [CodeBlock] that checks that the given [value] is within the [lower]
-     * and [upper] bounds.
+     * Returns a [CodeBlock] that checks that the given [value] is within the upper [bound].
      *
      * If the passed value is out of the range, creates an instance of [ConstraintViolation]
      * adding it to the [violations] list.
@@ -133,7 +122,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
 
     /**
      * Returns a boolean expression that checks if the given [value] is within
-     * the [lower] and [upper] bounds.
+     * the [lower] and [bound] bounds.
      *
      * Unsigned values are handled in a special way because Java does not support
      * them natively. [IntegerClass] and [LongClass] classes provide static methods
@@ -141,28 +130,20 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
      * and math operations. Outside of these methods, these primitives remain just
      * signed types.
      */
-    private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean>  {
-        val valueCase = lower.valueCase // This case is the same for both `lower` and `upper`.
-        val lowerLiteral = lower.asLiteral()
-        val lowerOperator = if (lower.inclusive) "<" else "<="
-        val upperLiteral = upper.asLiteral()
-        val upperOperator = if (upper.inclusive) ">" else ">="
+    private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean> {
+        val valueCase = bound.valueCase // This case is the same for both `lower` and `upper`.
+        val literal = bound.asLiteral()
         if (valueCase in listOf(UINT32_VALUE, UINT64_VALUE)) {
             unsignedIntegerWarning(view.file, field.span)
         }
         return when (valueCase) {
             UINT32_VALUE -> Expression(
-                "$IntegerClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$IntegerClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$IntegerClass.compareUnsigned($value, $literal) $operator 0"
             )
             UINT64_VALUE -> Expression(
-                "$LongClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$LongClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$LongClass.compareUnsigned($value, $literal) $operator 0"
             )
-            else -> Expression(
-                "$value $lowerOperator $lowerLiteral ||" +
-                        " $value $upperOperator $upperLiteral"
-            )
+            else -> Expression("$value $operator $literal")
         }
     }
 
@@ -187,44 +168,7 @@ internal class RangeFieldGenerator(private val view: RangeField) : FieldOptionGe
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        RANGE_VALUE to StringLiteral(view.range)
+        MAX_VALUE to StringLiteral(view.max),
+        MAX_OPERATOR to StringLiteral(operator)
     )
-}
-
-internal fun unsignedIntegerWarning(file: File, span: Span) =
-    Compilation.warning(file, span) {
-        "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
-                " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
-                " Operations on unsigned values rely on static utility methods from" +
-                " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
-                " when dealing with unsigned values outside of these methods, as Java" +
-                " treats all primitive integers as signed."
-    }
-
-/**
- * Returns a string representation of this [NumericBound].
- *
- * Note that `int` and `long` values that represent unsigned primitives are printed as is.
- * In the rendered Java code, they can become negative number constants due to overflow,
- * which is expected. [IntegerClass] and [LongClass] classes provide static methods to treat
- * signed primitives as unsigned.
- */
-internal fun NumericBound.asLiteral() =
-    when (valueCase) {
-        FLOAT_VALUE -> Literal("${floatValue}F")
-        DOUBLE_VALUE -> Literal("$doubleValue")
-        INT32_VALUE -> Literal("$int32Value")
-        INT64_VALUE -> Literal("${int64Value}L")
-        UINT32_VALUE -> Literal("$uint32Value")
-        UINT64_VALUE -> Literal("$uint64Value")
-        else -> error(
-            "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
-                    " Make sure `RangePolicy` correctly filtered out unsupported field types."
-        )
-    }
-
-@Suppress("MaxLineLength") // Long links.
-private object Docs {
-    const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
-    const val UNSIGNED_API = "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
 }
