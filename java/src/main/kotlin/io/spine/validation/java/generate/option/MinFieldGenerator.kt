@@ -38,8 +38,8 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.field
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.MAX
-import io.spine.validation.MaxField
+import io.spine.validation.MIN
+import io.spine.validation.MinField
 import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.java.expression.IntegerClass
@@ -59,25 +59,25 @@ import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.violation.ErrorPlaceholder.MAX_OPERATOR
-import io.spine.validation.java.violation.ErrorPlaceholder.MAX_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_OPERATOR
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(max)` option.
+ * The generator for `(min)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenerator {
+internal class MinFieldGenerator(private val view: MinField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
     private val bound = view.bound
-    private val operator = if (bound.exclusive) ">=" else ">"
+    private val operator = if (bound.exclusive) "<=" else "<"
 
     /**
      * Generates code for a field represented by the [view].
@@ -96,9 +96,9 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
             )
 
         else -> error(
-            "The field type `${fieldType.name}` is not supported by `MaxFieldGenerator`." +
+            "The field type `${fieldType.name}` is not supported by `MinFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by `MaxPolicy` when validating the `MaxFieldDiscovered` event."
+                    " used by `MinPolicy` when validating the `MinFieldDiscovered` event."
         )
     }.run { FieldOptionCode(this) }
 
@@ -155,7 +155,7 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
         val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, MAX, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, MIN, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
@@ -168,7 +168,7 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MAX_VALUE to StringLiteral(view.max),
-        MAX_OPERATOR to StringLiteral(operator)
+        MIN_VALUE to StringLiteral(view.min),
+        MIN_OPERATOR to StringLiteral(operator)
     )
 }
