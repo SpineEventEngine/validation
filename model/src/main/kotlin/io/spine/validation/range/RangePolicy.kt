@@ -88,7 +88,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file)
+        val primitiveType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
         val context = RangeContext(option.value, primitiveType, field, file)
@@ -105,7 +105,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = range
+            this.range = context.range
             lowerBound = lower.toProto()
             upperBound = upper.toProto()
             this.file = file
@@ -113,11 +113,18 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-private fun checkFieldType(field: Field, file: File): PrimitiveType {
+/**
+ * Checks if the number-constraining option is applied to a field of numeric type.
+ *
+ * @param [field] The field to check.
+ * @param [file] The file where the field is declared.
+ * @param [option] The name of number-constraint option.
+ */
+internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
     val primitive = field.type.extractPrimitive()
     Compilation.check(primitive in supportedPrimitives, file, field.span) {
         "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                " the `($RANGE)` option. Supported field types: numbers and repeated" +
+                " the `($option)` option. Supported field types: numbers and repeated" +
                 " of numbers."
     }
     return primitive!!

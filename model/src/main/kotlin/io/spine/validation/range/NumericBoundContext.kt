@@ -29,15 +29,23 @@ package io.spine.validation.range
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType
+import io.spine.validation.RANGE
 
 /**
- * The context of validating the `(range)` option.
+ * The context of validating a number-bounding option.
  *
- * Contains the data required to report a compilation error for the option
+ * Contains the data required to report a compilation error for the option.
  */
-internal data class RangeContext(
-    val range: String,
+internal open class NumericBoundContext(
+    val optionName: String,
     val primitiveType: PrimitiveType,
     val field: Field,
     val file: File
 )
+
+internal class RangeContext(
+    val range: String,
+    primitiveType: PrimitiveType,
+    field: Field,
+    file: File
+) : NumericBoundContext(RANGE, primitiveType, field, file)

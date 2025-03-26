@@ -28,12 +28,20 @@ package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Where
+import io.spine.option.MaxOption
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
-import io.spine.validation.NumberRules.Companion.from
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.server.event.just
+import io.spine.validation.event.MaxFieldDiscovered
+import io.spine.validation.event.maxFieldDiscovered
+import io.spine.validation.range.NumericBoundContext
+import io.spine.validation.range.checkFieldType
+import io.spine.validation.range.checkNumericBound
+import io.spine.validation.range.toProto
 
 /**
  * A policy to add a validation rule to a type whenever the `(max)` field option
@@ -43,11 +51,25 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = MAX) event: FieldOptionDiscovered
-    ): Just<SimpleRuleAdded> {
+        @External @Where(field = OPTION_NAME, equals = MAX)
+        event: FieldOptionDiscovered
+    ): Just<MaxFieldDiscovered> {
         val field = event.subject
-        val rules = from(field, event.option, typeSystem)
-        val rule = rules.maxRule(field.name)
-        return simpleRuleAdded(field.declaringType, rule)
+        val file = event.file
+        val primitiveType = checkFieldType(field, file, MAX)
+
+        val option = event.option.unpack<MaxOption>()
+        val context = NumericBoundContext(MAX, primitiveType, field, file)
+        val upper = context.checkNumericBound(option.value, !option.exclusive)
+
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        return maxFieldDiscovered {
+            id = field.ref
+            subject = field
+            errorMessage = message
+            this.max = option.value
+            upperBound = upper.toProto()
+            this.file = file
+        }.just()
     }
 }
