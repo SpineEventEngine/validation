@@ -65,7 +65,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
         assertCompilationFails(message) { field ->
             shouldContain(field.qualifiedName)
             shouldContain(value)
-            shouldContain("bound value is out of range")
+            shouldContain("value is out of range")
         }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithLowerEqualOrMoreThanUpper")
@@ -95,7 +95,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with integer number specified for lower bound of 'float' field`() =
         assertCompilationFails(RangeInvalidLowerFloat::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`0` bound value has an invalid format")
+            shouldContain("could not parse the `0` bound value")
             shouldContain("make sure the provided value is a floating-point number")
         }
 
@@ -103,7 +103,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with integer number specified for upper bound of 'float' field`() =
         assertCompilationFails(RangeInvalidUpperFloat::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`15` bound value has an invalid format")
+            shouldContain("could not parse the `15` bound value")
             shouldContain("make sure the provided value is a floating-point number")
         }
 
@@ -111,7 +111,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with integer number specified for lower bound of 'double' field`() =
         assertCompilationFails(RangeInvalidLowerDouble::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`0` bound value has an invalid format")
+            shouldContain("could not parse the `0` bound value")
             shouldContain("make sure the provided value is a floating-point number")
         }
 
@@ -119,7 +119,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with integer number specified for upper bound of 'double' field`() =
         assertCompilationFails(RangeInvalidUpperDouble::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`15` bound value has an invalid format")
+            shouldContain("could not parse the `15` bound value")
             shouldContain("make sure the provided value is a floating-point number")
         }
 
@@ -127,7 +127,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with floating-point number specified for lower bound of 'int32' field`() =
         assertCompilationFails(RangeInvalidLowerInt::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`0.0` bound value has an invalid format")
+            shouldContain("could not parse the `0.0` bound value")
             shouldContain("make sure the provided value is an integer number")
         }
 
@@ -135,7 +135,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun `with floating-point number specified for upper bound of 'int32' field`() =
         assertCompilationFails(RangeInvalidUpperInt::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("`15.0` bound value has an invalid format")
+            shouldContain("could not parse the `15.0` bound value")
             shouldContain("make sure the provided value is an integer number")
         }
 }

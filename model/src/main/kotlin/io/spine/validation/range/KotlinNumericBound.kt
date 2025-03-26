@@ -41,6 +41,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validation.NumericBound as ProtoNumericBound
 
@@ -124,14 +125,14 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
 internal fun NumericBoundContext.checkNumericBound(value: String, inclusive: Boolean): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
-            "The `($optionName)` option could not parse the `$value` bound value because it has" +
-                    " an invalid format. Please make sure the provided value is" +
+            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                    " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
         }
     } else {
         Compilation.check(INTEGER.matches(value), file, field.span) {
-            "The `($optionName)` option could not parse the `$value` bound value because it has" +
-                    " an invalid format. Please make sure the provided value is" +
+            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                    " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " an integer number. Examples: `123`, `-567823`."
         }
     }
@@ -145,8 +146,9 @@ internal fun NumericBoundContext.checkNumericBound(value: String, inclusive: Boo
         else -> unexpectedPrimitiveType(primitiveType)
     }
     Compilation.check(number != null, file, field.span) {
-        "The `($optionName)` option could not parse the `$value` bound value because it is out" +
-                " of range for the field type (`${field.type.name}`) the option is applied to."
+        "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                " `${field.qualifiedName}` field. The value is out of range for the field" +
+                " type `${field.type.name}` the option is applied to."
     }
     return KotlinNumericBound(number!!, inclusive)
 }
