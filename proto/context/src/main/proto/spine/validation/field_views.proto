@@ -103,6 +103,7 @@ message DistinctField {
 // A view of a field that is marked with `(range)` option.
 message RangeField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "io.spine.validation.BoundedFieldView";
 
     protodata.FieldRef id = 1;
 
@@ -128,6 +129,7 @@ message RangeField {
 // A view of a field that is marked with `(max)` option.
 message MaxField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "io.spine.validation.BoundedFieldView";
 
     protodata.FieldRef id = 1;
 
@@ -150,6 +152,7 @@ message MaxField {
 // A view of a field that is marked with `(min)` option.
 message MinField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "io.spine.validation.BoundedFieldView";
 
     protodata.FieldRef id = 1;
 
