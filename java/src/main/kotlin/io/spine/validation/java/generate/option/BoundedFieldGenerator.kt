@@ -136,8 +136,8 @@ internal abstract class BoundedFieldGenerator(
     /**
      * The number type of the bound.
      *
-     * It is used to report a warning for unsigned primitives, which are not
-     * natively supported in Java.
+     * It is checked for unsigned primitives, for which the generator reports
+     * a compilation warning. Such primitives are not natively supported in Java.
      */
     protected abstract val boundPrimitive: NumericBound.ValueCase
 
