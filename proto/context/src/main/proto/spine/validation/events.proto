@@ -175,7 +175,7 @@ message MaxFieldDiscovered {
     // The error message template.
     string error_message = 3;
 
-    // The max value.
+    // The max value, as was specified by a user.
     string max = 4;
 
     // The maximum value that a numeric field can have.
@@ -197,7 +197,7 @@ message MinFieldDiscovered {
     // The error message template.
     string error_message = 3;
 
-    // The min value.
+    // The min value, as was specified by a user.
     string min = 4;
 
     // The minimum value that a numeric field can have.
