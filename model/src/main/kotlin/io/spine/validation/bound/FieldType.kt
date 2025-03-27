@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field

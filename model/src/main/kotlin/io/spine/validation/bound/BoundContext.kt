@@ -24,26 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
-import io.spine.core.Subscribe
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.MaxField
-import io.spine.validation.event.MaxFieldDiscovered
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType
+import io.spine.validation.RANGE
 
 /**
- * A view of a field that is marked with the `(max)` option.
+ * The context of validating a numeric option that constrains a field's value
+ * with a minimum or maximum bound.
+ *
+ * Contains the data required to report a compilation error for the option.
  */
-internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
+internal open class BoundContext(
+    val optionName: String,
+    val primitiveType: PrimitiveType,
+    val field: Field,
+    val file: File
+)
 
-    @Subscribe
-    fun on(e: MaxFieldDiscovered) = alter {
-        subject = e.subject
-        errorMessage = e.errorMessage
-        max = e.max
-        bound = e.bound
-        file = e.file
-    }
-}
+/**
+ * The [BoundContext] for the `(range)` option.
+ *
+ * Introduces the [range] property to report the originally passed range definition
+ * in compilation errors.
+ */
+internal class RangeContext(
+    val range: String,
+    primitiveType: PrimitiveType,
+    field: Field,
+    file: File
+) : BoundContext(RANGE, primitiveType, field, file)

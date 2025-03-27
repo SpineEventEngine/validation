@@ -24,25 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
 import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.MinField
-import io.spine.validation.event.MinFieldDiscovered
+import io.spine.validation.MaxField
+import io.spine.validation.event.MaxFieldDiscovered
 
 /**
- * A view of a field that is marked with the `(min)` option.
+ * A view of a field that is marked with the `(max)` option.
  */
-internal class MinFieldView : View<FieldRef, MinField, MinField.Builder>() {
+internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
 
     @Subscribe
-    fun on(e: MinFieldDiscovered) = alter {
+    fun on(e: MaxFieldDiscovered) = alter {
         subject = e.subject
         errorMessage = e.errorMessage
-        min = e.min
+        max = e.max
         bound = e.bound
         file = e.file
     }
