@@ -49,7 +49,7 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 
 /**
- * Checks if a number range-constraining option is applied to a field of numeric type.
+ * Checks if a range-constraining option is applied to a field of numeric type.
  *
  * @param [field] The field to check.
  * @param [file] The file where the field is declared.

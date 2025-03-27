@@ -58,7 +58,7 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
         val primitiveType = checkFieldType(field, file, MAX)
 
         val option = event.option.unpack<MaxOption>()
-        val context = NumericBoundContext(MAX, primitiveType, field, file)
+        val context = BoundContext(MAX, primitiveType, field, file)
         val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }

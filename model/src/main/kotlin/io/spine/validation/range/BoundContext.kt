@@ -32,20 +32,27 @@ import io.spine.protodata.ast.PrimitiveType
 import io.spine.validation.RANGE
 
 /**
- * The context of validating a number-bounding option.
+ * The context of validating a numeric option that constrains a field's value
+ * with a minimum or maximum bound.
  *
  * Contains the data required to report a compilation error for the option.
  */
-internal open class NumericBoundContext(
+internal open class BoundContext(
     val optionName: String,
     val primitiveType: PrimitiveType,
     val field: Field,
     val file: File
 )
 
+/**
+ * The [BoundContext] for the `(range)` option.
+ *
+ * Introduces the [range] property to report the originally passed range definition
+ * in compilation errors.
+ */
 internal class RangeContext(
     val range: String,
     primitiveType: PrimitiveType,
     field: Field,
     file: File
-) : NumericBoundContext(RANGE, primitiveType, field, file)
+) : BoundContext(RANGE, primitiveType, field, file)

@@ -122,7 +122,7 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun NumericBoundContext.checkNumericBound(
+internal fun BoundContext.checkNumericBound(
     value: String,
     exclusive: Boolean
 ): KotlinNumericBound {
