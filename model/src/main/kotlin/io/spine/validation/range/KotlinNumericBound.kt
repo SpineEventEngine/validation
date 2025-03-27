@@ -43,10 +43,10 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
-import io.spine.validation.NumericBound as ProtoNumericBound
+import io.spine.validation.NumericBound
 
 /**
- * One-to-one Kotlin representation of [ProtoNumericBound].
+ * One-to-one Kotlin representation of [NumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
  * It eases the implementation of parsing and comparisons for such bounds.
@@ -84,10 +84,10 @@ internal data class KotlinNumericBound(
 }
 
 /**
- * Creates an instance of [ProtoNumericBound] from this [KotlinNumericBound].
+ * Creates an instance of [NumericBound] from this [KotlinNumericBound].
  */
-internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
-    val builder = ProtoNumericBound.newBuilder()
+internal fun KotlinNumericBound.toProto(): NumericBound {
+    val builder = NumericBound.newBuilder()
         .setExclusive(exclusive)
     when (value) {
         is Float -> builder.setFloatValue(value)
