@@ -169,6 +169,6 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         MAX_VALUE to StringLiteral(view.max),
-        MAX_OPERATOR to StringLiteral(operator)
+        MAX_OPERATOR to StringLiteral(if (bound.exclusive) "<" else "<=")
     )
 }

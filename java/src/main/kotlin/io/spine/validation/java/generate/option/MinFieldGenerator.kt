@@ -169,6 +169,6 @@ internal class MinFieldGenerator(private val view: MinField) : FieldOptionGenera
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         MIN_VALUE to StringLiteral(view.min),
-        MIN_OPERATOR to StringLiteral(operator)
+        MIN_OPERATOR to StringLiteral(if (bound.exclusive) ">" else ">=")
     )
 }

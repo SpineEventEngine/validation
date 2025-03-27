@@ -47,7 +47,7 @@ internal class NumberConstraintsITest {
     fun `min value is checked`() {
         assertViolation(
             InterestRate.newBuilder().setPercent(-3f),
-            "greater than 0.0"
+            "must be > 0.0"
         )
         assertValid(
             InterestRate.newBuilder()
@@ -60,12 +60,12 @@ internal class NumberConstraintsITest {
         assertViolation(
             Year.newBuilder()
                 .setDayCount(42),
-            "greater than or equal to 365"
+            "must be >= 365"
         )
         assertViolation(
             Year.newBuilder()
                 .setDayCount(420),
-            "less than or equal to 366"
+            "must be <= 366"
         )
         assertValid(
             Year.newBuilder()

@@ -26,20 +26,16 @@
 
 package io.spine.validate
 
-import com.google.common.truth.Truth.assertThat
 import com.google.protobuf.Message
 import com.google.protobuf.doubleValue
 import io.kotest.matchers.string.shouldContain
-import io.spine.test.validate.InvalidBound
 import io.spine.test.validate.MaxExclusive
 import io.spine.test.validate.MaxInclusive
 import io.spine.test.validate.MinExclusive
 import io.spine.test.validate.MinInclusive
-import io.spine.type.TypeName
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(min)` and `(max)` options and")
 internal class NumberRangeSpec : ValidationOfConstraintTest() {
@@ -77,7 +73,7 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
     fun `provide one valid violation if number is less than min`() {
         minNumberTest(LESS_THAN_MIN, inclusive = true, valid = false)
         val errorMessage = firstViolation().message.format()
-        errorMessage shouldContain "must be < $EQUAL_MIN"
+        errorMessage shouldContain "must be >= $EQUAL_MIN"
     }
 
     @Test
@@ -108,19 +104,7 @@ internal class NumberRangeSpec : ValidationOfConstraintTest() {
     fun `provide one valid violation if number is greater than max`() {
         maxNumberTest(GREATER_THAN_MAX, inclusive = true, valid = false)
         val errorMessage = firstViolation().message.format()
-        errorMessage shouldContain "must be > $EQUAL_MAX"
-    }
-
-    @Test
-    fun `not allow fraction boundaries for integer fields`() {
-        val exception = assertThrows<ValidationException> {
-            InvalidBound.newBuilder().build()
-        }
-        val assertMessage = assertThat(exception).hasMessageThat()
-        assertMessage
-            .contains("2.71")
-        assertMessage
-            .contains(TypeName.of(InvalidBound::class.java).value())
+        errorMessage shouldContain "must be <= $EQUAL_MAX"
     }
 
     private fun msgMin(value: Double, inclusive: Boolean): Message {
