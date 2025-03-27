@@ -77,7 +77,6 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
     private val bound = view.bound
-    private val operator = if (bound.exclusive) ">=" else ">"
 
     /**
      * Generates code for a field represented by the [view].
@@ -131,11 +130,12 @@ internal class MaxFieldGenerator(private val view: MaxField) : FieldOptionGenera
      * signed types.
      */
     private fun doesNotBelongToRange(value: Expression<Number>): Expression<Boolean> {
-        val valueCase = bound.valueCase // This case is the same for both `lower` and `upper`.
+        val valueCase = bound.valueCase
         val literal = bound.asLiteral()
         if (valueCase in listOf(UINT32_VALUE, UINT64_VALUE)) {
             unsignedIntegerWarning(view.file, field.span)
         }
+        val operator = if (bound.exclusive) ">=" else ">"
         return when (valueCase) {
             UINT32_VALUE -> Expression(
                 "$IntegerClass.compareUnsigned($value, $literal) $operator 0"
