@@ -30,25 +30,7 @@ import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.RangeOption
 import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -113,23 +95,6 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-/**
- * Checks if the number-constraining option is applied to a field of numeric type.
- *
- * @param [field] The field to check.
- * @param [file] The file where the field is declared.
- * @param [option] The name of number-constraint option.
- */
-internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
-    val primitive = field.type.extractPrimitive()
-    Compilation.check(primitive in supportedPrimitives, file, field.span) {
-        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                " the `($option)` option. Supported field types: numbers and repeated" +
-                " of numbers."
-    }
-    return primitive!!
-}
-
 private fun RangeContext.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
@@ -171,24 +136,4 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
-/**
- * Extracts a primitive type if this [FieldType] is singular or repeated field.
- *
- * The option does not support maps, so we cannot use a similar extension from ProtoData.
- */
-private fun FieldType.extractPrimitive(): PrimitiveType? = when {
-    isPrimitive -> primitive
-    isList -> list.primitive
-    else -> null
-}
-
 private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-])""")
-
-private val supportedPrimitives = listOf(
-    TYPE_FLOAT, TYPE_DOUBLE,
-    TYPE_INT32, TYPE_INT64,
-    TYPE_UINT32, TYPE_UINT64,
-    TYPE_SINT32, TYPE_SINT64,
-    TYPE_FIXED32, TYPE_FIXED64,
-    TYPE_SFIXED32, TYPE_SFIXED64,
-)
