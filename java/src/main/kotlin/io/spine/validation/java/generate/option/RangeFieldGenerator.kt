@@ -63,12 +63,6 @@ internal class RangeFieldGenerator(
     /**
      * Returns a boolean expression that checks if the given [value] is within
      * the [lower] and [upper] bounds.
-     *
-     * Unsigned values are handled in a special way because Java does not support
-     * them natively. [IntegerClass] and [LongClass] classes provide static methods
-     * to treat signed types as unsigned, including parsing, printing, comparison
-     * and math operations. Outside of these methods, these primitives remain just
-     * signed types.
      */
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean>  {
         val lowerLiteral = lower.asLiteral()

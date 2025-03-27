@@ -67,6 +67,13 @@ import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
+/**
+ * An abstract base for field generators that restrict the range of numeric fields.
+ *
+ * @see RangeFieldGenerator
+ * @see MinFieldGenerator
+ * @see MaxFieldGenerator
+ */
 internal abstract class BoundedFieldGenerator(
     private val view: BoundedFieldView,
     private val option: String
@@ -76,6 +83,9 @@ internal abstract class BoundedFieldGenerator(
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()
 
+    /**
+     * The type of the field to which the option is applied.
+     */
     protected val fieldType: FieldType = field.type
 
     /**
@@ -102,12 +112,12 @@ internal abstract class BoundedFieldGenerator(
     }.run { FieldOptionCode(this) }
 
     /**
-     * Returns a [CodeBlock] that checks that the given [value] is within the bound(s).
+     * Returns a [CodeBlock] that checks that the given [value] is within the bounds.
      *
      * If the passed value is out of the allowed range, the block creates an instance
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
-    private fun checkWithinBounds(value: Expression<Number>): CodeBlock  {
+    private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
         if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
             unsignedIntegerWarning(view.file, field.span)
         }
@@ -123,8 +133,22 @@ internal abstract class BoundedFieldGenerator(
         )
     }
 
+    /**
+     * The number type of the bound.
+     *
+     * It is used to report a warning for unsigned primitives, which are not
+     * natively supported in Java.
+     */
     protected abstract val boundPrimitive: NumericBound.ValueCase
 
+    /**
+     * Returns a boolean expression that checks if the given [value] is within the bounds.
+     *
+     * Note that unsigned values must be handled in a special way because Java does not
+     * support them natively. For this, `java.lang.Integer` and `java.lang.Long` classes
+     * provide static methods to treat signed types as unsigned, including parsing, printing,
+     * comparison and math operations.
+     */
     protected abstract fun isOutOfBounds(value: Expression<Number>): Expression<Boolean>
 
     private fun violation(
@@ -144,9 +168,31 @@ internal abstract class BoundedFieldGenerator(
         typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>>
+
+    /**
+     * Returns a string representation of this [NumericBound].
+     *
+     * Note that `int` and `long` values that represent unsigned primitives are printed as is.
+     * In the rendered Java code, they can become negative number constants due to overflow,
+     * which is expected.
+     */
+    protected fun NumericBound.asLiteral() =
+        when (valueCase) {
+            FLOAT_VALUE -> Literal("${floatValue}F")
+            DOUBLE_VALUE -> Literal("$doubleValue")
+            INT32_VALUE -> Literal("$int32Value")
+            INT64_VALUE -> Literal("${int64Value}L")
+            UINT32_VALUE -> Literal("$uint32Value")
+            UINT64_VALUE -> Literal("$uint64Value")
+            else -> error(
+                "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
+                        " Make sure the policy, which verified `${view::class.simpleName}`," +
+                        " correctly filtered out unsupported field types."
+            )
+        }
 }
 
-internal fun unsignedIntegerWarning(file: File, span: Span) =
+private fun unsignedIntegerWarning(file: File, span: Span) =
     Compilation.warning(file, span) {
         "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
                 " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
@@ -156,30 +202,9 @@ internal fun unsignedIntegerWarning(file: File, span: Span) =
                 " treats all primitive integers as signed."
     }
 
-/**
- * Returns a string representation of this [NumericBound].
- *
- * Note that `int` and `long` values that represent unsigned primitives are printed as is.
- * In the rendered Java code, they can become negative number constants due to overflow,
- * which is expected. [IntegerClass] and [LongClass] classes provide static methods to treat
- * signed primitives as unsigned.
- */
-internal fun NumericBound.asLiteral() =
-    when (valueCase) {
-        FLOAT_VALUE -> Literal("${floatValue}F")
-        DOUBLE_VALUE -> Literal("$doubleValue")
-        INT32_VALUE -> Literal("$int32Value")
-        INT64_VALUE -> Literal("${int64Value}L")
-        UINT32_VALUE -> Literal("$uint32Value")
-        UINT64_VALUE -> Literal("$uint64Value")
-        else -> error(
-            "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
-                    " Make sure `RangePolicy` correctly filtered out unsupported field types."
-        )
-    }
-
 @Suppress("MaxLineLength") // Long links.
 private object Docs {
     const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
-    const val UNSIGNED_API = "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
+    const val UNSIGNED_API =
+        "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
 }

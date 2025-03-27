@@ -60,14 +60,8 @@ internal class MinFieldGenerator(private val view: MinField) : BoundedFieldGener
     override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
 
     /**
-     * Returns a boolean expression that checks if the given [value] is within
-     * the [lower] and [bound] bounds.
-     *
-     * Unsigned values are handled in a special way because Java does not support
-     * them natively. [IntegerClass] and [LongClass] classes provide static methods
-     * to treat signed types as unsigned, including parsing, printing, comparison
-     * and math operations. Outside of these methods, these primitives remain just
-     * signed types.
+     * Returns a boolean expression that checks if the given [value] falls back
+     * the minimum [bound].
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
