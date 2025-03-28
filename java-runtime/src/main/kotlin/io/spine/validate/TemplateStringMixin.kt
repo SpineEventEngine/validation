@@ -28,11 +28,26 @@ package io.spine.validate
 
 import io.spine.annotation.GeneratedMixin
 
+/**
+ * Extends [TemplateString] with additional functionality.
+ */
 @GeneratedMixin
 public interface TemplateStringMixin {
 
+    /**
+     * The template string that may contain one or more placeholders.
+     */
     public val withPlaceholders: String
 
+    /**
+     * A map that provides values for placeholders referenced in [withPlaceholders].
+     *
+     * The keys in this map should match the placeholder keys inside [withPlaceholders]
+     * excluding the `${}` placeholder markers.
+     *
+     * All placeholders present in the template string must have corresponding entries
+     * in this map. Otherwise, the template is considered invalid.
+     */
     public val placeholderValueMap: Map<String, String>
 
     /**
