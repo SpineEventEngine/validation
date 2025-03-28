@@ -26,20 +26,23 @@
 
 package io.spine.validation.required
 
+import io.spine.option.OptionsProto
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.plugin.Policy
 import io.spine.protodata.settings.loadSettings
 import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
-import io.spine.validation.ValidationPolicy
-import io.spine.validation.required.RequiredRule.isRequired
-import io.spine.validation.event.RuleAdded
+import io.spine.validation.boolValue
+import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.findOption
+import io.spine.validation.required.RequiredField.isSupported
 import io.spine.validation.toEvent
 
 /**
- * A policy which defines validation rules for ID fields.
+ * Controls whether an ID field should be validated as `(required)`.
  *
  * An ID of a signal message or an entity state is the first field
  * declared in the type, disregarding the index of the proto field.
@@ -47,34 +50,45 @@ import io.spine.validation.toEvent
  * The ID field is assumed as required for commands and entity states,
  * unless it is specifically marked otherwise using the field options.
  *
- * Implementations define the ways of discovering signal and entity state messages.
+ * Implementations define the ways of discovering signal and entity
+ * state messages.
  */
-internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
+internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>() {
 
+    /**
+     * The validation config.
+     */
     protected val config: ValidationConfig? by lazy {
-        if (!settingsAvailable()) {
-            null
-        } else {
+        if (settingsAvailable()) {
             loadSettings<ValidationConfig>()
+        } else {
+            null
         }
     }
 
     /**
-     * Given an ID field, generates the required rule event.
+     * Controls whether [RequiredFieldDiscovered] should be emitted
+     * for the given ID [field].
      *
-     * If the field is marked with `(required) = false`, no rule is generated.
+     * If the field is marked with `(required) = false`, [NoReaction] is emitted.
      *
      * @param field The ID field.
      * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
-    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    fun withField(field: Field): EitherOf2<RuleAdded, NoReaction> {
-        if (!isRequired(field, true)) {
+    fun withField(field: Field): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+        val option = field.findOption(OptionsProto.required)
+        val explicitlyDisabled = option?.boolValue == false
+        val fieldTypeUnsupported = field.type.isSupported().not()
+        if (explicitlyDisabled || fieldTypeUnsupported) {
             return ignore()
         }
-        val errorMessage = "The ID field `${field.name.value}` must have a non-default value."
+
+
         val rule = RequiredRule.forField(field, errorMessage)
             ?: return ignore()
         return rule.toEvent(field.declaringType).asA()
     }
 }
+
+private const val ERROR_TEMPLATE = "The ID field `\${parent.type}.\${field.path}`" +
+        " of the type `\${field.type}` must have a non-default value.";

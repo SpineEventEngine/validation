@@ -37,7 +37,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.MessageMarkers
-import io.spine.validation.event.RuleAdded
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
  * A policy that marks ID fields in entity state messages and signal messages as required.
@@ -60,7 +60,7 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
 
     @React
     @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
+    override fun whenever(@External event: TypeDiscovered): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         if (filePatterns.isEmpty()) {
             return ignore()
         }
