@@ -34,6 +34,7 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.Combination
 import io.spine.test.tools.validate.Due
 import io.spine.type.TypeName
+import io.spine.validate.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
 import org.junit.jupiter.api.Disabled

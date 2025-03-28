@@ -38,6 +38,7 @@ import io.spine.test.tools.validate.Sauce
 import io.spine.test.tools.validate.fish
 import io.spine.testing.TestValues.randomString
 import io.spine.validate.Validate.violationsOf
+import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

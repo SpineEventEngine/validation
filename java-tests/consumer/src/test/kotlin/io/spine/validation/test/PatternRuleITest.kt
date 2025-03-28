@@ -28,6 +28,7 @@ package io.spine.validation.test
 
 import com.google.common.truth.Truth.assertThat
 import io.kotest.matchers.shouldBe
+import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
