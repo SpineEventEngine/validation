@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test
 internal class ConstraintViolationMixinSpec {
 
     @Test
-    fun `provide string representation`() {
+    fun `return error diagnostic text`() {
         val typeName = Timestamp.getDescriptor().name
         val fieldPath = FieldPath("nanos")
         val message = templateString {
