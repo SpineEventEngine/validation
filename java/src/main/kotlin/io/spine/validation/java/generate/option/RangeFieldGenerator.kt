@@ -30,11 +30,11 @@ import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.validation.NumericBound
-import io.spine.validation.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.NumericBound.ValueCase.UINT64_VALUE
+import io.spine.validation.bound.NumericBound
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.RANGE
-import io.spine.validation.RangeField
+import io.spine.validation.bound.RangeField
 import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString

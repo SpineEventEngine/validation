@@ -29,7 +29,7 @@ package io.spine.validation.java.generate.option
 import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.RangeField
+import io.spine.validation.bound.RangeField
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
