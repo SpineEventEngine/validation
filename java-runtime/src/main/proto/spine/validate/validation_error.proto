@@ -49,8 +49,6 @@ message ValidationError {
 // Describes violation of a validation constraint found in a field of a message.
 message ConstraintViolation {
 
-    option (is).java_type = "io.spine.validate.ConstraintViolationMixin";
-
     // Deprecated: use `message` field to access the error message.
     string msg_format = 1 [deprecated = true];
 
