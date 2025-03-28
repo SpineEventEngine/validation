@@ -60,6 +60,17 @@ import io.spine.validation.event.rangeFieldDiscovered
  * 6. The lower bound is strictly less than the upper one.
  *
  * Any violation of the above conditions leads to a compilation error.
+ *
+ * Examples of valid number ranges:
+ *  - `[0..1]`
+ *  - `( -17.3 .. +146.0 ]`
+ *  - `[+1..+100)`
+ *
+ * Examples of invalid number ranges:
+ *  - `1..5` - missing brackets.
+ *  - `[0 - 1]` - wrong divider.
+ *  - `[0 . . 1]` - wrong delimiter.
+ *  - `( .. 0)` - missing lower bound.
  */
 internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
