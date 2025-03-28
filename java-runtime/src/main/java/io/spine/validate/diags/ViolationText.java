@@ -36,14 +36,12 @@ import java.util.Collection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.string.Diags.backtick;
-import static io.spine.validate.TemplateStringExtsKt.format;
+import static io.spine.validate.TemplateStrings.format;
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.joining;
 
 /**
  * Provides error diagnostic text for a violation of a validation constraint.
- *
- * <p>If a {@link ConstraintViolation} has nested violations, they are listed in separate lines.
  */
 public final class ViolationText {
 
