@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("Options")
+package io.spine.validation.required
 
-package io.spine.validation
-
-import com.google.protobuf.BoolValue
-import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import io.spine.protobuf.unpack
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 
 /**
- * Finds the option with the given generated type applied to this [Field].
- *
- * @param [generated] The type used to represent the option.
- * @return the option or `null` if there is no option with such a type applied to the field.
+ * Determines whether the field type can be validated as `(required)`.
  */
-public fun Field.findOption(generated: GeneratedExtension<*, *>): Option? =
-    optionList.find { it.name == generated.descriptor.name && it.number == generated.number }
+internal object RequiredField {
 
-/**
- * Unpacks a [BoolValue] from this option.
- *
- * @throws io.spine.type.UnexpectedTypeException If the option stores a value of another type.
- */
-public val Option.boolValue: Boolean
-    get() = value.unpack<BoolValue>().value
+    /**
+     * Tell if this [FieldType] can be validated as `(required)`.
+     *
+     * Returns `true` if it is supported by the option, `false` otherwise.
+     */
+    fun FieldType.isSupported(): Boolean =
+        !isPrimitive || primitive in SUPPORTED_PRIMITIVES
+
+    private val SUPPORTED_PRIMITIVES = listOf(
+        TYPE_STRING, TYPE_BYTES
+    )
+}
