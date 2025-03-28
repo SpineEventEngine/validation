@@ -56,6 +56,12 @@ message ConstraintViolation {
     repeated string param = 2 [deprecated = true];
 
     // An error message for this violation.
+    //
+    // The returned message can be formatted using one of the following approaches:
+    //
+    // 1. In Kotlin, use the `TemplateString.format()` extension.
+    // 2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+    //
     spine.validate.TemplateString message = 8;
 
     // The name of the validated message type.
