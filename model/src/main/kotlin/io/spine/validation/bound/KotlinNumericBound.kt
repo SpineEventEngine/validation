@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.PrimitiveType
@@ -43,11 +43,9 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
-import io.spine.validation.RANGE
-import io.spine.validation.NumericBound as ProtoNumericBound
 
 /**
- * One-to-one Kotlin representation of [ProtoNumericBound].
+ * One-to-one Kotlin representation of [NumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
  * It eases the implementation of parsing and comparisons for such bounds.
@@ -57,7 +55,7 @@ import io.spine.validation.NumericBound as ProtoNumericBound
  */
 internal data class KotlinNumericBound(
     val value: Any, // Cannot use `Number` because Kotlin's `UInt` and `ULong` are not numbers.
-    val inclusive: Boolean
+    val exclusive: Boolean
 ) : Comparable<KotlinNumericBound> {
 
     override fun compareTo(other: KotlinNumericBound): Int {
@@ -85,11 +83,11 @@ internal data class KotlinNumericBound(
 }
 
 /**
- * Creates an instance of [ProtoNumericBound] from this [KotlinNumericBound].
+ * Creates an instance of [NumericBound] from this [KotlinNumericBound].
  */
-internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
-    val builder = ProtoNumericBound.newBuilder()
-        .setInclusive(inclusive)
+internal fun KotlinNumericBound.toProto(): NumericBound {
+    val builder = NumericBound.newBuilder()
+        .setExclusive(exclusive)
     when (value) {
         is Float -> builder.setFloatValue(value)
         is Double -> builder.setDoubleValue(value)
@@ -103,7 +101,7 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
         is ULong -> builder.setUint64Value(value.toLong())
 
         else -> error(
-            "Cannot convert `NumericBound` to Protobuf counterpart due to unexpected" +
+            "Cannot convert `KotlinNumericBound` to `NumericBound` due to unexpected" +
                     " value type: `${value::class}`."
         )
     }
@@ -123,19 +121,20 @@ internal fun KotlinNumericBound.toProto(): ProtoNumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): KotlinNumericBound {
+internal fun BoundContext.checkNumericBound(
+    value: String,
+    exclusive: Boolean
+): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The `$value` bound value has" +
-                    " an invalid format. Please make sure the provided value is" +
+            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                    " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
         }
     } else {
         Compilation.check(INTEGER.matches(value), file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The `$value` bound value has" +
-                    " an invalid format. Please make sure the provided value is" +
+            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                    " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " an integer number. Examples: `123`, `-567823`."
         }
     }
@@ -149,17 +148,17 @@ internal fun RangeContext.checkNumericBound(value: String, inclusive: Boolean): 
         else -> unexpectedPrimitiveType(primitiveType)
     }
     Compilation.check(number != null, file, field.span) {
-        "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                " `${field.qualifiedName}` field. The `$value` bound value is out of range" +
-                " for the field type (`${field.type.name}`) the option is applied to."
+        "The `($optionName)` option could not parse the `$value` bound value specified for" +
+                " `${field.qualifiedName}` field. The value is out of range for the field" +
+                " type `${field.type.name}` the option is applied to."
     }
-    return KotlinNumericBound(number!!, inclusive)
+    return KotlinNumericBound(number!!, exclusive)
 }
 
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
     error(
-        "`NumericBound` cannot be created for `$primitiveType` field type." +
-                " Please make sure `RangePolicy` correctly filtered unsupported field types."
+        "`KotlinNumericBound` cannot be created for `$primitiveType` field type." +
+                " Please make sure the policy correctly filtered unsupported field types."
     )
 
 private val INTEGER = Regex("[-+]?\\d+")

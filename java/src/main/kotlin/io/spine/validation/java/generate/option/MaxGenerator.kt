@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,37 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation.java.generate.option
 
-package spine.validation;
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.bound.MaxField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
-import "spine/options.proto";
+/**
+ * The generator for `(max)` option.
+ */
+internal class MaxGenerator(private val querying: Querying) : OptionGenerator {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "NumericBoundProto";
-option java_multiple_files = true;
-
-// A numeric value that restricts the range of numeric fields.
-message NumericBound {
-
-    // Whether the bound value itself should be included into the range.
-    bool inclusive = 1;
-
-    // A numeric value itself.
-    //
-    // Note that we do not cover all integer types. The remaining integers do not introduce
-    // their own ranges. They introduce alternative binary representations.
-    //
-    // For example, `sfixed32` has the same range of values as `int32`. But uses always 4
-    // bytes of spaces in comparison to `int32`, which uses variable-length encoding.
-    //
-    oneof value {
-        float float_value = 2;
-        double double_value = 3;
-        int32 int32_value = 4;
-        int64 int64_value = 5;
-        uint32 uint32_value = 6;
-        uint64 uint64_value = 7;
+    /**
+     * All `(max)` fields in the current compilation process.
+     */
+    private val allMaxFields by lazy {
+        querying.select<MaxField>()
+            .all()
     }
+
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allMaxFields
+            .filter { it.id.type == type }
+            .map { MaxFieldGenerator(it).generate() }
 }

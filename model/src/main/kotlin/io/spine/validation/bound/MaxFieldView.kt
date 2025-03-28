@@ -24,27 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
 import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.RangeField
-import io.spine.validation.event.RangeFieldDiscovered
+import io.spine.validation.bound.event.MaxFieldDiscovered
 
 /**
- * A view of a field that is marked with the `(range)` option.
+ * A view of a field that is marked with the `(max)` option.
  */
-internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
+internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
 
     @Subscribe
-    fun on(e: RangeFieldDiscovered) = alter {
+    fun on(e: MaxFieldDiscovered) = alter {
         subject = e.subject
         errorMessage = e.errorMessage
-        range = e.range
-        lowerBound = e.lowerBound
-        upperBound = e.upperBound
+        max = e.max
+        bound = e.bound
         file = e.file
     }
 }

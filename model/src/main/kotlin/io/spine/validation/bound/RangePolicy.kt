@@ -24,31 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.range
+package io.spine.validation.bound
 
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.RangeOption
 import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
@@ -60,8 +42,8 @@ import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.validation.defaultMessage
-import io.spine.validation.event.RangeFieldDiscovered
-import io.spine.validation.event.rangeFieldDiscovered
+import io.spine.validation.bound.event.RangeFieldDiscovered
+import io.spine.validation.bound.event.rangeFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(range)` option.
@@ -78,6 +60,17 @@ import io.spine.validation.event.rangeFieldDiscovered
  * 6. The lower bound is strictly less than the upper one.
  *
  * Any violation of the above conditions leads to a compilation error.
+ *
+ * Examples of valid number ranges:
+ *  - `[0..1]`
+ *  - `( -17.3 .. +146.0 ]`
+ *  - `[+1..+100)`
+ *
+ * Examples of invalid number ranges:
+ *  - `1..5` - missing brackets.
+ *  - `[0 - 1]` - wrong divider.
+ *  - `[0 . . 1]` - wrong delimiter.
+ *  - `( .. 0)` - missing lower bound.
  */
 internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
@@ -88,16 +81,16 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file)
+        val primitiveType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
         val context = RangeContext(option.value, primitiveType, field, file)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
-        val (lowerInclusive, upperInclusive) = context.checkBoundTypes(left, right)
-        val lower = context.checkNumericBound(left.substring(1), lowerInclusive)
-        val upper = context.checkNumericBound(right.dropLast(1), upperInclusive)
+        val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
+        val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
+        val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
         context.checkRelation(lower, upper)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -105,22 +98,12 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = range
+            this.range = context.range
             lowerBound = lower.toProto()
             upperBound = upper.toProto()
             this.file = file
         }.just()
     }
-}
-
-private fun checkFieldType(field: Field, file: File): PrimitiveType {
-    val primitive = field.type.extractPrimitive()
-    Compilation.check(primitive in supportedPrimitives, file, field.span) {
-        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                " the `($RANGE)` option. Supported field types: numbers and repeated" +
-                " of numbers."
-    }
-    return primitive!!
 }
 
 private fun RangeContext.checkDelimiter(): String =
@@ -133,9 +116,9 @@ private fun RangeContext.checkDelimiter(): String =
         }
 
 private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
-    val lowerInclusive = when (lower.first()) {
-        '(' -> false
-        '[' -> true
+    val lowerExclusive = when (lower.first()) {
+        '(' -> true
+        '[' -> false
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The lower bound should begin either" +
@@ -143,9 +126,9 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    val upperInclusive = when (upper.last()) {
-        ')' -> false
-        ']' -> true
+    val upperExclusive = when (upper.last()) {
+        ')' -> true
+        ']' -> false
         else -> Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
                     " `${field.qualifiedName}` field. The upper bound should end either" +
@@ -153,7 +136,7 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
                     " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
         }
     }
-    return lowerInclusive to upperInclusive
+    return lowerExclusive to upperExclusive
 }
 
 private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
@@ -164,24 +147,4 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
-/**
- * Extracts a primitive type if this [FieldType] is singular or repeated field.
- *
- * The option does not support maps, so we cannot use a similar extension from ProtoData.
- */
-private fun FieldType.extractPrimitive(): PrimitiveType? = when {
-    isPrimitive -> primitive
-    isList -> list.primitive
-    else -> null
-}
-
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-])""")
-
-private val supportedPrimitives = listOf(
-    TYPE_FLOAT, TYPE_DOUBLE,
-    TYPE_INT32, TYPE_INT64,
-    TYPE_UINT32, TYPE_UINT64,
-    TYPE_SINT32, TYPE_SINT64,
-    TYPE_FIXED32, TYPE_FIXED64,
-    TYPE_SFIXED32, TYPE_SFIXED64,
-)
+private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")

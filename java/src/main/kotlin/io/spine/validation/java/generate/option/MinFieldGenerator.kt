@@ -30,11 +30,11 @@ import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.validation.MIN
+import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.RANGE
-import io.spine.validation.bound.RangeField
 import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
@@ -43,45 +43,34 @@ import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_OPERATOR
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 
 /**
- * The generator for `(range)` option.
+ * The generator for `(min)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class RangeFieldGenerator(
-    private val view: RangeField
-) : BoundedFieldGenerator(view, RANGE) {
+internal class MinFieldGenerator(private val view: MinField) : BoundedFieldGenerator(view, MIN) {
 
-    private val lower = view.lowerBound
-    private val upper = view.upperBound
+    private val bound = view.bound
+    private val isExclusive = bound.exclusive
 
-    override val boundPrimitive: NumericBound.ValueCase = lower.valueCase
+    override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
 
     /**
-     * Returns a boolean expression that checks if the given [value] is within
-     * the [lower] and [upper] bounds.
+     * Returns a boolean expression that checks if the given [value] falls back
+     * the minimum [bound].
      */
-    override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean>  {
-        val lowerLiteral = lower.asLiteral()
-        val lowerOperator = if (lower.exclusive) "<=" else "<"
-        val upperLiteral = upper.asLiteral()
-        val upperOperator = if (upper.exclusive) ">=" else ">"
+    @Suppress("MaxLineLength") // Easier to read.
+    override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
+        val literal = bound.asLiteral()
+        val operator = if (isExclusive) "<=" else "<"
         return when (boundPrimitive) {
-            UINT32_VALUE -> Expression(
-                "$IntegerClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$IntegerClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
-            )
-            UINT64_VALUE -> Expression(
-                "$LongClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$LongClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
-            )
-            else -> Expression(
-                "$value $lowerOperator $lowerLiteral ||" +
-                        " $value $upperOperator $upperLiteral"
-            )
+            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $literal) $operator 0")
+            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $literal) $operator 0")
+            else -> Expression("$value $operator $literal")
         }
     }
 
@@ -94,6 +83,7 @@ internal class RangeFieldGenerator(
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        RANGE_VALUE to StringLiteral(view.range)
+        MIN_VALUE to StringLiteral(view.min),
+        MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }

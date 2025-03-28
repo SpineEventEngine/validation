@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,26 @@
 
 package io.spine.validation
 
-import io.spine.core.External
-import io.spine.core.Where
-import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.validation.NumberRules.Companion.from
-import io.spine.validation.event.SimpleRuleAdded
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
 
 /**
- * A policy to add a validation rule to a type whenever the `(max)` field option
- * is discovered.
+ * A common interface for the bounded numeric field views.
  */
-internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
+public interface BoundedFieldView {
 
-    @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = MAX) event: FieldOptionDiscovered
-    ): Just<SimpleRuleAdded> {
-        val field = event.subject
-        val rules = from(field, event.option, typeSystem)
-        val rule = rules.maxRule(field.name)
-        return simpleRuleAdded(field.declaringType, rule)
-    }
+    /**
+     * The field in which the option was discovered.
+     */
+    public val subject: Field
+
+    /**
+     * The error message template.
+     */
+    public val errorMessage: String
+
+    /**
+     * The file in which the option was discovered.
+     */
+    public val file: File
 }

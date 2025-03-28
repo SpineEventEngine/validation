@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,26 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.java.generate.option
 
-import io.spine.protodata.value.Value
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.bound.MinField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * Parses this string into a number value.
- *
- * @return a `Value` with either `double_value` or `int_value`
+ * The generator for `(min)` option.
  */
-internal fun String.parseToNumber(): Value {
-    val fraction = contains('.')
-    return if (fraction) {
-        Value
-            .newBuilder()
-            .setDoubleValue(toDouble())
-            .build()
-    } else {
-        Value
-            .newBuilder()
-            .setIntValue(toLong())
-            .build()
+internal class MinGenerator(private val querying: Querying) : OptionGenerator {
+
+    /**
+     * All `(min)` fields in the current compilation process.
+     */
+    private val allMinFields by lazy {
+        querying.select<MinField>()
+            .all()
     }
+
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allMinFields
+            .filter { it.id.type == type }
+            .map { MinFieldGenerator(it).generate() }
 }

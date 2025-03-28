@@ -26,64 +26,22 @@
 
 syntax = "proto3";
 
-package spine.validation;
+package spine.validation.bound;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.event";
+option java_package = "io.spine.validation.bound.event";
 option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
+import "spine/protodata/file.proto";
+import "spine/validation/bound/numeric_bound.proto";
 
-// The event emitted whenever a simple validation rule is attached to a message type.
-message SimpleRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    SimpleRule rule = 2;
-}
-
-// The event emitted whenever a composite validation rule is attached to a message type.
-message CompositeRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    CompositeRule rule = 2;
-}
-
-// The event emitted whenever a message-wide validation rule is attached to a type.
-message MessageWideRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    MessageWideRule rule = 3;
-}
-
-// The event emitted whenever a field with `(required) = true` option is discovered
+// The event emitted whenever a field with `(range)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message RequiredFieldDiscovered {
-
-    protodata.FieldRef id = 1;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
-
-    // The error message template.
-    string error_message = 3;
-}
-
-// The event emitted whenever a field with `(pattern)` option is discovered
-// and has passed the necessary checks to confirm the option is applied correctly.
-message PatternFieldDiscovered {
+message RangeFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
@@ -93,16 +51,22 @@ message PatternFieldDiscovered {
     // The error message template.
     string error_message = 3;
 
-    // The regular expression to match.
-    string pattern = 4;
+    // The range value.
+    string range = 4;
 
-    // Regular expression modifiers.
-    PatternOption.Modifier modifier = 5;
+    // The minimum value that a numeric field can have.
+    spine.validation.bound.NumericBound lower_bound = 5;
+
+    // The maximum value that a numeric field can have.
+    spine.validation.bound.NumericBound upper_bound = 6;
+
+    // The file in which the option was discovered.
+    protodata.File file = 7;
 }
 
-// The event emitted whenever a field with `(goes)` option is discovered
+// The event emitted whenever a field with `(max)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message GoesFieldDiscovered {
+message MaxFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
@@ -112,13 +76,19 @@ message GoesFieldDiscovered {
     // The error message template.
     string error_message = 3;
 
-    // The required companion field.
-    protodata.Field companion = 4;
+    // The max value, as was specified by a user.
+    string max = 4;
+
+    // The maximum value that a numeric field can have.
+    spine.validation.bound.NumericBound bound = 5;
+
+    // The file in which the option was discovered.
+    protodata.File file = 6;
 }
 
-// The event emitted whenever a field with `(distinct) = true` option is discovered
+// The event emitted whenever a field with `(min)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message DistinctFieldDiscovered {
+message MinFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
@@ -127,14 +97,13 @@ message DistinctFieldDiscovered {
 
     // The error message template.
     string error_message = 3;
-}
 
-// The event emitted whenever a field with `(validate) = true` option is discovered
-// and has passed the necessary checks to confirm the option is applied correctly.
-message ValidateFieldDiscovered {
+    // The min value, as was specified by a user.
+    string min = 4;
 
-    protodata.FieldRef id = 1;
+    // The minimum value that a numeric field can have.
+    spine.validation.bound.NumericBound bound = 5;
 
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    // The file in which the option was discovered.
+    protodata.File file = 6;
 }
