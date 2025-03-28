@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("TemplateStrings")
+
 package io.spine.validate
 
 import io.spine.code.proto.FieldDeclaration
