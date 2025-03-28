@@ -29,11 +29,14 @@ package io.spine.validate
 import io.spine.annotation.GeneratedMixin
 import io.spine.validate.diags.ViolationText
 
+/**
+ * Extends [ConstraintViolation] with additional functionality.
+ */
 @GeneratedMixin
 public interface ConstraintViolationMixin {
 
     /**
-     * Provides error diagnostic text for a violation of a validation constraint.
+     * Returns error diagnostic text.
      */
     public fun asString(): String =
         ViolationText.of(this as ConstraintViolation)

@@ -41,8 +41,6 @@ import static java.util.stream.Collectors.joining;
 
 /**
  * Provides error diagnostic text for a violation of a validation constraint.
- *
- * <p>If a {@link ConstraintViolation} has nested violations, they are listed in separate lines.
  */
 public final class ViolationText {
 
