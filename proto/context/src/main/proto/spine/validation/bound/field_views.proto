@@ -9,7 +9,7 @@ option java_package = "io.spine.validation.bound";
 option java_outer_classname = "FieldViewsProto";
 option java_multiple_files = true;
 
-import "spine/validation/numeric_bound.proto";
+import "spine/validation/bound/numeric_bound.proto";
 import "spine/protodata/ast.proto";
 import "spine/protodata/file.proto";
 
@@ -30,10 +30,10 @@ message RangeField {
     string range = 4;
 
     // The minimum value that a numeric field can have.
-    spine.validation.NumericBound lower_bound = 5;
+    spine.validation.bound.NumericBound lower_bound = 5;
 
     // The maximum value that a numeric field can have.
-    spine.validation.NumericBound upper_bound = 6;
+    spine.validation.bound.NumericBound upper_bound = 6;
 
     // The file in which the option was discovered.
     protodata.File file = 7;
@@ -56,7 +56,7 @@ message MaxField {
     string max = 4;
 
     // The maximum value that a numeric field can have.
-    spine.validation.NumericBound bound = 5;
+    spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
     protodata.File file = 6;
@@ -79,7 +79,7 @@ message MinField {
     string min = 4;
 
     // The minimum value that a numeric field can have.
-    spine.validation.NumericBound bound = 5;
+    spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
     protodata.File file = 6;
