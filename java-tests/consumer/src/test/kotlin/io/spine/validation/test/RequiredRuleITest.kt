@@ -28,8 +28,6 @@ package io.spine.validation.test
 
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.spine.validate.format
-import io.spine.validate.formatUnsafe
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
