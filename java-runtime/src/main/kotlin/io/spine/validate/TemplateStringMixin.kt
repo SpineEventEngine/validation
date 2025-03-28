@@ -74,7 +74,7 @@ public interface TemplateStringMixin {
      *
      * This method will return "My dog's name is Fido and its breed is ${dog.breed}.".
      */
-    public fun TemplateString.formatUnsafe(): String {
+    public fun formatUnsafe(): String {
         var result = withPlaceholders
         for ((key, value) in placeholderValueMap) {
             result = result.replace("\${$key}", value)
