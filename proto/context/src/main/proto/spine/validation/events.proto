@@ -70,6 +70,7 @@ message MessageWideRuleAdded {
 
 // The event emitted whenever a field with `(required) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
+// // TODO:2025-03-28:yevhenii.nadtochii: Used by ID policies as well.
 message RequiredFieldDiscovered {
 
     protodata.FieldRef id = 1;
