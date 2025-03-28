@@ -37,45 +37,6 @@ import org.junit.jupiter.api.assertThrows
 internal class TemplateStringExtsSpec {
 
     @Nested inner class
-    `format the template string` {
-
-        @Test
-        fun `returning the correct result`() {
-            val template = templateString {
-                withPlaceholders = "My dog's name is \${dog.name}."
-                placeholderValue["dog.name"] = "Fido"
-            }
-            template.format() shouldBe "My dog's name is Fido."
-        }
-
-        @Test
-        fun `returning an empty string if given an empty template`() {
-            TemplateString.getDefaultInstance().format() shouldBe ""
-        }
-
-        @Test
-        fun `throwing when a placeholder has no value`() {
-            assertThrows<IllegalArgumentException> {
-                val template = templateString {
-                    withPlaceholders = "My dog's name is \${dog.name}."
-                }
-                template.format()
-            }
-        }
-
-        @Test
-        fun `ignore when a placeholder with a value is not used`() {
-            assertDoesNotThrow {
-                val template = templateString {
-                    withPlaceholders = "My dog's name is Fido."
-                    placeholderValue["dog.name"] = "Fido"
-                }
-                template.format()
-            }
-        }
-    }
-
-    @Nested inner class
     `validate the template against placeholders` {
 
         private val message = { missingPlaceholders: List<String> -> "$missingPlaceholders" }
@@ -98,14 +59,5 @@ internal class TemplateStringExtsSpec {
                 checkPlaceholdersHasValue(template, placeholders, message)
             }
         }
-    }
-
-    @Test
-    fun `format with missing placeholders`() {
-        val template = templateString {
-            withPlaceholders = "My dog's name is \${dog.name} and its breed is \${dog.breed}."
-            placeholderValue["dog.name"] = "Fido"
-        }
-        template.formatUnsafe() shouldBe "My dog's name is Fido and its breed is \${dog.breed}."
     }
 }

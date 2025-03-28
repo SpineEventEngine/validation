@@ -28,22 +28,60 @@ package io.spine.validate
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`TemplateStringMixin` should")
 internal class TemplateStringMixinSpec {
 
-    @Test
-    fun `format the template as string`() {
-        val templateString = templateString {
-            withPlaceholders = "Hello, \${user.name}! Welcome to \${city.name}."
-            placeholderValue.putAll(
-                mapOf(
-                    "user.name" to "John Doe",
-                    "city.name" to "San Francisco"
-                )
-            )
+    @Nested
+    inner class
+    `format the template string` {
+
+        @Test
+        fun `returning the correct result`() {
+            val template = templateString {
+                withPlaceholders = "My dog's name is \${dog.name}."
+                placeholderValue["dog.name"] = "Fido"
+            }
+            template.format() shouldBe "My dog's name is Fido."
         }
-        templateString.format() shouldBe "Hello, John Doe! Welcome to San Francisco."
+
+        @Test
+        fun `returning an empty string if given an empty template`() {
+            TemplateString.getDefaultInstance().format() shouldBe ""
+        }
+
+        @Test
+        fun `throwing when a placeholder has no value`() {
+            assertThrows<IllegalArgumentException> {
+                val template = templateString {
+                    withPlaceholders = "My dog's name is \${dog.name}."
+                }
+                template.format()
+            }
+        }
+
+        @Test
+        fun `ignore when a placeholder with a value is not used`() {
+            assertDoesNotThrow {
+                val template = templateString {
+                    withPlaceholders = "My dog's name is Fido."
+                    placeholderValue["dog.name"] = "Fido"
+                }
+                template.format()
+            }
+        }
+    }
+
+    @Test
+    fun `format with missing placeholders`() {
+        val template = templateString {
+            withPlaceholders = "My dog's name is \${dog.name} and its breed is \${dog.breed}."
+            placeholderValue["dog.name"] = "Fido"
+        }
+        template.formatUnsafe() shouldBe "My dog's name is Fido and its breed is \${dog.breed}."
     }
 }
