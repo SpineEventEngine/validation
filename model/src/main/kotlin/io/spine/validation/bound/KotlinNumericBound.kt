@@ -43,7 +43,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
-import io.spine.validation.NumericBound
 
 /**
  * One-to-one Kotlin representation of [NumericBound].

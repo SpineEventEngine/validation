@@ -30,8 +30,7 @@ import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.MaxField
-import io.spine.validation.event.MaxFieldDiscovered
+import io.spine.validation.bound.event.MaxFieldDiscovered
 
 /**
  * A view of a field that is marked with the `(max)` option.

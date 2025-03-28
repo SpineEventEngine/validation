@@ -30,8 +30,7 @@ import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.RangeField
-import io.spine.validation.event.RangeFieldDiscovered
+import io.spine.validation.bound.event.RangeFieldDiscovered
 
 /**
  * A view of a field that is marked with the `(range)` option.

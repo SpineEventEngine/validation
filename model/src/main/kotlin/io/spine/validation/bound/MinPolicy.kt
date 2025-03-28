@@ -39,8 +39,8 @@ import io.spine.server.event.just
 import io.spine.validation.MIN
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.defaultMessage
-import io.spine.validation.event.MinFieldDiscovered
-import io.spine.validation.event.minFieldDiscovered
+import io.spine.validation.bound.event.MinFieldDiscovered
+import io.spine.validation.bound.event.minFieldDiscovered
 
 /**
  * A policy to add a validation rule to a type whenever the `(min)` field option

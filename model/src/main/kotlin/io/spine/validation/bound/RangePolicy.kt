@@ -42,8 +42,8 @@ import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.validation.defaultMessage
-import io.spine.validation.event.RangeFieldDiscovered
-import io.spine.validation.event.rangeFieldDiscovered
+import io.spine.validation.bound.event.RangeFieldDiscovered
+import io.spine.validation.bound.event.rangeFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(range)` option.

@@ -39,8 +39,8 @@ import io.spine.server.event.just
 import io.spine.validation.MAX
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.defaultMessage
-import io.spine.validation.event.MaxFieldDiscovered
-import io.spine.validation.event.maxFieldDiscovered
+import io.spine.validation.bound.event.MaxFieldDiscovered
+import io.spine.validation.bound.event.maxFieldDiscovered
 
 /**
  * A policy to add a validation rule to a type whenever the `(max)` field option
