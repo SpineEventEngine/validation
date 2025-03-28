@@ -136,4 +136,4 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-])""")
+private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")

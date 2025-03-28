@@ -36,7 +36,7 @@ option java_multiple_files = true;
 
 message Probability {
 
-    double value = 1 [(range).value = "[0.0 .. 1.0]"];
+    double value = 1 [(range).value = "[0.0 .. +1.0]"];
 }
 
 message InterestRate {
