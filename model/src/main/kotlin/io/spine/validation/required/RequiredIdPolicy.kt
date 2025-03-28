@@ -83,7 +83,9 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>() {
             return ignore()
         }
 
-
+        // TODO:2025-03-28:yevhenii.nadtochii:  We should split `resolveErrorMessage()` into two
+        //  methods, so that we could use `IfMissing` message when it is specified,
+        //  and out custom default error message, when it is not.
         val rule = RequiredRule.forField(field, errorMessage)
             ?: return ignore()
         return rule.toEvent(field.declaringType).asA()
