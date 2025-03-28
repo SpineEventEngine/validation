@@ -31,18 +31,17 @@ package io.spine.validation
 import com.google.protobuf.BoolValue
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import io.spine.protobuf.unpack
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.Option
 
 /**
- * Checks if this option represents the given generated option.
+ * Finds the option with the given generated type applied to this [Field].
  *
- * @return `true` if both option name and number are the same, `false` otherwise
+ * @param [generated] The type used to represent the option.
+ * @return the option or `null` if there is no option with such a type applied to the field.
  */
-@Suppress( "FunctionNaming" /* backticked because `is` is the Kotlin keyword. */ )
-public fun Option.`is`(generated: GeneratedExtension<*, *>): Boolean {
-    return name == generated.descriptor.name
-            && number == generated.number
-}
+public fun Field.findOption(generated: GeneratedExtension<*, *>): Option? =
+    optionList.find { it.name == generated.descriptor.name && it.number == generated.number }
 
 /**
  * Unpacks a [BoolValue] from this option.
