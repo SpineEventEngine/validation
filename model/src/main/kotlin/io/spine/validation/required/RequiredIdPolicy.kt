@@ -36,6 +36,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
+import io.spine.validation.ValidationPluginPart
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.findOption
@@ -54,7 +55,7 @@ import io.spine.validation.required.RequiredField.isSupported
  * Implementations define the ways of discovering signal and entity
  * state messages.
  */
-internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>() {
+internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), ValidationPluginPart {
 
     /**
      * The validation config.
