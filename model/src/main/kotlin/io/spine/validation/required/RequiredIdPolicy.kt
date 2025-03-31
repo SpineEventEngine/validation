@@ -44,7 +44,7 @@ import io.spine.validation.required.RequiredField.isSupported
 
 /**
  * An abstract base for policies that control whether an ID field
- * should be validated as `(required)`.
+ * should be implicitly validated as required.
  *
  * The ID of a signal message or an entity state is the first field
  * declared in the type, disregarding the index of the proto field.
