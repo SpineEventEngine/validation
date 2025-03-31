@@ -69,7 +69,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>() {
 
     /**
      * Controls whether the given ID [field] should be implicitly validated
-     * as `(required)`.
+     * as required.
      *
      * The method emits [RequiredFieldDiscovered] event if the following
      * conditions are met:

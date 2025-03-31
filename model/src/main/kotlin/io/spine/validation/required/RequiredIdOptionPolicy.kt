@@ -39,8 +39,9 @@ import io.spine.validation.event.RequiredFieldDiscovered
  * A policy that marks ID fields in entity state messages as required.
  *
  * The entity state messages are discovered via the options, specified in
- * [ValidationConfig][io.spine.validation.ValidationConfig]. If ProtoData
- * runs with no config, this policy never produces any validation rules.
+ * [ValidationConfig][io.spine.validation.ValidationConfig].
+ *
+ * The policy does nothing if ProtoData runs without the config.
  *
  * @see RequiredIdPatternPolicy
  */
@@ -55,8 +56,10 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
     }
 
     @React
-    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    override fun whenever(@External event: TypeDiscovered): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+    @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
+    override fun whenever(
+        @External event: TypeDiscovered
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         if (options.isEmpty()) {
             return ignore()
         }
