@@ -83,6 +83,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), ValidationP
      *
      * @param field The ID field.
      */
+    @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
     fun withField(field: Field): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         val requiredOption = field.findOption(OptionsProto.required)
         if (requiredOption != null) {
