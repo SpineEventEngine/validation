@@ -27,9 +27,11 @@
 package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
@@ -38,6 +40,8 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -80,6 +84,17 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
         }.asA()
+    }
+}
+
+/**
+ * A view of a field that is marked with `(validate) = true` option.
+ */
+internal class ValidatedFieldView : View<FieldRef, ValidateField, ValidateField.Builder>() {
+
+    @Subscribe
+    fun on(e: ValidateFieldDiscovered) = alter {
+        subject = e.subject
     }
 }
 
