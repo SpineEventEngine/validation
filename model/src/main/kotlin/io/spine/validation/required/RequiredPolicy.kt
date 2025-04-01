@@ -32,6 +32,7 @@ import io.spine.option.IfMissingOption
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -44,7 +45,6 @@ import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
-import io.spine.validation.boolValue
 import io.spine.validation.resolveErrorMessage
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 import io.spine.validation.required.event.RequiredFieldDiscovered

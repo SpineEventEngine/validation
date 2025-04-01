@@ -31,6 +31,7 @@ import io.spine.core.Where
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName

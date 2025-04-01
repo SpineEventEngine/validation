@@ -29,6 +29,7 @@ package io.spine.validation.required
 import io.spine.option.OptionsProto
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.ref
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.settings.loadSettings
@@ -37,7 +38,6 @@ import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
 import io.spine.validation.ValidationPluginPart
-import io.spine.validation.findOption
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 import io.spine.validation.required.event.RequiredFieldDiscovered
 import io.spine.validation.required.event.requiredFieldDiscovered
