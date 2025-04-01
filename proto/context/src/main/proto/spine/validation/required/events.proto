@@ -36,7 +36,6 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
 
 // A required field has been discovered.
 //
