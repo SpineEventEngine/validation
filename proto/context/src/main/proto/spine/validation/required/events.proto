@@ -44,8 +44,8 @@ import "spine/protodata/ast.proto";
 // 1. A field with `(required) = true` option is discovered.
 // 2. The ID field of a signal message or entity state is identified as required.
 //
-// The event confirms that the necessary checks have been passed, ensuring that
-// the option is applied correctly and the ID field qualifies as required.
+// The event emission happens iff the necessary checks have been passed, ensuring
+// that the option is applied correctly and the ID field qualifies as required.
 //
 message RequiredFieldDiscovered {
 
