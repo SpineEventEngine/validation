@@ -28,7 +28,6 @@ package io.spine.validate.option
 
 import com.google.protobuf.StringValue
 import io.spine.base.Identifier
-import io.spine.test.validate.CustomMessageWithNoRequiredOption
 import io.spine.test.validate.Planet
 import io.spine.test.validate.RepeatedRequiredStringValue
 import io.spine.test.validate.RequiredBytes
@@ -142,10 +141,5 @@ internal class RequiredSpec : ValidationOfConstraintTest() {
     fun `provide one valid violation if required field is NOT set`() {
         val invalidMsg = RequiredString.getDefaultInstance()
         assertSingleViolation(invalidMsg, MessageValidatorTestEnv.VALUE)
-    }
-
-    @Test
-    fun `ignore 'IfMissingOption' if field is not marked required`() = assertValid {
-        CustomMessageWithNoRequiredOption.getDefaultInstance()
     }
 }

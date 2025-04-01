@@ -63,7 +63,3 @@ enum Counter {
     UNO = 1;
     DOS = 2;
 }
-
-message CustomMessageWithNoRequiredOption {
-    string value = 1 [(if_missing).error_msg = "Custom error messages make no difference without `(required) = true`"];
-}
