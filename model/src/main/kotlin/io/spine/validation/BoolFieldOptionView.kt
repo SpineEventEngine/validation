@@ -32,6 +32,7 @@ import io.spine.core.ContractFor
 import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.Option
+import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.validate.ValidatingBuilder

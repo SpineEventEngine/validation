@@ -28,11 +28,6 @@
 
 package io.spine.validation
 
-import io.spine.protodata.ast.TypeName
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.event.compositeRuleAdded
-import io.spine.validation.event.simpleRuleAdded
-
 /**
  * Tells if this `rule` is a `SimpleRule`.
  */
@@ -44,24 +39,6 @@ public val Rule.isSimple: Boolean
  */
 public val Rule.isMessageWide: Boolean
     get() = hasMessageWide()
-
-/**
- * Converts this `rule` to an event.
- *
- * @param type the type name of the validated message
- */
-internal fun Rule.toEvent(type: TypeName): RuleAdded =
-    if (hasComposite()) {
-        compositeRuleAdded {
-            this.type = type
-            rule = composite
-        }
-    } else {
-        simpleRuleAdded {
-            this.type = type
-            rule = simple
-        }
-    }
 
 /**
  * Creates a [Rule] from this `SimpleRule`.

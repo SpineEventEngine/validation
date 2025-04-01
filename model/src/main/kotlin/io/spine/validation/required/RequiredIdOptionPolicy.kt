@@ -33,13 +33,14 @@ import io.spine.protodata.ast.firstField
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.RuleAdded
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
  * A policy that marks ID fields in entity state messages as required.
  *
- * The entity state messages are discovered via the options, specified in [ValidationConfig].
- * If ProtoData runs with no config, this policy never produces any validation rules.
+ * The entity state messages are discovered via
+ * the [options][io.spine.validation.MessageMarkers.getEntityOptionNameList],
+ * specified in [ValidationConfig][io.spine.validation.ValidationConfig].
  *
  * @see RequiredIdPatternPolicy
  */
@@ -49,13 +50,17 @@ internal class RequiredIdOptionPolicy : RequiredIdPolicy() {
         if (config == null) {
             emptySet()
         } else {
-            config!!.messageMarkers.entityOptionNameList.toSet()
+            config!!.messageMarkers
+                .entityOptionNameList
+                .toSet()
         }
     }
 
     @React
-    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
+    @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
+    override fun whenever(
+        @External event: TypeDiscovered
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         if (options.isEmpty()) {
             return ignore()
         }

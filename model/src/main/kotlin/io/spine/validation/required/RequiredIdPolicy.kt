@@ -26,55 +26,85 @@
 
 package io.spine.validation.required
 
+import io.spine.option.OptionsProto
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.event.TypeDiscovered
+import io.spine.protodata.ast.findOption
+import io.spine.protodata.ast.ref
+import io.spine.protodata.plugin.Policy
 import io.spine.protodata.settings.loadSettings
 import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
-import io.spine.validation.ValidationPolicy
-import io.spine.validation.required.RequiredRule.isRequired
-import io.spine.validation.event.RuleAdded
-import io.spine.validation.toEvent
+import io.spine.validation.ValidationPluginPart
+import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
- * A policy which defines validation rules for ID fields.
+ * An abstract base for policies that control whether an ID field
+ * should be implicitly validated as required.
  *
- * An ID of a signal message or an entity state is the first field
+ * The ID of a signal message or an entity state is the first field
  * declared in the type, disregarding the index of the proto field.
  *
  * The ID field is assumed as required for commands and entity states,
  * unless it is specifically marked otherwise using the field options.
  *
- * Implementations define the ways of discovering signal and entity state messages.
+ * Implementations define the ways of discovering signal and entity
+ * state messages.
  */
-internal abstract class RequiredIdPolicy : ValidationPolicy<TypeDiscovered>() {
+internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), ValidationPluginPart {
 
+    /**
+     * The validation config.
+     */
     protected val config: ValidationConfig? by lazy {
-        if (!settingsAvailable()) {
-            null
-        } else {
+        if (settingsAvailable()) {
             loadSettings<ValidationConfig>()
+        } else {
+            null
         }
     }
 
     /**
-     * Given an ID field, generates the required rule event.
+     * Controls whether the given ID [field] should be implicitly validated
+     * as required.
      *
-     * If the field is marked with `(required) = false`, no rule is generated.
+     * The method emits [RequiredFieldDiscovered] event if the following
+     * conditions are met:
+     *
+     * 1. The field does not have the  `(required)` option applied explicitly.
+     *   If it has, the field is handled by the [RequiredPolicy] policy then.
+     * 2. The field type is supported by the option.
+     *
+     * The method emits [NoReaction] in case of violation of the above conditions.
      *
      * @param field The ID field.
-     * @return a required rule event or `NoReaction`, if the ID field is not required.
      */
-    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    fun withField(field: Field): EitherOf2<RuleAdded, NoReaction> {
-        if (!isRequired(field, true)) {
+    @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
+    fun withField(field: Field): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+        val requiredOption = field.findOption(OptionsProto.required)
+        if (requiredOption != null) {
             return ignore()
         }
-        val errorMessage = "The ID field `${field.name.value}` must have a non-default value."
-        val rule = RequiredRule.forField(field, errorMessage)
-            ?: return ignore()
-        return rule.toEvent(field.declaringType).asA()
+
+        val fieldTypeUnsupported = field.type.isSupported().not()
+        if (fieldTypeUnsupported) {
+            return ignore()
+        }
+
+        return requiredFieldDiscovered {
+            id = field.ref
+            errorMessage = ID_FIELD_MUST_BE_SET
+            subject = field
+        }.asA()
     }
 }
+
+/**
+ * The error message template used for violations.
+ */
+private const val ID_FIELD_MUST_BE_SET = "The ID field `\${parent.type}.\${field.path}`" +
+        " of the type `\${field.type}` must have a non-default value."

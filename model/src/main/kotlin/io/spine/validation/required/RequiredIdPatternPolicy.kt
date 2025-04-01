@@ -26,7 +26,6 @@
 
 package io.spine.validation.required
 
-import com.google.common.collect.ImmutableList
 import io.spine.core.External
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.FilePattern
@@ -37,13 +36,14 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.MessageMarkers
-import io.spine.validation.event.RuleAdded
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
- * A policy that marks ID fields in entity state messages and signal messages as required.
+ * A policy that marks ID fields in entity state messages and signal
+ * messages as required.
  *
- * The messages are discovered via the file patterns, specified in [ValidationConfig].
- * If ProtoData runs with no config, this policy never produces any validation rules.
+ * The messages are discovered via the [file patterns][MessageMarkers],
+ * specified in [ValidationConfig][io.spine.validation.ValidationConfig].
  *
  * @see RequiredIdOptionPolicy
  */
@@ -54,13 +54,15 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
             emptySet()
         } else {
             val markers = config!!.messageMarkers
-            markers.allPatterns().toSet()
+            markers.allPatterns()
         }
     }
 
     @React
-    @Suppress("ReturnCount") // prefer sooner exit and precise conditions.
-    override fun whenever(@External event: TypeDiscovered): EitherOf2<RuleAdded, NoReaction> {
+    @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
+    override fun whenever(
+        @External event: TypeDiscovered
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         if (filePatterns.isEmpty()) {
             return ignore()
         }
@@ -79,12 +81,10 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
 }
 
 /**
- * Obtains all the file patterns that mark different types of Protobuf files.
+ * All the file patterns that mark different types of Protobuf files.
  */
-private fun MessageMarkers.allPatterns(): ImmutableList<FilePattern> {
-    return ImmutableList.builder<FilePattern>()
-        .addAll(eventPatternList)
-        .addAll(commandPatternList)
-        .addAll(rejectionPatternList)
-        .build()
+private fun MessageMarkers.allPatterns() = buildSet {
+    addAll(eventPatternList)
+    addAll(commandPatternList)
+    addAll(rejectionPatternList)
 }
