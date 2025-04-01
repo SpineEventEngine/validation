@@ -60,10 +60,10 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         RangeFieldView::class.java,
         MaxFieldView::class.java,
         MinFieldView::class.java,
+        SetOnceFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
-        CompiledMessageRepository(),
-        SetOnceFieldRepository()
+        CompiledMessageRepository()
     ),
     policies = setOf<Policy<*>>(
         RequiredPolicy(),
@@ -79,6 +79,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         WhenPolicy(),
         RequiredIdPatternPolicy(),
         RequiredIdOptionPolicy(),
-        GoesPolicy()
+        GoesPolicy(),
+        SetOncePolicy(),
     )
 )
