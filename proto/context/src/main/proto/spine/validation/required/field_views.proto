@@ -31,75 +31,20 @@ package spine.validation;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
+option java_package = "io.spine.validation.required";
 option java_outer_classname = "FieldViewsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
-// A view on a field that is marked with `(validate) = true` option.
-message ValidateField {
-    option (entity).kind = PROJECTION;
-
-    protodata.FieldRef id = 1;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
-}
-
-// A view of a field that is marked with `(set_once)` option.
-message SetOnceField {
-    option (entity).kind = PROJECTION;
-
-    protodata.FieldRef id = 1;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
-
-    // The error message template.
-    string error_message = 3;
-
-    // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
-    bool set_once = 4;
-}
-
-// A view of a field that is marked with `(pattern)` option.
-message PatternField {
-    option (entity).kind = PROJECTION;
-
-    protodata.FieldRef id = 1;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
-
-    // The error message template.
-    string error_message = 3;
-
-    // The regular expression to match.
-    string pattern = 4;
-
-    // Regular expression modifiers.
-    PatternOption.Modifier modifier = 5;
-}
-
-// A view of a field that is marked with `(goes)` option.
-message GoesField {
-    option (entity).kind = PROJECTION;
-
-    protodata.FieldRef id = 1;
-
-    // The field in which the option was discovered.
-    protodata.Field subject = 2;
-
-    // The error message template.
-    string error_message = 3;
-
-    // The required companion field.
-    protodata.Field companion = 4;
-}
-
-// A view of a field that is marked with `(distinct) = true` option.
-message DistinctField {
+// A view on a field that is recognized as required.
+//
+// This view applies in the following cases:
+//
+// 1. A field is marked with `(required) = true` option.
+// 2. A field serves as the ID of a signal message or entity state.
+//
+message RequiredField {
     option (entity).kind = PROJECTION;
 
     protodata.FieldRef id = 1;
