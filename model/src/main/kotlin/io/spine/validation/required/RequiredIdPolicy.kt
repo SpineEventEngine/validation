@@ -105,9 +105,6 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), ValidationP
 
 /**
  * The error message template used for violations.
- *
- * Unlike the one provided by [IfMissingOption][io.spine.option.IfMissingOption],
- * this explicitly states that this is `The ID field`.
  */
 private const val ID_FIELD_MUST_BE_SET = "The ID field `\${parent.type}.\${field.path}`" +
         " of the type `\${field.type}` must have a non-default value."

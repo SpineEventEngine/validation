@@ -42,10 +42,8 @@ import io.spine.validation.event.RequiredFieldDiscovered
  * A policy that marks ID fields in entity state messages and signal
  * messages as required.
  *
- * The messages are discovered via the file patterns, specified in
- * [ValidationConfig][io.spine.validation.ValidationConfig].
- *
- * The policy does nothing if ProtoData runs without the config.
+ * The messages are discovered via the [file patterns][MessageMarkers],
+ * specified in [ValidationConfig][io.spine.validation.ValidationConfig].
  *
  * @see RequiredIdOptionPolicy
  */
