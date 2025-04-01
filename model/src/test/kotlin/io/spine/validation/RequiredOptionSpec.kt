@@ -31,11 +31,6 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
-import io.spine.validation.given.required.IfMissingWithoutRequired
-import io.spine.validation.given.required.WithBoolField
-import io.spine.validation.given.required.WithDoubleField
-import io.spine.validation.given.required.WithIntField
-import io.spine.validation.given.required.WithSignedInt
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

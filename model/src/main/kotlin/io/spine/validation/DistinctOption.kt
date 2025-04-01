@@ -30,6 +30,7 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
+import io.spine.option.OptionsProto.distinct
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
@@ -37,6 +38,7 @@ import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
@@ -46,6 +48,8 @@ import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.Just.Companion.noReaction
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -89,6 +93,33 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
             errorMessage = message
             subject = field
         }.asA()
+    }
+}
+
+/**
+ * Controls that the `(if_has_duplicates)` option is always used together
+ * with `(distinct)`.
+ *
+ * If not, the policy reports a compilation error.
+ */
+internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_HAS_DUPLICATES)
+        event: FieldOptionDiscovered,
+    ): Just<NoReaction> {
+        val field = event.subject
+        val file = event.file
+
+        val distinctOption = field.findOption(distinct)
+        Compilation.check(distinctOption != null, file, field.span) {
+            "The `${field.qualifiedName}` field has the `($IF_HAS_DUPLICATES)` companion option" +
+                    " applied without its primary option: `($DISTINCT)`. Companion options must" +
+                    " always be used together with their primary counterparts."
+        }
+
+        return noReaction
     }
 }
 

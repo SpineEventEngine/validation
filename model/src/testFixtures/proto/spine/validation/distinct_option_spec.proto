@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
 
-import io.spine.core.Subscribe
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.event.DistinctFieldDiscovered
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "DistinctOptionSpecProto";
+option java_multiple_files = true;
+
+// Applies `(if_has_duplicates)` without the `(distinct)` option.
+message IfHasDuplicatesWithoutDistinct {
+    repeated string value = 1 [(if_has_duplicates).error_msg = "The `value` should be unique."];
+}

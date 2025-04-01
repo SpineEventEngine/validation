@@ -72,6 +72,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         MinPolicy(),
         MaxPolicy(),
         DistinctPolicy(),
+        IfHasDuplicatesPolicy(),
         ValidatePolicy(),
         PatternPolicy(),
         IsRequiredPolicy(),
