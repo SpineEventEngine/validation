@@ -33,7 +33,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 /**
  * Determines whether the field type can be validated as `(required)`.
  */
-internal object RequiredField {
+internal object RequiredFieldSupport {
 
     /**
      * Tells if this [FieldType] can be validated as `(required)`.

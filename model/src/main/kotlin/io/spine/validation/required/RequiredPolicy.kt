@@ -46,9 +46,9 @@ import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.boolValue
 import io.spine.validation.resolveErrorMessage
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.required.RequiredField.isSupported
+import io.spine.validation.required.RequiredFieldSupport.isSupported
+import io.spine.validation.required.event.RequiredFieldDiscovered
+import io.spine.validation.required.event.requiredFieldDiscovered
 
 /**
  * Controls whether a field should be validated as `(required)`.

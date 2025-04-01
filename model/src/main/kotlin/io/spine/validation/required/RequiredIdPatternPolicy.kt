@@ -36,7 +36,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.MessageMarkers
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.required.event.RequiredFieldDiscovered
 
 /**
  * A policy that marks ID fields in entity state messages and signal

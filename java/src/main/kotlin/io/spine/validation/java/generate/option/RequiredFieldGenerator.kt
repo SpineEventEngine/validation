@@ -37,7 +37,7 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
-import io.spine.validation.RequiredField
+import io.spine.validation.required.RequiredField
 import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse

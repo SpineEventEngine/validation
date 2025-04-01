@@ -30,8 +30,7 @@ import io.spine.core.Subscribe
 import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.validation.RequiredField
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.required.event.RequiredFieldDiscovered
 
 /**
  * A view of a field that is marked with `(required) = true` option.
