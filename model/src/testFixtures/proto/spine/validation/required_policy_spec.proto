@@ -55,3 +55,8 @@ message WithSignedInt {
 message WithDoubleField {
     double temperature = 1 [(.required) = true];
 }
+
+// Applies `(if_missing)` without the `(required)` option.
+message IfMissingWithoutRequired {
+    string value = 1 [(if_missing).error_msg = "The `value` must be set."];
+}

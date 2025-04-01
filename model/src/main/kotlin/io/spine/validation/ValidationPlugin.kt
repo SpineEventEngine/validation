@@ -36,6 +36,7 @@ import io.spine.validation.bound.MinFieldView
 import io.spine.validation.bound.MinPolicy
 import io.spine.validation.bound.RangeFieldView
 import io.spine.validation.bound.RangePolicy
+import io.spine.validation.required.IfMissingPolicy
 import io.spine.validation.required.RequiredFieldView
 import io.spine.validation.required.RequiredIdOptionPolicy
 import io.spine.validation.required.RequiredIdPatternPolicy
@@ -66,6 +67,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
     ),
     policies = setOf<Policy<*>>(
         RequiredPolicy(),
+        IfMissingPolicy(),
         RangePolicy(),
         MinPolicy(),
         MaxPolicy(),

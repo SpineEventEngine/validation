@@ -31,6 +31,7 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
+import io.spine.validation.given.required.IfMissingWithoutRequired
 import io.spine.validation.given.required.WithBoolField
 import io.spine.validation.given.required.WithDoubleField
 import io.spine.validation.given.required.WithIntField
@@ -71,6 +72,20 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
         val error = assertCompilationFails(message)
         val field = message.field("temperature")
         error.message shouldContain unsupportedFieldType(field)
+    }
+}
+
+@DisplayName("`IfMissingPolicy` should")
+internal class IfMissingPolicySpec : CompilationErrorTest() {
+
+    @Test
+    fun `reject without '(required)'`() {
+        val message = IfMissingWithoutRequired.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message shouldContain field.qualifiedName
+        error.message shouldContain IF_MISSING
+        error.message shouldContain REQUIRED
     }
 }
 
