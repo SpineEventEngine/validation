@@ -31,15 +31,3 @@ import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.event.DistinctFieldDiscovered
-
-/**
- * A view of a field that is marked with `(distinct) = true` option.
- */
-internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
-
-    @Subscribe
-    fun on(e: DistinctFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
-        subject = e.subject
-    }
-}
