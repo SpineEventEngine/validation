@@ -68,6 +68,27 @@ message MessageWideRuleAdded {
     MessageWideRule rule = 3;
 }
 
+// A required field has been discovered.
+//
+// The event emitted in the following cases:
+//
+// 1. A field with `(required) = true` option is discovered.
+// 2. The ID field of a signal message or entity state is identified as required.
+//
+// The event emission happens iff the necessary checks have been passed, ensuring
+// that the option is applied correctly and the ID field qualifies as required.
+//
+message RequiredFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+}
+
 // The event emitted whenever a field with `(pattern)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message PatternFieldDiscovered {

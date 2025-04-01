@@ -37,6 +37,25 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 
+// A view on a field that is recognized as required.
+//
+// This view applies in the following cases:
+//
+// 1. A field is marked with `(required) = true` option.
+// 2. A field serves as the ID of a signal message or entity state.
+//
+message RequiredField {
+    option (entity).kind = PROJECTION;
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+}
+
 // A view on a field that is marked with `(validate) = true` option.
 message ValidateField {
     option (entity).kind = PROJECTION;

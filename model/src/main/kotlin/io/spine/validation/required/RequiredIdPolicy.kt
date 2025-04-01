@@ -38,9 +38,9 @@ import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
 import io.spine.validation.ValidationPluginPart
+import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.required.RequiredFieldSupport.isSupported
-import io.spine.validation.required.event.RequiredFieldDiscovered
-import io.spine.validation.required.event.requiredFieldDiscovered
 
 /**
  * An abstract base for policies that control whether an ID field
