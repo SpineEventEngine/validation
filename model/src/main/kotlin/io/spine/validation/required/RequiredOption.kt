@@ -42,7 +42,6 @@ import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
