@@ -32,8 +32,8 @@ package spine.validation;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.given.required";
-option java_outer_classname = "RequiredPolicySpecProto";
+option java_package = "io.spine.validation";
+option java_outer_classname = "RequiredOptionSpecProto";
 option java_multiple_files = true;
 
 // Provides a boolean field with the inapplicable `(required)` option.
