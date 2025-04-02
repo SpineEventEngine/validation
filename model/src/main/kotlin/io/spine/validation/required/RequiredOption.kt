@@ -29,7 +29,7 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
-import io.spine.option.OptionsProto.required
+import io.spine.option.OptionsProto
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
@@ -115,7 +115,7 @@ internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
 
-        val requiredOption = field.findOption(required)
+        val requiredOption = field.findOption(OptionsProto.required)
         Compilation.check(requiredOption != null, file, field.span) {
             "The `${field.qualifiedName}` field has the `($IF_MISSING)` companion option applied" +
                     " without its primary option: `($REQUIRED)`. Companion options must always" +

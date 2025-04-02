@@ -30,7 +30,7 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
-import io.spine.option.OptionsProto.distinct
+import io.spine.option.OptionsProto
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
@@ -112,7 +112,7 @@ internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
 
-        val distinctOption = field.findOption(distinct)
+        val distinctOption = field.findOption(OptionsProto.distinct)
         Compilation.check(distinctOption != null, file, field.span) {
             "The `${field.qualifiedName}` field has the `($IF_HAS_DUPLICATES)` companion option" +
                     " applied without its primary option: `($DISTINCT)`. Companion options must" +
