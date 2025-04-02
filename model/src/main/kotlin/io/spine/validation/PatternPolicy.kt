@@ -86,8 +86,6 @@ private fun checkFieldType(field: Field, file: File) =
 
 /**
  * Tells if this [FieldType] can be validated with the `(pattern)` option.
- *
- * Returns `true` if it is supported by the option, `false` otherwise.
  */
 private fun FieldType.isSupported(): Boolean = isSingularString || isRepeatedString
 

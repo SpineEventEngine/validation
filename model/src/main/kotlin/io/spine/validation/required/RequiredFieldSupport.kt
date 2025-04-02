@@ -37,8 +37,6 @@ internal object RequiredFieldSupport {
 
     /**
      * Tells if this [FieldType] can be validated with the `(required)` option.
-     *
-     * Returns `true` if it is supported by the option, `false` otherwise.
      */
     fun FieldType.isSupported(): Boolean =
         !isPrimitive || primitive in SUPPORTED_PRIMITIVES

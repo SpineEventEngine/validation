@@ -123,8 +123,6 @@ private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
 
 /**
  * Tells if this [FieldType] can be validated with the `(goes)` option.
- *
- * Returns `true` if it is supported by the option, `false` otherwise.
  */
 private fun FieldType.isSupported(): Boolean =
     !isPrimitive || primitive in SUPPORTED_PRIMITIVES
