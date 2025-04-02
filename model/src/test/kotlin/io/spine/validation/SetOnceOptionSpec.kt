@@ -34,56 +34,41 @@ import io.spine.protodata.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`RequiredPolicy` should")
-internal class RequiredPolicySpec : CompilationErrorTest() {
+@DisplayName("`SetOncePolicy` should")
+internal class SetOncePolicySpec : CompilationErrorTest() {
 
     @Test
-    fun `reject option on a boolean field`() {
-        val message = WithBoolField.getDescriptor()
+    fun `reject option on a repeated field`() {
+        val message = SetOnceRepeated.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("really")
+        val field = message.field("value")
         error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `reject option on an integer field`() {
-        val message = WithIntField.getDescriptor()
+    fun `reject option on a map field`() {
+        val message = SetOnceMap.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("zero")
+        val field = message.field("value")
         error.message shouldContain unsupportedFieldType(field)
     }
 
-    @Test
-    fun `reject option on a signed integer field`() {
-        val message = WithSignedInt.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("signed")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
-    @Test
-    fun `reject option on a double field`() {
-        val message = WithDoubleField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("temperature")
-        error.message shouldContain unsupportedFieldType(field)
-    }
 }
 
-@DisplayName("`IfMissingPolicy` should")
-internal class IfMissingPolicySpec : CompilationErrorTest() {
+@DisplayName("`IfSetAgainPolicy` should")
+internal class IfSetAgainPolicySpec : CompilationErrorTest() {
 
     @Test
-    fun `reject without '(required)'`() {
-        val message = IfMissingWithoutRequired.getDescriptor()
+    fun `reject without '(set_once)'`() {
+        val message = IfSetAgainWithoutSetOnce.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message shouldContain field.qualifiedName
-        error.message shouldContain IF_MISSING
-        error.message shouldContain REQUIRED
+        error.message shouldContain IF_SET_AGAIN
+        error.message shouldContain SET_ONCE
     }
 }
 
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
-            " by the `($REQUIRED)` option."
+    "The field type `${field.type.name}` of the `${field.qualifiedName}` field is not supported" +
+            " by the `($SET_ONCE)` option."

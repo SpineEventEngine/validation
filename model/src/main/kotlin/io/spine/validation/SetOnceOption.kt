@@ -121,8 +121,6 @@ internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-// TODO:2025-04-01:yevhenii.nadtochii: Implement `SetOnceOptionSpec`.
-
 /**
  * A view of a field that is marked with `(set_once) = true` option.
  */

@@ -128,7 +128,7 @@ internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
                 " by the `($REQUIRED)` option. Supported field types: messages, enums," +
                 " strings, bytes, repeated, and maps."
     }
