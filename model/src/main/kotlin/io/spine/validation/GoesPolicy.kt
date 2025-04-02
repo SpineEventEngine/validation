@@ -122,7 +122,7 @@ private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
     }
 
 /**
- * Tells if this [FieldType] can be validated with the `(goes) option.
+ * Tells if this [FieldType] can be validated with the `(goes)` option.
  *
  * Returns `true` if it is supported by the option, `false` otherwise.
  */
