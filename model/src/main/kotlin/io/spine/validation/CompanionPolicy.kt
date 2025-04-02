@@ -38,13 +38,12 @@ import io.spine.server.event.NoReaction
 
 /**
  * Reports a compilation error when a companion option is applied
- * without its primary boolean counterpart.
+ * without its primary counterpart.
  *
- * Boolean options usually have a companion message option for
- * specifying an error message. This policy ensures that such
- * options are not used independently.
+ * Some options have a companion option for specifying an error message.
+ * This policy ensures that a companion option is not used independently.
  *
- * @param [primary] The primary boolean option.
+ * @param [primary] The primary option.
  * @param [companion] The dependent companion option.
  */
 internal abstract class CompanionPolicy(
@@ -69,9 +68,8 @@ internal abstract class CompanionPolicy(
         if (primaryOption == null) {
             Compilation.error(event.file, field.span) {
                 "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
-                        " applied without its primary `($primaryName)` boolean option." +
-                        " Companion options must always be used together with their primary" +
-                        " boolean counterparts."
+                        " applied without its primary `($primaryName)` option. Companion options" +
+                        " must always be used together with their primary counterparts."
             }
         }
 
