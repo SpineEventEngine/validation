@@ -31,7 +31,8 @@ import io.spine.protodata.settings.defaultConsumerId
 
 /**
  * An interface common for components of [ValidationPlugin] that load settings
- * passed as a file containing [ValidationConfig] instance written using the plugin class name.
+ * passed as a file containing [ValidationConfig] instance written using
+ * the plugin class name.
  */
 public interface WithValidationSettings: LoadsSettings {
 
