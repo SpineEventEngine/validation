@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,23 +26,16 @@
 
 package io.spine.validation
 
-import io.spine.base.EventMessage
-import io.spine.core.ContractFor
-import io.spine.protodata.plugin.Policy
-import io.spine.server.event.NoReaction
-import io.spine.server.event.React
-import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.RuleAdded
+import io.spine.protodata.settings.LoadsSettings
+import io.spine.protodata.settings.defaultConsumerId
 
 /**
- * A policy that reacts to an event with a [RuleAdded] event.
- *
- * May ignore an event and return [NoReaction] if necessary.
- *
- * @param E The type of the event to react to.
+ * An interface common for components of [ValidationPlugin] that load settings
+ * passed as a file containing [ValidationConfig] instance written using
+ * the plugin class name.
  */
-public abstract class ValidationPolicy<E : EventMessage> : Policy<E>(), ValidationPluginPart {
+public interface WithValidationSettings: LoadsSettings {
 
-    @ContractFor(handler = React::class)
-    protected abstract override fun whenever(event: E): EitherOf2<RuleAdded, NoReaction>
+    override val consumerId: String
+        get() = ValidationPlugin::class.java.defaultConsumerId
 }

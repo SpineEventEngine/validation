@@ -31,10 +31,6 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.protobuf.field
-import io.spine.validation.given.required.WithBoolField
-import io.spine.validation.given.required.WithDoubleField
-import io.spine.validation.given.required.WithIntField
-import io.spine.validation.given.required.WithSignedInt
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -74,6 +70,22 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
     }
 }
 
+@DisplayName("`IfMissingPolicy` should")
+internal class IfMissingPolicySpec : CompilationErrorTest() {
+
+    @Test
+    fun `reject without '(required)'`() {
+        val message = IfMissingWithoutRequired.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain(REQUIRED)
+        }
+    }
+}
+
 private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
+    "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
             " by the `($REQUIRED)` option."

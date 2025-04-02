@@ -66,7 +66,7 @@ message ValidateField {
     protodata.Field subject = 2;
 }
 
-// A view of a field that is marked with `(set_once)` option.
+// A view of a field that is marked with `(set_once) = true` option.
 message SetOnceField {
     option (entity).kind = PROJECTION;
 
@@ -77,9 +77,6 @@ message SetOnceField {
 
     // The error message template.
     string error_message = 3;
-
-    // `true` if the field is marked with `(set_once) = true`, `false` otherwise.
-    bool set_once = 4;
 }
 
 // A view of a field that is marked with `(pattern)` option.

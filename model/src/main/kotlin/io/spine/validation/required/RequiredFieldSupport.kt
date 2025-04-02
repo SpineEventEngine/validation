@@ -36,9 +36,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 internal object RequiredFieldSupport {
 
     /**
-     * Tells if this [FieldType] can be validated as `(required)`.
-     *
-     * Returns `true` if it is supported by the option, `false` otherwise.
+     * Tells if this [FieldType] can be validated with the `(required)` option.
      */
     fun FieldType.isSupported(): Boolean =
         !isPrimitive || primitive in SUPPORTED_PRIMITIVES

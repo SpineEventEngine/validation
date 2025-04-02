@@ -98,7 +98,8 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($GOES)` option."
+                " is not supported by the `($GOES)` option. Supported field types: messages," +
+                " enums, strings, bytes, repeated, and maps."
     }
 
 private fun checkCompanionType(companion: Field, file: File) =
@@ -120,6 +121,9 @@ private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
                 " The invalid field: `${field.qualifiedName}`."
     }
 
+/**
+ * Tells if this [FieldType] can be validated with the `(goes)` option.
+ */
 private fun FieldType.isSupported(): Boolean =
     !isPrimitive || primitive in SUPPORTED_PRIMITIVES
 

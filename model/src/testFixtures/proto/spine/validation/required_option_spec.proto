@@ -24,9 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
 
-/**
- * A repository for the [SetOnceFieldView]s.
- */
-internal class SetOnceFieldRepository : BoolFieldOptionRepo<SetOnceFieldView, SetOnceField>()
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "RequiredOptionSpecProto";
+option java_multiple_files = true;
+
+// Provides a boolean field with the inapplicable `(required)` option.
+message WithBoolField {
+    bool really = 1 [(.required) = true];
+}
+
+// Provides an `int32` field with the inapplicable `(required)` option.
+message WithIntField {
+    int32 zero = 1 [(.required) = true];
+}
+
+// Provides a `sint64` field with the inapplicable `(required)` option.
+message WithSignedInt {
+    sint64 signed = 1 [(.required) = true];
+}
+
+// Provides a `double` field with the inapplicable `(required)` option.
+message WithDoubleField {
+    double temperature = 1 [(.required) = true];
+}
+
+// Applies `(if_missing)` without the `(required)` option.
+message IfMissingWithoutRequired {
+    string value = 1 [(if_missing).error_msg = "The `value` must be set."];
+}

@@ -27,10 +27,13 @@
 package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
+import io.spine.option.OptionsProto
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
@@ -42,6 +45,8 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -88,10 +93,37 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
+/**
+ * Reports a compilation error when the `(if_has_duplicates)` option is applied
+ * without `(distinct)`.
+ */
+internal class IfHasDuplicatesPolicy : CompanionPolicy(
+    primary = OptionsProto.distinct,
+    companion = OptionsProto.ifHasDuplicates,
+) {
+    @React
+    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+}
+
+/**
+ * A view of a field that is marked with `(distinct) = true` option.
+ */
+internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
+
+    @Subscribe
+    fun on(e: DistinctFieldDiscovered) = alter {
+        errorMessage = e.errorMessage
+        subject = e.subject
+    }
+}
+
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
         "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
                 " by the `($DISTINCT)` option. This options supports `map` and `repeated` fields."
     }
 
+/**
+ * Tells if this [FieldType] can be validated with the `(distinct)` option.
+ */
 private fun FieldType.isSupported(): Boolean = isMap || isList

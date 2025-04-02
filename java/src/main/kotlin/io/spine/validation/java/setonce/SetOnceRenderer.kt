@@ -31,8 +31,6 @@ import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.render.JavaRenderer
@@ -63,8 +61,7 @@ internal class SetOnceRenderer : JavaRenderer() {
         }
 
         val allCompilationMessages = findMessageTypes().associateBy { it.name }
-        val setOnceFields = setOnceFields().filter { it.setOnce }
-        setOnceFields
+        (this as Querying).select<SetOnceField>().all()
             .associateWith { allCompilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
                 val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
@@ -72,15 +69,6 @@ internal class SetOnceRenderer : JavaRenderer() {
                 javaConstraints.render(sourceFile)
             }
     }
-
-    private fun setOnceFields() = (this as Querying).select<SetOnceField>().all()
-        .onEach {
-            val field = it.subject
-            check(!field.isMap && !field.isList) {
-                "The `($SET_ONCE)` option is not applicable to repeated fields or maps. " +
-                        "The invalid field: `${field.qualifiedName}`."
-            }
-        }
 
     private fun javaConstraints(field: Field, errorTemplate: String): SetOnceJavaConstraints<*> =
         when {

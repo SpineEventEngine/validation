@@ -29,6 +29,7 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
+import io.spine.option.OptionsProto
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
@@ -43,6 +44,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.CompanionPolicy
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.event.RequiredFieldDiscovered
@@ -96,9 +98,21 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
+/**
+ * Reports a compilation error when the `(if_missing)` option is applied
+ * without `(required)`.
+ */
+internal class IfMissingPolicy : CompanionPolicy(
+    primary = OptionsProto.required,
+    companion = OptionsProto.ifMissing,
+) {
+    @React
+    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+}
+
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
                 " by the `($REQUIRED)` option. Supported field types: messages, enums," +
                 " strings, bytes, repeated, and maps."
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,24 @@
 
 package io.spine.validation
 
-import io.spine.core.Subscribe
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.event.ValidateFieldDiscovered
+import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.protobuf.field
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-/**
- * A view of a field that is marked with `(validate) = true` option.
- */
-internal class ValidatedFieldView : View<FieldRef, ValidateField, ValidateField.Builder>() {
+@DisplayName("`IfHasDuplicatesPolicy` should")
+internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
 
-    @Subscribe
-    fun on(e: ValidateFieldDiscovered) = alter {
-        subject = e.subject
+    @Test
+    fun `reject without '(distinct)'`() {
+        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_HAS_DUPLICATES)
+            shouldContain(DISTINCT)
+        }
     }
 }
