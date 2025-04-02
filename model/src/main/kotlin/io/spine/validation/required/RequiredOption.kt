@@ -35,18 +35,16 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
-import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.IF_MISSING
+import io.spine.validation.CompanionPolicy
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.event.RequiredFieldDiscovered
@@ -104,25 +102,12 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
  * Reports a compilation error when the `(if_missing)` option is applied
  * without `(required)`.
  */
-internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
-
+internal class IfMissingPolicy : CompanionPolicy(
+    primary = OptionsProto.required,
+    companion = OptionsProto.ifMissing,
+) {
     @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = IF_MISSING)
-        event: FieldOptionDiscovered,
-    ): Just<NoReaction> {
-        val field = event.subject
-        val file = event.file
-
-        val requiredOption = field.findOption(OptionsProto.required)
-        Compilation.check(requiredOption != null, file, field.span) {
-            "The `${field.qualifiedName}` field has the `($IF_MISSING)` companion option applied" +
-                    " without its primary option: `($REQUIRED)`. Companion options must always" +
-                    " be used together with their primary counterparts."
-        }
-
-        return Just.noReaction
-    }
+    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
 }
 
 private fun checkFieldType(field: Field, file: File) =

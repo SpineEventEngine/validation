@@ -38,7 +38,6 @@ import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
-import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
@@ -48,8 +47,6 @@ import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
-import io.spine.server.event.Just
-import io.spine.server.event.Just.Companion.noReaction
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -100,25 +97,12 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
  * Reports a compilation error when the `(if_has_duplicates)` option is applied
  * without `(distinct)`.
  */
-internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
-
+internal class IfHasDuplicatesPolicy : CompanionPolicy(
+    primary = OptionsProto.distinct,
+    companion = OptionsProto.ifHasDuplicates,
+) {
     @React
-    override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = IF_HAS_DUPLICATES)
-        event: FieldOptionDiscovered,
-    ): Just<NoReaction> {
-        val field = event.subject
-        val file = event.file
-
-        val distinctOption = field.findOption(OptionsProto.distinct)
-        Compilation.check(distinctOption != null, file, field.span) {
-            "The `${field.qualifiedName}` field has the `($IF_HAS_DUPLICATES)` companion option" +
-                    " applied without its primary option: `($DISTINCT)`. Companion options must" +
-                    " always be used together with their primary counterparts."
-        }
-
-        return noReaction
-    }
+    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
 }
 
 /**
