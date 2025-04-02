@@ -33,7 +33,7 @@ import io.spine.protodata.settings.defaultConsumerId
  * An interface common for components of [ValidationPlugin] that load settings
  * passed as a file containing [ValidationConfig] instance written using the plugin class name.
  */
-public interface ValidationPluginPart: LoadsSettings {
+public interface WithValidationSettings: LoadsSettings {
 
     override val consumerId: String
         get() = ValidationPlugin::class.java.defaultConsumerId
