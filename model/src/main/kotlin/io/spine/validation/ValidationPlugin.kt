@@ -81,5 +81,6 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         RequiredIdOptionPolicy(),
         GoesPolicy(),
         SetOncePolicy(),
+        IfSetAgainPolicy(),
     )
 )

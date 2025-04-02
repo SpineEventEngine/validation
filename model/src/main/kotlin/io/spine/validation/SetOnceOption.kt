@@ -30,6 +30,7 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfSetAgainOption
+import io.spine.option.OptionsProto
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
@@ -37,6 +38,7 @@ import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
@@ -46,6 +48,7 @@ import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -92,7 +95,32 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
     }
 }
 
-// TODO:2025-04-01:yevhenii.nadtochii: Implement `IfSetAgainPolicy`.
+/**
+ * Controls that the `(if_set_again)` option is always used together with `(set_once)`.
+ *
+ * If not, the policy reports a compilation error.
+ */
+internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_SET_AGAIN)
+        event: FieldOptionDiscovered,
+    ): Just<NoReaction> {
+        val field = event.subject
+        val file = event.file
+
+        val setOnceOption = field.findOption(OptionsProto.setOnce)
+        Compilation.check(setOnceOption != null, file, field.span) {
+            "The `${field.qualifiedName}` field has the `($IF_SET_AGAIN)` companion option" +
+                    " applied without its primary option: `($SET_ONCE)`. Companion options must" +
+                    " always be used together with their primary counterparts."
+        }
+
+        return Just.noReaction
+    }
+}
+
 // TODO:2025-04-01:yevhenii.nadtochii: Implement `SetOnceOptionSpec`.
 
 /**
