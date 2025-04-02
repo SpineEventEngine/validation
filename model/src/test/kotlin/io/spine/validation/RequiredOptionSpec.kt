@@ -78,9 +78,11 @@ internal class IfMissingPolicySpec : CompilationErrorTest() {
         val message = IfMissingWithoutRequired.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message shouldContain field.qualifiedName
-        error.message shouldContain IF_MISSING
-        error.message shouldContain REQUIRED
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain(REQUIRED)
+        }
     }
 }
 

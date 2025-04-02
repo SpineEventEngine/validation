@@ -63,9 +63,11 @@ internal class IfSetAgainPolicySpec : CompilationErrorTest() {
         val message = IfSetAgainWithoutSetOnce.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message shouldContain field.qualifiedName
-        error.message shouldContain IF_SET_AGAIN
-        error.message shouldContain SET_ONCE
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_SET_AGAIN)
+            shouldContain(SET_ONCE)
+        }
     }
 }
 

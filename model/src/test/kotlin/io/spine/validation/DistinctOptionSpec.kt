@@ -40,8 +40,10 @@ internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
         val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message shouldContain field.qualifiedName
-        error.message shouldContain IF_HAS_DUPLICATES
-        error.message shouldContain DISTINCT
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_HAS_DUPLICATES)
+            shouldContain(DISTINCT)
+        }
     }
 }
