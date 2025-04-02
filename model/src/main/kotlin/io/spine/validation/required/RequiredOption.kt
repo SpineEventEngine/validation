@@ -101,9 +101,8 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 /**
- * Controls that the `(if_missing)` option is always used together with `(required)`.
- *
- * If not, the policy reports a compilation error.
+ * Reports a compilation error when the `(if_missing)` option is applied
+ * without `(required)`.
  */
 internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
 

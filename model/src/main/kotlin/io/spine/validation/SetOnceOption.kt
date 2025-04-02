@@ -96,9 +96,8 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
 }
 
 /**
- * Controls that the `(if_set_again)` option is always used together with `(set_once)`.
- *
- * If not, the policy reports a compilation error.
+ * Reports a compilation error when the `(if_set_again)` option is applied
+ * without `(set_once)`.
  */
 internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
 

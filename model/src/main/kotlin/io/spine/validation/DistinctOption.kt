@@ -97,10 +97,8 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 /**
- * Controls that the `(if_has_duplicates)` option is always used together
- * with `(distinct)`.
- *
- * If not, the policy reports a compilation error.
+ * Reports a compilation error when the `(if_has_duplicates)` option is applied
+ * without `(distinct)`.
  */
 internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
 
