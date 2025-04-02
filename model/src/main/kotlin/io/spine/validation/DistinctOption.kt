@@ -123,4 +123,9 @@ private fun checkFieldType(field: Field, file: File) =
                 " by the `($DISTINCT)` option. This options supports `map` and `repeated` fields."
     }
 
+/**
+ * Tells if this [FieldType] can be validated with the `(distinct) option.
+ *
+ * Returns `true` if it is supported by the option, `false` otherwise.
+ */
 private fun FieldType.isSupported(): Boolean = isMap || isList
