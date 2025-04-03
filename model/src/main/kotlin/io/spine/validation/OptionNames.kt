@@ -90,6 +90,11 @@ public const val IF_SET_AGAIN: String = "if_set_again"
 public const val VALIDATE: String = "validate"
 
 /**
+ * The name of the `(if_invalid)` option.
+ */
+public const val IF_INVALID: String = "if_invalid"
+
+/**
  * The name of the `(when)` option.
  */
 public const val WHEN: String = "when"

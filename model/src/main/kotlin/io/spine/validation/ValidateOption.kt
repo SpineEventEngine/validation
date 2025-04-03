@@ -42,6 +42,7 @@ import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -84,6 +85,26 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
         }.asA()
+    }
+}
+
+/**
+ * Reports a compilation warning if the deprecated `(if_invalid)` option is used.
+ */
+internal class IfInvalidPolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_INVALID)
+        event: FieldOptionDiscovered
+    ): Just<NoReaction> {
+        Compilation.warning(event.file, event.subject.span) {
+            "The `($IF_INVALID)` option is deprecated and should not longer be used. " +
+                    " Applying this option has no effect. The `($VALIDATE)` option no longer" +
+                    " accepts custom error messages. It only propagates messages from violations" +
+                    " of the validated message itself."
+        }
+        return Just.noReaction
     }
 }
 
