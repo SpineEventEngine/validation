@@ -69,6 +69,7 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
                 name = oneof
             }
             this.oneOf = oneof
+            declaringType = event.type
             errorMessage = "One of the fields in the `$oneof` group must be set."
         }.asA()
     }
@@ -82,6 +83,7 @@ internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredO
     @Subscribe
     fun on(e: IsRequiredOneofDiscovered) = alter {
         oneOf = e.oneOf
+        declaringType = e.declaringType
         errorMessage = e.errorMessage
     }
 }

@@ -170,6 +170,9 @@ message IsRequiredOneofDiscovered {
     // The name of the `oneof` group in which the option was discovered.
     protodata.OneofName one_of = 2;
 
+    // The name of the type that declared the `oneof` group.
+    protodata.TypeName declaring_type = 3;
+
     // The error message template.
-    string error_message = 3;
+    string error_message = 4;
 }
