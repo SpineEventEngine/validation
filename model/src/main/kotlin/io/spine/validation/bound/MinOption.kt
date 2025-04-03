@@ -42,6 +42,7 @@ import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.MIN
 import io.spine.validation.OPTION_NAME
+import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.MinFieldDiscovered
 import io.spine.validation.bound.event.minFieldDiscovered
