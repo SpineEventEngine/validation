@@ -160,13 +160,13 @@ message SetOnceFieldDiscovered {
     string error_message = 3;
 }
 
-// The event emitted whenever a `oneOf` field with `(is_required) = true` option is discovered
+// The event emitted whenever a `oneOf` group with `(is_required) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message IsRequiredFieldDiscovered {
+message IsRequiredOneOfDiscovered {
 
     protodata.FieldRef id = 1;
 
-    // The name of `oneof` in which the option was discovered.
+    // The name of the `oneof` group in which the option was discovered.
     protodata.OneofName one_of = 2;
 
     // The error message template.
