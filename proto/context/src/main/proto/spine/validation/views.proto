@@ -129,7 +129,7 @@ message DistinctField {
 }
 
 // A view of a `oneof` group that is marked with `(is_required) = true` option.
-message IsRequiredOneOf {
+message IsRequiredOneof {
 
     spine.validation.OneofRef id = 1;
 

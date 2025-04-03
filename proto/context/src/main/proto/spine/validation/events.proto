@@ -161,9 +161,9 @@ message SetOnceFieldDiscovered {
     string error_message = 3;
 }
 
-// The event emitted whenever a `oneOf` group with `(is_required) = true` option is discovered
+// The event emitted whenever a `oneof` group with `(is_required) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message IsRequiredOneOfDiscovered {
+message IsRequiredOneofDiscovered {
 
     spine.validation.OneofRef id = 1;
 
