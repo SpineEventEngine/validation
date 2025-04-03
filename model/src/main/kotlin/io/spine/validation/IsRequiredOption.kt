@@ -95,3 +95,5 @@ internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredO
 
 // TODO:2025-04-03:yevhenii.nadtochii: Have `OneofRef` and `OneofGroup.ref: OneofRef`
 //  and `OneofGroup subject = 7;` in ProtoData.
+
+// TODO:2025-04-03:yevhenii.nadtochii: Clean up the package as Rule stuff is removed.
