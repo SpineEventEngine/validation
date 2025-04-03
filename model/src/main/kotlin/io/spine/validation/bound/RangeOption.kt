@@ -27,20 +27,25 @@
 package io.spine.validation.bound
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.RangeOption
 import io.spine.protodata.Compilation
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
+import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
@@ -103,6 +108,22 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             upperBound = upper.toProto()
             this.file = file
         }.just()
+    }
+}
+
+/**
+ * A view of a field that is marked with the `(range)` option.
+ */
+internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>() {
+
+    @Subscribe
+    fun on(e: RangeFieldDiscovered) = alter {
+        subject = e.subject
+        errorMessage = e.errorMessage
+        range = e.range
+        lowerBound = e.lowerBound
+        upperBound = e.upperBound
+        file = e.file
     }
 }
 

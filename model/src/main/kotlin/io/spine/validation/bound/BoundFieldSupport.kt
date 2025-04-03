@@ -49,20 +49,28 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 
 /**
- * Checks if a range-constraining option is applied to a field of numeric type.
- *
- * @param [field] The field to check.
- * @param [file] The file where the field is declared.
- * @param [option] The name of the option initiated the check.
+ * Determines whether the field type can be validated with a range-constraining option.
  */
-internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
-    val primitive = field.type.extractPrimitive()
-    Compilation.check(primitive in numericPrimitives, file, field.span) {
-        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                " the `($option)` option. Supported field types: numbers and repeated" +
-                " of numbers."
+internal object BoundFieldSupport {
+
+    /**
+     * Ensures the range-constraining option is applied to a field of a numeric type.
+     *
+     * If not, the method reports a compilation error.
+     *
+     * @param [field] The field to check.
+     * @param [file] The file where the field is declared.
+     * @param [option] The name of the option initiated the check.
+     */
+    internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
+        val primitive = field.type.extractPrimitive()
+        Compilation.check(primitive in numericPrimitives, file, field.span) {
+            "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
+                    " the `($option)` option. Supported field types: numbers and repeated" +
+                    " of numbers."
+        }
+        return primitive!!
     }
-    return primitive!!
 }
 
 /**

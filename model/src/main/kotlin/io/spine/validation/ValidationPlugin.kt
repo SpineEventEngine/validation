@@ -63,7 +63,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         SetOnceFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
-        CompiledMessageRepository()
+        CompilationMessageRepository()
     ),
     policies = setOf<Policy<*>>(
         RequiredPolicy(),
@@ -74,6 +74,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         DistinctPolicy(),
         IfHasDuplicatesPolicy(),
         ValidatePolicy(),
+        IfInvalidPolicy(),
         PatternPolicy(),
         IsRequiredPolicy(),
         WhenPolicy(),

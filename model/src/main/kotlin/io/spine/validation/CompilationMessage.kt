@@ -31,7 +31,9 @@ import io.spine.core.Subscribe
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.TypeDiscovered
 import io.spine.protodata.plugin.View
+import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
+import io.spine.server.route.EventRouting
 import io.spine.validation.event.CompositeRuleAdded
 import io.spine.validation.event.MessageWideRuleAdded
 import io.spine.validation.event.SimpleRuleAdded
@@ -68,5 +70,21 @@ internal class CompilationMessageView :
     @Subscribe
     fun on(event: MessageWideRuleAdded) = alter {
         addRule(event.rule.wrap())
+    }
+}
+
+/**
+ * A repository for the [CompilationMessageView].
+ *
+ * Routes the [TypeDiscovered] events to the view by the type name.
+ */
+internal class CompilationMessageRepository :
+    ViewRepository<TypeName, CompilationMessageView, CompilationMessage>() {
+
+    override fun setupEventRouting(routing: EventRouting<TypeName>) {
+        super.setupEventRouting(routing)
+        routing.unicast<TypeDiscovered> { e, _ ->
+            e.type.name
+        }
     }
 }

@@ -32,6 +32,10 @@ import com.google.protobuf.Message
 import io.spine.protobuf.isNotDefault
 import io.spine.protobuf.pack
 import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.TypeName
+import io.spine.server.event.Just
+import io.spine.validation.event.SimpleRuleAdded
+import io.spine.validation.event.simpleRuleAdded
 
 /**
  * Creates a [SimpleRule] with a custom operator.
@@ -64,3 +68,12 @@ public fun SimpleRule(
         }
     }
 }
+
+/**
+ * A shortcut for creating [SimpleRuleAdded] wrapped into [Just].
+ */
+internal fun simpleRuleAdded(declaringType: TypeName, rule: SimpleRule): Just<SimpleRuleAdded> =
+    Just(simpleRuleAdded {
+        type = declaringType
+        this.rule = rule
+    })
