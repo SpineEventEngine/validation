@@ -35,20 +35,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "StandardFeaturesProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
 import "spine/time_options.proto";
-
-// The associated `oneof` group must be set, i.e. one of the fields in the group must be present.
-//
-// Generated code must check the `oneof` case in order to avoid comparisons to default values for
-// types which do not support the `required` constraint, such as numerical types.
-//
-message RequiredOneof {
-
-    // TODO:2025-04-03:yevhenii.nadtochii: Remove this feature.
-
-    protodata.OneofName name = 1;
-}
 
 // The associated temporal message must be either in the past or in the future from
 // the current time.
