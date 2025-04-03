@@ -27,12 +27,10 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.IsRequiredOneof
-import io.spine.validation.RequiredField
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -48,7 +46,7 @@ internal class IsRequiredGenerator(private val querying: Querying) : OptionGener
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
         allRequiredFields
             .filter { it.id.type == type }
             .map { IsRequiredFieldGenerator(it).generate() }

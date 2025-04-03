@@ -40,8 +40,8 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.MemberOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
@@ -54,9 +54,9 @@ import io.spine.validation.java.violation.templateString
 /**
  * The generator for `(is_required)` option.
  *
- * Generates code for a single field represented by the provided [view].
+ * Generates code for a single `oneof` group represented by the provided [view].
  */
-internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : FieldOptionGenerator {
+internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : MemberOptionGenerator {
 
     private val oneof = view.oneOf
     private val declaringType = view.declaringType
@@ -64,7 +64,7 @@ internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : Fie
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionApplicationCode {
         val caseField = "${oneof.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
             """
@@ -76,7 +76,7 @@ internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : Fie
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionApplicationCode(constraint)
     }
 
     private fun violation(
