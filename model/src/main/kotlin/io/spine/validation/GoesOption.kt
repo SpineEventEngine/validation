@@ -27,10 +27,12 @@
 package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.GoesOption
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.MessageType
@@ -45,7 +47,9 @@ import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.java.findField
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
 import io.spine.protodata.type.message
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
@@ -92,6 +96,19 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
             companion = companionField
             subject = field
         }.just()
+    }
+}
+
+/**
+ * A view of a field that is marked with the `(goes)` option.
+ */
+internal class GoesFieldView : View<FieldRef, GoesField, GoesField.Builder>() {
+
+    @Subscribe
+    fun on(e: GoesFieldDiscovered) = alter {
+        errorMessage = e.errorMessage
+        companion = e.companion
+        subject = e.subject
     }
 }
 

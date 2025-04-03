@@ -26,11 +26,56 @@
 
 package io.spine.validation.bound
 
+import io.spine.core.External
 import io.spine.core.Subscribe
+import io.spine.core.Where
+import io.spine.option.MaxOption
 import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
+import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.server.event.just
+import io.spine.validation.MAX
+import io.spine.validation.OPTION_NAME
+import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.MaxFieldDiscovered
+import io.spine.validation.bound.event.maxFieldDiscovered
+
+/**
+ * A policy to add a validation rule to a type whenever the `(max)` field option
+ * is discovered.
+ */
+internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = MAX)
+        event: FieldOptionDiscovered
+    ): Just<MaxFieldDiscovered> {
+        val field = event.subject
+        val file = event.file
+        val primitiveType = checkFieldType(field, file, MAX)
+
+        val option = event.option.unpack<MaxOption>()
+        val context = BoundContext(MAX, primitiveType, field, file)
+        val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
+
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        return maxFieldDiscovered {
+            id = field.ref
+            subject = field
+            errorMessage = message
+            this.max = option.value
+            bound = kotlinBound.toProto()
+            this.file = file
+        }.just()
+    }
+}
 
 /**
  * A view of a field that is marked with the `(max)` option.

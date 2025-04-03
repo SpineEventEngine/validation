@@ -27,10 +27,12 @@
 package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.PatternOption
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
@@ -41,6 +43,8 @@ import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
@@ -74,6 +78,21 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
             modifier = option.modifier
             subject = field
         }.just()
+    }
+}
+
+/**
+ * A view of a field that is marked with the `(pattern)` option.
+ */
+internal class PatternFieldView : View<FieldRef, PatternField, PatternField.Builder>() {
+
+    @Subscribe
+    fun on(e: PatternFieldDiscovered) = alter {
+        id = e.id
+        errorMessage = e.errorMessage
+        pattern = e.pattern
+        modifier = e.modifier
+        subject = e.subject
     }
 }
 
