@@ -70,7 +70,7 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
             }
             this.oneOf = oneof
             declaringType = event.type
-            errorMessage = "One of the fields in the `$oneof` group must be set."
+            errorMessage = "One of the fields in the `${oneof.value}` group must be set."
         }.asA()
     }
 }
