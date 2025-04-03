@@ -27,22 +27,25 @@
 package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.IsRequiredOneOfDiscovered
-import io.spine.validation.event.isRequiredOneOfDiscovered
+import io.spine.validation.event.IsRequiredOneofDiscovered
+import io.spine.validation.event.isRequiredOneofDiscovered
 
 /**
  * Controls whether a `oneof` group should be validated as `(is_required)`.
  *
  * Whenever a `oneof` groupd marked with `(is_required)` option is discovered,
- * emits [IsRequiredOneOfDiscovered] event if the option value is `true`.
+ * emits [IsRequiredOneofDiscovered] event if the option value is `true`.
  * Otherwise, the policy emits [NoReaction].
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.
@@ -55,12 +58,12 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = IS_REQUIRED)
         event: OneofOptionDiscovered
-    ): EitherOf2<IsRequiredOneOfDiscovered, NoReaction> {
+    ): EitherOf2<IsRequiredOneofDiscovered, NoReaction> {
         if (!event.option.boolValue) {
             return ignore()
         }
         val oneof = event.group
-        return isRequiredOneOfDiscovered {
+        return isRequiredOneofDiscovered {
             id = oneofRef {
                 type = event.type
                 name = oneof
@@ -68,6 +71,18 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
             this.oneOf = oneof
             errorMessage = "One of the fields in the `$oneof` group must be set."
         }.asA()
+    }
+}
+
+/**
+ * A view of a `oneof` group that is marked with `(is_required) = true` option.
+ */
+internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredOneof.Builder>() {
+
+    @Subscribe
+    fun on(e: IsRequiredOneofDiscovered) = alter {
+        oneOf = e.oneOf
+        errorMessage = e.errorMessage
     }
 }
 

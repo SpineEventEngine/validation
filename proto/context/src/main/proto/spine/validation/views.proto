@@ -130,6 +130,7 @@ message DistinctField {
 
 // A view of a `oneof` group that is marked with `(is_required) = true` option.
 message IsRequiredOneof {
+    option (entity).kind = PROJECTION;
 
     spine.validation.OneofRef id = 1;
 
