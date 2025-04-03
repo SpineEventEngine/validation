@@ -32,6 +32,8 @@ import io.spine.string.containsLineSeparators
 import io.spine.string.escapeLineSeparators
 import org.checkerframework.checker.regex.qual.Regex as CheckRegex
 
+// TODO:2025-04-03:yevhenii.nadtochii: Remove this object.
+
 /**
  * Diagnostic messages used by the validation library.
  */

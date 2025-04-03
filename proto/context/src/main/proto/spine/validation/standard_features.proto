@@ -45,6 +45,8 @@ import "spine/time_options.proto";
 //
 message RequiredOneof {
 
+    // TODO:2025-04-03:yevhenii.nadtochii: Remove this feature.
+
     protodata.OneofName name = 1;
 }
 
