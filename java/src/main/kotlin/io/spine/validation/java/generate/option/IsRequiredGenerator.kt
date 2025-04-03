@@ -24,15 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.java.generate.option
+
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.IsRequiredOneof
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * Generates Java code for a specific option applied to a specific field.
+ * The generator for `(is_required)` option.
  */
-internal interface FieldOptionGenerator {
+internal class IsRequiredGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * Generates validation code for a single option application.
+     * All `(is_required)` `oneof` groups in the current compilation process.
      */
-    fun generate(): FieldOptionCode
+    private val allRequiredFields by lazy {
+        querying.select<IsRequiredOneof>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { IsRequiredFieldGenerator(it).generate() }
 }

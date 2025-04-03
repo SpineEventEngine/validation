@@ -26,19 +26,13 @@
 
 package io.spine.validation.java.generate
 
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
-
 /**
- * Java code handling an application of a specific option for a message field.
- *
- * @property constraint A code block to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * Generates Java code for a specific option applied to a specific Protobuf member.
  */
-internal class FieldOptionCode(
-    val constraint: CodeBlock,
-    val fields: List<FieldDeclaration<*>> = emptyList(),
-    val methods: List<MethodDeclaration> = emptyList(),
-)
+internal interface MemberOptionGenerator {
+
+    /**
+     * Generates validation code for a single option application.
+     */
+    fun generate(): OptionApplicationCode
+}

@@ -27,18 +27,15 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.StringLiteral
+import io.spine.string.lowerCamelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_MISSING
-import io.spine.validation.RequiredField
-import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.IS_REQUIRED
+import io.spine.validation.IsRequiredOneof
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
@@ -50,32 +47,29 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.pa
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(required)` option.
+ * The generator for `(is_required)` option.
  *
- * Generates code for a single field represented by the provided [view].
+ * Generates code for a single `oneof` group represented by the provided [view].
  */
-internal class RequiredFieldGenerator(
-    private val view: RequiredField,
-    override val converter: JavaValueConverter
-) : MemberOptionGenerator, EmptyFieldCheck {
+internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : MemberOptionGenerator {
 
-    private val field = view.subject
-    private val declaringType = field.declaringType
+    private val oneof = view.oneOf
+    private val declaringType = view.declaringType
 
     /**
      * Generates code for a field represented by the [view].
      */
     override fun generate(): OptionApplicationCode {
+        val caseField = "${oneof.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
             """
-            if (${field.hasDefaultValue()}) {
-                var fieldPath = ${parentPath.resolve(field.name)};
+            if ($caseField == 0) {
+                var fieldPath = ${parentPath.resolve(oneof)};
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
                 $violations.add(violation);
@@ -91,8 +85,9 @@ internal class RequiredFieldGenerator(
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
+        val qualifiedName = declaringType.qualifiedName + ".${oneof.value}"
         val errorMessage =
-            templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
+            templateString(view.errorMessage, placeholders, IS_REQUIRED, qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
     }
 
@@ -101,7 +96,6 @@ internal class RequiredFieldGenerator(
         typeName: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_TYPE to StringLiteral(field.type.name),
         PARENT_TYPE to typeName
     )
 }

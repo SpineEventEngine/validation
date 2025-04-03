@@ -32,10 +32,11 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "FieldViewsProto";
+option java_outer_classname = "ViewsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
+import "spine/validation/identifiers.proto";
 
 // A view on a field that is recognized as required.
 //
@@ -125,4 +126,20 @@ message DistinctField {
 
     // The error message template.
     string error_message = 3;
+}
+
+// A view of a `oneof` group that is marked with `(is_required) = true` option.
+message IsRequiredOneof {
+    option (entity).kind = PROJECTION;
+
+    spine.validation.OneofRef id = 1;
+
+    // The name of the `oneof` group in which the option was discovered.
+    protodata.OneofName one_of = 2;
+
+    // The name of the type that declared the `oneof` group.
+    protodata.TypeName declaring_type = 3;
+
+    // The error message template.
+    string error_message = 4;
 }

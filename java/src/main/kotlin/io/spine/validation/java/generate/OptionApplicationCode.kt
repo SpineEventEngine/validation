@@ -24,39 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.rule
+package io.spine.validation.java.generate
 
-import io.spine.protodata.ast.Cardinality.CARDINALITY_SINGLE
-import io.spine.protodata.ast.OneofName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.field
-import io.spine.validation.ErrorMessage
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
 /**
- * A code generator for the `(is_required)` constraint.
+ * Java code handling an application of a specific option to a specific Protobuf member.
  *
- * The constraint applies to a `oneof` group and enforces an alternative to be set.
- * The generated code checks that the `oneof`'s case is one of the alternatives,
- * i.e., the `oneof` is initialized with an option.
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-internal class RequiredOneofGenerator(
-    private val name: OneofName,
-    ctx: GenerationContext
-) : CodeGenerator(ctx) {
-
-    private val rule = ctx.rule.messageWide
-
-    override fun condition(): Expression<Boolean> {
-        val casePropertyName = "${name.value}_case"
-        val pseudoField = ctx.msg.field(casePropertyName, CARDINALITY_SINGLE)
-        val getter = pseudoField.getter<Any>()
-        val numberGetter = getter.chain<Number>("getNumber")
-        return Expression("$numberGetter != 0")
-    }
-
-    override fun error() =
-        ErrorMessage.forRule(rule.errorMessage)
-
-    override fun createViolation() =
-        error().createViolation(ctx)
-}
+internal class OptionApplicationCode(
+    val constraint: CodeBlock,
+    val fields: List<FieldDeclaration<*>> = emptyList(),
+    val methods: List<MethodDeclaration> = emptyList(),
+)
