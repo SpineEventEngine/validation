@@ -26,28 +26,28 @@
 
 package io.spine.validation
 
-import com.google.protobuf.BoolValue
-import com.google.protobuf.kotlin.unpack
 import io.spine.core.External
 import io.spine.core.Where
-import io.spine.protobuf.pack
+import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.OneofOptionDiscovered
 import io.spine.protodata.plugin.Policy
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validate.Diags.IsRequired.errorMessage
-import io.spine.validate.Diags.IsRequired.operatorDescription
-import io.spine.validation.event.MessageWideRuleAdded
-import io.spine.validation.event.messageWideRuleAdded
+import io.spine.validation.event.IsRequiredOneOfDiscovered
+import io.spine.validation.event.isRequiredOneOfDiscovered
 
 /**
- * A policy to add a validation rule with the [RequiredOneof] feature whenever
- * a required `oneof` group with the `(is_required)` option is encountered.
+ * Controls whether a `oneof` group should be validated as `(is_required)`.
  *
- * Unlike the `(required)` constraint, any field types are allowed,
- * since the `oneof` encodes for a non-set value as a special case.
+ * Whenever a `oneof` groupd marked with `(is_required)` option is discovered,
+ * emits [IsRequiredOneOfDiscovered] event if the option value is `true`.
+ * Otherwise, the policy emits [NoReaction].
+ *
+ * Note that unlike the `(required)` constraint, this option supports any field type.
+ * Protobuf encodes a non-set value as a special case, allowing for checking whether
+ * the `oneof` group value is set without relying on default values of field types.
  */
 internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 
@@ -55,26 +55,28 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = IS_REQUIRED)
         event: OneofOptionDiscovered
-    ): EitherOf2<MessageWideRuleAdded, NoReaction> {
-        // We have the option defined in the type. But is it set to `true`?
-        val option = event.option.value.unpack<BoolValue>()
-        if (!option.value) {
+    ): EitherOf2<IsRequiredOneOfDiscovered, NoReaction> {
+        if (!event.option.boolValue) {
             return ignore()
         }
-        val requiredOneof = requiredOneof {
-            name = event.group
-        }
-        val customOp = customOperator {
-            description = operatorDescription
-            feature = requiredOneof.pack()
-        }
-        val messageWideRule = messageWideRule {
-            errorMessage = errorMessage(event.group.value)
-            operator = customOp
-        }
-        return messageWideRuleAdded {
-            rule = messageWideRule
-            type = event.type
+        val oneof = event.group
+        return isRequiredOneOfDiscovered {
+            id = oneofRef {
+                type = event.type
+                name = oneof
+            }
+            this.oneOf = oneof
+            errorMessage = "One of the fields in the `$oneof` group must be set."
         }.asA()
     }
 }
+
+// TODO:2025-04-03:yevhenii.nadtochii: Have the default message in `options.proto`.
+
+// TODO:2025-04-03:yevhenii.nadtochii: Do we allow a custom error message for this option?
+
+// TODO:2025-04-03:yevhenii.nadtochii: Make content of `OneofOptionDiscovered`
+//  similar to `FieldOptionDiscovered`.
+
+// TODO:2025-04-03:yevhenii.nadtochii: Have `OneofRef` and `OneofGroup.ref: OneofRef`
+//  and `OneofGroup subject = 7;` in ProtoData.
