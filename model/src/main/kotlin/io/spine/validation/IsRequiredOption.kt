@@ -29,8 +29,12 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
+import io.spine.option.ChoiceOption
+import io.spine.protodata.ast.OneofRef
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.OneofOptionDiscovered
+import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
@@ -62,15 +66,13 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
         if (!event.option.boolValue) {
             return ignore()
         }
-        val oneof = event.group
+        val oneof = event.subject
+        val option = event.option.unpack<ChoiceOption>()
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return isRequiredOneofDiscovered {
-            id = oneofRef {
-                type = event.type
-                name = oneof
-            }
-            this.oneOf = oneof
-            declaringType = event.type
-            errorMessage = "One of the fields in the `${oneof.value}` group must be set."
+            id = oneof.ref
+            subject = oneof
+            errorMessage = message
         }.asA()
     }
 }
@@ -82,20 +84,7 @@ internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredO
 
     @Subscribe
     fun on(e: IsRequiredOneofDiscovered) = alter {
-        oneOf = e.oneOf
-        declaringType = e.declaringType
+        subject = e.subject
         errorMessage = e.errorMessage
     }
 }
-
-// TODO:2025-04-03:yevhenii.nadtochii: Have the default message in `options.proto`.
-
-// TODO:2025-04-03:yevhenii.nadtochii: Do we allow a custom error message for this option?
-
-// TODO:2025-04-03:yevhenii.nadtochii: Make content of `OneofOptionDiscovered`
-//  similar to `FieldOptionDiscovered`.
-
-// TODO:2025-04-03:yevhenii.nadtochii: Have `OneofRef` and `OneofGroup.ref: OneofRef`
-//  and `OneofGroup subject = 7;` in ProtoData.
-
-// TODO:2025-04-03:yevhenii.nadtochii: Clean up the package as Rule stuff is removed.

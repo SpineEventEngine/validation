@@ -58,18 +58,18 @@ import io.spine.validation.java.violation.templateString
  */
 internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : MemberOptionGenerator {
 
-    private val oneof = view.oneOf
-    private val declaringType = view.declaringType
+    private val oneof = view.subject
+    private val declaringType = oneof.declaringType
 
     /**
      * Generates code for a field represented by the [view].
      */
     override fun generate(): OptionApplicationCode {
-        val caseField = "${oneof.value.lowerCamelCase()}Case_"
+        val caseField = "${oneof.name.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
             """
             if ($caseField == 0) {
-                var fieldPath = ${parentPath.resolve(oneof)};
+                var fieldPath = ${parentPath.resolve(oneof.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
                 $violations.add(violation);

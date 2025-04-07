@@ -37,7 +37,6 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
-import "spine/validation/identifiers.proto";
 
 // The event emitted whenever a simple validation rule is attached to a message type.
 message SimpleRuleAdded {
@@ -165,10 +164,10 @@ message SetOnceFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message IsRequiredOneofDiscovered {
 
-    spine.validation.OneofRef id = 1;
+    protodata.OneofRef id = 1;
 
-    // The name of the `oneof` group in which the option was discovered.
-    protodata.OneofName one_of = 2;
+    // The `oneof` group in which the option was discovered.
+    protodata.OneofGroup subject = 2;
 
     // The error message template.
     string error_message = 3;
