@@ -162,7 +162,7 @@ message SetOnceFieldDiscovered {
 
 // The event emitted whenever a `oneof` group with `(choice).required = true` option is
 // discovered and has passed the necessary checks to confirm the option is applied correctly.
-message RequiredOneofDiscovered {
+message RequiredChoiceDiscovered {
 
     protodata.OneofRef id = 1;
 

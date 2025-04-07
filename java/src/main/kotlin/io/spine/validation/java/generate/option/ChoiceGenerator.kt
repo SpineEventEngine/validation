@@ -29,7 +29,7 @@ package io.spine.validation.java.generate.option
 import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
-import io.spine.validation.RequiredOneof
+import io.spine.validation.RequiredChoice
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
@@ -42,7 +42,7 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
      * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
      */
     private val allRequiredFields by lazy {
-        querying.select<RequiredOneof>()
+        querying.select<RequiredChoice>()
             .all()
     }
 
