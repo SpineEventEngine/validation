@@ -56,7 +56,7 @@ import io.spine.validation.java.violation.templateString
  *
  * Generates code for a single `oneof` group represented by the provided [view].
  */
-internal class RequiredOneofGenerator(
+internal class RequiredChoiceGenerator(
     private val view: RequiredOneof
 ) : FieldOptionGenerator {
 

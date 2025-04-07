@@ -49,5 +49,5 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
-            .map { RequiredOneofGenerator(it).generate() }
+            .map { RequiredChoiceGenerator(it).generate() }
 }
