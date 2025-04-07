@@ -39,8 +39,8 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
@@ -89,7 +89,7 @@ internal class RequiredOneofGenerator(
         val placeholders = supportedPlaceholders(groupPath, typeNameStr)
         val errorMessage =
             templateString(view.errorMessage, placeholders, CHOICE, oneof.qualifiedName)
-        return constraintViolation(errorMessage, typeNameStr, groupPath, value = null)
+        return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
     }
 
     private fun supportedPlaceholders(

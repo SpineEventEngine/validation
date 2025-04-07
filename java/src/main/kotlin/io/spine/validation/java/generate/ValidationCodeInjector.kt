@@ -88,7 +88,7 @@ internal class ValidationCodeInjector {
     /**
      * Injects the provided validation [code] into the PSI class of the message.
      */
-    fun inject(code: FieldOptionCode, messageClass: PsiClass) {
+    fun inject(code: MessageValidationCode, messageClass: PsiClass) {
         val builderClass = messageClass.nested("Builder")
         execute {
             messageClass.apply {
