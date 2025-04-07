@@ -30,7 +30,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.RequiredChoice
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -46,8 +46,8 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<OptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
-            .map { RequiredChoiceGenerator(it).generate() }
+            .map { ChoiceOneofGenerator(it).generate() }
 }

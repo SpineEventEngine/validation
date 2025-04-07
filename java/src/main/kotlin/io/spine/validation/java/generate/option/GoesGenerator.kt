@@ -31,7 +31,7 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.GoesField
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -50,7 +50,7 @@ internal class GoesGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<OptionCode> =
         allGoesFields
             .filter { it.id.type == type }
             .map { GoesFieldGenerator(it, converter).generate() }

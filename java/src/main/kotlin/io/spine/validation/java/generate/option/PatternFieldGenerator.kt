@@ -56,7 +56,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_PATTERN
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.expression.FieldPathClass
 import io.spine.validation.java.expression.ImmutableListClass
 import io.spine.validation.java.expression.PatternClass
@@ -100,11 +100,11 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)
-            FieldOptionCode(constraint, listOf(pattern.field))
+            OptionCode(constraint, listOf(pattern.field))
         }
 
         fieldType.isRepeatedString -> {
@@ -112,7 +112,7 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
             val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
-            FieldOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
+            OptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
         }
 
         else -> error(

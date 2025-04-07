@@ -26,18 +26,19 @@
 
 package io.spine.validation.java.generate
 
-import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
 /**
- * Generates Java code for a specific option.
+ * Java code handling a single application of a specific option.
+ *
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-internal interface OptionGenerator {
-
-    /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     */
-    fun codeFor(type: TypeName): List<OptionCode>
-}
+internal class OptionCode(
+    val constraint: CodeBlock,
+    val fields: List<FieldDeclaration<*>> = emptyList(),
+    val methods: List<MethodDeclaration> = emptyList(),
+)

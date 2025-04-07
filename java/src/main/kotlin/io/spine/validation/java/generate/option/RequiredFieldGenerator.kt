@@ -43,7 +43,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -71,7 +71,7 @@ internal class RequiredFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionCode {
         val constraint = CodeBlock(
             """
             if (${field.hasDefaultValue()}) {
@@ -82,7 +82,7 @@ internal class RequiredFieldGenerator(
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionCode(constraint)
     }
 
     private fun violation(

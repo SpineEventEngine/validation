@@ -48,7 +48,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
@@ -79,7 +79,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
@@ -93,7 +93,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionCode(constraint)
     }
 
     /**
