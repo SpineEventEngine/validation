@@ -31,7 +31,7 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.RequiredField
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -50,7 +50,7 @@ internal class RequiredGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
             .map { RequiredFieldGenerator(it, converter).generate() }
