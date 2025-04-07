@@ -42,16 +42,16 @@ message Meal {
 
     // This `oneof` must contain a selected choice.
     oneof choice {
-        option (is_required) = true;
+        option (.choice).required = true;
 
         Fish fish = 1;
         Meat meat = 2;
         Vegetables veggies = 3;
     }
 
-    // This `oneof` may be empty.
+    // This `oneof` can be empty.
     oneof sauce {
-        option (is_required) = false;
+        option (.choice).required = false;
 
         // Here setting a field would make the choice.
         // The type is of no importance.

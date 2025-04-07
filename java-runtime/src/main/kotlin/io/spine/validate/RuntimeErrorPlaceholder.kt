@@ -55,7 +55,8 @@ public enum class RuntimeErrorPlaceholder(public val value: String) {
     MAX_VALUE("max.value"),
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
-    MIN_OPERATOR("min.operator");
+    MIN_OPERATOR("min.operator"),
+    GROUP_PATH("group.path");
 
     override fun toString(): String = value
 }

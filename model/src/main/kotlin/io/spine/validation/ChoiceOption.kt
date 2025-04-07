@@ -30,46 +30,48 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.ChoiceOption
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.OneofRef
-import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.OneofOptionDiscovered
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.IsRequiredOneofDiscovered
-import io.spine.validation.event.isRequiredOneofDiscovered
+import io.spine.validation.event.RequiredOneofDiscovered
+import io.spine.validation.event.requiredOneofDiscovered
 
 /**
- * Controls whether a `oneof` group should be validated as `(is_required)`.
+ * Controls whether a `oneof` group should be validated with the `(choice)` option.
  *
- * Whenever a `oneof` groupd marked with `(is_required)` option is discovered,
- * emits [IsRequiredOneofDiscovered] event if the option value is `true`.
- * Otherwise, the policy emits [NoReaction].
+ * Whenever a `oneof` groupd marked with `(choice)` option is discovered,
+ * emits [RequiredOneofDiscovered] event if the option has the `required` flag
+ * set to `true`. Otherwise, the policy emits [NoReaction].
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.
  * Protobuf encodes a non-set value as a special case, allowing for checking whether
  * the `oneof` group value is set without relying on default values of field types.
  */
-internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
+internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = IS_REQUIRED)
+        @External @Where(field = OPTION_NAME, equals = CHOICE)
         event: OneofOptionDiscovered
-    ): EitherOf2<IsRequiredOneofDiscovered, NoReaction> {
-        if (!event.option.boolValue) {
+    ): EitherOf2<RequiredOneofDiscovered, NoReaction> {
+        val option = event.option.unpack<ChoiceOption>()
+        if (!option.required) {
             return ignore()
         }
+
         val oneof = event.subject
-        val option = event.option.unpack<ChoiceOption>()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        return isRequiredOneofDiscovered {
+        return requiredOneofDiscovered {
             id = oneof.ref
             subject = oneof
             errorMessage = message
@@ -96,12 +98,12 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 }
 
 /**
- * A view of a `oneof` group that is marked with `(is_required) = true` option.
+ * A view of a `oneof` group that is marked with `(choice).required = true` option.
  */
-internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredOneof.Builder>() {
+internal class RequiredOneofView : View<OneofRef, RequiredOneof, RequiredOneof.Builder>() {
 
     @Subscribe
-    fun on(e: IsRequiredOneofDiscovered) = alter {
+    fun on(e: RequiredOneofDiscovered) = alter {
         subject = e.subject
         errorMessage = e.errorMessage
     }

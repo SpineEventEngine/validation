@@ -37,7 +37,7 @@ option java_multiple_files = true;
 message Meal {
 
     oneof choice {
-        option (is_required) = true;
+        option (.choice).required = true;
 
         Fish fish = 1;
         Meat meat = 2;
@@ -45,7 +45,7 @@ message Meal {
     }
 
     oneof sauce {
-        option (is_required) = false;
+        option (.choice).required = false;
 
         Sauce ketchup = 4;
         Sauce cheese = 5;

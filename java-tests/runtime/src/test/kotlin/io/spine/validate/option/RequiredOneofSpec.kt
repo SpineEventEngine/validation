@@ -27,6 +27,9 @@
 package io.spine.validate.option
 
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.spine.base.joined
+import io.spine.test.validate.Meal
 import io.spine.test.validate.Sauce
 import io.spine.test.validate.fish
 import io.spine.test.validate.meal
@@ -39,8 +42,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName(VALIDATION_SHOULD + "analyze `(is_required)` oneof option and")
-internal class IsRequiredSpec : ValidationOfConstraintTest() {
+@DisplayName(VALIDATION_SHOULD + "analyze `(choice)` oneof option and")
+internal class RequiredOneofSpec : ValidationOfConstraintTest() {
 
     @Test
     fun `throw if required field group is not set`() {
@@ -50,12 +53,14 @@ internal class IsRequiredSpec : ValidationOfConstraintTest() {
             }
         }
         val violation = exception.constraintViolations[0]
+        val oneof = Meal.getDescriptor().oneofs[0]
+        violation.fieldPath.joined shouldBe oneof.name
 
-        // We here check the value of the `message`, and not the `fieldPath` because
-        // `oneof` is not a field. As such, it does not have a `fieldPath`, and is not
-        // added to validation constraint by the code generation.
         val message = violation.message.format()
-        message shouldBe "One of the fields in the `choice` group must be set."
+        message.run {
+            shouldContain(oneof.fullName)
+            shouldContain("must have one of its fields set")
+        }
     }
 
     @Test

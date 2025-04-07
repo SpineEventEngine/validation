@@ -29,8 +29,8 @@ package io.spine.validation.test
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(is_required)` rule for `oneof` fields should")
-internal class IsRequiredRuleITest {
+@DisplayName("`(choice)` rule for `oneof` fields should")
+internal class ChoiceRuleITest {
 
     @Test
     fun `reject if none of the alternatives is set`() {
