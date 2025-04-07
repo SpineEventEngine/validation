@@ -24,24 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.java.generate.option
 
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RequiredOneof
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * Holds all generated validation code for a specific message type.
- *
- * @property message The class name of the target message.
- * @property constraints Code blocks to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * The generator for the `(choice)` option.
  */
-internal class MessageValidationCode(
-    val message: ClassName,
-    val constraints: List<CodeBlock>,
-    val fields: List<FieldDeclaration<*>>,
-    val methods: List<MethodDeclaration>,
-)
+internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator {
+
+    /**
+     * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
+     */
+    private val allRequiredFields by lazy {
+        querying.select<RequiredOneof>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
+        allRequiredFields
+            .filter { it.id.type == type }
+            .map { RequiredOneofGenerator(it).generate() }
+}

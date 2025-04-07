@@ -60,7 +60,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.MemberOptionGenerator
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.violation.templateString
 
@@ -69,7 +69,7 @@ import io.spine.validation.java.violation.templateString
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class DistinctFieldGenerator(private val view: DistinctField) : MemberOptionGenerator {
+internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type

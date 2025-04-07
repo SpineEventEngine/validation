@@ -48,7 +48,7 @@ import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionApplicationCode
-import io.spine.validation.java.generate.MemberOptionGenerator
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
@@ -69,7 +69,7 @@ import io.spine.validation.java.violation.templateString
 internal class GoesFieldGenerator(
     private val view: GoesField,
     override val converter: JavaValueConverter
-) : MemberOptionGenerator, EmptyFieldCheck {
+) : FieldOptionGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val fieldType = field.type

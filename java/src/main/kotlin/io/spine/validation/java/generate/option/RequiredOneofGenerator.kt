@@ -33,45 +33,47 @@ import io.spine.protodata.java.ReadVar
 import io.spine.string.lowerCamelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IS_REQUIRED
-import io.spine.validation.IsRequiredOneof
+import io.spine.validation.CHOICE
+import io.spine.validation.RequiredOneof
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionApplicationCode
-import io.spine.validation.java.generate.MemberOptionGenerator
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.protodata.qualifiedName
 import io.spine.validation.java.violation.ErrorPlaceholder
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(is_required)` option.
+ * The generator for the `(choice).required = true` option.
  *
  * Generates code for a single `oneof` group represented by the provided [view].
  */
-internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : MemberOptionGenerator {
+internal class RequiredOneofGenerator(
+    private val view: RequiredOneof
+) : FieldOptionGenerator {
 
     private val oneof = view.subject
-    private val declaringType = oneof.declaringType
 
     /**
-     * Generates code for a field represented by the [view].
+     * Generates code for a `oneof` group represented by the [view].
      */
     override fun generate(): OptionApplicationCode {
-        val caseField = "${oneof.name.value.lowerCamelCase()}Case_"
+        val groupName = oneof.name
+        val caseField = "${groupName.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
             """
             if ($caseField == 0) {
-                var fieldPath = ${parentPath.resolve(oneof.name)};
-                var typeName =  ${parentName.orElse(declaringType)};
-                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
+                var groupPath = ${parentPath.resolve(groupName)};
+                var typeName =  ${parentName.orElse(oneof.declaringType)};
+                var violation = ${violation(ReadVar("groupPath"), ReadVar("typeName"))};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -80,21 +82,21 @@ internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : Mem
     }
 
     private fun violation(
-        fieldPath: Expression<FieldPath>,
+        groupPath: Expression<FieldPath>,
         typeName: Expression<TypeName>
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
-        val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
+        val placeholders = supportedPlaceholders(groupPath, typeNameStr)
         val errorMessage =
-            templateString(view.errorMessage, placeholders, IS_REQUIRED, oneof.qualifiedName)
-        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
+            templateString(view.errorMessage, placeholders, CHOICE, oneof.qualifiedName)
+        return constraintViolation(errorMessage, typeNameStr, groupPath, value = null)
     }
 
     private fun supportedPlaceholders(
-        fieldPath: Expression<FieldPath>,
+        groupPath: Expression<FieldPath>,
         typeName: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
+        GROUP_PATH to groupPath.joinToString(),
         PARENT_TYPE to typeName
     )
 }

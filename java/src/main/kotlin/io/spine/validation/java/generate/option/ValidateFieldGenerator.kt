@@ -49,7 +49,7 @@ import io.spine.validation.java.expression.ValidationErrorClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.generate.OptionApplicationCode
-import io.spine.validation.java.generate.MemberOptionGenerator
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -63,7 +63,7 @@ import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.vi
 internal class ValidateFieldGenerator(
     private val view: ValidateField,
     override val converter: JavaValueConverter
-) : MemberOptionGenerator, EmptyFieldCheck {
+) : FieldOptionGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val fieldType = field.type

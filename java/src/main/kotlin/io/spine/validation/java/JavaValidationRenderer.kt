@@ -38,7 +38,7 @@ import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
-import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator
@@ -46,7 +46,7 @@ import io.spine.validation.java.generate.option.MaxGenerator
 import io.spine.validation.java.generate.option.MinGenerator
 import io.spine.validation.java.generate.option.PatternGenerator
 import io.spine.validation.java.generate.option.RangeGenerator
-import io.spine.validation.java.generate.option.RequiredChoiceGenerator
+import io.spine.validation.java.generate.option.ChoiceGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.rule.RuleGenerator
@@ -73,7 +73,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             RangeGenerator(querying),
             MaxGenerator(querying),
             MinGenerator(querying),
-            RequiredChoiceGenerator(querying),
+            ChoiceGenerator(querying),
         )
     }
 
@@ -92,10 +92,10 @@ public class JavaValidationRenderer : JavaRenderer() {
             }
     }
 
-    private fun generateCode(message: TypeName): MessageValidationCode {
+    private fun generateCode(message: TypeName): FieldOptionCode {
         val fieldOptions = generators.flatMap { it.codeFor(message) }
         val messageCode = with(fieldOptions) {
-            MessageValidationCode(
+            FieldOptionCode(
                 message = message.javaClassName(typeSystem),
                 constraints = map { it.constraint },
                 fields = flatMap { it.fields },
@@ -105,7 +105,7 @@ public class JavaValidationRenderer : JavaRenderer() {
         return messageCode
     }
 
-    private fun SourceFile<Java>.render(code: MessageValidationCode) {
+    private fun SourceFile<Java>.render(code: FieldOptionCode) {
         val psiFile = psi() as PsiJavaFile
         val messageClass = psiFile.findClass(code.message)
         codeInjector.inject(code, messageClass)

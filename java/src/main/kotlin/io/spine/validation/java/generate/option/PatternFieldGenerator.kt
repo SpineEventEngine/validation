@@ -65,7 +65,7 @@ import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.MemberOptionGenerator
+import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
@@ -88,7 +88,7 @@ private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialM
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class PatternFieldGenerator(private val view: PatternField) : MemberOptionGenerator {
+internal class PatternFieldGenerator(private val view: PatternField) : FieldOptionGenerator {
 
     private val field = view.subject
     private val fieldType = field.type

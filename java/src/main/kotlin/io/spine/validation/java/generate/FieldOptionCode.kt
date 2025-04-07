@@ -26,13 +26,22 @@
 
 package io.spine.validation.java.generate
 
-/**
- * Generates Java code for a specific option applied to a specific Protobuf member.
- */
-internal interface MemberOptionGenerator {
+import io.spine.protodata.java.ClassName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
-    /**
-     * Generates validation code for a single option application.
-     */
-    fun generate(): OptionApplicationCode
-}
+/**
+ * Holds all generated validation code for a specific message type.
+ *
+ * @property message The class name of the target message.
+ * @property constraints Code blocks to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
+ */
+internal class FieldOptionCode(
+    val message: ClassName,
+    val constraints: List<CodeBlock>,
+    val fields: List<FieldDeclaration<*>>,
+    val methods: List<MethodDeclaration>,
+)
