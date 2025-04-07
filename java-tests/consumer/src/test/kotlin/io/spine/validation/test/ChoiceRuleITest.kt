@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,47 +23,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.tools.validate;
+package io.spine.validation.test
 
-import "spine/options.proto";
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.test.tools.validate";
-option java_outer_classname = "RequiredChoiceProto";
-option java_multiple_files = true;
+@DisplayName("`(choice)` rule for `oneof` fields should")
+internal class ChoiceRuleITest {
 
-message Meal {
-
-    oneof choice {
-        option (.choice).required = true;
-
-        Fish fish = 1;
-        Meat meat = 2;
-        Vegetables veggies = 3;
+    @Test
+    fun `reject if none of the alternatives is set`() {
+        assertValidationException(Lunch.newBuilder())
     }
 
-    oneof sauce {
-        option (.choice).required = false;
-
-        Sauce ketchup = 4;
-        Sauce cheese = 5;
-    }
-}
-
-message Fish {
-    string description = 1;
-}
-
-message Meat {
-    string description = 1;
-}
-
-message Vegetables {
-    string description = 1;
-}
-
-message Sauce {
-    string description = 1;
+    @Test
+    fun `accept if an alternative is set`() = assertNoException(
+        Lunch.newBuilder()
+            .setHotSoup("Minestrone")
+    )
 }

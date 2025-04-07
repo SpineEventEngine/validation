@@ -128,7 +128,7 @@ message DistinctField {
 }
 
 // A view of a `oneof` group that is marked with `(choice).required = true` option.
-message RequiredChoice {
+message ChoiceOneof {
     option (entity).kind = PROJECTION;
 
     protodata.OneofRef id = 1;

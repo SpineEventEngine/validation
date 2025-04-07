@@ -34,7 +34,7 @@ import io.spine.string.lowerCamelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.CHOICE
-import io.spine.validation.RequiredChoice
+import io.spine.validation.ChoiceOneof
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
@@ -57,7 +57,7 @@ import io.spine.validation.java.violation.templateString
  * Generates code for a single `oneof` group represented by the provided [view].
  */
 internal class ChoiceOneofGenerator(
-    private val view: RequiredChoice
+    private val view: ChoiceOneof
 ) : OneofOptionGenerator {
 
     private val oneof = view.subject

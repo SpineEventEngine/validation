@@ -43,14 +43,14 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.event.RequiredChoiceDiscovered
-import io.spine.validation.event.requiredChoiceDiscovered
+import io.spine.validation.event.ChoiceOneofDiscovered
+import io.spine.validation.event.choiceOneofDiscovered
 
 /**
  * Controls whether a `oneof` group should be validated with the `(choice)` option.
  *
  * Whenever a `oneof` groupd marked with `(choice)` option is discovered,
- * emits [RequiredChoiceDiscovered] event if the option has the `required` flag
+ * emits [ChoiceOneofDiscovered] event if the option has the `required` flag
  * set to `true`. Otherwise, the policy emits [NoReaction].
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.
@@ -63,7 +63,7 @@ internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = CHOICE)
         event: OneofOptionDiscovered
-    ): EitherOf2<RequiredChoiceDiscovered, NoReaction> {
+    ): EitherOf2<ChoiceOneofDiscovered, NoReaction> {
         val option = event.option.unpack<ChoiceOption>()
         if (!option.required) {
             return ignore()
@@ -71,7 +71,7 @@ internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
 
         val oneof = event.subject
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        return requiredChoiceDiscovered {
+        return choiceOneofDiscovered {
             id = oneof.ref
             subject = oneof
             errorMessage = message
@@ -100,10 +100,10 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 /**
  * A view of a `oneof` group that is marked with `(choice).required = true` option.
  */
-internal class RequiredChoiceView : View<OneofRef, RequiredChoice, RequiredChoice.Builder>() {
+internal class ChoiceView : View<OneofRef, ChoiceOneof, ChoiceOneof.Builder>() {
 
     @Subscribe
-    fun on(e: RequiredChoiceDiscovered) = alter {
+    fun on(e: ChoiceOneofDiscovered) = alter {
         subject = e.subject
         errorMessage = e.errorMessage
     }

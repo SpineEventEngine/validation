@@ -43,7 +43,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 @DisplayName("`(choice)` option should be compiled so that")
-internal class RequiredChoiceITest {
+internal class ChoiceITest {
 
     @Test
     fun `it causes violation if required field group is not set`() {
