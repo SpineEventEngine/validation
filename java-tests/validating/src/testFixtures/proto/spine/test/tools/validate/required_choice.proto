@@ -31,7 +31,7 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.test.tools.validate";
-option java_outer_classname = "RequiredFieldsProto";
+option java_outer_classname = "RequiredChoiceProto";
 option java_multiple_files = true;
 
 message Meal {
