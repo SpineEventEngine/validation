@@ -100,7 +100,7 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 /**
  * A view of a `oneof` group that is marked with `(choice).required = true` option.
  */
-internal class RequiredOneofView : View<OneofRef, RequiredOneof, RequiredOneof.Builder>() {
+internal class RequiredChoiceView : View<OneofRef, RequiredOneof, RequiredOneof.Builder>() {
 
     @Subscribe
     fun on(e: RequiredOneofDiscovered) = alter {
