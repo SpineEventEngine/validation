@@ -27,7 +27,6 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
@@ -45,6 +44,7 @@ import io.spine.validation.java.generate.MemberOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.protodata.qualifiedName
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
@@ -85,9 +85,8 @@ internal class IsRequiredFieldGenerator(private val view: IsRequiredOneof) : Mem
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
-        val qualifiedName = declaringType.qualifiedName + ".${oneof.value}"
         val errorMessage =
-            templateString(view.errorMessage, placeholders, IS_REQUIRED, qualifiedName)
+            templateString(view.errorMessage, placeholders, IS_REQUIRED, oneof.qualifiedName)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
     }
 
