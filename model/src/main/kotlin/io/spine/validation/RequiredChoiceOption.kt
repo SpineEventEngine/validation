@@ -78,6 +78,24 @@ internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
 }
 
 /**
+ * Reports a compilation warning if the deprecated `(is_required)` option is used.
+ */
+internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
+
+    @React
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IS_REQUIRED)
+        event: OneofOptionDiscovered
+    ): Just<NoReaction> {
+        Compilation.warning(event.file, event.subject.span) {
+            "The `($IS_REQUIRED)` option is deprecated and no longer supported. " +
+                    " Please use `(choice).required = true` instead."
+        }
+        return Just.noReaction
+    }
+}
+
+/**
  * A view of a `oneof` group that is marked with `(is_required) = true` option.
  */
 internal class IsRequiredOneofView : View<OneofRef, IsRequiredOneof, IsRequiredOneof.Builder>() {
