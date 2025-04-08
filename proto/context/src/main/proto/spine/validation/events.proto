@@ -37,6 +37,7 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
+import "spine/time_options.proto";
 
 // The event emitted whenever a simple validation rule is attached to a message type.
 message SimpleRuleAdded {
@@ -158,6 +159,22 @@ message SetOnceFieldDiscovered {
 
     // The error message template.
     string error_message = 3;
+}
+
+// The event emitted whenever a field with `(when)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message WhenFieldDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    protodata.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // Defines a restriction for the timestamp.
+    Time in = 4;
 }
 
 // The event emitted whenever a `oneof` group with `(choice).required = true` option is
