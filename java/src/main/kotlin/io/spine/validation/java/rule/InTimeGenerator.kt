@@ -44,6 +44,10 @@ import io.spine.time.validation.Time.TIME_UNDEFINED
 import io.spine.validation.InTime
 import io.spine.validation.WHEN
 
+// TODO:2025-04-08:yevhenii.nadtochii: Remove this file.
+// TODO:2025-04-08:yevhenii.nadtochii: Remove this feature.
+// // TODO:2025-04-08:yevhenii.nadtochii: Remove rules.
+
 /**
  * Creates a code generator for the [InTime] feature.
  */
