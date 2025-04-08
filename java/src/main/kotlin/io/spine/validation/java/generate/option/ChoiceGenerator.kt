@@ -41,13 +41,13 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
     /**
      * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
      */
-    private val allRequiredFields by lazy {
+    private val allChoiceOneofs by lazy {
         querying.select<ChoiceOneof>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
-        allRequiredFields
+        allChoiceOneofs
             .filter { it.id.type == type }
             .map { ChoiceOneofGenerator(it).generate() }
 }
