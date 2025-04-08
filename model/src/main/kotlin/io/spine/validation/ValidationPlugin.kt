@@ -79,7 +79,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         PatternPolicy(),
         ChoicePolicy(),
         IsRequiredPolicy(),
-        WhenOption(),
+        WhenPolicy(),
         RequiredIdPatternPolicy(),
         RequiredIdOptionPolicy(),
         GoesPolicy(),
