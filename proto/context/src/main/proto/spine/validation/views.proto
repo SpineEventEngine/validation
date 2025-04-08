@@ -131,6 +131,7 @@ message DistinctField {
 
 // A view of a field that is marked with `(when)` option.
 message WhenField {
+    option (entity).kind = PROJECTION;
 
     protodata.FieldRef id = 1;
 
