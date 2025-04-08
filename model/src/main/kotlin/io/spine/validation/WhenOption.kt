@@ -95,8 +95,8 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): TimeFieldType {
-    val fieldType = field.type
-    val javaClass = typeSystem.findJavaClassName(fieldType.message)?.javaClass()
+    val messageType = field.type.message
+    val javaClass = messageType.findJavaClassName(typeSystem)?.javaClass()
     val timeType = when {
         javaClass == null -> TimeFieldType.WFT_UNKNOWN
         javaClass == Timestamp::class.java -> TimeFieldType.WFT_TimeStamp
