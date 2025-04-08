@@ -32,11 +32,13 @@ import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 
 /**
- * Finds a fully qualified Java class name, generated for the Protobuf type with
- * the given [type] name.
+ * Finds a fully qualified Java class name, generated for the Protobuf type with this [TypeName].
+ *
+ * @param typeSystem The type system to be used for obtaining the header for the proto
+ *   file in which this message type is declared.
  */
-public fun TypeSystem.findJavaClassName(type: TypeName): ClassName? {
-    val header = findMessageOrEnum(type)?.second
-    val className = header?.let { type.javaClassName(it) }
+public fun TypeName.findJavaClassName(typeSystem: TypeSystem): ClassName? {
+    val header = typeSystem.findMessageOrEnum(this)?.second
+    val className = header?.let { javaClassName(it) }
     return className
 }
