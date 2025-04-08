@@ -64,9 +64,8 @@ public enum class ErrorPlaceholder(public val value: String) {
     MIN_VALUE("min.value"),
     MIN_OPERATOR("min.operator"),
 
-    // Placeholders for `oneof` options.
+    // Placeholders for `oneof` groups.
     GROUP_PATH("group.path");
-
 
     override fun toString(): String = value
 }
