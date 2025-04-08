@@ -26,13 +26,28 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Timestamp
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.protobuf.unpack
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldType
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
+import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.extractMessageType
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.check
+import io.spine.protodata.java.javaClass
+import io.spine.protodata.java.javaClassName
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.type.TypeSystem
 import io.spine.server.event.Just
 import io.spine.server.event.React
+import io.spine.time.Temporal
 import io.spine.time.validation.TimeOption
 import io.spine.validation.event.SimpleRuleAdded
 
@@ -50,11 +65,15 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
         @External @Where(field = OPTION_NAME, equals = WHEN)
         event: FieldOptionDiscovered
     ): Just<SimpleRuleAdded> {
+        val field = event.subject
+        val file = event.file
+        checkFieldType(field, typeSystem, file)
+
+
         val option = event.option.value.unpack<TimeOption>()
         val futureOrPast = option.getIn()
         val feature = inTime { time = futureOrPast }
         val errorMessage = "The time must be in the ${futureOrPast.name.lowercase()}."
-        val field = event.subject
         val newRule = SimpleRule(
             field.name,
             feature,
@@ -64,4 +83,25 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
         )
         return simpleRuleAdded(field.declaringType, newRule)
     }
+}
+
+private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File) =
+    Compilation.check(field.type.isSupported(typeSystem), file, field.span) {
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
+                " is not supported by the `($GOES)` option. Supported field types: messages," +
+                " enums, strings, bytes, repeated, and maps."
+    }
+
+/**
+ * Tells if this [FieldType] can be validated with the `(when)` option.
+ */
+private fun FieldType.isSupported(typeSystem: TypeSystem): Boolean {
+    if (!isMessage) {
+        return false
+    }
+
+    val fieldClass = message.javaClassName(typeSystem)
+        .javaClass() ?: return false
+
+    return fieldClass == Timestamp::class.java || Temporal::class.java.isAssignableFrom(fieldClass)
 }

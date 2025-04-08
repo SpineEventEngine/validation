@@ -37,6 +37,7 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 import "spine/time_options.proto";
+import "spine/validation/time_field_type.proto";
 
 // A view on a field that is recognized as required.
 //
@@ -141,6 +142,9 @@ message WhenField {
 
     // Defines a restriction for the timestamp.
     Time in = 4;
+
+    // The type of the field.
+    spine.validation.TimeFieldType type = 5;
 }
 
 // A view of a `oneof` group that is marked with `(choice).required = true` option.

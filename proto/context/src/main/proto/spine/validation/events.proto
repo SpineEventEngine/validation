@@ -37,6 +37,7 @@ option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
 import "spine/validation/rule.proto";
+import "spine/validation/time_field_type.proto";
 import "spine/time_options.proto";
 
 // The event emitted whenever a simple validation rule is attached to a message type.
@@ -175,6 +176,9 @@ message WhenFieldDiscovered {
 
     // Defines a restriction for the timestamp.
     Time in = 4;
+
+    // The type of the field.
+    spine.validation.TimeFieldType type = 5;
 }
 
 // The event emitted whenever a `oneof` group with `(choice).required = true` option is
