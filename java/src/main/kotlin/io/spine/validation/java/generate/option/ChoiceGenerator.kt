@@ -24,39 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.rule
+package io.spine.validation.java.generate.option
 
-import io.spine.protodata.ast.Cardinality.CARDINALITY_SINGLE
-import io.spine.protodata.ast.OneofName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.field
-import io.spine.validation.ErrorMessage
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.ChoiceOneof
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * A code generator for the `(is_required)` constraint.
- *
- * The constraint applies to a `oneof` group and enforces an alternative to be set.
- * The generated code checks that the `oneof`'s case is one of the alternatives,
- * i.e., the `oneof` is initialized with an option.
+ * The generator for the `(choice)` option.
  */
-internal class RequiredOneofGenerator(
-    private val name: OneofName,
-    ctx: GenerationContext
-) : CodeGenerator(ctx) {
+internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator {
 
-    private val rule = ctx.rule.messageWide
-
-    override fun condition(): Expression<Boolean> {
-        val casePropertyName = "${name.value}_case"
-        val pseudoField = ctx.msg.field(casePropertyName, CARDINALITY_SINGLE)
-        val getter = pseudoField.getter<Any>()
-        val numberGetter = getter.chain<Number>("getNumber")
-        return Expression("$numberGetter != 0")
+    /**
+     * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
+     */
+    private val allChoiceOneofs by lazy {
+        querying.select<ChoiceOneof>()
+            .all()
     }
 
-    override fun error() =
-        ErrorMessage.forRule(rule.errorMessage)
-
-    override fun createViolation() =
-        error().createViolation(ctx)
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allChoiceOneofs
+            .filter { it.id.type == type }
+            .map { ChoiceOneofGenerator(it).generate() }
 }

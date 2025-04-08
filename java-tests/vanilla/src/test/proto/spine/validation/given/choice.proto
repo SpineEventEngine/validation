@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,27 +25,36 @@
  */
 syntax = "proto3";
 
-package spine.test.tools.validate;
+package spine.validation.given;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.test.tools.validate";
-option java_outer_classname = "RequiredFieldsProto";
+option java_package = "io.spine.validation.java.given";
+option java_outer_classname = "ChoiceProto";
 option java_multiple_files = true;
 
+// A data type with one `oneof` required and one optional.
+//
+// See `IsRequiredTest`.
+//
 message Meal {
 
+    // This `oneof` must contain a selected choice.
     oneof choice {
-        option (is_required) = true;
+        option (.choice).required = true;
 
         Fish fish = 1;
         Meat meat = 2;
         Vegetables veggies = 3;
     }
 
+    // This `oneof` can be empty.
     oneof sauce {
-        option (is_required) = false;
+        option (.choice).required = false;
+
+        // Here setting a field would make the choice.
+        // The type is of no importance.
 
         Sauce ketchup = 4;
         Sauce cheese = 5;
@@ -53,17 +62,21 @@ message Meal {
 }
 
 message Fish {
+    // If no description specified, any fish would do.
     string description = 1;
 }
 
 message Meat {
+    // If no description specified, any meat would do.
     string description = 1;
 }
 
 message Vegetables {
+    // If no description specified, any vegetable would do.
     string description = 1;
 }
 
 message Sauce {
+    // If no description specified, then its kind is selected by the field under `sauce` oneof.
     string description = 1;
 }

@@ -12,7 +12,7 @@ option java_multiple_files = true;
 message Lunch {
 
     oneof soup {
-        option (is_required) = true;
+        option (choice).required = true;
 
         string hot_soup = 1;
         bool ramen = 2;

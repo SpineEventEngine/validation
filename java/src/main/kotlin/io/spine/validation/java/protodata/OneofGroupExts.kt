@@ -24,25 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.rule
+package io.spine.validation.java.protodata
 
-import com.google.protobuf.Message
-import io.spine.protobuf.unpackGuessingType
-import io.spine.validation.InTime
-import io.spine.validation.isMessageWide
-import io.spine.validation.isSimple
+import io.spine.protodata.ast.OneofGroup
+import io.spine.protodata.ast.qualifiedName
 
 /**
- * Creates a [CodeGenerator] for a custom validation operator for the given context.
+ * The field name containing a qualified name of the declaring type.
  */
-internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
-    when (val feature = ctx.feature()) {
-        is InTime -> inTimeGenerator(feature, ctx)
-        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
-    }
-
-private fun GenerationContext.feature(): Message = when {
-    rule.isSimple -> rule.simple.customOperator.feature.unpackGuessingType()
-    rule.isMessageWide -> rule.messageWide.operator.feature.unpackGuessingType()
-    else -> error("The rule has no custom operator: `$rule`.")
-}
+public val OneofGroup.qualifiedName: String
+    get() = "${declaringType.qualifiedName}.${name.value}"

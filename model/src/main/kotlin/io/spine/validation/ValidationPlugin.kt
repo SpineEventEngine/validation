@@ -61,6 +61,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         MaxFieldView::class.java,
         MinFieldView::class.java,
         SetOnceFieldView::class.java,
+        ChoiceView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompilationMessageRepository()
@@ -76,6 +77,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         ValidatePolicy(),
         IfInvalidPolicy(),
         PatternPolicy(),
+        ChoicePolicy(),
         IsRequiredPolicy(),
         WhenPolicy(),
         RequiredIdPatternPolicy(),

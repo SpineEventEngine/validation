@@ -46,6 +46,7 @@ import io.spine.validation.java.generate.option.MaxGenerator
 import io.spine.validation.java.generate.option.MinGenerator
 import io.spine.validation.java.generate.option.PatternGenerator
 import io.spine.validation.java.generate.option.RangeGenerator
+import io.spine.validation.java.generate.option.ChoiceGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.rule.RuleGenerator
@@ -72,6 +73,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             RangeGenerator(querying),
             MaxGenerator(querying),
             MinGenerator(querying),
+            ChoiceGenerator(querying),
         )
     }
 

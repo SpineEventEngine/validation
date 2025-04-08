@@ -108,3 +108,8 @@ public const val GOES: String = "goes"
  * The name of `(if_has_duplicates)` option.
  */
 public const val IF_HAS_DUPLICATES: String = "if_has_duplicates"
+
+/**
+ * The name of `(choice)` option.
+ */
+public const val CHOICE : String = "choice"

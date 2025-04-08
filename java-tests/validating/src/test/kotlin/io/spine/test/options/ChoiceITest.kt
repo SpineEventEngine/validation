@@ -42,8 +42,8 @@ import io.spine.validate.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(is_required)` option should be compiled so that")
-internal class IsRequiredITest {
+@DisplayName("`(choice)` option should be compiled so that")
+internal class ChoiceITest {
 
     @Test
     fun `it causes violation if required field group is not set`() {

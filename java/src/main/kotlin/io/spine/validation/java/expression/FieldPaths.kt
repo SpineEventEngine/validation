@@ -28,6 +28,7 @@ package io.spine.validation.java.expression
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.FieldName
+import io.spine.protodata.ast.OneofName
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
@@ -50,4 +51,17 @@ internal fun Expression<FieldPath>.joinToString(): Expression<String> =
 internal fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
     toBuilder()
         .chainAdd("field_name", StringLiteral(field.value))
+        .chainBuild()
+
+/**
+ * Returns an expression that yields a new instance of [FieldPath] by appending
+ * the provided [oneof] group name to this parental [FieldPath] expression.
+ *
+ * Strictly speaking, [OneofName] does not represent a field, but a group of fields.
+ * But we still use [FieldPath] to provide a path to this message member because
+ * [io.spine.validate.ConstraintViolation] expects exactly [FieldPath] type.
+ */
+internal fun Expression<FieldPath>.resolve(oneof: OneofName): Expression<FieldPath> =
+    toBuilder()
+        .chainAdd("field_name", StringLiteral(oneof.value))
         .chainBuild()

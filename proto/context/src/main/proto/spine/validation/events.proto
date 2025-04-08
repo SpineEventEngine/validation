@@ -159,3 +159,16 @@ message SetOnceFieldDiscovered {
     // The error message template.
     string error_message = 3;
 }
+
+// The event emitted whenever a `oneof` group with `(choice).required = true` option is
+// discovered and has passed the necessary checks to confirm the option is applied correctly.
+message ChoiceOneofDiscovered {
+
+    protodata.OneofRef id = 1;
+
+    // The required `oneof` group.
+    protodata.OneofGroup subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+}

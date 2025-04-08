@@ -62,7 +62,10 @@ public enum class ErrorPlaceholder(public val value: String) {
     MAX_VALUE("max.value"),
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
-    MIN_OPERATOR("min.operator");
+    MIN_OPERATOR("min.operator"),
+
+    // Placeholders for `oneof` groups.
+    GROUP_PATH("group.path");
 
     override fun toString(): String = value
 }
