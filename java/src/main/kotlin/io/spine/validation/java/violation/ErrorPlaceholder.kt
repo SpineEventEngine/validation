@@ -63,6 +63,8 @@ public enum class ErrorPlaceholder(public val value: String) {
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
     MIN_OPERATOR("min.operator"),
+
+    // Placeholders for `oneof` options.
     GROUP_PATH("group.path");
 
 
