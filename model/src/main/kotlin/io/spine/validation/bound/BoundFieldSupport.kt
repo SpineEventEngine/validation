@@ -54,7 +54,7 @@ import io.spine.protodata.check
 internal object BoundFieldSupport {
 
     /**
-     * Makes sure if a range-constraining option is applied to a field of numeric type.
+     * Ensures the range-constraining option is applied to a field of a numeric type.
      *
      * If not, the method reports a compilation error.
      *
