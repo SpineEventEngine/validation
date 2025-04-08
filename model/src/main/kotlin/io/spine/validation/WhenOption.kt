@@ -28,10 +28,12 @@ package io.spine.validation
 
 import com.google.protobuf.Timestamp
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protobuf.unpack
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
@@ -40,7 +42,9 @@ import io.spine.protodata.ast.ref
 import io.spine.protodata.check
 import io.spine.protodata.java.javaClass
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
 import io.spine.protodata.type.TypeSystem
+import io.spine.server.entity.alter
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
@@ -109,4 +113,18 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
                 " enums, strings, bytes, repeated, and maps."
     }
     return timeType
+}
+
+/**
+ * A view of a field that is marked with the `(when)` option.
+ */
+internal class WhenFieldView : View<FieldRef, WhenField, WhenField.Builder>() {
+
+    @Subscribe
+    fun on(e: WhenFieldDiscovered) = alter {
+        subject = e.subject
+        errorMessage = e.errorMessage
+        bound = e.bound
+        type = e.type
+    }
 }
