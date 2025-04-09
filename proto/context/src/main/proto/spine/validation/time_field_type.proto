@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,34 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+syntax = "proto3";
 
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.JavaValueConverter
-import io.spine.server.query.Querying
-import io.spine.server.query.select
-import io.spine.validation.ValidateField
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.OptionGenerator
+package spine.validation;
 
-/**
- * The generator for `(validate)` option.
- */
-internal class ValidateGenerator(
-    private val querying: Querying,
-    private val converter: JavaValueConverter
-) : OptionGenerator {
+import "spine/options.proto";
 
-    /**
-     * All `(validate)` fields in the current compilation process.
-     */
-    private val allValidateFields by lazy {
-        querying.select<ValidateField>()
-            .all()
-    }
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "TimeFieldTypeProto";
+option java_multiple_files = true;
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
-        allValidateFields
-            .filter { it.id.type == type }
-            .map { ValidateFieldGenerator(it, converter).generate() }
+import "spine/protodata/ast.proto";
+import "spine/protodata/value.proto";
+import "google/protobuf/any.proto";
+
+// Defines the time-related field types supported by the `(when)` option.
+enum TimeFieldType {
+
+    WFT_UNKNOWN = 0;
+
+    // Denotes a built-in Protobuf message – `com.google.protobuf.Timestamp`.
+    WFT_Timestamp = 1;
+
+    // Denotes an interface `io.spine.time.Temporal`, which the field type should
+    // implement to ba handled by the option.
+    WFT_Temporal = 2;
 }

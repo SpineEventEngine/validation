@@ -62,6 +62,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         MinFieldView::class.java,
         SetOnceFieldView::class.java,
         ChoiceView::class.java,
+        WhenFieldView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompilationMessageRepository()

@@ -34,7 +34,9 @@ import com.google.common.collect.LinkedHashMultiset
 import com.google.common.collect.Multiset
 import com.google.protobuf.Any
 import com.google.protobuf.Message
+import com.google.protobuf.util.Timestamps
 import io.spine.base.FieldPath
+import io.spine.base.Time
 import io.spine.protobuf.AnyPacker
 import io.spine.protodata.java.ClassName
 import io.spine.type.KnownTypes
@@ -161,3 +163,13 @@ internal val LongClass = ClassName(java.lang.Long::class)
  * The [ClassName] of [java.util.Objects].
  */
 internal val ObjectsClass = ClassName(Objects::class)
+
+/**
+ * The [ClassName] of [Timestamps].
+ */
+internal val TimestampsClass = ClassName(Timestamps::class)
+
+/**
+ * The [ClassName] of [io.spine.base.Time].
+ */
+internal val SpineTime = ClassName(Time::class)

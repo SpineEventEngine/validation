@@ -24,13 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.protodata
+package io.spine.validation.java.generate.option
 
-import io.spine.protodata.ast.OneofGroup
-import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.WhenField
+import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * The field name containing a qualified name of the declaring type.
+ * The generator for `(when)` option.
  */
-public val OneofGroup.qualifiedName: String
-    get() = "${declaringType.qualifiedName}.${name.value}"
+internal class WhenGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
+
+    /**
+     * All `(when)` fields in the current compilation process.
+     */
+    private val allWhenFields by lazy {
+        querying.select<WhenField>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+        allWhenFields
+            .filter { it.id.type == type }
+            .map { WhenFieldGenerator(it, converter).generate() }
+}
