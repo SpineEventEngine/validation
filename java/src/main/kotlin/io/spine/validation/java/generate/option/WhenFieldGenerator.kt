@@ -29,9 +29,13 @@ package io.spine.validation.java.generate.option
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.field
+import io.spine.time.validation.Time.FUTURE
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.TimeFieldType.WFT_Temporal
@@ -39,11 +43,19 @@ import io.spine.validation.TimeFieldType.WFT_Timestamp
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.SpineTime
+import io.spine.validation.java.expression.TimestampsClass
 import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -67,20 +79,46 @@ internal class WhenFieldGenerator(
     private val fieldType = field.type
     private val declaringType = field.declaringType
 
+    // TODO:2025-04-09:yevhenii.nadtochii: Support repeated types and add tests for this.
+
     /**
      * Generates code for a field represented by the [view].
      */
     override fun generate(): FieldOptionCode {
-        when(view.type) {
+        val fieldValue = message.field(field).getter<Any>()
+        val constraint = when(view.type) {
             WFT_Timestamp -> {
-
+                val operator = if (view.bound == FUTURE) "<" else ">"
+                """
+                if (!${field.hasDefaultValue()} && $TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0) {
+                    var fieldPath = ${parentPath.resolve(field.name)};
+                    var typeName =  ${parentName.orElse(declaringType)};
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
+                    $violations.add(violation);
+                }
+                """.trimIndent()
             }
             WFT_Temporal -> {
-
+                val method = if (view.bound == FUTURE) "isInPast" else "isInFuture"
+                """
+                if (!${field.hasDefaultValue()} && $fieldValue.$method()) {
+                    var fieldPath = ${parentPath.resolve(field.name)};
+                    var typeName =  ${parentName.orElse(declaringType)};
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
+                    $violations.add(violation);
+                }
+                """.trimIndent()
             }
-            else -> error("")
+            else -> error(
+                "The time type `${view.type.name}` is not supported by " +
+                        " `${this::class.simpleName}`. Please ensure that the supported field" +
+                        " types in this generator match those used by the policy," +
+                        " which verified `${view::class.simpleName}`."
+            )
         }
-        TODO()
+        return FieldOptionCode(
+            CodeBlock(constraint)
+        )
     }
 
     private fun violation(
