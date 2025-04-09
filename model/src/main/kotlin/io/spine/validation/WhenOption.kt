@@ -129,7 +129,12 @@ private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     }
 }
 
-private val FieldType.isRepeatedMessage
+/**
+ * Tells if this [FieldType] represents a `repeated message` field.
+ *
+ * The property is `public` because the option generator also uses it.
+ */
+public val FieldType.isRepeatedMessage: Boolean
     get() = isList && list.isMessage
 
 /**

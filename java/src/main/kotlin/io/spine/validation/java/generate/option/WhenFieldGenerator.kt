@@ -42,6 +42,7 @@ import io.spine.validation.TimeFieldType.WFT_Temporal
 import io.spine.validation.TimeFieldType.WFT_Timestamp
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
+import io.spine.validation.isRepeatedMessage
 import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.SpineTime
 import io.spine.validation.java.expression.TimestampsClass
@@ -78,46 +79,49 @@ internal class WhenFieldGenerator(
     private val field = view.subject
     private val fieldType = field.type
     private val declaringType = field.declaringType
+    private val fieldValue = message.field(field).getter<Any>()
 
-    // TODO:2025-04-09:yevhenii.nadtochii: Support repeated types and add tests for this.
 
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
-        val fieldValue = message.field(field).getter<Any>()
-        val constraint = when(view.type) {
+    override fun generate(): FieldOptionCode = when {
+        fieldType.isMessage -> validateTime(fieldValue)
+        fieldType.isRepeatedMessage ->
+            CodeBlock(
+                """
+                for (var element : $fieldValue) {
+                    ${validateTime(ReadVar("element"))}
+                }
+                """.trimIndent()
+            )
+
+        else -> unsupportedFieldType()
+    }.run { FieldOptionCode(this) }
+
+    private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
+        val timeIsOutOfBound = when (view.type) {
             WFT_Timestamp -> {
                 val operator = if (view.bound == FUTURE) "<" else ">"
-                """
-                if (!${field.hasDefaultValue()} && $TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0) {
-                    var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  ${parentName.orElse(declaringType)};
-                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
-                    $violations.add(violation);
-                }
-                """.trimIndent()
+                "$TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0"
             }
+
             WFT_Temporal -> {
                 val method = if (view.bound == FUTURE) "isInPast" else "isInFuture"
-                """
-                if (!${field.hasDefaultValue()} && $fieldValue.$method()) {
-                    var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  ${parentName.orElse(declaringType)};
-                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
-                    $violations.add(violation);
-                }
-                """.trimIndent()
+                "$fieldValue.$method()"
             }
-            else -> error(
-                "The time type `${view.type.name}` is not supported by " +
-                        " `${this::class.simpleName}`. Please ensure that the supported field" +
-                        " types in this generator match those used by the policy," +
-                        " which verified `${view::class.simpleName}`."
-            )
+
+            else -> unsupportedFieldType()
         }
-        return FieldOptionCode(
-            CodeBlock(constraint)
+        return CodeBlock(
+            """
+            if (!${field.hasDefaultValue()} && $timeIsOutOfBound) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
+                $violations.add(violation);
+            }
+            """.trimIndent()
         )
     }
 
@@ -144,4 +148,11 @@ internal class WhenFieldGenerator(
         PARENT_TYPE to typeName,
         WHEN_IN to StringLiteral("${view.bound}".lowercase())
     )
+
+    private fun unsupportedFieldType(): Nothing =
+        error(
+            "The field type `${field.type.name}` is not supported by `${this::class.simpleName}`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by the policy, which verified `${view::class.simpleName}`."
+        )
 }
