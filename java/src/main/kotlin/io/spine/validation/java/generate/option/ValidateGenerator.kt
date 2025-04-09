@@ -45,13 +45,13 @@ internal class ValidateGenerator(
     /**
      * All `(validate)` fields in the current compilation process.
      */
-    private val allRequiredFields by lazy {
+    private val allValidateFields by lazy {
         querying.select<ValidateField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
-        allRequiredFields
+        allValidateFields
             .filter { it.id.type == type }
             .map { ValidateFieldGenerator(it, converter).generate() }
 }
