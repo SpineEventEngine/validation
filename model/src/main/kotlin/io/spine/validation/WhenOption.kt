@@ -34,8 +34,11 @@ import io.spine.protobuf.unpack
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.extractMessageType
+import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
@@ -54,7 +57,7 @@ import io.spine.time.validation.Time
 import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
-import io.spine.validation.protodata.findJavaClassName
+import io.spine.protodata.java.findJavaClassName
 
 /**
  * Controls whether a field should be validated with the `(when)` option.
@@ -99,21 +102,33 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): TimeFieldType {
-    val messageType = field.type.message
-    val javaClass = messageType.findJavaClassName(typeSystem)?.javaClass()
-    val timeType = when {
+    val timeType = typeSystem.determineTimeType(field.type)
+    Compilation.check(timeType != TimeFieldType.WFT_UNKNOWN, file, field.span) {
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
+                " is not supported by the `($WHEN)` option. Supported field types: " +
+                " `google.protobuf.Timestamp` and types marked with `io.spine.time.Temporal`:" +
+                " `spine.time.ZonedDateTime`, `spine.time.LocalDateTime`," +
+                " `spine.time.LocalDate`, `spine.time.OffsetDateTime`, `spine.time.YearMonth`."
+    }
+    return timeType
+}
+
+private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
+    if (!fieldType.isMessage && !fieldType.isRepeatedMessage) {
+        return TimeFieldType.WFT_UNKNOWN
+    }
+    val messageType = fieldType.extractMessageType(typeSystem = this)?.name
+    val javaClass = messageType?.findJavaClassName(typeSystem = this)?.javaClass()
+    return when {
         javaClass == null -> TimeFieldType.WFT_UNKNOWN
         javaClass == Timestamp::class.java -> TimeFieldType.WFT_TimeStamp
         Temporal::class.java.isAssignableFrom(javaClass) -> TimeFieldType.WFT_Temporal
         else -> TimeFieldType.WFT_UNKNOWN
     }
-    Compilation.check(timeType != TimeFieldType.WFT_UNKNOWN, file, field.span) {
-        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($GOES)` option. Supported field types: messages," +
-                " enums, strings, bytes, repeated, and maps."
-    }
-    return timeType
 }
+
+private val FieldType.isRepeatedMessage
+    get() = isList && list.isMessage
 
 /**
  * A view of a field that is marked with the `(when)` option.
