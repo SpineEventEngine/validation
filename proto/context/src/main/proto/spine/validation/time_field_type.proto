@@ -45,7 +45,7 @@ enum TimeFieldType {
     WFT_UNKNOWN = 0;
 
     // Denotes a built-in Protobuf message – `com.google.protobuf.Timestamp`.
-    WFT_TimeStamp = 1;
+    WFT_Timestamp = 1;
 
     // Denotes an interface `io.spine.time.Temporal`, which the field type should
     // implement to ba handled by the option.
