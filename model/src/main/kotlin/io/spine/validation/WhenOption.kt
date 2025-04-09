@@ -106,9 +106,8 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
     Compilation.check(timeType != TimeFieldType.WFT_UNKNOWN, file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
                 " is not supported by the `($WHEN)` option. Supported field types: " +
-                " `google.protobuf.Timestamp` and types marked with `io.spine.time.Temporal`:" +
-                " `spine.time.ZonedDateTime`, `spine.time.LocalDateTime`," +
-                " `spine.time.LocalDate`, `spine.time.OffsetDateTime`, `spine.time.YearMonth`."
+                " `google.protobuf.Timestamp` and types introduced in the `spine.time` package" +
+                " that describe time-related concepts."
     }
     return timeType
 }
