@@ -36,39 +36,8 @@ option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
 import "spine/validation/time_field_type.proto";
 import "spine/time_options.proto";
-
-// The event emitted whenever a simple validation rule is attached to a message type.
-message SimpleRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    SimpleRule rule = 2;
-}
-
-// The event emitted whenever a composite validation rule is attached to a message type.
-message CompositeRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    CompositeRule rule = 2;
-}
-
-// The event emitted whenever a message-wide validation rule is attached to a type.
-message MessageWideRuleAdded {
-
-    option (is).java_type = "io.spine.validation.event.RuleAdded";
-
-    protodata.TypeName type = 1;
-
-    MessageWideRule rule = 3;
-}
 
 // A required field has been discovered.
 //
