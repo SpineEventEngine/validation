@@ -35,7 +35,7 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * The generator for `(when)` option.
+ * The generator for the `(when)` option.
  */
 internal class WhenGenerator(
     private val querying: Querying,

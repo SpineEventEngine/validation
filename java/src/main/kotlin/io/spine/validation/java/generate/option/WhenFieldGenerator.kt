@@ -67,7 +67,7 @@ import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(when)` option.
+ * The generator for the `(when)` option.
  *
  * Generates code for a single field represented by the provided [view].
  */
@@ -80,7 +80,6 @@ internal class WhenFieldGenerator(
     private val fieldType = field.type
     private val declaringType = field.declaringType
     private val fieldValue = message.field(field).getter<Any>()
-
 
     /**
      * Generates code for a field represented by the [view].
@@ -99,23 +98,34 @@ internal class WhenFieldGenerator(
         else -> unsupportedFieldType()
     }.run { FieldOptionCode(this) }
 
+    /**
+     * Yields an expression to check if the provided [fieldValue] matches
+     * the time [restriction][WhenField.getBound].
+     *
+     * The reported violations are appended to [violations] list, if any.
+     *
+     * Depending on the field type, the method uses either Protobuf's
+     * [Timestamps.compare()][com.google.protobuf.util.Timestamps.compare] util
+     * or a pair of Spine's [Temporal.isInPast()][io.spine.time.Temporal.isInPast]
+     * and [Temporal.isInFuture()][io.spine.time.Temporal.isInFuture] methods.
+     */
     private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
-        val timeIsOutOfBound = when (view.type) {
+        val isTimeOutOfBound = when (view.type) {
             WFT_Timestamp -> {
                 val operator = if (view.bound == FUTURE) "<" else ">"
                 "$TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0"
             }
 
             WFT_Temporal -> {
-                val method = if (view.bound == FUTURE) "isInPast" else "isInFuture"
-                "$fieldValue.$method()"
+                val checkBound = if (view.bound == FUTURE) "isInPast" else "isInFuture"
+                "$fieldValue.$checkBound()"
             }
 
             else -> unsupportedFieldType()
         }
         return CodeBlock(
             """
-            if (!${field.hasDefaultValue()} && $timeIsOutOfBound) {
+            if (!${field.hasDefaultValue()} && $isTimeOutOfBound) {
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
