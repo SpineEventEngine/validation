@@ -42,12 +42,12 @@ import "google/protobuf/any.proto";
 // Defines the time-related field types supported by the `(when)` option.
 enum TimeFieldType {
 
-    WFT_UNKNOWN = 0;
+    TFT_UNKNOWN = 0;
 
     // Denotes a built-in Protobuf message – `com.google.protobuf.Timestamp`.
-    WFT_Timestamp = 1;
+    TFT_Timestamp = 1;
 
     // Denotes an interface `io.spine.time.Temporal`, which the field type should
     // implement to ba handled by the option.
-    WFT_Temporal = 2;
+    TFT_Temporal = 2;
 }

@@ -38,8 +38,8 @@ import io.spine.protodata.java.field
 import io.spine.time.validation.Time.FUTURE
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.TimeFieldType.WFT_Temporal
-import io.spine.validation.TimeFieldType.WFT_Timestamp
+import io.spine.validation.TimeFieldType.TFT_Temporal
+import io.spine.validation.TimeFieldType.TFT_Timestamp
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
@@ -111,12 +111,12 @@ internal class WhenFieldGenerator(
      */
     private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
         val isTimeOutOfBound = when (view.type) {
-            WFT_Timestamp -> {
+            TFT_Timestamp -> {
                 val operator = if (view.bound == FUTURE) "<" else ">"
                 "$TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0"
             }
 
-            WFT_Temporal -> {
+            TFT_Temporal -> {
                 val checkBound = if (view.bound == FUTURE) "isInPast" else "isInFuture"
                 "$fieldValue.$checkBound()"
             }

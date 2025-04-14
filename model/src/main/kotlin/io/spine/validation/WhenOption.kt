@@ -58,9 +58,9 @@ import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
 import io.spine.protodata.java.findJavaClassName
-import io.spine.validation.TimeFieldType.WFT_Temporal
-import io.spine.validation.TimeFieldType.WFT_Timestamp
-import io.spine.validation.TimeFieldType.WFT_UNKNOWN
+import io.spine.validation.TimeFieldType.TFT_Temporal
+import io.spine.validation.TimeFieldType.TFT_Timestamp
+import io.spine.validation.TimeFieldType.TFT_UNKNOWN
 
 /**
  * Controls whether a field should be validated with the `(when)` option.
@@ -106,9 +106,9 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 
 private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): TimeFieldType {
     val timeType = typeSystem.determineTimeType(field.type)
-    Compilation.check(timeType != WFT_UNKNOWN, file, field.span) {
+    Compilation.check(timeType != TFT_UNKNOWN, file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($WHEN)` option. Supported field types: " +
+                " is not supported by the `($WHEN)` option. Supported field types:" +
                 " `google.protobuf.Timestamp` and types introduced in the `spine.time` package" +
                 " that describe time-related concepts."
     }
@@ -117,15 +117,15 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
 
 private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     if (!fieldType.isMessage && !fieldType.isRepeatedMessage) {
-        return WFT_UNKNOWN
+        return TFT_UNKNOWN
     }
     val messageType = fieldType.extractMessageType(typeSystem = this)?.name
     val javaClass = messageType?.findJavaClassName(typeSystem = this)?.javaClass()
     return when {
-        javaClass == null -> WFT_UNKNOWN
-        javaClass == Timestamp::class.java -> WFT_Timestamp
-        Temporal::class.java.isAssignableFrom(javaClass) -> WFT_Temporal
-        else -> WFT_UNKNOWN
+        javaClass == null -> TFT_UNKNOWN
+        javaClass == Timestamp::class.java -> TFT_Timestamp
+        Temporal::class.java.isAssignableFrom(javaClass) -> TFT_Temporal
+        else -> TFT_UNKNOWN
     }
 }
 
