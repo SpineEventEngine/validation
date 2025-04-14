@@ -115,6 +115,12 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
     return timeType
 }
 
+/**
+ * Analysis the given [fieldType], determining whether it represents
+ * the Protobuf [Timestamp] or Spine [Temporal].
+ *
+ * For other field types, the method return [TimeFieldType.TFT_UNKNOWN].
+ */
 private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     if (!fieldType.isMessage && !fieldType.isRepeatedMessage) {
         return TFT_UNKNOWN
