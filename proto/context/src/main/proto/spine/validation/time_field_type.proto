@@ -35,16 +35,12 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "TimeFieldTypeProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
-import "spine/protodata/value.proto";
-import "google/protobuf/any.proto";
-
-// Defines the time-related field types supported by the `(when)` option.
+// Time-related field types supported by the `(when)` option.
 enum TimeFieldType {
 
     TFT_UNKNOWN = 0;
 
-    // Denotes a built-in Protobuf message – `com.google.protobuf.Timestamp`.
+    // Denotes `com.google.protobuf.Timestamp`.
     TFT_Timestamp = 1;
 
     // Denotes an interface `io.spine.time.Temporal`, which the field type should
