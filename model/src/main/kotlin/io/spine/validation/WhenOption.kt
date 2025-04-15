@@ -58,8 +58,8 @@ import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
 import io.spine.protodata.java.findJavaClassName
-import io.spine.validation.TimeFieldType.TFT_Temporal
-import io.spine.validation.TimeFieldType.TFT_Timestamp
+import io.spine.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
 
 /**
@@ -129,8 +129,8 @@ private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     val javaClass = messageType?.findJavaClassName(typeSystem = this)?.javaClass()
     return when {
         javaClass == null -> TFT_UNKNOWN
-        javaClass == Timestamp::class.java -> TFT_Timestamp
-        Temporal::class.java.isAssignableFrom(javaClass) -> TFT_Temporal
+        javaClass == Timestamp::class.java -> TFT_TIMESTAMP
+        Temporal::class.java.isAssignableFrom(javaClass) -> TFT_TEMPORAL
         else -> TFT_UNKNOWN
     }
 }
