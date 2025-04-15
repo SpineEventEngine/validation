@@ -44,6 +44,6 @@ enum TimeFieldType {
     TFT_TIMESTAMP = 1;
 
     // Denotes an interface `io.spine.time.Temporal`, which the field type should
-    // implement to ba handled by the option.
+    // implement to be handled by the option.
     TFT_TEMPORAL = 2;
 }
