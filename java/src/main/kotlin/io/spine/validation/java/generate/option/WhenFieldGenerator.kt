@@ -105,9 +105,9 @@ internal class WhenFieldGenerator(
      * The reported violations are appended to [violations] list, if any.
      *
      * Depending on the field type, the method uses either Protobuf's
-     * [Timestamps.compare()][com.google.protobuf.util.Timestamps.compare] util
-     * or a pair of Spine's [Temporal.isInPast()][io.spine.time.Temporal.isInPast]
-     * and [Temporal.isInFuture()][io.spine.time.Temporal.isInFuture] methods.
+     * [Timestamps.compare()][com.google.protobuf.util.Timestamps.compare]
+     * or Spine's [Temporal.isInPast()][io.spine.time.Temporal.isInPast] and
+     * [Temporal.isInFuture()][io.spine.time.Temporal.isInFuture] methods.
      */
     private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
         val isTimeOutOfBound = when (view.type) {
