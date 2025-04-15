@@ -27,44 +27,32 @@
 package io.spine.validation.test
 
 import io.spine.core.External
+import io.spine.core.Where
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.event.TypeExited
+import io.spine.protodata.ast.event.TypeOptionDiscovered
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.value.Value
 import io.spine.protodata.value.value
-import io.spine.server.event.NoReaction
+import io.spine.server.event.Just
 import io.spine.server.event.React
-import io.spine.server.event.asA
-import io.spine.server.query.select
-import io.spine.server.tuple.EitherOf2
-import io.spine.validation.ComparisonOperator.LESS_THAN
-import io.spine.validation.SimpleRule
-import io.spine.validation.event.SimpleRuleAdded
-import io.spine.validation.event.simpleRuleAdded
-import io.spine.validation.simpleRule
-import io.spine.validation.test.money.CurrencyType
+import io.spine.validation.test.money.Currency
+import io.spine.validation.test.money.CurrencyMessageDiscovered
 
 /**
  * A policy which, if a type is a currency type, produces an event with a validation rule.
  *
- * We do not have enough data on `TypeOptionDiscovered`, thus we collect info in the `CurrencyType`
- * view and only then decide if we want to emit the validation event.
+ * Such a message must have exactly 2 integer fields, one for the major currency and
+ * another one for the minor currency.
  */
-public class CurrencyValidationPolicy : Policy<TypeExited>() {
+public class CurrencyPolicy : Policy<TypeOptionDiscovered>() {
 
     @React
-    override fun whenever(@External event: TypeExited): EitherOf2<SimpleRuleAdded, NoReaction> {
-        val currencyType = select<CurrencyType>().findById(event.type)
-        if (currencyType == null || currencyType.hasCurrency().not()) {
-            return ignore()
-        }
-        val minorUnits = currencyType.minorUnitField
-        val otherValue = minorUnitsPerUnit(currencyType)
-        val rule = constructRule(currencyType.majorUnitField, minorUnits, otherValue)
-        return simpleRuleAdded {
-            type = event.type
-            this.rule = rule
-        }.asA()
+    override fun whenever(
+        @External @Where(field = "option.name", equals = "currency")
+        event: TypeOptionDiscovered
+    ): Just<CurrencyMessageDiscovered> {
+        val option = event.option.unpack<Currency>()
     }
 
     private fun minorUnitsPerUnit(currencyType: CurrencyType): Value =
