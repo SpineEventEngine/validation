@@ -35,7 +35,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "TimeFieldTypeProto";
 option java_multiple_files = true;
 
-// Time-related field types supported by the `(when)` option.
+// Time-related field type supported by the `(when)` option.
 enum TimeFieldType {
 
     TFT_UNKNOWN = 0;
