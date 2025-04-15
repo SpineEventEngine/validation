@@ -32,31 +32,25 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.test.money";
-option java_outer_classname = "MoneyOptionsProto";
+option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
-import "google/protobuf/descriptor.proto";
+import "spine/protodata/ast.proto";
+import "spine/validation/test/money_options.proto";
 
-// Descriptor of a monetary currency.
-message Currency {
+// The event emitted whenever a message with `(currency)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message CurrencyMessageDiscovered {
 
-    string name = 1;
+    // The name of the discovered message.
+    protodata.TypeName type = 1;
 
-    string code = 2;
+    // The applied option.
+    Currency currency = 2;
 
-    // Number of minor units per major unit of the currency.
-    uint32 minor_units = 3;
-}
+    // The field of the message which stores the major units of the currency.
+    protodata.Field major_unit_field = 3;
 
-extend google.protobuf.MessageOptions {
-
-    // Marks a type which represents a monetary value in a fixed currency.
-    //
-    // A currency type must have exactly two integer fields: for the major and minor units.
-    //
-    // The amount of minor units is limited by the number of minor units per major unit —
-    // `Currency.minor_units`. The value of the second field of the message must always
-    // be lower than this limit.
-    //
-    Currency currency = 73938;
+    // The field of the message which stores the minor units of the currency.
+    protodata.Field minor_unit_field = 4;
 }
