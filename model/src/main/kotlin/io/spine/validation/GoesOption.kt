@@ -59,7 +59,7 @@ import io.spine.validation.event.goesFieldDiscovered
 /**
  * Controls whether a field should be validated with the `(goes)` option.
  *
- * Whenever a field marked with `(goes)` option is discovered, emits
+ * Whenever a field marked with the `(goes)` option is discovered, emits
  * [GoesFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.

@@ -28,7 +28,6 @@ package io.spine.validation.java.rule
 
 import com.google.protobuf.Message
 import io.spine.protobuf.unpackGuessingType
-import io.spine.validation.InTime
 import io.spine.validation.isMessageWide
 import io.spine.validation.isSimple
 
@@ -37,7 +36,6 @@ import io.spine.validation.isSimple
  */
 internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
     when (val feature = ctx.feature()) {
-        is InTime -> inTimeGenerator(feature, ctx)
         else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
     }
 

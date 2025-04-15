@@ -56,6 +56,7 @@ public enum class RuntimeErrorPlaceholder(public val value: String) {
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
     MIN_OPERATOR("min.operator"),
+    WHEN_IN("when.in"),
 
     // Placeholders for `oneof` groups.
     GROUP_PATH("group.path");
