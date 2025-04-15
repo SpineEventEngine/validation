@@ -58,8 +58,8 @@ import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
 import io.spine.protodata.java.findJavaClassName
-import io.spine.validation.TimeFieldType.TFT_Temporal
-import io.spine.validation.TimeFieldType.TFT_Timestamp
+import io.spine.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
 
 /**
@@ -119,7 +119,7 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
  * Analysis the given [fieldType], determining whether it represents
  * the Protobuf [Timestamp] or Spine [Temporal].
  *
- * For other field types, the method return [TimeFieldType.TFT_UNKNOWN].
+ * For other field types, the method returns [TimeFieldType.TFT_UNKNOWN].
  */
 private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     if (!fieldType.isMessage && !fieldType.isRepeatedMessage) {
@@ -129,14 +129,14 @@ private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
     val javaClass = messageType?.findJavaClassName(typeSystem = this)?.javaClass()
     return when {
         javaClass == null -> TFT_UNKNOWN
-        javaClass == Timestamp::class.java -> TFT_Timestamp
-        Temporal::class.java.isAssignableFrom(javaClass) -> TFT_Temporal
+        javaClass == Timestamp::class.java -> TFT_TIMESTAMP
+        Temporal::class.java.isAssignableFrom(javaClass) -> TFT_TEMPORAL
         else -> TFT_UNKNOWN
     }
 }
 
 /**
- * Tells if this [FieldType] represents a `repeated message` field.
+ * Tells if this [FieldType] represents a `repeated` of messages.
  *
  * The property is `public` because the option generator also uses it.
  */

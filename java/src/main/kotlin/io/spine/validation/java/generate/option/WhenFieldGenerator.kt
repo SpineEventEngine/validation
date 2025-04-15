@@ -38,8 +38,8 @@ import io.spine.protodata.java.field
 import io.spine.time.validation.Time.FUTURE
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.TimeFieldType.TFT_Temporal
-import io.spine.validation.TimeFieldType.TFT_Timestamp
+import io.spine.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
@@ -105,18 +105,18 @@ internal class WhenFieldGenerator(
      * The reported violations are appended to [violations] list, if any.
      *
      * Depending on the field type, the method uses either Protobuf's
-     * [Timestamps.compare()][com.google.protobuf.util.Timestamps.compare] util
-     * or a pair of Spine's [Temporal.isInPast()][io.spine.time.Temporal.isInPast]
-     * and [Temporal.isInFuture()][io.spine.time.Temporal.isInFuture] methods.
+     * [Timestamps.compare()][com.google.protobuf.util.Timestamps.compare]
+     * or Spine's [Temporal.isInPast()][io.spine.time.Temporal.isInPast] and
+     * [Temporal.isInFuture()][io.spine.time.Temporal.isInFuture] methods.
      */
     private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
         val isTimeOutOfBound = when (view.type) {
-            TFT_Timestamp -> {
+            TFT_TIMESTAMP -> {
                 val operator = if (view.bound == FUTURE) "<" else ">"
                 "$TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0"
             }
 
-            TFT_Temporal -> {
+            TFT_TEMPORAL -> {
                 val checkBound = if (view.bound == FUTURE) "isInPast" else "isInFuture"
                 "$fieldValue.$checkBound()"
             }
