@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,12 @@
 
 package io.spine.validation.test
 
-import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.render.SourceFileSet
 
-@Suppress("unused") // Accessed reflectively by ProtoData.
-public class MoneyValidationPlugin : Plugin(
-    viewRepositories = setOf(CurrencyTypeView.Repo()),
-    policies = setOf(CurrencyPolicy()),
-    renderers = listOf(CurrencyRenderer())
-)
+public class CurrencyRenderer : JavaRenderer() {
+
+    override fun render(sources: SourceFileSet) {
+        TODO("Not yet implemented")
+    }
+}
