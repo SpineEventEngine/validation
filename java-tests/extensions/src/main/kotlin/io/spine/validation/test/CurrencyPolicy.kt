@@ -28,16 +28,28 @@ package io.spine.validation.test
 
 import io.spine.core.External
 import io.spine.core.Where
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.event.TypeOptionDiscovered
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
+import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
+import io.spine.protodata.ast.event.MessageOptionDiscovered
 import io.spine.protodata.ast.unpack
+import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.value.Value
-import io.spine.protodata.value.value
 import io.spine.server.event.Just
 import io.spine.server.event.React
+import io.spine.server.event.just
+import io.spine.validation.OPTION_NAME
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
+import io.spine.validation.test.money.currencyMessageDiscovered
+
+/**
+ * The name of the option.
+ */
+private const val CURRENCY = "currency"
 
 /**
  * A policy which, if a type is a currency type, produces an event with a validation rule.
@@ -45,25 +57,43 @@ import io.spine.validation.test.money.CurrencyMessageDiscovered
  * Such a message must have exactly 2 integer fields, one for the major currency and
  * another one for the minor currency.
  */
-public class CurrencyPolicy : Policy<TypeOptionDiscovered>() {
+public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = "option.name", equals = "currency")
-        event: TypeOptionDiscovered
+        @External @Where(field = OPTION_NAME, equals = CURRENCY)
+        event: MessageOptionDiscovered
     ): Just<CurrencyMessageDiscovered> {
+        val file = event.file
+        val messageType = event.subject
+        val fields = messageType.fieldList
+        checkFieldType(fields.size == 2, file, messageType)
+
+        val firstField = messageType.fieldList[0]
+        val secondField = messageType.fieldList[1]
+        checkFieldType(firstField.isInteger && secondField.isInteger, file, messageType)
+
         val option = event.option.unpack<Currency>()
+        val message = errorMessage(firstField, secondField)
+        return currencyMessageDiscovered {
+            type = messageType.name
+            currency = option
+            majorUnitField = firstField
+            minorUnitField = secondField
+            errorMessage = message
+        }.just()
     }
-
-    private fun minorUnitsPerUnit(currencyType: CurrencyType): Value =
-        value { intValue = currencyType.currency.minorUnits.toLong() }
-
-    private fun constructRule(majorUnits: Field, minorUnits: Field, otherValue: Value): SimpleRule =
-        simpleRule {
-            errorMessage = "Expected `${minorUnits.name.value}` field to have less than `{other}`" +
-                    " per one unit in `${majorUnits.name.value}` field, but got `{value}`."
-            field = minorUnits.name
-            operator = LESS_THAN
-            this.otherValue = otherValue
-        }
 }
+
+private val Field.isInteger: Boolean
+    get() = type.primitive in listOf(TYPE_INT32, TYPE_INT64)
+
+private fun errorMessage(minor: Field, major: Field) =
+    "Expected `${minor.name.value}` field to have less than `\$MINOR_VALUE`" +
+            " per one unit in `${major.name.value}` field, but got `\$MAJOR_VALUE`."
+
+private fun checkFieldType(condition: Boolean, file: File, message: MessageType) =
+    Compilation.check(condition, file, message.span) {
+        "The `($CURRENCY)` option cannot be applied to `${message.qualifiedName}`. It is" +
+                " applicable only to messages that have exactly two integer fields."
+    }
