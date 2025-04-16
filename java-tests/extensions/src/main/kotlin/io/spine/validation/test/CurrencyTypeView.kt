@@ -26,64 +26,24 @@
 
 package io.spine.validation.test
 
-import io.spine.core.External
 import io.spine.core.Subscribe
-import io.spine.core.Where
-import io.spine.protobuf.unpack
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.event.FieldEntered
-import io.spine.protodata.ast.event.TypeExited
-import io.spine.protodata.ast.event.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
-import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
-import io.spine.server.route.EventRouting
-import io.spine.validation.OPTION_NAME
-import io.spine.validation.test.money.Currency
-import io.spine.validation.test.money.CurrencyType
+import io.spine.validation.test.money.CurrencyMessage
+import io.spine.validation.test.money.CurrencyMessageDiscovered
 
 /**
  * A view on a message type which stores an amount of money is a certain currency.
  */
-public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builder>() {
+public class CurrencyTypeView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
 
     @Subscribe
-    internal fun on(
-        @External @Where(field = OPTION_NAME, equals = "currency")
-        event: TypeOptionDiscovered
-    ) {
-        val option = event.option.value.unpack<Currency>()
-        alter {
-            currency = option
-        }
-    }
-
-    @Subscribe
-    internal fun on(@External event: FieldEntered) {
-        val field = event.field
-        alter {
-            when (field.orderOfDeclaration) {
-                0 -> majorUnitField = field
-                1 -> minorUnitField = field
-            }
-        }
-    }
-
-    @Subscribe
-    @Suppress("UNUSED_PARAMETER")
-    internal fun on(@External event: TypeExited) {
-        if (!builder().hasCurrency()) {
-            deleted = true
-        }
-    }
-
-    internal class Repo : ViewRepository<TypeName, CurrencyTypeView, CurrencyType>() {
-
-        override fun setupEventRouting(routing: EventRouting<TypeName>) {
-            super.setupEventRouting(routing)
-            routing.unicast(TypeOptionDiscovered::class.java) { e, _ -> e.type }
-            routing.unicast(FieldEntered::class.java) { e, _ -> e.type }
-            routing.unicast(TypeExited::class.java) { e, _ -> e.type }
-        }
+    public fun on(e: CurrencyMessageDiscovered): Unit = alter {
+        type = e.type
+        currency = e.currency
+        majorUnitField = e.majorUnitField
+        minorUnitField = e.minorUnitField
+        errorMessage = e.errorMessage
     }
 }
