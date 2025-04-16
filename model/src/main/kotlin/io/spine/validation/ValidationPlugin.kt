@@ -28,7 +28,6 @@ package io.spine.validation
 
 import io.spine.protodata.plugin.Plugin
 import io.spine.protodata.plugin.Policy
-import io.spine.protodata.plugin.ViewRepository
 import io.spine.protodata.render.Renderer
 import io.spine.validation.bound.MaxFieldView
 import io.spine.validation.bound.MaxPolicy
@@ -63,9 +62,6 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         SetOnceFieldView::class.java,
         ChoiceView::class.java,
         WhenFieldView::class.java,
-    ),
-    viewRepositories = setOf<ViewRepository<*, *, *>>(
-        CompilationMessageRepository()
     ),
     policies = setOf<Policy<*>>(
         RequiredPolicy(),

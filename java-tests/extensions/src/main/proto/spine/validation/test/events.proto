@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,39 +26,34 @@
 
 syntax = "proto3";
 
-package spine.validation;
+package spine.validation.test.money;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "CompilationMessageProto";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
 import "spine/protodata/ast.proto";
-import "spine/validation/rule.proto";
+import "spine/validation/test/money_options.proto";
 
-// A message from the current compilation process.
-//
-// May contain one or more validation rules.
-//
-message CompilationMessage {
-    option (entity).kind = PROJECTION;
+// The event emitted whenever a message with `(currency)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message CurrencyMessageDiscovered {
 
-    // The name of the message type.
-    protodata.TypeName name = 1;
+    // The name of the discovered message.
+    protodata.TypeName type = 1;
 
-    // Partial information about the type.
-    //
-    // May contain only the type's own data, such as docs, declaring file, etc.
-    //
-    // Does not contain information about nested elements, such as fields and options.
-    //
-    protodata.MessageType type = 2;
+    // The applied option.
+    Currency currency = 2;
 
-    // Validation rules.
-    //
-    // All these rules must be met in order for a message to be regarded as valid.
-    //
-    repeated Rule rule = 3;
+    // The field of the message which stores the major units of the currency.
+    protodata.Field major_unit_field = 3;
+
+    // The field of the message which stores the minor units of the currency.
+    protodata.Field minor_unit_field = 4;
+
+    // The error message template.
+    string error_message = 5;
 }

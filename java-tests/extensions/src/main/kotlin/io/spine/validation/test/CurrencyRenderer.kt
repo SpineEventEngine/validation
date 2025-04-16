@@ -24,23 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.rule
+package io.spine.validation.test
 
-import com.google.protobuf.Message
-import io.spine.protobuf.unpackGuessingType
-import io.spine.validation.isMessageWide
-import io.spine.validation.isSimple
+import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.render.SourceFileSet
 
-/**
- * Creates a [CodeGenerator] for a custom validation operator for the given context.
- */
-internal fun generatorForCustom(ctx: GenerationContext): CodeGenerator =
-    when (val feature = ctx.feature()) {
-        else -> UnsupportedRuleGenerator(feature::class.simpleName!!, ctx)
+public class CurrencyRenderer : JavaRenderer() {
+
+    override fun render(sources: SourceFileSet) {
+        TODO("Not yet implemented")
     }
-
-private fun GenerationContext.feature(): Message = when {
-    rule.isSimple -> rule.simple.customOperator.feature.unpackGuessingType()
-    rule.isMessageWide -> rule.messageWide.operator.feature.unpackGuessingType()
-    else -> error("The rule has no custom operator: `$rule`.")
 }

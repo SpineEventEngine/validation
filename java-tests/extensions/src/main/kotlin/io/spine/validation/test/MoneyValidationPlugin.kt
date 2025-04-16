@@ -31,5 +31,6 @@ import io.spine.protodata.plugin.Plugin
 @Suppress("unused") // Accessed reflectively by ProtoData.
 public class MoneyValidationPlugin : Plugin(
     viewRepositories = setOf(CurrencyTypeView.Repo()),
-    policies = setOf(CurrencyValidationPolicy())
+    policies = setOf(CurrencyPolicy()),
+    renderers = listOf(CurrencyRenderer())
 )
