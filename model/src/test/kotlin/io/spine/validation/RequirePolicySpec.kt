@@ -68,6 +68,12 @@ internal class RequirePolicySpec : CompilationErrorTest() {
         val field = message.field("double_field")
         error.message shouldContain unsupportedFieldType(field)
     }
+
+    @Test
+    fun `reject a non-existent field`() {
+        val message = RequireNonExistentField.getDescriptor()
+        // TODO:2025-04-16:yevhenii.nadtochii: Write a test.
+    }
 }
 
 private fun unsupportedFieldType(field: Field) =

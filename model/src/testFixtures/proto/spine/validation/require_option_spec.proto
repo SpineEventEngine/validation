@@ -32,7 +32,7 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "RequireBadFieldTypeProto";
+option java_outer_classname = "RequireOptionSpecProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
@@ -71,4 +71,12 @@ message RequireWithDouble {
     string string_field = 1;
     double double_field = 2;
     google.protobuf.Timestamp timestamp_field = 3;
+}
+
+// Declares the `(require)` option with a non-existent field.
+message RequireNonExistentField {
+    option (require).fields = "field1 & field3 | field2";
+
+    string field1 = 1;
+    string field3 = 2;
 }
