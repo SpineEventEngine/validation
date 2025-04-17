@@ -72,7 +72,41 @@ internal class RequirePolicySpec : CompilationErrorTest() {
     @Test
     fun `reject a non-existent field`() {
         val message = RequireNonExistentField.getDescriptor()
-        // TODO:2025-04-16:yevhenii.nadtochii: Write a test.
+        val error = assertCompilationFails(message)
+        val nonExistentField = "field2"
+        with(error.message) {
+            shouldContain(nonExistentField)
+            shouldContain(message.fullName)
+            shouldContain("is not declared in the message")
+        }
+    }
+
+    @Test
+    fun `reject duplicate fields in a combination`() {
+        val message = RequireDuplicateFields.getDescriptor()
+        val error = assertCompilationFails(message)
+        val duplicateField = "field2"
+        val invalidCombination = "field2 & field3 & field2"
+        with(error.message) {
+            shouldContain(message.fullName)
+            shouldContain(duplicateField)
+            shouldContain(invalidCombination)
+            shouldContain("appear more than once")
+        }
+    }
+
+    @Test
+    fun `reject duplicate combinations`() {
+        val message = RequireDuplicateCombinations.getDescriptor()
+        val error = assertCompilationFails(message)
+        val firstCombination = "field1 & field3"
+        val secondCombination = "field3 & field1"
+        with(error.message) {
+            shouldContain(message.fullName)
+            shouldContain("appear more than once")
+            shouldContain(firstCombination)
+            shouldContain(secondCombination)
+        }
     }
 }
 

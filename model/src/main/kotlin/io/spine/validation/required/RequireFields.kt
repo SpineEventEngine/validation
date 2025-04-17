@@ -67,10 +67,11 @@ internal class RequireFields(
      */
     fun toCombinations(): List<FieldCombination> {
         val combinations = specifiedFields.split(FIELDS_DELIMITER)
-            .map(::combinationFieldNames)
+            .map(::toCombination)
             .run { checkCombinationsUnique(this) }
         return combinations.map {
-            val astFields = it.toAstFields()
+            val astFields = it.fields
+                .map(::toAstField)
                 .onEach(::checkFieldType)
             fieldCombination {
                 field.addAll(astFields)
@@ -78,25 +79,27 @@ internal class RequireFields(
         }
     }
 
-    private fun combinationFieldNames(combination: String): Set<String> {
-        val fieldNames = combination.trim()
+    private fun toCombination(definition: String): Combination {
+        val trimmedDefinition = definition.trim()
+        val fieldNames = trimmedDefinition
             .split(COMBINATION_DELIMITER)
             .map { it.trim() }
-            .run { checkFieldsUnique(this) }
+            .run { checkFieldsUnique(fieldNames = this, definition) }
         fieldNames.forEach(::checkFieldExists)
-        return fieldNames
+        return Combination(trimmedDefinition, fieldNames)
     }
 
-    private fun Set<String>.toAstFields() = map { fieldName ->
+    private fun toAstField(fieldName: String) =
         messageFields.first { messageField ->
             messageField.name.value == fieldName
         }
-    }
 
-    private fun checkCombinationsUnique(combinations: List<Set<String>>): Set<Set<String>> {
-        val duplicates = combinations.groupBy { it }
+    private fun checkCombinationsUnique(combinations: List<Combination>): Set<Combination> {
+        val duplicates = combinations.groupBy { it.fields }
             .filter { it.value.size > 1 }
-            .map { it.key }
+            .flatMap { it.value }
+            .map { it.definition }
+            .toSet()
         Compilation.check(duplicates.isEmpty(), file, message.span) {
             "The following combinations of fields listed in the `($REQUIRE)` option of" +
                     " `${message.name.qualifiedName}` appear more than once:" +
@@ -105,14 +108,14 @@ internal class RequireFields(
         return combinations.toSet()
     }
 
-    private fun checkFieldsUnique(fieldNames: List<String>): Set<String> {
+    private fun checkFieldsUnique(fieldNames: List<String>, combination: String): Set<String> {
         val duplicates = fieldNames.groupBy { it }
             .filter { it.value.size > 1 }
             .map { it.key }
         Compilation.check(duplicates.isEmpty(), file, message.span) {
-            "The following fields listed in the `($REQUIRE)` option of" +
+            "The `$duplicates` fields listed in the `($REQUIRE)` option of" +
                     " `${message.name.qualifiedName}` appear more than once within" +
-                    " a single combination: `$duplicates`."
+                    " the `$combination` combination."
         }
         return fieldNames.toSet()
     }
@@ -129,14 +132,22 @@ internal class RequireFields(
                     " by the `($REQUIRE)` option. Supported field types: messages, enums," +
                     " strings, bytes, repeated, and maps."
         }
+
+    private companion object {
+
+        /**
+         * Separates standalone fields or combinations of fields.
+         */
+        const val FIELDS_DELIMITER = "|"
+
+        /**
+         * Separates fields within a combination.
+         */
+        const val COMBINATION_DELIMITER = "&"
+    }
 }
 
-/**
- * Separates standalone fields or combinations of fields.
- */
-private const val FIELDS_DELIMITER = "|"
-
-/**
- * Separates fields within a combination.
- */
-private const val COMBINATION_DELIMITER = "&"
+private class Combination(
+    val definition: String,
+    val fields: Set<String>,
+)
