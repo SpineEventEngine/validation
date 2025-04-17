@@ -37,6 +37,8 @@ import io.spine.validation.bound.MinPolicy
 import io.spine.validation.bound.RangeFieldView
 import io.spine.validation.bound.RangePolicy
 import io.spine.validation.required.IfMissingPolicy
+import io.spine.validation.required.RequireMessageView
+import io.spine.validation.required.RequirePolicy
 import io.spine.validation.required.RequiredFieldView
 import io.spine.validation.required.RequiredIdOptionPolicy
 import io.spine.validation.required.RequiredIdPatternPolicy
@@ -63,6 +65,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         SetOnceFieldView::class.java,
         ChoiceView::class.java,
         WhenFieldView::class.java,
+        RequireMessageView::class.java,
     ),
     viewRepositories = setOf<ViewRepository<*, *, *>>(
         CompilationMessageRepository()
@@ -86,5 +89,6 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         GoesPolicy(),
         SetOncePolicy(),
         IfSetAgainPolicy(),
+        RequirePolicy()
     )
 )

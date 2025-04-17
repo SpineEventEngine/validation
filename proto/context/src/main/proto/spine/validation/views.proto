@@ -164,12 +164,16 @@ message ChoiceOneof {
 
 // A view of a message that is marked with `(require)` option.
 message RequireMessage {
+    option (entity).kind = PROJECTION;
 
     protodata.TypeName id = 1;
 
     // The error message template.
     string error_message = 2;
 
+    // A list of combinations as specified by a user.
+    string specified_fields = 3;
+
     // A list of acceptable combinations.
-    repeated FieldCombination combination = 3;
+    repeated FieldCombination combination = 4;
 }

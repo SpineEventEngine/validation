@@ -27,48 +27,32 @@
 package io.spine.validation.required
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.RequireOption
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.boolValue
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.MessageOptionDiscovered
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
-import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
-import io.spine.server.event.NoReaction
 import io.spine.server.event.React
-import io.spine.server.event.asA
+import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
-import io.spine.validation.REQUIRE
 import io.spine.validation.REQUIRED
+import io.spine.validation.RequireMessage
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequireMessageDiscovered
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.required.RequiredFieldSupport.isSupported
+import io.spine.validation.event.requireMessageDiscovered
 
 /**
- * Controls whether a field should be validated as `(required)`.
+ * Controls whether a message should be validated with the `(require)` option.
  *
- * Whenever a field marked with `(required)` option is discovered, emits
- * [RequiredFieldDiscovered] event if the following conditions are met:
- *
- * 1. The field type is supported by the option.
- *
- * If (1) is violated, the policy reports a compilation error.
- *
- * Violation of (2) means that the `(required)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-required field, marked with `(required)`.
+ * Whenever a message marked with `(require)` option is discovered, emits
+ * [RequireMessageDiscovered] event if the specified field combinations are valid.
+ * Please take a look on docs to [RequireFields] to see how they are validated.
  */
-// TODO:2025-04-16:yevhenii.nadtochii: Update docs.
 internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
 
     @React
@@ -76,66 +60,30 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
         @External @Where(field = OPTION_NAME, equals = REQUIRED)
         event: MessageOptionDiscovered,
     ): Just<RequireMessageDiscovered> {
-        val file = event.file
-        val option = event.option.unpack<RequireOption>()
         val messageType = event.subject
-
-        val allMessageFields = event.subject.fieldList
-        val alternatives = option.fields.split(FIELDS_DELIMITER)
-            .map { combination ->
-                val messageFields = allMessageFields.map { it.name.value }.toSet()
-                val combinationFields = combination.trim()
-                    .split(COMBINATION_DELIMITER)
-                    .map { it.trim() }
-                checkFieldsExist(nonExistentFields, messageType, file)
-            }
-
-        checkFieldType(field, file)
-
-        if (!event.option.boolValue) {
-            return ignore()
-        }
-
+        val option = event.option.unpack<RequireOption>()
+        val requireFields = RequireFields(option, messageType, event.file)
+        val combinations = requireFields.toCombinations()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        return requiredFieldDiscovered {
-            id = field.ref
+        return requireMessageDiscovered {
+            id = messageType.name
             errorMessage = message
-            subject = field
-        }.asA()
+            specifiedFields = option.fields
+            combination.addAll(combinations)
+        }.just()
     }
 }
 
 /**
- * Separates standalone fields or combinations of fields.
+ * A view of a message that is marked with the `(require)` option.
  */
-private const val FIELDS_DELIMITER = "|"
+internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessage.Builder>() {
 
-/**
- * Separates fields within a combination.
- */
-private const val COMBINATION_DELIMITER = "&"
-
-// TODO:2025-04-16:yevhenii.nadtochii: Check for duplicate combinations.
-// TODO:2025-04-16:yevhenii.nadtochii: Check for duplicates within a combination.
-// TODO:2025-04-16:yevhenii.nadtochii: Cover these cases with tests.
-
-private fun checkFieldsExist(
-    messageFields: Set<String>,
-    combinationFields: Set<String>,
-    message: MessageType,
-    file: File
-) {
-    val nonExistentFields = combinationFields - messageFields
-    Compilation.check(nonExistentFields.isEmpty(), file, message.span) {
-        "The following fields listed in the `($REQUIRE)` option of" +
-                " `${message.name.qualifiedName}` are not declared in the message:" +
-                " `${nonExistentFields.joinToString()}`."
+    @Subscribe
+    fun on(e: RequireMessageDiscovered) = alter {
+        id = e.id
+        errorMessage = e.errorMessage
+        specifiedFields = e.specifiedFields
+        combinationList.addAll(e.combinationList)
     }
 }
-
-private fun checkFieldType(field: Field, file: File) =
-    Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
-                " by the `($REQUIRE)` option. Supported field types: messages, enums," +
-                " strings, bytes, repeated, and maps."
-    }

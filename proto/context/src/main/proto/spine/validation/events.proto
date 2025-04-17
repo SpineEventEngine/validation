@@ -204,6 +204,9 @@ message RequireMessageDiscovered {
     // The error message template.
     string error_message = 2;
 
-    // A list of acceptable combinations.
-    repeated FieldCombination combination = 3;
+    // A list of combinations as specified by a user.
+    string specified_fields = 3;
+
+    // A list of combinations.
+    repeated FieldCombination combination = 4;
 }
