@@ -68,7 +68,7 @@ internal class RequireFields(
     fun toCombinations(): List<FieldCombination> {
         val combinations = specifiedFields.split(FIELDS_DELIMITER)
             .map(::combinationFieldNames)
-            .run { checkDuplicates(this) }
+            .run { checkCombinationsUnique(this) }
         return combinations.map {
             val astFields = it.toAstFields()
                 .onEach(::checkFieldType)
@@ -82,7 +82,7 @@ internal class RequireFields(
         val fieldNames = combination.trim()
             .split(COMBINATION_DELIMITER)
             .map { it.trim() }
-            .run { checkDuplicates(this) }
+            .run { checkFieldsUnique(this) }
         fieldNames.forEach(::checkFieldExists)
         return fieldNames
     }
@@ -93,7 +93,7 @@ internal class RequireFields(
         }
     }
 
-    private fun checkDuplicates(combinations: List<Set<String>>): Set<Set<String>> {
+    private fun checkCombinationsUnique(combinations: List<Set<String>>): Set<Set<String>> {
         val duplicates = combinations.groupBy { it }
             .filter { it.value.size > 1 }
             .map { it.key }
@@ -105,7 +105,7 @@ internal class RequireFields(
         return combinations.toSet()
     }
 
-    private fun checkDuplicates(fieldNames: List<String>): Set<String> {
+    private fun checkFieldsUnique(fieldNames: List<String>): Set<String> {
         val duplicates = fieldNames.groupBy { it }
             .filter { it.value.size > 1 }
             .map { it.key }
