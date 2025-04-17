@@ -40,7 +40,7 @@ import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
-import io.spine.validation.REQUIRED
+import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequireMessageDiscovered
@@ -57,7 +57,7 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = REQUIRED)
+        @External @Where(field = OPTION_NAME, equals = REQUIRE)
         event: MessageOptionDiscovered,
     ): Just<RequireMessageDiscovered> {
         val messageType = event.subject
