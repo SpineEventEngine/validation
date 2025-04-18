@@ -91,13 +91,13 @@ internal class RequireSpec : ValidationOfConstraintTest() {
             assertNotValid(EveryFieldRequired.getDefaultInstance(), false)
             val onlyOneRequiredSet = EveryFieldRequired.newBuilder()
                 .setFirst("only one set")
-                .build()
+                .buildPartial()
             assertNotValid(onlyOneRequiredSet, false)
 
             val twoRequiredSet = EveryFieldRequired.newBuilder()
                 .setFirst("first set")
                 .setSecond("second set")
-                .build()
+                .buildPartial()
             assertNotValid(twoRequiredSet, false)
         }
 
@@ -106,7 +106,7 @@ internal class RequireSpec : ValidationOfConstraintTest() {
             assertNotValid(OneofRequired.getDefaultInstance(), false)
             val withDefaultValue = OneofRequired.newBuilder()
                 .setFirst("")
-                .build()
+                .buildPartial()
             assertNotValid(withDefaultValue, false)
         }
     }

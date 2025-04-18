@@ -107,14 +107,8 @@ internal class OneofSpec : ValidationOfConstraintTest() {
     `invalid if` {
 
         @Test
-        fun `a required field is set to the default value`() {
-            //TODO:2023-11-18:alexander.yevsyukov: This message should not be built.
-            // It looks like codegen does not implement it yet.
-            val requiredIsDefault = OneofWithRequiredFields.newBuilder()
-                .setFirst("")
-                .build()
-            assertNotValid(requiredIsDefault, false)
-        }
+        fun `a required field is set to the default value`() =
+            assertNotValid(OneofWithRequiredFields.getDefaultInstance(), false)
 
         @Test
         fun `a field within 'oneof' is not valid`() = assertDoesNotBuild {
