@@ -48,9 +48,6 @@ internal class RequireGenerator(
     private val allRequireMessages by lazy {
         querying.select<RequireMessage>()
             .all()
-            .also {
-                println("Discovered ${it.size}")
-            }
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
