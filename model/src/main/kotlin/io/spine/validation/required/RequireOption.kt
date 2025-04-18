@@ -51,7 +51,7 @@ import io.spine.validation.event.requireMessageDiscovered
  *
  * Whenever a message marked with `(require)` option is discovered, emits
  * [RequireMessageDiscovered] event if the specified field combinations are valid.
- * Please take a look on docs to [RequireFields] to see how they are validated.
+ * Please take a look on docs to [CombinationParser] to see how they are validated.
  */
 internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
 
@@ -62,8 +62,8 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
     ): Just<RequireMessageDiscovered> {
         val messageType = event.subject
         val option = event.option.unpack<RequireOption>()
-        val requireFields = RequireFields(option, messageType, event.file)
-        val combinations = requireFields.toCombinations()
+        val parser = CombinationParser(option, messageType, event.file)
+        val combinations = parser.toCombinations()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return requireMessageDiscovered {
             id = messageType.name

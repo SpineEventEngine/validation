@@ -51,7 +51,7 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  *
  * In case of violations, the class reports a compilation error.
  */
-internal class RequireFields(
+internal class CombinationParser(
     option: RequireOption,
     private val message: MessageType,
     private val file: File
@@ -63,7 +63,7 @@ internal class RequireFields(
         .toSet()
 
     /**
-     * Returns this [RequireFields] as a list of [FieldCombination].
+     * Returns this [CombinationParser] as a list of [FieldCombination].
      */
     fun toCombinations(): List<FieldCombination> {
         val combinations = specifiedFields.split(FIELDS_DELIMITER)
@@ -122,7 +122,7 @@ internal class RequireFields(
 
     private fun checkFieldExists(fieldName: String) =
         Compilation.check(messageFieldNames.contains(fieldName), file, message.span) {
-            "The `$fieldName` listed in the `($REQUIRE)` option of" +
+            "The `$fieldName` field listed in the `($REQUIRE)` option of" +
                     " `${message.name.qualifiedName}` is not declared in the message."
         }
 
