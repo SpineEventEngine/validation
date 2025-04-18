@@ -38,7 +38,7 @@ option java_package = "io.spine.test.validate.requiredfield";
 
 message EveryFieldRequired {
 
-    option (required_field) = "first & second & third";
+    option (require).fields = "first & second & third";
 
     string first = 1;
 
@@ -49,7 +49,7 @@ message EveryFieldRequired {
 
 message OneofRequired {
 
-    option (required_field) = "first | second";
+    option (require).fields = "first | second";
 
     oneof fields {
         string first = 1;
@@ -62,7 +62,7 @@ message OneofRequired {
 // Remove the comment when the https://github.com/SpineEventEngine/base/issues/381 is resolved.
 message OneofFieldAndOtherFieldRequired {
 
-    option (required_field) = "(first | second) & third";
+    option (require).fields = "(first | second) & third";
 
     oneof fields {
         string first = 1;
@@ -86,7 +86,7 @@ message EveryFieldOptional {
 // Remove the comment when the https://github.com/SpineEventEngine/base/issues/381 is resolved.
 message ComplexRequiredFields {
 
-    option (required_field) = "(first | second) & (third | fourth) & fifth";
+    option (require).fields = "(first | second) & (third | fourth) & fifth";
 
     repeated string first = 1;
 

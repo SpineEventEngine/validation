@@ -37,22 +37,19 @@ import io.spine.type.TypeName
 import io.spine.validate.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required_field)` option should be compiled so that")
-internal class RequiredFieldITest {
+@DisplayName("`(require)` option should be compiled so that")
+internal class RequireITest {
 
     @Test
-    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
     fun `unset fields produce a violation`() {
         val invalidMessage = Due.newBuilder()
         assertInvalidWithParam(invalidMessage, "date | never")
     }
 
     @Test
-    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
     fun `incomplete group causes a violation`() {
         val invalidMessage = Combination.newBuilder()
             .setA1("a1")

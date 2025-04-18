@@ -44,8 +44,8 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName(VALIDATION_SHOULD + "analyze `(required_field)` message option and consider message")
-internal class RequiredFieldSpec : ValidationOfConstraintTest() {
+@DisplayName(VALIDATION_SHOULD + "analyze `(require)` message option and consider message")
+internal class RequireSpec : ValidationOfConstraintTest() {
 
     @Nested
     @DisplayName("valid if")

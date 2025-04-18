@@ -36,7 +36,7 @@ option java_package = "io.spine.test.validate.altfields";
 
 
 message PersonName {
-    option (required_field) = "first_name | honorific_prefix & last_name";
+    option (require).fields = "first_name | honorific_prefix & last_name";
 
     string honorific_prefix = 1;
     string first_name = 2;
@@ -45,7 +45,7 @@ message PersonName {
 }
 
 message MessageWithMissingField {
-    option (required_field) = "name | else";
+    option (require).fields = "name | else";
 
     string name = 1;
     bool present = 2;
