@@ -84,6 +84,6 @@ internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessag
         id = e.id
         errorMessage = e.errorMessage
         specifiedFields = e.specifiedFields
-        combinationList.addAll(e.combinationList)
+        addAllCombination(e.combinationList)
     }
 }

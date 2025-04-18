@@ -35,7 +35,7 @@ import io.spine.validation.java.generate.FieldOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * The generator for `(require)` option.
+ * The generator for the `(require)` option.
  */
 internal class RequireGenerator(
     private val querying: Querying,
@@ -48,6 +48,9 @@ internal class RequireGenerator(
     private val allRequireMessages by lazy {
         querying.select<RequireMessage>()
             .all()
+            .also {
+                println("Discovered ${it.size}")
+            }
     }
 
     override fun codeFor(type: TypeName): List<FieldOptionCode> =
