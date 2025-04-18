@@ -61,7 +61,7 @@ private typealias MethodName = String
 /**
  * The generator for the `(require)` option.
  *
- * Generates code for a single field represented by the provided [view].
+ * Generates code for a message represented by the provided [view].
  */
 internal class RequireMessageGenerator(
     private val view: RequireMessage,
@@ -69,7 +69,7 @@ internal class RequireMessageGenerator(
 ) : FieldOptionGenerator, EmptyFieldCheck {
 
     /**
-     * Generates code for a field represented by the [view].
+     * Generates code for a message represented by the [view].
      */
     override fun generate(): FieldOptionCode {
         val (noneRequireCombinationSet, declaration) = noneRequireCombinationSet()
@@ -86,8 +86,8 @@ internal class RequireMessageGenerator(
     }
 
     /**
-     * Creates the method that returns `true` if none of the provided field combinations
-     * has all its fields set, `false` otherwise.
+     * Creates a method that returns `true` if none of the provided field combinations
+     * has its fields set.
      */
     private fun noneRequireCombinationSet(): Pair<MethodName, MethodDeclaration> {
         val name = mangled(NONE_REQUIRE_COMBINATION_SET)
@@ -104,7 +104,7 @@ internal class RequireMessageGenerator(
     }
 
     /**
-     * Yields an `if` constraint that checks if all fields within the given
+     * Creates an `if` constraint that checks if all fields within the given
      * [combination] are set.
      */
     private fun toConstraint(combination: FieldCombination): CodeBlock {
