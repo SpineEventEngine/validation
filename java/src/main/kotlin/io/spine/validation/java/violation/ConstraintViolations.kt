@@ -50,7 +50,7 @@ import io.spine.validation.java.expression.TemplateStringClass
  * @param typeName The message type being validated. In the case of in-depth validation,
  *  contains the root message name.
  * @param fieldPath The path to the field containing an invalid value, if any.
- *   For example, the `(require) option uses `null` for this parameter because
+ *   For example, the `(require)` option uses `null` for this parameter because
  *   it is a message-wide option.
  * @param fieldValue The field value that violated the constraint, if any.
  *   For example, the `(required)` option uses `null` for this parameter because
@@ -93,7 +93,7 @@ internal fun templateString(
     checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
         "Unexpected error message placeholders `$it` specified for the `($optionName)` option." +
                 " The available placeholders: `${placeholders.keys}`. Please make sure that" +
-                " the policy that verifies the message placeholders and the code generator" +
+                " the policy that verifies the message placeholders and its code generator" +
                 " operate with the same set of placeholders."
     }
     val placeholderEntries = mapExpression(
