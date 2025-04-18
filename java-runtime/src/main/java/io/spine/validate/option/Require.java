@@ -44,22 +44,22 @@ import java.util.Optional;
  * <pre>
  *     {@code
  *     message PersonName {
- *         option (required_field) = "given_name|honorific_prefix & family_name";
+ *         option (require).fields = "given_name|honorific_prefix & family_name";
  *         string honorific_prefix = 1;
  *         string given_name = 2;
  *         string middle_name = 3;
  *     }
  *     }
  * </pre>
- * <p>The {@code PersonName} message is valid against the {@code RequiredField} either if it has a
- * non-default family name, or both honorific prefix and a family name.
+ * <p>The {@code PersonName} message is valid against the {@code RequiredField} either
+ * if it has a non-default family name, or both the honorific prefix and family name.
  */
 @Immutable
-public final class RequiredField implements ValidatingOption<String, MessageType, Descriptor> {
+public final class Require implements ValidatingOption<String, MessageType, Descriptor> {
 
     @Override
     public Optional<String> valueFrom(Descriptor message) {
-        @Nullable String result = message.getOptions()
+        String result = message.getOptions()
                                       .getExtension(OptionsProto.requiredField);
         return result == null || result.isEmpty()
                ? Optional.empty()

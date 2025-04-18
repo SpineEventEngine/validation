@@ -30,7 +30,6 @@ import io.spine.base.FieldPath
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
@@ -48,7 +47,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.expression.ImmutableSetClass
 import io.spine.validation.java.expression.LinkedHashMultisetClass
 import io.spine.validation.java.expression.MultiSetEntryClass
@@ -60,7 +59,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.violation.templateString
 
@@ -69,7 +68,9 @@ import io.spine.validation.java.violation.templateString
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOptionGenerator {
+internal class DistinctFieldGenerator(
+    private val view: DistinctField
+) : OptionApplicationGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -79,7 +80,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionApplicationCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
@@ -93,7 +94,7 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionApplicationCode(constraint)
     }
 
     /**
@@ -138,10 +139,9 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
         typeName: Expression<TypeName>,
         duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, duplicates)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, getter)
     }
 

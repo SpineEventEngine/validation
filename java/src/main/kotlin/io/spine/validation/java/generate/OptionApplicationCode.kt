@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,45 +23,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.validation;
+package io.spine.validation.java.generate
 
-import "spine/options.proto";
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
-option (type_url_prefix) = "type.spine.io";
-option java_multiple_files = true;
-option java_outer_classname = "RequiredFieldTestProto";
-option java_package = "io.spine.test.validate.requiredfield";
-
-// `oneof` declarations for `MessageValidatorTest`.
-
-message EveryFieldRequired {
-
-    option (require).fields = "first & second & third";
-
-    string first = 1;
-
-    string second = 2;
-
-    string third = 3;
-}
-
-message OneofRequired {
-
-    option (require).fields = "first | second";
-
-    oneof fields {
-        string first = 1;
-        string second = 2;
-    }
-}
-
-message EveryFieldOptional {
-    oneof fields {
-        string first = 1;
-        string second = 2;
-    }
-
-    string third = 3;
-}
+/**
+ * Java code handling a single application of a specific option.
+ *
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
+ */
+internal class OptionApplicationCode(
+    val constraint: CodeBlock,
+    val fields: List<FieldDeclaration<*>> = emptyList(),
+    val methods: List<MethodDeclaration> = emptyList(),
+)

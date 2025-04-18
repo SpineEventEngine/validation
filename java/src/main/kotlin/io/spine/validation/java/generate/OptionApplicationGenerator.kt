@@ -27,12 +27,12 @@
 package io.spine.validation.java.generate
 
 /**
- * Generates Java code for a specific option applied to a specific field.
+ * Generates Java code for a single option application.
  */
-internal interface FieldOptionGenerator {
+internal interface OptionApplicationGenerator {
 
     /**
      * Generates validation code for a single option application.
      */
-    fun generate(): FieldOptionCode
+    fun generate(): OptionApplicationCode
 }

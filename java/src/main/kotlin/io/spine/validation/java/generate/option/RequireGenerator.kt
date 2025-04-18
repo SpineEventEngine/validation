@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,24 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.java.generate.option
 
-import com.google.protobuf.DescriptorProtos.MessageOptions
-import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import com.google.protobuf.Message
-import io.spine.option.OptionsProto.requiredField
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RequireMessage
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * This file provides workarounds for supporting validation features that
- * are not yet fully migrated to ProtoData-based code generation.
+ * The generator for the `(require)` option.
  */
-@Suppress("unused")
-private const val ABOUT = ""
+internal class RequireGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
 
-internal fun Message.requiresRuntimeValidation(): Boolean =
-    hasTypeOption(requiredField)
+    /**
+     * All `(require)` messages in the current compilation process.
+     */
+    private val allRequireMessages by lazy {
+        querying.select<RequireMessage>()
+            .all()
+    }
 
-private fun Message.hasTypeOption(option: GeneratedExtension<MessageOptions, *>): Boolean {
-    val result = descriptorForType.options.hasExtension(option)
-    return result
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
+        allRequireMessages
+            .filter { it.id == type }
+            .map { RequireMessageGenerator(it, converter).generate() }
 }

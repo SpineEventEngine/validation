@@ -29,7 +29,6 @@ package io.spine.validation.java.generate.option
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -47,8 +46,8 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
@@ -69,7 +68,7 @@ import io.spine.validation.java.violation.templateString
 internal class GoesFieldGenerator(
     private val view: GoesField,
     override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldCheck {
+) : OptionApplicationGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -78,7 +77,7 @@ internal class GoesFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionApplicationCode {
         val companion = view.companion
         val fieldGetter = This<Message>()
             .field(field)
@@ -93,7 +92,7 @@ internal class GoesFieldGenerator(
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionApplicationCode(constraint)
     }
 
     private fun violation(
@@ -101,10 +100,9 @@ internal class GoesFieldGenerator(
         typeName: Expression<TypeName>,
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, GOES)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

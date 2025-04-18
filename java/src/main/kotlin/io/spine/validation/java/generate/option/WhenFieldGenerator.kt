@@ -28,7 +28,6 @@ package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -51,8 +50,8 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -74,7 +73,7 @@ import io.spine.validation.java.violation.templateString
 internal class WhenFieldGenerator(
     private val view: WhenField,
     override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldCheck {
+) : OptionApplicationGenerator, EmptyFieldCheck {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -84,7 +83,7 @@ internal class WhenFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionApplicationCode = when {
         fieldType.isMessage -> validateTime(fieldValue)
         fieldType.isRepeatedMessage ->
             CodeBlock(
@@ -96,7 +95,7 @@ internal class WhenFieldGenerator(
             )
 
         else -> unsupportedFieldType()
-    }.run { FieldOptionCode(this) }
+    }.run { OptionApplicationCode(this) }
 
     /**
      * Yields an expression to check if the provided [fieldValue] matches
@@ -140,10 +139,9 @@ internal class WhenFieldGenerator(
         typeName: Expression<TypeName>,
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, WHEN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, WHEN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

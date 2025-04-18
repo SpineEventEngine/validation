@@ -31,7 +31,7 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.WhenField
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -50,7 +50,7 @@ internal class WhenGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
         allWhenFields
             .filter { it.id.type == type }
             .map { WhenFieldGenerator(it, converter).generate() }

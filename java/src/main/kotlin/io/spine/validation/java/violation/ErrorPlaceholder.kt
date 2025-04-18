@@ -50,9 +50,10 @@ public enum class ErrorPlaceholder(public val value: String) {
     FIELD_PATH("field.path"),
     FIELD_VALUE("field.value"),
     FIELD_TYPE("field.type"),
+    MESSAGE_TYPE("message.type"),
     PARENT_TYPE("parent.type"),
 
-    // Option-specific placeholders.
+    // Placeholders for the field options.
     REGEX_PATTERN("regex.pattern"),
     REGEX_MODIFIERS("regex.modifiers"),
     GOES_COMPANION("goes.companion"),
@@ -65,8 +66,11 @@ public enum class ErrorPlaceholder(public val value: String) {
     MIN_OPERATOR("min.operator"),
     WHEN_IN("when.in"),
 
-    // Placeholders for `oneof` groups.
-    GROUP_PATH("group.path");
+    // Placeholders for the `oneof` options.
+    GROUP_PATH("group.path"),
+
+    // Placeholder for the message options.
+    REQUIRE_FIELDS("require.fields");
 
     override fun toString(): String = value
 }

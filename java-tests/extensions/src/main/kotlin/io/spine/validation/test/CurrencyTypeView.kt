@@ -32,8 +32,8 @@ import io.spine.core.Where
 import io.spine.protobuf.unpack
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.event.FieldEntered
+import io.spine.protodata.ast.event.MessageOptionDiscovered
 import io.spine.protodata.ast.event.TypeExited
-import io.spine.protodata.ast.event.TypeOptionDiscovered
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
 import io.spine.server.entity.alter
@@ -50,7 +50,7 @@ public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builde
     @Subscribe
     internal fun on(
         @External @Where(field = OPTION_NAME, equals = "currency")
-        event: TypeOptionDiscovered
+        event: MessageOptionDiscovered
     ) {
         val option = event.option.value.unpack<Currency>()
         alter {
@@ -81,7 +81,7 @@ public class CurrencyTypeView : View<TypeName, CurrencyType, CurrencyType.Builde
 
         override fun setupEventRouting(routing: EventRouting<TypeName>) {
             super.setupEventRouting(routing)
-            routing.unicast(TypeOptionDiscovered::class.java) { e, _ -> e.type }
+            routing.unicast(MessageOptionDiscovered::class.java) { e, _ -> e.subject.name }
             routing.unicast(FieldEntered::class.java) { e, _ -> e.type }
             routing.unicast(TypeExited::class.java) { e, _ -> e.type }
         }

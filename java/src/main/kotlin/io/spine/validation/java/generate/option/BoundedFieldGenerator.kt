@@ -34,7 +34,6 @@ import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
@@ -55,8 +54,8 @@ import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -77,7 +76,7 @@ import io.spine.validation.java.violation.templateString
 internal abstract class BoundedFieldGenerator(
     private val view: BoundedFieldView,
     private val option: String
-) : FieldOptionGenerator {
+) : OptionApplicationGenerator {
 
     private val field = view.subject
     private val declaringType = field.declaringType
@@ -92,7 +91,7 @@ internal abstract class BoundedFieldGenerator(
      * Generates code for a field represented by the [view].
      */
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionApplicationCode = when {
         fieldType.isSingular -> checkWithinBounds(getter as Expression<Number>)
 
         fieldType.isList ->
@@ -109,7 +108,7 @@ internal abstract class BoundedFieldGenerator(
                     " Please ensure that the supported field types in this generator match those" +
                     " used by the policy, which verified `${view::class.simpleName}`."
         )
-    }.run { FieldOptionCode(this) }
+    }.run { OptionApplicationCode(this) }
 
     /**
      * Returns a [CodeBlock] that checks that the given [value] is within the bounds.
@@ -156,10 +155,9 @@ internal abstract class BoundedFieldGenerator(
         typeName: Expression<TypeName>,
         fieldValue: Expression<Number>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, option, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, option)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

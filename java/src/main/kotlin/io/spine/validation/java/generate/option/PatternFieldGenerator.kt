@@ -31,7 +31,6 @@ import io.spine.option.PatternOption
 import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.FieldDeclaration
@@ -56,7 +55,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_PATTERN
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionApplicationCode
 import io.spine.validation.java.expression.FieldPathClass
 import io.spine.validation.java.expression.ImmutableListClass
 import io.spine.validation.java.expression.PatternClass
@@ -65,7 +64,7 @@ import io.spine.validation.java.expression.TypeNameClass
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
@@ -88,7 +87,7 @@ private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialM
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class PatternFieldGenerator(private val view: PatternField) : FieldOptionGenerator {
+internal class PatternFieldGenerator(private val view: PatternField) : OptionApplicationGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
@@ -100,11 +99,11 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionApplicationCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)
-            FieldOptionCode(constraint, listOf(pattern.field))
+            OptionApplicationCode(constraint, listOf(pattern.field))
         }
 
         fieldType.isRepeatedString -> {
@@ -112,7 +111,11 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
             val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
-            FieldOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
+            OptionApplicationCode(
+                constraint,
+                fields = listOf(pattern.field),
+                methods = listOf(validateRepeatedFieldDecl)
+            )
         }
 
         else -> error(
@@ -222,10 +225,9 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         typeName: Expression<TypeName>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
