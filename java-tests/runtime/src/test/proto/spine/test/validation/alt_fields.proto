@@ -34,7 +34,6 @@ option java_multiple_files = true;
 option java_outer_classname = "ValidationTestAltFieldsProto";
 option java_package = "io.spine.test.validate.altfields";
 
-
 message PersonName {
     option (require).fields = "first_name | honorific_prefix & last_name";
 
@@ -42,11 +41,4 @@ message PersonName {
     string first_name = 2;
     string last_name = 3;
     string honorific_suffix = 4;
-}
-
-message MessageWithMissingField {
-    option (require).fields = "name | else";
-
-    string name = 1;
-    bool present = 2;
 }

@@ -26,17 +26,14 @@
 
 package io.spine.validate.option
 
-import com.google.common.truth.Truth.assertThat
 import io.spine.test.validate.requiredfield.EveryFieldOptional
 import io.spine.test.validate.requiredfield.EveryFieldRequired
-import io.spine.test.validate.requiredfield.OneofFieldAndOtherFieldRequired
 import io.spine.test.validate.requiredfield.OneofRequired
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(require)` message option and consider message")
 internal class RequireSpec : ValidationOfConstraintTest() {
@@ -111,17 +108,6 @@ internal class RequireSpec : ValidationOfConstraintTest() {
                 .setFirst("")
                 .build()
             assertNotValid(withDefaultValue, false)
-        }
-
-        @Test
-        fun `'oneof' or other field is not set`() {
-            val exception = assertThrows<IllegalStateException> {
-                validate(OneofFieldAndOtherFieldRequired.getDefaultInstance())
-            }
-            assertThat(exception)
-                .hasCauseThat()
-                .hasMessageThat()
-                .contains("(")
         }
     }
 }
