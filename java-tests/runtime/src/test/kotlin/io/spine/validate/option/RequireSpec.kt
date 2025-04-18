@@ -27,22 +27,16 @@
 package io.spine.validate.option
 
 import com.google.common.truth.Truth.assertThat
-import io.spine.test.validate.requiredfield.ComplexRequiredFields
-import io.spine.test.validate.requiredfield.ComplexRequiredFields.FifthField
 import io.spine.test.validate.requiredfield.EveryFieldOptional
 import io.spine.test.validate.requiredfield.EveryFieldRequired
 import io.spine.test.validate.requiredfield.OneofFieldAndOtherFieldRequired
 import io.spine.test.validate.requiredfield.OneofRequired
 import io.spine.validate.ValidationOfConstraintTest
 import io.spine.validate.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import java.util.stream.Stream
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName(VALIDATION_SHOULD + "analyze `(require)` message option and consider message")
 internal class RequireSpec : ValidationOfConstraintTest() {
@@ -80,15 +74,6 @@ internal class RequireSpec : ValidationOfConstraintTest() {
         }
 
         @Test
-        @Disabled("See https://github.com/SpineEventEngine/validation/issues/39")
-        fun `'oneof' and other field are set`() = assertValid {
-            OneofFieldAndOtherFieldRequired.newBuilder()
-                .setSecond("second field set")
-                .setThird("third field set")
-                .build()
-        }
-
-        @Test
         fun `all fields are optional`() {
             assertValid(EveryFieldOptional.getDefaultInstance())
             assertValid(
@@ -97,15 +82,6 @@ internal class RequireSpec : ValidationOfConstraintTest() {
                     .setThird("third field set")
                     .build()
             )
-        }
-
-        @Disabled("See https://github.com/SpineEventEngine/validation/issues/39")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RequiredFieldSpec#validComplexMessages")
-        fun `a message qualifies for complex required field pattern`(
-            message: ComplexRequiredFields
-        ) {
-            assertValid(message)
         }
     }
 
@@ -146,67 +122,6 @@ internal class RequireSpec : ValidationOfConstraintTest() {
                 .hasCauseThat()
                 .hasMessageThat()
                 .contains("(")
-        }
-
-        @Disabled("See https://github.com/SpineEventEngine/base/issues/381")
-        @ParameterizedTest
-        @MethodSource("io.spine.validate.option.RequiredFieldSpec#invalidComplexMessages")
-        fun `a message does not qualifies for a complext required field pattern`(
-            message: ComplexRequiredFields
-        ) {
-            assertNotValid(message, false)
-        }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun validComplexMessages(): Stream<ComplexRequiredFields> {
-            val message = ComplexRequiredFields.newBuilder()
-                .addFirst("first field set")
-                .setFourth("fourth field set")
-                .setFifth(
-                    FifthField
-                        .newBuilder()
-                        .setValue("fifthFieldValue")
-                )
-                .build()
-            val alternativeMessage = ComplexRequiredFields.newBuilder()
-                .putSecond("key", "second field set")
-                .setThird("fourth field set")
-                .setFifth(
-                    FifthField
-                        .newBuilder()
-                        .setValue("fifthFieldValue")
-                )
-                .build()
-            return Stream.of(message, alternativeMessage)
-        }
-
-        @JvmStatic
-        fun invalidComplexMessages(): Stream<ComplexRequiredFields> {
-            val fifthFieldValue = FifthField.newBuilder()
-                .setValue("fifthFieldValue")
-            val withoutListOrMap = ComplexRequiredFields.newBuilder()
-                .setFourth("fourth field set")
-                .setFifth(fifthFieldValue)
-                .build()
-
-            val withoutOneof = ComplexRequiredFields.newBuilder()
-                .putSecond("key", "second field set")
-                .setFifth(fifthFieldValue)
-                .build()
-
-            val withoutMessage = ComplexRequiredFields.newBuilder()
-                .putSecond("key", "second field set")
-                .setThird("fourth field set")
-                .build()
-            return Stream.of(
-                ComplexRequiredFields.getDefaultInstance(),
-                withoutListOrMap,
-                withoutOneof,
-                withoutMessage
-            )
         }
     }
 }
