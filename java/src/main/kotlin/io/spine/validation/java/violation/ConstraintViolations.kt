@@ -83,8 +83,6 @@ internal fun constraintViolation(
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
-// TODO:2025-04-18:yevhenii.nadtochii: Move placeholder checks to the `:model`.
-//  We must throw a compilation error instead of `IllegalArgumentException`.
 internal fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
