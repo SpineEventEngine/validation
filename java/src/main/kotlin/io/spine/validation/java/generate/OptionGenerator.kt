@@ -34,10 +34,8 @@ import io.spine.protodata.ast.TypeName
 internal interface OptionGenerator {
 
     /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
+     * Generates validation code for all option applications within
+     * the provided message [type].
      */
-    fun codeFor(type: TypeName): List<FieldOptionCode>
+    fun codeFor(type: TypeName): List<OptionApplicationCode>
 }

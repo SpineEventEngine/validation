@@ -42,8 +42,8 @@ import io.spine.validation.RequireMessage
 import io.spine.validation.java.expression.EmptyFieldCheck
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.OptionApplicationGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.mangled
@@ -66,12 +66,12 @@ private typealias MethodName = String
 internal class RequireMessageGenerator(
     private val view: RequireMessage,
     override val converter: JavaValueConverter
-) : FieldOptionGenerator, EmptyFieldCheck {
+) : OptionApplicationGenerator, EmptyFieldCheck {
 
     /**
      * Generates code for a message represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionApplicationCode {
         val (noneRequireCombinationSet, declaration) = noneRequireCombinationSet()
         val constraint = CodeBlock(
             """
@@ -82,7 +82,7 @@ internal class RequireMessageGenerator(
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint, methods = listOf(declaration))
+        return OptionApplicationCode(constraint, methods = listOf(declaration))
     }
 
     /**
