@@ -111,7 +111,11 @@ internal class PatternFieldGenerator(private val view: PatternField) : OptionApp
             val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
-            OptionApplicationCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
+            OptionApplicationCode(
+                constraint,
+                fields = listOf(pattern.field),
+                methods = listOf(validateRepeatedFieldDecl)
+            )
         }
 
         else -> error(

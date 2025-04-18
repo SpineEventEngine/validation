@@ -68,7 +68,9 @@ import io.spine.validation.java.violation.templateString
  *
  * Generates code for a single field represented by the provided [view].
  */
-internal class DistinctFieldGenerator(private val view: DistinctField) : OptionApplicationGenerator {
+internal class DistinctFieldGenerator(
+    private val view: DistinctField
+) : OptionApplicationGenerator {
 
     private val field = view.subject
     private val fieldType = field.type
