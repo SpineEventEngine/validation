@@ -42,14 +42,14 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
 /**
  * Parses and validates field combinations specified in the given [RequireOption].
  *
- * The class ensures the following:
+ * The class ensures the following conditions:
  *
- * 1. Each specified field is present in the [message] type.
+ * 1. Each specified field is declared in the [message] type.
  * 2. Each field has a [compatible][RequiredFieldSupport] field type.
  * 3. Each combination has a unique set of fields.
  * 4. Each combination is unique.
  *
- * In case of violations, the class reports a compilation error.
+ * A compilation error is reported in case of violation of any condition.
  */
 internal class CombinationParser(
     option: RequireOption,
@@ -63,9 +63,9 @@ internal class CombinationParser(
         .toSet()
 
     /**
-     * Returns this [CombinationParser] as a list of [FieldCombination].
+     * Returns a list of parsed [FieldCombination].
      */
-    fun toCombinations(): List<FieldCombination> {
+    fun combinations(): List<FieldCombination> {
         val combinations = specifiedFields.split(FIELDS_DELIMITER)
             .map(::toCombination)
             .run { checkCombinationsUnique(this) }
@@ -136,7 +136,7 @@ internal class CombinationParser(
     private companion object {
 
         /**
-         * Separates standalone fields or combinations of fields.
+         * Separates standalone fields or combinations of them.
          */
         const val FIELDS_DELIMITER = "|"
 
@@ -147,6 +147,12 @@ internal class CombinationParser(
     }
 }
 
+/**
+ * A combination of fields.
+ *
+ * @property definition The combination as was specified by a user.
+ * @property fields The combination fields.
+ */
 private class Combination(
     val definition: String,
     val fields: Set<String>,
