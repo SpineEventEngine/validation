@@ -27,7 +27,6 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
@@ -87,8 +86,7 @@ internal class ChoiceOneofGenerator(
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(groupPath, typeNameStr)
-        val errorMessage =
-            templateString(view.errorMessage, placeholders, CHOICE, oneof.qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, CHOICE)
         return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
     }
 

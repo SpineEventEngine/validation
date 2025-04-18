@@ -30,7 +30,6 @@ import io.spine.base.FieldPath
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
@@ -138,10 +137,9 @@ internal class DistinctFieldGenerator(private val view: DistinctField) : FieldOp
         typeName: Expression<TypeName>,
         duplicates: Expression<List<*>>
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, duplicates)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, getter)
     }
 

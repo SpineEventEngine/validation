@@ -29,7 +29,6 @@ package io.spine.validation.java.generate.option
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -101,10 +100,9 @@ internal class GoesFieldGenerator(
         typeName: Expression<TypeName>,
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, GOES)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

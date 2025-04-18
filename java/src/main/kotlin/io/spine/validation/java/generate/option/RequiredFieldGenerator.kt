@@ -28,7 +28,6 @@ package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -92,7 +91,7 @@ internal class RequiredFieldGenerator(
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
         val errorMessage =
-            templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
+            templateString(view.errorMessage, placeholders, IF_MISSING)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
     }
 

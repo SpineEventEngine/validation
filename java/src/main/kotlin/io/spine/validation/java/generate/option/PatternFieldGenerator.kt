@@ -31,7 +31,6 @@ import io.spine.option.PatternOption
 import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.FieldDeclaration
@@ -222,10 +221,9 @@ internal class PatternFieldGenerator(private val view: PatternField) : FieldOpti
         typeName: Expression<TypeName>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
