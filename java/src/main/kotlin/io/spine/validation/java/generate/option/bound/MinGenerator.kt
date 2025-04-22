@@ -24,14 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.validation.MAX
-import io.spine.validation.bound.MaxField
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.MIN
+import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
@@ -39,20 +42,40 @@ import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.generate.SingleOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.violation.ErrorPlaceholder.MAX_OPERATOR
-import io.spine.validation.java.violation.ErrorPlaceholder.MAX_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_OPERATOR
+import io.spine.validation.java.violation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 
 /**
- * The generator for `(max)` option.
- *
- * Generates code for a single field represented by the provided [view].
+ * The generator for `(min)` option.
  */
-internal class MaxFieldGenerator(private val view: MaxField) : BoundedFieldGenerator(view, MAX) {
+internal class MinGenerator(private val querying: Querying) : OptionGenerator {
+
+    /**
+     * All `(min)` fields in the current compilation process.
+     */
+    private val allMinFields by lazy {
+        querying.select<MinField>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
+        allMinFields
+            .filter { it.id.type == type }
+            .map { GenerateMin(it).code() }
+}
+
+/**
+ * Generates code for a single application of the `(min)` option
+ * represented by the [view].
+ */
+private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(view, MIN) {
 
     private val bound = view.bound
     private val isExclusive = bound.exclusive
@@ -60,13 +83,13 @@ internal class MaxFieldGenerator(private val view: MaxField) : BoundedFieldGener
     override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
 
     /**
-     * Returns a boolean expression that checks if the given [value] exceeds
-     * the maximum [bound].
+     * Returns a boolean expression that checks if the given [value] falls back
+     * the minimum [bound].
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
         val literal = bound.asLiteral()
-        val operator = if (isExclusive) ">=" else ">"
+        val operator = if (isExclusive) "<=" else "<"
         return when (boundPrimitive) {
             UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $literal) $operator 0")
             UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $literal) $operator 0")
@@ -83,7 +106,7 @@ internal class MaxFieldGenerator(private val view: MaxField) : BoundedFieldGener
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MAX_VALUE to StringLiteral(view.max),
-        MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
+        MIN_VALUE to StringLiteral(view.min),
+        MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }
