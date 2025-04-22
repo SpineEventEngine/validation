@@ -88,10 +88,10 @@ internal fun templateString(
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
     optionName: String
 ): Expression<TemplateString> {
-    checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
-        "Unexpected error message placeholders `$it` specified for the `($optionName)` option." +
-                " The available placeholders: `${placeholders.keys}`. Please make sure that" +
-                " the policy that verifies the message placeholders and its code generator" +
+    checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) { missingKeys ->
+        "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
+                " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
+                " that the policy that verifies the message placeholders and its code generator" +
                 " operate with the same set of placeholders."
     }
     val placeholderEntries = mapExpression(
