@@ -53,9 +53,6 @@ import io.spine.validation.java.violation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
-/**
- * Denotes a method name.
- */
 private typealias MethodName = String
 
 /**
