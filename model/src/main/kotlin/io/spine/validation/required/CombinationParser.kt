@@ -58,18 +58,20 @@ internal class CombinationParser(
 ) {
     private val specifiedFields = option.fields
     private val messageFields = message.fieldList
-    private val messageFieldNames = messageFields
-        .map { it.name.value }
-        .toSet()
+    private val messageFieldNames by lazy {
+        messageFields
+            .map { it.name.value }
+            .toSet()
+    }
 
     /**
-     * Returns a list of parsed [FieldCombination].
+     * A list of parsed [FieldCombination]s.
      */
-    fun combinations(): List<FieldCombination> {
+    val combinations by lazy {
         val combinations = specifiedFields.split(FIELDS_DELIMITER)
             .map(::toCombination)
             .run { checkCombinationsUnique(this) }
-        return combinations.map {
+        combinations.map {
             val astFields = it.fields
                 .map(::toAstField)
                 .onEach(::checkFieldType)

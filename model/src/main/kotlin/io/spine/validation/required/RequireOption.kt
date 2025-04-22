@@ -63,7 +63,7 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
         val messageType = event.subject
         val option = event.option.unpack<RequireOption>()
         val parser = CombinationParser(option, messageType, event.file)
-        val combinations = parser.combinations()
+        val combinations = parser.combinations
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return requireMessageDiscovered {
             id = messageType.name
