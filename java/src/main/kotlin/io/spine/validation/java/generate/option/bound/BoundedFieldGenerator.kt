@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
 import io.spine.protodata.Compilation
@@ -60,8 +60,8 @@ import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.mes
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.option.Docs.SCALAR_TYPES
-import io.spine.validation.java.generate.option.Docs.UNSIGNED_API
+import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
+import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString

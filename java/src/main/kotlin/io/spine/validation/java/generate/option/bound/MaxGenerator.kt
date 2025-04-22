@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
