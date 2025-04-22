@@ -46,7 +46,7 @@ message ValidationError {
     repeated ConstraintViolation constraint_violation = 1;
 }
 
-// Describes violation of a validation constraint found in a message.
+// Describes the violation of a validation constraint found in a message.
 message ConstraintViolation {
 
     // Deprecated: use `message` field to access the error message.
