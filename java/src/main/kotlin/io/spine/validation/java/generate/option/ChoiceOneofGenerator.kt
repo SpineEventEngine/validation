@@ -40,7 +40,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -65,7 +65,7 @@ internal class ChoiceOneofGenerator(
     /**
      * Generates code for a `oneof` group represented by the [view].
      */
-    override fun generate(): FieldOptionCode {
+    override fun generate(): OptionCode {
         val groupName = oneof.name
         val caseField = "${groupName.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
@@ -78,7 +78,7 @@ internal class ChoiceOneofGenerator(
             }
             """.trimIndent()
         )
-        return FieldOptionCode(constraint)
+        return OptionCode(constraint)
     }
 
     private fun violation(

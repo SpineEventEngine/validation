@@ -30,7 +30,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.PatternField
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
@@ -46,7 +46,7 @@ internal class PatternGenerator(private val querying: Querying) : OptionGenerato
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<OptionCode> =
         allPatternFields
             .filter { it.id.type == type }
             .map { PatternFieldGenerator(it).generate() }

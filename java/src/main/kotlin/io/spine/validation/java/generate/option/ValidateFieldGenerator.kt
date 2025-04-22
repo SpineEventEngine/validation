@@ -48,7 +48,7 @@ import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -71,7 +71,7 @@ internal class ValidateFieldGenerator(
     private val getter = message.field(field).getter<Any>()
 
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionCode = when {
         fieldType.isMessage -> validate(getter as Expression<Message>, fieldType.message.isAny)
 
         fieldType.isList ->
@@ -97,7 +97,7 @@ internal class ValidateFieldGenerator(
                     " Please ensure that the supported field types in this generator match those" +
                     " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
         )
-    }.run { FieldOptionCode(this) }
+    }.run { OptionCode(this) }
 
     /**
      * Yields an expression to validate the provided [message] if it implements

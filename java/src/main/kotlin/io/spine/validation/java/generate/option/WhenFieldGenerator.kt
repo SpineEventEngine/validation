@@ -51,7 +51,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.FieldOptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -84,7 +84,7 @@ internal class WhenFieldGenerator(
     /**
      * Generates code for a field represented by the [view].
      */
-    override fun generate(): FieldOptionCode = when {
+    override fun generate(): OptionCode = when {
         fieldType.isMessage -> validateTime(fieldValue)
         fieldType.isRepeatedMessage ->
             CodeBlock(
@@ -96,7 +96,7 @@ internal class WhenFieldGenerator(
             )
 
         else -> unsupportedFieldType()
-    }.run { FieldOptionCode(this) }
+    }.run { OptionCode(this) }
 
     /**
      * Yields an expression to check if the provided [fieldValue] matches
