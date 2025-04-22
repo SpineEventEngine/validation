@@ -27,12 +27,33 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.MethodDeclaration
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.string.joinByLines
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.FieldCombination
+import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
-import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.SingleOptionCode
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.mangled
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.MESSAGE_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.REQUIRE_FIELDS
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
 
 /**
  * The generator for the `(require)` option.
@@ -50,14 +71,90 @@ internal class RequireGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionApplicationCode> {
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
         val requireMessage = allRequireMessages.find { it.id == type }
         if  (requireMessage == null) {
             return emptyList()
         }
-
-        val code = RequireMessageGenerator(requireMessage, converter)
-            .generate()
+        val code = GenerateRequire(requireMessage, converter).code()
         return listOf(code)
+    }
+}
+
+private typealias MethodName = String
+
+/**
+ * Generates code for a single application of the `(require)` option
+ * represented by the [view].
+ */
+internal class GenerateRequire(
+    private val view: RequireMessage,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): SingleOptionCode {
+        val (noneOfFieldCombinationsSet, declaration) = noneOfFieldCombinationsSet()
+        val constraint = CodeBlock(
+            """
+            if ($noneOfFieldCombinationsSet()) {
+                var typeName =  ${parentName.orElse(view.id)};
+                var violation = ${violation(ReadVar("typeName"))};
+                $violations.add(violation);
+            }
+            """.trimIndent()
+        )
+        return SingleOptionCode(constraint, methods = listOf(declaration))
+    }
+
+    /**
+     * Creates a method that returns `true` if none of the provided field
+     * combinations is set.
+     */
+    private fun noneOfFieldCombinationsSet(): Pair<MethodName, MethodDeclaration> {
+        val name = mangled(NONE_OF_FIELD_COMBINATIONS_SET)
+        val combinationsConstraints = view.combinationList
+            .map(::toConstraint)
+            .joinByLines()
+        val declaration = MethodDeclaration("""
+            private boolean $name() {
+                $combinationsConstraints
+                return true;
+            }
+        """.trimIndent())
+        return Pair(name, declaration)
+    }
+
+    /**
+     * Creates an `if` constraint that checks if all fields within the given
+     * field [combination] are set.
+     */
+    private fun toConstraint(combination: FieldCombination): CodeBlock {
+        val allFieldsSet = combination.fieldList
+            .map { it.hasNonDefaultValue() }
+            .joinToString(" && ")
+        return CodeBlock("""
+            if ($allFieldsSet) {
+                return false;
+            }
+        """.trimIndent())
+    }
+
+    private fun violation(typeName: Expression<io.spine.type.TypeName>): Expression<ConstraintViolation> {
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders()
+        val errorMessage = templateString(view.errorMessage, placeholders, REQUIRE)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
+    }
+
+    private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
+        REQUIRE_FIELDS to StringLiteral(view.specifiedFields)
+    )
+
+    private companion object {
+        const val NONE_OF_FIELD_COMBINATIONS_SET = "noneOfFieldCombinationsSet"
     }
 }

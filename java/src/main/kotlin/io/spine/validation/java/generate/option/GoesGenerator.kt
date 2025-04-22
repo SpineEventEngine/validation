@@ -30,7 +30,6 @@ import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
@@ -124,10 +123,9 @@ private class GenerateGoes(
         typeName: Expression<io.spine.type.TypeName>,
         fieldValue: Expression<*>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, GOES)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

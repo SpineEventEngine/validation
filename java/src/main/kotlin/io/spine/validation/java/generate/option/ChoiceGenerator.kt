@@ -105,8 +105,7 @@ private class GenerateChoice(private val view: ChoiceOneof) {
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(groupPath, typeNameStr)
-        val errorMessage =
-            templateString(view.errorMessage, placeholders, CHOICE, oneof.qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, CHOICE)
         return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
     }
 
