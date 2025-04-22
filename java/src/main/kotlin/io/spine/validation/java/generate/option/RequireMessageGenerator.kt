@@ -72,10 +72,10 @@ internal class RequireMessageGenerator(
      * Generates code for a message represented by the [view].
      */
     override fun generate(): OptionApplicationCode {
-        val (noneRequireCombinationSet, declaration) = noneRequireCombinationSet()
+        val (noneOfFieldCombinationsSet, declaration) = noneOfFieldCombinationsSet()
         val constraint = CodeBlock(
             """
-            if ($noneRequireCombinationSet()) {
+            if ($noneOfFieldCombinationsSet()) {
                 var typeName =  ${parentName.orElse(view.id)};
                 var violation = ${violation(ReadVar("typeName"))};
                 $violations.add(violation);
@@ -86,11 +86,11 @@ internal class RequireMessageGenerator(
     }
 
     /**
-     * Creates a method that returns `true` if none of the provided field combinations
-     * has its fields set.
+     * Creates a method that returns `true` if none of the provided field
+     * combinations is set.
      */
-    private fun noneRequireCombinationSet(): Pair<MethodName, MethodDeclaration> {
-        val name = mangled(NONE_REQUIRE_COMBINATION_SET)
+    private fun noneOfFieldCombinationsSet(): Pair<MethodName, MethodDeclaration> {
+        val name = mangled(NONE_OF_FIELD_COMBINATIONS_SET)
         val combinationsConstraints = view.combinationList
             .map(::toConstraint)
             .joinByLines()
@@ -105,7 +105,7 @@ internal class RequireMessageGenerator(
 
     /**
      * Creates an `if` constraint that checks if all fields within the given
-     * [combination] are set.
+     * field [combination] are set.
      */
     private fun toConstraint(combination: FieldCombination): CodeBlock {
         val allFieldsSet = combination.fieldList
@@ -131,6 +131,6 @@ internal class RequireMessageGenerator(
     )
 
     private companion object {
-        const val NONE_REQUIRE_COMBINATION_SET = "noneRequireCombinationSet"
+        const val NONE_OF_FIELD_COMBINATIONS_SET = "noneOfFieldCombinationsSet"
     }
 }
