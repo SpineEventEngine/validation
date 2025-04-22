@@ -37,7 +37,7 @@ import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
-import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.OptionGenerator
 import com.squareup.javapoet.CodeBlock as PoetCodeBlock
@@ -67,7 +67,7 @@ internal class RuleGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionApplicationCode> {
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
         val message = allMessagesWithRules.first { it.type.name == type }
         val generatedRules = message.ruleList.map { generate(message.type, it) }
         return generatedRules
@@ -83,13 +83,13 @@ internal class RuleGenerator(
      * Note: [CodeGenerator] returns JavaPoet's elements, which we convert to counterparts
      * from ProtoData Expression API as required by [OptionGenerator] interface.
      */
-    private fun generate(messageType: MessageType, rule: Rule): OptionApplicationCode {
+    private fun generate(messageType: MessageType, rule: Rule): SingleOptionCode {
         val context = newContext(rule, messageType)
         val generator = generatorFor(context)
         val constraints = generator.code()
         val fields = generator.supportingFields()
         val methods = generator.supportingMethods()
-        return OptionApplicationCode(
+        return SingleOptionCode(
             constraints.toCodeBlock(),
             fields.map(PoetField::toFieldDeclaration),
             methods.map(PoetMethod::toMethodDeclaration),

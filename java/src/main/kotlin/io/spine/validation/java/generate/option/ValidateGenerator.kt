@@ -26,13 +26,37 @@
 
 package io.spine.validation.java.generate.option
 
+import com.google.protobuf.Message
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.isAny
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
+import io.spine.protodata.ast.name
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.field
+import io.spine.protodata.java.getDefaultInstance
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.ValidateField
-import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.expression.AnyClass
+import io.spine.validation.java.expression.AnyPackerClass
+import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.KnownTypesClass
+import io.spine.validation.java.expression.MessageClass
+import io.spine.validation.java.expression.TypeUrlClass
+import io.spine.validation.java.expression.ValidatableMessageClass
+import io.spine.validation.java.expression.ValidationErrorClass
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 
 /**
  * The generator for `(validate)` option.
@@ -43,15 +67,113 @@ internal class ValidateGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(validate)`-marked fields in the current compilation process.
+     * All `(validate)` fields in the current compilation process.
      */
     private val allValidateFields by lazy {
         querying.select<ValidateField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allValidateFields
             .filter { it.id.type == type }
-            .map { ValidateFieldGenerator(it, converter).generate() }
+            .map { GenerateValidate(it, converter).code() }
+}
+
+/**
+ * Generates code for a single application of the `(validate)` option
+ * represented by the [view].
+ */
+private class GenerateValidate(
+    private val view: ValidateField,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
+
+    private val field = view.subject
+    private val fieldType = field.type
+    private val declaringType = field.declaringType
+    private val getter = message.field(field).getter<Any>()
+
+    /**
+     * Returns the generated code.
+     */
+    @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
+    fun code(): SingleOptionCode = when {
+        fieldType.isMessage -> validate(getter as Expression<Message>, fieldType.message.isAny)
+
+        fieldType.isList ->
+            CodeBlock(
+                """
+                for (var element : $getter) {
+                    ${validate(ReadVar("element"), fieldType.list.isAny)}
+                }
+                """.trimIndent()
+            )
+
+        fieldType.isMap ->
+            CodeBlock(
+                """
+                for (var element : $getter.values()) {
+                    ${validate(ReadVar("element"), fieldType.map.valueType.isAny)}
+                }     
+                """.trimIndent()
+            )
+
+        else -> error(
+            "The field type `${fieldType.name}` is not supported by `ValidateFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
+        )
+    }.run { SingleOptionCode(this) }
+
+    /**
+     * Yields an expression to validate the provided [message] if it implements
+     * [io.spine.validate.ValidatableMessage] interface.
+     *
+     * The reported violations are appended to [violations] list, if any.
+     *
+     * If the passed [message] represents [com.google.protobuf.Any], the method will firstly
+     * unpack the enclosed message, and only then validate it.
+     *
+     * Note that not all instances of [com.google.protobuf.Any] can be unpacked:
+     *
+     * 1) Unpacking of the default instance is impossible.
+     * 2) Unpacking of instances with unknown type URLs is also impossible.
+     *
+     * Such instances are always considered valid.
+     *
+     * The default instances of [com.google.protobuf.Message] are considered valid
+     * for singular fields even if the checked message has one or more required fields.
+     * In this case, it is impossible to determine whether the field itself is set
+     * with an invalid message instance or just empty.
+     *
+     * The above statement doesn't apply to repeated and map fields. Within collections,
+     * default instances are considered invalid.
+     *
+     * @param message An instance of a Protobuf message to validate.
+     * @param isAny Must be `true` if the provided [message] is [com.google.protobuf.Any].
+     *  In this case, the method will do the unpacking in the first place.
+     */
+    @Suppress("MaxLineLength") // For better readability of the rendered conditions.
+    private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
+        val isValidatable =
+            if (isAny)
+                "$message != ${AnyClass.getDefaultInstance()} &&" +
+                        " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
+                        " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
+            else
+                "!${field.hasDefaultValue()} &&" +
+                        " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+        return CodeBlock(
+            """
+            if ($isValidatable) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                validatable.validate(fieldPath, typeName)
+                    .map($ValidationErrorClass::getConstraintViolationList)
+                    .ifPresent($violations::addAll);
+            }
+            """.trimIndent()
+        )
+    }
 }

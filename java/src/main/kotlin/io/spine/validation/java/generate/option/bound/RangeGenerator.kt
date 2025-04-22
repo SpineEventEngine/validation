@@ -24,21 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
+import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.validation.RANGE
 import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.RANGE
 import io.spine.validation.bound.RangeField
 import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.generate.SingleOptionCode
+import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
@@ -48,10 +53,28 @@ import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 
 /**
  * The generator for `(range)` option.
- *
- * Generates code for a single field represented by the provided [view].
  */
-internal class RangeFieldGenerator(
+internal class RangeGenerator(private val querying: Querying) : OptionGenerator {
+
+    /**
+     * All `(range)` fields in the current compilation process.
+     */
+    private val allRangeFields by lazy {
+        querying.select<RangeField>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
+        allRangeFields
+            .filter { it.id.type == type }
+            .map { GenerateRange(it).code() }
+}
+
+/**
+ * Generates code for a single application of the `(range)` option
+ * represented by the [view].
+ */
+private class GenerateRange(
     private val view: RangeField
 ) : BoundedFieldGenerator(view, RANGE) {
 
@@ -64,7 +87,7 @@ internal class RangeFieldGenerator(
      * Returns a boolean expression that checks if the given [value] is within
      * the [lower] and [upper] bounds.
      */
-    override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean>  {
+    override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
         val lowerLiteral = lower.asLiteral()
         val lowerOperator = if (lower.exclusive) "<=" else "<"
         val upperLiteral = upper.asLiteral()

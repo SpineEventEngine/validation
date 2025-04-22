@@ -26,13 +26,36 @@
 
 package io.spine.validation.java.generate.option
 
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.generate.OptionApplicationCode
+import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
 
 /**
  * The generator for `(required)` option.
@@ -43,15 +66,65 @@ internal class RequiredGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(required)`-marked fields in the current compilation process.
+     * All `(required)` fields in the current compilation process.
      */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
-            .map { RequiredFieldGenerator(it, converter).generate() }
+            .map { GenerateRequired(it, converter).code() }
+}
+
+/**
+ * Generates code for a single application of the `(required)` option
+ * represented by the [view].
+ */
+private class GenerateRequired(
+    private val view: RequiredField,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
+
+    private val field = view.subject
+    private val declaringType = field.declaringType
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): SingleOptionCode {
+        val constraint = CodeBlock(
+            """
+            if (${field.hasDefaultValue()}) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
+                $violations.add(violation);
+            }
+            """.trimIndent()
+        )
+        return SingleOptionCode(constraint)
+    }
+
+    private fun violation(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<io.spine.type.TypeName>
+    ): Expression<ConstraintViolation> {
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
+        val errorMessage =
+            templateString(view.errorMessage, placeholders, IF_MISSING, field.qualifiedName)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
+    }
+
+    private fun supportedPlaceholders(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_TYPE to StringLiteral(field.type.name),
+        PARENT_TYPE to typeName
+    )
 }
