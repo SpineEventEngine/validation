@@ -26,16 +26,45 @@
 
 package io.spine.validation.java.generate.option
 
+import com.google.protobuf.Message
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.This
+import io.spine.protodata.java.field
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.GOES
 import io.spine.validation.GoesField
+import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
 
 /**
- * The generator for `(goes)` option.
+ * The generator for the `(goes)` option.
  */
 internal class GoesGenerator(
     private val querying: Querying,
@@ -53,5 +82,64 @@ internal class GoesGenerator(
     override fun codeFor(type: TypeName): List<OptionCode> =
         allGoesFields
             .filter { it.id.type == type }
-            .map { GoesFieldGenerator(it, converter).generate() }
+            .map { GenerateGoes(it, converter).code() }
+}
+
+/**
+ * Generates code for a single application of the `(goes)` option
+ * represented by the [view].
+ */
+private class GenerateGoes(
+    private val view: GoesField,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
+
+    private val field = view.subject
+    private val fieldType = field.type
+    private val declaringType = field.declaringType
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): OptionCode {
+        val companion = view.companion
+        val fieldGetter = This<Message>()
+            .field(field)
+            .getter<Any>()
+        val constraint = CodeBlock(
+            """
+            if (!${field.hasDefaultValue()} && ${companion.hasDefaultValue()}) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldGetter)};
+                $violations.add(violation);
+            }
+            """.trimIndent()
+        )
+        return OptionCode(constraint)
+    }
+
+    private fun violation(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<io.spine.type.TypeName>,
+        fieldValue: Expression<*>,
+    ): Expression<ConstraintViolation> {
+        val qualifiedName = field.qualifiedName
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, GOES, qualifiedName)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
+    }
+
+    private fun supportedPlaceholders(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
+        fieldValue: Expression<*>,
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to typeName,
+        GOES_COMPANION to StringLiteral(view.companion.name.value)
+    )
 }

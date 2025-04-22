@@ -26,12 +26,30 @@
 
 package io.spine.validation.java.generate.option
 
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.name
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validation.RANGE
+import io.spine.validation.bound.NumericBound
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.bound.RangeField
+import io.spine.validation.java.expression.IntegerClass
+import io.spine.validation.java.expression.LongClass
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 
 /**
  * The generator for `(range)` option.
@@ -49,5 +67,56 @@ internal class RangeGenerator(private val querying: Querying) : OptionGenerator 
     override fun codeFor(type: TypeName): List<OptionCode> =
         allRangeFields
             .filter { it.id.type == type }
-            .map { RangeFieldGenerator(it).generate() }
+            .map { GenerateRange(it).code() }
+}
+
+/**
+ * Generates code for a single application of the `(range)` option
+ * represented by the [view].
+ */
+private class GenerateRange(
+    private val view: RangeField
+) : BoundedFieldGenerator(view, RANGE) {
+
+    private val lower = view.lowerBound
+    private val upper = view.upperBound
+
+    override val boundPrimitive: NumericBound.ValueCase = lower.valueCase
+
+    /**
+     * Returns a boolean expression that checks if the given [value] is within
+     * the [lower] and [upper] bounds.
+     */
+    override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
+        val lowerLiteral = lower.asLiteral()
+        val lowerOperator = if (lower.exclusive) "<=" else "<"
+        val upperLiteral = upper.asLiteral()
+        val upperOperator = if (upper.exclusive) ">=" else ">"
+        return when (boundPrimitive) {
+            UINT32_VALUE -> Expression(
+                "$IntegerClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$IntegerClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+            )
+            UINT64_VALUE -> Expression(
+                "$LongClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
+                        "$LongClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+            )
+            else -> Expression(
+                "$value $lowerOperator $lowerLiteral ||" +
+                        " $value $upperOperator $upperLiteral"
+            )
+        }
+    }
+
+    override fun supportedPlaceholders(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
+        fieldValue: Expression<*>,
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to typeName,
+        RANGE_VALUE to StringLiteral(view.range)
+    )
 }

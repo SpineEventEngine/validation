@@ -26,12 +26,32 @@
 
 package io.spine.validation.java.generate.option
 
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.ReadVar
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.string.lowerCamelCase
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.CHOICE
 import io.spine.validation.ChoiceOneof
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.GROUP_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
 
 /**
  * The generator for the `(choice)` option.
@@ -49,5 +69,52 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
     override fun codeFor(type: TypeName): List<OptionCode> =
         allChoiceOneofs
             .filter { it.id.type == type }
-            .map { ChoiceOneofGenerator(it).generate() }
+            .map { GenerateChoice(it).code() }
+}
+
+/**
+ * Generates code for a single application of the `(choice)` option
+ * represented by the [view].
+ */
+private class GenerateChoice(private val view: ChoiceOneof) {
+
+    private val oneof = view.subject
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): OptionCode {
+        val groupName = oneof.name
+        val caseField = "${groupName.value.lowerCamelCase()}Case_"
+        val constraint = CodeBlock(
+            """
+            if ($caseField == 0) {
+                var groupPath = ${parentPath.resolve(groupName)};
+                var typeName =  ${parentName.orElse(oneof.declaringType)};
+                var violation = ${violation(ReadVar("groupPath"), ReadVar("typeName"))};
+                $violations.add(violation);
+            }
+            """.trimIndent()
+        )
+        return OptionCode(constraint)
+    }
+
+    private fun violation(
+        groupPath: Expression<FieldPath>,
+        typeName: Expression<io.spine.type.TypeName>
+    ): Expression<ConstraintViolation> {
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(groupPath, typeNameStr)
+        val errorMessage =
+            templateString(view.errorMessage, placeholders, CHOICE, oneof.qualifiedName)
+        return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
+    }
+
+    private fun supportedPlaceholders(
+        groupPath: Expression<FieldPath>,
+        typeName: Expression<String>,
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        GROUP_PATH to groupPath.joinToString(),
+        PARENT_TYPE to typeName
+    )
 }
