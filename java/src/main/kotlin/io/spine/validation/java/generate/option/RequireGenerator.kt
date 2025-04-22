@@ -50,8 +50,14 @@ internal class RequireGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionApplicationCode> =
-        allRequireMessages
-            .filter { it.id == type }
-            .map { RequireMessageGenerator(it, converter).generate() }
+    override fun codeFor(type: TypeName): List<OptionApplicationCode> {
+        val requireMessage = allRequireMessages.find { it.id == type }
+        if  (requireMessage == null) {
+            return emptyList()
+        }
+
+        val code = RequireMessageGenerator(requireMessage, converter)
+            .generate()
+        return listOf(code)
+    }
 }
