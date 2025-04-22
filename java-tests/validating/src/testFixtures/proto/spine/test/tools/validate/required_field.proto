@@ -37,6 +37,12 @@ option java_multiple_files = true;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
+message Citizen {
+    option (require).fields = "tax_number";
+
+    string tax_number = 1;
+}
+
 message Due {
     option (require).fields = "date | never";
 

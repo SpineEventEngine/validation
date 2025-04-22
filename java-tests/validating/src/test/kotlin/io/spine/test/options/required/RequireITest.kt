@@ -31,6 +31,7 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.spine.test.tools.validate.Citizen
 import io.spine.test.tools.validate.Combination
 import io.spine.test.tools.validate.Due
 import io.spine.type.TypeName
@@ -42,6 +43,12 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("`(require)` option should be compiled so that")
 internal class RequireITest {
+
+    @Test
+    fun `unset field produces a violation`() {
+        val invalidMessage = Citizen.newBuilder()
+        assertInvalidWithParam(invalidMessage, "tax_number")
+    }
 
     @Test
     fun `unset fields produce a violation`() {
