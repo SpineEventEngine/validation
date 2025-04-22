@@ -59,7 +59,7 @@ internal interface EmptyFieldCheck {
     }
 
     /**
-     * Returns an expression that checks if this [Field] has a non-default set.
+     * Returns an expression that checks if this [Field] has a non-default value set.
      */
     fun Field.hasNonDefaultValue(): Expression<Boolean> =
         Expression("!${hasDefaultValue()}")
