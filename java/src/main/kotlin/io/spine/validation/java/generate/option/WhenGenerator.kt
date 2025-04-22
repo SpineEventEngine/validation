@@ -43,7 +43,7 @@ internal class WhenGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(when)` fields in the current compilation process.
+     * All `(when)`-marked fields in the current compilation process.
      */
     private val allWhenFields by lazy {
         querying.select<WhenField>()

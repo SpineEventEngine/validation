@@ -43,7 +43,7 @@ internal class ValidateGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(validate)` fields in the current compilation process.
+     * All `(validate)`-marked fields in the current compilation process.
      */
     private val allValidateFields by lazy {
         querying.select<ValidateField>()

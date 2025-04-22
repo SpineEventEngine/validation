@@ -43,7 +43,7 @@ internal class GoesGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(goes)` fields in the current compilation process.
+     * All `(goes)`-marked fields in the current compilation process.
      */
     private val allGoesFields by lazy {
         querying.select<GoesField>()

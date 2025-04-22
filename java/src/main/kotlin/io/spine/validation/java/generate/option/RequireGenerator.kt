@@ -43,7 +43,7 @@ internal class RequireGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(require)` messages in the current compilation process.
+     * All `(require)`-marked messages in the current compilation process.
      */
     private val allRequireMessages by lazy {
         querying.select<RequireMessage>()

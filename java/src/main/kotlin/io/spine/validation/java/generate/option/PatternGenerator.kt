@@ -39,7 +39,7 @@ import io.spine.validation.java.generate.OptionGenerator
 internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All `(pattern)` fields in the current compilation process.
+     * All `(pattern)`-marked fields in the current compilation process.
      */
     private val allPatternFields by lazy {
         querying.select<PatternField>()

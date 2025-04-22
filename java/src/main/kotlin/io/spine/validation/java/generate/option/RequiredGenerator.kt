@@ -43,7 +43,7 @@ internal class RequiredGenerator(
 ) : OptionGenerator {
 
     /**
-     * All `(required)` fields in the current compilation process.
+     * All `(required)`-marked fields in the current compilation process.
      */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()

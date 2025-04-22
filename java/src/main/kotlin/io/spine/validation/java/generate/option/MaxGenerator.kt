@@ -39,7 +39,7 @@ import io.spine.validation.java.generate.OptionGenerator
 internal class MaxGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All `(max)` fields in the current compilation process.
+     * All `(max)`-marked fields in the current compilation process.
      */
     private val allMaxFields by lazy {
         querying.select<MaxField>()

@@ -39,7 +39,7 @@ import io.spine.validation.java.generate.OptionGenerator
 internal class MinGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All `(min)` fields in the current compilation process.
+     * All `(min)`-marked fields in the current compilation process.
      */
     private val allMinFields by lazy {
         querying.select<MinField>()

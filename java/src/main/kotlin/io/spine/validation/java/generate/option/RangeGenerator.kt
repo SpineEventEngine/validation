@@ -39,7 +39,7 @@ import io.spine.validation.java.generate.OptionGenerator
 internal class RangeGenerator(private val querying: Querying) : OptionGenerator {
 
     /**
-     * All `(range)` fields in the current compilation process.
+     * All `(range)`-marked fields in the current compilation process.
      */
     private val allRangeFields by lazy {
         querying.select<RangeField>()
