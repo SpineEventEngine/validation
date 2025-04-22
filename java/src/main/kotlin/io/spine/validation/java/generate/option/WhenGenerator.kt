@@ -53,7 +53,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -84,7 +84,7 @@ internal class WhenGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allWhenFields
             .filter { it.id.type == type }
             .map { GenerateWhen(it, converter).code() }
@@ -107,7 +107,7 @@ private class GenerateWhen(
     /**
      * Returns the generated code.
      */
-    fun code(): OptionCode = when {
+    fun code(): SingleOptionCode = when {
         fieldType.isMessage -> validateTime(fieldValue)
         fieldType.isRepeatedMessage ->
             CodeBlock(
@@ -119,7 +119,7 @@ private class GenerateWhen(
             )
 
         else -> unsupportedFieldType()
-    }.run { OptionCode(this) }
+    }.run { SingleOptionCode(this) }
 
     /**
      * Yields an expression to check if the provided [fieldValue] matches

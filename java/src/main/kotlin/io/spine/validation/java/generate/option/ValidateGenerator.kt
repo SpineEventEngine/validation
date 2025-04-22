@@ -51,7 +51,7 @@ import io.spine.validation.java.expression.ValidatableMessageClass
 import io.spine.validation.java.expression.ValidationErrorClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -74,7 +74,7 @@ internal class ValidateGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allValidateFields
             .filter { it.id.type == type }
             .map { GenerateValidate(it, converter).code() }
@@ -98,7 +98,7 @@ private class GenerateValidate(
      * Returns the generated code.
      */
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    fun code(): OptionCode = when {
+    fun code(): SingleOptionCode = when {
         fieldType.isMessage -> validate(getter as Expression<Message>, fieldType.message.isAny)
 
         fieldType.isList ->
@@ -124,7 +124,7 @@ private class GenerateValidate(
                     " Please ensure that the supported field types in this generator match those" +
                     " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
         )
-    }.run { OptionCode(this) }
+    }.run { SingleOptionCode(this) }
 
     /**
      * Yields an expression to validate the provided [message] if it implements

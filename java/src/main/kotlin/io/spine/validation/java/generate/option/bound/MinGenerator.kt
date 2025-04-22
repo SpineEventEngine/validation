@@ -42,7 +42,7 @@ import io.spine.validation.java.expression.IntegerClass
 import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
@@ -65,7 +65,7 @@ internal class MinGenerator(private val querying: Querying) : OptionGenerator {
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allMinFields
             .filter { it.id.type == type }
             .map { GenerateMin(it).code() }

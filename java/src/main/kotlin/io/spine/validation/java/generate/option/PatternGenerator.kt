@@ -60,7 +60,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -92,7 +92,7 @@ internal class PatternGenerator(private val querying: Querying) : OptionGenerato
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allPatternFields
             .filter { it.id.type == type }
             .map { GeneratePattern(it).code() }
@@ -120,11 +120,11 @@ private class GeneratePattern(private val view: PatternField) {
     /**
      * Returns the generated code.
      */
-    fun code(): OptionCode = when {
+    fun code(): SingleOptionCode = when {
         fieldType.isSingularString -> {
             val fieldValue = fieldAccess.getter<String>()
             val constraint = singularStringConstraint(fieldValue)
-            OptionCode(constraint, listOf(pattern.field))
+            SingleOptionCode(constraint, listOf(pattern.field))
         }
 
         fieldType.isRepeatedString -> {
@@ -132,7 +132,7 @@ private class GeneratePattern(private val view: PatternField) {
             val validateRepeatedField = mangled("validate$camelFieldName")
             val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
             val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
-            OptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
+            SingleOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
         }
 
         else -> error(

@@ -42,7 +42,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -66,7 +66,7 @@ internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allChoiceOneofs
             .filter { it.id.type == type }
             .map { GenerateChoice(it).code() }
@@ -83,7 +83,7 @@ private class GenerateChoice(private val view: ChoiceOneof) {
     /**
      * Returns the generated code.
      */
-    fun code(): OptionCode {
+    fun code(): SingleOptionCode {
         val groupName = oneof.name
         val caseField = "${groupName.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
@@ -96,7 +96,7 @@ private class GenerateChoice(private val view: ChoiceOneof) {
             }
             """.trimIndent()
         )
-        return OptionCode(constraint)
+        return SingleOptionCode(constraint)
     }
 
     private fun violation(

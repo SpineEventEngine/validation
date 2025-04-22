@@ -52,7 +52,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
@@ -79,7 +79,7 @@ internal class DistinctGenerator(private val querying: Querying) : OptionGenerat
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allDistinctFields
             .filter { it.id.type == type }
             .map { GenerateDistinct(it).code() }
@@ -99,7 +99,7 @@ private class GenerateDistinct(private val view: DistinctField) {
     /**
      * Returns the generated code.
      */
-    fun code(): OptionCode {
+    fun code(): SingleOptionCode {
         val collection = validatedCollection()
         val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
         val constraint = CodeBlock(
@@ -113,7 +113,7 @@ private class GenerateDistinct(private val view: DistinctField) {
             }
             """.trimIndent()
         )
-        return OptionCode(constraint)
+        return SingleOptionCode(constraint)
     }
 
     /**

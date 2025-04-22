@@ -45,7 +45,7 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -73,7 +73,7 @@ internal class RequiredGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<OptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
             .map { GenerateRequired(it, converter).code() }
@@ -94,7 +94,7 @@ private class GenerateRequired(
     /**
      * Returns the generated code.
      */
-    fun code(): OptionCode {
+    fun code(): SingleOptionCode {
         val constraint = CodeBlock(
             """
             if (${field.hasDefaultValue()}) {
@@ -105,7 +105,7 @@ private class GenerateRequired(
             }
             """.trimIndent()
         )
-        return OptionCode(constraint)
+        return SingleOptionCode(constraint)
     }
 
     private fun violation(

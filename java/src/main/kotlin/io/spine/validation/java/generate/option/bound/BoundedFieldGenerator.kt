@@ -55,7 +55,7 @@ import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionCode
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
@@ -91,7 +91,7 @@ internal abstract class BoundedFieldGenerator(
      * Return the generated code.
      */
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    fun code(): OptionCode = when {
+    fun code(): SingleOptionCode = when {
         fieldType.isSingular -> checkWithinBounds(getter as Expression<Number>)
 
         fieldType.isList ->
@@ -108,7 +108,7 @@ internal abstract class BoundedFieldGenerator(
                     " Please ensure that the supported field types in this generator match those" +
                     " used by the policy, which verified `${view::class.simpleName}`."
         )
-    }.run { OptionCode(this) }
+    }.run { SingleOptionCode(this) }
 
     /**
      * Returns a [CodeBlock] that checks that the given [value] is within the bounds.
