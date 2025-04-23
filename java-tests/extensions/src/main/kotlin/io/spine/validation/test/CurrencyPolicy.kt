@@ -77,7 +77,7 @@ public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
         checkFieldType(firstField.isInteger && secondField.isInteger, file, messageType)
 
         val option = event.option.unpack<Currency>()
-        val message = errorMessage(firstField, secondField)
+        val message = errorMessage(firstField, secondField, option.minorUnits)
         return currencyMessageDiscovered {
             type = messageType.name
             currency = option
@@ -91,9 +91,9 @@ public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
 private val Field.isInteger: Boolean
     get() = type.primitive in listOf(TYPE_INT32, TYPE_INT64)
 
-private fun errorMessage(minor: Field, major: Field) =
-    "Expected `${minor.name.value}` field to have less than `\$MINOR_VALUE`" +
-            " per one unit in `${major.name.value}` field, but got `\$MAJOR_VALUE`."
+private fun errorMessage(minor: Field, major: Field, minorUnits: Int) =
+    "Expected `${minor.name.value}` field to have less than `$minorUnits`" +
+            " per one unit in `${major.name.value}` field, but got `\${minor.value}`."
 
 private fun checkFieldType(condition: Boolean, file: File, message: MessageType) =
     Compilation.check(condition, file, message.span) {
