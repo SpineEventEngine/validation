@@ -87,7 +87,7 @@ private typealias MethodName = String
  * Generates code for a single application of the `(require)` option
  * represented by the [view].
  */
-internal class GenerateRequire(
+private class GenerateRequire(
     private val view: RequireMessage,
     override val converter: JavaValueConverter
 ) : EmptyFieldCheck {
