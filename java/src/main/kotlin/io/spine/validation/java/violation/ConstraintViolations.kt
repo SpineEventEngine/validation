@@ -57,7 +57,7 @@ import io.spine.validation.java.expression.TemplateStringClass
  *   the invalid field value for this option is the field type's default value,
  *   which is treated as "no value" at all.
  */
-internal fun constraintViolation(
+public fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     typeName: Expression<String>,
     fieldPath: Expression<FieldPath>?,
@@ -83,7 +83,7 @@ internal fun constraintViolation(
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
-internal fun templateString(
+public fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
     optionName: String
