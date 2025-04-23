@@ -32,7 +32,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.Citizen
-import io.spine.test.tools.validate.Combination
+import io.spine.test.tools.validate.FieldGroup
 import io.spine.test.tools.validate.Due
 import io.spine.type.TypeName
 import io.spine.validate.format
@@ -58,7 +58,7 @@ internal class RequireITest {
 
     @Test
     fun `incomplete group causes a violation`() {
-        val invalidMessage = Combination.newBuilder()
+        val invalidMessage = FieldGroup.newBuilder()
             .setA1("a1")
             .setB2(ByteString.copyFrom("b2", Charsets.UTF_16))
         assertInvalidWithParam(invalidMessage, "a1 & a2 | b1 & b2")
@@ -66,15 +66,15 @@ internal class RequireITest {
 
     @Test
     fun `at least one alternative satisfies the constraint`() {
-        val message = Combination.newBuilder()
+        val message = FieldGroup.newBuilder()
             .setA1("a1")
             .addA2("a2")
         assertValid(message)
     }
 
     @Test
-    fun `if all the alternatives set the constraint is satisfied`() {
-        val message = Combination.newBuilder()
+    fun `if all the alternatives satisfy the constraint`() {
+        val message = FieldGroup.newBuilder()
             .setA1("a1")
             .addA2("a2")
             .putB1(42, 314)

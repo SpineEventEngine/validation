@@ -82,30 +82,30 @@ internal class RequirePolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `reject duplicate fields in a combination`() {
+    fun `reject duplicate fields in a field group`() {
         val message = RequireDuplicateFields.getDescriptor()
         val error = assertCompilationFails(message)
         val duplicateField = "field2"
-        val invalidCombination = "field2 & field3 & field2"
+        val invalidFieldGroup = "field2 & field3 & field2"
         with(error.message) {
             shouldContain(message.fullName)
             shouldContain(duplicateField)
-            shouldContain(invalidCombination)
+            shouldContain(invalidFieldGroup)
             shouldContain("appear more than once")
         }
     }
 
     @Test
-    fun `reject duplicate combinations`() {
-        val message = RequireDuplicateCombinations.getDescriptor()
+    fun `reject duplicate field groups`() {
+        val message = RequireDuplicateGroups.getDescriptor()
         val error = assertCompilationFails(message)
-        val firstCombination = "field1 & field3"
-        val secondCombination = "field3 & field1"
+        val firstFieldGroup = "field1 & field3"
+        val secondFieldGroup = "field3 & field1"
         with(error.message) {
             shouldContain(message.fullName)
             shouldContain("appear more than once")
-            shouldContain(firstCombination)
-            shouldContain(secondCombination)
+            shouldContain(firstFieldGroup)
+            shouldContain(secondFieldGroup)
         }
     }
 }

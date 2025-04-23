@@ -34,29 +34,29 @@ import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
-import io.spine.validation.FieldCombination
+import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
-import io.spine.validation.fieldCombination
+import io.spine.validation.fieldGroup
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
- * Parses and validates field combinations specified in the given [RequireOption].
+ * Parses and validates field groups specified in the given [RequireOption].
  *
  * The class ensures the following conditions:
  *
  * 1. Each specified field is declared in the [message] type.
  * 2. Each field has a [compatible][RequiredFieldSupport] field type.
- * 3. Each combination has a unique set of fields.
- * 4. Each combination is unique.
+ * 3. Each field group has a unique set of fields.
+ * 4. Each field group is unique.
  *
  * A compilation error is reported in case of violation of any condition.
  */
-internal class CombinationParser(
+internal class ParseFieldGroups(
     option: RequireOption,
     private val message: MessageType,
     private val file: File
 ) {
-    private val specifiedFields = option.fields
+    private val groupsDefinition = option.fields
     private val messageFields = message.fieldList
     private val messageFieldNames by lazy {
         messageFields
@@ -65,30 +65,30 @@ internal class CombinationParser(
     }
 
     /**
-     * A list of parsed [FieldCombination]s.
+     * A list of parsed [FieldGroup]s.
      */
-    val combinations by lazy {
-        val combinations = specifiedFields.split(FIELDS_DELIMITER)
-            .map(::toCombination)
-            .run { checkCombinationsUnique(this) }
-        combinations.map {
-            val astFields = it.fields
-                .map(::toAstField)
-                .onEach(::checkFieldType)
-            fieldCombination {
-                field.addAll(astFields)
+    val result by lazy {
+        groupsDefinition.split(GROUPS_DELIMITER)
+            .map(::toRawFieldGroup)
+            .run { checkGroupsAreUnique(this) }
+            .map {
+                val astFields = it.fields
+                    .map(::toAstField)
+                    .onEach(::checkFieldType)
+                fieldGroup {
+                    field.addAll(astFields)
+                }
             }
-        }
     }
 
-    private fun toCombination(definition: String): Combination {
+    private fun toRawFieldGroup(definition: String): RawFieldGroup {
         val trimmedDefinition = definition.trim()
         val fieldNames = trimmedDefinition
-            .split(COMBINATION_DELIMITER)
+            .split(FIELDS_DELIMITER)
             .map { it.trim() }
-            .run { checkFieldsUnique(fieldNames = this, definition) }
+            .run { checkFieldsAreUnique(fieldNames = this, definition) }
         fieldNames.forEach(::checkFieldExists)
-        return Combination(trimmedDefinition, fieldNames)
+        return RawFieldGroup(trimmedDefinition, fieldNames)
     }
 
     private fun toAstField(fieldName: String) =
@@ -96,28 +96,31 @@ internal class CombinationParser(
             messageField.name.value == fieldName
         }
 
-    private fun checkCombinationsUnique(combinations: List<Combination>): Set<Combination> {
-        val duplicates = combinations.groupBy { it.fields }
+    private fun checkGroupsAreUnique(groups: List<RawFieldGroup>): Set<RawFieldGroup> {
+        val duplicates = groups.groupBy { it.fields }
             .filter { it.value.size > 1 }
             .flatMap { it.value }
             .map { it.definition }
             .toSet()
         Compilation.check(duplicates.isEmpty(), file, message.span) {
-            "The following combinations of fields listed in the `($REQUIRE)` option of" +
+            "The following groups of fields listed in the `($REQUIRE)` option of" +
                     " `${message.name.qualifiedName}` appear more than once:" +
                     " `$duplicates`."
         }
-        return combinations.toSet()
+        return groups.toSet()
     }
 
-    private fun checkFieldsUnique(fieldNames: List<String>, combination: String): Set<String> {
+    private fun checkFieldsAreUnique(
+        fieldNames: List<String>,
+        groupDefinition: String
+    ): Set<String> {
         val duplicates = fieldNames.groupBy { it }
             .filter { it.value.size > 1 }
             .map { it.key }
         Compilation.check(duplicates.isEmpty(), file, message.span) {
             "The `$duplicates` fields listed in the `($REQUIRE)` option of" +
                     " `${message.name.qualifiedName}` appear more than once within" +
-                    " the `$combination` combination."
+                    " the `$groupDefinition` field group."
         }
         return fieldNames.toSet()
     }
@@ -138,24 +141,26 @@ internal class CombinationParser(
     private companion object {
 
         /**
-         * Separates standalone fields or combinations of them.
+         * Separates field groups.
          */
-        const val FIELDS_DELIMITER = "|"
+        const val GROUPS_DELIMITER = "|"
 
         /**
-         * Separates fields within a combination.
+         * Separates fields within a group.
          */
-        const val COMBINATION_DELIMITER = "&"
+        const val FIELDS_DELIMITER = "&"
     }
 }
 
 /**
- * A combination of fields.
+ * A field group definition along with the names of the fields it includes.
  *
- * @property definition The combination as was specified by a user.
- * @property fields The combination fields.
+ * This class is used during the validation phase of the parsing.
+ *
+ * @property definition The field group as was specified by a user.
+ * @property fields The contained field names.
  */
-private class Combination(
+private class RawFieldGroup(
     val definition: String,
     val fields: Set<String>,
 )

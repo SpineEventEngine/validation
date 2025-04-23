@@ -38,7 +38,7 @@ option java_multiple_files = true;
 import "spine/protodata/ast.proto";
 import "spine/time_options.proto";
 import "spine/validation/time_field_type.proto";
-import "spine/validation/field_combination.proto";
+import "spine/validation/field_group.proto";
 
 // A view on a field that is recognized as required.
 //
@@ -171,9 +171,9 @@ message RequireMessage {
     // The error message template.
     string error_message = 2;
 
-    // A list of combinations as specified by a user.
-    string specified_fields = 3;
+    // A list of field groups as specified by a user.
+    string groups_definition = 3;
 
-    // A list of combinations.
-    repeated FieldCombination combination = 4;
+    // A list of field groups.
+    repeated FieldGroup group = 4;
 }

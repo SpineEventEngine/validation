@@ -50,8 +50,8 @@ import io.spine.validation.event.requireMessageDiscovered
  * Controls whether a message should be validated with the `(require)` option.
  *
  * Whenever a message marked with `(require)` option is discovered, emits
- * [RequireMessageDiscovered] event if the specified field combinations are valid.
- * Please take a look on docs to [CombinationParser] to see how they are validated.
+ * [RequireMessageDiscovered] event if the specified field groups are valid.
+ * Please take a look on docs to [ParseFieldGroups] to see how they are validated.
  */
 internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
 
@@ -62,14 +62,13 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
     ): Just<RequireMessageDiscovered> {
         val messageType = event.subject
         val option = event.option.unpack<RequireOption>()
-        val parser = CombinationParser(option, messageType, event.file)
-        val combinations = parser.combinations
+        val groups = ParseFieldGroups(option, messageType, event.file).result
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return requireMessageDiscovered {
             id = messageType.name
             errorMessage = message
-            specifiedFields = option.fields
-            combination.addAll(combinations)
+            groupsDefinition = option.fields
+            group += groups
         }.just()
     }
 }
@@ -83,7 +82,7 @@ internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessag
     fun on(e: RequireMessageDiscovered) = alter {
         id = e.id
         errorMessage = e.errorMessage
-        specifiedFields = e.specifiedFields
-        addAllCombination(e.combinationList)
+        groupsDefinition = e.groupsDefinition
+        addAllGroup(e.groupList)
     }
 }

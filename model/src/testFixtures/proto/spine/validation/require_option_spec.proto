@@ -90,8 +90,8 @@ message RequireDuplicateFields {
     string field3 = 3;
 }
 
-// Declares the `(require)` option with the duplicate combination.
-message RequireDuplicateCombinations {
+// Declares the `(require)` option with the duplicate field groups.
+message RequireDuplicateGroups {
     option (require).fields = "field1 & field3 | field2 & field3 | field3 & field1";
 
     string field1 = 1;

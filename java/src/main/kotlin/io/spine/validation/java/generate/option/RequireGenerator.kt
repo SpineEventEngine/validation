@@ -38,7 +38,7 @@ import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.string.joinByLines
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.FieldCombination
+import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.java.expression.EmptyFieldCheck
@@ -96,10 +96,10 @@ internal class GenerateRequire(
      * Returns the generated code.
      */
     fun code(): SingleOptionCode {
-        val (noneOfFieldCombinationsSet, declaration) = noneOfFieldCombinationsSet()
+        val (noneOfFieldGroupsSet, declaration) = noneOfFieldGroupsSet()
         val constraint = CodeBlock(
             """
-            if ($noneOfFieldCombinationsSet()) {
+            if ($noneOfFieldGroupsSet()) {
                 var typeName =  ${parentName.orElse(view.id)};
                 var violation = ${violation(ReadVar("typeName"))};
                 $violations.add(violation);
@@ -111,16 +111,16 @@ internal class GenerateRequire(
 
     /**
      * Creates a method that returns `true` if none of the provided field
-     * combinations is set.
+     * groups is set.
      */
-    private fun noneOfFieldCombinationsSet(): Pair<MethodName, MethodDeclaration> {
-        val name = mangled(NONE_OF_FIELD_COMBINATIONS_SET)
-        val combinationsConstraints = view.combinationList
+    private fun noneOfFieldGroupsSet(): Pair<MethodName, MethodDeclaration> {
+        val name = mangled(NONE_OF_FIELD_GROUPS_SET)
+        val groupsConstraints = view.groupList
             .map(::toConstraint)
             .joinByLines()
         val declaration = MethodDeclaration("""
             private boolean $name() {
-                $combinationsConstraints
+                $groupsConstraints
                 return true;
             }
         """.trimIndent())
@@ -129,10 +129,10 @@ internal class GenerateRequire(
 
     /**
      * Creates an `if` constraint that checks if all fields within the given
-     * field [combination] are set.
+     * field [group] are set.
      */
-    private fun toConstraint(combination: FieldCombination): CodeBlock {
-        val allFieldsSet = combination.fieldList
+    private fun toConstraint(group: FieldGroup): CodeBlock {
+        val allFieldsSet = group.fieldList
             .map { it.hasNonDefaultValue() }
             .joinToString(" && ")
         return CodeBlock("""
@@ -151,10 +151,10 @@ internal class GenerateRequire(
 
     private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
-        REQUIRE_FIELDS to StringLiteral(view.specifiedFields)
+        REQUIRE_FIELDS to StringLiteral(view.groupsDefinition)
     )
 
     private companion object {
-        const val NONE_OF_FIELD_COMBINATIONS_SET = "noneOfFieldCombinationsSet"
+        const val NONE_OF_FIELD_GROUPS_SET = "noneOfFieldGroupsSet"
     }
 }
