@@ -172,8 +172,8 @@ message RequireMessage {
     string error_message = 2;
 
     // A list of field groups as specified by a user.
-    string groups_definition = 3;
+    string specified_groups = 3;
 
-    // A list of field groups.
+    // The field groups parsed from the `specified_groups` string.
     repeated FieldGroup group = 4;
 }
