@@ -34,7 +34,6 @@ import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.Literal
@@ -69,7 +68,7 @@ import io.spine.validation.java.violation.templateString
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
  *
- * @see RangeFieldGenerator
+ * @see GenerateRange
  * @see GenerateMin
  * @see GenerateMax
  */
@@ -155,10 +154,9 @@ internal abstract class BoundedFieldGenerator(
         typeName: Expression<TypeName>,
         fieldValue: Expression<Number>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, option, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, option)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

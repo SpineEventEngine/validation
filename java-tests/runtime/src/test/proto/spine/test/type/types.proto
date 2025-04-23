@@ -512,7 +512,7 @@ enum Language {
 message PersonName {
 
     // A minimum requirement to refer to a person.
-    option (required_field) = "given_name|honorific_prefix & family_name";
+    option (require).fields = "given_name|honorific_prefix & family_name";
 
     // The honorific prefix (such as "Dr." or "Prof.") for this person.
     string honorific_prefix = 1;

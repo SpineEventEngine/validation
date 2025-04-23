@@ -59,6 +59,12 @@ internal interface EmptyFieldCheck {
     }
 
     /**
+     * Returns an expression that checks if this [Field] has a non-default value set.
+     */
+    fun Field.hasNonDefaultValue(): Expression<Boolean> =
+        Expression("!${hasDefaultValue()}")
+
+    /**
      * Returns an expression that yields a default value for the given field.
      */
     private fun Field.defaultValue(): Expression<*> {

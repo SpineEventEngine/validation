@@ -49,13 +49,15 @@ import io.spine.validation.java.expression.TemplateStringClass
  * @param errorMessage The error message template string.
  * @param typeName The message type being validated. In the case of in-depth validation,
  *  contains the root message name.
- * @param fieldPath The path to the field containing an invalid value.
+ * @param fieldPath The path to the field containing an invalid value, if any.
+ *   For example, the `(require)` option uses `null` for this parameter because
+ *   it is a message-wide option.
  * @param fieldValue The field value that violated the constraint, if any.
  *   For example, the `(required)` option uses `null` for this parameter because
  *   the invalid field value for this option is the field type's default value,
  *   which is treated as "no value" at all.
  */
-public fun constraintViolation(
+internal fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     typeName: Expression<String>,
     fieldPath: Expression<FieldPath>?,
@@ -80,16 +82,17 @@ public fun constraintViolation(
  * @param template The template string that may have one or more placeholders.
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
- * @param fieldName The fully qualified name of the field, which passed the provided [template].
  */
-public fun templateString(
+internal fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
-    optionName: String,
+    optionName: String
 ): Expression<TemplateString> {
-    checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
-        "The `($optionName)` option doesn't support the following placeholders: `$it`. " +
-                "The supported placeholders: `${placeholders.keys}`."
+    checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) { missingKeys ->
+        "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
+                " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
+                " that the policy that verifies the message placeholders and its code generator" +
+                " operate with the same set of placeholders."
     }
     val placeholderEntries = mapExpression(
         StringClass, StringClass,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+syntax = "proto3";
 
-import com.google.protobuf.DescriptorProtos.MessageOptions
-import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import com.google.protobuf.Message
-import io.spine.option.OptionsProto.requiredField
+package spine.validation;
 
-/**
- * This file provides workarounds for supporting validation features that
- * are not yet fully migrated to ProtoData-based code generation.
- */
-@Suppress("unused")
-private const val ABOUT = ""
+import "spine/options.proto";
 
-internal fun Message.requiresRuntimeValidation(): Boolean =
-    hasTypeOption(requiredField)
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "FieldGroupProto";
+option java_multiple_files = true;
 
-private fun Message.hasTypeOption(option: GeneratedExtension<MessageOptions, *>): Boolean {
-    val result = descriptorForType.options.hasExtension(option)
-    return result
+import "spine/protodata/ast.proto";
+
+// A group of related fields that are supposed to be set together.
+message FieldGroup {
+
+    // One or more fields that constitute this group.
+    repeated protodata.Field field = 1;
 }

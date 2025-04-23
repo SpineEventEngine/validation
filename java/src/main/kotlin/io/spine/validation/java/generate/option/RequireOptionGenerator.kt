@@ -1,0 +1,160 @@
+/*
+ * Copyright 2025, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+package io.spine.validation.java.generate.option
+
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.JavaValueConverter
+import io.spine.protodata.java.MethodDeclaration
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.string.joinByLines
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.FieldGroup
+import io.spine.validation.REQUIRE
+import io.spine.validation.RequireMessage
+import io.spine.validation.java.expression.EmptyFieldCheck
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.SingleOptionCode
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.mangled
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.MESSAGE_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.REQUIRE_FIELDS
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
+
+/**
+ * The generator for the `(require)` option.
+ */
+internal class RequireOptionGenerator(
+    private val querying: Querying,
+    private val converter: JavaValueConverter
+) : OptionGenerator {
+
+    /**
+     * All `(require)`-marked messages in the current compilation process.
+     */
+    private val allRequireMessages by lazy {
+        querying.select<RequireMessage>()
+            .all()
+    }
+
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
+        val requireMessage = allRequireMessages.find { it.id == type }
+        if  (requireMessage == null) {
+            return emptyList()
+        }
+        val code = GenerateRequire(requireMessage, converter).code()
+        return listOf(code)
+    }
+}
+
+private typealias MethodName = String
+
+/**
+ * Generates code for a single application of the `(require)` option
+ * represented by the [view].
+ */
+private class GenerateRequire(
+    private val view: RequireMessage,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): SingleOptionCode {
+        val (noneOfFieldGroupsSet, declaration) = noneOfFieldGroupsSet()
+        val constraint = CodeBlock(
+            """
+            if ($noneOfFieldGroupsSet()) {
+                var typeName =  ${parentName.orElse(view.id)};
+                var violation = ${violation(ReadVar("typeName"))};
+                $violations.add(violation);
+            }
+            """.trimIndent()
+        )
+        return SingleOptionCode(constraint, methods = listOf(declaration))
+    }
+
+    /**
+     * Creates a method that returns `true` if none of the provided field
+     * groups is set.
+     */
+    private fun noneOfFieldGroupsSet(): Pair<MethodName, MethodDeclaration> {
+        val name = mangled(NONE_OF_FIELD_GROUPS_SET)
+        val groupsConstraints = view.groupList
+            .map(::toConstraint)
+            .joinByLines()
+        val declaration = MethodDeclaration("""
+            private boolean $name() {
+                $groupsConstraints
+                return true;
+            }
+        """.trimIndent())
+        return Pair(name, declaration)
+    }
+
+    /**
+     * Creates an `if` constraint that checks if all fields within the given
+     * field [group] are set.
+     */
+    private fun toConstraint(group: FieldGroup): CodeBlock {
+        val allFieldsSet = group.fieldList
+            .map { it.hasNonDefaultValue() }
+            .joinToString(" && ")
+        return CodeBlock("""
+            if ($allFieldsSet) {
+                return false;
+            }
+        """.trimIndent())
+    }
+
+    private fun violation(typeName: Expression<TypeName>): Expression<ConstraintViolation> {
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders()
+        val errorMessage = templateString(view.errorMessage, placeholders, REQUIRE)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
+    }
+
+    private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
+        REQUIRE_FIELDS to StringLiteral(view.specifiedGroups)
+    )
+
+    private companion object {
+        const val NONE_OF_FIELD_GROUPS_SET = "noneOfFieldGroupsSet"
+    }
+}
