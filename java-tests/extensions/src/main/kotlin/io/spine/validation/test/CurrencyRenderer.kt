@@ -26,15 +26,53 @@
 
 package io.spine.validation.test
 
+import com.intellij.psi.PsiJavaFile
+import io.spine.protodata.java.file.hasJavaRoot
+import io.spine.protodata.java.javaClassName
 import io.spine.protodata.java.render.JavaRenderer
+import io.spine.protodata.java.render.findClass
+import io.spine.protodata.java.render.findMessageTypes
+import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
+import io.spine.tools.code.Java
+import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.java.generate.ValidationCodeInjector
 
 /**
  * Renders Java code for the `(currency)` option.
  */
 public class CurrencyRenderer : JavaRenderer() {
 
-    override fun render(sources: SourceFileSet) {
+    private val codeInjector = ValidationCodeInjector()
+    private val querying = this@CurrencyRenderer
+    private val currencyGenerator = CurrencyGenerator(querying)
 
+    override fun render(sources: SourceFileSet) {
+        // We receive `grpc` and `kotlin` output sources roots here as well.
+        // As for now, we modify only `java` sources.
+        if (!sources.hasJavaRoot) {
+            return
+        }
+
+        findMessageTypes()
+            .forEach { message ->
+                val optionCode = currencyGenerator.codeFor(message.name)
+                    .first() // There can be only one message option per message.
+                val messageCode = MessageValidationCode(
+                    message = message.name.javaClassName(typeSystem),
+                    constraints = listOf(optionCode.constraint),
+                    fields = emptyList(),
+                    methods = emptyList(),
+                )
+                val file = sources.javaFileOf(message)
+                file.render(messageCode)
+            }
+    }
+
+    private fun SourceFile<Java>.render(code: MessageValidationCode) {
+        val psiFile = psi() as PsiJavaFile
+        val messageClass = psiFile.findClass(code.message)
+        codeInjector.inject(code, messageClass)
+        overwrite(psiFile.text)
     }
 }
