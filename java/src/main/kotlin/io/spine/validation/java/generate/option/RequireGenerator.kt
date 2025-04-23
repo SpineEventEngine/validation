@@ -142,7 +142,7 @@ internal class GenerateRequire(
         """.trimIndent())
     }
 
-    private fun violation(typeName: Expression<io.spine.type.TypeName>): Expression<ConstraintViolation> {
+    private fun violation(typeName: Expression<TypeName>): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders()
         val errorMessage = templateString(view.errorMessage, placeholders, REQUIRE)
