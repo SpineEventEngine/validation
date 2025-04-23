@@ -42,7 +42,6 @@ import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
-import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
 import io.spine.validation.test.money.currencyMessageDiscovered
@@ -50,7 +49,7 @@ import io.spine.validation.test.money.currencyMessageDiscovered
 /**
  * The name of the option.
  */
-private const val CURRENCY = "currency"
+internal const val CURRENCY = "currency"
 
 /**
  * Controls whether a message should be validated with the `(currency)` option.
@@ -93,7 +92,7 @@ private val Field.isInteger: Boolean
 
 private fun errorMessage(minor: Field, major: Field, minorUnits: Int) =
     "Expected `${minor.name.value}` field to have less than `$minorUnits`" +
-            " per one unit in `${major.name.value}` field, but got `\${minor.value}`."
+            " per one unit in `${major.name.value}` field."
 
 private fun checkFieldType(condition: Boolean, file: File, message: MessageType) =
     Compilation.check(condition, file, message.span) {

@@ -29,9 +29,12 @@ package io.spine.validation.test
 import io.spine.protodata.java.render.JavaRenderer
 import io.spine.protodata.render.SourceFileSet
 
+/**
+ * Renders Java code for the `(currency)` option.
+ */
 public class CurrencyRenderer : JavaRenderer() {
 
     override fun render(sources: SourceFileSet) {
-        TODO("Not yet implemented")
+
     }
 }

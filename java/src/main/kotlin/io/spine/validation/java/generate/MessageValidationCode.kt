@@ -39,9 +39,9 @@ import io.spine.protodata.java.MethodDeclaration
  * @property fields Additional class-level fields required by the validation logic.
  * @property methods Additional class-level methods required by the validation logic.
  */
-internal class MessageValidationCode(
-    val message: ClassName,
-    val constraints: List<CodeBlock>,
-    val fields: List<FieldDeclaration<*>>,
-    val methods: List<MethodDeclaration>,
+public class MessageValidationCode(
+    public val message: ClassName,
+    public val constraints: List<CodeBlock>,
+    public val fields: List<FieldDeclaration<*>>,
+    public val methods: List<MethodDeclaration>,
 )

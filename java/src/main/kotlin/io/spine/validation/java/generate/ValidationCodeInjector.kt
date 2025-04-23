@@ -83,12 +83,12 @@ private typealias BuilderPsiClass = PsiClass
  * returning the result from its [build][com.google.protobuf.Message.Builder.build] method.
  * If one or more violations are detected, the builder will throw an exception.
  */
-internal class ValidationCodeInjector {
+public class ValidationCodeInjector {
 
     /**
      * Injects the provided validation [code] into the PSI class of the message.
      */
-    fun inject(code: MessageValidationCode, messageClass: PsiClass) {
+    public fun inject(code: MessageValidationCode, messageClass: PsiClass) {
         val builderClass = messageClass.nested("Builder")
         execute {
             messageClass.apply {
@@ -110,17 +110,18 @@ internal class ValidationCodeInjector {
     /**
      * Scope variables available within `validate(FieldPath)` method.
      */
-    object ValidateScope {
-        val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parentPath")
-        val parentName = ReadVar<TypeName?>("parentName")
+    public object ValidateScope {
+        public val violations: ReadVar<MutableList<ConstraintViolation>> =
+            ReadVar("violations")
+        public val parentPath: ReadVar<FieldPath> = ReadVar("parentPath")
+        public val parentName: ReadVar<TypeName?> = ReadVar("parentName")
     }
 
     /**
      * Scope variables available within the whole message class.
      */
-    object MessageScope {
-        val message = This<Message>(explicit = false)
+    public object MessageScope {
+        public val message: This<Message> = This(explicit = false)
     }
 }
 

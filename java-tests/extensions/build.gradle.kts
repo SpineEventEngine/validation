@@ -28,6 +28,7 @@ import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.McJava
+import io.spine.dependency.local.ProtoData
 
 buildscript {
     forceCodegenPlugins()
@@ -42,6 +43,7 @@ dependencies {
     ksp(AutoServiceKsp.processor)
 
     implementation(project(":java"))
+    implementation(ProtoData.java)
 }
 
 configurations.all {

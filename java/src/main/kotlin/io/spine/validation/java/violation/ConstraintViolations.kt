@@ -55,16 +55,18 @@ import io.spine.validation.java.expression.TemplateStringClass
  *   the invalid field value for this option is the field type's default value,
  *   which is treated as "no value" at all.
  */
-internal fun constraintViolation(
+public fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     typeName: Expression<String>,
-    fieldPath: Expression<FieldPath>,
+    fieldPath: Expression<FieldPath>?,
     fieldValue: Expression<*>?
 ): Expression<ConstraintViolation> {
     var builder = ClassName(ConstraintViolation::class).newBuilder()
         .chainSet("message", errorMessage)
         .chainSet("type_name", typeName)
-        .chainSet("field_path", fieldPath)
+    fieldPath?.let {
+        builder = builder.chainSet("field_path", fieldPath)
+    }
     fieldValue?.let {
         builder = builder.chainSet("field_value", fieldValue.packToAny())
     }
@@ -80,16 +82,14 @@ internal fun constraintViolation(
  * @param optionName The name of the option, which declared the provided [placeholders].
  * @param fieldName The fully qualified name of the field, which passed the provided [template].
  */
-internal fun templateString(
+public fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
     optionName: String,
-    fieldName: String
 ): Expression<TemplateString> {
     checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) {
         "The `($optionName)` option doesn't support the following placeholders: `$it`. " +
-                "The supported placeholders: `${placeholders.keys}`. " +
-                "The declared field: `${fieldName}`."
+                "The supported placeholders: `${placeholders.keys}`."
     }
     val placeholderEntries = mapExpression(
         StringClass, StringClass,
