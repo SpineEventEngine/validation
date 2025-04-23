@@ -42,6 +42,7 @@ import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.OPTION_NAME
+import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
 import io.spine.validation.test.money.currencyMessageDiscovered
@@ -52,10 +53,12 @@ import io.spine.validation.test.money.currencyMessageDiscovered
 private const val CURRENCY = "currency"
 
 /**
- * A policy which, if a type is a currency type, produces an event with a validation rule.
+ * Controls whether a message should be validated with the `(currency)` option.
  *
- * Such a message must have exactly 2 integer fields, one for the major currency and
- * another one for the minor currency.
+ * Whenever a message marked with the `(currency)` option is discovered, emits
+ * [CurrencyMessageDiscovered] event if the message has exactly two integer fields.
+ *
+ * Otherwise, a compilation error is reported.
  */
 public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
 
