@@ -81,7 +81,7 @@ message RequireNonExistentField {
     string field3 = 2;
 }
 
-// Declares the `(require)` option with duplicate fields within a single combination.
+// Declares the `(require)` option with duplicate fields within a single field group.
 message RequireDuplicateFields {
     option (require).fields = "field1 & field3 | field2 & field3 & field2";
 
