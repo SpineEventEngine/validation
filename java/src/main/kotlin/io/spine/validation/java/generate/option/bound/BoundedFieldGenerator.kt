@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
 import io.spine.protodata.Compilation
@@ -55,14 +55,13 @@ import io.spine.validation.java.expression.LongClass
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.FieldOptionGenerator
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.option.Docs.SCALAR_TYPES
-import io.spine.validation.java.generate.option.Docs.UNSIGNED_API
+import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
+import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
@@ -71,13 +70,13 @@ import io.spine.validation.java.violation.templateString
  * An abstract base for field generators that restrict the range of numeric fields.
  *
  * @see RangeFieldGenerator
- * @see MinFieldGenerator
- * @see MaxFieldGenerator
+ * @see GenerateMin
+ * @see GenerateMax
  */
 internal abstract class BoundedFieldGenerator(
     private val view: BoundedFieldView,
     private val option: String
-) : FieldOptionGenerator {
+) {
 
     private val field = view.subject
     private val declaringType = field.declaringType
@@ -89,10 +88,10 @@ internal abstract class BoundedFieldGenerator(
     protected val fieldType: FieldType = field.type
 
     /**
-     * Generates code for a field represented by the [view].
+     * Return the generated code.
      */
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    override fun generate(): FieldOptionCode = when {
+    fun code(): SingleOptionCode = when {
         fieldType.isSingular -> checkWithinBounds(getter as Expression<Number>)
 
         fieldType.isList ->
@@ -109,7 +108,7 @@ internal abstract class BoundedFieldGenerator(
                     " Please ensure that the supported field types in this generator match those" +
                     " used by the policy, which verified `${view::class.simpleName}`."
         )
-    }.run { FieldOptionCode(this) }
+    }.run { SingleOptionCode(this) }
 
     /**
      * Returns a [CodeBlock] that checks that the given [value] is within the bounds.

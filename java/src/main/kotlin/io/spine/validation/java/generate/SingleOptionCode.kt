@@ -24,30 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.java.generate
 
-import io.spine.protodata.ast.TypeName
-import io.spine.server.query.Querying
-import io.spine.server.query.select
-import io.spine.validation.bound.MinField
-import io.spine.validation.java.generate.FieldOptionCode
-import io.spine.validation.java.generate.OptionGenerator
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
 /**
- * The generator for `(min)` option.
+ * Java code handling a single application of a specific option.
+ *
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-internal class MinGenerator(private val querying: Querying) : OptionGenerator {
-
-    /**
-     * All `(min)` fields in the current compilation process.
-     */
-    private val allMinFields by lazy {
-        querying.select<MinField>()
-            .all()
-    }
-
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
-        allMinFields
-            .filter { it.id.type == type }
-            .map { MinFieldGenerator(it).generate() }
-}
+internal class SingleOptionCode(
+    val constraint: CodeBlock,
+    val fields: List<FieldDeclaration<*>> = emptyList(),
+    val methods: List<MethodDeclaration> = emptyList(),
+)

@@ -26,12 +26,58 @@
 
 package io.spine.validation.java.generate.option
 
+import io.spine.base.FieldPath
+import io.spine.option.PatternOption
+import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.camelCase
+import io.spine.protodata.ast.name
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.Literal
+import io.spine.protodata.java.MethodCall
+import io.spine.protodata.java.MethodDeclaration
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
+import io.spine.protodata.java.field
 import io.spine.server.query.Querying
 import io.spine.server.query.select
+import io.spine.validate.ConstraintViolation
+import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
-import io.spine.validation.java.generate.FieldOptionCode
+import io.spine.validation.isRepeatedString
+import io.spine.validation.isSingularString
+import io.spine.validation.java.expression.ConstraintViolationClass
+import io.spine.validation.java.expression.FieldPathClass
+import io.spine.validation.java.expression.ImmutableListClass
+import io.spine.validation.java.expression.PatternClass
+import io.spine.validation.java.expression.StringClass
+import io.spine.validation.java.expression.TypeNameClass
+import io.spine.validation.java.expression.joinToString
+import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.resolve
+import io.spine.validation.java.expression.stringify
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.mangled
+import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.java.violation.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.java.violation.constraintViolation
+import io.spine.validation.java.violation.templateString
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * The generator for `(pattern)` option.
@@ -46,8 +92,197 @@ internal class PatternGenerator(private val querying: Querying) : OptionGenerato
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<FieldOptionCode> =
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allPatternFields
             .filter { it.id.type == type }
-            .map { PatternFieldGenerator(it).generate() }
+            .map { GeneratePattern(it).code() }
+}
+
+/**
+ * Stores the generated Java field that contains the compiled [Pattern]
+ * along with [partialMatch] modifier.
+ */
+private class CompiledPattern(val field: FieldDeclaration<Pattern>, val partialMatch: Boolean)
+
+/**
+ * Generates code for a single application of the `(pattern)` option
+ * represented by the [view].
+ */
+private class GeneratePattern(private val view: PatternField) {
+
+    private val field = view.subject
+    private val fieldType = field.type
+    private val fieldAccess = message.field(field)
+    private val declaringType = field.declaringType
+    private val camelFieldName = field.name.camelCase
+    private val pattern = compilePattern()
+
+    /**
+     * Returns the generated code.
+     */
+    fun code(): SingleOptionCode = when {
+        fieldType.isSingularString -> {
+            val fieldValue = fieldAccess.getter<String>()
+            val constraint = singularStringConstraint(fieldValue)
+            SingleOptionCode(constraint, listOf(pattern.field))
+        }
+
+        fieldType.isRepeatedString -> {
+            val fieldValues = fieldAccess.getter<List<String>>()
+            val validateRepeatedField = mangled("validate$camelFieldName")
+            val validateRepeatedFieldDecl = validateRepeated(fieldValues, validateRepeatedField)
+            val constraint = repeatedStringConstraint(fieldValues, validateRepeatedField)
+            SingleOptionCode(constraint, listOf(pattern.field), listOf(validateRepeatedFieldDecl))
+        }
+
+        else -> error(
+            "The field type `${fieldType.name}` is not supported by `PatternFieldGenerator`." +
+                    " Please ensure that the supported field types in this generator match those" +
+                    " used by `PatternPolicy` when validating the `PatternFieldDiscovered` event."
+        )
+    }
+
+    /**
+     * Returns a [CodeBlock] that checks if the [fieldValue] matches the [pattern].
+     */
+    private fun singularStringConstraint(fieldValue: Expression<String>) = CodeBlock(
+        """
+        if (!$fieldValue.isEmpty() && !${pattern.matches(fieldValue)}) {
+            var fieldPath = ${parentPath.resolve(field.name)};
+            var typeName =  ${parentName.orElse(declaringType)};
+            var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
+            $violations.add(violation);
+        }
+        """.trimIndent()
+    )
+
+    /**
+     * Returns a [CodeBlock] that invokes [validateRepeated] method to check
+     * if each value from the [fieldValues] list matches the [pattern].
+     */
+    private fun repeatedStringConstraint(
+        fieldValues: Expression<List<String>>,
+        validateRepeated: String
+    ) = CodeBlock(
+        """
+        if (!$fieldValues.isEmpty()) {
+            var fieldViolations = $validateRepeated($parentPath, $parentName);
+            $violations.addAll(fieldViolations);
+        }
+        """.trimIndent()
+    )
+
+    /**
+     * Returns a [MethodDeclaration] of the method that goes through each element of
+     * the [fieldValues] list making sure it matches the [pattern].
+     *
+     * The created method returns a list of [ConstraintViolation]s, containing one
+     * violation per each invalid field value.
+     */
+    private fun validateRepeated(
+        fieldValues: Expression<List<String>>,
+        methodName: String
+    ) = MethodDeclaration(
+        """
+        private $ImmutableListClass<$ConstraintViolationClass> $methodName($FieldPathClass $parentPath, $TypeNameClass $parentName) {
+            var violations = $ImmutableListClass.<$ConstraintViolationClass>builder();
+            for ($StringClass element : $fieldValues) {
+                if (!element.isEmpty() && !${pattern.matches(ReadVar("element"))}) {
+                    var fieldPath = ${parentPath.resolve(field.name)};
+                    var typeName =  ${parentName.orElse(declaringType)};
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("element"))};
+                    violations.add(violation);
+                }
+            }
+            return violations.build();
+        }
+        """.trimIndent()
+    )
+
+    /**
+     * Creates a field containing a compiled Java [Pattern].
+     *
+     * The created field is wrapped in [CompiledPattern] instance along with
+     * the [PatternOption.Modifier.getPartialMatch] value. This way, we have
+     * everything we need to yield an expression for [Pattern.matcher] invocation
+     * under a single object. Otherwise, the [matches] method would have to accept
+     * `partialMatch` parameter along with the string value to check.
+     *
+     * Note that [PatternField.pattern_] string should not contain unprintable
+     * characters to be used as a string literal. We have to [restore][restoreProtobufEscapes]
+     * escape sequences for them, if any.
+     */
+    private fun compilePattern(): CompiledPattern {
+        val modifiers = view.modifier
+        val compilationArgs = listOf(
+            StringLiteral(restoreProtobufEscapes(view.pattern)),
+            Literal(modifiers.asFlagsMask())
+        )
+        val field = FieldDeclaration<Pattern>(
+            modifiers = "private static final",
+            type = PatternClass,
+            name = mangled("${camelFieldName}Pattern"),
+            value = PatternClass.call("compile", compilationArgs)
+        )
+        return CompiledPattern(field, modifiers.partialMatch)
+    }
+
+    /**
+     * Yields a boolean expression that checks the given string [value]
+     * matches this [CompiledPattern].
+     */
+    private fun CompiledPattern.matches(value: Expression<String>): Expression<Boolean> {
+        val matcher = MethodCall<Matcher>(field.read(), "matcher", value)
+        val operation = if (partialMatch) "find" else "matches"
+        return matcher.chain(operation)
+    }
+
+    private fun violation(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<io.spine.type.TypeName>,
+        fieldValue: Expression<String>,
+    ): Expression<ConstraintViolation> {
+        val qualifiedName = field.qualifiedName
+        val typeNameStr = typeName.stringify()
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
+    }
+
+    private fun supportedPlaceholders(
+        fieldPath: Expression<FieldPath>,
+        typeName: Expression<String>,
+        fieldValue: Expression<String>,
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldValue,
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to typeName,
+        REGEX_PATTERN to StringLiteral(restoreProtobufEscapes(view.pattern)),
+        REGEX_MODIFIERS to StringLiteral(restoreProtobufEscapes("${view.modifier}")),
+    )
+}
+
+/**
+ * Converts this [PatternOption.Modifier] to a Java [Pattern] bitwise mask.
+ *
+ * Note that [PatternOption.Modifier.getPartialMatch] is not handled by this method.
+ * It is not a flag in Java. We take it into account when choosing which method to invoke
+ * upon the [Matcher]: [Matcher.find] or [Matcher.matches].
+ */
+private fun PatternOption.Modifier.asFlagsMask(): Int {
+    var mask = 0
+    if (dotAll) {
+        mask = mask or Pattern.DOTALL
+    }
+    if (caseInsensitive) {
+        mask = mask or Pattern.CASE_INSENSITIVE
+    }
+    if (multiline) {
+        mask = mask or Pattern.MULTILINE
+    }
+    if (unicode) {
+        mask = mask or Pattern.UNICODE_CASE
+    }
+    return mask
 }
