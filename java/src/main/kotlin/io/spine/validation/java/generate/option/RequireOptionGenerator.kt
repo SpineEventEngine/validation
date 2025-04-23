@@ -58,7 +58,7 @@ import io.spine.validation.java.violation.templateString
 /**
  * The generator for the `(require)` option.
  */
-internal class RequireGenerator(
+internal class RequireOptionGenerator(
     private val querying: Querying,
     private val converter: JavaValueConverter
 ) : OptionGenerator {
