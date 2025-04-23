@@ -151,7 +151,7 @@ private class GenerateRequire(
 
     private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
-        REQUIRE_FIELDS to StringLiteral(view.groupsDefinition)
+        REQUIRE_FIELDS to StringLiteral(view.specifiedGroups)
     )
 
     private companion object {

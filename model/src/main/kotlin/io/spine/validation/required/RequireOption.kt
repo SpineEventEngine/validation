@@ -67,7 +67,7 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
         return requireMessageDiscovered {
             id = messageType.name
             errorMessage = message
-            groupsDefinition = option.fields
+            specifiedGroups = option.fields
             group += groups
         }.just()
     }
@@ -82,7 +82,7 @@ internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessag
     fun on(e: RequireMessageDiscovered) = alter {
         id = e.id
         errorMessage = e.errorMessage
-        groupsDefinition = e.groupsDefinition
+        specifiedGroups = e.specifiedGroups
         addAllGroup(e.groupList)
     }
 }
