@@ -24,13 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+syntax = "proto3";
 
-import io.spine.protodata.plugin.Plugin
+package spine.validation.test.money;
 
-@Suppress("unused") // Accessed reflectively by ProtoData.
-public class MoneyValidationPlugin : Plugin(
-    views = setOf(CurrencyView::class.java),
-    policies = setOf(CurrencyPolicy()),
-    renderers = listOf(CurrencyRenderer())
-)
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "ViewsProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/test/money_options.proto";
+
+// A view on a message that is marked with the `(currency)` option.
+message CurrencyMessage {
+    option (entity).kind = PROJECTION;
+
+    // The name of the discovered message.
+    protodata.TypeName type = 1;
+
+    // The applied option.
+    Currency currency = 2;
+
+    // The field of the message which stores the major units of the currency.
+    protodata.Field major_unit_field = 3;
+
+    // The field of the message which stores the minor units of the currency.
+    protodata.Field minor_unit_field = 4;
+
+    // The error message template.
+    string error_message = 5;
+}

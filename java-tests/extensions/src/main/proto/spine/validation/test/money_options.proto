@@ -38,7 +38,6 @@ option java_multiple_files = true;
 import "google/protobuf/descriptor.proto";
 
 // Descriptor of a monetary currency.
-//
 message Currency {
 
     string name = 1;
