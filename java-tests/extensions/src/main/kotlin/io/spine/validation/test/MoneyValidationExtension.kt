@@ -32,6 +32,9 @@ import io.spine.protodata.plugin.View
 import io.spine.validation.java.JavaValidationExtension
 import io.spine.validation.java.generate.OptionGenerator
 
+/**
+ * Extends the Java validation with the custom `(currency)` option.
+ */
 @AutoService(JavaValidationExtension::class)
 public class MoneyValidationExtension : JavaValidationExtension {
 

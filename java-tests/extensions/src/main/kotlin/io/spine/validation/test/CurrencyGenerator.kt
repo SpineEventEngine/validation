@@ -31,7 +31,6 @@ import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.java.expression.orElse
@@ -48,7 +47,7 @@ import io.spine.validation.test.money.CurrencyMessage
 /**
  * The generator for the `(currency)` option.
  */
-internal class CurrencyGenerator(private val querying: Querying) : OptionGenerator {
+internal class CurrencyGenerator : OptionGenerator() {
 
     /**
      * All `(currency)`-marked messages in the current compilation process.
