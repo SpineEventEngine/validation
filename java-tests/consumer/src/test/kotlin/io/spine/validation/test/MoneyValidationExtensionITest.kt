@@ -32,16 +32,16 @@ import org.junit.jupiter.api.Test
 
 /**
  * This is the integration test that verifies custom validation rules
- * implemented by [MoneyValidationPlugin] in the `java-tests:extensions` module.
+ * implemented by [MoneyValidationExtension] in the `java-tests:extensions` module.
  *
  * The `extensions` module declares the `currency` message option, which is used by
  * money data types in this module. Please see `main/proto/test/money.proto` for details.
  *
- * [MoneyValidationPlugin] handles the validation of the `currency` option.
+ * [MoneyValidationExtension] handles the validation of the `currency` option.
  * This test verifies that custom validation code rendered by the plugin works as expected.
  */
 @DisplayName("`MoneyValidationPlugin` should generate the code which")
-internal class MoneyValidationPluginITest {
+internal class MoneyValidationExtensionITest {
 
     @Test
     fun `throws 'ValidationException' if actual value is greater than the threshold`() {

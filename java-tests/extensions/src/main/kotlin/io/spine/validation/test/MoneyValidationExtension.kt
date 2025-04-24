@@ -26,11 +26,18 @@
 
 package io.spine.validation.test
 
-import io.spine.protodata.plugin.Plugin
+import com.google.auto.service.AutoService
+import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.validation.java.JavaValidationExtension
+import io.spine.validation.java.generate.OptionGenerator
 
-@Suppress("unused") // Accessed reflectively by ProtoData.
-public class MoneyValidationPlugin : Plugin(
-    views = setOf(CurrencyView::class.java),
-    policies = setOf(CurrencyPolicy()),
-    renderers = listOf(CurrencyRenderer())
-)
+@AutoService(JavaValidationExtension::class)
+public class MoneyValidationExtension : JavaValidationExtension {
+
+    override val policies: Set<Policy<*>> = setOf(CurrencyPolicy())
+
+    override val views: Set<Class<out View<*, *, *>>> = setOf(CurrencyView::class.java)
+
+    override val generators: List<OptionGenerator> = listOf(CurrencyGenerator())
+}
