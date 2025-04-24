@@ -34,11 +34,12 @@ import io.spine.server.query.Querying
  */
 public abstract class OptionGenerator {
 
-    // TODO:2025-04-24:yevhenii.nadtochii: Generator may need something from the renderer.
-    //  Querying, TypeSystem, ValueConverter. Provide them all post-factum?
-
     /**
      * A component capable of querying states of views.
+     *
+     * Note that the class inheritors are not responsible for providing [Querying].
+     * The instance is [injected][inject] by the Java validation plugin before
+     * the first invocation of the [codeFor] method.
      */
     protected lateinit var querying: Querying
 
