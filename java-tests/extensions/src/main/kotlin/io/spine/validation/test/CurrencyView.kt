@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import io.spine.validation.test.money.CurrencyMessage
 import io.spine.validation.test.money.CurrencyMessageDiscovered
 
 /**
- * A view on a message type which stores an amount of money is a certain currency.
+ * A view of a message that is marked with the `(currency)` option.
  */
 internal class CurrencyView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
 

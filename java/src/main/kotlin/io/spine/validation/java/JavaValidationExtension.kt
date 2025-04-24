@@ -38,7 +38,7 @@ import io.spine.validation.java.generate.OptionGenerator
 public interface JavaValidationExtension {
 
     /**
-     * The option [generators][OptionGenerator] added by this extension.
+     * The option [generators][OptionGenerator].
      *
      * The generators are called in the order of their declaration in the extension.
      */
@@ -46,14 +46,13 @@ public interface JavaValidationExtension {
         get() = emptyList()
 
     /**
-     * The [views][View] added by this extension represented via their Java classes.
+     * The [views][View] represented via their Java classes.
      */
     public val views: Set<Class<out View<*, *, *>>>
         get() = emptySet()
 
     /**
-     * The [views][View] added by this extension represented via their
-     * [repositories][ViewRepository].
+     * The [views][View] represented via their [repositories][ViewRepository].
      *
      * If passing events to a [View] does not require custom routing,
      * the view may not have a need for repository. In such a case,
@@ -63,7 +62,7 @@ public interface JavaValidationExtension {
         get() = emptySet()
 
     /**
-     * The [policies][Policy] added by this extension.
+     * The [policies][Policy].
      */
     public val policies: Set<Policy<*>>
         get() = emptySet()

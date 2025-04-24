@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import io.spine.validation.test.money.CurrencyMessageDiscovered
 import io.spine.validation.test.money.currencyMessageDiscovered
 
 /**
- * The name of the option.
+ * The name of the `(currency)` option.
  */
 internal const val CURRENCY = "currency"
 
@@ -71,17 +71,17 @@ public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
         val fields = messageType.fieldList
         checkFieldType(fields.size == 2, file, messageType)
 
-        val firstField = messageType.fieldList[0]
-        val secondField = messageType.fieldList[1]
-        checkFieldType(firstField.isInteger && secondField.isInteger, file, messageType)
+        val majorField = messageType.fieldList[0]
+        val minorField = messageType.fieldList[1]
+        checkFieldType(majorField.isInteger && minorField.isInteger, file, messageType)
 
         val option = event.option.unpack<Currency>()
-        val message = errorMessage(secondField, firstField, option.minorUnits)
+        val message = errorMessage(minorField, majorField, option.minorUnits)
         return currencyMessageDiscovered {
             type = messageType.name
             currency = option
-            majorUnitField = firstField
-            minorUnitField = secondField
+            majorUnitField = majorField
+            minorUnitField = minorField
             errorMessage = message
         }.just()
     }
