@@ -39,6 +39,7 @@ import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
 import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator
@@ -59,7 +60,7 @@ import io.spine.validation.java.rule.RuleGenerator
  * This renderer is applied to every compilation [Message],
  * even if the message does not have any declared constraints.
  */
-public class JavaValidationRenderer : JavaRenderer() {
+public class JavaValidationRenderer(customGenerator: List<OptionGenerator>) : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
@@ -78,7 +79,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             ChoiceGenerator(querying),
             WhenGenerator(querying, valueConverter),
             RequireOptionGenerator(querying, valueConverter),
-        )
+        ) + customGenerator
     }
 
     override fun render(sources: SourceFileSet) {
