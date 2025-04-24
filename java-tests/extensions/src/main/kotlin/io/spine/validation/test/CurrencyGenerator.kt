@@ -59,11 +59,11 @@ internal class CurrencyGenerator : OptionGenerator() {
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> {
-        val requireMessage = allCurrencyMessages.find { it.type == type }
-        if (requireMessage == null) {
+        val currencyMessage = allCurrencyMessages.find { it.type == type }
+        if (currencyMessage == null) {
             return emptyList()
         }
-        val code = GenerateCurrency(requireMessage).code()
+        val code = GenerateCurrency(currencyMessage).code()
         return listOf(code)
     }
 }
@@ -81,13 +81,13 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
      * Returns the generated code.
      */
     fun code(): SingleOptionCode {
-        val getter = message.field(minorField)
+        val minorGetter = message.field(minorField)
             .getter<Int>()
         val constraint = CodeBlock(
             """
-            if ($getter >= $minorThreshold) {
+            if ($minorGetter >= $minorThreshold) {
                 var typeName =  ${parentName.orElse(view.type)};
-                var violation = ${violation(ReadVar("typeName"), getter)};
+                var violation = ${violation(ReadVar("typeName"), minorGetter)};
                 $violations.add(violation);
             }
             """.trimIndent()
