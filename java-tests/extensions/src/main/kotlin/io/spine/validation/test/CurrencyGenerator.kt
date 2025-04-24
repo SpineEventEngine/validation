@@ -34,6 +34,7 @@ import io.spine.protodata.java.field
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.java.expression.orElse
+import io.spine.validation.java.expression.stringValueOf
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.MessageScope.message
 import io.spine.validation.java.generate.OptionGenerator
@@ -59,7 +60,7 @@ internal class CurrencyGenerator : OptionGenerator() {
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> {
         val requireMessage = allCurrencyMessages.find { it.type == type }
-        if  (requireMessage == null) {
+        if (requireMessage == null) {
             return emptyList()
         }
         val code = GenerateCurrency(requireMessage).code()
@@ -84,7 +85,7 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
             .getter<Int>()
         val constraint = CodeBlock(
             """
-            if ($getter > $minorThreshold) {
+            if ($getter >= $minorThreshold) {
                 var typeName =  ${parentName.orElse(view.type)};
                 var violation = ${violation(ReadVar("typeName"), getter)};
                 $violations.add(violation);
@@ -106,5 +107,6 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
 
     private fun supportedPlaceholders(
         minorValue: Expression<Int>
-    ): Map<String, Expression<String>> = mapOf("minor.value" to minorValue.stringify())
+    ): Map<String, Expression<String>> =
+        mapOf("minor.value" to minorField.stringValueOf(minorValue))
 }
