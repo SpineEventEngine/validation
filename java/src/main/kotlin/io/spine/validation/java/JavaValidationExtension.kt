@@ -66,5 +66,4 @@ public interface JavaValidationExtension {
      */
     public val policies: Set<Policy<*>>
         get() = emptySet()
-
 }
