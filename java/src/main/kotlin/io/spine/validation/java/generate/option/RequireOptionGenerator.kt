@@ -81,8 +81,6 @@ internal class RequireOptionGenerator(
     }
 }
 
-private typealias MethodName = String
-
 /**
  * Generates code for a single application of the `(require)` option
  * represented by the [view].
@@ -112,8 +110,10 @@ private class GenerateRequire(
     /**
      * Creates a method that returns `true` if none of the provided field
      * groups is set.
+     *
+     * @return The name of the generated method along with its declaration.
      */
-    private fun noneOfFieldGroupsSet(): Pair<MethodName, MethodDeclaration> {
+    private fun noneOfFieldGroupsSet(): Pair<String, MethodDeclaration> {
         val name = mangled(NONE_OF_FIELD_GROUPS_SET)
         val groupsConstraints = view.groupList
             .map(::toConstraint)
