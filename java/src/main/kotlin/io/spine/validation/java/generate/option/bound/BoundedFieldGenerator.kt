@@ -55,10 +55,10 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.MessageScope.message
+import io.spine.validation.java.generate.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.violations
 import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.java.violation.ErrorPlaceholder
