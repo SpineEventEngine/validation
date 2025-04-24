@@ -37,8 +37,8 @@ import io.spine.protodata.java.MethodDeclaration
  * @property fields Additional class-level fields required by the validation logic.
  * @property methods Additional class-level methods required by the validation logic.
  */
-internal class SingleOptionCode(
-    val constraint: CodeBlock,
-    val fields: List<FieldDeclaration<*>> = emptyList(),
-    val methods: List<MethodDeclaration> = emptyList(),
+public class SingleOptionCode(
+    public val constraint: CodeBlock,
+    public val fields: List<FieldDeclaration<*>> = emptyList(),
+    public val methods: List<MethodDeclaration> = emptyList(),
 )

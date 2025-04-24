@@ -39,5 +39,5 @@ public interface OptionGenerator {
      *
      * @param type The message to generate code for.
      */
-    fun codeFor(type: TypeName): List<SingleOptionCode>
+    public fun codeFor(type: TypeName): List<SingleOptionCode>
 }
