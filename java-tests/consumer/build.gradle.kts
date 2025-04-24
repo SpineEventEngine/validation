@@ -33,7 +33,6 @@ protoData {
         // Suppress warnings in the generated code.
         "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
         "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
     )
 }
 
