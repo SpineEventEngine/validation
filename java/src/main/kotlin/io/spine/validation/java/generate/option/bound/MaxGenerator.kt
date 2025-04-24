@@ -31,7 +31,6 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.MAX
 import io.spine.validation.bound.MaxField
@@ -55,7 +54,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
 /**
  * The generator for the `(max)` option.
  */
-internal class MaxGenerator(private val querying: Querying) : OptionGenerator {
+internal class MaxGenerator : OptionGenerator() {
 
     /**
      * All `(max)` fields in the current compilation process.

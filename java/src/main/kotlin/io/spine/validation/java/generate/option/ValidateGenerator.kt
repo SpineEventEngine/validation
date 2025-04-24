@@ -38,7 +38,6 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.ValidateField
 import io.spine.validation.java.expression.AnyClass
@@ -53,18 +52,17 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.MessageScope.message
+import io.spine.validation.java.generate.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.violations
 
 /**
  * The generator for `(validate)` option.
  */
 internal class ValidateGenerator(
-    private val querying: Querying,
     private val converter: JavaValueConverter
-) : OptionGenerator {
+) : OptionGenerator() {
 
     /**
      * All `(validate)` fields in the current compilation process.

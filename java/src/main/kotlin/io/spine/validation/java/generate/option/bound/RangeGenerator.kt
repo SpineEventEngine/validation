@@ -31,7 +31,6 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.RANGE
 import io.spine.validation.bound.NumericBound
@@ -54,7 +53,7 @@ import io.spine.validation.java.violation.ErrorPlaceholder.RANGE_VALUE
 /**
  * The generator for `(range)` option.
  */
-internal class RangeGenerator(private val querying: Querying) : OptionGenerator {
+internal class RangeGenerator : OptionGenerator() {
 
     /**
      * All `(range)` fields in the current compilation process.

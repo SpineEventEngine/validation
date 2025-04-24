@@ -42,7 +42,6 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.PATTERN
@@ -61,10 +60,10 @@ import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.MessageScope.message
+import io.spine.validation.java.generate.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.violations
 import io.spine.validation.java.generate.mangled
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
@@ -81,7 +80,7 @@ import java.util.regex.Pattern
 /**
  * The generator for `(pattern)` option.
  */
-internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
+internal class PatternGenerator : OptionGenerator() {
 
     /**
      * All `(pattern)` fields in the current compilation process.

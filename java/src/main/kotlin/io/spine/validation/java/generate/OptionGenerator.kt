@@ -27,11 +27,20 @@
 package io.spine.validation.java.generate
 
 import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
 
 /**
  * Generates Java code for a specific option.
  */
-public interface OptionGenerator {
+public abstract class OptionGenerator {
+
+    // TODO:2025-04-24:yevhenii.nadtochii: Generator may need something from the renderer.
+    //  Querying, TypeSystem, ValueConverter. Provide them all post-factum?
+
+    /**
+     * A component capable of querying states of views.
+     */
+    protected lateinit var querying: Querying
 
     /**
      * Generates validation code for all option applications within the provided
@@ -39,5 +48,12 @@ public interface OptionGenerator {
      *
      * @param type The message to generate code for.
      */
-    public fun codeFor(type: TypeName): List<SingleOptionCode>
+    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
+
+    /**
+     * Injects [Querying] into this instance of [OptionGenerator].
+     */
+    internal fun inject(querying: Querying) {
+        this.querying = querying
+    }
 }

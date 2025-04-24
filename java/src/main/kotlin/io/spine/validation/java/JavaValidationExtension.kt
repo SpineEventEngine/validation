@@ -29,6 +29,7 @@ package io.spine.validation.java
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.protodata.plugin.ViewRepository
+import io.spine.server.query.Querying
 import io.spine.validation.java.generate.OptionGenerator
 
 /**

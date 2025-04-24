@@ -28,11 +28,9 @@ package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.string.lowerCamelCase
 import io.spine.validate.ConstraintViolation
@@ -44,9 +42,9 @@ import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.java.generate.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.violations
 import io.spine.validation.java.violation.ErrorPlaceholder
 import io.spine.validation.java.violation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
@@ -56,7 +54,7 @@ import io.spine.validation.java.violation.templateString
 /**
  * The generator for the `(choice)` option.
  */
-internal class ChoiceGenerator(private val querying: Querying) : OptionGenerator {
+internal class ChoiceGenerator : OptionGenerator() {
 
     /**
      * All `oneof` groups with `(choice).enabled = true` in the current compilation process.

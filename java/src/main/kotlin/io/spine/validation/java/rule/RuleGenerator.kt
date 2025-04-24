@@ -33,13 +33,12 @@ import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.This
 import io.spine.protodata.type.TypeSystem
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.CompilationMessage
 import io.spine.validation.Rule
 import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.ValidateScope.violations
 import com.squareup.javapoet.CodeBlock as PoetCodeBlock
 import com.squareup.javapoet.FieldSpec as PoetField
 import com.squareup.javapoet.MethodSpec as PoetMethod
@@ -55,9 +54,8 @@ import com.squareup.javapoet.MethodSpec as PoetMethod
  */
 @Deprecated("Will be removed as we complete our migration to standalone generators.")
 internal class RuleGenerator(
-    private val querying: Querying,
     private val typeSystem: TypeSystem
-) : OptionGenerator {
+) : OptionGenerator() {
 
     /**
      * All compilation messages along with their rules.
