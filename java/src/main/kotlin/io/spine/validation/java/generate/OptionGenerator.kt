@@ -31,7 +31,7 @@ import io.spine.protodata.ast.TypeName
 /**
  * Generates Java code for a specific option.
  */
-internal interface OptionGenerator {
+public interface OptionGenerator {
 
     /**
      * Generates validation code for all option applications within the provided
