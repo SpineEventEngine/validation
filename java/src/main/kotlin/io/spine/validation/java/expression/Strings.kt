@@ -32,4 +32,4 @@ import io.spine.protodata.java.call
 /**
  * Converts this [Expression] to its string representation by invoking `toString()`.
  */
-internal fun Expression<*>.stringify(): Expression<String> = call("toString")
+public fun Expression<*>.stringify(): Expression<String> = call("toString")
