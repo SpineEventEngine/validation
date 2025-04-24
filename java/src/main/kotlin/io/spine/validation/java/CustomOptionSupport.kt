@@ -28,41 +28,25 @@ package io.spine.validation.java
 
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
-import io.spine.protodata.plugin.ViewRepository
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
- * Extends the Java validation library with the custom components.
+ * Extends the Java validation library with the custom validation option.
  */
-public interface JavaValidationExtension {
+public interface CustomOptionSupport {
 
     /**
-     * The option [generators][OptionGenerator].
-     *
-     * The generators are called in the order of their declaration in the extension.
+     * The option [generator][OptionGenerator].
      */
-    public val generators: List<OptionGenerator>
-        get() = emptyList()
+    public val generator: OptionGenerator
 
     /**
-     * The [views][View] represented via their Java classes.
+     * The Java class of the option [view][View].
      */
-    public val views: Set<Class<out View<*, *, *>>>
-        get() = emptySet()
+    public val view: Class<out View<*, *, *>>
 
     /**
-     * The [views][View] represented via their [repositories][ViewRepository].
-     *
-     * If passing events to a [View] does not require custom routing,
-     * the view may not have a need for repository. In such a case,
-     * please use [JavaValidationExtension.views] instead.
+     * The option [policy][Policy].
      */
-    public val viewRepositories: Set<ViewRepository<*, *, *>>
-        get() = emptySet()
-
-    /**
-     * The [policies][Policy].
-     */
-    public val policies: Set<Policy<*>>
-        get() = emptySet()
+    public val policy: Policy<*>
 }

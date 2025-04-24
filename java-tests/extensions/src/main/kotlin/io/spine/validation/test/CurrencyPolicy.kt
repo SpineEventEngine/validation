@@ -59,7 +59,7 @@ internal const val CURRENCY = "currency"
  *
  * Otherwise, a compilation error is reported.
  */
-public class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
+internal class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
 
     @React
     override fun whenever(

@@ -29,18 +29,18 @@ package io.spine.validation.test
 import com.google.auto.service.AutoService
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
-import io.spine.validation.java.JavaValidationExtension
+import io.spine.validation.java.CustomOptionSupport
 import io.spine.validation.java.generate.OptionGenerator
 
 /**
  * Extends the Java validation with the custom `(currency)` option.
  */
-@AutoService(JavaValidationExtension::class)
-public class MoneyValidationExtension : JavaValidationExtension {
+@AutoService(CustomOptionSupport::class)
+public class CurrencyOptionSupport : CustomOptionSupport {
 
-    override val policies: Set<Policy<*>> = setOf(CurrencyPolicy())
+    override val policy: Policy<*> = CurrencyPolicy()
 
-    override val views: Set<Class<out View<*, *, *>>> = setOf(CurrencyView::class.java)
+    override val view: Class<out View<*, *, *>> = CurrencyView::class.java
 
-    override val generators: List<OptionGenerator> = listOf(CurrencyGenerator())
+    override val generator: OptionGenerator = CurrencyGenerator()
 }

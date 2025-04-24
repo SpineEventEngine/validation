@@ -45,18 +45,17 @@ import java.util.*
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(extensions.flatMap { it.generators }),
+        JavaValidationRenderer(customOptions.map { it.generator }),
         SetOnceRenderer()
     ),
-    views = extensions.flatMapTo(mutableSetOf()) { it.views },
-    viewRepositories = extensions.flatMapTo(mutableSetOf()) { it.viewRepositories },
-    policies = extensions.flatMapTo(mutableSetOf()) { it.policies },
+    views = customOptions.map { it.view }.toSet(),
+    policies = customOptions.map { it.policy }.toSet(),
 )
 
 /**
- * Dynamically discovered instances of [JavaValidationExtension].
+ * Dynamically discovered instances of [CustomOptionSupport].
  */
-private val extensions by lazy {
-    ServiceLoader.load(JavaValidationExtension::class.java)
+private val customOptions by lazy {
+    ServiceLoader.load(CustomOptionSupport::class.java)
         .filterNotNull()
 }

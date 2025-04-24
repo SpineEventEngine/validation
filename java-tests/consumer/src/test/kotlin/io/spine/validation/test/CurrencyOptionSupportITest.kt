@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test
  * This test verifies that custom validation code rendered by the plugin works as expected.
  */
 @DisplayName("`MoneyValidationPlugin` should generate the code which")
-internal class MoneyValidationExtensionITest {
+internal class CurrencyOptionSupportITest {
 
     @Test
     fun `throws 'ValidationException' if actual value is greater than the threshold`() {
