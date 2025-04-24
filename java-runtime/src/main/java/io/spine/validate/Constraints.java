@@ -32,7 +32,7 @@ import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.OneofDeclaration;
 import io.spine.type.MessageType;
 import io.spine.validate.option.IsRequired;
-import io.spine.validate.option.RequiredField;
+import io.spine.validate.option.Require;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -91,10 +91,10 @@ public final class Constraints {
 
     private static void addRequiredField(MessageType type,
                                          ImmutableList.Builder<Constraint> constraintBuilder) {
-        var requiredField = new RequiredField();
-        if (requiredField.valuePresent(type.descriptor())) {
-            var requiredFieldConstraint = requiredField.constraintFor(type);
-            constraintBuilder.add(requiredFieldConstraint);
+        var require = new Require();
+        if (require.valuePresent(type.descriptor())) {
+            var constraint = require.constraintFor(type);
+            constraintBuilder.add(constraint);
         }
     }
 

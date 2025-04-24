@@ -57,7 +57,6 @@ internal class SetOnceConstraintViolation(
 
     private val fieldName = field.name.value
     private val fieldType = field.type.name
-    private val qualifiedName = field.qualifiedName
     private val declaringType = StringLiteral(field.declaringType.qualifiedName)
 
     /**
@@ -76,7 +75,7 @@ internal class SetOnceConstraintViolation(
         payload: Expression<*> = newValue
     ): Expression<ConstraintViolation> {
         val placeholders = supportedPlaceholders(currentValue, newValue)
-        val errorMessage = templateString(errorTemplate, placeholders, IF_SET_AGAIN, qualifiedName)
+        val errorMessage = templateString(errorTemplate, placeholders, IF_SET_AGAIN)
         val fieldPath = ClassName(FieldPath::class).newBuilder()
             .chainAdd("field_name", StringLiteral(fieldName))
             .chainBuild<FieldPath>()

@@ -38,7 +38,7 @@ option java_package = "io.spine.test.validate.requiredfield";
 
 message EveryFieldRequired {
 
-    option (required_field) = "first & second & third";
+    option (require).fields = "first & second & third";
 
     string first = 1;
 
@@ -49,27 +49,12 @@ message EveryFieldRequired {
 
 message OneofRequired {
 
-    option (required_field) = "first | second";
+    option (require).fields = "first | second";
 
     oneof fields {
         string first = 1;
         string second = 2;
     }
-}
-
-// Currently () syntax is not supported.
-// The message is here because the test that validates the behavior is disabled.
-// Remove the comment when the https://github.com/SpineEventEngine/base/issues/381 is resolved.
-message OneofFieldAndOtherFieldRequired {
-
-    option (required_field) = "(first | second) & third";
-
-    oneof fields {
-        string first = 1;
-        string second = 2;
-    }
-
-    string third = 3;
 }
 
 message EveryFieldOptional {
@@ -79,27 +64,4 @@ message EveryFieldOptional {
     }
 
     string third = 3;
-}
-
-// Currently () syntax is not supported.
-// The message is here because the test that validates the behavior is disabled.
-// Remove the comment when the https://github.com/SpineEventEngine/base/issues/381 is resolved.
-message ComplexRequiredFields {
-
-    option (required_field) = "(first | second) & (third | fourth) & fifth";
-
-    repeated string first = 1;
-
-    map<string,string> second = 2;
-
-    oneof fields {
-        string third = 3;
-        string fourth = 4;
-    }
-
-    FifthField fifth = 5;
-
-    message FifthField {
-        string value = 1;
-    }
 }

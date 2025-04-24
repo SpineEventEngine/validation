@@ -38,7 +38,7 @@ option java_package = "io.spine.test.validate.oneof";
 
 message OneofWithRequiredFields {
 
-    option (required_field) = "first | second";
+    option (require).fields = "first | second";
 
     oneof fields {
         string first = 1;
@@ -55,7 +55,7 @@ message OneofWithOptionalFields {
 
 message OneofAndOtherAreRequired {
 
-    option (required_field) = "first | second";
+    option (require).fields = "first | second";
 
     oneof fields {
         string first = 1;
@@ -75,7 +75,7 @@ message OneofWithValidation {
 
 message RequiredOneofWithValidation {
 
-    option (required_field) = "raw_value | valid_value";
+    option (require).fields = "raw_value | valid_value";
 
     oneof fields {
         string raw_value = 1;

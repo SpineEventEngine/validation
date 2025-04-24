@@ -32,7 +32,6 @@ import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.camelCase
 import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.FieldDeclaration
@@ -242,10 +241,9 @@ private class GeneratePattern(private val view: PatternField) {
         typeName: Expression<io.spine.type.TypeName>,
         fieldValue: Expression<String>,
     ): Expression<ConstraintViolation> {
-        val qualifiedName = field.qualifiedName
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN, qualifiedName)
+        val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

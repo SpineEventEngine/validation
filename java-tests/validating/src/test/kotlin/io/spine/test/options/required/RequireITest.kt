@@ -31,30 +31,34 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.spine.test.tools.validate.Combination
+import io.spine.test.tools.validate.Citizen
+import io.spine.test.tools.validate.FieldGroup
 import io.spine.test.tools.validate.Due
 import io.spine.type.TypeName
 import io.spine.validate.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required_field)` option should be compiled so that")
-internal class RequiredFieldITest {
+@DisplayName("`(require)` option should be compiled so that")
+internal class RequireITest {
 
     @Test
-    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
+    fun `unset field produces a violation`() {
+        val invalidMessage = Citizen.newBuilder()
+        assertInvalidWithParam(invalidMessage, "tax_number")
+    }
+
+    @Test
     fun `unset fields produce a violation`() {
         val invalidMessage = Due.newBuilder()
         assertInvalidWithParam(invalidMessage, "date | never")
     }
 
     @Test
-    @Disabled("https://github.com/SpineEventEngine/validation/issues/148")
     fun `incomplete group causes a violation`() {
-        val invalidMessage = Combination.newBuilder()
+        val invalidMessage = FieldGroup.newBuilder()
             .setA1("a1")
             .setB2(ByteString.copyFrom("b2", Charsets.UTF_16))
         assertInvalidWithParam(invalidMessage, "a1 & a2 | b1 & b2")
@@ -62,15 +66,15 @@ internal class RequiredFieldITest {
 
     @Test
     fun `at least one alternative satisfies the constraint`() {
-        val message = Combination.newBuilder()
+        val message = FieldGroup.newBuilder()
             .setA1("a1")
             .addA2("a2")
         assertValid(message)
     }
 
     @Test
-    fun `if all the alternatives set the constraint is satisfied`() {
-        val message = Combination.newBuilder()
+    fun `if all the alternatives satisfy the constraint`() {
+        val message = FieldGroup.newBuilder()
             .setA1("a1")
             .addA2("a2")
             .putB1(42, 314)

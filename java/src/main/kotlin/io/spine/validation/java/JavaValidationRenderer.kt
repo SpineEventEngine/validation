@@ -47,6 +47,7 @@ import io.spine.validation.java.generate.option.bound.MinGenerator
 import io.spine.validation.java.generate.option.PatternGenerator
 import io.spine.validation.java.generate.option.bound.RangeGenerator
 import io.spine.validation.java.generate.option.ChoiceGenerator
+import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
@@ -76,6 +77,7 @@ public class JavaValidationRenderer : JavaRenderer() {
             MinGenerator(querying),
             ChoiceGenerator(querying),
             WhenGenerator(querying, valueConverter),
+            RequireOptionGenerator(querying, valueConverter),
         )
     }
 

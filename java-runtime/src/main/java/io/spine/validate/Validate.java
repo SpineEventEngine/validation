@@ -50,7 +50,6 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH;
 import static io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE;
-import static io.spine.validate.WorkaroundKt.requiresRuntimeValidation;
 import static java.lang.String.format;
 
 /**
@@ -109,8 +108,7 @@ public final class Validate {
     @SuppressWarnings("ChainOfInstanceofChecks") // A necessity for covering more cases.
     public static List<ConstraintViolation> violationsOf(Message message) {
         var msg = message;
-        if (message instanceof Any) {
-            var packed = (Any) message;
+        if (message instanceof Any packed) {
             if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
                 msg = unpack(packed);
             } else {
@@ -119,11 +117,8 @@ public final class Validate {
                     packed.getTypeUrl()));
             }
         }
-        if (msg instanceof ValidatableMessage) {
-            if (requiresRuntimeValidation(message)) {
-                return validateAtRuntime(message);
-            }
-            var error = ((ValidatableMessage) msg).validate();
+        if (msg instanceof ValidatableMessage validatable) {
+            var error = validatable.validate();
             return error.map(ValidationError::getConstraintViolationList)
                         .orElse(ImmutableList.of());
         }
