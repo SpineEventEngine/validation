@@ -30,7 +30,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.getterName
+import io.spine.protodata.java.field
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
@@ -38,6 +38,7 @@ import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.stringify
 import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.SingleOptionCode
+import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.violation.constraintViolation
@@ -73,18 +74,20 @@ internal class CurrencyGenerator(private val querying: Querying) : OptionGenerat
  */
 private class GenerateCurrency(private val view: CurrencyMessage) {
 
-    private val minorField = view.minorUnitField.getterName
+    private val minorField = view.minorUnitField
     private val minorThreshold = view.currency.minorUnits
 
     /**
      * Returns the generated code.
      */
     fun code(): SingleOptionCode {
+        val getter = message.field(minorField)
+            .getter<Int>()
         val constraint = CodeBlock(
             """
-            if ($minorField() > $minorThreshold)) {
+            if ($getter > $minorThreshold) {
                 var typeName =  ${parentName.orElse(view.type)};
-                var violation = ${violation(ReadVar("typeName"))};
+                var violation = ${violation(ReadVar("typeName"), getter)};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -92,9 +95,17 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
         return SingleOptionCode(constraint)
     }
 
-    private fun violation(typeName: Expression<TypeName>): Expression<ConstraintViolation> {
+    private fun violation(
+        typeName: Expression<TypeName>,
+        minorValue: Expression<Int>
+    ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
-        val errorMessage = templateString(view.errorMessage, emptyMap(), CURRENCY)
+        val placeholders = supportedPlaceholders(minorValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, CURRENCY)
         return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
+
+    private fun supportedPlaceholders(
+        minorValue: Expression<Int>
+    ): Map<String, Expression<String>> = mapOf("minor.value" to minorValue.stringify(),)
 }

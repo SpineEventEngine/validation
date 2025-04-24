@@ -92,7 +92,7 @@ private val Field.isInteger: Boolean
 
 private fun errorMessage(minor: Field, major: Field, minorUnits: Int) =
     "Expected `${minor.name.value}` field to have less than `$minorUnits`" +
-            " per one unit in `${major.name.value}` field."
+            " per one unit in `${major.name.value}` field. The passed value: `\${minor.value}`."
 
 private fun checkFieldType(condition: Boolean, file: File, message: MessageType) =
     Compilation.check(condition, file, message.span) {

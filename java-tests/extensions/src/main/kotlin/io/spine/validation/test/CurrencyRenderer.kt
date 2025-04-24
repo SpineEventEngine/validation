@@ -55,9 +55,14 @@ public class CurrencyRenderer : JavaRenderer() {
         }
 
         findMessageTypes()
-            .forEach { message ->
+            .mapNotNull { message ->
                 val optionCode = currencyGenerator.codeFor(message.name)
-                    .first() // There can be only one message option per message.
+                    .firstOrNull()
+                optionCode?.let {
+                    message to it
+                }
+            }
+            .forEach { (message, optionCode) ->
                 val messageCode = MessageValidationCode(
                     message = message.name.javaClassName(typeSystem),
                     constraints = listOf(optionCode.constraint),
