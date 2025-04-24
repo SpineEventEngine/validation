@@ -31,8 +31,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 /**
- * This is the integration test that verifies custom validation rules
- * implemented by [MoneyValidationExtension] in the `java-tests:extensions` module.
+ * This is the integration test that verifies the custom validation implemented
+ * by [MoneyValidationExtension] in the `:java-tests:extensions` module.
  *
  * The `extensions` module declares the `currency` message option, which is used by
  * money data types in this module. Please see `main/proto/test/money.proto` for details.
