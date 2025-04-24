@@ -52,12 +52,12 @@ import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
 import io.spine.validation.java.expression.FieldPathClass
 import io.spine.validation.java.expression.NullableTypeNameClass
 import io.spine.validation.java.expression.ObjectsClass
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.parentName
+import io.spine.validation.java.generate.ValidateScope.parentPath
+import io.spine.validation.java.generate.ValidateScope.violations
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -93,7 +93,6 @@ internal class ValidationCodeInjector {
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declareDefaultValidateMethod()
                 declareValidateMethod(code.constraints)
                 declareSupportingFields(code.fields)
                 declareSupportingMethods(code.methods)
@@ -106,22 +105,22 @@ internal class ValidationCodeInjector {
             }
         }
     }
+}
 
-    /**
-     * Scope variables available within `validate(FieldPath)` method.
-     */
-    object ValidateScope {
-        val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parentPath")
-        val parentName = ReadVar<TypeName?>("parentName")
-    }
+/**
+ * Scope variables available within `validate(FieldPath)` method.
+ */
+public object ValidateScope {
+    public val violations: ReadVar<MutableList<ConstraintViolation>> = ReadVar("violations")
+    public val parentPath: ReadVar<FieldPath> = ReadVar("parentPath")
+    public val parentName: ReadVar<TypeName?> = ReadVar("parentName")
+}
 
-    /**
-     * Scope variables available within the whole message class.
-     */
-    object MessageScope {
-        val message = This<Message>(explicit = false)
-    }
+/**
+ * Scope variables available within the whole message class.
+ */
+public object MessageScope {
+    public val message: This<Message> = This(explicit = false)
 }
 
 /**
@@ -131,28 +130,6 @@ private fun MessagePsiClass.implementValidatableMessage() {
     val qualifiedName = ValidatableMessage::class.java.canonicalName
     val reference = elementFactory.createInterfaceReference(qualifiedName)
     implement(reference)
-}
-
-/**
- * Declares the `validate()` method in this [MessagePsiClass].
- *
- * This is an implementation of [ValidatableMessage.validate] that doesn't accept
- * any parameters. The actual constraints are contained in its [overload][declareValidateMethod],
- * to which this method delegates.
- */
-// TODO:2025-03-12:yevhenii.nadtochii: Remove it in a favour of the default implementation
-//  provided in the `ValidatableMessage` interface.
-//  See issue: https://github.com/SpineEventEngine/validation/issues/198
-private fun MessagePsiClass.declareDefaultValidateMethod() {
-    val psiMethod = elementFactory.createMethodFromText(
-        """
-        public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParentPath = $FieldPathClass.getDefaultInstance();
-            return validate(noParentPath, null);
-        }
-        """.trimIndent(), this)
-    psiMethod.annotate(Override::class.java)
-    addLast(psiMethod)
 }
 
 /**
