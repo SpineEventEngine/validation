@@ -36,10 +36,10 @@ import io.spine.validation.test.money.CurrencyMessageDiscovered
 /**
  * A view on a message type which stores an amount of money is a certain currency.
  */
-public class CurrencyTypeView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
+internal class CurrencyView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
 
     @Subscribe
-    public fun on(e: CurrencyMessageDiscovered): Unit = alter {
+    fun on(e: CurrencyMessageDiscovered): Unit = alter {
         type = e.type
         currency = e.currency
         majorUnitField = e.majorUnitField
