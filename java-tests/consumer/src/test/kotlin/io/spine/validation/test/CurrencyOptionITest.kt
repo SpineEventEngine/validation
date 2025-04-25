@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,29 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.test
 
-import io.spine.protodata.plugin.Policy
-import io.spine.protodata.plugin.View
-import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.test.money.Mru
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
- * Extends the Java validation library with the custom validation option.
+ * This is the integration test that verifies the custom validation implemented
+ * by [CurrencyOption] in the `:java-tests:extensions` module.
+ *
+ * The `extensions` module declares the `(currency)` message option, which is used by
+ * money data types in this module. Please see `main/proto/test/money.proto` for details.
+ *
+ * This test verifies that custom validation code works as expected.
  */
-public interface CustomOptionSupport {
+@DisplayName("`CurrencyOption` should generate the code which")
+internal class CurrencyOptionITest {
 
-    /**
-     * The option [generator][OptionGenerator].
-     */
-    public val generator: OptionGenerator
+    @Test
+    fun `throws 'ValidationException' if actual value is greater than the threshold`() {
+        assertValidationException(Mru.newBuilder().setKhoums(6))
+    }
 
-    /**
-     * The Java class of the option [view][View].
-     */
-    public val view: Class<out View<*, *, *>>
+    @Test
+    fun `throws 'ValidationException' if actual value is equal to the threshold`() {
+        assertValidationException(Mru.newBuilder().setKhoums(5))
+    }
 
-    /**
-     * The option [policy][Policy].
-     */
-    public val policy: Policy<*>
+    @Test
+    fun `throws no exceptions if actual value is less than the threshold`() {
+        assertNoException(Mru.newBuilder().setKhoums(4))
+    }
 }

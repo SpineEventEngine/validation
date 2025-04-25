@@ -53,9 +53,9 @@ public class JavaValidationPlugin : ValidationPlugin(
 )
 
 /**
- * Dynamically discovered instances of [CustomOptionSupport].
+ * Dynamically discovered instances of [CustomOption].
  */
 private val customOptions by lazy {
-    ServiceLoader.load(CustomOptionSupport::class.java)
+    ServiceLoader.load(CustomOption::class.java)
         .filterNotNull()
 }
