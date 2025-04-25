@@ -58,6 +58,6 @@ internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.B
     @Subscribe
     fun on(e: RequiredIdFieldDiscovered) = alter {
         subject = e.subject
-        errorMessage = e.defaultErrorMessage
+        errorMessage = e.errorMessage
     }
 }

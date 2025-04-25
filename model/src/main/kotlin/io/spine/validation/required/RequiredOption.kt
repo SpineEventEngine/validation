@@ -29,7 +29,8 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
-import io.spine.option.OptionsProto.*
+import io.spine.option.OptionsProto.ifMissing
+import io.spine.option.OptionsProto.required
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File

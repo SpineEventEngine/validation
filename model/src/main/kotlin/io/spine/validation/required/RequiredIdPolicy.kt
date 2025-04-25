@@ -38,8 +38,8 @@ import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ValidationConfig
 import io.spine.validation.WithValidationSettings
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.validation.event.RequiredIdFieldDiscovered
+import io.spine.validation.event.requiredIdFieldDiscovered
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
@@ -72,10 +72,10 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
      * Controls whether the given ID [field] should be implicitly validated
      * as required.
      *
-     * The method emits [RequiredFieldDiscovered] event if the following
+     * The method emits [RequiredIdFieldDiscovered] event if the following
      * conditions are met:
      *
-     * 1. The field does not have the  `(required)` option applied explicitly.
+     * 1. The field does not have the `(required)` option applied explicitly.
      *   If it has, the field is handled by the [RequiredPolicy] policy then.
      * 2. The field type is supported by the option.
      *
@@ -84,7 +84,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
      * @param field The ID field.
      */
     @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
-    fun withField(field: Field): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+    fun withField(field: Field): EitherOf2<RequiredIdFieldDiscovered, NoReaction> {
         val requiredOption = field.findOption(OptionsProto.required)
         if (requiredOption != null) {
             return ignore()
@@ -95,7 +95,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
             return ignore()
         }
 
-        return requiredFieldDiscovered {
+        return requiredIdFieldDiscovered {
             id = field.ref
             errorMessage = ID_FIELD_MUST_BE_SET
             subject = field
