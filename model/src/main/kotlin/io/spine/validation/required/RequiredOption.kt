@@ -110,7 +110,6 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 /**
- *
  * Controls whether the `(if_missing)` option is applied correctly.
  *
  * Whenever a field marked with the `(if_missing)` option is discovered, emits

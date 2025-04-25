@@ -144,15 +144,25 @@ message GoesFieldDiscovered {
 
 // The event emitted whenever a field with `(distinct) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message DistinctFieldDiscovered {
+message DistinctOptionDiscovered {
 
     protodata.FieldRef id = 1;
 
     // The field in which the option was discovered.
     protodata.Field subject = 2;
 
-    // The error message template.
-    string error_message = 3;
+    // The default error message template.
+    string default_error_message = 3;
+}
+
+// The event emitted whenever a field with `(if_has_duplicates)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message IfHasDuplicatesOptionDiscovered {
+
+    protodata.FieldRef id = 1;
+
+    // The custom error message template.
+    string custom_error_message = 3;
 }
 
 // The event emitted whenever a field with `(validate) = true` option is discovered
