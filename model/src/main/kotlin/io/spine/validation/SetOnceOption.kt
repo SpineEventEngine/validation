@@ -58,6 +58,7 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.IfSetAgainOptionDiscovered
 import io.spine.validation.event.SetOnceFieldDiscovered
@@ -181,4 +182,4 @@ private fun checkPlaceholders(template: String, field: Field, file: File) {
 }
 
 private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_PROPOSED_VALUE, FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
+    setOf(FIELD_VALUE, FIELD_PROPOSED_VALUE, FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
