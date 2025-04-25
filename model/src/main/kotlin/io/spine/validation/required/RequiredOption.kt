@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.*
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
@@ -45,25 +45,28 @@ import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
+import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.CompanionPolicy
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.validation.checkBothApplied
+import io.spine.validation.defaultErrorMessage
+import io.spine.validation.event.IfMissingOptionDiscovered
+import io.spine.validation.event.RequiredOptionDiscovered
+import io.spine.validation.event.ifMissingOptionDiscovered
+import io.spine.validation.event.requiredOptionDiscovered
 import io.spine.validation.missingPlaceholders
-import io.spine.validation.resolveErrorMessage
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
  * Controls whether a field should be validated as `(required)`.
  *
- * Whenever a field marked with `(required)` option is discovered, emits
- * [RequiredFieldDiscovered] event if the following conditions are met:
+ * Whenever a field marked with the `(required)` option is discovered, emits
+ * [RequiredOptionDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
@@ -87,7 +90,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = REQUIRED)
         event: FieldOptionDiscovered,
-    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+    ): EitherOf2<RequiredOptionDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -96,30 +99,47 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val message = resolveErrorMessage<IfMissingOption>(field)
-        return requiredFieldDiscovered {
+        val defaultMessage = defaultErrorMessage<IfMissingOption>()
+        return requiredOptionDiscovered {
             id = field.ref
-            errorMessage = message
             subject = field
+            defaultErrorMessage = defaultMessage
         }.asA()
     }
 }
 
 /**
- * Reports a compilation error when the `(if_missing)` option is applied
- * without `(required)`.
+ *
+ * Controls whether the `(if_missing)` option is applied correctly.
+ *
+ * Whenever a field marked with the `(if_missing)` option is discovered, emits
+ * [IfMissingOptionDiscovered] event if the following conditions are met:
+ *
+ * 1. The option field is also marked with the `(required)` option.
+ * 2. The specified error message template does not contain placeholders
+ * not supported by the option.
+ *
+ * A compilation error is reported in case of violation of any condition.
  */
-internal class IfMissingPolicy : CompanionPolicy(
-    primary = OptionsProto.required,
-    companion = OptionsProto.ifMissing,
-) {
+internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
+
     @React
-    override fun whenever(@External event: FieldOptionDiscovered): Just<NoReaction> {
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_MISSING)
+        event: FieldOptionDiscovered
+    ): Just<IfMissingOptionDiscovered> {
         val field = event.subject
         val file = event.file
+        checkBothApplied(ifMissing, required, field, file)
+
         val option = event.option.unpack<IfMissingOption>()
-        checkPlaceholders(option.errorMsg, field, file)
-        return checkWithPrimary(event)
+        val message = option.errorMsg
+        checkPlaceholders(message, field, file)
+
+        return ifMissingOptionDiscovered {
+            id = field.ref
+            customErrorMessage = message
+        }.just()
     }
 }
 
@@ -138,6 +158,5 @@ private fun checkPlaceholders(template: String, field: Field, file: File) {
                 " the following: `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
     }
 }
-
 
 private val SUPPORTED_PLACEHOLDERS = setOf(FIELD_PATH, FIELD_TYPE, PARENT_TYPE)

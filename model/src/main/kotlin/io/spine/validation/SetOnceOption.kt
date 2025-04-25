@@ -102,7 +102,7 @@ internal class IfSetAgainPolicy : CompanionPolicy(
     companion = OptionsProto.ifSetAgain,
 ) {
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(@External event: FieldOptionDiscovered) = checkBothApplied(event)
 }
 
 /**

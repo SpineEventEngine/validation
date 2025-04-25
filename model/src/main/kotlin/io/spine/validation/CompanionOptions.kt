@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,33 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Descriptors.Descriptor
-import com.google.protobuf.Message
-import io.spine.option.OptionsProto
-import io.spine.protodata.protobuf.descriptor
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.findOption
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.check
 
 /**
- * Returns the default error message from the given option descriptor.
+ * Reports a compilation error if the [companion] option is applied
+ * to the given [field] without the [primary] option.
  *
- * The descriptor should be marked with the `(default_message)` option.
- * If the option is absent, an empty message is returned.
+ * Some options have a companion option for specifying an error message.
+ * This method ensures that a companion option is not used independently.
  */
-internal val Descriptor.defaultMessage: String
-    get() = options.getExtension(OptionsProto.defaultMessage)
-
-/**
- * Returns the value of the `(default_message)` option applied
- * to the message option of type [T].
- *
- * Return an empty string, if the message type [T] does not have
- * this option applied.
- */
-internal inline fun <reified T : Message> defaultErrorMessage(): String {
-    val descriptor = T::class.descriptor
-    return descriptor.defaultMessage
+internal fun checkBothApplied(
+    companion: GeneratedExtension<*, *>,
+    primary: GeneratedExtension<*, *>,
+    field: Field,
+    file: File
+) {
+    val primaryOption = field.findOption(primary)
+    val primaryName = primaryOption?.name
+    val companionName = companion.descriptor.name
+    Compilation.check(primaryOption != null, file, field.span) {
+        "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
+                " applied without its primary `($primaryName)` option. Companion options" +
+                " must always be used together with their primary counterparts."
+    }
 }

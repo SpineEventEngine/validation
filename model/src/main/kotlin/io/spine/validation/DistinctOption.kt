@@ -102,7 +102,7 @@ internal class IfHasDuplicatesPolicy : CompanionPolicy(
     companion = OptionsProto.ifHasDuplicates,
 ) {
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(@External event: FieldOptionDiscovered) = checkBothApplied(event)
 }
 
 /**

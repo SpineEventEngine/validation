@@ -31,7 +31,9 @@ import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.RequiredField
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.IfMissingOptionDiscovered
+import io.spine.validation.event.RequiredIdFieldDiscovered
+import io.spine.validation.event.RequiredOptionDiscovered
 
 /**
  * A view of a field that is marked with `(required) = true` option.
@@ -39,8 +41,23 @@ import io.spine.validation.event.RequiredFieldDiscovered
 internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
 
     @Subscribe
-    fun on(e: RequiredFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
+    fun on(e: RequiredOptionDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfMissingOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
+    }
+
+    @Subscribe
+    fun on(e: RequiredIdFieldDiscovered) = alter {
         subject = e.subject
+        errorMessage = e.defaultErrorMessage
     }
 }
