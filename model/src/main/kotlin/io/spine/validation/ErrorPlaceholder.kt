@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.violation
+package io.spine.validation
 
 /**
  * A template placeholder that can be used in error messages.

@@ -53,12 +53,12 @@ import io.spine.validation.java.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.violation.ErrorPlaceholder
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.violation.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
