@@ -63,7 +63,7 @@ public abstract class ValidationPlugin(renderers: List<Renderer<*>> = emptyList(
         MaxFieldView::class.java,
         MinFieldView::class.java,
         SetOnceFieldView::class.java,
-        ChoiceView::class.java,
+        ChoiceGroupView::class.java,
         WhenFieldView::class.java,
         RequireMessageView::class.java,
     ),
