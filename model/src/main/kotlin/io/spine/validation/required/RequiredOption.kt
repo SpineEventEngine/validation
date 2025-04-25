@@ -38,17 +38,24 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.CompanionPolicy
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.validation.missingPlaceholders
 import io.spine.validation.resolveErrorMessage
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
@@ -107,7 +114,13 @@ internal class IfMissingPolicy : CompanionPolicy(
     companion = OptionsProto.ifMissing,
 ) {
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(@External event: FieldOptionDiscovered): Just<NoReaction> {
+        val field = event.subject
+        val file = event.file
+        val option = event.option.unpack<IfMissingOption>()
+        checkPlaceholders(option.errorMsg, field, file)
+        return checkWithPrimary(event)
+    }
 }
 
 private fun checkFieldType(field: Field, file: File) =
@@ -116,3 +129,15 @@ private fun checkFieldType(field: Field, file: File) =
                 " by the `($REQUIRED)` option. Supported field types: messages, enums," +
                 " strings, bytes, repeated, and maps."
     }
+
+private fun checkPlaceholders(template: String, field: Field, file: File) {
+    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
+    Compilation.check(missing.isEmpty(), file, field.span) {
+        "The `${field.qualifiedName}` field specifies an error message using the `($IF_MISSING)`" +
+                " option with unsupported placeholders: `$missing`. Supported placeholders are" +
+                " the following: `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
+    }
+}
+
+
+private val SUPPORTED_PLACEHOLDERS = setOf(FIELD_PATH, FIELD_TYPE, PARENT_TYPE)

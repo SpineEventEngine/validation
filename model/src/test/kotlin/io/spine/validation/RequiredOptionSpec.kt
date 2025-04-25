@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -39,7 +40,7 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on a boolean field`() {
-        val message = WithBoolField.getDescriptor()
+        val message = RequiredBoolField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("really")
         error.message shouldContain unsupportedFieldType(field)
@@ -47,7 +48,7 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on an integer field`() {
-        val message = WithIntField.getDescriptor()
+        val message = RequiredIntField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("zero")
         error.message shouldContain unsupportedFieldType(field)
@@ -55,7 +56,7 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on a signed integer field`() {
-        val message = WithSignedInt.getDescriptor()
+        val message = RequiredSignedInt.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("signed")
         error.message shouldContain unsupportedFieldType(field)
@@ -63,7 +64,7 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on a double field`() {
-        val message = WithDoubleField.getDescriptor()
+        val message = RequiredDoubleField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("temperature")
         error.message shouldContain unsupportedFieldType(field)
@@ -82,6 +83,19 @@ internal class IfMissingPolicySpec : CompilationErrorTest() {
             shouldContain(field.qualifiedName)
             shouldContain(IF_MISSING)
             shouldContain(REQUIRED)
+        }
+    }
+
+    @Test
+    fun `reject unsupported placeholders`() {
+        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain("with unsupported placeholders")
+            shouldInclude("[field.name, field.value]")
         }
     }
 }

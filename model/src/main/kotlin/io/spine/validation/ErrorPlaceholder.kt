@@ -78,22 +78,23 @@ public enum class ErrorPlaceholder(public val value: String) {
 }
 
 /**
- * Tells whether all placeholders required by the [template] string are present
- * in the provided set of [placeholders].
+ * Returns a set of placeholders that are used by the given [template] string,
+ * but not present in the provided [placeholders] set.
  *
  * @param template The template with placeholders like `${something}`.
- * @param placeholders The set with placeholder names like `something.length`.
+ * @param placeholders The set of error placeholders.
  */
-public fun hasMissingPlaceholders(
+public fun missingPlaceholders(
     template: String,
     placeholders: Set<ErrorPlaceholder>
-): Boolean {
-    val neededPlaceholders = extractPlaceholders(template)
+): Set<String> {
+    val requested = extractPlaceholders(template)
     val provided = placeholders.map { it.value }
-    for (placeholder in neededPlaceholders) {
+    val missing = mutableSetOf<String>()
+    for (placeholder in requested) {
         if (!provided.contains(placeholder)) {
-            return false
+            missing.add(placeholder)
         }
     }
-    return true
+    return missing
 }

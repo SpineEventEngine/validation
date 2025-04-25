@@ -36,23 +36,32 @@ option java_outer_classname = "RequiredOptionSpecProto";
 option java_multiple_files = true;
 
 // Provides a boolean field with the inapplicable `(required)` option.
-message WithBoolField {
+message RequiredBoolField {
     bool really = 1 [(.required) = true];
 }
 
 // Provides an `int32` field with the inapplicable `(required)` option.
-message WithIntField {
+message RequiredIntField {
     int32 zero = 1 [(.required) = true];
 }
 
 // Provides a `sint64` field with the inapplicable `(required)` option.
-message WithSignedInt {
+message RequiredSignedInt {
     sint64 signed = 1 [(.required) = true];
 }
 
 // Provides a `double` field with the inapplicable `(required)` option.
-message WithDoubleField {
+message RequiredDoubleField {
     double temperature = 1 [(.required) = true];
+}
+
+// Provides a required field that specifies a custom error message using
+// the placeholders not supported by the option.
+message IfMissingWithInvalidPlaceholders {
+    string value = 1 [
+        (.required) = true,
+        (if_missing).error_msg = "The `${field.name}` field has default `${field.value}` value."
+    ];
 }
 
 // Applies `(if_missing)` without the `(required)` option.
