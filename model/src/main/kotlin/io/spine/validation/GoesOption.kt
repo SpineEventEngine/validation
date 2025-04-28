@@ -53,6 +53,11 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 
@@ -66,6 +71,7 @@ import io.spine.validation.event.goesFieldDiscovered
  * 2. The companion field is present in the message.
  * 3. The companion field and the target field are different fields.
  * 4. The companion field type is supported by the option.
+ * 5. The error message does not contain unsupported placeholders.
  *
  * Any violation of the above conditions leads to a compilation error.
  */
@@ -90,6 +96,8 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         checkCompanionType(companionField, file)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        checkPlaceholders(message, field, file)
+
         return goesFieldDiscovered {
             id = field.ref
             errorMessage = message
@@ -137,6 +145,18 @@ private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
                 " Self-referencing is prohibited. Please specify another field." +
                 " The invalid field: `${field.qualifiedName}`."
     }
+
+private fun checkPlaceholders(template: String, field: Field, file: File) {
+    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
+    Compilation.check(missing.isEmpty(), file, field.span) {
+        "The `${field.qualifiedName}` field specifies a custom error message for the `($GOES)`" +
+                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
+                " the following: `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
+    }
+}
+
+private val SUPPORTED_PLACEHOLDERS =
+    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, GOES_COMPANION)
 
 /**
  * Tells if this [FieldType] can be validated with the `(goes)` option.
