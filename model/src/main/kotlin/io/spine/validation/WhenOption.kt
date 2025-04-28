@@ -58,6 +58,11 @@ import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
 import io.spine.protodata.java.findJavaClassName
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
@@ -94,6 +99,8 @@ internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, WHEN)
+
         return whenFieldDiscovered {
             id = field.ref
             subject = field
@@ -156,3 +163,6 @@ internal class WhenFieldView : View<FieldRef, WhenField, WhenField.Builder>() {
         type = e.type
     }
 }
+
+private val SUPPORTED_PLACEHOLDERS =
+    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, WHEN_IN)
