@@ -79,7 +79,7 @@ internal class IfSetAgainPolicySpec : CompilationErrorTest() {
         error.message.run {
             shouldContain(field.qualifiedName)
             shouldContain(IF_SET_AGAIN)
-            shouldContain("with unsupported placeholders")
+            shouldContain("unsupported placeholders")
             shouldInclude("[field.name]")
         }
     }

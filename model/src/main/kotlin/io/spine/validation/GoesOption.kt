@@ -96,7 +96,7 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         checkCompanionType(companionField, file)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, GOES)
 
         return goesFieldDiscovered {
             id = field.ref
@@ -146,18 +146,6 @@ private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
                 " The invalid field: `${field.qualifiedName}`."
     }
 
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies a custom error message for the `($GOES)`" +
-                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
-                " the following: `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
-
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, GOES_COMPANION)
-
 /**
  * Tells if this [FieldType] can be validated with the `(goes)` option.
  */
@@ -167,3 +155,6 @@ private fun FieldType.isSupported(): Boolean =
 private val SUPPORTED_PRIMITIVES = listOf(
     TYPE_STRING, TYPE_BYTES
 )
+
+private val SUPPORTED_PLACEHOLDERS =
+    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, GOES_COMPANION)

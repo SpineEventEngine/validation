@@ -129,7 +129,7 @@ internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<IfSetAgainOption>()
         val message = option.errorMsg
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_SET_AGAIN)
 
         return ifSetAgainOptionDiscovered {
             id = field.ref
@@ -170,16 +170,6 @@ private fun checkFieldType(field: Field, file: File) =
  * Tells if this [FieldType] can be validated with the `(set_once)` option.
  */
 private fun FieldType.isSupported(): Boolean = !isList && !isMap
-
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message using" +
-                " the `($IF_SET_AGAIN)` option with unsupported placeholders: `$missing`." +
-                " Supported placeholders are the following:" +
-                " `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
 
 private val SUPPORTED_PLACEHOLDERS =
     setOf(FIELD_VALUE, FIELD_PROPOSED_VALUE, FIELD_PATH, FIELD_TYPE, PARENT_TYPE)

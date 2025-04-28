@@ -129,7 +129,7 @@ internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<IfHasDuplicatesOption>()
         val message = option.errorMsg
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_HAS_DUPLICATES)
 
         return ifHasDuplicatesOptionDiscovered {
             id = field.ref
@@ -169,16 +169,6 @@ private fun checkFieldType(field: Field, file: File) =
  * Tells if this [FieldType] can be validated with the `(distinct)` option.
  */
 private fun FieldType.isSupported(): Boolean = isMap || isList
-
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message using" +
-                " the `($IF_HAS_DUPLICATES)` option with unsupported placeholders: `$missing`." +
-                " Supported placeholders are the following:" +
-                " `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
 
 private val SUPPORTED_PLACEHOLDERS =
     setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, FIELD_DUPLICATES)

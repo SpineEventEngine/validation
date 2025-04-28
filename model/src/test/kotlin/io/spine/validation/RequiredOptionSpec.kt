@@ -94,7 +94,7 @@ internal class IfMissingPolicySpec : CompilationErrorTest() {
         error.message.run {
             shouldContain(field.qualifiedName)
             shouldContain(IF_MISSING)
-            shouldContain("with unsupported placeholders")
+            shouldContain("unsupported placeholders")
             shouldInclude("[field.name, field.value]")
         }
     }

@@ -56,7 +56,7 @@ internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
         error.message.run {
             shouldContain(field.qualifiedName)
             shouldContain(IF_HAS_DUPLICATES)
-            shouldContain("with unsupported placeholders")
+            shouldContain("unsupported placeholders")
             shouldInclude("[field.name, duplicates.size]")
         }
     }
