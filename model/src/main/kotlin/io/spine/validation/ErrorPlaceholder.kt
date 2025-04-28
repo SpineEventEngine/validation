@@ -26,8 +26,6 @@
 
 package io.spine.validation
 
-import io.spine.validate.extractPlaceholders
-
 /**
  * A template placeholder that can be used in error messages.
  *

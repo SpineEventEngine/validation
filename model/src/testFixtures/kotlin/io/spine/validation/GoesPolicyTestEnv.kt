@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 object GoesPolicyTestEnv {
 
     /**
-     * Test data for [io.spine.validation.GoesPolicySpec.whenTargetFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.GoesPolicySpec.targetFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
@@ -56,7 +56,7 @@ object GoesPolicyTestEnv {
     ).map { arguments(named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.GoesPolicySpec.whenCompanionFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.GoesPolicySpec.companionFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedCompanion() = listOf(
