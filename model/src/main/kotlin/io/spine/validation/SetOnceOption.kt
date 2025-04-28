@@ -110,7 +110,7 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
  * Whenever a field marked with the `(if_set_again)` option is discovered,
  * emits [IfSetAgainOptionDiscovered] event if the following conditions are met:
  *
- * 1. The option field is also marked with the `(set_once)` option.
+ * 1. The target field is also marked with the `(set_once)` option.
  * 2. The specified error message template does not contain placeholders
  * not supported by the option.
  *

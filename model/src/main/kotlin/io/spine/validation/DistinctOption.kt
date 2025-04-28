@@ -110,7 +110,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
  * Whenever a field marked with the `(if_has_duplicates)` option is discovered,
  * emits [IfHasDuplicatesOptionDiscovered] event if the following conditions are met:
  *
- * 1. The option field is also marked with the `(distinct)` option.
+ * 1. The target field is also marked with the `(distinct)` option.
  * 2. The specified error message template does not contain placeholders
  * not supported by the option.
  *

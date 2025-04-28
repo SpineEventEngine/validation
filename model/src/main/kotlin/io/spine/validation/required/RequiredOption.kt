@@ -115,7 +115,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
  * Whenever a field marked with the `(if_missing)` option is discovered, emits
  * [IfMissingOptionDiscovered] event if the following conditions are met:
  *
- * 1. The option field is also marked with the `(required)` option.
+ * 1. The target field is also marked with the `(required)` option.
  * 2. The specified error message template does not contain placeholders
  * not supported by the option.
  *
