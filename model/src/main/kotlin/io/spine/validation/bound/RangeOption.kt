@@ -69,6 +69,7 @@ import io.spine.validation.checkPlaceholders
  *    for integer fields.
  * 5. The provided bounds fit into the range of the target field type.
  * 6. The lower bound is strictly less than the upper one.
+ * 7. The error message does not contain unsupported placeholders.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
