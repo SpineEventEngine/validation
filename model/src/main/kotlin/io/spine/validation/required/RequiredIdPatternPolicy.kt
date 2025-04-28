@@ -36,7 +36,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.MessageMarkers
-import io.spine.validation.event.RequiredIdFieldDiscovered
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
  * A policy that marks ID fields in entity state messages and signal
@@ -62,7 +62,7 @@ internal class RequiredIdPatternPolicy : RequiredIdPolicy() {
     @Suppress("ReturnCount") // Prefer sooner exit and precise conditions.
     override fun whenever(
         @External event: TypeDiscovered
-    ): EitherOf2<RequiredIdFieldDiscovered, NoReaction> {
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         if (filePatterns.isEmpty()) {
             return ignore()
         }
