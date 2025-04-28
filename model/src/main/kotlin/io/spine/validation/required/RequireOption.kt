@@ -39,9 +39,12 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
+import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
+import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequireMessageDiscovered
 import io.spine.validation.event.requireMessageDiscovered
@@ -50,8 +53,13 @@ import io.spine.validation.event.requireMessageDiscovered
  * Controls whether a message should be validated with the `(require)` option.
  *
  * Whenever a message marked with `(require)` option is discovered, emits
- * [RequireMessageDiscovered] event if the specified field groups are valid.
- * Please take a look on docs to [ParseFieldGroups] to see how they are validated.
+ * [RequireMessageDiscovered] event if the following conditions are met:
+ *
+ * 1. The specified field groups are valid. Please take a look on docs to [ParseFieldGroups]
+ *    to see how they are validated.
+ * 2. The error message does not contain unsupported placeholders.
+ *
+ * Any violation of the above conditions leads to a compilation error.
  */
 internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
 
@@ -61,9 +69,14 @@ internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
         event: MessageOptionDiscovered,
     ): Just<RequireMessageDiscovered> {
         val messageType = event.subject
+        val file = event.file
+
         val option = event.option.unpack<RequireOption>()
         val groups = ParseFieldGroups(option, messageType, event.file).result
+
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, messageType, file, REQUIRE)
+
         return requireMessageDiscovered {
             id = messageType.name
             errorMessage = message
@@ -86,3 +99,5 @@ internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessag
         addAllGroup(e.groupList)
     }
 }
+
+private val SUPPORTED_PLACEHOLDERS = setOf(MESSAGE_TYPE, REQUIRE_FIELDS)

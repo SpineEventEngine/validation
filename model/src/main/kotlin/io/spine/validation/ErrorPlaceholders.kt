@@ -29,10 +29,35 @@ package io.spine.validation
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.OneofGroup
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validate.extractPlaceholders
+
+/**
+ * Checks if this [String] contains placeholders that are not present
+ * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
+ *
+ * @param supportedPlaceholders The set of placeholders that can occur in this [String].
+ * @param message The message type declared the message template.
+ * @param file The file that contains the [message] declaration.
+ * @param option The name of the option with which the message template was specified.
+ */
+internal fun String.checkPlaceholders(
+    supportedPlaceholders: Set<ErrorPlaceholder>,
+    message: MessageType,
+    file: File,
+    option: String
+) {
+    val template = this
+    val missing = missingPlaceholders(template, supportedPlaceholders)
+    Compilation.check(missing.isEmpty(), file, message.span) {
+        "The `${message.qualifiedName}` message specifies an error message for the `($option)`" +
+                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
+                " the following: `${supportedPlaceholders.map { it.value }}`."
+    }
+}
 
 /**
  * Checks if this [String] contains placeholders that are not present

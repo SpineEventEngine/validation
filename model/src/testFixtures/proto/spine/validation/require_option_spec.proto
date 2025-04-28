@@ -98,3 +98,13 @@ message RequireDuplicateGroups {
     string field2 = 2;
     string field3 = 3;
 }
+
+// Provides a message marked with the `(require)` option that specifies a custom error
+// message using the placeholders not supported by the option.
+message RequireWithInvalidPlaceholders {
+    option (require) = {
+        fields: "value",
+        error_msg: "At least one of `${require.fields}` must be set in `${message.name}`."
+    };
+    string value = 1;
+}
