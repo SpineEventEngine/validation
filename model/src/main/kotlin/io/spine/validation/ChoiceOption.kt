@@ -43,6 +43,8 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.ErrorPlaceholder.GROUP_PATH
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 
@@ -50,8 +52,13 @@ import io.spine.validation.event.choiceOneofDiscovered
  * Controls whether a `oneof` group should be validated with the `(choice)` option.
  *
  * Whenever a `oneof` groupd marked with `(choice)` option is discovered,
- * emits [ChoiceOneofDiscovered] event if the option has the `required` flag
- * set to `true`. Otherwise, the policy emits [NoReaction].
+ * emits [ChoiceOneofDiscovered] event if the following conditions are met:
+ *
+ * 1. The option has the `required` flag set to `true`.
+ * 2. The error message does not contain unsupported placeholders.
+ *
+ * If (1) is violated, the policy just emits [NoReaction].
+ * Violation of (2) leads to a compilation error.
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.
  * Protobuf encodes a non-set value as a special case, allowing for checking whether
@@ -64,13 +71,16 @@ internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
         @External @Where(field = OPTION_NAME, equals = CHOICE)
         event: OneofOptionDiscovered
     ): EitherOf2<ChoiceOneofDiscovered, NoReaction> {
+        val oneof = event.subject
+        val file = event.file
         val option = event.option.unpack<ChoiceOption>()
+        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, oneof, file, CHOICE)
+
         if (!option.required) {
             return ignore()
         }
 
-        val oneof = event.subject
-        val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         return choiceOneofDiscovered {
             id = oneof.ref
             subject = oneof
@@ -108,3 +118,5 @@ internal class ChoiceGroupView : View<OneofRef, ChoiceOneof, ChoiceOneof.Builder
         errorMessage = e.errorMessage
     }
 }
+
+private val SUPPORTED_PLACEHOLDERS = setOf(GROUP_PATH, PARENT_TYPE)

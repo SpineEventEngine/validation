@@ -29,6 +29,7 @@ package io.spine.validation
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.OneofGroup
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validate.extractPlaceholders
@@ -38,7 +39,31 @@ import io.spine.validate.extractPlaceholders
  * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
  *
  * @param supportedPlaceholders The set of placeholders that can occur in this [String].
- * @param field The field declared the template.
+ * @param oneof The oneof group declared the message template.
+ * @param file The file that contains the [oneof] declaration.
+ * @param option The name of the option with which the message template was specified.
+ */
+internal fun String.checkPlaceholders(
+    supportedPlaceholders: Set<ErrorPlaceholder>,
+    oneof: OneofGroup,
+    file: File,
+    option: String
+) {
+    val template = this
+    val missing = missingPlaceholders(template, supportedPlaceholders)
+    Compilation.check(missing.isEmpty(), file, oneof.span) {
+        "The `${oneof.qualifiedName}` group specifies an error message for the `($option)`" +
+                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
+                " the following: `${supportedPlaceholders.map { it.value }}`."
+    }
+}
+
+/**
+ * Checks if this [String] contains placeholders that are not present
+ * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
+ *
+ * @param supportedPlaceholders The set of placeholders that can occur in this [String].
+ * @param field The field declared the message template.
  * @param file The file that contains the [field] declaration.
  * @param option The name of the option with which the message template was specified.
  */
