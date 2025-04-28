@@ -43,12 +43,18 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
+import io.spine.validation.checkPlaceholders
 
 /**
  * Controls whether a field should be validated with the `(range)` option.
@@ -99,6 +105,8 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         context.checkRelation(lower, upper)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
+
         return rangeFieldDiscovered {
             id = field.ref
             subject = field
@@ -169,3 +177,6 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
 }
 
 private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")
+
+private val SUPPORTED_PLACEHOLDERS =
+    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, RANGE_VALUE)

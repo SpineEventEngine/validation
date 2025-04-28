@@ -28,6 +28,7 @@ package io.spine.validation
 
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -138,6 +139,19 @@ internal class RangePolicySpec : CompilationErrorTest() {
             shouldContain("could not parse the `15.0` bound value")
             shouldContain("make sure the provided value is an integer number")
         }
+
+    @Test
+    fun `with unsupported placeholders in the error message`() {
+        val message = RangeWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(RANGE)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[field.name, range]")
+        }
+    }
 }
 
 private fun CompilationErrorTest.assertCompilationFails(

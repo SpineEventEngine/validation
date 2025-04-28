@@ -32,17 +32,16 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "GoesOptionSpecProto";
+option java_outer_classname = "RangeOptionSpecProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
 
-// Provides a `(goes)` field that specifies a custom error message using
+// Provides a `(range)` field that specifies a custom error message using
 // the placeholders not supported by the option.
-message GoesWithInvalidPlaceholders {
-    string companion = 1;
-    string value = 2 [
-        (goes).with = "companion",
-        (goes).error_msg = "The `${field.name}` field does not have a value."
+message RangeWithInvalidPlaceholders {
+    int32 value = 2 [
+        (range).value = "[1 .. 10]",
+        (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
     ];
 }
