@@ -60,16 +60,16 @@ import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.event.DistinctOptionDiscovered
+import io.spine.validation.event.DistinctFieldDiscovered
 import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
-import io.spine.validation.event.distinctOptionDiscovered
+import io.spine.validation.event.distinctFieldDiscovered
 import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
 
 /**
  * Controls whether a field should be validated as `(distinct)`.
  *
  * Whenever a field marked with `(distinct)` option is discovered, emits
- * [DistinctOptionDiscovered] event if the following conditions are met:
+ * [DistinctFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is `repeated` or `map`.
  * 2. The option value is `true`.
@@ -86,7 +86,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = DISTINCT)
         event: FieldOptionDiscovered
-    ): EitherOf2<DistinctOptionDiscovered, NoReaction> {
+    ): EitherOf2<DistinctFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -96,7 +96,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
         }
 
         val message = defaultErrorMessage<IfHasDuplicatesOption>()
-        return distinctOptionDiscovered {
+        return distinctFieldDiscovered {
             id = field.ref
             defaultErrorMessage = message
             subject = field
@@ -144,7 +144,7 @@ internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
 internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
 
     @Subscribe
-    fun on(e: DistinctOptionDiscovered) {
+    fun on(e: DistinctFieldDiscovered) {
         val currentMessage = state().errorMessage
         val message = currentMessage.ifEmpty { e.defaultErrorMessage }
         alter {

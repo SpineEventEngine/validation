@@ -61,15 +61,15 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.IfSetAgainOptionDiscovered
-import io.spine.validation.event.SetOnceOptionDiscovered
+import io.spine.validation.event.SetOnceFieldDiscovered
 import io.spine.validation.event.ifSetAgainOptionDiscovered
-import io.spine.validation.event.setOnceOptionDiscovered
+import io.spine.validation.event.setOnceFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(set_once)` option.
  *
  * Whenever a field marked with `(set_once)` option is discovered, emits
- * [SetOnceOptionDiscovered] event if the following conditions are met:
+ * [SetOnceFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
@@ -86,7 +86,7 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = SET_ONCE)
         event: FieldOptionDiscovered
-    ): EitherOf2<SetOnceOptionDiscovered, NoReaction> {
+    ): EitherOf2<SetOnceFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -96,7 +96,7 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
         }
 
         val defaultMessage = defaultErrorMessage<IfSetAgainOption>()
-        return setOnceOptionDiscovered {
+        return setOnceFieldDiscovered {
             id = field.ref
             subject = field
             defaultErrorMessage = defaultMessage
@@ -144,7 +144,7 @@ internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
 internal class SetOnceFieldView : View<FieldRef, SetOnceField, SetOnceField.Builder>() {
 
     @Subscribe
-    fun on(e: SetOnceOptionDiscovered) {
+    fun on(e: SetOnceFieldDiscovered) {
         val currentMessage = state().errorMessage
         val message = currentMessage.ifEmpty { e.defaultErrorMessage }
         alter {

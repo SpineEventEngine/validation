@@ -55,7 +55,7 @@ message RequiredDoubleField {
     double temperature = 1 [(.required) = true];
 }
 
-// Provides a required field that specifies a custom error message using
+// Provides a `(required)` field that specifies a custom error message using
 // the placeholders not supported by the option.
 message IfMissingWithInvalidPlaceholders {
     string value = 1 [

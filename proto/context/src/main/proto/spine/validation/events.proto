@@ -73,7 +73,7 @@ message MessageWideRuleAdded {
 
 // The event emitted whenever a field with `(required) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message RequiredOptionDiscovered {
+message RequiredFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
@@ -144,7 +144,7 @@ message GoesFieldDiscovered {
 
 // The event emitted whenever a field with `(distinct) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message DistinctOptionDiscovered {
+message DistinctFieldDiscovered {
 
     protodata.FieldRef id = 1;
 
@@ -177,7 +177,7 @@ message ValidateFieldDiscovered {
 
 // The event emitted whenever a field with `(set_once) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
-message SetOnceOptionDiscovered {
+message SetOnceFieldDiscovered {
 
     protodata.FieldRef id = 1;
 

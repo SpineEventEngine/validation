@@ -57,9 +57,9 @@ import io.spine.validation.REQUIRED
 import io.spine.validation.checkBothApplied
 import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.IfMissingOptionDiscovered
-import io.spine.validation.event.RequiredOptionDiscovered
+import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.ifMissingOptionDiscovered
-import io.spine.validation.event.requiredOptionDiscovered
+import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.validation.missingPlaceholders
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
@@ -67,7 +67,7 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * Controls whether a field should be validated as `(required)`.
  *
  * Whenever a field marked with the `(required)` option is discovered, emits
- * [RequiredOptionDiscovered] event if the following conditions are met:
+ * [RequiredFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
@@ -91,7 +91,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
     override fun whenever(
         @External @Where(field = OPTION_NAME, equals = REQUIRED)
         event: FieldOptionDiscovered,
-    ): EitherOf2<RequiredOptionDiscovered, NoReaction> {
+    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -101,7 +101,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
         }
 
         val defaultMessage = defaultErrorMessage<IfMissingOption>()
-        return requiredOptionDiscovered {
+        return requiredFieldDiscovered {
             id = field.ref
             subject = field
             defaultErrorMessage = defaultMessage
