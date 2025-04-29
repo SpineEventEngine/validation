@@ -41,12 +41,12 @@ public interface CustomOption {
     public val generator: OptionGenerator
 
     /**
-     * The Java class of the option [view][View].
+     * The [views][View] added by the option.
      */
-    public val view: Class<out View<*, *, *>>
+    public val view: Set<Class<out View<*, *, *>>>
 
     /**
-     * The option [policy][Policy].
+     * The [policies][Policy] added by the option.
      */
-    public val policy: Policy<*>
+    public val policy: Set<Policy<*>>
 }
