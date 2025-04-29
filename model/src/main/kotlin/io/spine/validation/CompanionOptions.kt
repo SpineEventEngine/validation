@@ -35,21 +35,20 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 
 /**
- * Reports a compilation error if the [companion] option is applied
- * to the given [field] without the [primary] option.
+ * Reports a compilation error if this [companion option][GeneratedExtension]
+ * is applied to the given [field] without the [primary] option.
  *
  * Some options have a companion option for specifying an error message.
  * This method ensures that a companion option is not used independently.
  */
-internal fun checkBothApplied(
-    companion: GeneratedExtension<*, *>,
+internal fun GeneratedExtension<*, *>.checkPrimaryApplied(
     primary: GeneratedExtension<*, *>,
     field: Field,
     file: File
 ) {
     val primaryOption = field.findOption(primary)
     val primaryName = primaryOption?.name
-    val companionName = companion.descriptor.name
+    val companionName = this.descriptor.name
     Compilation.check(primaryOption != null, file, field.span) {
         "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
                 " applied without its primary `($primaryName)` option. Companion options" +

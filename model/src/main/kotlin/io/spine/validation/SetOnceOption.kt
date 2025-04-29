@@ -125,7 +125,7 @@ internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
     ): Just<IfSetAgainOptionDiscovered> {
         val field = event.subject
         val file = event.file
-        checkBothApplied(ifSetAgain, setOnce, field, file)
+        ifSetAgain.checkPrimaryApplied(setOnce, field, file)
 
         val option = event.option.unpack<IfSetAgainOption>()
         val message = option.errorMsg
