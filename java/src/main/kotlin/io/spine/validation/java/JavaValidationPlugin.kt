@@ -48,8 +48,8 @@ public class JavaValidationPlugin : ValidationPlugin(
         JavaValidationRenderer(customOptions.map { it.generator }),
         SetOnceRenderer()
     ),
-    views = customOptions.map { it.view }.toSet(),
-    policies = customOptions.map { it.policy }.toSet(),
+    views = customOptions.flatMap { it.view }.toSet(),
+    policies = customOptions.flatMap { it.policy }.toSet(),
 )
 
 /**

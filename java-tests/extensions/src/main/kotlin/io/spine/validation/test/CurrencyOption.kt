@@ -38,9 +38,9 @@ import io.spine.validation.java.generate.OptionGenerator
 @AutoService(CustomOption::class)
 public class CurrencyOption : CustomOption {
 
-    override val policy: Policy<*> = CurrencyPolicy()
+    override val policy: Set<Policy<*>> = setOf(CurrencyPolicy())
 
-    override val view: Class<out View<*, *, *>> = CurrencyView::class.java
+    override val view: Set<Class<out View<*, *, *>>> = setOf(CurrencyView::class.java)
 
     override val generator: OptionGenerator = CurrencyGenerator()
 }

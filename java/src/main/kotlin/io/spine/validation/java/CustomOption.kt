@@ -36,9 +36,9 @@ import io.spine.validation.java.generate.OptionGenerator
 public interface CustomOption {
 
     /**
-     * The option [generator][OptionGenerator].
+     * The [policies][Policy] added by the option.
      */
-    public val generator: OptionGenerator
+    public val policy: Set<Policy<*>>
 
     /**
      * The [views][View] added by the option.
@@ -46,7 +46,7 @@ public interface CustomOption {
     public val view: Set<Class<out View<*, *, *>>>
 
     /**
-     * The [policies][Policy] added by the option.
+     * The option [generator][OptionGenerator].
      */
-    public val policy: Set<Policy<*>>
+    public val generator: OptionGenerator
 }

@@ -38,6 +38,12 @@ import io.spine.protodata.java.field
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
 import io.spine.validate.ConstraintViolation
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
@@ -57,12 +63,6 @@ import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidateScope.violations
-import io.spine.validation.java.violation.ErrorPlaceholder
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.java.violation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.ErrorPlaceholder.WHEN_IN
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 

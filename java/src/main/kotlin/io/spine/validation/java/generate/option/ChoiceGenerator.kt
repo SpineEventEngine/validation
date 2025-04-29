@@ -45,9 +45,9 @@ import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidateScope.violations
-import io.spine.validation.java.violation.ErrorPlaceholder
-import io.spine.validation.java.violation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.java.violation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.GROUP_PATH
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 
