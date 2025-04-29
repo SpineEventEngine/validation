@@ -33,7 +33,7 @@ import io.spine.validation.java.generate.OptionGenerator
 /**
  * Extends the Java validation library with the custom validation option.
  */
-public interface CustomOption {
+public interface ValidationOption {
 
     /**
      * The [policies][Policy] added by the option.
