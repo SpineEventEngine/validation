@@ -34,11 +34,11 @@ import io.spine.protodata.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`WhenPolicy` should")
+@DisplayName("`WhenPolicy` should reject")
 internal class WhenPolicySpec : CompilationErrorTest() {
 
     @Test
-    fun `reject option on a boolean field`() {
+    fun `option on a boolean field`() {
         val message = WhenBoolField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
@@ -49,7 +49,7 @@ internal class WhenPolicySpec : CompilationErrorTest() {
         }    }
 
     @Test
-    fun `reject option on an integer field`() {
+    fun `option on an integer field`() {
         val message = WhenInt32Field.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
@@ -60,7 +60,7 @@ internal class WhenPolicySpec : CompilationErrorTest() {
         }    }
 
     @Test
-    fun `reject option on a string field`() {
+    fun `option on a string field`() {
         val message = WhenStringField.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
@@ -71,7 +71,7 @@ internal class WhenPolicySpec : CompilationErrorTest() {
         }    }
 
     @Test
-    fun `the error message contains unsupported placeholders`() {
+    fun `the error message with unsupported placeholders`() {
         val message = WhenWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")

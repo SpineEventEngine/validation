@@ -41,12 +41,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`GoesPolicy` should reject the option when")
+@DisplayName("`GoesPolicy` should reject the option")
 internal class GoesPolicySpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
-    fun targetFieldHasUnsupportedType(message: KClass<out Message>) {
+    fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("target")
@@ -55,7 +55,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedCompanion")
     @ParameterizedTest(name = "when companion's field type is `{0}`")
-    fun companionFieldHasUnsupportedType(message: KClass<out Message>) {
+    fun whenCompanionFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("companion")
@@ -63,7 +63,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `the specified companion field does not exist`() {
+    fun `when the specified companion field does not exist`() {
         val message = GoesNonExistingCompanion.getDescriptor()
         val error = assertCompilationFails(message)
         val companion = "name"
@@ -71,7 +71,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `the field specified itself as its companion`() {
+    fun `when the field specified itself as its companion`() {
         val message = GoesSelfCompanion.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("name")

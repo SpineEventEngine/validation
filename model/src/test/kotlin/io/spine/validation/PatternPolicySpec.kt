@@ -39,12 +39,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`PatternPolicy` should reject the option when")
+@DisplayName("`PatternPolicy` should reject the option")
 internal class PatternPolicySpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.PatternPolicyTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
-    fun targetFieldHasUnsupportedType(message: KClass<out Message>) {
+    fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
         val error = assertCompilationFails(descriptor)
         val field = descriptor.field("value")
@@ -56,7 +56,7 @@ internal class PatternPolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `the error message contains unsupported placeholders`() {
+    fun `when the error message contains unsupported placeholders`() {
         val message = PatternWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
