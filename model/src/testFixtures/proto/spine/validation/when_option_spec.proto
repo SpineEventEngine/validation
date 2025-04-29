@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,33 +24,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+syntax = "proto3";
 
-import io.spine.core.Subscribe
-import io.spine.protodata.ast.FieldRef
-import io.spine.protodata.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.RequiredField
-import io.spine.validation.event.IfMissingOptionDiscovered
-import io.spine.validation.event.RequiredFieldDiscovered
+package spine.validation;
 
-/**
- * A view of a field that is marked with `(required) = true` option.
- */
-internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
+import "spine/options.proto";
+import "spine/time_options.proto";
 
-    @Subscribe
-    fun on(e: RequiredFieldDiscovered) {
-        val currentMessage = state().errorMessage
-        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
-        alter {
-            subject = e.subject
-            errorMessage = message
-        }
-    }
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "WhenOptionSpecProto";
+option java_multiple_files = true;
 
-    @Subscribe
-    fun on(e: IfMissingOptionDiscovered) = alter {
-        errorMessage = e.customErrorMessage
-    }
+import "google/protobuf/timestamp.proto";
+
+// Provides a boolean field with the inapplicable `(when)` option.
+message WhenBoolField {
+    bool value = 1 [(when).in = FUTURE];
+}
+
+// Provides an int32 field with the inapplicable `(when)` option.
+message WhenInt32Field {
+    int32 value = 1 [(when).in = FUTURE];
+}
+
+// Provides a string field with the inapplicable `(when)` option.
+message WhenStringField {
+    string value = 1 [(when).in = PAST];
+}
+
+// Provides a `(when)` field that specifies a custom error message using
+// the placeholders not supported by the option.
+message WhenWithInvalidPlaceholders {
+    google.protobuf.Timestamp value = 1 [(when) = {
+        in: PAST,
+        error_msg: "The field value `${field.value}` must be in `${when}`."
+    }];
 }

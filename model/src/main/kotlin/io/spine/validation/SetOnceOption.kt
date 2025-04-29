@@ -30,7 +30,8 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfSetAgainOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.ifSetAgain
+import io.spine.option.OptionsProto.setOnce
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
@@ -43,15 +44,25 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
+import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.event.IfSetAgainOptionDiscovered
 import io.spine.validation.event.SetOnceFieldDiscovered
+import io.spine.validation.event.ifSetAgainOptionDiscovered
 import io.spine.validation.event.setOnceFieldDiscovered
 
 /**
@@ -66,8 +77,9 @@ import io.spine.validation.event.setOnceFieldDiscovered
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(set_once)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-set-once field, marked with `(set_once)`.
+ * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
 
@@ -84,25 +96,47 @@ internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val message = resolveErrorMessage<IfSetAgainOption>(field)
+        val defaultMessage = defaultErrorMessage<IfSetAgainOption>()
         return setOnceFieldDiscovered {
             id = field.ref
-            errorMessage = message
             subject = field
+            defaultErrorMessage = defaultMessage
         }.asA()
     }
 }
 
 /**
- * Reports a compilation error when the `(if_set_again)` option is applied
- * without `(set_once)`.
+ * Controls whether the `(if_set_again)` option is applied correctly.
+ *
+ * Whenever a field marked with the `(if_set_again)` option is discovered,
+ * emits [IfSetAgainOptionDiscovered] event if the following conditions are met:
+ *
+ * 1. The target field is also marked with the `(set_once)` option.
+ * 2. The specified error message template does not contain placeholders
+ * not supported by the option.
+ *
+ * A compilation error is reported in case of violation of any condition.
  */
-internal class IfSetAgainPolicy : CompanionPolicy(
-    primary = OptionsProto.setOnce,
-    companion = OptionsProto.ifSetAgain,
-) {
+internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
+
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_SET_AGAIN)
+        event: FieldOptionDiscovered
+    ): Just<IfSetAgainOptionDiscovered> {
+        val field = event.subject
+        val file = event.file
+        ifSetAgain.checkPrimaryApplied(setOnce, field, file)
+
+        val option = event.option.unpack<IfSetAgainOption>()
+        val message = option.errorMsg
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_SET_AGAIN)
+
+        return ifSetAgainOptionDiscovered {
+            id = field.ref
+            customErrorMessage = message
+        }.just()
+    }
 }
 
 /**
@@ -111,9 +145,18 @@ internal class IfSetAgainPolicy : CompanionPolicy(
 internal class SetOnceFieldView : View<FieldRef, SetOnceField, SetOnceField.Builder>() {
 
     @Subscribe
-    fun on(e: SetOnceFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
-        subject = e.subject
+    fun on(e: SetOnceFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfSetAgainOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
     }
 }
 
@@ -128,3 +171,11 @@ private fun checkFieldType(field: Field, file: File) =
  * Tells if this [FieldType] can be validated with the `(set_once)` option.
  */
 private fun FieldType.isSupported(): Boolean = !isList && !isMap
+
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_PROPOSED_VALUE,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+)

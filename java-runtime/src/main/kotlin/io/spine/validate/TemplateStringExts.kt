@@ -83,8 +83,8 @@ public fun TemplateString.formatUnsafe(): String {
 }
 
 /**
- * Makes sure that each placeholder within the [template] string has a value
- * in [placeholders] list.
+ * Makes sure that each placeholder within the [template] string is present
+ * in the [placeholders] set.
  *
  * @param template The template with placeholders like `${something}`.
  * @param placeholders The list with placeholder values.
@@ -153,7 +153,7 @@ public fun TemplateString.Builder.withRegex(regex: String): TemplateString.Build
 /**
  * Extracts all placeholders used within this [template] string.
  */
-private fun extractPlaceholders(template: String): Set<String> =
+public fun extractPlaceholders(template: String): Set<String> =
     PLACEHOLDERS.findAll(template)
         .map { it.groupValues[1] }
         .toSet()

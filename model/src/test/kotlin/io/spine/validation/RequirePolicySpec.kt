@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -106,6 +107,18 @@ internal class RequirePolicySpec : CompilationErrorTest() {
             shouldContain("appear more than once")
             shouldContain(firstFieldGroup)
             shouldContain(secondFieldGroup)
+        }
+    }
+
+    @Test
+    fun `reject the error message contains unsupported placeholders`() {
+        val message = RequireWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        error.message.run {
+            shouldContain(message.fullName)
+            shouldContain(REQUIRE)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[message.name]")
         }
     }
 }

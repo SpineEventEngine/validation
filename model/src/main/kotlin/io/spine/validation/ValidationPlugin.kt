@@ -72,7 +72,7 @@ public abstract class ValidationPlugin(
                 MaxFieldView::class.java,
                 MinFieldView::class.java,
                 SetOnceFieldView::class.java,
-                ChoiceView::class.java,
+                ChoiceGroupView::class.java,
                 WhenFieldView::class.java,
                 RequireMessageView::class.java,
             ),

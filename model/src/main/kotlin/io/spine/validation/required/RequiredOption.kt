@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@ package io.spine.validation.required
 import io.spine.core.External
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.ifMissing
+import io.spine.option.OptionsProto.required
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
@@ -38,24 +39,34 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
+import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.CompanionPolicy
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
+import io.spine.validation.checkPrimaryApplied
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultErrorMessage
+import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.validation.event.ifMissingOptionDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.resolveErrorMessage
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
  * Controls whether a field should be validated as `(required)`.
  *
- * Whenever a field marked with `(required)` option is discovered, emits
+ * Whenever a field marked with the `(required)` option is discovered, emits
  * [RequiredFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
@@ -64,8 +75,9 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(required)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-required field, marked with `(required)`.
+ * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  *
  * Note that this policy is responsible only for fields explicitly marked with
  * the validation option. There are other policies that handle implicitly
@@ -89,25 +101,47 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val message = resolveErrorMessage<IfMissingOption>(field)
+        val defaultMessage = defaultErrorMessage<IfMissingOption>()
         return requiredFieldDiscovered {
             id = field.ref
-            errorMessage = message
             subject = field
+            defaultErrorMessage = defaultMessage
         }.asA()
     }
 }
 
 /**
- * Reports a compilation error when the `(if_missing)` option is applied
- * without `(required)`.
+ * Controls whether the `(if_missing)` option is applied correctly.
+ *
+ * Whenever a field marked with the `(if_missing)` option is discovered, emits
+ * [IfMissingOptionDiscovered] event if the following conditions are met:
+ *
+ * 1. The target field is also marked with the `(required)` option.
+ * 2. The specified error message template does not contain placeholders
+ * not supported by the option.
+ *
+ * A compilation error is reported in case of violation of any condition.
  */
-internal class IfMissingPolicy : CompanionPolicy(
-    primary = OptionsProto.required,
-    companion = OptionsProto.ifMissing,
-) {
+internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
+
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_MISSING)
+        event: FieldOptionDiscovered
+    ): Just<IfMissingOptionDiscovered> {
+        val field = event.subject
+        val file = event.file
+        ifMissing.checkPrimaryApplied(required, field, file)
+
+        val option = event.option.unpack<IfMissingOption>()
+        val message = option.errorMsg
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_MISSING)
+
+        return ifMissingOptionDiscovered {
+            id = field.ref
+            customErrorMessage = message
+        }.just()
+    }
 }
 
 private fun checkFieldType(field: Field, file: File) =
@@ -116,3 +150,9 @@ private fun checkFieldType(field: Field, file: File) =
                 " by the `($REQUIRED)` option. Supported field types: messages, enums," +
                 " strings, bytes, repeated, and maps."
     }
+
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    PARENT_TYPE,
+)

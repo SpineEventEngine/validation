@@ -39,3 +39,12 @@ option java_multiple_files = true;
 message IfHasDuplicatesWithoutDistinct {
     repeated string value = 1 [(if_has_duplicates).error_msg = "The `value` should be unique."];
 }
+
+// Provides a `(distinct)` field that specifies a custom error message using
+// the placeholders not supported by the option.
+message IfHasDuplicatesWithInvalidPlaceholders {
+    repeated string value = 1 [
+        (distinct) = true,
+        (if_has_duplicates).error_msg = "The `${field.name}` has `${duplicates.size}` duplicates."
+    ];
+}

@@ -48,6 +48,12 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 
@@ -55,8 +61,12 @@ import io.spine.validation.event.patternFieldDiscovered
  * Controls whether a field should be validated with the `(pattern)` option.
  *
  * Whenever a field marked with the `(pattern)` option is discovered, emits
- * [PatternFieldDiscovered] event. The policy reports a compilation error
- * if the option does not support the field type.
+ * [PatternFieldDiscovered] event if the following conditions are met:
+ *
+ * 1. The field type is supported by the option.
+ * 2. The error message does not contain unsupported placeholders.
+ *
+ * Any violation of the above conditions leads to a compilation error.
  */
 internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -71,6 +81,8 @@ internal class PatternPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<PatternOption>()
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, PATTERN)
+
         return patternFieldDiscovered {
             id = field.ref
             errorMessage = message
@@ -123,3 +135,12 @@ public val FieldType.isRepeatedString: Boolean
  */
 public val FieldType.isSingularString: Boolean
     get() = primitive == TYPE_STRING
+
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+    REGEX_MODIFIERS,
+    REGEX_PATTERN,
+)

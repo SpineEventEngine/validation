@@ -61,7 +61,7 @@ import io.spine.validation.java.generate.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidateScope.violations
 import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
-import io.spine.validation.java.violation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.java.violation.constraintViolation
 import io.spine.validation.java.violation.templateString
 

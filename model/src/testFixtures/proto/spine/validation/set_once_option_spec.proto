@@ -49,3 +49,12 @@ message SetOnceMap {
 message IfSetAgainWithoutSetOnce {
     string value = 1 [(if_set_again).error_msg = "The `value` must be set."];
 }
+
+// Provides a `(set_once)` field that specifies a custom error message using
+// the placeholders not supported by the option.
+message IfSetAgainWithInvalidPlaceholders {
+    string value = 1 [
+        (set_once) = true,
+        (if_set_again).error_msg = "The `${field.name}` was set again."
+    ];
+}

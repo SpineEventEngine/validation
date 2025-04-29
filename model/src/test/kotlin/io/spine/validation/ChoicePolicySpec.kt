@@ -28,36 +28,22 @@ package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`IfHasDuplicatesPolicy` should")
-internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
+@DisplayName("`ChoicePolicy` should reject the option")
+internal class ChoicePolicySpec : CompilationErrorTest() {
 
     @Test
-    fun `reject without '(distinct)'`() {
-        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
+    fun `when the error message contains unsupported placeholders`() {
+        val message = ChoiceWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("value")
+        val oneof = message.oneofs.first { it.name == "value" }
         error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain(DISTINCT)
-        }
-    }
-
-    @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfHasDuplicatesWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
+            shouldContain(oneof.fullName)
+            shouldContain(CHOICE)
             shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, duplicates.size]")
+            shouldInclude("[group.fields]")
         }
     }
 }

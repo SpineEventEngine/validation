@@ -43,8 +43,8 @@ import io.spine.validation.java.expression.joinToString
 import io.spine.validation.java.expression.orElse
 import io.spine.validation.java.expression.resolve
 import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.java.generate.SingleOptionCode
 import io.spine.validation.java.generate.ValidateScope.parentName
 import io.spine.validation.java.generate.ValidateScope.parentPath
 import io.spine.validation.java.generate.ValidateScope.violations
