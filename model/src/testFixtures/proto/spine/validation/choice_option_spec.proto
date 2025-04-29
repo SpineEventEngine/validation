@@ -51,6 +51,5 @@ message ChoiceWithInvalidPlaceholders {
         string string_value = 2;
 
         bool bool_value = 3;
-
     }
 }
