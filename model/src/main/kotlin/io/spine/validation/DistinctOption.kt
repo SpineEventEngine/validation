@@ -125,7 +125,7 @@ internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
     ): Just<IfHasDuplicatesOptionDiscovered> {
         val field = event.subject
         val file = event.file
-        checkBothApplied(ifHasDuplicates, distinct, field, file)
+        ifHasDuplicates.checkPrimaryApplied(distinct, field,  file)
 
         val option = event.option.unpack<IfHasDuplicatesOption>()
         val message = option.errorMsg

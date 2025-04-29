@@ -54,7 +54,7 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
-import io.spine.validation.checkBothApplied
+import io.spine.validation.checkPrimaryApplied
 import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
@@ -130,7 +130,7 @@ internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
     ): Just<IfMissingOptionDiscovered> {
         val field = event.subject
         val file = event.file
-        checkBothApplied(ifMissing, required, field, file)
+        ifMissing.checkPrimaryApplied(required, field, file)
 
         val option = event.option.unpack<IfMissingOption>()
         val message = option.errorMsg
