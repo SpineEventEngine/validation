@@ -37,11 +37,11 @@ import io.spine.protodata.check
 import io.spine.validate.extractPlaceholders
 
 /**
- * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supported], and reports a compilation error if so.
+ * Checks if this [String] contains placeholders that are not present in the given
+ * set of the [supported] placeholders, and reports a compilation error if so.
  *
  * @param supported The set of placeholders that can occur in this [String].
- * @param message The message type declared the message template.
+ * @param message The message type declared that the message template.
  * @param file The file that contains the [message] declaration.
  * @param option The name of the option with which the message template was specified.
  */
@@ -59,11 +59,11 @@ internal fun String.checkPlaceholders(
 )
 
 /**
- * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supported], and reports a compilation error if so.
+ * Checks if this [String] contains placeholders that are not present in the given
+ * set of the [supported] placeholders, and reports a compilation error if so.
  *
  * @param supported The set of placeholders that can occur in this [String].
- * @param oneof The oneof group declared the message template.
+ * @param oneof The oneof group that declared the message template.
  * @param file The file that contains the [oneof] declaration.
  * @param option The name of the option with which the message template was specified.
  */
@@ -81,11 +81,11 @@ internal fun String.checkPlaceholders(
 )
 
 /**
- * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supported], and reports a compilation error if so.
+ * Checks if this [String] contains placeholders that are not present in the given
+ * set of the [supported] placeholders, and reports a compilation error if so.
  *
  * @param supported The set of placeholders that can occur in this [String].
- * @param field The field declared the message template.
+ * @param field The field that declared the message template.
  * @param file The file that contains the [field] declaration.
  * @param option The name of the option with which the message template was specified.
  */
@@ -103,8 +103,8 @@ internal fun String.checkPlaceholders(
 )
 
 /**
- * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supported], and reports a compilation error if so.
+ * Checks if this [String] contains placeholders that are not present in the given
+ * set of the [supported] placeholders, and reports a compilation error if so.
  */
 private fun String.checkPlaceholders(
     supported: Set<ErrorPlaceholder>,
