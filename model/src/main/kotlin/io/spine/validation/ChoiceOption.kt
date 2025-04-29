@@ -51,13 +51,13 @@ import io.spine.validation.event.choiceOneofDiscovered
 /**
  * Controls whether a `oneof` group should be validated with the `(choice)` option.
  *
- * Whenever a `oneof` groupd marked with `(choice)` option is discovered,
+ * Whenever a `oneof` groupd marked with the `(choice)` option is discovered,
  * emits [ChoiceOneofDiscovered] event if the following conditions are met:
  *
  * 1. The option has the `required` flag set to `true`.
  * 2. The error message does not contain unsupported placeholders.
  *
- * If (1) is violated, the policy just emits [NoReaction].
+ * If (1) is violated, the policy emits [NoReaction].
  * Violation of (2) leads to a compilation error.
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.

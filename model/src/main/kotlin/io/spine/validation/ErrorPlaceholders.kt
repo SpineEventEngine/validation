@@ -31,79 +31,94 @@ import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.OneofGroup
+import io.spine.protodata.ast.Span
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
 import io.spine.validate.extractPlaceholders
 
 /**
  * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
+ * in the given set of the [supported], and reports a compilation error if so.
  *
- * @param supportedPlaceholders The set of placeholders that can occur in this [String].
+ * @param supported The set of placeholders that can occur in this [String].
  * @param message The message type declared the message template.
  * @param file The file that contains the [message] declaration.
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supportedPlaceholders: Set<ErrorPlaceholder>,
+    supported: Set<ErrorPlaceholder>,
     message: MessageType,
     file: File,
     option: String
-) {
-    val template = this
-    val missing = missingPlaceholders(template, supportedPlaceholders)
-    Compilation.check(missing.isEmpty(), file, message.span) {
-        "The `${message.qualifiedName}` message specifies an error message for the `($option)`" +
-                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
-                " the following: `${supportedPlaceholders.map { it.value }}`."
-    }
-}
+) = checkPlaceholders(
+    supported,
+    "`${message.qualifiedName}` message",
+    message.span,
+    file,
+    option
+)
 
 /**
  * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
+ * in the given set of the [supported], and reports a compilation error if so.
  *
- * @param supportedPlaceholders The set of placeholders that can occur in this [String].
+ * @param supported The set of placeholders that can occur in this [String].
  * @param oneof The oneof group declared the message template.
  * @param file The file that contains the [oneof] declaration.
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supportedPlaceholders: Set<ErrorPlaceholder>,
+    supported: Set<ErrorPlaceholder>,
     oneof: OneofGroup,
     file: File,
     option: String
-) {
-    val template = this
-    val missing = missingPlaceholders(template, supportedPlaceholders)
-    Compilation.check(missing.isEmpty(), file, oneof.span) {
-        "The `${oneof.qualifiedName}` group specifies an error message for the `($option)`" +
-                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
-                " the following: `${supportedPlaceholders.map { it.value }}`."
-    }
-}
+) = checkPlaceholders(
+    supported,
+    "`${oneof.qualifiedName}` group",
+    oneof.span,
+    file,
+    option
+)
 
 /**
  * Checks if this [String] contains placeholders that are not present
- * in the given set of the [supportedPlaceholders], and reports a compilation error if so.
+ * in the given set of the [supported], and reports a compilation error if so.
  *
- * @param supportedPlaceholders The set of placeholders that can occur in this [String].
+ * @param supported The set of placeholders that can occur in this [String].
  * @param field The field declared the message template.
  * @param file The file that contains the [field] declaration.
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supportedPlaceholders: Set<ErrorPlaceholder>,
+    supported: Set<ErrorPlaceholder>,
     field: Field,
+    file: File,
+    option: String
+) = checkPlaceholders(
+    supported,
+    "`${field.qualifiedName}` field",
+    field.span,
+    file,
+    option
+)
+
+/**
+ * Checks if this [String] contains placeholders that are not present
+ * in the given set of the [supported], and reports a compilation error if so.
+ */
+private fun String.checkPlaceholders(
+    supported: Set<ErrorPlaceholder>,
+    declaration: String,
+    span: Span,
     file: File,
     option: String
 ) {
     val template = this
-    val missing = missingPlaceholders(template, supportedPlaceholders)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message for the `($option)`" +
-                " option using unsupported placeholders: `$missing`. Supported placeholders are" +
-                " the following: `${supportedPlaceholders.map { it.value }}`."
+    val missing = missingPlaceholders(template, supported)
+    Compilation.check(missing.isEmpty(), file, span) {
+        "The $declaration specifies an error message for the `($option)` option using unsupported" +
+                " placeholders: `$missing`. Supported placeholders are the following:" +
+                " `${supported.map { it.value }}`."
     }
 }
 
