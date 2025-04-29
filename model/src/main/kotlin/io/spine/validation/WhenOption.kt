@@ -74,11 +74,12 @@ import io.spine.validation.TimeFieldType.TFT_UNKNOWN
  * [WhenFieldDiscovered] event if the following conditions are met:
  *
  * 1) The field type is supported by the option.
- * 2) The option value is other than [Time.TIME_UNDEFINED].
+ * 2) The error message does not contain unsupported placeholders.
+ * 3) The option value is other than [Time.TIME_UNDEFINED].
  *
- * If (1) is violated, the policy reports a compilation error.
+ * If (1) or (2) is violated, the policy reports a compilation error.
  *
- * Violation of (2) means that the `(when)` option is applied correctly,
+ * Violation of (3) means that the `(when)` option is applied correctly,
  * but disabled. In this case, the policy emits [NoReaction].
  */
 internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
