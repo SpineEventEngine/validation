@@ -29,6 +29,7 @@ package io.spine.validation
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
@@ -62,7 +63,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `the specified companion field does not exist`() {
+    fun `when the specified companion field does not exist`() {
         val message = GoesNonExistingCompanion.getDescriptor()
         val error = assertCompilationFails(message)
         val companion = "name"
@@ -70,11 +71,24 @@ internal class GoesPolicySpec : CompilationErrorTest() {
     }
 
     @Test
-    fun `the field specified itself as its companion`() {
+    fun `when the field specified itself as its companion`() {
         val message = GoesSelfCompanion.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("name")
         error.message shouldContain selfCompanion(field)
+    }
+
+    @Test
+    fun `when the error message contains unsupported placeholders`() {
+        val message = GoesWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(GOES)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[field.name]")
+        }
     }
 }
 

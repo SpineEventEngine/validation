@@ -77,8 +77,9 @@ import io.spine.validation.event.setOnceFieldDiscovered
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(set_once)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-set-once field, marked with `(set_once)`.
+ * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
 
@@ -129,7 +130,7 @@ internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<IfSetAgainOption>()
         val message = option.errorMsg
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_SET_AGAIN)
 
         return ifSetAgainOptionDiscovered {
             id = field.ref
@@ -171,15 +172,10 @@ private fun checkFieldType(field: Field, file: File) =
  */
 private fun FieldType.isSupported(): Boolean = !isList && !isMap
 
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message using" +
-                " the `($IF_SET_AGAIN)` option with unsupported placeholders: `$missing`." +
-                " Supported placeholders are the following:" +
-                " `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
-
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_VALUE, FIELD_PROPOSED_VALUE, FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_PROPOSED_VALUE,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+)

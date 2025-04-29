@@ -55,12 +55,12 @@ import io.spine.validation.IF_MISSING
 import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.checkPrimaryApplied
+import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.ifMissingOptionDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.missingPlaceholders
 import io.spine.validation.required.RequiredFieldSupport.isSupported
 
 /**
@@ -75,8 +75,9 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(required)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-required field, marked with `(required)`.
+ * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  *
  * Note that this policy is responsible only for fields explicitly marked with
  * the validation option. There are other policies that handle implicitly
@@ -134,7 +135,7 @@ internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<IfMissingOption>()
         val message = option.errorMsg
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_MISSING)
 
         return ifMissingOptionDiscovered {
             id = field.ref
@@ -150,13 +151,8 @@ private fun checkFieldType(field: Field, file: File) =
                 " strings, bytes, repeated, and maps."
     }
 
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message using the `($IF_MISSING)`" +
-                " option with unsupported placeholders: `$missing`. Supported placeholders are" +
-                " the following: `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
-
-private val SUPPORTED_PLACEHOLDERS = setOf(FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    PARENT_TYPE,
+)

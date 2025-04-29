@@ -40,16 +40,26 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
+import io.spine.validation.ErrorPlaceholder.MAX_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MAX
 import io.spine.validation.OPTION_NAME
+import io.spine.validation.RANGE
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.MaxFieldDiscovered
 import io.spine.validation.bound.event.maxFieldDiscovered
+import io.spine.validation.checkPlaceholders
 
 /**
  * A policy to add a validation rule to a type whenever the `(max)` field option
  * is discovered.
+ *
+ * The condition checks done by the policy are similar to the ones performed by [RangePolicy].
  */
 internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -67,6 +77,8 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
         val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
+
         return maxFieldDiscovered {
             id = field.ref
             subject = field
@@ -92,3 +104,12 @@ internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
         file = e.file
     }
 }
+
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    MAX_OPERATOR,
+    MAX_VALUE,
+    PARENT_TYPE,
+)

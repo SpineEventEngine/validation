@@ -53,6 +53,11 @@ import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 
@@ -66,6 +71,7 @@ import io.spine.validation.event.goesFieldDiscovered
  * 2. The companion field is present in the message.
  * 3. The companion field and the target field are different fields.
  * 4. The companion field type is supported by the option.
+ * 5. The error message does not contain unsupported placeholders.
  *
  * Any violation of the above conditions leads to a compilation error.
  */
@@ -90,6 +96,8 @@ internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
         checkCompanionType(companionField, file)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, GOES)
+
         return goesFieldDiscovered {
             id = field.ref
             errorMessage = message
@@ -146,4 +154,12 @@ private fun FieldType.isSupported(): Boolean =
 
 private val SUPPORTED_PRIMITIVES = listOf(
     TYPE_STRING, TYPE_BYTES
+)
+
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    GOES_COMPANION,
+    PARENT_TYPE,
 )

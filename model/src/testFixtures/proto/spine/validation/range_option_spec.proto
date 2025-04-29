@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.316")
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation";
+option java_outer_classname = "RangeOptionSpecProto";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+// Provides a `(range)` field that specifies a custom error message using
+// the placeholders not supported by the option.
+message RangeWithInvalidPlaceholders {
+    int32 value = 2 [
+        (range).value = "[1 .. 10]",
+        (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
+    ];
+}

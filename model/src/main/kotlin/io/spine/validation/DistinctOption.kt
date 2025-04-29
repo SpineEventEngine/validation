@@ -77,8 +77,9 @@ import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(distinct)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we
- * actually have a non-distinct field, marked with `(distinct)`.
+ * but effectively disabled. [DistinctFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
 
@@ -129,7 +130,7 @@ internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
 
         val option = event.option.unpack<IfHasDuplicatesOption>()
         val message = option.errorMsg
-        checkPlaceholders(message, field, file)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_HAS_DUPLICATES)
 
         return ifHasDuplicatesOptionDiscovered {
             id = field.ref
@@ -170,15 +171,10 @@ private fun checkFieldType(field: Field, file: File) =
  */
 private fun FieldType.isSupported(): Boolean = isMap || isList
 
-private fun checkPlaceholders(template: String, field: Field, file: File) {
-    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
-    Compilation.check(missing.isEmpty(), file, field.span) {
-        "The `${field.qualifiedName}` field specifies an error message using" +
-                " the `($IF_HAS_DUPLICATES)` option with unsupported placeholders: `$missing`." +
-                " Supported placeholders are the following:" +
-                " `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
-    }
-}
-
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, FIELD_DUPLICATES)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_DUPLICATES,
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+)

@@ -63,8 +63,9 @@ import io.spine.validation.event.validateFieldDiscovered
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(validate)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we
- * actually have a non-validated field, marked with `(validate)`.
+ * but effectively disabled. [ValidateFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
 

@@ -26,38 +26,27 @@
 
 package io.spine.validation
 
-import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.field
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Named.named
+import org.junit.jupiter.params.provider.Arguments.arguments
 
-@DisplayName("`IfHasDuplicatesPolicy` should")
-internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
+/**
+ * Provides data for parametrized tests in [io.spine.validation.PatternPolicySpec].
+ */
+@Suppress("unused") // Data provider for parameterized test.
+object PatternPolicyTestEnv {
 
-    @Test
-    fun `reject without '(distinct)'`() {
-        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain(DISTINCT)
-        }
-    }
-
-    @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfHasDuplicatesWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, duplicates.size]")
-        }
-    }
+    /**
+     * Test data for [io.spine.validation.PatternPolicySpec.targetFieldHasUnsupportedType].
+     */
+    @JvmStatic
+    fun messagesWithUnsupportedTarget() = listOf(
+        "bool" to PatternBoolField::class,
+        "repeated double" to PatternRepeatedBoolField::class,
+        "int32" to PatternIntField::class,
+        "repeated int32" to PatternRepeatedIntField::class,
+        "double" to PatternDoubleField::class,
+        "repeated double" to PatternRepeatedDoubleField::class,
+        "message" to PatternMessageField::class,
+        "repeated message" to PatternRepeatedMessageField::class,
+    ).map { arguments(named(it.first, it.second)) }
 }
