@@ -26,6 +26,7 @@
 
 package io.spine.validation.java.generate
 
+import io.spine.annotation.Internal
 import io.spine.protodata.ast.TypeName
 import io.spine.server.query.Querying
 
@@ -54,6 +55,7 @@ public abstract class OptionGenerator {
     /**
      * Injects [Querying] into this instance of [OptionGenerator].
      */
+    @Internal
     internal fun inject(querying: Querying) {
         this.querying = querying
     }
