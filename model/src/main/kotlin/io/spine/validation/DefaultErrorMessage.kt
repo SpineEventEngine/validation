@@ -27,23 +27,9 @@
 package io.spine.validation
 
 import com.google.protobuf.Descriptors.Descriptor
+import com.google.protobuf.Message
 import io.spine.option.OptionsProto
-
-/**
- * A factory of validation error messages.
- */
-internal object DefaultErrorMessage {
-
-    /**
-     * Obtains the validation error message from the given option descriptor.
-     *
-     * The descriptor should be marked with the `(default_message)` option.
-     * If the option is absent, an empty message is returned.
-     */
-    @JvmStatic
-    fun from(optionDescriptor: Descriptor): String =
-        optionDescriptor.options.getExtension(OptionsProto.defaultMessage)
-}
+import io.spine.protodata.protobuf.descriptor
 
 /**
  * Returns the default error message from the given option descriptor.
@@ -52,4 +38,16 @@ internal object DefaultErrorMessage {
  * If the option is absent, an empty message is returned.
  */
 internal val Descriptor.defaultMessage: String
-    get() = DefaultErrorMessage.from(this)
+    get() = options.getExtension(OptionsProto.defaultMessage)
+
+/**
+ * Returns the value of the `(default_message)` option applied
+ * to the message option of type [T].
+ *
+ * Return an empty string, if the message type [T] does not have
+ * this option applied.
+ */
+internal inline fun <reified T : Message> defaultErrorMessage(): String {
+    val descriptor = T::class.descriptor
+    return descriptor.defaultMessage
+}

@@ -26,38 +26,32 @@
 
 package io.spine.validation
 
-import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protodata.Compilation
+import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.File
+import io.spine.protodata.ast.findOption
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.field
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import io.spine.protodata.check
 
-@DisplayName("`IfHasDuplicatesPolicy` should")
-internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
-
-    @Test
-    fun `reject without '(distinct)'`() {
-        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain(DISTINCT)
-        }
-    }
-
-    @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfHasDuplicatesWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain("with unsupported placeholders")
-            shouldInclude("[field.name, duplicates.size]")
-        }
+/**
+ * Reports a compilation error if this [companion option][GeneratedExtension]
+ * is applied to the given [field] without the [primary] option.
+ *
+ * Some options have a companion option for specifying an error message.
+ * This method ensures that a companion option is not used independently.
+ */
+internal fun GeneratedExtension<*, *>.checkPrimaryApplied(
+    primary: GeneratedExtension<*, *>,
+    field: Field,
+    file: File
+) {
+    val primaryOption = field.findOption(primary)
+    val primaryName = primaryOption?.name
+    val companionName = this.descriptor.name
+    Compilation.check(primaryOption != null, file, field.span) {
+        "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
+                " applied without its primary `($primaryName)` option. Companion options" +
+                " must always be used together with their primary counterparts."
     }
 }

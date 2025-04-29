@@ -75,7 +75,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
      * The method emits [RequiredFieldDiscovered] event if the following
      * conditions are met:
      *
-     * 1. The field does not have the  `(required)` option applied explicitly.
+     * 1. The field does not have the `(required)` option applied explicitly.
      *   If it has, the field is handled by the [RequiredPolicy] policy then.
      * 2. The field type is supported by the option.
      *
@@ -97,7 +97,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
 
         return requiredFieldDiscovered {
             id = field.ref
-            errorMessage = ID_FIELD_MUST_BE_SET
+            defaultErrorMessage = ID_FIELD_MUST_BE_SET
             subject = field
         }.asA()
     }

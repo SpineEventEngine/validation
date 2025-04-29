@@ -39,6 +39,7 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
+import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.java.expression.StringClass
 import io.spine.validation.java.expression.TemplateStringClass
 

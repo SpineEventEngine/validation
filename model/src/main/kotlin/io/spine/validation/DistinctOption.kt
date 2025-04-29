@@ -30,7 +30,8 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
-import io.spine.option.OptionsProto
+import io.spine.option.OptionsProto.distinct
+import io.spine.option.OptionsProto.ifHasDuplicates
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldRef
@@ -43,16 +44,26 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
+import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
+import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.event.DistinctFieldDiscovered
+import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.validation.event.distinctFieldDiscovered
+import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
 
 /**
  * Controls whether a field should be validated as `(distinct)`.
@@ -84,25 +95,47 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val message = resolveErrorMessage<IfHasDuplicatesOption>(field)
+        val message = defaultErrorMessage<IfHasDuplicatesOption>()
         return distinctFieldDiscovered {
             id = field.ref
-            errorMessage = message
+            defaultErrorMessage = message
             subject = field
         }.asA()
     }
 }
 
 /**
- * Reports a compilation error when the `(if_has_duplicates)` option is applied
- * without `(distinct)`.
+ * Controls whether the `(if_has_duplicates)` option is applied correctly.
+ *
+ * Whenever a field marked with the `(if_has_duplicates)` option is discovered,
+ * emits [IfHasDuplicatesOptionDiscovered] event if the following conditions are met:
+ *
+ * 1. The target field is also marked with the `(distinct)` option.
+ * 2. The specified error message template does not contain placeholders
+ * not supported by the option.
+ *
+ * A compilation error is reported in case of violation of any condition.
  */
-internal class IfHasDuplicatesPolicy : CompanionPolicy(
-    primary = OptionsProto.distinct,
-    companion = OptionsProto.ifHasDuplicates,
-) {
+internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
+
     @React
-    override fun whenever(@External event: FieldOptionDiscovered) = checkWithPrimary(event)
+    override fun whenever(
+        @External @Where(field = OPTION_NAME, equals = IF_HAS_DUPLICATES)
+        event: FieldOptionDiscovered
+    ): Just<IfHasDuplicatesOptionDiscovered> {
+        val field = event.subject
+        val file = event.file
+        ifHasDuplicates.checkPrimaryApplied(distinct, field,  file)
+
+        val option = event.option.unpack<IfHasDuplicatesOption>()
+        val message = option.errorMsg
+        checkPlaceholders(message, field, file)
+
+        return ifHasDuplicatesOptionDiscovered {
+            id = field.ref
+            customErrorMessage = message
+        }.just()
+    }
 }
 
 /**
@@ -111,9 +144,18 @@ internal class IfHasDuplicatesPolicy : CompanionPolicy(
 internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
 
     @Subscribe
-    fun on(e: DistinctFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
-        subject = e.subject
+    fun on(e: DistinctFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfHasDuplicatesOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
     }
 }
 
@@ -127,3 +169,16 @@ private fun checkFieldType(field: Field, file: File) =
  * Tells if this [FieldType] can be validated with the `(distinct)` option.
  */
 private fun FieldType.isSupported(): Boolean = isMap || isList
+
+private fun checkPlaceholders(template: String, field: Field, file: File) {
+    val missing = missingPlaceholders(template, SUPPORTED_PLACEHOLDERS)
+    Compilation.check(missing.isEmpty(), file, field.span) {
+        "The `${field.qualifiedName}` field specifies an error message using" +
+                " the `($IF_HAS_DUPLICATES)` option with unsupported placeholders: `$missing`." +
+                " Supported placeholders are the following:" +
+                " `${SUPPORTED_PLACEHOLDERS.map { it.value }}`."
+    }
+}
+
+private val SUPPORTED_PLACEHOLDERS =
+    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, FIELD_DUPLICATES)

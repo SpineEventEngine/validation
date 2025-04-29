@@ -31,6 +31,7 @@ import io.spine.protodata.ast.FieldRef
 import io.spine.protodata.plugin.View
 import io.spine.server.entity.alter
 import io.spine.validation.RequiredField
+import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
@@ -39,8 +40,17 @@ import io.spine.validation.event.RequiredFieldDiscovered
 internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
 
     @Subscribe
-    fun on(e: RequiredFieldDiscovered) = alter {
-        errorMessage = e.errorMessage
-        subject = e.subject
+    fun on(e: RequiredFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfMissingOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.violation
+package io.spine.validation
+
+import io.spine.validate.extractPlaceholders
 
 /**
  * A template placeholder that can be used in error messages.
@@ -73,4 +75,26 @@ public enum class ErrorPlaceholder(public val value: String) {
     REQUIRE_FIELDS("require.fields");
 
     override fun toString(): String = value
+}
+
+/**
+ * Returns a set of placeholders that are used by the given [template] string,
+ * but not present in the provided [placeholders] set.
+ *
+ * @param template The template with placeholders like `${something}`.
+ * @param placeholders The set of error placeholders.
+ */
+public fun missingPlaceholders(
+    template: String,
+    placeholders: Set<ErrorPlaceholder>
+): Set<String> {
+    val requested = extractPlaceholders(template)
+    val provided = placeholders.map { it.value }
+    val missing = mutableSetOf<String>()
+    for (placeholder in requested) {
+        if (!provided.contains(placeholder)) {
+            missing.add(placeholder)
+        }
+    }
+    return missing
 }
