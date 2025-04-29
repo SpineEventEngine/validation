@@ -59,42 +59,45 @@ public abstract class ValidationPlugin(
     policies: Set<Policy<*>> = setOf(),
 ) : Plugin(
     renderers = renderers,
-    views = setOf(
-        RequiredFieldView::class.java,
-        PatternFieldView::class.java,
-        GoesFieldView::class.java,
-        DistinctFieldView::class.java,
-        ValidatedFieldView::class.java,
-        RangeFieldView::class.java,
-        MaxFieldView::class.java,
-        MinFieldView::class.java,
-        SetOnceFieldView::class.java,
-        ChoiceView::class.java,
-        WhenFieldView::class.java,
-        RequireMessageView::class.java,
-    ) + views,
-    viewRepositories = setOf<ViewRepository<*, *, *>>(
-        CompilationMessageRepository()
-    ) + viewRepositories,
-    policies = setOf<Policy<*>>(
-        RequiredPolicy(),
-        IfMissingPolicy(),
-        RangePolicy(),
-        MinPolicy(),
-        MaxPolicy(),
-        DistinctPolicy(),
-        IfHasDuplicatesPolicy(),
-        ValidatePolicy(),
-        IfInvalidPolicy(),
-        PatternPolicy(),
-        ChoicePolicy(),
-        IsRequiredPolicy(),
-        WhenPolicy(),
-        RequiredIdPatternPolicy(),
-        RequiredIdOptionPolicy(),
-        GoesPolicy(),
-        SetOncePolicy(),
-        IfSetAgainPolicy(),
-        RequirePolicy()
-    ) +  policies
+    views = views +
+            setOf(
+                RequiredFieldView::class.java,
+                PatternFieldView::class.java,
+                GoesFieldView::class.java,
+                DistinctFieldView::class.java,
+                ValidatedFieldView::class.java,
+                RangeFieldView::class.java,
+                MaxFieldView::class.java,
+                MinFieldView::class.java,
+                SetOnceFieldView::class.java,
+                ChoiceView::class.java,
+                WhenFieldView::class.java,
+                RequireMessageView::class.java,
+            ),
+    viewRepositories = viewRepositories +
+            setOf<ViewRepository<*, *, *>>(
+                CompilationMessageRepository()
+            ),
+    policies = policies +
+            setOf<Policy<*>>(
+                RequiredPolicy(),
+                IfMissingPolicy(),
+                RangePolicy(),
+                MinPolicy(),
+                MaxPolicy(),
+                DistinctPolicy(),
+                IfHasDuplicatesPolicy(),
+                ValidatePolicy(),
+                IfInvalidPolicy(),
+                PatternPolicy(),
+                ChoicePolicy(),
+                IsRequiredPolicy(),
+                WhenPolicy(),
+                RequiredIdPatternPolicy(),
+                RequiredIdOptionPolicy(),
+                GoesPolicy(),
+                SetOncePolicy(),
+                IfSetAgainPolicy(),
+                RequirePolicy()
+            )
 )
