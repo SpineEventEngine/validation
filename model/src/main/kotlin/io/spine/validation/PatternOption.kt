@@ -136,5 +136,11 @@ public val FieldType.isRepeatedString: Boolean
 public val FieldType.isSingularString: Boolean
     get() = primitive == TYPE_STRING
 
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, REGEX_PATTERN, REGEX_MODIFIERS)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+    REGEX_MODIFIERS,
+    REGEX_PATTERN,
+)

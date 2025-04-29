@@ -179,5 +179,10 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
 
 private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")
 
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, RANGE_VALUE)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+    RANGE_VALUE,
+)

@@ -105,5 +105,11 @@ internal class MinFieldView : View<FieldRef, MinField, MinField.Builder>() {
     }
 }
 
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, MIN_VALUE, MIN_OPERATOR)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    MIN_OPERATOR,
+    MIN_VALUE,
+    PARENT_TYPE,
+)

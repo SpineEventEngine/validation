@@ -172,5 +172,10 @@ private fun checkFieldType(field: Field, file: File) =
  */
 private fun FieldType.isSupported(): Boolean = !isList && !isMap
 
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_VALUE, FIELD_PROPOSED_VALUE, FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_PROPOSED_VALUE,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+)

@@ -167,5 +167,10 @@ internal class WhenFieldView : View<FieldRef, WhenField, WhenField.Builder>() {
     }
 }
 
-private val SUPPORTED_PLACEHOLDERS =
-    setOf(FIELD_PATH, FIELD_VALUE, FIELD_TYPE, PARENT_TYPE, WHEN_IN)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    FIELD_VALUE,
+    PARENT_TYPE,
+    WHEN_IN,
+)

@@ -151,4 +151,8 @@ private fun checkFieldType(field: Field, file: File) =
                 " strings, bytes, repeated, and maps."
     }
 
-private val SUPPORTED_PLACEHOLDERS = setOf(FIELD_PATH, FIELD_TYPE, PARENT_TYPE)
+private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_PATH,
+    FIELD_TYPE,
+    PARENT_TYPE,
+)
