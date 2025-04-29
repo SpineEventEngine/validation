@@ -57,7 +57,11 @@ import io.spine.validation.event.choiceOneofDiscovered
  * 1. The option has the `required` flag set to `true`.
  * 2. The error message does not contain unsupported placeholders.
  *
- * If (1) is violated, the policy emits [NoReaction].
+ * Violation of (1) means that the `(choice)` option is applied correctly,
+ * but effectively disabled. [ChoiceOneofDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
+ *
  * Violation of (2) leads to a compilation error.
  *
  * Note that unlike the `(required)` constraint, this option supports any field type.

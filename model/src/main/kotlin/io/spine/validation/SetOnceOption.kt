@@ -77,8 +77,9 @@ import io.spine.validation.event.setOnceFieldDiscovered
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(set_once)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-set-once field, marked with `(set_once)`.
+ * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
 

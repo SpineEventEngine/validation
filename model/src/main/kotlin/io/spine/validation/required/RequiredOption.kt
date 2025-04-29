@@ -75,8 +75,9 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * If (1) is violated, the policy reports a compilation error.
  *
  * Violation of (2) means that the `(required)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction] because we actually
- * have a non-required field, marked with `(required)`.
+ * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  *
  * Note that this policy is responsible only for fields explicitly marked with
  * the validation option. There are other policies that handle implicitly

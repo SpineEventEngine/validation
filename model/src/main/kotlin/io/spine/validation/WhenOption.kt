@@ -80,7 +80,9 @@ import io.spine.validation.TimeFieldType.TFT_UNKNOWN
  * If (1) or (2) is violated, the policy reports a compilation error.
  *
  * Violation of (3) means that the `(when)` option is applied correctly,
- * but disabled. In this case, the policy emits [NoReaction].
+ * but effectively disabled. [WhenFieldDiscovered] is not emitted for
+ * disabled options. In this case, the policy emits [NoReaction] meaning
+ * that the option is ignored.
  */
 internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
 
