@@ -42,12 +42,6 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
-    <groupId>com.squareup</groupId>
-    <artifactId>javapoet</artifactId>
-    <version>1.13.0</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-base</artifactId>
     <version>2.0.0-SNAPSHOT.308</version>
@@ -84,22 +78,10 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
-    <groupId>org.jboss.forge.roaster</groupId>
-    <artifactId>roaster-api</artifactId>
-    <version>2.28.0.Final</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-stdlib</artifactId>
     <version>2.1.20</version>
     <scope>compile</scope>
-  </dependency>
-  <dependency>
-    <groupId>org.jboss.forge.roaster</groupId>
-    <artifactId>roaster-jdt</artifactId>
-    <version>2.28.0.Final</version>
-    <scope>runtime</scope>
   </dependency>
   <dependency>
     <groupId>com.google.truth</groupId>
