@@ -93,7 +93,6 @@ internal class ValidationCodeInjector {
         execute {
             messageClass.apply {
                 implementValidatableMessage()
-                declareDefaultValidateMethod()
                 declareValidateMethod(code.constraints)
                 declareSupportingFields(code.fields)
                 declareSupportingMethods(code.methods)
@@ -131,28 +130,6 @@ private fun MessagePsiClass.implementValidatableMessage() {
     val qualifiedName = ValidatableMessage::class.java.canonicalName
     val reference = elementFactory.createInterfaceReference(qualifiedName)
     implement(reference)
-}
-
-/**
- * Declares the `validate()` method in this [MessagePsiClass].
- *
- * This is an implementation of [ValidatableMessage.validate] that doesn't accept
- * any parameters. The actual constraints are contained in its [overload][declareValidateMethod],
- * to which this method delegates.
- */
-// TODO:2025-03-12:yevhenii.nadtochii: Remove it in a favour of the default implementation
-//  provided in the `ValidatableMessage` interface.
-//  See issue: https://github.com/SpineEventEngine/validation/issues/198
-private fun MessagePsiClass.declareDefaultValidateMethod() {
-    val psiMethod = elementFactory.createMethodFromText(
-        """
-        public java.util.Optional<io.spine.validate.ValidationError> validate() {
-            var noParentPath = $FieldPathClass.getDefaultInstance();
-            return validate(noParentPath, null);
-        }
-        """.trimIndent(), this)
-    psiMethod.annotate(Override::class.java)
-    addLast(psiMethod)
 }
 
 /**
