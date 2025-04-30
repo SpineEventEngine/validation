@@ -26,7 +26,6 @@
 
 package io.spine.validation
 
-import io.spine.annotation.Internal
 import io.spine.protodata.plugin.Plugin
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
@@ -53,7 +52,6 @@ import io.spine.validation.required.RequiredPolicy
  * The concrete implementations should provide [renderers], which implement
  * these constraints for a specific programming language.
  */
-@Internal
 public abstract class ValidationPlugin(
     renderers: List<Renderer<*>> = emptyList(),
     views: Set<Class<out View<*, *, *>>> = setOf(),
