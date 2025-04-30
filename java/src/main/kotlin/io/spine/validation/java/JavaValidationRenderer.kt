@@ -51,7 +51,6 @@ import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
-import io.spine.validation.java.rule.RuleGenerator
 
 /**
  * The main Java renderer of the validation library.
@@ -66,7 +65,6 @@ public class JavaValidationRenderer : JavaRenderer() {
     private val querying = this@JavaValidationRenderer
     private val generators by lazy {
         listOf(
-            RuleGenerator(querying, typeSystem),
             RequiredGenerator(querying, valueConverter),
             PatternGenerator(querying),
             GoesGenerator(querying, valueConverter),
