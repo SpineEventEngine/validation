@@ -42,9 +42,19 @@ include(
     "java-runtime",
     "java-bundle",
     ":java-tests",
-    ":java-tests:consumer",
+
+    /**
+     * Extension-related tests are temporarily disabled to clean up the codebase from
+     * the rules-related classes without introducing a new extension mechanism right away.
+     *
+     * The following PR enables them back:
+     * https://github.com/SpineEventEngine/validation/pull/215
+     */
+
+    // ":java-tests:extensions",
+    // ":java-tests:consumer",
+
     ":java-tests:consumer-dependency",
-    ":java-tests:extensions",
     ":java-tests:runtime",
     ":java-tests:vanilla",
     ":java-tests:validating",

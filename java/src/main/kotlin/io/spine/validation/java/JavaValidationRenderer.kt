@@ -52,7 +52,6 @@ import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
-import io.spine.validation.java.rule.RuleGenerator
 
 /**
  * The main Java renderer of the validation library.
@@ -60,26 +59,27 @@ import io.spine.validation.java.rule.RuleGenerator
  * This renderer is applied to every compilation [Message],
  * even if the message does not have any declared constraints.
  */
-public class JavaValidationRenderer(customGenerator: List<OptionGenerator>) : JavaRenderer() {
+public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val generators by lazy {
-        (listOf(
-            RuleGenerator(typeSystem),
-            RequiredGenerator(valueConverter),
-            PatternGenerator(),
-            GoesGenerator(valueConverter),
-            DistinctGenerator(),
-            ValidateGenerator(valueConverter),
-            RangeGenerator(),
-            MaxGenerator(),
-            MinGenerator(),
-            ChoiceGenerator(),
-            WhenGenerator(valueConverter),
-            RequireOptionGenerator(valueConverter),
-        ) + customGenerator).onEach { it.inject(querying) }
+        customGenerators.onEach { it.inject(querying) }
+        +
+        listOf(
+            RequiredGenerator(querying, valueConverter),
+            PatternGenerator(querying),
+            GoesGenerator(querying, valueConverter),
+            DistinctGenerator(querying),
+            ValidateGenerator(querying, valueConverter),
+            RangeGenerator(querying),
+            MaxGenerator(querying),
+            MinGenerator(querying),
+            ChoiceGenerator(querying),
+            WhenGenerator(querying, valueConverter),
+            RequireOptionGenerator(querying, valueConverter),
+        )
     }
 
     override fun render(sources: SourceFileSet) {

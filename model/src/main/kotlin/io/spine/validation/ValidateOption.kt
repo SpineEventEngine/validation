@@ -38,6 +38,7 @@ import io.spine.protodata.ast.event.FieldOptionDiscovered
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
+import io.spine.protodata.ast.refersToMessage
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
