@@ -47,7 +47,7 @@ import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.java.generate.mangled
+import io.spine.validation.api.generate.mangled
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS

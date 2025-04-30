@@ -64,7 +64,7 @@ import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.java.generate.mangled
+import io.spine.validation.api.generate.mangled
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE

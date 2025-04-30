@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.api.generate
 
 import io.spine.protodata.backend.SecureRandomString
 
@@ -35,10 +35,13 @@ import io.spine.protodata.backend.SecureRandomString
  * Appending this hash ensures that the generated field or method name does
  * not conflict with existing declarations in the target class.
  */
-internal fun mangled(javaIdentifier: String): String {
-    val hash = SecureRandomString.generate(HASH_LENGTH)
+public fun mangled(javaIdentifier: String, length: Int = HASH_LENGTH): String {
+    val hash = SecureRandomString.generate(length)
         .filter(Char::isJavaIdentifierPart)
     return "${javaIdentifier}_$hash"
 }
 
+/**
+ * The default length of the generated hash.
+ */
 private const val HASH_LENGTH = 10
