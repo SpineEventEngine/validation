@@ -24,9 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
+package io.spine.validation.api.expression
 
-dependencies {
-    api(ProtoData.java)
-    api(project(":proto:context"))
-}
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.call
+
+/**
+ * Converts this [Expression] to its string representation by invoking `toString()`.
+ */
+public fun Expression<*>.stringify(): Expression<String> = call("toString")

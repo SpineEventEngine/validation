@@ -49,22 +49,22 @@ import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
-import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.SpineTime
-import io.spine.validation.java.expression.TimestampsClass
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.MessageScope.message
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidateScope.violations
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.SpineTime
+import io.spine.validation.api.expression.TimestampsClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(when)` option.

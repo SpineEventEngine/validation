@@ -36,20 +36,20 @@ import io.spine.string.lowerCamelCase
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.CHOICE
 import io.spine.validation.ChoiceOneof
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidateScope.violations
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(choice)` option.

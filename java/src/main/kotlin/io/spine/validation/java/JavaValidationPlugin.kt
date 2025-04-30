@@ -27,6 +27,7 @@
 package io.spine.validation.java
 
 import io.spine.validation.ValidationPlugin
+import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
 import java.util.*
 

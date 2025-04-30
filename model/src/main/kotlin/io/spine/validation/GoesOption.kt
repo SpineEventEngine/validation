@@ -58,6 +58,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 

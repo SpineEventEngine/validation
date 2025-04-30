@@ -29,12 +29,6 @@
 package io.spine.validation
 
 /**
- * Path to the name field of the option in
- * the [io.spine.protodata.ast.event.FieldOptionDiscovered] event.
- */
-public const val OPTION_NAME: String = "option.name"
-
-/**
  * The name of the `(distinct)` option.
  */
 public const val DISTINCT: String = "distinct"

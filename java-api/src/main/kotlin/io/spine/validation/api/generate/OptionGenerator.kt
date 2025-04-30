@@ -24,9 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
+package io.spine.validation.api.generate
 
-dependencies {
-    api(ProtoData.java)
-    api(project(":proto:context"))
+import io.spine.annotation.Internal
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+
+/**
+ * Generates Java code for a specific option.
+ */
+public abstract class OptionGenerator {
+
+    /**
+     * A component capable of querying states of views.
+     *
+     * Note that the class inheritors are not responsible for providing [Querying].
+     * The instance is [injected][inject] by the Java validation plugin before
+     * the first invocation of the [codeFor] method.
+     */
+    protected lateinit var querying: Querying
+
+    /**
+     * Generates validation code for all option applications within the provided
+     * message [type].
+     *
+     * @param type The message to generate code for.
+     */
+    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
+
+    /**
+     * Injects [Querying] into this instance of [OptionGenerator].
+     */
+    @Internal
+    public fun inject(querying: Querying) {
+        this.querying = querying
+    }
 }

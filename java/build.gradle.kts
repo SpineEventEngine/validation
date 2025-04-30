@@ -24,14 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
-
 plugins {
     `build-proto-model`
 }
 
 dependencies {
-    api(ProtoData.java)
-    api(project(":model"))
-    api(project(":proto:context"))
+    implementation(project(":java-api"))
+    implementation(project(":model"))
 }

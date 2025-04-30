@@ -24,9 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
+@file:JvmName("ConstraintViolations")
 
-dependencies {
-    api(ProtoData.java)
-    api(project(":proto:context"))
-}
+package io.spine.validation.java.expression
+
+import io.spine.protodata.java.Expression
+import io.spine.validate.TemplateString
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.api.expression.templateString as withStringPlaceholders
+
+/**
+ * Yields an expression that creates a new instance of [TemplateString].
+ *
+ * @param placeholders The supported placeholders and their values.
+ * @param optionName The name of the option, which declared the provided [placeholders].
+ */
+public fun templateString(
+    template: String,
+    placeholders: Map<ErrorPlaceholder, Expression<String>>,
+    optionName: String
+): Expression<TemplateString> =
+    withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)

@@ -40,22 +40,22 @@ import io.spine.protodata.java.field
 import io.spine.protodata.java.getDefaultInstance
 import io.spine.server.query.select
 import io.spine.validation.ValidateField
-import io.spine.validation.java.expression.AnyClass
-import io.spine.validation.java.expression.AnyPackerClass
-import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.KnownTypesClass
-import io.spine.validation.java.expression.MessageClass
-import io.spine.validation.java.expression.TypeUrlClass
-import io.spine.validation.java.expression.ValidatableMessageClass
-import io.spine.validation.java.expression.ValidationErrorClass
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.MessageScope.message
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidateScope.violations
+import io.spine.validation.api.expression.AnyClass
+import io.spine.validation.api.expression.AnyPackerClass
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.KnownTypesClass
+import io.spine.validation.api.expression.MessageClass
+import io.spine.validation.api.expression.TypeUrlClass
+import io.spine.validation.api.expression.ValidatableMessageClass
+import io.spine.validation.api.expression.ValidationErrorClass
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 
 /**
  * The generator for `(validate)` option.

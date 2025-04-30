@@ -47,8 +47,8 @@ import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MAX
-import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
+import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.MaxFieldDiscovered

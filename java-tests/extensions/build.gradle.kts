@@ -38,10 +38,9 @@ apply {
 }
 
 dependencies {
+    implementation(project(":java-api"))
     compileOnly(AutoService.annotations)
     ksp(AutoServiceKsp.processor)
-
-    implementation(project(":java"))
 }
 
 configurations.all {

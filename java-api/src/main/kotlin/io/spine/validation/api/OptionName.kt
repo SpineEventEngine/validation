@@ -24,18 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
-
-import io.spine.protodata.java.AnnotatedClassName
-import io.spine.protodata.java.ClassName
-import org.checkerframework.checker.nullness.qual.Nullable
+package io.spine.validation.api
 
 /**
- * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
+ * Path to the name field of the option in
+ * the [io.spine.protodata.ast.event.FieldOptionDiscovered] event.
  */
-internal val NullableAnnotation = ClassName(Nullable::class)
-
-/**
- * The [TypeNameClass] annotated with [NullableAnnotation].
- */
-internal val NullableTypeNameClass = AnnotatedClassName(TypeNameClass, NullableAnnotation)
+public const val OPTION_NAME: String = "option.name"

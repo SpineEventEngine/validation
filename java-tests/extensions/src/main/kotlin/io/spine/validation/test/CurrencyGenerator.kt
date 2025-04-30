@@ -33,16 +33,16 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.MessageScope.message
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.violations
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.api.expression.templateString
 import io.spine.validation.test.money.CurrencyMessage
 
 /**

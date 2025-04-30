@@ -41,8 +41,8 @@ import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.

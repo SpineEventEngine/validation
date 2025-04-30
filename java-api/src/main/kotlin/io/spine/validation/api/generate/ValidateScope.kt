@@ -24,21 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.api.generate
 
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.base.FieldPath
+import io.spine.protodata.java.ReadVar
+import io.spine.type.TypeName
+import io.spine.validate.ConstraintViolation
 
 /**
- * Java code handling a single application of a specific option.
- *
- * @property constraint A code block to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * Scope variables available within `validate(FieldPath)` method.
  */
-public class SingleOptionCode(
-    public val constraint: CodeBlock,
-    public val fields: List<FieldDeclaration<*>> = emptyList(),
-    public val methods: List<MethodDeclaration> = emptyList(),
-)
+public object ValidateScope {
+
+    /**
+     * The list of discovered violations.
+     */
+    public val violations: ReadVar<MutableList<ConstraintViolation>> = ReadVar("violations")
+
+    /**
+     * The field path from the root message field that triggered validation
+     * down to the field where the violation occurred.
+     *
+     * The path is nested when a deep validation takes place.
+     */
+    public val parentPath: ReadVar<FieldPath> = ReadVar("parentPath")
+
+    /**
+     * The name of the message type that triggered validation.
+     *
+     * The first field of the [parentPath] must be declared in this [parentName].
+     */
+    public val parentName: ReadVar<TypeName?> = ReadVar("parentName")
+}

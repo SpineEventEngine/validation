@@ -24,21 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.generate
 
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.type.TypeName
-import io.spine.protodata.ast.TypeName as AstTypeName
+import io.spine.protodata.java.CodeBlock
+import io.spine.protodata.java.FieldDeclaration
+import io.spine.protodata.java.MethodDeclaration
 
 /**
- * Returns an expression that ensures a non-`null` [TypeName] value.
+ * Java code handling a single application of a specific option.
  *
- * If this [Expression] is non-`null`, it remains unchanged.
- * Otherwise, it is replaced with the specified [typeName].
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
-    val nameLiteral = StringLiteral(typeName.qualifiedName)
-    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
-}
+public class SingleOptionCode(
+    public val constraint: CodeBlock,
+    public val fields: List<FieldDeclaration<*>> = emptyList(),
+    public val methods: List<MethodDeclaration> = emptyList(),
+)

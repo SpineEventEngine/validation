@@ -24,9 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
+package io.spine.validation.api
 
-dependencies {
-    api(ProtoData.java)
-    api(project(":proto:context"))
+import io.spine.annotation.SPI
+import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.validation.api.generate.OptionGenerator
+
+/**
+ * Extends the Java validation library with the custom validation option.
+ */
+@SPI
+public interface ValidationOption {
+
+    /**
+     * The [policies][Policy] added by the option.
+     */
+    public val policy: Set<Policy<*>>
+
+    /**
+     * The [views][View] added by the option.
+     */
+    public val view: Set<Class<out View<*, *, *>>>
+
+    /**
+     * The option [generator][OptionGenerator].
+     */
+    public val generator: OptionGenerator
 }

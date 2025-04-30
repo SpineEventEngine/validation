@@ -38,22 +38,22 @@ import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_MISSING
 import io.spine.validation.RequiredField
-import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidateScope.violations
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for `(required)` option.

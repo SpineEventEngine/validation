@@ -46,7 +46,7 @@ import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.methodWithSignature
-import io.spine.validation.java.expression.stringValueOf
+import io.spine.validation.api.expression.stringValueOf
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].

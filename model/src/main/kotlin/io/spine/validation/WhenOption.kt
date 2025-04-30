@@ -66,6 +66,7 @@ import io.spine.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.validation.api.OPTION_NAME
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldType

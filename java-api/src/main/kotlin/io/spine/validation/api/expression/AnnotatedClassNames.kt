@@ -24,12 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.call
+import io.spine.protodata.java.AnnotatedClassName
+import io.spine.protodata.java.ClassName
+import org.checkerframework.checker.nullness.qual.Nullable
 
 /**
- * Converts this [Expression] to its string representation by invoking `toString()`.
+ * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
  */
-public fun Expression<*>.stringify(): Expression<String> = call("toString")
+public val NullableAnnotation: ClassName = ClassName(Nullable::class)
+
+/**
+ * The [TypeNameClass] annotated with [NullableAnnotation].
+ */
+public val NullableTypeNameClass: AnnotatedClassName =
+    AnnotatedClassName(TypeNameClass, NullableAnnotation)

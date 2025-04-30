@@ -39,7 +39,7 @@ import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
 import io.spine.validation.java.generate.MessageValidationCode
-import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator

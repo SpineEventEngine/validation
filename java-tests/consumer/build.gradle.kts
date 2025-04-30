@@ -48,6 +48,7 @@ tasks.withType<LaunchProtoData>().configureEach {
 }
 
 dependencies {
+    protoData(project(":java"))
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:consumer-dependency"))

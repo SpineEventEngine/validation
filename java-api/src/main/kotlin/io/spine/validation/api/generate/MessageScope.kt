@@ -24,39 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.api.generate
 
-import io.spine.annotation.Internal
-import io.spine.protodata.ast.TypeName
-import io.spine.server.query.Querying
+import com.google.protobuf.Message
+import io.spine.protodata.java.This
 
 /**
- * Generates Java code for a specific option.
+ * Scope variables available within the whole message class.
  */
-public abstract class OptionGenerator {
+public object MessageScope {
 
     /**
-     * A component capable of querying states of views.
-     *
-     * Note that the class inheritors are not responsible for providing [Querying].
-     * The instance is [injected][inject] by the Java validation plugin before
-     * the first invocation of the [codeFor] method.
+     * An implicit message class `this` reference.
      */
-    protected lateinit var querying: Querying
-
-    /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     */
-    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
-
-    /**
-     * Injects [Querying] into this instance of [OptionGenerator].
-     */
-    @Internal
-    internal fun inject(querying: Querying) {
-        this.querying = querying
-    }
+    public val message: This<Message> = This(explicit = false)
 }

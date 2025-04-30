@@ -40,19 +40,19 @@ import io.spine.validate.ConstraintViolation
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
-import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidateScope.violations
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.java.generate.mangled
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(require)` option.

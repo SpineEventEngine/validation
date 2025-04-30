@@ -41,7 +41,7 @@ import io.spine.protodata.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
-import io.spine.validation.OPTION_NAME
+import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
 import io.spine.validation.test.money.currencyMessageDiscovered

@@ -41,9 +41,9 @@ import io.spine.server.event.React
 import io.spine.server.event.just
 import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
-import io.spine.validation.OPTION_NAME
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
+import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequireMessageDiscovered

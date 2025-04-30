@@ -24,29 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.validation.api.expression
 
-import io.spine.protodata.plugin.Policy
-import io.spine.protodata.plugin.View
-import io.spine.validation.java.generate.OptionGenerator
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+import io.spine.type.TypeName
+import io.spine.protodata.ast.TypeName as AstTypeName
 
 /**
- * Extends the Java validation library with the custom validation option.
+ * Returns an expression that ensures a non-`null` [TypeName] value.
+ *
+ * If this [Expression] is non-`null`, it remains unchanged.
+ * Otherwise, it is replaced with the specified [typeName].
  */
-public interface ValidationOption {
-
-    /**
-     * The [policies][Policy] added by the option.
-     */
-    public val policy: Set<Policy<*>>
-
-    /**
-     * The [views][View] added by the option.
-     */
-    public val view: Set<Class<out View<*, *, *>>>
-
-    /**
-     * The option [generator][OptionGenerator].
-     */
-    public val generator: OptionGenerator
+public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
+    val nameLiteral = StringLiteral(typeName.qualifiedName)
+    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
 }

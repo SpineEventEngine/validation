@@ -54,6 +54,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 

@@ -26,7 +26,7 @@
 
 @file:JvmName("ConstraintViolations")
 
-package io.spine.validation.java.violation
+package io.spine.validation.api.expression
 
 import io.spine.base.FieldPath
 import io.spine.protobuf.restoreProtobufEscapes
@@ -39,9 +39,6 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.java.expression.StringClass
-import io.spine.validation.java.expression.TemplateStringClass
 
 /**
  * Yields an expression that creates a new instance of [ConstraintViolation]
@@ -77,56 +74,12 @@ public fun constraintViolation(
 }
 
 /**
- * Yields an expression that creates a new instance of [TemplateString]
- * with the given parameters.
- *
- * Pass placeholder keys either as [ErrorPlaceholder] instances of plain `String`.
+ * Yields an expression that creates a new instance of [TemplateString].
  *
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
-@Suppress("Unchecked_Cast")
-public inline fun <reified T : Any> templateString(
-    template: String,
-    placeholders: Map<T, Expression<String>>,
-    optionName: String
-): Expression<TemplateString> = when (T::class) {
-    String::class -> {
-        val typedPlaceholders = placeholders as Map<String, Expression<String>>
-        withStringPlaceholders(template, typedPlaceholders, optionName)
-    }
-    ErrorPlaceholder::class -> {
-        val typedPlaceholders = placeholders as Map<ErrorPlaceholder, Expression<String>>
-        withEnumPlaceholders(template, typedPlaceholders, optionName)
-    }
-    else -> error(
-        "Unsupported error placeholder type: `${T::class}`. The supported types are `String`" +
-                " and `io.spine.validation.java.violation.ErrorPlaceholder`."
-    )
-}
-
-/**
- * Yields an expression that creates a new instance of [TemplateString]
- * using [ErrorPlaceholder] for key values.
- *
- * Note that the method is kept public because it is invoked from
- * the inlined [templateString].
- */
-public fun withEnumPlaceholders(
-    template: String,
-    placeholders: Map<ErrorPlaceholder, Expression<String>>,
-    optionName: String
-): Expression<TemplateString> =
-    templateString(template, placeholders.mapKeys { it.key.value }, optionName)
-
-/**
- * Yields an expression that creates a new instance of [TemplateString]
- * using [String] for key values.
- *
- * Note that the method is kept public because it is invoked from
- * the inlined [templateString].
- */
-public fun withStringPlaceholders(
+public fun templateString(
     template: String,
     placeholders: Map<String, Expression<String>>,
     optionName: String
