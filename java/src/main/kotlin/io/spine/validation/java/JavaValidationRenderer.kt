@@ -65,21 +65,8 @@ public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : J
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val generators by lazy {
-        customGenerators.onEach { it.inject(querying) }
-        +
-        listOf(
-            RequiredGenerator(querying, valueConverter),
-            PatternGenerator(querying),
-            GoesGenerator(querying, valueConverter),
-            DistinctGenerator(querying),
-            ValidateGenerator(querying, valueConverter),
-            RangeGenerator(querying),
-            MaxGenerator(querying),
-            MinGenerator(querying),
-            ChoiceGenerator(querying),
-            WhenGenerator(querying, valueConverter),
-            RequireOptionGenerator(querying, valueConverter),
-        )
+        (builtInGenerators() + customGenerators)
+            .onEach { it.inject(querying) }
     }
 
     override fun render(sources: SourceFileSet) {
@@ -96,6 +83,20 @@ public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : J
                 file.render(code)
             }
     }
+
+    private fun builtInGenerators() = listOf(
+        RequiredGenerator(valueConverter),
+        PatternGenerator(),
+        GoesGenerator(valueConverter),
+        DistinctGenerator(),
+        ValidateGenerator(valueConverter),
+        RangeGenerator(),
+        MaxGenerator(),
+        MinGenerator(),
+        ChoiceGenerator(),
+        WhenGenerator(valueConverter),
+        RequireOptionGenerator(valueConverter),
+    )
 
     private fun generateCode(message: TypeName): MessageValidationCode {
         val fieldOptions = generators.flatMap { it.codeFor(message) }
