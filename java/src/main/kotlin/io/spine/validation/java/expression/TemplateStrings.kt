@@ -36,6 +36,10 @@ import io.spine.validation.api.expression.templateString as withStringPlaceholde
 /**
  * Yields an expression that creates a new instance of [TemplateString].
  *
+ * Note that this method differs from the one provided by the API module
+ * in that it accepts placeholder keys as [ErrorPlaceholder]. This enum
+ * contains placeholder keys for built-in options.
+ *
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
