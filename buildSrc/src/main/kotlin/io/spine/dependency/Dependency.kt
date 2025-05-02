@@ -32,5 +32,9 @@ interface Dependency {
     val artifacts: Map<String, String>
 }
 
+interface DependencyWithBom : Dependency {
+    val bom: String
+}
+
 internal fun List<String>.withVersion(version: String): Map<String, String> =
     associateWith { "$it:$version" }
