@@ -27,7 +27,20 @@
 package io.spine.validation.api
 
 /**
- * Path to the name field of the option in
- * the [io.spine.protodata.ast.event.FieldOptionDiscovered] event.
+ * Path to the name field in `*OptionDiscovered` events.
+ *
+ * The main purpose of this constant is to set the field path when
+ * filtering incoming events by the option name. It is usually used
+ * in a pair with the constant containing the option name.
+ *
+ * An example of event filtering in a policy:
+ *
+ * ```
+ *     @React
+ *     override fun whenever(
+ *         @External @Where(field = OPTION_NAME, equals = REQUIRED)
+ *         event: FieldOptionDiscovered,
+ *     ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+ * ```
  */
 public const val OPTION_NAME: String = "option.name"
