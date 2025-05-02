@@ -30,12 +30,14 @@ import com.google.protobuf.Message
 import io.spine.protodata.java.This
 
 /**
- * Scope variables available within the whole message class.
+ * Scope variables available within the message class.
  */
 public object MessageScope {
 
     /**
-     * An implicit message class `this` reference.
+     * An implicit `this` reference to the message class.
+     *
+     * Can be used to access methods and fields of the message class.
      */
     public val message: This<Message> = This(explicit = false)
 }

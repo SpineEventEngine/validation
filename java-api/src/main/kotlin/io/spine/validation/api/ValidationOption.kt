@@ -48,7 +48,7 @@ public interface ValidationOption {
     public val view: Set<Class<out View<*, *, *>>>
 
     /**
-     * The option [generator][OptionGenerator].
+     * The option [generator][OptionGenerator] for Java.
      */
     public val generator: OptionGenerator
 }

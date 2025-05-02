@@ -32,7 +32,10 @@ import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 
 /**
- * Scope variables available within `validate(FieldPath)` method.
+ * Scope variables available within the `validate(FieldPath)` method.
+ *
+ * Use these variables to create an instance of [ConstraintViolation]
+ * for the failed option constraint.
  */
 public object ValidateScope {
 
