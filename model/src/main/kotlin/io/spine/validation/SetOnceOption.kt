@@ -24,24 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option.required
+package io.spine.validation
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfMissingOption
-import io.spine.option.OptionsProto.ifMissing
-import io.spine.option.OptionsProto.required
+import io.spine.option.IfSetAgainOption
+import io.spine.option.OptionsProto.ifSetAgain
+import io.spine.option.OptionsProto.setOnce
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.File
 import io.spine.protodata.ast.boolValue
 import io.spine.protodata.ast.event.FieldOptionDiscovered
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
 import io.spine.protodata.plugin.Policy
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -49,50 +56,39 @@ import io.spine.server.event.asA
 import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.IF_MISSING
-import io.spine.validation.REQUIRED
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.option.checkPrimaryApplied
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultErrorMessage
-import io.spine.validation.event.IfMissingOptionDiscovered
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.ifMissingOptionDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.option.required.RequiredFieldSupport.isSupported
+import io.spine.validation.event.IfSetAgainOptionDiscovered
+import io.spine.validation.event.SetOnceFieldDiscovered
+import io.spine.validation.event.ifSetAgainOptionDiscovered
+import io.spine.validation.event.setOnceFieldDiscovered
 
 /**
- * Controls whether a field should be validated as `(required)`.
+ * Controls whether a field should be validated with the `(set_once)` option.
  *
- * Whenever a field marked with the `(required)` option is discovered, emits
- * [RequiredFieldDiscovered] event if the following conditions are met:
+ * Whenever a field marked with `(set_once)` option is discovered, emits
+ * [SetOnceFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
  *
  * If (1) is violated, the policy reports a compilation error.
  *
- * Violation of (2) means that the `(required)` option is applied correctly,
- * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
+ * Violation of (2) means that the `(set_once)` option is applied correctly,
+ * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
  * disabled options. In this case, the policy emits [NoReaction] meaning
  * that the option is ignored.
- *
- * Note that this policy is responsible only for fields explicitly marked with
- * the validation option. There are other policies that handle implicitly
- * required fields, i.e., ID fields in entities and signal messages.
- *
- * @see [RequiredIdOptionPolicy]
- * @see [RequiredIdPatternPolicy]
  */
-internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
+internal class SetOncePolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = REQUIRED)
-        event: FieldOptionDiscovered,
-    ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
+        event: FieldOptionDiscovered
+    ): EitherOf2<SetOnceFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -101,8 +97,8 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val defaultMessage = defaultErrorMessage<IfMissingOption>()
-        return requiredFieldDiscovered {
+        val defaultMessage = defaultErrorMessage<IfSetAgainOption>()
+        return setOnceFieldDiscovered {
             id = field.ref
             subject = field
             defaultErrorMessage = defaultMessage
@@ -111,48 +107,76 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
 }
 
 /**
- * Controls whether the `(if_missing)` option is applied correctly.
+ * Controls whether the `(if_set_again)` option is applied correctly.
  *
- * Whenever a field marked with the `(if_missing)` option is discovered, emits
- * [IfMissingOptionDiscovered] event if the following conditions are met:
+ * Whenever a field marked with the `(if_set_again)` option is discovered,
+ * emits [IfSetAgainOptionDiscovered] event if the following conditions are met:
  *
- * 1. The target field is also marked with the `(required)` option.
+ * 1. The target field is also marked with the `(set_once)` option.
  * 2. The specified error message template does not contain placeholders
  * not supported by the option.
  *
  * A compilation error is reported in case of violation of any condition.
  */
-internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
+internal class IfSetAgainPolicy : Policy<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = IF_MISSING)
+        @External @Where(field = OPTION_NAME, equals = IF_SET_AGAIN)
         event: FieldOptionDiscovered
-    ): Just<IfMissingOptionDiscovered> {
+    ): Just<IfSetAgainOptionDiscovered> {
         val field = event.subject
         val file = event.file
-        ifMissing.checkPrimaryApplied(required, field, file)
+        ifSetAgain.checkPrimaryApplied(setOnce, field, file)
 
-        val option = event.option.unpack<IfMissingOption>()
+        val option = event.option.unpack<IfSetAgainOption>()
         val message = option.errorMsg
-        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_MISSING)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_SET_AGAIN)
 
-        return ifMissingOptionDiscovered {
+        return ifSetAgainOptionDiscovered {
             id = field.ref
             customErrorMessage = message
         }.just()
     }
 }
 
+/**
+ * A view of a field that is marked with `(set_once) = true` option.
+ */
+internal class SetOnceFieldView : View<FieldRef, SetOnceField, SetOnceField.Builder>() {
+
+    @Subscribe
+    fun on(e: SetOnceFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfSetAgainOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
+    }
+}
+
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
-                " by the `($REQUIRED)` option. Supported field types: messages, enums," +
-                " strings, bytes, repeated, and maps."
+        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
+                " is not supported by the `($SET_ONCE)` option. Supported field types: messages," +
+                " enums, strings, bytes, bools and all numeric fields."
     }
+
+/**
+ * Tells if this [FieldType] can be validated with the `(set_once)` option.
+ */
+private fun FieldType.isSupported(): Boolean = !isList && !isMap
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_PATH,
+    FIELD_PROPOSED_VALUE,
     FIELD_TYPE,
+    FIELD_VALUE,
     PARENT_TYPE,
 )

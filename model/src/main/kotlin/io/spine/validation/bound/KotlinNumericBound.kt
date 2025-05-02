@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option.bound
+package io.spine.validation.bound
 
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.PrimitiveType
@@ -43,7 +43,6 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
-import io.spine.validation.bound.NumericBound
 
 /**
  * One-to-one Kotlin representation of [NumericBound].

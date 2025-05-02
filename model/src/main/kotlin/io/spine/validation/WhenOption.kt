@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option
+package io.spine.validation
 
 import com.google.protobuf.Timestamp
 import io.spine.core.External
@@ -63,15 +63,10 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.WHEN_IN
-import io.spine.validation.TimeFieldType
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.validation.WHEN
-import io.spine.validation.WhenField
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

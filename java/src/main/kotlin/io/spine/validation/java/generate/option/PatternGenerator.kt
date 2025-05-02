@@ -46,8 +46,8 @@ import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
-import io.spine.validation.option.isRepeatedString
-import io.spine.validation.option.isSingularString
+import io.spine.validation.isRepeatedString
+import io.spine.validation.isSingularString
 import io.spine.validation.api.expression.ConstraintViolationClass
 import io.spine.validation.api.expression.FieldPathClass
 import io.spine.validation.api.expression.ImmutableListClass

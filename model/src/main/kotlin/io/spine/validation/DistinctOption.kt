@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option
+package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -55,17 +55,12 @@ import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.DISTINCT
-import io.spine.validation.DistinctField
 import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.IF_HAS_DUPLICATES
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.DistinctFieldDiscovered
 import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.validation.event.distinctFieldDiscovered

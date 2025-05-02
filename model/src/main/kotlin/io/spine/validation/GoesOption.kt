@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option
+package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -58,11 +58,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.GOES
-import io.spine.validation.GoesField
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 

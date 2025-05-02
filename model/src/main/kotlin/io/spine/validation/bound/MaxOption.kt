@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option.bound
+package io.spine.validation.bound
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -49,8 +49,7 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MAX
 import io.spine.validation.RANGE
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.bound.MaxField
-import io.spine.validation.option.bound.BoundFieldSupport.checkFieldType
+import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.MaxFieldDiscovered
 import io.spine.validation.bound.event.maxFieldDiscovered

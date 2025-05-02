@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option
+package io.spine.validation
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -54,11 +54,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
-import io.spine.validation.PATTERN
-import io.spine.validation.PatternField
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 

@@ -24,34 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option
+package io.spine.validation.bound
 
-import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.findOption
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.check
+import io.spine.protodata.ast.PrimitiveType
+import io.spine.validation.RANGE
 
 /**
- * Reports a compilation error if this [companion option][GeneratedExtension]
- * is applied to the given [field] without the [primary] option.
+ * The context of validating a numeric option that constrains a field's value
+ * with a minimum or maximum bound.
  *
- * Some options have a companion option for specifying an error message.
- * This method ensures that a companion option is not used independently.
+ * Contains the data required to report a compilation error for the option.
  */
-internal fun GeneratedExtension<*, *>.checkPrimaryApplied(
-    primary: GeneratedExtension<*, *>,
+internal open class BoundContext(
+    val optionName: String,
+    val primitiveType: PrimitiveType,
+    val field: Field,
+    val file: File
+)
+
+/**
+ * The [BoundContext] for the `(range)` option.
+ *
+ * Introduces the [range] property to report the originally passed range definition
+ * in compilation errors.
+ */
+internal class RangeContext(
+    val range: String,
+    primitiveType: PrimitiveType,
     field: Field,
     file: File
-) {
-    val primaryOption = field.findOption(primary)
-    val primaryName = primaryOption?.name
-    val companionName = this.descriptor.name
-    Compilation.check(primaryOption != null, file, field.span) {
-        "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
-                " applied without its primary `($primaryName)` option. Companion options" +
-                " must always be used together with their primary counterparts."
-    }
-}
+) : BoundContext(RANGE, primitiveType, field, file)
