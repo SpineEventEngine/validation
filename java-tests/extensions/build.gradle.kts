@@ -25,7 +25,6 @@
  */
 
 import io.spine.dependency.build.Ksp
-import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.McJava
 
@@ -39,7 +38,6 @@ apply {
 
 dependencies {
     implementation(project(":java-api"))
-    compileOnly(AutoService.annotations)
     ksp(AutoServiceKsp.processor)
 }
 
