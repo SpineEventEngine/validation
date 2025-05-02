@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,13 @@ dependencies {
         Logging.lib,
         Validation.runtime,
         Kotest.assertions
-    ) + JUnit.api + Truth.libs
+    ) + JUnit.artifacts.values + Truth.libs
 
     testFixtureDependencies.forEach {
         testFixturesImplementation(it)
     }
 
-    testImplementation(JUnit.params)
+    testImplementation(JUnit.Jupiter.run { artifacts[params] })
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
     testImplementation(ProtoData.api)

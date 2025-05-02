@@ -27,6 +27,7 @@
 package io.spine.dependency.boms
 
 import io.gitlab.arturbosch.detekt.getSupportedKotlinVersion
+import io.spine.dependency.DependencyWithBom
 import io.spine.dependency.kotlinx.Coroutines
 import io.spine.dependency.lib.Kotlin
 import org.gradle.api.Plugin
@@ -104,12 +105,14 @@ class BomsPlugin : Plugin<Project>  {
 private fun Configuration.diagSuffix(project: Project): String =
     "the configuration `$name` in the project: `${project.path}`."
 
-private fun Configuration.applyBoms(project: Project, boms: List<String>) {
-    boms.forEach { bom ->
+private fun Configuration.applyBoms(project: Project, deps: List<DependencyWithBom>) {
+    deps.forEach { dep ->
         withDependencies {
-            val platform = project.dependencies.platform(bom)
+            val platform = project.dependencies.platform(dep.bom)
             addLater(project.provider { platform })
-            project.log { "Applied BOM: `$bom` to the configuration: `${this@applyBoms.name}`." }
+            project.log {
+                "Applied BOM: `${dep.bom}` to the configuration: `${this@applyBoms.name}`."
+            }
         }
     }
 }
@@ -183,9 +186,9 @@ private fun Project.forceArtifacts() =
             }
 
             if (!isDetekt) {
-                forceAll(Kotlin.artifacts)
-                forceAll(Kotlin.StdLib.artifacts)
-                forceAll(Coroutines.artifacts)
+                forceAll(Kotlin.artifacts.values)
+                forceAll(Kotlin.StdLib.artifacts.values)
+                forceAll(Coroutines.artifacts.values)
             }
         }
     }
