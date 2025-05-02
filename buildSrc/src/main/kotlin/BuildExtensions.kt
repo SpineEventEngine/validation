@@ -29,13 +29,14 @@
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.GradleDoctor
 import io.spine.dependency.build.Ksp
+import io.spine.dependency.build.PluginPublishPlugin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.McJava
 import io.spine.dependency.local.ProtoData
 import io.spine.dependency.local.ProtoTap
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Kover
-import io.spine.gradle.standardToSpineSdk
+import io.spine.gradle.repo.standardToSpineSdk
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.JavaExec
@@ -66,7 +67,7 @@ import org.gradle.plugin.use.PluginDependencySpec
 private const val ABOUT_DEPENDENCY_EXTENSIONS = ""
 
 /**
- * Applies [standard][standardToSpineSdk] repositories to this `buildscript`.
+ * Applies [standard][io.spine.gradle.repo.standardToSpineSdk] repositories to this `buildscript`.
  */
 fun ScriptHandlerScope.standardSpineSdkRepositories() {
     repositories.standardToSpineSdk()
@@ -99,7 +100,7 @@ val ScriptHandlerScope.protoData: ProtoData
  * This plugin is published at Gradle Plugin Portal.
  * But when used in a pair with [mcJava], it cannot be applied directly to a project.
  * It is so, because [mcJava] uses [protoData] as its dependency.
- * And buildscript's classpath ends up with both of them.
+ * And the buildscript's classpath ends up with both of them.
  */
 val PluginDependenciesSpec.protoData: ProtoData
     get() = ProtoData
@@ -111,8 +112,8 @@ val PluginDependenciesSpec.protoData: ProtoData
  * declared in auto-generated `org.gradle.kotlin.dsl.PluginAccessors.kt` file.
  * It conflicts with our own declarations.
  *
- * Declaring of top-level shortcuts eliminates the need in applying plugins
- * using fully qualified name of dependency objects.
+ * Declaring of top-level shortcuts eliminates the need to apply plugins
+ * using a fully qualified name of dependency objects.
  *
  * It is still possible to apply a plugin with a custom version, if needed.
  * Just declare a version again on the returned [PluginDependencySpec].
@@ -150,6 +151,9 @@ val PluginDependenciesSpec.kover: PluginDependencySpec
 val PluginDependenciesSpec.ksp: PluginDependencySpec
     get() = id(Ksp.id).version(Ksp.version)
 
+val PluginDependenciesSpec.`plugin-publish`: PluginDependencySpec
+    get() = id(PluginPublishPlugin.id).version(PluginPublishPlugin.version)
+
 /**
  * Configures the dependencies between third-party Gradle tasks
  * and those defined via ProtoData and Spine Model Compiler.
@@ -185,7 +189,10 @@ fun Project.configureTaskDependencies() {
         val generateProto = "generateProto"
         val createVersionFile = "createVersionFile"
         val compileKotlin = "compileKotlin"
-        compileKotlin.dependOn(launchProtoData)
+        compileKotlin.run {
+            dependOn(generateProto)
+            dependOn(launchProtoData)
+        }
         val compileTestKotlin = "compileTestKotlin"
         compileTestKotlin.dependOn(launchTestProtoData)
         val sourcesJar = "sourcesJar"
@@ -223,7 +230,29 @@ fun Project.configureTaskDependencies() {
  * By convention, such modules are for integration tests and should be treated differently.
  */
 val Project.productionModules: Iterable<Project>
-    get() = rootProject.subprojects.filter { !it.name.contains("-tests") }
+    get() = rootProject.subprojects.filterNot { subproject ->
+        subproject.name.run {
+            contains("-tests")
+                    || contains("test-fixtures")
+                    || contains("integration-tests")
+        }
+    }
+
+/**
+ * Obtains the names of the [productionModules].
+ *
+ * The extension could be useful for excluding modules from standard publishing:
+ * ```kotlin
+ * spinePublishing {
+ *     val customModule = "my-custom-module"
+ *     modules = productionModuleNames.toSet().minus(customModule)
+ *     modulesWithCustomPublishing = setOf(customModule)
+ *     //...
+ * }
+ * ```
+ */
+val Project.productionModuleNames: List<String>
+    get() = productionModules.map { it.name }
 
 /**
  * Sets the remote debug option for this [JavaExec] task.

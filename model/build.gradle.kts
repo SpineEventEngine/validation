@@ -46,10 +46,12 @@ dependencies {
     implementation(project(":java-api"))
     implementation(project(":java-runtime"))
 
+    val enforcedJUnit = enforcedPlatform(JUnit.bom)
+    testImplementation(enforcedJUnit)
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(ProtoData.testlib)
-    testImplementation(JUnit.params)
 
+    testFixturesImplementation(enforcedJUnit)
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
