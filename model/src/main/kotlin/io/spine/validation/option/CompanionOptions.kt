@@ -24,35 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.validation.option
 
+import com.google.protobuf.GeneratedMessage.GeneratedExtension
+import io.spine.protodata.Compilation
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.validation.RANGE
+import io.spine.protodata.ast.findOption
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.check
 
 /**
- * The context of validating a numeric option that constrains a field's value
- * with a minimum or maximum bound.
+ * Reports a compilation error if this [companion option][GeneratedExtension]
+ * is applied to the given [field] without the [primary] option.
  *
- * Contains the data required to report a compilation error for the option.
+ * Some options have a companion option for specifying an error message.
+ * This method ensures that a companion option is not used independently.
  */
-internal open class BoundContext(
-    val optionName: String,
-    val primitiveType: PrimitiveType,
-    val field: Field,
-    val file: File
-)
-
-/**
- * The [BoundContext] for the `(range)` option.
- *
- * Introduces the [range] property to report the originally passed range definition
- * in compilation errors.
- */
-internal class RangeContext(
-    val range: String,
-    primitiveType: PrimitiveType,
+internal fun GeneratedExtension<*, *>.checkPrimaryApplied(
+    primary: GeneratedExtension<*, *>,
     field: Field,
     file: File
-) : BoundContext(RANGE, primitiveType, field, file)
+) {
+    val primaryOption = field.findOption(primary)
+    val primaryName = primaryOption?.name
+    val companionName = this.descriptor.name
+    Compilation.check(primaryOption != null, file, field.span) {
+        "The `${field.qualifiedName}` field has the `($companionName)` companion option" +
+                " applied without its primary `($primaryName)` option. Companion options" +
+                " must always be used together with their primary counterparts."
+    }
+}

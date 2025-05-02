@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -43,9 +43,14 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.CHOICE
+import io.spine.validation.ChoiceOneof
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.IS_REQUIRED
 import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.option.required
 
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.FieldRef
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.RequiredField
+import io.spine.validation.event.IfMissingOptionDiscovered
+import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
- * Determines whether the field type can be validated as `(required)`.
+ * A view of a field that is marked with `(required) = true` option.
  */
-internal object RequiredFieldSupport {
+internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
 
-    /**
-     * Tells if this [FieldType] can be validated with the `(required)` option.
-     */
-    fun FieldType.isSupported(): Boolean =
-        !isPrimitive || primitive in SUPPORTED_PRIMITIVES
+    @Subscribe
+    fun on(e: RequiredFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
 
-    private val SUPPORTED_PRIMITIVES = listOf(
-        TYPE_STRING, TYPE_BYTES
-    )
+    @Subscribe
+    fun on(e: IfMissingOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
+    }
 }

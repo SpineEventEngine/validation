@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -48,6 +48,9 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.validation.IF_INVALID
+import io.spine.validation.VALIDATE
+import io.spine.validation.ValidateField
 import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.event.ValidateFieldDiscovered
 import io.spine.validation.event.validateFieldDiscovered

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.option.required
 
 import io.spine.option.OptionsProto
 import io.spine.protodata.ast.Field
@@ -40,7 +40,7 @@ import io.spine.validation.ValidationConfig
 import io.spine.validation.WithValidationSettings
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.validation.required.RequiredFieldSupport.isSupported
+import io.spine.validation.option.required.RequiredFieldSupport.isSupported
 
 /**
  * An abstract base for policies that control whether an ID field

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.validation.option.bound
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -50,7 +50,8 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.validation.RANGE
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.bound.BoundFieldSupport.checkFieldType
+import io.spine.validation.bound.RangeField
+import io.spine.validation.option.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -54,7 +54,11 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.PATTERN
+import io.spine.validation.PatternField
 import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 

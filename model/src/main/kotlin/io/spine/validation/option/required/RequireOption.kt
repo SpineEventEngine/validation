@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.option.required
 
 import io.spine.core.External
 import io.spine.core.Subscribe

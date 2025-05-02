@@ -48,7 +48,7 @@ import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
-import io.spine.validation.isRepeatedMessage
+import io.spine.validation.option.isRepeatedMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
 import io.spine.validation.api.expression.SpineTime
 import io.spine.validation.api.expression.TimestampsClass

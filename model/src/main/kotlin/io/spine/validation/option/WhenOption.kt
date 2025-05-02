@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.validation.option
 
 import com.google.protobuf.Timestamp
 import io.spine.core.External
@@ -63,10 +63,15 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.WHEN_IN
+import io.spine.validation.TimeFieldType
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.validation.WHEN
+import io.spine.validation.WhenField
 import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultMessage
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

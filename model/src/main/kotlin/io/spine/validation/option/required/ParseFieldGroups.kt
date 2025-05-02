@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.validation.option.required
 
 import io.spine.option.RequireOption
 import io.spine.protodata.Compilation
@@ -37,7 +37,7 @@ import io.spine.protodata.check
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.fieldGroup
-import io.spine.validation.required.RequiredFieldSupport.isSupported
+import io.spine.validation.option.required.RequiredFieldSupport.isSupported
 
 /**
  * Parses and validates field groups specified in the given [RequireOption].
