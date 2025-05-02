@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.validation.api.generate
+
+import io.spine.annotation.Internal
+import io.spine.protodata.ast.TypeName
+import io.spine.server.query.Querying
+
+/**
+ * Generates Java code for a specific option.
+ */
+public abstract class OptionGenerator {
+
+    /**
+     * A component capable of querying states of views.
+     *
+     * Note that the class inheritors are not responsible for providing [Querying].
+     * The instance is [injected][inject] by the Java validation plugin before
+     * the first invocation of the [codeFor] method.
+     */
+    protected lateinit var querying: Querying
+
+    /**
+     * Generates validation code for all option applications within the provided
+     * message [type].
+     *
+     * @param type The message to generate code for.
+     */
+    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
+
+    /**
+     * Injects [Querying] into this instance of [OptionGenerator].
+     */
+    @Internal
+    public fun inject(querying: Querying) {
+        this.querying = querying
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-)

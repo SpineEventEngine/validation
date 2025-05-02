@@ -42,30 +42,29 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
-import io.spine.validation.java.expression.ConstraintViolationClass
-import io.spine.validation.java.expression.FieldPathClass
-import io.spine.validation.java.expression.ImmutableListClass
-import io.spine.validation.java.expression.PatternClass
-import io.spine.validation.java.expression.StringClass
-import io.spine.validation.java.expression.TypeNameClass
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.mangled
+import io.spine.validation.api.expression.ConstraintViolationClass
+import io.spine.validation.api.expression.FieldPathClass
+import io.spine.validation.api.expression.ImmutableListClass
+import io.spine.validation.api.expression.PatternClass
+import io.spine.validation.api.expression.StringClass
+import io.spine.validation.api.expression.TypeNameClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.api.generate.mangled
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -73,15 +72,15 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
 import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 /**
  * The generator for `(pattern)` option.
  */
-internal class PatternGenerator(private val querying: Querying) : OptionGenerator {
+internal class PatternGenerator : OptionGenerator() {
 
     /**
      * All `(pattern)` fields in the current compilation process.

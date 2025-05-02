@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+syntax = "proto3";
 
-import io.spine.protodata.plugin.Plugin
+package spine.validation.test.money;
 
-@Suppress("unused") // Accessed reflectively by ProtoData.
-public class MoneyValidationPlugin : Plugin(
-    viewRepositories = setOf(CurrencyTypeView.Repo()),
-    policies = setOf(CurrencyValidationPolicy())
-)
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test.money";
+option java_outer_classname = "EventsProto";
+option java_multiple_files = true;
+
+import "spine/protodata/ast.proto";
+import "spine/validation/test/money_options.proto";
+
+// The event emitted whenever a message with `(currency)` option is discovered
+// and has passed the necessary checks to confirm the option is applied correctly.
+message CurrencyMessageDiscovered {
+
+    // The name of the discovered message.
+    protodata.TypeName type = 1;
+
+    // The applied option.
+    Currency currency = 2;
+
+    // The field of the message which stores the major units of the currency.
+    protodata.Field major_unit_field = 3;
+
+    // The field of the message which stores the minor units of the currency.
+    protodata.Field minor_unit_field = 4;
+
+    // The error message template.
+    string error_message = 5;
+}

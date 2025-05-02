@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,35 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation.test
 
-package spine.validation.test.money;
+import io.spine.core.Subscribe
+import io.spine.protodata.ast.TypeName
+import io.spine.protodata.plugin.View
+import io.spine.server.entity.alter
+import io.spine.validation.test.money.CurrencyMessage
+import io.spine.validation.test.money.CurrencyMessageDiscovered
 
-import "spine/options.proto";
+/**
+ * A view of a message that is marked with the `(currency)` option.
+ */
+internal class CurrencyView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.test.money";
-option java_outer_classname = "CurrencyProto";
-option java_multiple_files = true;
-
-import "spine/protodata/ast.proto";
-import "spine/validation/test/money_options.proto";
-
-// A view on a message type which represents an amount of money in a certain currency.
-//
-// Such a message must have exactly 2 integer fields, one for the major currency and another one
-// for the minor currency.
-//
-message CurrencyType {
-    option (entity).kind = PROJECTION;
-
-    protodata.TypeName type = 1;
-
-    Currency currency = 2;
-
-    // The field of the message which stores the major units of the currency.
-    protodata.Field major_unit_field = 3;
-
-    // The field of the message which stores the minor units of the currency.
-    protodata.Field minor_unit_field = 4;
+    @Subscribe
+    fun on(e: CurrencyMessageDiscovered): Unit = alter {
+        type = e.type
+        currency = e.currency
+        majorUnitField = e.majorUnitField
+        minorUnitField = e.minorUnitField
+        errorMessage = e.errorMessage
+    }
 }

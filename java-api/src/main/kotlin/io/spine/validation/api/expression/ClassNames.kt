@@ -26,7 +26,7 @@
 
 @file:JvmName("ClassNames")
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
@@ -53,52 +53,52 @@ import java.util.stream.Collectors
 /**
  * The [ClassName] of [String].
  */
-internal val StringClass = ClassName(String::class)
+public val StringClass: ClassName = ClassName(String::class)
 
 /**
  * The [ClassName] of [Collectors].
  */
-internal val CollectorsClass = ClassName(Collectors::class)
+public val CollectorsClass: ClassName = ClassName(Collectors::class)
 
 /**
  * The [ClassName] of [TemplateString].
  */
-internal val TemplateStringClass = ClassName(TemplateString::class)
+public val TemplateStringClass: ClassName = ClassName(TemplateString::class)
 
 /**
  * The [ClassName] of [Pattern].
  */
-internal val PatternClass = ClassName(Pattern::class)
+public val PatternClass: ClassName = ClassName(Pattern::class)
 
 /**
  * The [ClassName] of [ImmutableList].
  */
-internal val ImmutableListClass = ClassName(ImmutableList::class)
+public val ImmutableListClass: ClassName = ClassName(ImmutableList::class)
 
 /**
  * The [ClassName] of [ImmutableSet].
  */
-internal val ImmutableSetClass = ClassName(ImmutableSet::class)
+public val ImmutableSetClass: ClassName = ClassName(ImmutableSet::class)
 
 /**
  * The [ClassName] of [LinkedHashMultiset].
  */
-internal val LinkedHashMultisetClass = ClassName(LinkedHashMultiset::class)
+public val LinkedHashMultisetClass: ClassName = ClassName(LinkedHashMultiset::class)
 
 /**
  * The [ClassName] of [Multiset.Entry] class.
  */
-internal val MultiSetEntryClass = ClassName(Multiset.Entry::class)
+public val MultiSetEntryClass: ClassName = ClassName(Multiset.Entry::class)
 
 /**
  * The [ClassName] of [FieldPath].
  */
-internal val FieldPathClass = ClassName(FieldPath::class)
+public val FieldPathClass: ClassName = ClassName(FieldPath::class)
 
 /**
  * The [ClassName] of [ConstraintViolation].
  */
-internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
+public val ConstraintViolationClass: ClassName = ClassName(ConstraintViolation::class)
 
 /**
  * The [ClassName] of `io.spine.base.FieldPaths`.
@@ -107,69 +107,69 @@ internal val ConstraintViolationClass = ClassName(ConstraintViolation::class)
  * declared for [FieldPath]. It is available from Java, but not from Kotlin.
  * So, we specify it as a string literal here.
  */
-internal val FieldPathsClass = ClassName("io.spine.base", "FieldPaths")
+public val FieldPathsClass: ClassName = ClassName("io.spine.base", "FieldPaths")
 
 /**
  * The [ClassName] of [ValidationError].
  */
-internal val ValidationErrorClass = ClassName(ValidationError::class)
+public val ValidationErrorClass: ClassName = ClassName(ValidationError::class)
 
 /**
  * The [ClassName] of [ValidatableMessage].
  */
-internal val ValidatableMessageClass = ClassName(ValidatableMessage::class)
+public val ValidatableMessageClass: ClassName = ClassName(ValidatableMessage::class)
 
 /**
  * The [ClassName] of [AnyPacker].
  */
-internal val AnyPackerClass = ClassName(AnyPacker::class)
+public val AnyPackerClass: ClassName = ClassName(AnyPacker::class)
 
 /**
  * The [ClassName] of [Message].
  */
-internal val MessageClass = ClassName(Message::class)
+public val MessageClass: ClassName = ClassName(Message::class)
 
 /**
  * The [ClassName] of Protobuf [Any].
  */
-internal val AnyClass = ClassName(Any::class)
+public val AnyClass: ClassName = ClassName(Any::class)
 
 /**
  * The [ClassName] of [KnownTypes].
  */
-internal val KnownTypesClass = ClassName(KnownTypes::class)
+public val KnownTypesClass: ClassName = ClassName(KnownTypes::class)
 
 /**
  * The [ClassName] of [TypeUrl].
  */
-internal val TypeUrlClass = ClassName(TypeUrl::class)
+public val TypeUrlClass: ClassName = ClassName(TypeUrl::class)
 
 /**
  * The [ClassName] of [TypeName] from `java-base`.
  */
-internal val TypeNameClass = ClassName(TypeName::class)
+public val TypeNameClass: ClassName = ClassName(TypeName::class)
 
 /**
  * The [ClassName] of [java.lang.Integer].
  */
-internal val IntegerClass = ClassName(Integer::class)
+public val IntegerClass: ClassName = ClassName(Integer::class)
 
 /**
  * The [ClassName] of [java.lang.Long].
  */
-internal val LongClass = ClassName(java.lang.Long::class)
+public val LongClass: ClassName = ClassName(java.lang.Long::class)
 
 /**
  * The [ClassName] of [java.util.Objects].
  */
-internal val ObjectsClass = ClassName(Objects::class)
+public val ObjectsClass: ClassName = ClassName(Objects::class)
 
 /**
  * The [ClassName] of [Timestamps].
  */
-internal val TimestampsClass = ClassName(Timestamps::class)
+public val TimestampsClass: ClassName = ClassName(Timestamps::class)
 
 /**
  * The [ClassName] of [io.spine.base.Time].
  */
-internal val SpineTime = ClassName(Time::class)
+public val SpineTime: ClassName = ClassName(Time::class)

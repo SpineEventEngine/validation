@@ -24,18 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.generate
 
-import io.spine.protodata.java.AnnotatedClassName
-import io.spine.protodata.java.ClassName
-import org.checkerframework.checker.nullness.qual.Nullable
-
-/**
- * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
- */
-internal val NullableAnnotation = ClassName(Nullable::class)
+import io.spine.base.FieldPath
+import io.spine.protodata.java.ReadVar
+import io.spine.type.TypeName
+import io.spine.validate.ConstraintViolation
 
 /**
- * The [TypeNameClass] annotated with [NullableAnnotation].
+ * Scope variables available within the `validate(FieldPath)` method.
+ *
+ * Use these variables to create an instance of [ConstraintViolation]
+ * for the failed option constraint.
  */
-internal val NullableTypeNameClass = AnnotatedClassName(TypeNameClass, NullableAnnotation)
+public object ValidateScope {
+
+    /**
+     * The list of discovered violations.
+     */
+    public val violations: ReadVar<MutableList<ConstraintViolation>> = ReadVar("violations")
+
+    /**
+     * The field path from the root message field that triggered validation
+     * down to the field where the violation occurred.
+     *
+     * The path is nested when a deep validation takes place.
+     */
+    public val parentPath: ReadVar<FieldPath> = ReadVar("parentPath")
+
+    /**
+     * The name of the message type that triggered validation.
+     *
+     * The first field of the [parentPath] must be declared in this [parentName].
+     */
+    public val parentName: ReadVar<TypeName?> = ReadVar("parentName")
+}

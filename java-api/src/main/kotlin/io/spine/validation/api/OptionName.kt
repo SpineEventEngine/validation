@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
-}
+package io.spine.validation.api
 
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-)
+/**
+ * Path to the name field in `*OptionDiscovered` events.
+ *
+ * The main purpose of this constant is to set the field path when
+ * filtering incoming events by the option name. It is usually used
+ * in a pair with the constant containing the option name.
+ *
+ * An example of event filtering in a policy:
+ *
+ * ```
+ *     @React
+ *     override fun whenever(
+ *         @External @Where(field = OPTION_NAME, equals = REQUIRED)
+ *         event: FieldOptionDiscovered,
+ *     ): EitherOf2<RequiredFieldDiscovered, NoReaction> {
+ * ```
+ */
+public const val OPTION_NAME: String = "option.name"

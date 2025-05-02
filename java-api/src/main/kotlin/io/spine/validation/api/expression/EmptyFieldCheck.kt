@@ -24,14 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.field
-import io.spine.validation.UnsetValue
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.UnsetValue
 
 /**
  * Provides an expression to check if a given [Field] holds
@@ -43,17 +43,17 @@ import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.mes
  */
 // TODO:2025-03-12:yevhenii.nadtochii: This trait can go without `JavaValueConverter`.
 //  See issue: https://github.com/SpineEventEngine/validation/issues/199
-internal interface EmptyFieldCheck {
+public interface EmptyFieldCheck {
 
     /**
      * Converts Protobuf values to Java expressions.
      */
-    val converter: JavaValueConverter
+    public val converter: JavaValueConverter
 
     /**
      * Returns an expression that checks if this [Field] has the default (unset) value.
      */
-    fun Field.hasDefaultValue(): Expression<Boolean> {
+    public fun Field.hasDefaultValue(): Expression<Boolean> {
         val getter = message.field(this).getter<Any>()
         return Expression("$getter.equals(${defaultValue()})")
     }
@@ -61,7 +61,7 @@ internal interface EmptyFieldCheck {
     /**
      * Returns an expression that checks if this [Field] has a non-default value set.
      */
-    fun Field.hasNonDefaultValue(): Expression<Boolean> =
+    public fun Field.hasNonDefaultValue(): Expression<Boolean> =
         Expression("!${hasDefaultValue()}")
 
     /**

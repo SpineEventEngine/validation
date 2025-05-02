@@ -28,12 +28,9 @@ package io.spine.validation.java.generate
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
-import io.spine.base.FieldPath
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.FieldDeclaration
 import io.spine.protodata.java.MethodDeclaration
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.This
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore
@@ -46,18 +43,16 @@ import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
 import io.spine.tools.psi.java.nested
-import io.spine.type.TypeName
-import io.spine.validate.ConstraintViolation
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.expression.FieldPathClass
-import io.spine.validation.java.expression.NullableTypeNameClass
-import io.spine.validation.java.expression.ObjectsClass
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.api.expression.FieldPathClass
+import io.spine.validation.api.expression.NullableTypeNameClass
+import io.spine.validation.api.expression.ObjectsClass
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -105,22 +100,6 @@ internal class ValidationCodeInjector {
             }
         }
     }
-
-    /**
-     * Scope variables available within `validate(FieldPath)` method.
-     */
-    object ValidateScope {
-        val violations = ReadVar<MutableList<ConstraintViolation>>("violations")
-        val parentPath = ReadVar<FieldPath>("parentPath")
-        val parentName = ReadVar<TypeName?>("parentName")
-    }
-
-    /**
-     * Scope variables available within the whole message class.
-     */
-    object MessageScope {
-        val message = This<Message>(explicit = false)
-    }
 }
 
 /**
@@ -149,7 +128,7 @@ private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) 
     val psiMethod = elementFactory.createMethodFromText(
         """
         public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass $parentPath, $NullableTypeNameClass $parentName) {
-            ${ObjectsClass}.requireNonNull($parentPath);
+            $ObjectsClass.requireNonNull($parentPath);
             ${validateMethodBody(constraints)}
         }
         """.trimIndent(), this

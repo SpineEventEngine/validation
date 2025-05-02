@@ -24,72 +24,70 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.validation.test
 
-import io.spine.base.FieldPath
 import io.spine.protodata.ast.TypeName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.field
 import io.spine.server.query.select
-import io.spine.string.lowerCamelCase
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.CHOICE
-import io.spine.validation.ChoiceOneof
-import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
-import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
-import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.java.expression.templateString
+import io.spine.validation.api.expression.templateString
+import io.spine.validation.test.money.CurrencyMessage
 
 /**
- * The generator for the `(choice)` option.
+ * The generator for the `(currency)` option.
  */
-internal class ChoiceGenerator : OptionGenerator() {
+internal class CurrencyGenerator : OptionGenerator() {
 
     /**
-     * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
+     * All `(currency)`-marked messages in the current compilation process.
      */
-    private val allChoiceOneofs by lazy {
-        querying.select<ChoiceOneof>()
+    private val allCurrencyMessages by lazy {
+        querying.select<CurrencyMessage>()
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<SingleOptionCode> =
-        allChoiceOneofs
-            .filter { it.id.type == type }
-            .map { GenerateChoice(it).code() }
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
+        val currencyMessage = allCurrencyMessages.find { it.type == type }
+        if (currencyMessage == null) {
+            return emptyList()
+        }
+        val code = GenerateCurrency(currencyMessage).code()
+        return listOf(code)
+    }
 }
 
 /**
- * Generates code for a single application of the `(choice)` option
+ * Generates code for a single application of the `(currency)` option
  * represented by the [view].
  */
-private class GenerateChoice(private val view: ChoiceOneof) {
+private class GenerateCurrency(private val view: CurrencyMessage) {
 
-    private val oneof = view.subject
+    private val minorField = view.minorUnitField
+    private val minorThreshold = view.currency.minorUnits
 
     /**
      * Returns the generated code.
      */
     fun code(): SingleOptionCode {
-        val groupName = oneof.name
-        val caseField = "${groupName.value.lowerCamelCase()}Case_"
+        val minorGetter = message.field(minorField)
+            .getter<Int>()
         val constraint = CodeBlock(
             """
-            if ($caseField == 0) {
-                var groupPath = ${parentPath.resolve(groupName)};
-                var typeName =  ${parentName.orElse(oneof.declaringType)};
-                var violation = ${violation(ReadVar("groupPath"), ReadVar("typeName"))};
+            if ($minorGetter >= $minorThreshold) {
+                var typeName =  ${parentName.orElse(view.type)};
+                var violation = ${violation(ReadVar("typeName"), minorGetter)};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -98,20 +96,17 @@ private class GenerateChoice(private val view: ChoiceOneof) {
     }
 
     private fun violation(
-        groupPath: Expression<FieldPath>,
-        typeName: Expression<io.spine.type.TypeName>
+        typeName: Expression<TypeName>,
+        minorValue: Expression<Int>
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
-        val placeholders = supportedPlaceholders(groupPath, typeNameStr)
-        val errorMessage = templateString(view.errorMessage, placeholders, CHOICE)
-        return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
+        val placeholders = supportedPlaceholders(minorValue)
+        val errorMessage = templateString(view.errorMessage, placeholders, CURRENCY)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
 
     private fun supportedPlaceholders(
-        groupPath: Expression<FieldPath>,
-        typeName: Expression<String>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        GROUP_PATH to groupPath.joinToString(),
-        PARENT_TYPE to typeName
-    )
+        minorValue: Expression<Int>
+    ): Map<String, Expression<String>> =
+        mapOf("minor.value" to minorField.stringValueOf(minorValue))
 }

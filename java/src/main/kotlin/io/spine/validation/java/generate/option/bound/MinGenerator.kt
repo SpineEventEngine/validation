@@ -31,19 +31,18 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validation.MIN
 import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.java.expression.IntegerClass
-import io.spine.validation.java.expression.LongClass
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.OptionGenerator
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -55,7 +54,7 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 /**
  * The generator for `(min)` option.
  */
-internal class MinGenerator(private val querying: Querying) : OptionGenerator {
+internal class MinGenerator : OptionGenerator() {
 
     /**
      * All `(min)` fields in the current compilation process.

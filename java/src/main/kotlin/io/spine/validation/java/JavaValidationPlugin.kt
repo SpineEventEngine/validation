@@ -27,7 +27,9 @@
 package io.spine.validation.java
 
 import io.spine.validation.ValidationPlugin
+import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
+import java.util.*
 
 /**
  * An implementation of [ValidationPlugin] for Java language.
@@ -44,7 +46,17 @@ import io.spine.validation.java.setonce.SetOnceRenderer
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(),
+        JavaValidationRenderer(customOptions.map { it.generator }),
         SetOnceRenderer()
-    )
+    ),
+    views = customOptions.flatMap { it.view }.toSet(),
+    policies = customOptions.flatMap { it.policy }.toSet(),
 )
+
+/**
+ * Dynamically discovered instances of custom [ValidationOption]s.
+ */
+private val customOptions by lazy {
+    ServiceLoader.load(ValidationOption::class.java)
+        .filterNotNull()
+}

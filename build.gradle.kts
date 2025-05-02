@@ -58,6 +58,7 @@ spinePublishing {
         "java",
         "java-bundle",
         "java-runtime",
+        "java-api"
     )
     modulesWithCustomPublishing = setOf(
         "java-bundle",

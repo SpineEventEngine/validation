@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
-}
+@file:JvmName("ConstraintViolations")
 
-rootProject.name = "validation"
+package io.spine.validation.java.expression
 
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-)
+import io.spine.protodata.java.Expression
+import io.spine.validate.TemplateString
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.api.expression.templateString as withStringPlaceholders
+
+/**
+ * Yields an expression that creates a new instance of [TemplateString].
+ *
+ * Note that this method differs from the one provided by the API module
+ * in that it accepts placeholder keys as [ErrorPlaceholder]. This enum
+ * contains placeholder keys for built-in options.
+ *
+ * @param placeholders The supported placeholders and their values.
+ * @param optionName The name of the option, which declared the provided [placeholders].
+ */
+public fun templateString(
+    template: String,
+    placeholders: Map<ErrorPlaceholder, Expression<String>>,
+    optionName: String
+): Expression<TemplateString> =
+    withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)

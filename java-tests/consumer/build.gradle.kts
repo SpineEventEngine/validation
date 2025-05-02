@@ -33,7 +33,6 @@ protoData {
         // Suppress warnings in the generated code.
         "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
         "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.validation.test.MoneyValidationPlugin"
     )
 }
 
@@ -49,6 +48,7 @@ tasks.withType<LaunchProtoData>().configureEach {
 }
 
 dependencies {
+    protoData(project(":java"))
     protoData(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:consumer-dependency"))

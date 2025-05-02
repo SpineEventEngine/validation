@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.FieldName
@@ -41,14 +41,14 @@ import io.spine.protodata.java.toBuilder
  * Note that in Java, this extension becomes a static method upon [FieldPathsClass]
  * with `get` prefix.
  */
-internal fun Expression<FieldPath>.joinToString(): Expression<String> =
+public fun Expression<FieldPath>.joinToString(): Expression<String> =
     FieldPathsClass.call("getJoined", this)
 
 /**
  * Returns an expression that yields a new instance of [FieldPath] by appending
  * the provided [field] name to this parental [FieldPath] expression.
  */
-internal fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
+public fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
     toBuilder()
         .chainAdd("field_name", StringLiteral(field.value))
         .chainBuild()
@@ -61,7 +61,7 @@ internal fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPa
  * But we still use [FieldPath] to provide a path to this message member because
  * [io.spine.validate.ConstraintViolation] expects exactly [FieldPath] type.
  */
-internal fun Expression<FieldPath>.resolve(oneof: OneofName): Expression<FieldPath> =
+public fun Expression<FieldPath>.resolve(oneof: OneofName): Expression<FieldPath> =
     toBuilder()
         .chainAdd("field_name", StringLiteral(oneof.value))
         .chainBuild()

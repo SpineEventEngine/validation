@@ -39,6 +39,7 @@ import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
 import io.spine.tools.code.Java
 import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.java.generate.ValidationCodeInjector
 import io.spine.validation.java.generate.option.DistinctGenerator
 import io.spine.validation.java.generate.option.GoesGenerator
@@ -58,25 +59,14 @@ import io.spine.validation.java.generate.option.WhenGenerator
  * This renderer is applied to every compilation [Message],
  * even if the message does not have any declared constraints.
  */
-public class JavaValidationRenderer : JavaRenderer() {
+public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val generators by lazy {
-        listOf(
-            RequiredGenerator(querying, valueConverter),
-            PatternGenerator(querying),
-            GoesGenerator(querying, valueConverter),
-            DistinctGenerator(querying),
-            ValidateGenerator(querying, valueConverter),
-            RangeGenerator(querying),
-            MaxGenerator(querying),
-            MinGenerator(querying),
-            ChoiceGenerator(querying),
-            WhenGenerator(querying, valueConverter),
-            RequireOptionGenerator(querying, valueConverter),
-        )
+        (builtInGenerators() + customGenerators)
+            .onEach { it.inject(querying) }
     }
 
     override fun render(sources: SourceFileSet) {
@@ -93,6 +83,30 @@ public class JavaValidationRenderer : JavaRenderer() {
                 file.render(code)
             }
     }
+
+    /**
+     * Returns code generators for the built-in options.
+     *
+     * Note that some generators cannot be created outside of [JavaRenderer] because
+     * they need [valueConverter], which in turn needs [JavaRenderer.typeSystem].
+     *
+     * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
+     * is addressed, all generators must be created outside of [JavaValidationRenderer],
+     * and just passed to the renderer.
+     */
+    private fun builtInGenerators() = listOf(
+        RequiredGenerator(valueConverter),
+        PatternGenerator(),
+        GoesGenerator(valueConverter),
+        DistinctGenerator(),
+        ValidateGenerator(valueConverter),
+        RangeGenerator(),
+        MaxGenerator(),
+        MinGenerator(),
+        ChoiceGenerator(),
+        WhenGenerator(valueConverter),
+        RequireOptionGenerator(valueConverter),
+    )
 
     private fun generateCode(message: TypeName): MessageValidationCode {
         val fieldOptions = generators.flatMap { it.codeFor(message) }

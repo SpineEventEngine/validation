@@ -24,21 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.type.TypeName
-import io.spine.protodata.ast.TypeName as AstTypeName
+import io.spine.protodata.java.AnnotatedClassName
+import io.spine.protodata.java.ClassName
+import org.checkerframework.checker.nullness.qual.Nullable
 
 /**
- * Returns an expression that ensures a non-`null` [TypeName] value.
- *
- * If this [Expression] is non-`null`, it remains unchanged.
- * Otherwise, it is replaced with the specified [typeName].
+ * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
  */
-internal fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
-    val nameLiteral = StringLiteral(typeName.qualifiedName)
-    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
-}
+public val NullableAnnotation: ClassName = ClassName(Nullable::class)
+
+/**
+ * The [TypeNameClass] annotated with [NullableAnnotation].
+ */
+public val NullableTypeNameClass: AnnotatedClassName =
+    AnnotatedClassName(TypeNameClass, NullableAnnotation)

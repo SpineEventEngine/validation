@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.validation.test
 
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.validation.test.money.Mru
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
- * Java code handling a single application of a specific option.
+ * This is the integration test that verifies the custom validation implemented
+ * by [CurrencyOption] in the `:java-tests:extensions` module.
  *
- * @property constraint A code block to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * The `extensions` module declares the `(currency)` message option, which is used by
+ * money data types in this module. Please see `main/proto/test/money.proto` for details.
+ *
+ * This test verifies that custom validation code works as expected.
  */
-internal class SingleOptionCode(
-    val constraint: CodeBlock,
-    val fields: List<FieldDeclaration<*>> = emptyList(),
-    val methods: List<MethodDeclaration> = emptyList(),
-)
+@DisplayName("`CurrencyOption` should generate the code which")
+internal class CurrencyOptionITest {
+
+    @Test
+    fun `throws 'ValidationException' if actual value is greater than the threshold`() {
+        assertValidationException(Mru.newBuilder().setKhoums(6))
+    }
+
+    @Test
+    fun `throws 'ValidationException' if actual value is equal to the threshold`() {
+        assertValidationException(Mru.newBuilder().setKhoums(5))
+    }
+
+    @Test
+    fun `throws no exceptions if actual value is less than the threshold`() {
+        assertNoException(Mru.newBuilder().setKhoums(4))
+    }
+}

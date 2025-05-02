@@ -26,7 +26,7 @@
 
 @file:JvmName("ConstraintViolations")
 
-package io.spine.validation.java.violation
+package io.spine.validation.api.expression
 
 import io.spine.base.FieldPath
 import io.spine.protobuf.restoreProtobufEscapes
@@ -39,9 +39,6 @@ import io.spine.protodata.java.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.java.expression.StringClass
-import io.spine.validation.java.expression.TemplateStringClass
 
 /**
  * Yields an expression that creates a new instance of [ConstraintViolation]
@@ -58,7 +55,7 @@ import io.spine.validation.java.expression.TemplateStringClass
  *   the invalid field value for this option is the field type's default value,
  *   which is treated as "no value" at all.
  */
-internal fun constraintViolation(
+public fun constraintViolation(
     errorMessage: Expression<TemplateString>,
     typeName: Expression<String>,
     fieldPath: Expression<FieldPath>?,
@@ -77,19 +74,17 @@ internal fun constraintViolation(
 }
 
 /**
- * Yields an expression that creates a new instance of [TemplateString]
- * with the given parameters.
+ * Yields an expression that creates a new instance of [TemplateString].
  *
- * @param template The template string that may have one or more placeholders.
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
-internal fun templateString(
+public fun templateString(
     template: String,
-    placeholders: Map<ErrorPlaceholder, Expression<String>>,
+    placeholders: Map<String, Expression<String>>,
     optionName: String
 ): Expression<TemplateString> {
-    checkPlaceholdersHasValue(template, placeholders.mapKeys { it.key.value }) { missingKeys ->
+    checkPlaceholdersHasValue(template, placeholders) { missingKeys ->
         "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
                 " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
                 " that the policy that verifies the message placeholders and its code generator" +
@@ -97,7 +92,7 @@ internal fun templateString(
     }
     val placeholderEntries = mapExpression(
         StringClass, StringClass,
-        placeholders.mapKeys { StringLiteral(it.key.toString()) }
+        placeholders.mapKeys { StringLiteral(it.key) }
     )
     val escapedTemplate = restoreProtobufEscapes(template)
     return TemplateStringClass.newBuilder()

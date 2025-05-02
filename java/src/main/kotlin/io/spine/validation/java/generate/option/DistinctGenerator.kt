@@ -37,38 +37,37 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.PATTERN
-import io.spine.validation.java.expression.CollectorsClass
-import io.spine.validation.java.expression.ImmutableSetClass
-import io.spine.validation.java.expression.LinkedHashMultisetClass
-import io.spine.validation.java.expression.MultiSetEntryClass
-import io.spine.validation.java.expression.joinToString
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringValueOf
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
+import io.spine.validation.api.expression.CollectorsClass
+import io.spine.validation.api.expression.ImmutableSetClass
+import io.spine.validation.api.expression.LinkedHashMultisetClass
+import io.spine.validation.api.expression.MultiSetEntryClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(distinct)` option.
  */
-internal class DistinctGenerator(private val querying: Querying) : OptionGenerator {
+internal class DistinctGenerator : OptionGenerator() {
 
     /**
      * All `(distinct)` fields in the current compilation process.

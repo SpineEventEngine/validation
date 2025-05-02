@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,29 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+package io.spine.validation.api.expression
+
+import io.spine.protodata.ast.qualifiedName
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+import io.spine.type.TypeName
+import io.spine.protodata.ast.TypeName as AstTypeName
+
+/**
+ * Returns an expression that ensures a non-`null` [TypeName] value.
+ *
+ * If this [Expression] is non-`null`, it remains unchanged.
+ * Otherwise, it is replaced with the specified [typeName].
+ */
+public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
+    val nameLiteral = StringLiteral(typeName.qualifiedName)
+    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-)

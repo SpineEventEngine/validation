@@ -24,20 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+import io.spine.dependency.local.ProtoData
 
-import io.spine.protodata.ast.TypeName
-
-/**
- * Generates Java code for a specific option.
- */
-internal interface OptionGenerator {
-
-    /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     */
-    fun codeFor(type: TypeName): List<SingleOptionCode>
+dependencies {
+    api(ProtoData.java)
+    api(project(":proto:context"))
 }

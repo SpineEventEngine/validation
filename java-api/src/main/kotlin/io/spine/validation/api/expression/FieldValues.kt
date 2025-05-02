@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.expression
+package io.spine.validation.api.expression
 
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.FieldType
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
@@ -36,6 +37,14 @@ import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.call
+
+/**
+ * Returns an expression that converts the provided field [value] to a [String].
+ *
+ * See [FieldType.stringValueOf] for details upon how the value is converted.
+ */
+public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
+    type.stringValueOf(value)
 
 /**
  * Returns an expression that converts the provided field [value] to a [String].
@@ -60,7 +69,7 @@ import io.spine.protodata.java.call
  * 1. `string` remains unchanged.
  * 2. Scalar types (except `bytes`) are converted using the `String.valueOf` method.
  */
-internal fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
+public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
         isSingular -> when {
             isMessage || isEnum -> value.stringify()

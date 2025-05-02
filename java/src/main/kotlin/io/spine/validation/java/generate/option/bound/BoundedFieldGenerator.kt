@@ -49,21 +49,21 @@ import io.spine.validation.bound.NumericBound.ValueCase.INT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.INT64_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.java.expression.IntegerClass
-import io.spine.validation.java.expression.LongClass
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.resolve
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.MessageScope.message
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentPath
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.MessageScope.message
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.

@@ -34,34 +34,32 @@ import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.MethodDeclaration
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
-import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.string.joinByLines
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
-import io.spine.validation.java.expression.EmptyFieldCheck
-import io.spine.validation.java.expression.orElse
-import io.spine.validation.java.expression.stringify
-import io.spine.validation.java.generate.OptionGenerator
-import io.spine.validation.java.generate.SingleOptionCode
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.parentName
-import io.spine.validation.java.generate.ValidationCodeInjector.ValidateScope.violations
-import io.spine.validation.java.generate.mangled
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.stringify
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.api.generate.ValidateScope.parentName
+import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.api.generate.mangled
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
-import io.spine.validation.java.violation.constraintViolation
-import io.spine.validation.java.violation.templateString
+import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(require)` option.
  */
 internal class RequireOptionGenerator(
-    private val querying: Querying,
     private val converter: JavaValueConverter
-) : OptionGenerator {
+) : OptionGenerator() {
 
     /**
      * All `(require)`-marked messages in the current compilation process.
