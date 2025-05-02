@@ -55,7 +55,7 @@ dependencies {
         testFixturesImplementation(it)
     }
 
-    testImplementation(JUnit.Jupiter.run { artifacts[params] })
+    testImplementation((JUnit.Jupiter.run { artifacts[params] }!!))
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
     testImplementation(ProtoData.api)
