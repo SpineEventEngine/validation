@@ -24,8 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.JavaPoet
-import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.ProtoData
 
 plugins {
@@ -33,13 +31,7 @@ plugins {
 }
 
 dependencies {
+    api(ProtoData.java)
     api(project(":model"))
     api(project(":proto:context"))
-    api(ProtoData.java)
-
-    implementation(project(":java-runtime"))
-    implementation(JavaPoet.lib)
-    implementation(Roaster.api)
-
-    runtimeOnly(Roaster.jdt)
 }
