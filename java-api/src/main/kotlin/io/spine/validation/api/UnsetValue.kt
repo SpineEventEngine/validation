@@ -56,6 +56,8 @@ import io.spine.string.shortly
  * This class does not instantiate default values of Protobuf messages. It merely creates
  * instances of [Value] which represent values of Protobuf message fields, which are not set.
  */
+// TODO:2025-03-12:yevhenii.nadtochii: `EmptyFieldCheck` should not need this object.
+//  See issue: https://github.com/SpineEventEngine/validation/issues/199
 public object UnsetValue {
 
     /**
