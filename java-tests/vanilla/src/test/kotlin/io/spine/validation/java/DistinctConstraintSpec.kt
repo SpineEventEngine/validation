@@ -26,7 +26,7 @@
 
 package io.spine.validation.java
 
-import com.google.common.truth.Truth8.assertThat
+import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny

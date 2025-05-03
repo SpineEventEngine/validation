@@ -35,7 +35,7 @@ import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.code.proto.OneofDeclaration;
 import io.spine.type.MessageType;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 

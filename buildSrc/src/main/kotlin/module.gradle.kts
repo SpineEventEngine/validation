@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
-import io.spine.dependency.lib.Jackson
+import io.spine.dependency.build.JSpecify
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJava
@@ -36,9 +37,6 @@ import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
-import io.spine.dependency.test.JUnit
-import io.spine.dependency.test.Kotest
-import io.spine.dependency.test.Truth
 import io.spine.gradle.javac.configureErrorProne
 import io.spine.gradle.javac.configureJavac
 import io.spine.gradle.javadoc.JavadocConfig
@@ -46,16 +44,14 @@ import io.spine.gradle.kotlin.applyJvmToolchain
 import io.spine.gradle.kotlin.setFreeCompilerArgs
 import io.spine.gradle.publish.IncrementGuard
 import io.spine.gradle.report.license.LicenseReporter
-import io.spine.gradle.testing.configureLogging
-import io.spine.gradle.testing.registerTestTasks
 import org.gradle.jvm.tasks.Jar
-import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     java
     `java-library`
     kotlin("jvm")
+    id("module-testing")
     id("com.google.protobuf")
     id("net.ltgt.errorprone")
     id("detekt-code-analysis")
@@ -67,7 +63,7 @@ plugins {
     id("project-report")
     id("pmd-settings")
 }
-
+apply<BomsPlugin>()
 apply<IncrementGuard>()
 LicenseReporter.generateReportIn(project)
 JavadocConfig.applyTo(project)
@@ -81,7 +77,6 @@ project.run {
     configureJava(javaVersion)
     configureKotlin(javaVersion)
 
-    configureTests()
     configureTaskDependencies()
     dependTestOnJavaRuntime()
     configureProtoc()
@@ -101,10 +96,7 @@ fun Module.addDependencies() {
             errorprone(core)
             errorproneJavac(javacPlugin)
         }
-        JUnit.api.forEach { testImplementation(it) }
-        Truth.libs.forEach { testImplementation(it) }
-        testImplementation(Kotest.assertions)
-        testRuntimeOnly(JUnit.runner)
+        api(JSpecify.annotations)
     }
 }
 
@@ -150,8 +142,6 @@ fun Module.forceConfigurations() {
         all {
             resolutionStrategy {
                 force(
-                    JUnit.runner,
-
                     Reflect.lib,
                     Base.lib,
                     Time.lib,
@@ -162,15 +152,6 @@ fun Module.forceConfigurations() {
                     CoreJava.server,
                     CoreJava.testUtilServer,
                     Validation.runtime,
-
-                    Jackson.core,
-                    Jackson.moduleKotlin,
-                    Jackson.databind,
-                    Jackson.bom,
-                    Jackson.annotations,
-                    Jackson.dataformatYaml,
-                    Jackson.dataformatXml,
-
                     Dokka.BasePlugin.lib
                 )
             }
@@ -212,21 +193,6 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
 
     tasks.withType<KotlinJvmCompile>().configureEach {
         compilerOptions.setFreeCompilerArgs()
-    }
-}
-
-/**
- * Configures test tasks.
- */
-fun Project.configureTests() {
-    tasks {
-        registerTestTasks()
-        test {
-            useJUnitPlatform {
-                includeEngines("junit-jupiter")
-            }
-            configureLogging()
-        }
     }
 }
 
