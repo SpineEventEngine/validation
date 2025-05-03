@@ -60,7 +60,7 @@ abstract class Dependency {
     /**
      * Obtains full Maven coordinates for the requested [module].
      */
-    fun artifact(module: String): String = artifacts[name] ?: error(
+    fun artifact(module: String): String = artifacts[module] ?: error(
         "The dependency `${this::class.simpleName}` does not declare a module `$module`."
     )
 }
