@@ -80,4 +80,3 @@ abstract class DependencyWithBom : Dependency() {
      */
     abstract val bom: String
 }
-
