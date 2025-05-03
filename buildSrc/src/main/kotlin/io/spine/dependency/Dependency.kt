@@ -56,6 +56,13 @@ abstract class Dependency {
     final val artifacts: Map<String, String> by lazy {
         modules.associateWith { "$it:$version" }
     }
+
+    /**
+     * Obtains full Maven coordinates for the requested [module].
+     */
+    fun artifact(module: String): String = artifacts[name] ?: error(
+        "The dependency `${this::class.simpleName}` does not declare a module `$module`."
+    )
 }
 
 /**

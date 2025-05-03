@@ -32,6 +32,7 @@ import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
 import io.spine.dependency.test.JUnit
+import io.spine.dependency.test.JUnit.Jupiter
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Truth
 
@@ -55,7 +56,7 @@ dependencies {
         testFixturesImplementation(it)
     }
 
-    testImplementation((JUnit.Jupiter.run { artifacts[params] }!!))
+    testImplementation((Jupiter.artifact(Jupiter.params)))
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
     testImplementation(ProtoData.api)
