@@ -27,7 +27,6 @@
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
-import io.spine.dependency.test.JUnit
 
 plugins {
     java
