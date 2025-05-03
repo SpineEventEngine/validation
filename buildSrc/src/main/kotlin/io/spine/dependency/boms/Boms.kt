@@ -35,6 +35,9 @@ import io.spine.dependency.test.JUnit
 
 /**
  * The collection of references to BOMs applied by [BomsPlugin].
+ *
+ * @see <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Bill_of_Materials_.28BOM.29_POMs">
+ * Maven Bill of Materials</a>
  */
 object Boms {
 
