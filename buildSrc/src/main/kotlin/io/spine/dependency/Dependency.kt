@@ -59,12 +59,18 @@ abstract class Dependency {
 }
 
 /**
- * A dependency which declares a Maven BOM.
+ * A dependency which declares a Maven Bill of Materials (BOM).
  *
+ * @see <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Bill_of_Materials_.28BOM.29_POMs">
+ * Maven Bill of Materials</a>
  * @see io.spine.dependency.boms.Boms
  * @see io.spine.dependency.boms.BomsPlugin
  */
 abstract class DependencyWithBom : Dependency() {
+
+    /**
+     * Maven coordinates of the dependency BOM.
+     */
     abstract val bom: String
 }
 
