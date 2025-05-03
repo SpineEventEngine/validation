@@ -30,6 +30,7 @@ import io.gitlab.arturbosch.detekt.getSupportedKotlinVersion
 import io.spine.dependency.DependencyWithBom
 import io.spine.dependency.kotlinx.Coroutines
 import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.test.JUnit
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -181,14 +182,17 @@ private fun Project.forceArtifacts() =
                 log { "Forced the version of `$artifact` in " + this@all.diagSuffix(project) }
             }
 
-            fun forceAll(artifacts: Iterable<String>) = artifacts.forEach { artifact ->
+            fun forceAll(artifacts: Map<String, String>) = artifacts.values.forEach { artifact ->
                 forceWithLogging(artifact)
             }
 
             if (!isDetekt) {
-                forceAll(Kotlin.artifacts.values)
-                forceAll(Kotlin.StdLib.artifacts.values)
-                forceAll(Coroutines.artifacts.values)
+                forceAll(Kotlin.artifacts)
+                forceAll(Kotlin.StdLib.artifacts)
+                forceAll(Coroutines.artifacts)
+                forceAll(JUnit.Jupiter.artifacts) /*
+                    for configurations like `testFixturesCompileProtoPath`.
+                 */
             }
         }
     }
