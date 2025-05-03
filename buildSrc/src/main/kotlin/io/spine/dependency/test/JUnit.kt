@@ -28,11 +28,10 @@ package io.spine.dependency.test
 
 import io.spine.dependency.Dependency
 import io.spine.dependency.DependencyWithBom
-import io.spine.dependency.withVersion
 
 // https://junit.org/junit5/
 @Suppress("unused", "ConstPropertyName")
-object JUnit : DependencyWithBom {
+object JUnit : DependencyWithBom() {
 
     override val version = "5.12.2"
     override val group: String = "org.junit"
@@ -77,7 +76,7 @@ object JUnit : DependencyWithBom {
     @Deprecated("Use JUnit.Jupiter.params instead", ReplaceWith("JUnit.Jupiter.params"))
     val params = "org.junit.jupiter:junit-jupiter-params:$version"
 
-    object Jupiter : Dependency {
+    object Jupiter : Dependency() {
         override val version = JUnit.version
         override val group = "org.junit.jupiter"
         private const val infix = "junit-jupiter"
@@ -90,16 +89,15 @@ object JUnit : DependencyWithBom {
         @Deprecated("Please use `[Jupiter.run { artifacts[api] }` instead.")
         val apiArtifact = "$api:$version"
 
-        override val artifacts: Map<String, String> =
-            listOf(api, params, engine).withVersion(version)
+        override val modules = listOf(api, params, engine)
     }
 
     /**
      * The same as [Jupiter.artifacts].
      */
-    override val artifacts: Map<String, String> = Jupiter.artifacts
+    override val modules = Jupiter.modules
 
-    object Platform : Dependency {
+    object Platform : Dependency() {
 
         /**
          * The version of the platform is defined by JUnit BOM.
@@ -116,7 +114,6 @@ object JUnit : DependencyWithBom {
         val engine = "$group:$infix-engine"
         val suiteApi = "$group:$infix-suite-api"
 
-        override val artifacts: Map<String, String> =
-            listOf(commons, launcher, engine, suiteApi).withVersion(version)
+        override val modules = listOf(commons, launcher, engine, suiteApi)
     }
 }

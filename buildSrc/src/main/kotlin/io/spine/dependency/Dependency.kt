@@ -26,15 +26,45 @@
 
 package io.spine.dependency
 
-interface Dependency {
-    val version: String
-    val group: String
-    val artifacts: Map<String, String>
+/**
+ * A dependency is a software component we use in a project.
+ *
+ * It could be a library, a set of libraries, or a development tool
+ * that participates in a build.
+ */
+abstract class Dependency {
+
+    /**
+     * The version of the dependency in terms of Maven coordinates.
+     */
+    abstract val version: String
+
+    /**
+     * The group of the dependency in terms of Maven coordinates.
+     */
+    abstract val group: String
+
+    /**
+     * The modules of the dependency that we use directly or
+     * transitively in our projects.
+     */
+    abstract val modules: List<String>
+
+    /**
+     * The [modules] given with the [version].
+     */
+    final val artifacts: Map<String, String> by lazy {
+        modules.associateWith { "$it:$version" }
+    }
 }
 
-interface DependencyWithBom : Dependency {
-    val bom: String
+/**
+ * A dependency which declares a Maven BOM.
+ *
+ * @see io.spine.dependency.boms.Boms
+ * @see io.spine.dependency.boms.BomsPlugin
+ */
+abstract class DependencyWithBom : Dependency() {
+    abstract val bom: String
 }
 
-internal fun List<String>.withVersion(version: String): Map<String, String> =
-    associateWith { "$it:$version" }

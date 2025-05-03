@@ -27,14 +27,13 @@
 package io.spine.dependency.kotlinx
 
 import io.spine.dependency.DependencyWithBom
-import io.spine.dependency.withVersion
 
 /**
  * Kotlin Coroutines.
  *
  * @see <a href="https://github.com/Kotlin/kotlinx.coroutines">GitHub project</a>
  */
-object Coroutines : DependencyWithBom {
+object Coroutines : DependencyWithBom() {
     override val group = KotlinX.group
     override val version = "1.10.2"
 
@@ -51,6 +50,5 @@ object Coroutines : DependencyWithBom {
     val test = "$group:$infix-test"
     val testJvm = "$group:$infix-test-jvm"
 
-    override val artifacts =
-        listOf(core, coreJvm, jdk7, jdk8, debug, test, testJvm).withVersion(version)
+    override val modules = listOf(core, coreJvm, jdk7, jdk8, debug, test, testJvm)
 }

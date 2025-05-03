@@ -28,12 +28,11 @@ package io.spine.dependency.lib
 
 import io.spine.dependency.Dependency
 import io.spine.dependency.DependencyWithBom
-import io.spine.dependency.withVersion
 
 // https://github.com/JetBrains/kotlin
 // https://github.com/Kotlin
 @Suppress("unused", "ConstPropertyName")
-object Kotlin : DependencyWithBom {
+object Kotlin : DependencyWithBom() {
 
     /**
      * This is the version of Kotlin we use for writing code which does not
@@ -62,7 +61,7 @@ object Kotlin : DependencyWithBom {
 
     val scriptRuntime = "$group:kotlin-script-runtime"
 
-    object StdLib : Dependency {
+    object StdLib : Dependency() {
         override val version = runtimeVersion
         override val group = Kotlin.group
 
@@ -72,7 +71,7 @@ object Kotlin : DependencyWithBom {
         val jdk7 = "$group:$infix-jdk7"
         val jdk8 = "$group:$infix-jdk8"
 
-        override val artifacts = listOf(itself, common, jdk7, jdk8).withVersion(version)
+        override val modules = listOf(itself, common, jdk7, jdk8)
     }
 
     @Deprecated("Please use `StdLib.itself` instead.", ReplaceWith("StdLib.itself"))
@@ -92,9 +91,9 @@ object Kotlin : DependencyWithBom {
     val testJUnit5 = "$group:kotlin-test-junit5"
 
     /**
-     * The artifacts that do not belong to [StdLib].
+     * The modules our interest that do not belong to [StdLib].
      */
-    override val artifacts = listOf(reflect, testJUnit5).withVersion(runtimeVersion)
+    override val modules = listOf(reflect, testJUnit5)
 
     @Deprecated(message = "Please use `GradlePlugin.api` instead.", ReplaceWith("GradlePlugin.api"))
     val gradlePluginApi = "$group:kotlin-gradle-plugin-api"
@@ -108,7 +107,7 @@ object Kotlin : DependencyWithBom {
         val embeddable = "$group:kotlin-compiler-embeddable:$embeddedVersion"
     }
 
-    object GradlePlugin : Dependency {
+    object GradlePlugin : Dependency() {
         override val version = runtimeVersion
         override val group = Kotlin.group
 
@@ -116,6 +115,6 @@ object Kotlin : DependencyWithBom {
         val lib = "$group:kotlin-gradle-plugin:$version"
         val model = "$group:kotlin-gradle-model:$version"
 
-        override val artifacts = listOf(api, lib, model).withVersion(version)
+        override val modules = listOf(api, lib, model)
     }
 }

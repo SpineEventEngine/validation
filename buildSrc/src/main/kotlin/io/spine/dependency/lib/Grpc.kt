@@ -27,11 +27,10 @@
 package io.spine.dependency.lib
 
 import io.spine.dependency.DependencyWithBom
-import io.spine.dependency.withVersion
 
 // https://github.com/grpc/grpc-java
 @Suppress("unused", "ConstPropertyName")
-object Grpc : DependencyWithBom {
+object Grpc : DependencyWithBom() {
 
     override val version = "1.72.0"
     override val group = "io.grpc"
@@ -49,7 +48,7 @@ object Grpc : DependencyWithBom {
     val netty          = "$group:grpc-netty"
     val nettyShaded    = "$group:grpc-netty-shaded"
 
-    override val artifacts = listOf(
+    override val modules = listOf(
         api,
         auth,
         core,
@@ -61,7 +60,7 @@ object Grpc : DependencyWithBom {
         protobufLite,
         netty,
         nettyShaded
-    ).withVersion(version)
+    )
 
 
     object ProtocPlugin {
