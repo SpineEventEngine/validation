@@ -6,15 +6,17 @@
 
 This repository contains Spine Validation library.
 
-The library brings data validation into Protobuf messages.
+The library brings data-validation directly into your Protobuf messages. 
 
-As for now, only the Java target is supported.
+Currently, only the Java target is supported.
 
-### Overview
+## Prerequisites
 
-The library allows declaring validation constraints right in a Protobuf message definition.
+This library is built with Java 17.
 
-An example of the message with several validation constraints:
+## Validation in Action
+
+Define your validation rules right in the .proto file:
 
 ```protobuf
 import "spine/options.proto";
@@ -23,29 +25,13 @@ import "spine/time_options.proto";
 import "google/protobuf/timestamp.proto";
 
 message CardNumber {
-
     string digits = 1 [(pattern).regex = "\\d{4}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4}"];
-    
     string owner = 2 [(required) = true];
-    
     google.protobuf.Timestamp issued_at = 3 [(when).in = PAST];
 }
 ```
 
-Now the generated code of `CardNumber` contains a set of assertions in accordance 
-to the used constraints:
-
-```java
-if (getOwner().equals("")) {
-    // ...
-}
-if (!getDigits().isEmpty() && !DigitsPattern_en9N85BXqVCE4A.matcher(getDigits()).matches()) {
-    // ...
-}
-if (Timestamps.compare(getIssuedAt(), Time.currentTime()) > 0) {
-    // ...
-}
-```
+When compiled, Spine Validation injects assertions into your Java classes.
 
 The generated assertions are invoked upon building an instance of the message:
 
@@ -64,22 +50,21 @@ Also, it is possible to validate a message instance without throwing an exceptio
 var card = CardNumber.newBuilder()
     .set...()
     // ...
-    .buildPartial(); <- Builds the message instance without validation.
+    .buildPartial(); <- No validation.
 var optionalError = card.validate();
-if (optionalError.isPresent()) {
+error.ifPresent(err -> {
     // ...
 }
 ```
 
-### Options
+### Validation Options
 
 The set of validation options is defined by the following files:
 
-1. [spine-base](https://github.com/SpineEventEngine/base) defines all validation options
-   in the [options.proto](https://github.com/SpineEventEngine/base/blob/master/base/src/main/proto/spine/options.proto)
-   file, except for time-related ones.
-2. [spine-time](https://github.com/SpineEventEngine/time) defines time-related options
-   in [time_options.proto](https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto).
+1. [spine-base](https://github.com/SpineEventEngine/base) supplies the core validation options with
+   the [options.proto](https://github.com/SpineEventEngine/base/blob/master/base/src/main/proto/spine/options.proto).
+2. [spine-time](https://github.com/SpineEventEngine/time) supplies time-related options with the
+   [time_options.proto](https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto).
 
 A user should import these Proto files to be able to use options they define.
 
@@ -88,25 +73,22 @@ import "spine/options.proto"; // Brings all options, except for time-related one
 import "spine/time_options.proto"; // Brings time-related options.
 ```
 
-### Structure
+## Architecture
 
-The library is implemented as a plugin for [ProtoData](https://github.com/SpineEventEngine/ProtoData).
-Each target language is represented with a separate ProtoData plugin. Note that as for now, 
-only Java is supported.
+The library is a set of plugins for [ProtoData](https://github.com/SpineEventEngine/ProtoData).
 
-Take a look at the following diagram to grasp high-level understanding of how the library works:
+Each target language is a separate ProtoData plugin.
+
+Take a look at the following diagram to grasp a high-level library structure:
 
 ![High-level library structure overview](.github/readme/high_level_overview.png)
 
 The workflow is the following:
 
-1. A user defines Protobuf messages.
-2. Applies validation options to them.
-3. Protobuf generates Java sources for the message definitions.
-4. ProtoData begins its work.
-5. Set of policies and views build the validation model for the compiled messages.
-6. Java plugin generates the code according to the model.
-7. Java plugin injects the generated validation code into the message classes.
+- (1), (2) – a user defines Protobuf messages using validation options. 
+- (3) – Protobuf generates Java classes for the message definitions.
+- (4), (5) – set of policies and views build the validation model for the compiled messages.
+- (6), (7) – the Java plugin generates and injects validation code into the message classes.
 
 ### Key Modules
 
@@ -125,16 +107,16 @@ The workflow is the following:
   that is explained in a dedicated [section](#extending-the-library).
 
 - `java-api`: an extension point to the validation library. Contains API that can be used 
-  to implement a custom validation option support for Java.
+  to implement a custom validation option for Java.
 
 # Extending the library
 
-Users can extend the library providing their custom Protobuf options and code generation logic 
-for their processing.
+Users can extend the library providing custom Protobuf options and code generation logic for them.
 
-Below is an overview of steps that should be done to create a custom validation option:
+Below is an overview of steps that should be done to create a custom option:
 
-1. Declare a [custom](https://protobuf.dev/programming-guides/proto3/#customoptions) Protobuf option.
+1. Declare a [custom](https://protobuf.dev/programming-guides/proto3/#customoptions) option
+   within Protobuf.
 2. Provide an implementation of `io.spine.option.OptionsProvider` that registers the created option
    in `com.google.protobuf.ExtensionRegistry`. This step is required for the Java target.
 3. Implement the following entities:
@@ -154,7 +136,7 @@ Below is a workflow diagram for a typical option:
 Note that a custom option can provide several policies and views, but only one generator.
 This allows building more complex models, using more entities and events.
 
-Let's take a closer look at each of them.
+Let's take a closer look at each entity.
 
 ### Policy
 
@@ -180,7 +162,7 @@ For example:
 1. An unsupported field type.
 2. Illegal option content (invalid regex, parameter, signature).
 
-Also, the policy may just ignore the discovered option emitting `NoReaction`. A typical example
+The policy may just ignore the discovered option emitting `NoReaction`. A typical example
 of this is a boolean option, such as `(required)`, which does nothing when it is set to `false`.
 
 The desired behavior depends on the option itself.
@@ -201,13 +183,9 @@ We always have one code generator per option. The generator is asked to provide 
 applications of a specific option within the given message type.
 
 It has access to `Querying` and can query views using a filter to find ones that belong to its
-message of interest. Then, it goes through the found views providing code for each application.
+message of interest.
 
-Further, this code will be injected by the `JavaValidationPlugin`.
-
-# Java Support
-
-This library is built with Java 17.
+The generator is an entity that provides an actual implementation of the option behavior.
 
 [codecov]: https://codecov.io/gh/SpineEventEngine/validation
 [codecov-badge]: https://codecov.io/gh/SpineEventEngine/validation/branch/master/graph/badge.svg
