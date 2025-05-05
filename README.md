@@ -69,7 +69,7 @@ The set of validation options is defined by the following files:
 2. [spine-time](https://github.com/SpineEventEngine/time) supplies time-related options with the
    [time_options.proto](https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto).
 
-A user should import these Proto files to be able to use options they define.
+Users should import these Proto files to be able to use options they define.
 
 ```protobuf
 import "spine/options.proto"; // Brings all options, except for time-related ones.
@@ -88,19 +88,18 @@ Take a look at the following diagram to grasp a high-level library structure:
 
 The workflow is the following:
 
-- (1), (2) – a user defines Protobuf messages using validation options. 
-- (3) – Protobuf generates Java classes for the message definitions.
-- (4), (5) – set of policies and views build the validation model for the compiled messages.
-- (6), (7) – the Java plugin generates and injects validation code into the message classes.
+- (1), (2) – user defines Protobuf messages with validation options.
+- (3) – Protobuf compiler generates Java classes.
+- (4), (5) – policies and views build the validation model.
+- (6), (7) – Java plugin generates and injects validation code.
 
 ### Key Modules
 
-- `model`: the language-agnostic model of the built-in validation options. The model detects 
-  the applied options, verifies if they were applied correctly, and builds views of the applied
-  options. Further, these views will be queried by the code generators of the target languages.
-
-- `proto`: contains Protobuf definitions for the `:model`. They are defined outside the model,
-  so that `java-api` could also depend on them separately.
+| Module    | Description                                                          |
+|-----------|----------------------------------------------------------------------|
+| :model    | The language-agnostic model for the built-in options.                |
+| :java     | Generates and injects Java validation code based on applied options. |
+| :java-api | Extension API for custom options in Java.                            |
 
 - `java`: the Java support of the validation library. This module knows how to converse the views
   of the applied options to the actual Java code implementing these options and how to inject this
