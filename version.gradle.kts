@@ -29,4 +29,4 @@
  *
  * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.319")
+val validationVersion by extra("2.0.0-SNAPSHOT.332")
