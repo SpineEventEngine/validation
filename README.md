@@ -101,39 +101,27 @@ The workflow is the following:
 | :java     | Generates and injects Java validation code based on applied options. |
 | :java-api | Extension API for custom options in Java.                            |
 
-- `java`: the Java support of the validation library. This module knows how to converse the views
-  of the applied options to the actual Java code implementing these options and how to inject this
-  code into the Java classes of the compiled Protobuf messages. By default, it takes into account
-  only the built-in options provided by the `:model`, but it is also possible to provide custom
-  implementations of `ValidationOption` to extend the built-in options with custom ones. More on
-  that is explained in a dedicated [section](#extending-the-library).
-
-- `java-api`: an extension point to the validation library. Contains API that can be used 
-  to implement a custom validation option for Java.
-
-# Extending the library
+# Extending the Library
 
 Users can extend the library providing custom Protobuf options and code generation logic for them.
 
-Below is an overview of steps that should be done to create a custom option:
+Follow these steps to create a custom option:
 
-1. Declare a [custom](https://protobuf.dev/programming-guides/proto3/#customoptions) option
-   within Protobuf.
-2. Provide an implementation of `io.spine.option.OptionsProvider` that registers the created option
-   in `com.google.protobuf.ExtensionRegistry`. This step is required for the Java target.
+1. Declare a Protobuf [extension](https://protobuf.dev/programming-guides/proto3/#customoptions)
+   in your `.proto` file.
+2. Register it via `io.spine.option.OptionsProvider`.
 3. Implement the following entities:
-   - `MyOptionPolicy` – discovers and validates the option, optionally reporting warnings 
-     or compilation errors.
-   - `MyOptionView` – accumulates valid option applications. Each view is supposed to contain all 
-     necessary information for the code generation.
-   - `MyOptionGenerator` – generates Java code for the option applications within 
-     the compilation messages.
-4. Provide an implementation of `io.spine.validation.api.ValidationOption` passing the created
-   policy, view and generator. Further, `JavaValidationPlugin` will incorporate these entities.
+   - Policy (`MyOptionPolicy`) – discovers and validates the option.
+   - View (`MyOptionView`) – accumulates valid option applications.
+   - Generator (`MyOptionGenerator`) – generates Java code for the option.
+4. Register them via `io.spine.validation.api.ValidationOption`.
 
 Below is a workflow diagram for a typical option:
 
 ![Typical custom option](.github/readme/typical_custom_option.png)
+
+Take a look at the `:java-tests:extensions` module that contains a full example of
+implementation of the custom `(currency)` option.
 
 Note that a custom option can provide several policies and views, but only one generator.
 This allows building more complex models, using more entities and events.
