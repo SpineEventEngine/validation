@@ -26,18 +26,18 @@
 
 package io.spine.test.options.required
 
-import com.google.common.base.Charsets
 import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.test.tools.validate.Citizen
-import io.spine.test.tools.validate.FieldGroup
 import io.spine.test.tools.validate.Due
+import io.spine.test.tools.validate.FieldGroup
 import io.spine.type.TypeName
 import io.spine.validate.format
 import io.spine.validation.assertions.assertInvalid
 import io.spine.validation.assertions.assertValid
+import java.nio.charset.StandardCharsets.UTF_16
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -60,7 +60,7 @@ internal class RequireITest {
     fun `incomplete group causes a violation`() {
         val invalidMessage = FieldGroup.newBuilder()
             .setA1("a1")
-            .setB2(ByteString.copyFrom("b2", Charsets.UTF_16))
+            .setB2(ByteString.copyFrom("b2", UTF_16))
         assertInvalidWithParam(invalidMessage, "a1 & a2 | b1 & b2")
     }
 

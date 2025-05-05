@@ -26,7 +26,7 @@
 
 package io.spine.test.options.required
 
-import com.google.common.truth.Truth8.assertThat
+import com.google.common.truth.Truth.assertThat
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.optional.shouldBePresent
 import io.spine.test.tools.validate.Singulars

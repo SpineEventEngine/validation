@@ -26,10 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.dependency.lib.Grpc
-import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.KotlinPoet
-import io.spine.dependency.lib.KotlinX
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
@@ -38,10 +35,10 @@ import io.spine.dependency.local.Spine
 import io.spine.dependency.local.ToolBase
 import io.spine.gradle.publish.PublishingRepos
 import io.spine.gradle.publish.spinePublishing
+import io.spine.gradle.repo.standardToSpineSdk
 import io.spine.gradle.report.coverage.JacocoConfig
 import io.spine.gradle.report.license.LicenseReporter
 import io.spine.gradle.report.pom.PomGenerator
-import io.spine.gradle.standardToSpineSdk
 
 plugins {
     idea
@@ -103,16 +100,7 @@ allprojects {
                 CoreJava.server,
                 ToolBase.lib,
                 ToolBase.pluginBase,
-                Grpc.api,
-                Grpc.context,
-                Grpc.core,
-                Grpc.protobuf,
-                Grpc.stub,
-                Kotlin.stdLibJdk7,
                 KotlinPoet.lib,
-                KotlinX.Coroutines.core,
-                KotlinX.Coroutines.coreJvm,
-                KotlinX.Coroutines.jdk8
             )
         }
     }
