@@ -4,11 +4,18 @@
 
 # Spine Validation
 
-This repository contains Spine Validation library.
+This repository contains the Spine Validation library.
 
-The library brings data-validation directly into your Protobuf messages. 
+The library brings data validation directly into your Protobuf messages. 
 
 Currently, only the Java target is supported.
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Validation in Action](#validation-in-action)
+- [Architecture](#architecture)
+- [Extending the Library](#extending-the-library)
 
 ## Prerequisites
 
@@ -31,29 +38,25 @@ message CardNumber {
 }
 ```
 
-When compiled, Spine Validation injects assertions into your Java classes.
-
-The generated assertions are invoked upon building an instance of the message:
+At build time, Spine Validation injects assertions into the generated Java classes:
 
 ```java
 var card = CardNumber.newBuilder()
-    .set...()
-    // ...
-    .build(); <- Builds and validates the message instance.
+    .setDigits("invalid")
+    .build(); <- Validates here.
 ```
 
-In case of violations, the `ValidationException` is thrown from the `build()` method.
+If any constraint is violated, a `ValidationException` is thrown from `build()`.
 
-Also, it is possible to validate a message instance without throwing an exception:
+You can also validate without throwing:
 
 ```java
 var card = CardNumber.newBuilder()
-    .set...()
-    // ...
+    .setDigits("invalid")
     .buildPartial(); <- No validation.
 var optionalError = card.validate();
 error.ifPresent(err -> {
-    // ...
+    System.out.println(err.getMessage());
 }
 ```
 
