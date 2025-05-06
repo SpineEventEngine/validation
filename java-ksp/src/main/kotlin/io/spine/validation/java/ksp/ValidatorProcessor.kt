@@ -1,5 +1,3 @@
-import com.google.devtools.ksp.gradle.KspTask
-
 /*
  * Copyright 2025, TeamDev. All rights reserved.
  *
@@ -26,36 +24,34 @@ import com.google.devtools.ksp.gradle.KspTask
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    id("com.google.devtools.ksp")
-}
+package io.spine.validation.java.ksp
 
-dependencies {
-    ksp(project(":java-ksp"))
-    protoData(project(":java"))
-    implementation(project(":java-api"))
-}
+import com.google.devtools.ksp.processing.Resolver
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import io.spine.validation.api.Validator
+import java.io.File
 
-protoData {
-    plugins(
-        "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.protodata.java.style.JavaCodeStyleFormatterPlugin"
-    )
-}
+internal class ValidatorProcessor : SymbolProcessor {
 
-tasks.withType<KspTask> {
-    // make sure stdout (println) appears at INFO level
-    logging.captureStandardOutput(LogLevel.INFO)
-}
+    override fun process(resolver: Resolver): List<KSAnnotated> {
+        val file = File("/Users/yevhenii/Projects/Spine/validation-master/validator-debug.log")
 
-// Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
-// on missing explicit dependency.
-project.afterEvaluate {
-    val launchProtoData by tasks.getting
-    val kspKotlin by tasks.getting {
-        dependsOn(launchProtoData)
-    }
-    val compileKotlin by tasks.getting {
-        dependsOn(kspKotlin)
+        // Discover symbols annotated with io.spine.validation.api.Validator
+        val symbols = resolver.getSymbolsWithAnnotation(Validator::class.qualifiedName!!)
+            .filterIsInstance<KSClassDeclaration>()
+
+        if (!symbols.iterator().hasNext()) {
+            file.appendText("Not found any @Validator\n")
+            return emptyList()
+        }
+
+        symbols.forEach { ksClass ->
+            file.appendText("Found @Validator: ${ksClass.qualifiedName!!.getShortName()}\n")
+        }
+
+        // Return an empty list: no deferred symbols
+        return emptyList()
     }
 }
