@@ -26,8 +26,9 @@
 
 package io.spine.validation.test
 
-import com.google.protobuf.Timestamp
-import com.google.protobuf.util.Timestamps
+import com.google.protobuf.DescriptorProtos.FileDescriptorSet
+import com.google.protobuf.fileDescriptorProto
+import com.google.protobuf.fileDescriptorSet
 import io.spine.base.fieldPath
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.constraintViolation
@@ -35,21 +36,21 @@ import io.spine.validate.templateString
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 
-@Validator(Timestamp::class)
-public class TimestampValidator : MessageValidator<Timestamp> {
+@Validator(FileDescriptorSet::class)
+public class FileDescriptorSetValidator : MessageValidator<FileDescriptorSet> {
 
-    override fun validate(message: Timestamp): List<ConstraintViolation> {
-        if (message == ValidTimestamp) {
+    override fun validate(message: FileDescriptorSet): List<ConstraintViolation> {
+        if (message == ValidSet) {
             return emptyList()
         }
 
         val violation = constraintViolation {
             this.message = templateString {
-                withPlaceholders = "Invalid timestamp."
+                withPlaceholders = "Invalid file descriptor set."
             }
-            typeName = Timestamp.getDescriptor().name
+            typeName = FileDescriptorSet.getDescriptor().name
             fieldPath = fieldPath {
-                fieldName.add("seconds")
+                fieldName.add("file")
             }
         }
 
@@ -59,8 +60,10 @@ public class TimestampValidator : MessageValidator<Timestamp> {
     public companion object {
 
         /**
-         * The [TimestampValidator] passes only this instance as valid.
+         * The [FileDescriptorSetValidator] passes only this instance as valid.
          */
-        public val ValidTimestamp: Timestamp = Timestamps.fromMillis(893755250000L)
+        public val ValidSet: FileDescriptorSet = fileDescriptorSet {
+            file.add(fileDescriptorProto {  })
+        }
     }
 }
