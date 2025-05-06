@@ -28,8 +28,7 @@ package io.spine.validation.api
 
 import com.google.protobuf.Message
 import io.spine.annotation.SPI
-import io.spine.validate.ValidationError
-import java.util.*
+import io.spine.validate.ConstraintViolation
 
 /**
  * Defines a validator for Protobuf messages of type [M].
@@ -46,5 +45,5 @@ public interface MessageValidator<M : Message> {
      *
      * @return an error or {@link Optional#empty()} if no violations found
      */
-    public fun validate(message: M): Optional<ValidationError>
+    public fun validate(message: M): List<ConstraintViolation>
 }
