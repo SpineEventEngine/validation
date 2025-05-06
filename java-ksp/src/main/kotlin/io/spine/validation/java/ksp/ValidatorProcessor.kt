@@ -24,9 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.333")
+package io.spine.validation.java.ksp
+
+import com.google.devtools.ksp.processing.Resolver
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import io.spine.validation.api.Validator
+import java.io.File
+
+internal class ValidatorProcessor : SymbolProcessor {
+
+    override fun process(resolver: Resolver): List<KSAnnotated> {
+        val file = File("/Users/yevhenii/Projects/Spine/validation-master/validator-debug.log")
+
+        // Discover symbols annotated with io.spine.validation.api.Validator
+        val symbols = resolver.getSymbolsWithAnnotation(Validator::class.qualifiedName!!)
+            .filterIsInstance<KSClassDeclaration>()
+
+        if (!symbols.iterator().hasNext()) {
+            file.appendText("Not found any @Validator\n")
+            return emptyList()
+        }
+
+        symbols.forEach { ksClass ->
+            file.appendText("Found @Validator: ${ksClass.qualifiedName!!.getShortName()}\n")
+        }
+
+        // Return an empty list: no deferred symbols
+        return emptyList()
+    }
+}

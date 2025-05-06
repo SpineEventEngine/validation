@@ -24,9 +24,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.333")
+package io.spine.validation.test
+
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
+import io.spine.base.fieldPath
+import io.spine.validate.ConstraintViolation
+import io.spine.validate.constraintViolation
+import io.spine.validate.templateString
+import io.spine.validation.api.MessageValidator
+import io.spine.validation.api.Validator
+
+@Validator(Timestamp::class)
+public class TimestampValidator : MessageValidator<Timestamp> {
+
+    override fun validate(message: Timestamp): List<ConstraintViolation> {
+        if (message == ValidTimestamp) {
+            return emptyList()
+        }
+
+        val violation = constraintViolation {
+            this.message = templateString {
+                withPlaceholders = "Invalid timestamp."
+            }
+            typeName = Timestamp.getDescriptor().name
+            fieldPath = fieldPath {
+                fieldName.add("seconds")
+            }
+        }
+
+        return listOf(violation)
+    }
+
+    public companion object {
+
+        /**
+         * The [TimestampValidator] passes only this instance as valid.
+         */
+        public val ValidTimestamp: Timestamp = Timestamps.fromMillis(893755250000L)
+    }
+}

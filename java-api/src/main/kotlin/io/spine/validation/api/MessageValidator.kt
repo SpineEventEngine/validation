@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,31 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+package io.spine.validation.api
+
+import com.google.protobuf.Message
+import io.spine.annotation.SPI
+import io.spine.validate.ConstraintViolation
+
+/**
+ * Defines a validator for Protobuf messages of type [M].
+ *
+ * Implementations should perform domain-specific validation on the given message.
+ *
+ * @param M the type of Protobuf [Message] being validated.
+ */
+@SPI
+public interface MessageValidator<M : Message> {
+
+    /**
+     * Validates the given [message].
+     *
+     * @return an error or {@link Optional#empty()} if no violations found
+     */
+    public fun validate(message: M): List<ConstraintViolation>
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-ksp",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-    ":java-tests:validator"
-)
