@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,22 +23,15 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.test.tools.validate;
+dependencies {
+    protoData(project(":java"))
+    implementation(project(":java-api"))
+}
 
-import "spine/options.proto";
-
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.test.tools.validate";
-option java_outer_classname = "WhenProto";
-option java_multiple_files = true;
-
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/descriptor.proto";
-
-message ValidatorDescriptors {
-    string set_name = 1 [(pattern).regex = "^[A-Za-z ]+\\$"];
-    google.protobuf.FileDescriptorSet set = 2 [(required) = true];
-    google.protobuf.Timestamp created_at = 3;
+protoData {
+    plugins(
+        "io.spine.validation.java.JavaValidationPlugin",
+        "io.spine.protodata.java.style.JavaCodeStyleFormatterPlugin"
+    )
 }
