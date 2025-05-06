@@ -31,7 +31,6 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.reflect.KClass
 
-
 /**
  * Marks the class as a message validator.
  */
