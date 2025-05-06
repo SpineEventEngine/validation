@@ -6,12 +6,15 @@
 
 The library brings data validation directly into your Protobuf messages.
 
-### Why Use
+### Why
 
-Protobuf messages are defined using a language that lacks built-in mechanisms for enforcing 
-domain-specific rules at runtime. As a result, developers must manually insert validation logic
-or make explicit calls to a separate API to ensure message integrity, which can be error-prone 
-and scattered across codebases.
+While Protobuf provides a structured way to define data schemas, it does not include built-in 
+mechanisms for enforcing domain-specific rules at runtime. Without validation, invalid or 
+inconsistent data can slip through, leading to subtle bugs and potential system failures.
+
+Typically, developers address this by manually adding validation logic in application code
+or by invoking separate validation APIs. This ad-hoc approach can be error-prone and often 
+results in duplicated, hard-to-maintain code scattered across the codebase.
 
 ### How It Works
 
