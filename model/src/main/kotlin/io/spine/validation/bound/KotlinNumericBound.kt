@@ -26,6 +26,8 @@
 
 package io.spine.validation.bound
 
+import io.spine.base.FieldPath
+import io.spine.base.fieldPath
 import io.spine.protodata.Compilation
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
@@ -43,6 +45,8 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
+import io.spine.protodata.type.resolve
+import io.spine.validation.bound.BoundFieldSupport.numericPrimitives
 
 /**
  * One-to-one Kotlin representation of [NumericBound].
@@ -74,6 +78,11 @@ internal data class KotlinNumericBound(
             is Long -> value.compareTo(otherValue as Long)
             is UInt -> value.compareTo(otherValue as UInt)
             is ULong -> value.compareTo(otherValue as ULong)
+
+            // Comparing numeric bounds that reference a field value makes no sense.
+            // Always report they are equal, so that `(range)` don't handle them individually.
+            is FieldPath -> 0
+
             else -> error(
                 "Illegal comparison of numeric bound with unsupported" +
                         " value type: `${value::class}`."
@@ -89,16 +98,18 @@ internal fun KotlinNumericBound.toProto(): NumericBound {
     val builder = NumericBound.newBuilder()
         .setExclusive(exclusive)
     when (value) {
-        is Float -> builder.setFloatValue(value)
-        is Double -> builder.setDoubleValue(value)
         is Int -> builder.setInt32Value(value)
+        is Double -> builder.setDoubleValue(value)
         is Long -> builder.setInt64Value(value)
+        is Float -> builder.setFloatValue(value)
 
         // The resulting `int` value will have the same binary representation as `UInt` value.
         is UInt -> builder.setUint32Value(value.toInt())
 
         // The resulting `long` value will have the same binary representation as `ULong` value.
         is ULong -> builder.setUint64Value(value.toLong())
+
+        is FieldPath -> builder.setFieldValue(value)
 
         else -> error(
             "Cannot convert `KotlinNumericBound` to `NumericBound` due to unexpected" +
@@ -125,6 +136,22 @@ internal fun BoundContext.checkNumericBound(
     value: String,
     exclusive: Boolean
 ): KotlinNumericBound {
+    Compilation.check(value.isNotEmpty(), file, field.span) {
+        "The `($optionName)` option could not parse the bound value specified for" +
+                " `${field.qualifiedName}` field because it is empty. Please provide either" +
+                " a numeric value or a field reference."
+    }
+    return if (value.first().isLetter()) {
+        checkNumericField(value, exclusive)
+    } else {
+        checkNumericValue(value, exclusive)
+    }
+}
+
+private fun BoundContext.checkNumericValue(
+    value: String,
+    exclusive: Boolean
+): KotlinNumericBound {
     if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
         Compilation.check(FLOAT.matches(value), file, field.span) {
             "The `($optionName)` option could not parse the `$value` bound value specified for" +
@@ -138,6 +165,7 @@ internal fun BoundContext.checkNumericBound(
                     " an integer number. Examples: `123`, `-567823`."
         }
     }
+
     val number = when (primitiveType) {
         TYPE_FLOAT -> value.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
         TYPE_DOUBLE -> value.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
@@ -147,12 +175,42 @@ internal fun BoundContext.checkNumericBound(
         TYPE_UINT64, TYPE_FIXED64 -> value.toULongOrNull()
         else -> unexpectedPrimitiveType(primitiveType)
     }
+
     Compilation.check(number != null, file, field.span) {
         "The `($optionName)` option could not parse the `$value` bound value specified for" +
                 " `${field.qualifiedName}` field. The value is out of range for the field" +
                 " type `${field.type.name}` the option is applied to."
     }
+
     return KotlinNumericBound(number!!, exclusive)
+}
+
+private fun BoundContext.checkNumericField(
+    fieldPath: String,
+    exclusive: Boolean
+): KotlinNumericBound {
+    val boundFieldPath = fieldPath {
+        fieldName.addAll(fieldPath.split("."))
+    }
+
+    val boundField = try {
+        typeSystem.resolve(boundFieldPath, messageType)
+    } catch (e: IllegalStateException) {
+        Compilation.error(file, field.span) {
+            "The `($optionName)` option could not parse the `$fieldPath` field path specified" +
+                    " for `${field.qualifiedName}` field. Please make sure the provided field" +
+                    " path is valid: `${e.message}`."
+        }
+    }
+
+    val boundFieldType = boundField.type.primitive
+    Compilation.check(boundFieldType in numericPrimitives, file, field.span) {
+        "The field `${boundField.qualifiedName}` cannot be used as a bound value `${fieldPath}`" +
+                " for the `($optionName)` option due to its type `${boundFieldType.name}`." +
+                " Only singular numeric fields are supported."
+    }
+
+    return KotlinNumericBound(boundFieldPath, exclusive)
 }
 
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =

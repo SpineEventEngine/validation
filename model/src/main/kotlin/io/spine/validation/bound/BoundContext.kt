@@ -28,7 +28,9 @@ package io.spine.validation.bound
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
+import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.PrimitiveType
+import io.spine.protodata.type.TypeSystem
 import io.spine.validation.RANGE
 
 /**
@@ -39,6 +41,8 @@ import io.spine.validation.RANGE
  */
 internal open class BoundContext(
     val optionName: String,
+    val typeSystem: TypeSystem,
+    val messageType: MessageType,
     val primitiveType: PrimitiveType,
     val field: Field,
     val file: File
@@ -52,7 +56,9 @@ internal open class BoundContext(
  */
 internal class RangeContext(
     val range: String,
+    typeSystem: TypeSystem,
+    messageType: MessageType,
     primitiveType: PrimitiveType,
     field: Field,
     file: File
-) : BoundContext(RANGE, primitiveType, field, file)
+) : BoundContext(RANGE, typeSystem, messageType, primitiveType, field, file)

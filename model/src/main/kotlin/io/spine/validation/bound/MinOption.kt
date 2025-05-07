@@ -70,10 +70,11 @@ internal class MinPolicy : Policy<FieldOptionDiscovered>() {
     ): Just<MinFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, MIN)
+        val fieldType = checkFieldType(field, file, MIN)
 
         val option = event.option.unpack<MinOption>()
-        val context = BoundContext(MIN, primitiveType, field, file)
+        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
+        val context = BoundContext(MIN, typeSystem, messageType, fieldType, field, file)
         val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }

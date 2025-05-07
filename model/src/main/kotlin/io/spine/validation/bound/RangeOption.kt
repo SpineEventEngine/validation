@@ -93,10 +93,11 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, RANGE)
+        val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val context = RangeContext(option.value, primitiveType, field, file)
+        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
+        val context = RangeContext(option.value, typeSystem, messageType, fieldType, field, file)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
