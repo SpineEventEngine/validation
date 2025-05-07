@@ -71,6 +71,18 @@ internal object BoundFieldSupport {
         }
         return primitive!!
     }
+
+    /**
+     * Enumerates all numeric primitive field types.
+     */
+    internal val numericPrimitives = listOf(
+        TYPE_FLOAT, TYPE_DOUBLE,
+        TYPE_INT32, TYPE_INT64,
+        TYPE_UINT32, TYPE_UINT64,
+        TYPE_SINT32, TYPE_SINT64,
+        TYPE_FIXED32, TYPE_FIXED64,
+        TYPE_SFIXED32, TYPE_SFIXED64,
+    )
 }
 
 /**
@@ -84,12 +96,3 @@ private fun FieldType.extractPrimitive(): PrimitiveType? = when {
     isList -> list.primitive
     else -> null
 }
-
-private val numericPrimitives = listOf(
-    TYPE_FLOAT, TYPE_DOUBLE,
-    TYPE_INT32, TYPE_INT64,
-    TYPE_UINT32, TYPE_UINT64,
-    TYPE_SINT32, TYPE_SINT64,
-    TYPE_FIXED32, TYPE_FIXED64,
-    TYPE_SFIXED32, TYPE_SFIXED64,
-)

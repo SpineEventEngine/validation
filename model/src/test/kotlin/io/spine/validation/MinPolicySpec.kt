@@ -24,41 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation
 
-package spine.validation;
+import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.ast.qualifiedName
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import "spine/options.proto";
+@DisplayName("`MinPolicy` should reject the option")
+internal class MinPolicySpec : CompilationErrorTest() {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "RangeOptionSpecProto";
-option java_multiple_files = true;
-
-import "google/protobuf/timestamp.proto";
-import "spine/base/error.proto";
-
-// Provides a `(range)` field that specifies a custom error message using
-// the placeholders not supported by the option.
-message RangeWithInvalidPlaceholders {
-    int32 value = 1 [
-        (range).value = "[1 .. 10]",
-        (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
-    ];
-}
-
-// Provides a `(range)` field that specifies a non-existing field's value for the upper bound.
-message RangeWithNonExistingFieldBound {
-
-    int32 value = 1 [(range).value = "[0 .. timestamp.minutes]"];
-
-    google.protobuf.Timestamp timestamp = 2;
-}
-
-// Provides a `(range)` field that specifies a non-numeric field's value for the lower bound.
-message RangeWithNonNumericFieldBound {
-
-    int32 value = 1 [(range).value = "(error.type .. 10)"];
-
-   spine.base.Error error = 2;
+    @Test
+    fun `with empty value`() =
+        assertCompilationFails(MinWithEmptyValue::class) { field ->
+            shouldContain(MIN)
+            shouldContain(field.qualifiedName)
+            shouldContain("because it is empty")
+        }
 }

@@ -93,10 +93,11 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, RANGE)
+        val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val context = RangeContext(option.value, primitiveType, field, file)
+        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
+        val context = RangeContext(option.value, typeSystem, messageType, fieldType, field, file)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
@@ -177,7 +178,7 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")
+private val DELIMITER = Regex("""(?<=[\p{Alnum}_])\s?\.\.\s?(?=[\p{Alnum}-+_])""")
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_PATH,

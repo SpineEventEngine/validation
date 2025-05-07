@@ -87,22 +87,22 @@ private class GenerateRange(
      * the [lower] and [upper] bounds.
      */
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
-        val lowerLiteral = lower.asLiteral()
+        val lowerBound = lower.asNumberExpression()
         val lowerOperator = if (lower.exclusive) "<=" else "<"
-        val upperLiteral = upper.asLiteral()
+        val upperBound = upper.asNumberExpression()
         val upperOperator = if (upper.exclusive) ">=" else ">"
         return when (boundPrimitive) {
             UINT32_VALUE -> Expression(
-                "$IntegerClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$IntegerClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$IntegerClass.compareUnsigned($value, $lowerBound) $lowerOperator 0 ||" +
+                        "$IntegerClass.compareUnsigned($value, $upperBound) $upperOperator 0"
             )
             UINT64_VALUE -> Expression(
-                "$LongClass.compareUnsigned($value, $lowerLiteral) $lowerOperator 0 ||" +
-                        "$LongClass.compareUnsigned($value, $upperLiteral) $upperOperator 0"
+                "$LongClass.compareUnsigned($value, $lowerBound) $lowerOperator 0 ||" +
+                        "$LongClass.compareUnsigned($value, $upperBound) $upperOperator 0"
             )
             else -> Expression(
-                "$value $lowerOperator $lowerLiteral ||" +
-                        " $value $upperOperator $upperLiteral"
+                "$value $lowerOperator $lowerBound ||" +
+                        " $value $upperOperator $upperBound"
             )
         }
     }
