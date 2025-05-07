@@ -40,6 +40,8 @@ import io.spine.validation.assertions.assertValid
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+// TODO:2025-05-07:yevhenii.nadtochii: Add cases for new fixtures.
+
 @DisplayName("Number boundaries constraints should be compiled so that")
 internal class NumberConstraintsITest {
 
