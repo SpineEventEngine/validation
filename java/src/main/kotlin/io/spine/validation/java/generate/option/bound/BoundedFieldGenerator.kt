@@ -36,9 +36,9 @@ import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.field
+import io.spine.string.camelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.BoundedFieldView
@@ -63,6 +63,7 @@ import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
 import io.spine.validation.java.expression.templateString
 
 /**
@@ -167,20 +168,25 @@ internal abstract class BoundedFieldGenerator(
     ): Map<ErrorPlaceholder, Expression<String>>
 
     /**
-     * Returns a string representation of this [NumericBound].
+     * Returns a number expression for this [NumericBound].
      *
      * Note that `int` and `long` values that represent unsigned primitives are printed as is.
      * In the rendered Java code, they can become negative number constants due to overflow,
      * which is expected.
      */
-    protected fun NumericBound.asLiteral() =
+    protected fun NumericBound.asNumberExpression(): Expression<Number> =
         when (valueCase) {
-            FLOAT_VALUE -> Literal("${floatValue}F")
-            DOUBLE_VALUE -> Literal("$doubleValue")
-            INT32_VALUE -> Literal("$int32Value")
-            INT64_VALUE -> Literal("${int64Value}L")
-            UINT32_VALUE -> Literal("$uint32Value")
-            UINT64_VALUE -> Literal("$uint64Value")
+            FLOAT_VALUE -> Expression("${floatValue}F")
+            DOUBLE_VALUE -> Expression("$doubleValue")
+            INT32_VALUE -> Expression("$int32Value")
+            INT64_VALUE -> Expression("${int64Value}L")
+            UINT32_VALUE -> Expression("$uint32Value")
+            UINT64_VALUE -> Expression("$uint64Value")
+            FIELD_VALUE -> {
+                val fieldGetter = fieldValue.fieldNameList
+                    .joinToString(".") { "get${it.camelCase()}()" }
+                Expression(fieldGetter)
+            }
             else -> error(
                 "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
                         " Make sure the policy, which verified `${view::class.simpleName}`," +
