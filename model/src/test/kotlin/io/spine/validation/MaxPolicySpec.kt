@@ -24,22 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation
 
-package spine.validation;
+import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.ast.qualifiedName
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import "spine/options.proto";
+@DisplayName("`MaxPolicy` should reject the option")
+internal class MaxPolicySpec : CompilationErrorTest() {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation";
-option java_outer_classname = "RangeOptionSpecProto";
-option java_multiple_files = true;
-
-// Provides a `(range)` field that specifies a custom error message using
-// the placeholders not supported by the option.
-message RangeWithInvalidPlaceholders {
-    int32 value = 2 [
-        (range).value = "[1 .. 10]",
-        (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
-    ];
+    @Test
+    fun `with empty value`() =
+        assertCompilationFails(MaxWithEmptyValue::class) { field ->
+            shouldContain(MAX)
+            shouldContain(field.qualifiedName)
+            shouldContain("because it is empty")
+        }
 }

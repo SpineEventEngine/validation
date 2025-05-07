@@ -32,14 +32,10 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation";
-option java_outer_classname = "RangeOptionSpecProto";
+option java_outer_classname = "MinOptionSpecProto";
 option java_multiple_files = true;
 
-// Provides a `(range)` field that specifies a custom error message using
-// the placeholders not supported by the option.
-message RangeWithInvalidPlaceholders {
-    int32 value = 2 [
-        (range).value = "[1 .. 10]",
-        (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
-    ];
+// Provides a `(min)` option with no value.
+message MinWithEmptyValue {
+    int32 value = 2 [(min).value = ""];
 }

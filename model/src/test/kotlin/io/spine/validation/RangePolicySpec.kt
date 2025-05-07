@@ -29,10 +29,8 @@ package io.spine.validation
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.descriptor
 import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
@@ -152,14 +150,4 @@ internal class RangePolicySpec : CompilationErrorTest() {
             shouldInclude("[field.name, range]")
         }
     }
-}
-
-private fun CompilationErrorTest.assertCompilationFails(
-    message: KClass<out Message>,
-    errorMessageAssertions: String.(Field) -> Unit
-) {
-    val descriptor = message.descriptor
-    val error = assertCompilationFails(descriptor)
-    val field = descriptor.field("value")
-    error.message!!.errorMessageAssertions(field)
 }
