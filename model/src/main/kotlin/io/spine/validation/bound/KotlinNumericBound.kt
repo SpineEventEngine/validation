@@ -205,8 +205,8 @@ private fun BoundContext.checkNumericField(
 
     val boundFieldType = boundField.type.primitive
     Compilation.check(boundFieldType in numericPrimitives, file, field.span) {
-        "The field `${boundField.qualifiedName}` cannot be used as a bound value `${fieldPath}`" +
-                " for the `($optionName)` option due to its type `${boundFieldType.name}`." +
+        "The `($optionName)` option cannot use `${fieldPath}` field as a bound value for" +
+                " the `${field.qualifiedName}` field due to its type `${boundFieldType.name}`." +
                 " Only singular numeric fields are supported."
     }
 

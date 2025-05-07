@@ -31,7 +31,6 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -139,15 +138,30 @@ internal class RangePolicySpec : CompilationErrorTest() {
         }
 
     @Test
-    fun `with unsupported placeholders in the error message`() {
-        val message = RangeWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
+    fun `with unsupported placeholders in the error message`() =
+        assertCompilationFails(RangeWithInvalidPlaceholders::class) { field ->
             shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
             shouldContain("unsupported placeholders")
             shouldInclude("[field.name, range]")
         }
-    }
+
+    @Test
+    fun `with a non-existing field as a bound`() =
+        assertCompilationFails(RangeWithNonExistingFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("`timestamp.minutes`")
+            shouldContain("make sure the provided field path is valid")
+            println(this)
+        }
+
+    @Test
+    fun `with a non-numeric field  as a bound`() =
+        assertCompilationFails(RangeWithNonNumericFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("cannot use `error.type` field")
+            shouldContain("Only singular numeric fields are supported")
+        }
 }
