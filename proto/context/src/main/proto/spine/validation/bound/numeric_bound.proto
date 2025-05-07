@@ -35,13 +35,15 @@ option java_package = "io.spine.validation.bound";
 option java_outer_classname = "NumericBoundProto";
 option java_multiple_files = true;
 
-// A numeric value that restricts the range of numeric fields.
+import "spine/protodata/value.proto";
+
+// A numeric value or a field value that restricts the range of numeric fields.
 message NumericBound {
 
     // Whether the bound value itself should be excluded from the range.
     bool exclusive = 1;
 
-    // A numeric value itself.
+    // The bound value.
     //
     // Note that we do not cover all integer types. The remaining integers do not introduce
     // their own ranges. They introduce alternative binary representations.
@@ -56,5 +58,6 @@ message NumericBound {
         int64 int64_value = 5;
         uint32 uint32_value = 6;
         uint64 uint64_value = 7;
+        spine.protodata.Reference field_value = 8;
     }
 }
