@@ -42,6 +42,7 @@ import io.spine.validation.RANGE
 import io.spine.validation.api.expression.IntegerClass
 import io.spine.validation.api.expression.LongClass
 import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.plus
 import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode

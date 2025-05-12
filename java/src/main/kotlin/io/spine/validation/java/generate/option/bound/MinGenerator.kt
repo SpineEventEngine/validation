@@ -109,9 +109,3 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }
-
-internal operator fun Expression<String>.plus(value: String): Expression<String> =
-    plus(StringLiteral(value))
-
-internal operator fun Expression<String>.plus(value: Expression<String>): Expression<String> =
-    Expression("$this + $value")
