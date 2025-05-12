@@ -66,7 +66,8 @@ import io.spine.validation.checkPlaceholders
  * 1. The field type is supported by the option.
  * 2. Either `..` or ` .. ` is used as a range delimiter.
  * 3. Either `()` for exclusive or `[]` for inclusive bounds is used.
- * 4. The error message does not contain unsupported placeholders.
+ * 4. Both lower and upper bounds must be specified.
+ * 5. The error message does not contain unsupported placeholders.
  *
  * Conditions for number-based bounds:
  *
