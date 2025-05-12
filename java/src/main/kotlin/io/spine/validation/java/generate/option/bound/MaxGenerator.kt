@@ -87,12 +87,12 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
-        val boundExpr = bound.asNumberExpression()
+        val upperBound = bound.asNumberExpression()
         val operator = if (isExclusive) ">=" else ">"
         return when (boundPrimitive) {
-            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $boundExpr) $operator 0")
-            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $boundExpr) $operator 0")
-            else -> Expression("$value $operator $boundExpr")
+            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $upperBound) $operator 0")
+            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $upperBound) $operator 0")
+            else -> Expression("$value $operator $upperBound")
         }
     }
 

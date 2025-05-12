@@ -87,12 +87,12 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
-        val boundExpr = bound.asNumberExpression()
+        val lowerBound = bound.asNumberExpression()
         val operator = if (isExclusive) "<=" else "<"
         return when (boundPrimitive) {
-            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $boundExpr) $operator 0")
-            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $boundExpr) $operator 0")
-            else -> Expression("$value $operator $boundExpr")
+            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $lowerBound) $operator 0")
+            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $lowerBound) $operator 0")
+            else -> Expression("$value $operator $lowerBound")
         }
     }
 
