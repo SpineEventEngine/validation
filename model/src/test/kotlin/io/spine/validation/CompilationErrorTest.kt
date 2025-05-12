@@ -70,7 +70,7 @@ internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
  *
  * @param message The class of the message to compile.
  * @param fieldName The name of the field to use for assertions.
- * @param errorMessageAssertions Assertions upon the returned error message.
+ * @param errorMessageAssertions Assertions to run upon the returned error message.
  */
 internal fun CompilationErrorTest.assertCompilationFails(
     message: KClass<out Message>,
