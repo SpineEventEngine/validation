@@ -31,19 +31,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
 import io.spine.server.query.select
-import io.spine.validation.MAX
-import io.spine.validation.bound.MaxField
-import io.spine.validation.bound.NumericBound
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.stringValueOf
-import io.spine.validation.api.generate.SingleOptionCode
-import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -51,8 +39,17 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.api.expression.StringClass
+import io.spine.validation.MAX
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.bound.MaxField
 import io.spine.validation.bound.NumericBound.ValueCase
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 
 /**
  * The generator for the `(max)` option.

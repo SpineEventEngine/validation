@@ -66,7 +66,6 @@ import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
 import io.spine.validation.java.expression.templateString
 
