@@ -198,16 +198,21 @@ internal abstract class BoundedFieldGenerator(
             )
         }
 
-    // TODO:2025-05-12:yevhenii.nadtochii: Document.
-    protected fun NumericBound.stringify(specifiedValue: String): Expression<String> {
-        val specified = StringLiteral(specifiedValue)
-        val usesField = valueCase == FIELD_VALUE
+    /**
+     * If the provided [NumericBound] refers to a field, appends the field’s numeric
+     * value in parentheses.
+     *
+     * Otherwise, just returns this [String] as [Expression].
+     */
+    protected fun String.withFieldValue(bound: NumericBound): Expression<String> {
+        val specifiedBound = StringLiteral(this)
+        val usesField = bound.valueCase == FIELD_VALUE
         if (!usesField) {
-            return specified
+            return specifiedBound
         }
 
-        val fieldValue = StringClass.call<String>("valueOf", asNumberExpression())
-        return specified + " (" + fieldValue + ")"
+        val fieldValue = StringClass.call<String>("valueOf", bound.asNumberExpression())
+        return specifiedBound + " (" + fieldValue + ")"
     }
 }
 

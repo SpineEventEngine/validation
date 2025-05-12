@@ -112,18 +112,32 @@ private class GenerateRange(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> {
-        val (left, right) = view.range.split("..").map { it.trim() }
-        val leftValue = lower.stringify(left)
+    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE to StringLiteral(fieldType.name),
+        PARENT_TYPE to typeName,
+        RANGE_VALUE to withFieldValue()
+    )
+
+    /**
+     * Constructs a string [Expression] for the range literal, inserting bound
+     * field values, if any.
+     *
+     * The method splits a range string into its lower and upper parts, appending any
+     * referenced field’s actual values in parentheses, and then concatenates back
+     * these parts using the original delimiter.
+     */
+    private fun withFieldValue(): Expression<String> {
+        val (left, right) = view.range.split(DELIMITER).map { it.trim() }
+        val leftValue = left.withFieldValue(lower)
         val rightBrace = right.last().toString()
-        val rightValue = upper.stringify(right.dropLast(1)) + rightBrace
-        val rangeValue = leftValue + " .. " + rightValue
-        return mapOf(
-            FIELD_PATH to fieldPath.joinToString(),
-            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-            FIELD_TYPE to StringLiteral(fieldType.name),
-            PARENT_TYPE to typeName,
-            RANGE_VALUE to rangeValue
-        )
+        val rightValue = right.dropLast(1).withFieldValue(upper) + rightBrace
+        return leftValue + " $DELIMITER " + rightValue
     }
 }
+
+/**
+ * The range delimiter.
+ */
+private const val DELIMITER = ".."

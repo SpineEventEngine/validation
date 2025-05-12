@@ -105,7 +105,7 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MAX_VALUE to bound.stringify(view.max),
+        MAX_VALUE to view.max.withFieldValue(bound),
         MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
     )
 }

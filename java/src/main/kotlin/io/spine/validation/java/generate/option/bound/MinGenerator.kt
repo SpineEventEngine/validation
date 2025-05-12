@@ -105,7 +105,7 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MIN_VALUE to bound.stringify(view.min),
+        MIN_VALUE to view.min.withFieldValue(bound),
         MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }
