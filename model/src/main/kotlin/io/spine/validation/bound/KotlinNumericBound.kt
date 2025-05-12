@@ -52,13 +52,19 @@ import io.spine.validation.bound.BoundFieldSupport.numericPrimitives
  * One-to-one Kotlin representation of [NumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
+ *
  * It eases the implementation of parsing and comparisons for such bounds.
  * Otherwise, we would have to care for special cases with unsigned types
- * (which are just `int` and `long` in Protobuf) when parsing and comparing
- * such bounds. With this data class, Kotlin unsigned classes do it for us.
+ * (which come just as `int` and `long` from Protobuf) when parsing and comparing them.
+ *
+ * With this data class, Kotlin unsigned classes do it for us.
+ *
+ * @param value The value of this bound. It can be any implementation of [Number],
+ *   [UInt] or [ULong] (they don't extend [Number]) and [FieldPath] for field-based bounds.
+ * @param exclusive Specifies whether this bound is exclusive.
  */
 internal data class KotlinNumericBound(
-    val value: Any, // Cannot use `Number` because Kotlin's `UInt` and `ULong` are not numbers.
+    val value: Any,
     val exclusive: Boolean
 ) : Comparable<KotlinNumericBound> {
 
@@ -78,11 +84,6 @@ internal data class KotlinNumericBound(
             is Long -> value.compareTo(otherValue as Long)
             is UInt -> value.compareTo(otherValue as UInt)
             is ULong -> value.compareTo(otherValue as ULong)
-
-            // Comparing numeric bounds that reference a field value makes no sense.
-            // Always report they are equal, so that `(range)` don't handle them individually.
-            is FieldPath -> 0
-
             else -> error(
                 "Illegal comparison of numeric bound with unsupported" +
                         " value type: `${value::class}`."
@@ -122,11 +123,18 @@ internal fun KotlinNumericBound.toProto(): NumericBound {
 /**
  * Parses the given string [value] to a [KotlinNumericBound].
  *
- * This method checks the following:
+ * For number-based bounds, the method checks the following:
  *
- * 1) The provided number has `.` for floating-point fields, and does not have `.`
+ * 1) The bound value is not empty.
+ * 2) The provided number has `.` for floating-point fields, and does not have `.`
  *    for integer fields.
- * 2) The provided number fits into the range of the target field type.
+ * 3) The provided number fits into the range of the target field type.
+ *
+ * For field-based bounds:
+ *
+ * 1) The specified field path points to an existing field.
+ * 2) The field bound is not referencing the field it restricts (self-referencing).
+ * 3) The referenced field is of singular numeric type.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
@@ -142,13 +150,13 @@ internal fun BoundContext.checkNumericBound(
                 " a numeric value or a field reference."
     }
     return if (value.first().isLetter()) {
-        checkNumericField(value, exclusive)
+        checkFieldValue(value, exclusive)
     } else {
-        checkNumericValue(value, exclusive)
+        checkNumberValue(value, exclusive)
     }
 }
 
-private fun BoundContext.checkNumericValue(
+private fun BoundContext.checkNumberValue(
     value: String,
     exclusive: Boolean
 ): KotlinNumericBound {
@@ -185,7 +193,7 @@ private fun BoundContext.checkNumericValue(
     return KotlinNumericBound(number!!, exclusive)
 }
 
-private fun BoundContext.checkNumericField(
+private fun BoundContext.checkFieldValue(
     fieldPath: String,
     exclusive: Boolean
 ): KotlinNumericBound {

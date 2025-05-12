@@ -82,7 +82,7 @@ import io.spine.validation.checkPlaceholders
  * 2. The field must be of numeric type. Repeated fields are not supported.
  *    Strict consistency between target and bound fields is not required,
  *    floating-point fields can be used as bounds for integer fields and vice versa.
- * 3. The field cannot specify self as a bound.
+ * 3. The field doesn't specify self as its bound.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
