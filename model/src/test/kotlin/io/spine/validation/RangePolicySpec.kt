@@ -157,11 +157,19 @@ internal class RangePolicySpec : CompilationErrorTest() {
         }
 
     @Test
-    fun `with a non-numeric field  as a bound`() =
+    fun `with a non-numeric field as a bound`() =
         assertCompilationFails(RangeWithNonNumericFieldBound::class) { field ->
             shouldContain(RANGE)
             shouldContain(field.qualifiedName)
             shouldContain("cannot use `error.type` field")
             shouldContain("Only singular numeric fields are supported")
+        }
+
+    @Test
+    fun `with a self as a bound`() =
+        assertCompilationFails(RangeWithSelfReferencing::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("self-referencing is prohibited")
         }
 }

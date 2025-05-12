@@ -189,6 +189,12 @@ private fun BoundContext.checkNumericField(
     fieldPath: String,
     exclusive: Boolean
 ): KotlinNumericBound {
+    Compilation.check(fieldPath != field.name.value, file, field.span) {
+        "The `($optionName)` option cannot use `$fieldPath` field as a bound value for" +
+                " the `${field.qualifiedName}` because self-referencing is prohibited." +
+                " Please use other message fields."
+    }
+
     val boundFieldPath = fieldPath {
         fieldName.addAll(fieldPath.split("."))
     }
@@ -205,7 +211,7 @@ private fun BoundContext.checkNumericField(
 
     val boundFieldType = boundField.type.primitive
     Compilation.check(boundFieldType in numericPrimitives, file, field.span) {
-        "The `($optionName)` option cannot use `${fieldPath}` field as a bound value for" +
+        "The `($optionName)` option cannot use `$fieldPath` field as a bound value for" +
                 " the `${field.qualifiedName}` field due to its type `${boundFieldType.name}`." +
                 " Only singular numeric fields are supported."
     }
