@@ -153,7 +153,6 @@ internal class RangePolicySpec : CompilationErrorTest() {
             shouldContain(field.qualifiedName)
             shouldContain("`timestamp.minutes`")
             shouldContain("make sure the provided field path is valid")
-            println(this)
         }
 
     @Test
@@ -162,6 +161,15 @@ internal class RangePolicySpec : CompilationErrorTest() {
             shouldContain(RANGE)
             shouldContain(field.qualifiedName)
             shouldContain("cannot use `error.type` field")
+            shouldContain("Only singular numeric fields are supported")
+        }
+
+    @Test
+    fun `with a repeated field as a bound`() =
+        assertCompilationFails(RangeWithRepeatedFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("cannot use `error.code` field")
             shouldContain("Only singular numeric fields are supported")
         }
 
