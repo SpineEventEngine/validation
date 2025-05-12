@@ -169,7 +169,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
         assertCompilationFails(RangeWithRepeatedFieldBound::class) { field ->
             shouldContain(RANGE)
             shouldContain(field.qualifiedName)
-            shouldContain("cannot use `error.code` field")
+            shouldContain("cannot use `error_code` field")
             shouldContain("Only singular numeric fields are supported")
         }
 
