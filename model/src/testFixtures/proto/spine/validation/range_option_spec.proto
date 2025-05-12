@@ -47,7 +47,7 @@ message RangeWithInvalidPlaceholders {
     ];
 }
 
-// Provides a `(range)` field that specifies a non-existing field's value for the upper bound.
+// Provides a `(range)` field that specifies a non-existing field for the upper bound.
 message RangeWithNonExistingFieldBound {
 
     int32 value = 1 [(range).value = "[0 .. timestamp.minutes]"];
@@ -55,7 +55,7 @@ message RangeWithNonExistingFieldBound {
     google.protobuf.Timestamp timestamp = 2;
 }
 
-// Provides a `(range)` field that specifies a non-numeric field's value for the lower bound.
+// Provides a `(range)` field that specifies a non-numeric field for the lower bound.
 message RangeWithNonNumericFieldBound {
 
     int32 value = 1 [(range).value = "(error.type .. 10)"];
