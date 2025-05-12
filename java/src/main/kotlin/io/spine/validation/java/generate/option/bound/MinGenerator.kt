@@ -31,10 +31,10 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.server.query.select
 import io.spine.validation.MIN
 import io.spine.validation.bound.MinField
-import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.validation.api.expression.IntegerClass
@@ -50,6 +50,9 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.api.expression.StringClass
+import io.spine.validation.bound.NumericBound
+import io.spine.validation.bound.NumericBound.ValueCase
 
 /**
  * The generator for `(min)` option.
@@ -79,7 +82,7 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
     private val bound = view.bound
     private val isExclusive = bound.exclusive
 
-    override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
+    override val boundPrimitive: ValueCase = bound.valueCase
 
     /**
      * Returns a boolean expression that checks if the given [value] falls back
@@ -105,7 +108,13 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MIN_VALUE to StringLiteral(view.min),
+        MIN_VALUE to bound.stringify(view.min),
         MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }
+
+internal operator fun Expression<String>.plus(value: String): Expression<String> =
+    plus(StringLiteral(value))
+
+internal operator fun Expression<String>.plus(value: Expression<String>): Expression<String> =
+    Expression("$this + $value")

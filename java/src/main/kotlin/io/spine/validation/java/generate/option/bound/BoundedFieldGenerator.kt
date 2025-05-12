@@ -37,6 +37,8 @@ import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.string.camelCase
 import io.spine.type.TypeName
@@ -62,7 +64,9 @@ import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
 import io.spine.validation.java.expression.templateString
 
@@ -193,6 +197,18 @@ internal abstract class BoundedFieldGenerator(
                         " correctly filtered out unsupported field types."
             )
         }
+
+    // TODO:2025-05-12:yevhenii.nadtochii: Document.
+    protected fun NumericBound.stringify(specifiedValue: String): Expression<String> {
+        val specified = StringLiteral(specifiedValue)
+        val usesField = valueCase == FIELD_VALUE
+        if (!usesField) {
+            return specified
+        }
+
+        val fieldValue = StringClass.call<String>("valueOf", asNumberExpression())
+        return specified + " (" + fieldValue + ")"
+    }
 }
 
 private fun unsignedIntegerWarning(file: File, span: Span) =

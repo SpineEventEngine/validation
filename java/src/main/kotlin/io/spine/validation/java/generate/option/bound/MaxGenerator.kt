@@ -31,6 +31,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.server.query.select
 import io.spine.validation.MAX
 import io.spine.validation.bound.MaxField
@@ -50,6 +51,8 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.api.expression.StringClass
+import io.spine.validation.bound.NumericBound.ValueCase
 
 /**
  * The generator for the `(max)` option.
@@ -79,7 +82,7 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
     private val bound = view.bound
     private val isExclusive = bound.exclusive
 
-    override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
+    override val boundPrimitive: ValueCase = bound.valueCase
 
     /**
      * Returns a boolean expression that checks if the given [value] exceeds
@@ -105,7 +108,7 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MAX_VALUE to StringLiteral(view.max),
+        MAX_VALUE to bound.stringify(view.max),
         MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
     )
 }

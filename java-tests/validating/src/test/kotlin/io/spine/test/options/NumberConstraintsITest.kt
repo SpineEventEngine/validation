@@ -84,14 +84,14 @@ internal class NumberConstraintsITest {
     }
 
     @Test
+    @Suppress("MaxLineLength") // Long range definition.
     fun `range with field values is checked`() {
         val numberOfStudents = 21
         val targetHonors = 5L
         val targets = targetMetrics {
             honorStudents = targetHonors
         }
-        val expected = "$MUST_BELONG: " +
-                "[targets.honor_students ($targetHonors) .. number_of_students ($numberOfStudents)]"
+        val expected = "[targets.honor_students ($targetHonors) .. number_of_students ($numberOfStudents)]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
@@ -120,7 +120,7 @@ internal class NumberConstraintsITest {
         val targets = targetMetrics {
             disciplinaryIncidents = targetIncidents
         }
-        val expected =  "$MUST_BELONG: [0 .. targets.disciplinary_incidents ($targetIncidents)]"
+        val expected =  "[0 .. targets.disciplinary_incidents ($targetIncidents)]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
@@ -147,7 +147,7 @@ internal class NumberConstraintsITest {
         val targets = targetMetrics {
             averageGrade = targetGrade
         }
-        val expected =  "$MUST_BELONG: [targets.average_grade ($targetGrade) .. $maxGrade]"
+        val expected =  "[targets.average_grade ($targetGrade) .. $maxGrade]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
@@ -283,5 +283,3 @@ private fun assertViolation(message: Message.Builder, error: String) {
     violations[0] shouldNotBe null
     violations[0].message.format() shouldContain error
 }
-
-private const val MUST_BELONG = "must be within the following range:"

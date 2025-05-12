@@ -32,23 +32,23 @@ import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.select
-import io.spine.validation.RANGE
-import io.spine.validation.bound.NumericBound
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.bound.RangeField
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.stringValueOf
-import io.spine.validation.api.generate.SingleOptionCode
-import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.validation.RANGE
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.bound.NumericBound.ValueCase
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
+import io.spine.validation.bound.RangeField
 
 /**
  * The generator for `(range)` option.
@@ -80,7 +80,7 @@ private class GenerateRange(
     private val lower = view.lowerBound
     private val upper = view.upperBound
 
-    override val boundPrimitive: NumericBound.ValueCase = lower.valueCase
+    override val boundPrimitive: ValueCase = lower.valueCase
 
     /**
      * Returns a boolean expression that checks if the given [value] is within
@@ -111,11 +111,18 @@ private class GenerateRange(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        RANGE_VALUE to StringLiteral(view.range)
-    )
+    ): Map<ErrorPlaceholder, Expression<String>> {
+        val (left, right) = view.range.split("..").map { it.trim() }
+        val leftValue = lower.stringify(left)
+        val rightBrace = right.last().toString()
+        val rightValue = upper.stringify(right.dropLast(1)) + rightBrace
+        val rangeValue = leftValue + " .. " + rightValue
+        return mapOf(
+            FIELD_PATH to fieldPath.joinToString(),
+            FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+            FIELD_TYPE to StringLiteral(fieldType.name),
+            PARENT_TYPE to typeName,
+            RANGE_VALUE to rangeValue
+        )
+    }
 }
