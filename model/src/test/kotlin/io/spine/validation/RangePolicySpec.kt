@@ -166,7 +166,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
         }
 
     @Test
-    fun `with a self as a bound`() =
+    fun `with self as a bound`() =
         assertCompilationFails(RangeWithSelfReferencing::class) { field ->
             shouldContain(RANGE)
             shouldContain(field.qualifiedName)
