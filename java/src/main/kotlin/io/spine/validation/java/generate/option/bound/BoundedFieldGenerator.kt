@@ -121,9 +121,11 @@ internal abstract class BoundedFieldGenerator(
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
     private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
-        if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
-            unsignedIntegerWarning(view.file, field.span)
-        }
+        // TODO:2025-05-12:yevhenii.nadtochii: Enable reporting back when we decide upon the format.
+        //  Issue: https://github.com/SpineEventEngine/validation/issues/227.
+        // if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
+        //     unsignedIntegerWarning(view.file, field.span)
+        // }
         return CodeBlock(
             """
             if (${isOutOfBounds(value)}) {
@@ -216,6 +218,7 @@ internal abstract class BoundedFieldGenerator(
     }
 }
 
+@Suppress("unused") // https://github.com/SpineEventEngine/validation/issues/227
 private fun unsignedIntegerWarning(file: File, span: Span) =
     Compilation.warning(file, span) {
         "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
