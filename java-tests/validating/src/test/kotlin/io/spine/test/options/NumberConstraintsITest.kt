@@ -117,14 +117,15 @@ internal class NumberConstraintsITest {
     @Test
     fun `range with number and field values is checked`() {
         val targetIncidents = 3
+        val minimumIncidents = 0
         val targets = targetMetrics {
             disciplinaryIncidents = targetIncidents
         }
-        val expected =  "[0 .. targets.disciplinary_incidents ($targetIncidents)]"
+        val expected =  "[$minimumIncidents .. targets.disciplinary_incidents ($targetIncidents)]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
-                .setDisciplinaryIncidents(-1),
+                .setDisciplinaryIncidents(minimumIncidents - 1),
            expected
         )
         assertViolation(
