@@ -55,11 +55,15 @@ message SchoolClass {
 
     int32 honor_students = 2 [(range).value = "[targets.honor_students .. number_of_students]"];
 
-    int32 failing_students = 3 [(max).value = "number_of_students"];
+    int32 disciplinary_incidents = 3 [(range).value = "[0 .. targets.disciplinary_incidents]"];
 
-    float attendance_rate = 4 [(min).value = "targets.attendance_rate"];
+    double average_grade = 4 [(range).value = "[targets.average_grade .. 100.0]"];
 
-    TargetMetrics targets = 5;
+    int32 failing_students = 5 [(max).value = "number_of_students"];
+
+    float attendance_rate = 6 [(min).value = "targets.attendance_rate"];
+
+    TargetMetrics targets = 7;
 }
 
 message TargetMetrics {
@@ -67,4 +71,8 @@ message TargetMetrics {
     uint64 honor_students = 1;
 
     double attendance_rate = 2;
+
+    int32 disciplinary_incidents = 3;
+
+    float average_grade = 4;
 }

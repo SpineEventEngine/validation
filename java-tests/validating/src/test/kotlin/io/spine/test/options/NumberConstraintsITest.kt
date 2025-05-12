@@ -49,14 +49,15 @@ internal class NumberConstraintsITest {
     @Test
     fun `min field value is checked`() {
         val targetAttendance = 0.66
+        val actualAttendance = targetAttendance - 0.2
         val targets = targetMetrics {
             attendanceRate = targetAttendance
         }
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
-                .setAttendanceRate((targetAttendance - 0.2).toFloat()),
-            "must be >= targets.attendance_rate"
+                .setAttendanceRate(actualAttendance.toFloat()),
+            "must be >= targets.attendance_rate ($targetAttendance)"
         )
         assertValid(
             SchoolClass.newBuilder()
@@ -68,11 +69,12 @@ internal class NumberConstraintsITest {
     @Test
     fun `max field value is checked`() {
         val numberOfStudents = 21
+        val failingStudents = numberOfStudents + 1
         assertViolation(
             SchoolClass.newBuilder()
                 .setNumberOfStudents(numberOfStudents)
-                .setFailingStudents(numberOfStudents + 1),
-            "must be <= number_of_students"
+                .setFailingStudents(failingStudents),
+            "must be <= number_of_students ($numberOfStudents)"
         )
         assertValid(
             SchoolClass.newBuilder()
@@ -84,29 +86,84 @@ internal class NumberConstraintsITest {
     @Test
     fun `range with field values is checked`() {
         val numberOfStudents = 21
-        val targetHonorStudents = 5L
+        val targetHonors = 5L
         val targets = targetMetrics {
-            honorStudents = targetHonorStudents
+            honorStudents = targetHonors
         }
+        val expected = "$MUST_BELONG: " +
+                "[targets.honor_students ($targetHonors) .. number_of_students ($numberOfStudents)]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
                 .setNumberOfStudents(numberOfStudents)
-                .setHonorStudents((targetHonorStudents - 1).toInt()),
-            "[targets.honor_students .. number_of_students]"
+                .setHonorStudents((targetHonors - 1).toInt()),
+            expected
         )
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
                 .setNumberOfStudents(numberOfStudents)
                 .setHonorStudents(numberOfStudents + 1),
-            "[targets.honor_students .. number_of_students]"
+            expected
         )
         assertValid(
             SchoolClass.newBuilder()
                 .setTargets(targets)
                 .setNumberOfStudents(numberOfStudents)
-                .setHonorStudents(nextInt(targetHonorStudents.toInt(), numberOfStudents))
+                .setHonorStudents(nextInt(targetHonors.toInt(), numberOfStudents))
+        )
+    }
+
+    @Test
+    fun `range with number and field values is checked`() {
+        val targetIncidents = 3
+        val targets = targetMetrics {
+            disciplinaryIncidents = targetIncidents
+        }
+        val expected =  "$MUST_BELONG: [0 .. targets.disciplinary_incidents ($targetIncidents)]"
+        assertViolation(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setDisciplinaryIncidents(-1),
+           expected
+        )
+        assertViolation(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setDisciplinaryIncidents(targetIncidents + 1),
+            expected
+        )
+        assertValid(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setDisciplinaryIncidents(targetIncidents - 1)
+        )
+    }
+
+    @Test
+    fun `range with field and number values is checked`() {
+        val targetGrade = 66.6f
+        val maxGrade = 100.0
+        val targets = targetMetrics {
+            averageGrade = targetGrade
+        }
+        val expected =  "$MUST_BELONG: [targets.average_grade ($targetGrade) .. $maxGrade]"
+        assertViolation(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setAverageGrade(targetGrade - 1.0),
+            expected
+        )
+        assertViolation(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setAverageGrade(maxGrade + 1.0),
+            expected
+        )
+        assertValid(
+            SchoolClass.newBuilder()
+                .setTargets(targets)
+                .setAverageGrade(maxGrade - 1.0)
         )
     }
 
@@ -226,3 +283,5 @@ private fun assertViolation(message: Message.Builder, error: String) {
     violations[0] shouldNotBe null
     violations[0].message.format() shouldContain error
 }
+
+private const val MUST_BELONG = "must be within the following range:"
