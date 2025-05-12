@@ -60,17 +60,28 @@ import io.spine.validation.checkPlaceholders
 /**
  * Controls whether a field should be validated with the `(range)` option.
  *
- * Whenever a field marked with `(range)` option is discovered, emits
+ * Whenever a field marked with the `(range)` option is discovered, emits
  * [RangeFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. Either `..` or ` .. ` is used as a range delimiter.
  * 3. Either `()` for exclusive or `[]` for inclusive bounds is used.
- * 4. The provided number has `.` for floating-point fields, and does not have `.`
+ * 4. The error message does not contain unsupported placeholders.
+ *
+ * Conditions for number-based bounds:
+ *
+ * 1. The provided number has `.` for floating-point fields, and does not have `.`
  *    for integer fields.
- * 5. The provided bounds fit into the range of the target field type.
- * 6. The lower bound is strictly less than the upper one.
- * 7. The error message does not contain unsupported placeholders.
+ * 2. The provided number fits into the range of the target field type.
+ * 3. If both bounds are numbers, the lower bound must be strictly less than the upper one.
+ *
+ * Conditions for field-based bounds:
+ *
+ * 1. The specified field path must point to an exciting field.
+ * 2. The field must be of numeric type. Repeated fields are not supported.
+ *    Strict consistency between target and bound fields is not required,
+ *    floating-point fields can be used as bounds for integer fields and vice versa.
+ * 3. The field cannot specify self as a bound.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
@@ -106,8 +117,8 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
         val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
 
+        // Check `lower < upper` only if both bounds are numbers.
         if (lower.value !is FieldPath && upper.value !is FieldPath) {
-            // Check relation only if both values are numeric constants.
             context.checkRelation(lower, upper)
         }
 
@@ -183,6 +194,15 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
+/**
+ * Finds `..` or ` .. ` delimiter only when it is used between identifiers or numbers.
+ *
+ * Additionally, `-+_` symbols are allowed on the right side form the delimiter
+ * for the following reasons:
+ *
+ * 1. A number may begin with the minus or plus symbol.
+ * 2. A Protobuf identifier may begin with the underscore.
+ */
 private val DELIMITER = Regex("""(?<=[\p{Alnum}_])\s?\.\.\s?(?=[\p{Alnum}-+_])""")
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
