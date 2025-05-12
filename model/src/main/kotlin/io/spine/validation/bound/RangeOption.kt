@@ -26,6 +26,7 @@
 
 package io.spine.validation.bound
 
+import io.spine.base.FieldPath
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
@@ -104,7 +105,11 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
         val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
         val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
-        context.checkRelation(lower, upper)
+
+        if (lower.value !is FieldPath && upper.value !is FieldPath) {
+            // Check relation only if both values are numeric constants.
+            context.checkRelation(lower, upper)
+        }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
