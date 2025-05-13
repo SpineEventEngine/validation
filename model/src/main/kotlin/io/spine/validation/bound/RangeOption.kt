@@ -113,7 +113,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
+        val (lowerExclusive, upperExclusive) = context.checkBrackets(left, right)
         val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
         val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
 
@@ -162,7 +162,7 @@ private fun RangeBoundDetails.checkDelimiter(): String =
                     " ranges: `(0..10]`, `[0 .. 10)`."
         }
 
-private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
+private fun RangeBoundDetails.checkBrackets(lower: String, upper: String): Pair<Boolean, Boolean> {
     val lowerExclusive = when (lower.first()) {
         '(' -> true
         '[' -> false
