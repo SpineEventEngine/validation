@@ -37,5 +37,5 @@ option java_multiple_files = true;
 
 // Provides a `(max)` option with no value.
 message MaxWithEmptyValue {
-    int32 value = 2 [(max).value = ""];
+    int32 value = 1 [(max).value = ""];
 }

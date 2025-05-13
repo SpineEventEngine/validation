@@ -37,5 +37,5 @@ option java_multiple_files = true;
 
 // Provides a `(min)` option with no value.
 message MinWithEmptyValue {
-    int32 value = 2 [(min).value = ""];
+    int32 value = 1 [(min).value = ""];
 }
