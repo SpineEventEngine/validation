@@ -109,17 +109,17 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val details = RangeBoundDetails(option.value, field, fieldType, file, typeSystem)
-        val delimiter = details.checkDelimiter()
+        val metadata = RangeOptionMetadata(option.value, field, fieldType, file, typeSystem)
+        val delimiter = metadata.checkDelimiter()
 
-        val (left, right) = details.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = details.checkBrackets(left, right)
-        val lower = details.checkNumericBound(left.substring(1), lowerExclusive)
-        val upper = details.checkNumericBound(right.dropLast(1), upperExclusive)
+        val (left, right) = metadata.range.split(delimiter)
+        val (lowerExclusive, upperExclusive) = metadata.checkBrackets(left, right)
+        val lower = metadata.checkNumericBound(left.substring(1), lowerExclusive)
+        val upper = metadata.checkNumericBound(right.dropLast(1), upperExclusive)
 
         // Check `lower < upper` only if both bounds are numbers.
         if (lower.value !is FieldPath && upper.value !is FieldPath) {
-            details.checkRelation(lower, upper)
+            metadata.checkRelation(lower, upper)
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -129,7 +129,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = details.range
+            this.range = metadata.range
             lowerBound = lower.toProto()
             upperBound = upper.toProto()
             this.file = file
@@ -153,7 +153,7 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
     }
 }
 
-private fun RangeBoundDetails.checkDelimiter(): String =
+private fun RangeOptionMetadata.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
@@ -162,7 +162,10 @@ private fun RangeBoundDetails.checkDelimiter(): String =
                     " ranges: `(0..10]`, `[0 .. 10)`."
         }
 
-private fun RangeBoundDetails.checkBrackets(lower: String, upper: String): Pair<Boolean, Boolean> {
+private fun RangeOptionMetadata.checkBrackets(
+    lower: String,
+    upper: String
+): Pair<Boolean, Boolean> {
     val lowerExclusive = when (lower.first()) {
         '(' -> true
         '[' -> false
@@ -186,7 +189,10 @@ private fun RangeBoundDetails.checkBrackets(lower: String, upper: String): Pair<
     return lowerExclusive to upperExclusive
 }
 
-private fun RangeBoundDetails.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
+private fun RangeOptionMetadata.checkRelation(
+    lower: KotlinNumericBound,
+    upper: KotlinNumericBound
+) {
     Compilation.check(lower <= upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +

@@ -33,18 +33,20 @@ import io.spine.protodata.type.TypeSystem
 import io.spine.validation.RANGE
 
 /**
- * A container for auxiliary data required to parse and validate
- * a [numeric bound][KotlinNumericBound] from a string value.
+ * Protobuf metadata related to a numeric option, which restricts the allowed
+ * range of the field values.
  *
- * @param optionName The name of the option that contains the bound definition.
+ * This metadata is required to parse and validate the option value.
+ *
+ * @param optionName The name of the option.
  * @param field The field, to which the option is applied.
  * @param fieldType The field type.
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [BoundDetails.checkNumericBound]
+ * @see [NumericOptionMetadata.checkNumericBound]
  */
-internal open class BoundDetails(
+internal open class NumericOptionMetadata(
     val optionName: String,
     val field: Field,
     val fieldType: PrimitiveType,
@@ -53,24 +55,22 @@ internal open class BoundDetails(
 )
 
 /**
- * A container for auxiliary data required to parse and validate
- * a [numeric bound][KotlinNumericBound] of the `(range)` option.
+ * Protobuf metadata related to the `(range)` option.
  *
- * Introduces the [range] property to allow reporting of the originally
- * passed range definition in compilation errors.
+ * This metadata is required to parse and validate the option value.
  *
- * @param range The value of the `(range)` option as passed by a user.
+ * @param range The option value as passed by a user.
  * @param field The field, to which the option is applied.
  * @param fieldType The field type.
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [BoundDetails.checkNumericBound]
+ * @see [NumericOptionMetadata.checkNumericBound]
  */
-internal class RangeBoundDetails(
+internal class RangeOptionMetadata(
     val range: String,
     field: Field,
     fieldType: PrimitiveType,
     file: File,
     typeSystem: TypeSystem,
-) : BoundDetails(RANGE, field, fieldType, file, typeSystem)
+) : NumericOptionMetadata(RANGE, field, fieldType, file, typeSystem)
