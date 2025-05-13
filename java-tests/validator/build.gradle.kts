@@ -1,5 +1,3 @@
-import com.google.devtools.ksp.gradle.KspTask
-
 /*
  * Copyright 2025, TeamDev. All rights reserved.
  *
@@ -26,6 +24,8 @@ import com.google.devtools.ksp.gradle.KspTask
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.google.devtools.ksp.gradle.KspTask
+
 plugins {
     id("com.google.devtools.ksp")
 }
@@ -51,11 +51,11 @@ tasks.withType<KspTask> {
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
-    val launchProtoData by tasks.getting
-    val kspKotlin by tasks.getting {
-        dependsOn(launchProtoData)
-    }
-    val compileKotlin by tasks.getting {
-        dependsOn(kspKotlin)
-    }
+//    val launchProtoData by tasks.getting
+//    val kspKotlin by tasks.getting {
+//        dependsOn(launchProtoData)
+//    }
+//    val compileKotlin by tasks.getting {
+//        dependsOn(kspKotlin)
+//    }
 }
