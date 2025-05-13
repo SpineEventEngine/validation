@@ -109,17 +109,17 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val context = RangeBoundDetails(option.value, field, fieldType, file, typeSystem)
-        val delimiter = context.checkDelimiter()
+        val details = RangeBoundDetails(option.value, field, fieldType, file, typeSystem)
+        val delimiter = details.checkDelimiter()
 
-        val (left, right) = context.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = context.checkBrackets(left, right)
-        val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
-        val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
+        val (left, right) = details.range.split(delimiter)
+        val (lowerExclusive, upperExclusive) = details.checkBrackets(left, right)
+        val lower = details.checkNumericBound(left.substring(1), lowerExclusive)
+        val upper = details.checkNumericBound(right.dropLast(1), upperExclusive)
 
         // Check `lower < upper` only if both bounds are numbers.
         if (lower.value !is FieldPath && upper.value !is FieldPath) {
-            context.checkRelation(lower, upper)
+            details.checkRelation(lower, upper)
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -129,7 +129,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = context.range
+            this.range = details.range
             lowerBound = lower.toProto()
             upperBound = upper.toProto()
             this.file = file

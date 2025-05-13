@@ -140,7 +140,7 @@ internal fun KotlinNumericBound.toProto(): NumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun NumericBoundDetails.checkNumericBound(
+internal fun BoundDetails.checkNumericBound(
     bound: String,
     exclusive: Boolean
 ): KotlinNumericBound {
@@ -156,7 +156,7 @@ internal fun NumericBoundDetails.checkNumericBound(
     }
 }
 
-private fun NumericBoundDetails.checkNumberValue(
+private fun BoundDetails.checkNumberValue(
     number: String,
     exclusive: Boolean
 ): KotlinNumericBound {
@@ -193,7 +193,7 @@ private fun NumericBoundDetails.checkNumberValue(
     return KotlinNumericBound(parsed!!, exclusive)
 }
 
-private fun NumericBoundDetails.checkFieldValue(
+private fun BoundDetails.checkFieldValue(
     fieldPath: String,
     exclusive: Boolean
 ): KotlinNumericBound {

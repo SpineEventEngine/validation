@@ -42,9 +42,9 @@ import io.spine.validation.RANGE
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [NumericBoundDetails.checkNumericBound]
+ * @see [BoundDetails.checkNumericBound]
  */
-internal open class NumericBoundDetails(
+internal open class BoundDetails(
     val optionName: String,
     val field: Field,
     val fieldType: PrimitiveType,
@@ -57,10 +57,7 @@ internal open class NumericBoundDetails(
  * a [numeric bound][KotlinNumericBound] of the `(range)` option.
  *
  * Introduces the [range] property to allow reporting of the originally
- * passed range definition in compilation errors. Although the whole
- * range definition is passed to this class, usually only one bound
- * (lower or upper) is parsed at once. We store the whole definition
- * in details class for error messages, so not to confuse a user.
+ * passed range definition in compilation errors.
  *
  * @param range The value of the `(range)` option as passed by a user.
  * @param field The field, to which the option is applied.
@@ -68,7 +65,7 @@ internal open class NumericBoundDetails(
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [NumericBoundDetails.checkNumericBound]
+ * @see [BoundDetails.checkNumericBound]
  */
 internal class RangeBoundDetails(
     val range: String,
@@ -76,4 +73,4 @@ internal class RangeBoundDetails(
     fieldType: PrimitiveType,
     file: File,
     typeSystem: TypeSystem,
-) : NumericBoundDetails(RANGE, field, fieldType, file, typeSystem)
+) : BoundDetails(RANGE, field, fieldType, file, typeSystem)
