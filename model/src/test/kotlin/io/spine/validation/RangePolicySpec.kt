@@ -29,11 +29,8 @@ package io.spine.validation
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.descriptor
-import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -141,25 +138,46 @@ internal class RangePolicySpec : CompilationErrorTest() {
         }
 
     @Test
-    fun `with unsupported placeholders in the error message`() {
-        val message = RangeWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
+    fun `with unsupported placeholders in the error message`() =
+        assertCompilationFails(RangeWithInvalidPlaceholders::class) { field ->
             shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
             shouldContain("unsupported placeholders")
             shouldInclude("[field.name, range]")
         }
-    }
-}
 
-private fun CompilationErrorTest.assertCompilationFails(
-    message: KClass<out Message>,
-    errorMessageAssertions: String.(Field) -> Unit
-) {
-    val descriptor = message.descriptor
-    val error = assertCompilationFails(descriptor)
-    val field = descriptor.field("value")
-    error.message!!.errorMessageAssertions(field)
+    @Test
+    fun `with a non-existing field as a bound`() =
+        assertCompilationFails(RangeWithNonExistingFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("`timestamp.minutes`")
+            shouldContain("make sure the provided field path is valid")
+        }
+
+    @Test
+    fun `with a non-numeric field as a bound`() =
+        assertCompilationFails(RangeWithNonNumericFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("cannot use `error.type` field")
+            shouldContain("Only singular numeric fields are supported")
+        }
+
+    @Test
+    fun `with a repeated field as a bound`() =
+        assertCompilationFails(RangeWithRepeatedFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("cannot use `error_code` field")
+            shouldContain("Only singular numeric fields are supported")
+        }
+
+    @Test
+    fun `with self as a bound`() =
+        assertCompilationFails(RangeWithSelfReferencing::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("self-referencing is prohibited")
+        }
 }

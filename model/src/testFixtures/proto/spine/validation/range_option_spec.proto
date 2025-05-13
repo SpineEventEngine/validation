@@ -36,12 +36,42 @@ option java_outer_classname = "RangeOptionSpecProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
+import "spine/base/error.proto";
 
 // Provides a `(range)` field that specifies a custom error message using
 // the placeholders not supported by the option.
 message RangeWithInvalidPlaceholders {
-    int32 value = 2 [
+    int32 value = 1 [
         (range).value = "[1 .. 10]",
         (range).error_msg = "The `${field.name}` does not belong to the `${range}` range."
     ];
+}
+
+// Provides a `(range)` field that specifies a non-existent field for the upper bound.
+message RangeWithNonExistingFieldBound {
+
+    int32 value = 1 [(range).value = "[0 .. timestamp.minutes]"];
+
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+// Provides a `(range)` field that specifies a non-numeric field for the lower bound.
+message RangeWithNonNumericFieldBound {
+
+    int32 value = 1 [(range).value = "(error.type .. 10)"];
+
+   spine.base.Error error = 2;
+}
+
+// Provides a `(range)` field that specifies itself for the lower bound.
+message RangeWithSelfReferencing {
+    int32 value = 1 [(range).value = "[value .. 100]"];
+}
+
+// Provides a `(range)` field that specifies a repeated field for the lower bound.
+message RangeWithRepeatedFieldBound {
+
+    int32 value = 1 [(range).value = "(error_code .. 10)"];
+
+    repeated int32 error_code = 2;
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,56 +23,19 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 syntax = "proto3";
 
-package spine.test.tools.validate;
+package spine.validation;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.test.tools.validate";
-option java_outer_classname = "NumbersProto";
+option java_package = "io.spine.validation";
+option java_outer_classname = "MinOptionSpecProto";
 option java_multiple_files = true;
 
-message Probability {
-
-    double value = 1 [(range).value = "[0.0 .. +1.0]"];
-}
-
-message InterestRate {
-
-    float percent = 1 [(min) = {value: "0.0" exclusive: true}];
-}
-
-message Year {
-
-    uint32 day_count = 1 [(min).value = "365", (max).value = "366"];
-}
-
-message SchoolClass {
-
-    int32 number_of_students = 1;
-
-    int32 honor_students = 2 [(range).value = "[targets.honor_students .. number_of_students]"];
-
-    int32 disciplinary_incidents = 3 [(range).value = "[0 .. targets.disciplinary_incidents]"];
-
-    double average_grade = 4 [(range).value = "[targets.average_grade .. 100.0]"];
-
-    int32 failing_students = 5 [(max).value = "number_of_students"];
-
-    float attendance_rate = 6 [(min).value = "targets.attendance_rate"];
-
-    TargetMetrics targets = 7;
-}
-
-message TargetMetrics {
-
-    uint64 honor_students = 1;
-
-    double attendance_rate = 2;
-
-    int32 disciplinary_incidents = 3;
-
-    float average_grade = 4;
+// Provides a `(min)` option with no value.
+message MinWithEmptyValue {
+    int32 value = 1 [(min).value = ""];
 }

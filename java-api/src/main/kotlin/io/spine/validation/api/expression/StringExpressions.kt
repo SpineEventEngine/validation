@@ -24,9 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.api.expression
+
+import io.spine.protodata.java.Expression
+import io.spine.protodata.java.StringLiteral
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * Yields a new string [Expression] by appending the given [String]
+ * literal to this string [Expression].
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.333")
+public operator fun Expression<String>.plus(value: String): Expression<String> =
+    plus(StringLiteral(value))
+
+/**
+ * Yields a new string [Expression] by concatenating this [Expression]
+ * with another [Expression].
+ */
+public operator fun Expression<String>.plus(value: Expression<String>): Expression<String> =
+    Expression("$this + $value")

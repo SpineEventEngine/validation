@@ -24,9 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation
+
+import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.ast.qualifiedName
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+
 /**
- * The version of the Validation SDK to publish.
+ * Tests [MinPolicy][io.spine.validation.bound.MinPolicy]-specific conditions.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * [MinPolicy][io.spine.validation.bound.MinPolicy] is not extensively
+ * tested here because it largely relies on the implementation of
+ * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ *
+ * Both policies share the same mechanism of the option value parsing.
+ *
+ * @see RangePolicySpec
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.333")
+@DisplayName("`MinPolicy` should reject the option")
+internal class MinPolicySpec : CompilationErrorTest() {
+
+    @Test
+    fun `with empty value`() =
+        assertCompilationFails(MinWithEmptyValue::class) { field ->
+            shouldContain(MIN)
+            shouldContain(field.qualifiedName)
+            shouldContain("because it is empty")
+        }
+}

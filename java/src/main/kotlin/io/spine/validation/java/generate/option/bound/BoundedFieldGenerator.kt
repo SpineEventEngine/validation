@@ -36,9 +36,11 @@ import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
-import io.spine.protodata.java.Literal
 import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.protodata.java.field
+import io.spine.string.camelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.BoundedFieldView
@@ -62,7 +64,10 @@ import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.constraintViolation
+import io.spine.validation.api.expression.plus
+import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
 import io.spine.validation.java.expression.templateString
 
 /**
@@ -116,9 +121,11 @@ internal abstract class BoundedFieldGenerator(
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
     private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
-        if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
-            unsignedIntegerWarning(view.file, field.span)
-        }
+        // TODO:2025-05-12:yevhenii.nadtochii: Enable reporting back when we decide upon the format.
+        //  Issue: https://github.com/SpineEventEngine/validation/issues/227.
+        // if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
+        //     unsignedIntegerWarning(view.file, field.span)
+        // }
         return CodeBlock(
             """
             if (${isOutOfBounds(value)}) {
@@ -167,28 +174,51 @@ internal abstract class BoundedFieldGenerator(
     ): Map<ErrorPlaceholder, Expression<String>>
 
     /**
-     * Returns a string representation of this [NumericBound].
+     * Returns a number expression for this [NumericBound].
      *
      * Note that `int` and `long` values that represent unsigned primitives are printed as is.
      * In the rendered Java code, they can become negative number constants due to overflow,
      * which is expected.
      */
-    protected fun NumericBound.asLiteral() =
+    protected fun NumericBound.asNumberExpression(): Expression<Number> =
         when (valueCase) {
-            FLOAT_VALUE -> Literal("${floatValue}F")
-            DOUBLE_VALUE -> Literal("$doubleValue")
-            INT32_VALUE -> Literal("$int32Value")
-            INT64_VALUE -> Literal("${int64Value}L")
-            UINT32_VALUE -> Literal("$uint32Value")
-            UINT64_VALUE -> Literal("$uint64Value")
+            FLOAT_VALUE -> Expression("${floatValue}F")
+            DOUBLE_VALUE -> Expression("$doubleValue")
+            INT32_VALUE -> Expression("$int32Value")
+            INT64_VALUE -> Expression("${int64Value}L")
+            UINT32_VALUE -> Expression("$uint32Value")
+            UINT64_VALUE -> Expression("$uint64Value")
+            FIELD_VALUE -> {
+                val fieldGetter = fieldValue.fieldNameList
+                    .joinToString(".") { "get${it.camelCase()}()" }
+                Expression(fieldGetter)
+            }
             else -> error(
                 "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
                         " Make sure the policy, which verified `${view::class.simpleName}`," +
                         " correctly filtered out unsupported field types."
             )
         }
+
+    /**
+     * If the provided [NumericBound] refers to a field, appends the field’s numeric
+     * value in parentheses.
+     *
+     * Otherwise, just returns this [String] as [Expression].
+     */
+    protected fun String.withFieldValue(bound: NumericBound): Expression<String> {
+        val specifiedBound = StringLiteral(this)
+        val usesField = bound.valueCase == FIELD_VALUE
+        if (!usesField) {
+            return specifiedBound
+        }
+
+        val fieldValue = StringClass.call<String>("valueOf", bound.asNumberExpression())
+        return specifiedBound + " (" + fieldValue + ")"
+    }
 }
 
+@Suppress("unused") // https://github.com/SpineEventEngine/validation/issues/227
 private fun unsignedIntegerWarning(file: File, span: Span) =
     Compilation.warning(file, span) {
         "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +

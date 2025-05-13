@@ -26,6 +26,7 @@
 
 package io.spine.validation.bound
 
+import io.spine.base.FieldPath
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
@@ -59,17 +60,29 @@ import io.spine.validation.checkPlaceholders
 /**
  * Controls whether a field should be validated with the `(range)` option.
  *
- * Whenever a field marked with `(range)` option is discovered, emits
+ * Whenever a field marked with the `(range)` option is discovered, emits
  * [RangeFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. Either `..` or ` .. ` is used as a range delimiter.
  * 3. Either `()` for exclusive or `[]` for inclusive bounds is used.
- * 4. The provided number has `.` for floating-point fields, and does not have `.`
+ * 4. Both lower and upper bounds must be specified.
+ * 5. The error message does not contain unsupported placeholders.
+ *
+ * Conditions for number-based bounds:
+ *
+ * 1. The provided number has `.` for floating-point fields, and does not have `.`
  *    for integer fields.
- * 5. The provided bounds fit into the range of the target field type.
- * 6. The lower bound is strictly less than the upper one.
- * 7. The error message does not contain unsupported placeholders.
+ * 2. The provided number fits into the range of the target field type.
+ * 3. If both bounds are numbers, the lower bound must be strictly less than the upper one.
+ *
+ * Conditions for field-based bounds:
+ *
+ * 1. The specified field path must point to an exciting field.
+ * 2. The field must be of numeric type. Repeated fields are not supported.
+ *    Strict consistency between target and bound fields is not required,
+ *    floating-point fields can be used as bounds for integer fields and vice versa.
+ * 3. The field doesn't specify self as its bound.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
@@ -93,17 +106,22 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, RANGE)
+        val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val context = RangeContext(option.value, primitiveType, field, file)
+        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
+        val context = RangeContext(option.value, typeSystem, messageType, fieldType, field, file)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
         val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
         val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
         val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
-        context.checkRelation(lower, upper)
+
+        // Check `lower < upper` only if both bounds are numbers.
+        if (lower.value !is FieldPath && upper.value !is FieldPath) {
+            context.checkRelation(lower, upper)
+        }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
@@ -177,7 +195,16 @@ private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinN
     }
 }
 
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")
+/**
+ * Finds `..` or ` .. ` delimiter only when it is used between identifiers or numbers.
+ *
+ * Additionally, `-+_` symbols are allowed on the right side form the delimiter
+ * for the following reasons:
+ *
+ * 1. A number may begin with the minus or plus symbol.
+ * 2. A Protobuf identifier may begin with the underscore.
+ */
+private val DELIMITER = Regex("""(?<=[\p{Alnum}_])\s?\.\.\s?(?=[\p{Alnum}-+_])""")
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_PATH,
