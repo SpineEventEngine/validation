@@ -32,11 +32,13 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 /**
- * Please note that [MinPolicy][io.spine.validation.bound.MinPolicy]
- * is not extensively tested here because it mostly relies on implementation
- * of [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ * Tests [MinPolicy][io.spine.validation.bound.MinPolicy]-specific conditions.
  *
- * This spec contains tests specific to `(min)`.
+ * [MinPolicy][io.spine.validation.bound.MinPolicy] is not extensively
+ * tested here because it largely relies on the implementation of
+ * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ *
+ * Both policies share the same mechanism of the option value parsing.
  *
  * @see RangePolicySpec
  */
