@@ -109,8 +109,7 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
-        val context = RangeContext(option.value, typeSystem, messageType, fieldType, field, file)
+        val context = RangeBoundDetails(option.value, field, fieldType, file, typeSystem)
         val delimiter = context.checkDelimiter()
 
         val (left, right) = context.range.split(delimiter)
@@ -154,7 +153,7 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
     }
 }
 
-private fun RangeContext.checkDelimiter(): String =
+private fun RangeBoundDetails.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
             "The `($RANGE)` option could not parse the range value `$range` specified for" +
@@ -187,7 +186,7 @@ private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boo
     return lowerExclusive to upperExclusive
 }
 
-private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
+private fun RangeBoundDetails.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +

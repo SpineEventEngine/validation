@@ -121,7 +121,7 @@ internal fun KotlinNumericBound.toProto(): NumericBound {
 }
 
 /**
- * Parses the given string [value] to a [KotlinNumericBound].
+ * Parses the given raw [bound] string to a [KotlinNumericBound].
  *
  * For number-based bounds, the method checks the following:
  *
@@ -140,60 +140,60 @@ internal fun KotlinNumericBound.toProto(): NumericBound {
  *
  * @return The parsed numeric bound.
  */
-internal fun BoundContext.checkNumericBound(
-    value: String,
+internal fun NumericBoundDetails.checkNumericBound(
+    bound: String,
     exclusive: Boolean
 ): KotlinNumericBound {
-    Compilation.check(value.isNotEmpty(), file, field.span) {
+    Compilation.check(bound.isNotEmpty(), file, field.span) {
         "The `($optionName)` option could not parse the bound value specified for" +
                 " `${field.qualifiedName}` field because it is empty. Please provide either" +
                 " a numeric value or a field reference."
     }
-    return if (value.first().isLetter()) {
-        checkFieldValue(value, exclusive)
+    return if (bound.first().isLetter()) {
+        checkFieldValue(bound, exclusive)
     } else {
-        checkNumberValue(value, exclusive)
+        checkNumberValue(bound, exclusive)
     }
 }
 
-private fun BoundContext.checkNumberValue(
-    value: String,
+private fun NumericBoundDetails.checkNumberValue(
+    number: String,
     exclusive: Boolean
 ): KotlinNumericBound {
-    if (primitiveType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
-        Compilation.check(FLOAT.matches(value), file, field.span) {
-            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+    if (fieldType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
+        Compilation.check(FLOAT.matches(number), file, field.span) {
+            "The `($optionName)` option could not parse the `$number` bound value specified for" +
                     " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
         }
     } else {
-        Compilation.check(INTEGER.matches(value), file, field.span) {
-            "The `($optionName)` option could not parse the `$value` bound value specified for" +
+        Compilation.check(INTEGER.matches(number), file, field.span) {
+            "The `($optionName)` option could not parse the `$number` bound value specified for" +
                     " `${field.qualifiedName}` field. Please make sure the provided value is" +
                     " an integer number. Examples: `123`, `-567823`."
         }
     }
 
-    val number = when (primitiveType) {
-        TYPE_FLOAT -> value.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
-        TYPE_DOUBLE -> value.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
-        TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> value.toIntOrNull()
-        TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> value.toLongOrNull()
-        TYPE_UINT32, TYPE_FIXED32 -> value.toUIntOrNull()
-        TYPE_UINT64, TYPE_FIXED64 -> value.toULongOrNull()
-        else -> unexpectedPrimitiveType(primitiveType)
+    val parsed = when (fieldType) {
+        TYPE_FLOAT -> number.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_DOUBLE -> number.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> number.toIntOrNull()
+        TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> number.toLongOrNull()
+        TYPE_UINT32, TYPE_FIXED32 -> number.toUIntOrNull()
+        TYPE_UINT64, TYPE_FIXED64 -> number.toULongOrNull()
+        else -> unexpectedPrimitiveType(fieldType)
     }
 
-    Compilation.check(number != null, file, field.span) {
-        "The `($optionName)` option could not parse the `$value` bound value specified for" +
+    Compilation.check(parsed != null, file, field.span) {
+        "The `($optionName)` option could not parse the `$number` bound value specified for" +
                 " `${field.qualifiedName}` field. The value is out of range for the field" +
                 " type `${field.type.name}` the option is applied to."
     }
 
-    return KotlinNumericBound(number!!, exclusive)
+    return KotlinNumericBound(parsed!!, exclusive)
 }
 
-private fun BoundContext.checkFieldValue(
+private fun NumericBoundDetails.checkFieldValue(
     fieldPath: String,
     exclusive: Boolean
 ): KotlinNumericBound {
@@ -208,6 +208,7 @@ private fun BoundContext.checkFieldValue(
     }
 
     val boundField = try {
+        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
         typeSystem.resolve(boundFieldPath, messageType)
     } catch (e: IllegalStateException) {
         Compilation.error(file, field.span) {
