@@ -54,6 +54,7 @@ public class JavaValidationPlugin : ValidationPlugin(
     policies = customOptions.flatMap { it.policy }.toSet(),
 )
 
+@Suppress("UnusedPrivateProperty", "SwallowedException")
 private val customValidators = run {
     val className = "io.spine.validation.test.FileDescriptorSetValidator"
     val isPresent = try {
@@ -62,6 +63,7 @@ private val customValidators = run {
     } catch (e: ClassNotFoundException) {
         false
     }
+
     println("$className: $isPresent")
 
     val validators = ServiceLoader.load(MessageValidator::class.java)
