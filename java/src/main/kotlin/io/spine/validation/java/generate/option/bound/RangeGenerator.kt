@@ -135,9 +135,12 @@ private class GenerateRange(
         val rightValue = right.dropLast(1).withFieldValue(upper) + rightBrace
         return leftValue + " $DELIMITER " + rightValue
     }
-}
 
-/**
- * The range delimiter.
- */
-private const val DELIMITER = ".."
+    private companion object {
+
+        /**
+         * The range delimiter.
+         */
+        const val DELIMITER = ".."
+    }
+}
