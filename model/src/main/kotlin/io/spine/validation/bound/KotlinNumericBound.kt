@@ -232,13 +232,13 @@ private fun NumericOptionMetadata.checkFieldValue(
  * Parses this [String] to a [Float], returning null if the string is not a valid finite float.
  */
 private fun String.toFiniteFloatOrNull(): Float? =
-    toFloatOrNull()?.takeIf { !it.isInfinite() }
+    toFloatOrNull()?.takeIf { it.isFinite() }
 
 /**
  * Parses this [String] to a [Double], returning null if the string is not a valid finite double.
  */
 private fun String.toFiniteDoubleOrNull(): Double? =
-    toDoubleOrNull()?.takeIf { !it.isInfinite() }
+    toDoubleOrNull()?.takeIf { it.isFinite() }
 
 
 /**
