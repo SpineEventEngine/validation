@@ -74,7 +74,7 @@ internal class NumberConstraintsITest {
             SchoolClass.newBuilder()
                 .setNumberOfStudents(numberOfStudents)
                 .setFailingStudents(failingStudents),
-            "must be <= number_of_students ($numberOfStudents)"
+            "must be <= _number_of_students ($numberOfStudents)"
         )
         assertValid(
             SchoolClass.newBuilder()
@@ -91,7 +91,7 @@ internal class NumberConstraintsITest {
         val targets = targetMetrics {
             honorStudents = targetHonors
         }
-        val expected = "[targets.honor_students ($targetHonors) .. number_of_students ($numberOfStudents)]"
+        val expected = "[targets.honor_students ($targetHonors) .. _number_of_students ($numberOfStudents)]"
         assertViolation(
             SchoolClass.newBuilder()
                 .setTargets(targets)
