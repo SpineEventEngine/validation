@@ -149,7 +149,7 @@ internal fun NumericOptionMetadata.checkNumericBound(
                 " `${field.qualifiedName}` field because it is empty. Please provide either" +
                 " a numeric value or a field reference."
     }
-    return if (bound.first().isLetter() || bound.first() == '_') {
+    return if (bound.isFieldReference()) {
         checkFieldValue(bound, exclusive)
     } else {
         checkNumberValue(bound, exclusive)
@@ -226,6 +226,13 @@ private fun NumericOptionMetadata.checkFieldValue(
     }
 
     return KotlinNumericBound(boundFieldPath, exclusive)
+}
+
+/**
+ * Tells whether this [String] bound value contains a field reference.
+ */
+private fun String.isFieldReference() = first().run {
+    isLetter() || this == '_'
 }
 
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
