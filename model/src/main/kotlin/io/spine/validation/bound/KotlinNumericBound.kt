@@ -149,7 +149,7 @@ internal fun NumericOptionMetadata.checkNumericBound(
                 " `${field.qualifiedName}` field because it is empty. Please provide either" +
                 " a numeric value or a field reference."
     }
-    return if (bound.first().isLetter()) {
+    return if (bound.first().isLetter() || bound.first() == '_') {
         checkFieldValue(bound, exclusive)
     } else {
         checkNumberValue(bound, exclusive)
