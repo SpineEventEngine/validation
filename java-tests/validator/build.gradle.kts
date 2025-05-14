@@ -48,14 +48,10 @@ tasks.withType<KspTask> {
     logging.captureStandardOutput(LogLevel.INFO)
 }
 
-// Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
-// on missing explicit dependency.
+// ProtoData codegen needs output from `:java-ksp`.
 project.afterEvaluate {
-//    val launchProtoData by tasks.getting
-//    val kspKotlin by tasks.getting {
-//        dependsOn(launchProtoData)
-//    }
-//    val compileKotlin by tasks.getting {
-//        dependsOn(kspKotlin)
-//    }
+    val kspKotlin by tasks.getting
+    val launchProtoData by tasks.getting {
+        dependsOn(kspKotlin)
+    }
 }
