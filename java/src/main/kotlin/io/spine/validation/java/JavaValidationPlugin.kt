@@ -27,7 +27,6 @@
 package io.spine.validation.java
 
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
 import java.util.*
@@ -53,23 +52,6 @@ public class JavaValidationPlugin : ValidationPlugin(
     views = customOptions.flatMap { it.view }.toSet(),
     policies = customOptions.flatMap { it.policy }.toSet(),
 )
-
-@Suppress("UnusedPrivateProperty", "SwallowedException")
-private val customValidators = run {
-    val className = "io.spine.validation.test.FileDescriptorSetValidator"
-    val isPresent = try {
-        Class.forName(className)
-        true
-    } catch (e: ClassNotFoundException) {
-        false
-    }
-
-    println("$className: $isPresent")
-
-    val validators = ServiceLoader.load(MessageValidator::class.java)
-        .filterNotNull()
-    println("validators: $validators")
-}
 
 /**
  * Dynamically discovered instances of custom [ValidationOption]s.

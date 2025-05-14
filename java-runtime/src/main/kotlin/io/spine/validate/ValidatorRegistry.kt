@@ -37,6 +37,19 @@ public object ValidatorRegistry {
 
     private val map = mutableMapOf<Class<out Message>, MessageValidator<*>>()
 
+    init {
+        loadMessageValidators().also { println("Content of message-validators: $it") }
+            .map { it.split(":") }
+            .forEach { (validator, message) ->
+                val validatorInstance = Class.forName(validator)
+                    .getConstructor()
+                    .newInstance() as MessageValidator<Message>
+                val messageClass = Class.forName(message) as Class<Message>
+                register(messageClass, validatorInstance)
+            }
+
+    }
+
     /**
      * Registers a [validator] for the given message [clazz].
      *
@@ -72,6 +85,23 @@ public object ValidatorRegistry {
      */
     @JvmStatic
     public fun contains(clazz: Class<out Message>): Boolean = map.containsKey(clazz)
+
+    public fun size(): Int = map.size
+
+    /**
+     * Reads a file from META-INF in the classpath and returns its non-blank lines.
+     *
+     * @param name the resource path under META-INF (e.g. "message-validators")
+     */
+    private fun loadMessageValidators(name: String = "message-validators"): List<String> {
+        val resourcePath = "META-INF/$name"
+        val stream = Thread.currentThread()
+            .contextClassLoader
+            .getResourceAsStream(resourcePath)
+            ?: error("File not found: $resourcePath")
+        return stream.bufferedReader(Charsets.UTF_8)
+            .readLines()
+    }
 
     /**
      * Removes all validators from the registry.

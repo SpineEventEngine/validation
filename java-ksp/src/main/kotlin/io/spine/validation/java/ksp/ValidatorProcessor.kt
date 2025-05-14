@@ -26,32 +26,87 @@
 
 package io.spine.validation.java.ksp
 
+import com.google.devtools.ksp.processing.CodeGenerator
+import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
+import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.symbol.KSTypeReference
 import io.spine.validation.api.Validator
-import java.io.File
 
-internal class ValidatorProcessor : SymbolProcessor {
+internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : SymbolProcessor {
+
+    private val discoveredValidators = mutableSetOf<String>()
+    private val output by lazy {
+        codeGenerator.createNewFileByPath(
+            dependencies = Dependencies(aggregating = true),
+            path = "META-INF/message-validators",
+            extensionName = ""
+        ).writer()
+    }
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val file = File("/Users/yevhenii/Projects/Spine/validation-master/validator-debug.log")
+        val validators = resolver.getSymbolsWithAnnotation(validator.qualifiedName!!)
+            .filterIsInstance<KSClassDeclaration>().associateBy { kclass ->
+                val annotation = kclass.annotations.find {
+                    it.shortName.getShortName() == validator.simpleName
+                }!!
+                annotation.argumentValue()
+            }
 
-        // Discover symbols annotated with io.spine.validation.api.Validator
-        val symbols = resolver.getSymbolsWithAnnotation(Validator::class.qualifiedName!!)
-            .filterIsInstance<KSClassDeclaration>()
-
-        if (!symbols.iterator().hasNext()) {
-            file.appendText("Not found any @Validator\n")
+        if (validators.isEmpty()) {
             return emptyList()
         }
 
-        symbols.forEach { ksClass ->
-            file.appendText("Found @Validator: ${ksClass.qualifiedName!!.getShortName()}\n")
+        output.use { writer ->
+            validators.forEach { (message, validator) ->
+                val validatorName = validator.jvmName() // ?: must be class decl.
+                val messageName = message.jvmName() // ?: must be class decl
+                if (discoveredValidators.add(validatorName)) {
+                    writer.appendLine("$validatorName:$messageName")
+                }
+            }
         }
 
         // Return an empty list: no deferred symbols
         return emptyList()
+    }
+
+    /**
+     * For a KSClassDeclaration, returns the JVM-binary name.
+     * e.g. com.pkg.Outer.Inner → "com.pkg.Outer$Inner"
+     */
+    private fun KSClassDeclaration.jvmName(): String {
+        val fqn = qualifiedName!!.asString()
+        val pkg = packageName.asString()
+        // strip off the package + dot, or get the whole name if no package
+        val clsPart = if (pkg.isEmpty()) fqn else fqn.removePrefix("$pkg.")
+        val binarySimple = clsPart.replace('.', '$')
+        return if (pkg.isEmpty()) binarySimple else "$pkg.$binarySimple"
+    }
+
+    private fun KSAnnotation.argumentValue(argumentName: String = "value"): KSClassDeclaration {
+        val valueArg = arguments.firstOrNull { it.name?.asString() == argumentName }
+            ?: error("Annotation `@$shortName` has no argument named `$argumentName`.")
+
+        // the raw .value can be a KSType or a KSTypeReference
+        val kType: KSType = when (val raw = valueArg.value) {
+            is KSType -> raw
+            is KSTypeReference -> raw.resolve()
+            else -> error("Unsupported annotation parameter type: `${raw?.javaClass}`.")
+        }
+
+        // its declaration is a KSClassDeclaration
+        val declaration = kType.declaration as? KSClassDeclaration
+            ?: error("Expected a class declaration, but got `$kType`.")
+
+        return declaration
+    }
+
+    private companion object {
+        val validator = Validator::class
     }
 }

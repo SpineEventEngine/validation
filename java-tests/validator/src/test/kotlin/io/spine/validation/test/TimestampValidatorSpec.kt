@@ -24,17 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.ksp
+package io.spine.validation.test
 
-import com.google.auto.service.AutoService
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
+import io.spine.validate.ValidatorRegistry
+import org.junit.jupiter.api.Test
 
-@AutoService(SymbolProcessorProvider::class)
-public class ValidatorProcessorProvider : SymbolProcessorProvider {
+class TimestampValidatorSpec {
 
-    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return ValidatorProcessor(environment.codeGenerator)
+    @Test
+    fun test() {
+        val registrySize = ValidatorRegistry.size()
+        println("Registry size: $registrySize")
+
+        val path = "META-INF/message-validators"
+        val resources = Thread.currentThread()
+            .contextClassLoader
+            .getResources(path)
+            .toList()
+
+        println("Found ${resources.size} resource(s) at '$path':")
+        resources.forEach { url ->
+            println("  → $url")
+            println("    contents: '${url.openStream().bufferedReader().use { it.readText() }}'")
+        }
     }
 }
