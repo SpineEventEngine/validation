@@ -54,6 +54,7 @@ dependencies {
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
+    implementation(project(":java-api"))
     implementation(Base.lib)
     implementation(Logging.lib)
 
