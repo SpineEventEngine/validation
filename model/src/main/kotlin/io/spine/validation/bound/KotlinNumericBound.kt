@@ -175,8 +175,8 @@ private fun NumericOptionMetadata.checkNumberValue(
     }
 
     val parsed = when (fieldType) {
-        TYPE_FLOAT -> number.toFloatOrNull().takeIf { !"$it".contains("Infinity") }
-        TYPE_DOUBLE -> number.toDoubleOrNull().takeIf { !"$it".contains("Infinity") }
+        TYPE_FLOAT -> number.toFiniteFloatOrNull()
+        TYPE_DOUBLE -> number.toFiniteDoubleOrNull()
         TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32 -> number.toIntOrNull()
         TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64 -> number.toLongOrNull()
         TYPE_UINT32, TYPE_FIXED32 -> number.toUIntOrNull()
@@ -227,6 +227,19 @@ private fun NumericOptionMetadata.checkFieldValue(
 
     return KotlinNumericBound(boundFieldPath, exclusive)
 }
+
+/**
+ * Parses this [String] to a [Float], returning null if the string is not a valid finite float.
+ */
+private fun String.toFiniteFloatOrNull(): Float? =
+    toFloatOrNull()?.takeIf { !it.isInfinite() }
+
+/**
+ * Parses this [String] to a [Double], returning null if the string is not a valid finite double.
+ */
+private fun String.toFiniteDoubleOrNull(): Double? =
+    toDoubleOrNull()?.takeIf { !it.isInfinite() }
+
 
 /**
  * Tells whether this [String] bound value contains a field reference.
