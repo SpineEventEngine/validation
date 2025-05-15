@@ -50,6 +50,6 @@ internal class MinPolicySpec : CompilationErrorTest() {
         assertCompilationFails(MinWithEmptyValue::class) { field ->
             shouldContain(MIN)
             shouldContain(field.qualifiedName)
-            shouldContain("because it is empty")
+            shouldContain("the value is empty")
         }
 }
