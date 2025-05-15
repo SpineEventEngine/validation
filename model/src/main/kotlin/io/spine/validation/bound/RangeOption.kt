@@ -114,10 +114,12 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
 
         val (left, right) = metadata.range.split(delimiter)
         val (lowerExclusive, upperExclusive) = metadata.checkBrackets(left, right)
+        val leftWithoutBracket = left.substring(1)
+        val rightWithoutBracket = right.dropLast(1)
 
         val boundParser = NumericBoundParser(metadata)
-        val lower = boundParser.parse(left.substring(1), lowerExclusive)
-        val upper = boundParser.parse(right.dropLast(1), upperExclusive)
+        val lower = boundParser.parse(leftWithoutBracket, lowerExclusive)
+        val upper = boundParser.parse(rightWithoutBracket, upperExclusive)
 
         // Check `lower < upper` only if both bounds are numbers.
         if (lower.value !is FieldPath && upper.value !is FieldPath) {
