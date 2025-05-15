@@ -191,10 +191,7 @@ private fun RangeOptionMetadata.checkBrackets(
     return lowerExclusive to upperExclusive
 }
 
-private fun RangeOptionMetadata.checkRelation(
-    lower: KotlinNumericBound,
-    upper: KotlinNumericBound
-) {
+private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
         "The `($RANGE)` option could not parse the range value `$range` specified for" +
                 " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +

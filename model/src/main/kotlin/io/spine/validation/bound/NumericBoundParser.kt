@@ -59,7 +59,7 @@ internal class NumericBoundParser(
 ) {
 
     /**
-     * Parses the given raw [bound] value to a [KotlinNumericBound].
+     * Parses the given raw [bound] value to a [KNumericBound].
      *
      * For number-based bounds, the method checks the following:
      *
@@ -78,10 +78,7 @@ internal class NumericBoundParser(
      *
      * @return The parsed numeric bound.
      */
-    internal fun parse(
-        bound: String,
-        exclusive: Boolean
-    ): KotlinNumericBound {
+    internal fun parse(bound: String, exclusive: Boolean): KNumericBound {
         with(metadata) {
             Compilation.check(bound.isNotEmpty(), file, field.span) {
                 "The `($optionName)` option could not parse the bound value specified for" +
@@ -99,7 +96,7 @@ internal class NumericBoundParser(
     private fun NumericOptionMetadata.parseNumber(
         number: String,
         exclusive: Boolean
-    ): KotlinNumericBound {
+    ): KNumericBound {
         if (fieldType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
             Compilation.check(FLOAT.matches(number), file, field.span) {
                 "The `($optionName)` option could not parse the `$number` bound value specified" +
@@ -130,13 +127,13 @@ internal class NumericBoundParser(
                     " type `${field.type.name}` the option is applied to."
         }
 
-        return KotlinNumericBound(parsed!!, exclusive)
+        return KNumericBound(parsed!!, exclusive)
     }
 
     private fun NumericOptionMetadata.parseFieldReference(
         fieldPath: String,
         exclusive: Boolean
-    ): KotlinNumericBound {
+    ): KNumericBound {
         Compilation.check(fieldPath != field.name.value, file, field.span) {
             "The `($optionName)` option cannot use `$fieldPath` field as a bound value for" +
                     " the `${field.qualifiedName}` because self-referencing is prohibited." +
@@ -165,7 +162,7 @@ internal class NumericBoundParser(
                     " `${boundFieldType.name}`. Only singular numeric fields are supported."
         }
 
-        return KotlinNumericBound(boundFieldPath, exclusive)
+        return KNumericBound(boundFieldPath, exclusive)
     }
 
     private companion object {

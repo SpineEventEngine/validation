@@ -43,12 +43,12 @@ import io.spine.base.FieldPath
  *   [UInt] or [ULong] (they don't extend [Number]) and [FieldPath] for field-based bounds.
  * @param exclusive Specifies whether this bound is exclusive.
  */
-internal data class KotlinNumericBound(
+internal data class KNumericBound(
     val value: Any,
     val exclusive: Boolean
-) : Comparable<KotlinNumericBound> {
+) : Comparable<KNumericBound> {
 
-    override fun compareTo(other: KotlinNumericBound): Int {
+    override fun compareTo(other: KNumericBound): Int {
         val otherValue = other.value
         if (otherValue::class != value::class) {
             error(
@@ -73,9 +73,9 @@ internal data class KotlinNumericBound(
 }
 
 /**
- * Creates an instance of [NumericBound] from this [KotlinNumericBound].
+ * Creates an instance of [NumericBound] from this [KNumericBound].
  */
-internal fun KotlinNumericBound.toProto(): NumericBound {
+internal fun KNumericBound.toProto(): NumericBound {
     val builder = NumericBound.newBuilder()
         .setExclusive(exclusive)
     when (value) {
