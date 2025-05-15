@@ -23,50 +23,54 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.validate.option
 
-package io.spine.validate.option;
-
-import com.google.auto.service.AutoService;
-import com.google.common.collect.ImmutableSet;
-import com.google.errorprone.annotations.Immutable;
-import io.spine.annotation.Internal;
-
-import java.util.Set;
-
-import static com.google.common.collect.Sets.union;
+import com.google.auto.service.AutoService
+import com.google.common.collect.ImmutableSet
+import com.google.common.collect.Sets
+import com.google.errorprone.annotations.Immutable
+import io.spine.annotation.Internal
 
 /**
  * A factory of standard validating options for non-primitive types.
  */
-@AutoService(ValidatingOptionFactory.class)
+@AutoService(ValidatingOptionFactory::class)
 @Internal
 @Immutable
-public final class NonPrimitiveOptionFactory implements StandardOptionFactory {
+public class NonPrimitiveOptionFactory public constructor() : StandardOptionFactory {
 
-    private static final ImmutableSet<FieldValidatingOption<?>> STRING_OPTIONS =
-            ImmutableSet.of(Pattern.create());
-    private static final ImmutableSet<FieldValidatingOption<?>> COLLECTION_OPTIONS =
-            ImmutableSet.of(Required.create(false), Goes.create(), Distinct.create());
-    private static final ImmutableSet<FieldValidatingOption<?>> MESSAGE_OPTIONS =
-            ImmutableSet.of(new Valid());
-
-    @Override
-    public Set<FieldValidatingOption<?>> forString() {
-        return union(STRING_OPTIONS, COLLECTION_OPTIONS);
+    override fun forString(): Set<FieldValidatingOption<*>> {
+        return Sets.union<FieldValidatingOption<*>>(stringOptions, collectionOptions)
     }
 
-    @Override
-    public Set<FieldValidatingOption<?>> forByteString() {
-        return COLLECTION_OPTIONS;
+    override fun forByteString(): Set<FieldValidatingOption<*>> {
+        return collectionOptions
     }
 
-    @Override
-    public Set<FieldValidatingOption<?>> forEnum() {
-        return COLLECTION_OPTIONS;
+    override fun forEnum(): Set<FieldValidatingOption<*>> {
+        return collectionOptions
     }
 
-    @Override
-    public Set<FieldValidatingOption<?>> forMessage() {
-        return union(MESSAGE_OPTIONS, COLLECTION_OPTIONS);
+    override fun forMessage(): Set<FieldValidatingOption<*>> {
+        return Sets.union<FieldValidatingOption<*>>(messageOptions, collectionOptions)
+    }
+
+    public companion object {
+
+        private val stringOptions by lazy {
+            ImmutableSet.of<FieldValidatingOption<*>>(Pattern.create())
+        }
+
+        private val collectionOptions by lazy {
+            ImmutableSet.of<FieldValidatingOption<*>>(
+                Required.create(false),
+                Goes.create(),
+                Distinct.create()
+            )
+        }
+
+        private val messageOptions by lazy {
+            ImmutableSet.of<FieldValidatingOption<*>>(Valid())
+        }
     }
 }
