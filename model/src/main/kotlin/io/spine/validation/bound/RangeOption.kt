@@ -112,18 +112,18 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val metadata = RangeOptionMetadata(option.value, field, fieldType, file, typeSystem)
         val delimiter = metadata.checkDelimiter()
 
-        val (left, right) = metadata.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = metadata.checkBrackets(left, right)
-        val leftWithoutBracket = left.substring(1)
-        val rightWithoutBracket = right.dropLast(1)
+        val (lower, upper) = metadata.range.split(delimiter)
+        val (isLowerExclusive, isUpperExclusive) = metadata.checkBrackets(lower, upper)
 
         val boundParser = NumericBoundParser(metadata)
-        val lower = boundParser.parse(leftWithoutBracket, lowerExclusive)
-        val upper = boundParser.parse(rightWithoutBracket, upperExclusive)
+        val lowerBound = lower.substring(1) // Removes a leading bracket.
+        val lowerKBound = boundParser.parse(lowerBound, isLowerExclusive)
+        val upperBound = upper.dropLast(1) // Removes a trailing bracket.
+        val upperKBound = boundParser.parse(upperBound, isUpperExclusive)
 
         // Check `lower < upper` only if both bounds are numbers.
-        if (lower.value !is FieldPath && upper.value !is FieldPath) {
-            metadata.checkRelation(lower, upper)
+        if (lowerKBound.value !is FieldPath && upperKBound.value !is FieldPath) {
+            metadata.checkRelation(lowerKBound, upperKBound)
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -134,8 +134,8 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             subject = field
             errorMessage = message
             this.range = metadata.range
-            lowerBound = lower.toProto()
-            upperBound = upper.toProto()
+            this.lowerBound = lowerKBound.toProto()
+            this.upperBound = upperKBound.toProto()
             this.file = file
         }.just()
     }
