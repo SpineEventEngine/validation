@@ -84,7 +84,8 @@ internal class NumericBoundParser(
             Compilation.check(bound.isNotEmpty(), file, field.span) {
                 "The `($optionName)` option could not parse the bound value specified for" +
                         " `${field.qualifiedName}` field because it is empty. Please provide" +
-                        " either a numeric value or a field reference."
+                        " either a numeric value or refer to a value of another field via" +
+                        " its name or a path, if the field is nested."
             }
         }
         return if (bound.isFieldReference()) {
