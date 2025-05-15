@@ -67,10 +67,10 @@ internal object BoundFieldSupport {
         val primitive = field.type.extractPrimitive()
         Compilation.check(primitive in numericPrimitives, file, field.span) {
             """
-                The `($option)` option was applied to a filed of unsupported type.
-                Target field: `${field.qualifiedName}`.
-                Field type: `${field.type.name}`.
-                Supported field types: floating-point and integer numbers, repeated of numbers.
+            The `($option)` option was applied to a filed of an unsupported type.
+            Target field: `${field.qualifiedName}`.
+            Field type: `${field.type.name}`.
+            Supported field types: floating-point and integer numbers (including repeated fields).
             """.trimIndent()
         }
         return primitive!!

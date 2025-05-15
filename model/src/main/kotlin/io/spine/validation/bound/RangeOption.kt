@@ -161,11 +161,11 @@ private fun RangeOptionMetadata.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
             """
-                The `($RANGE)` option could not parse the passed range value.
-                The passed value: `$range`.
-                Target field: `${field.qualifiedName}`.
-                Reason: the lower and upper bounds should be separated either with `..` or ` .. ` delimiter.
-                Examples of the correct ranges: `(0..10]`, `[0 .. 10)`.
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower and upper bounds must be separated either with `..` or ` .. `.
+            Examples of correct ranges: `(0..10]`, `[0 .. 10)`.
             """.trimIndent()
         }
 
@@ -178,11 +178,11 @@ private fun RangeOptionMetadata.checkBrackets(
         '[' -> false
         else -> Compilation.error(file, field.span) {
             """
-                The `($RANGE)` option could not parse the passed range value.
-                The passed value: `$range`.
-                Target field: `${field.qualifiedName}`.
-                Reason: the lower bound should begin either with `(` for exclusive or `[` for inclusive values.
-                Examples of the correct lower bounds: `(5`, `[3`.
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower bound must begin either with `(` for exclusive or `[` for inclusive values.
+            Examples: `(5`, `[3`.
             """.trimIndent()
         }
     }
@@ -191,11 +191,11 @@ private fun RangeOptionMetadata.checkBrackets(
         ']' -> false
         else -> Compilation.error(file, field.span) {
             """
-                The `($RANGE)` option could not parse the passed range value.
-                The passed value: `$range`.
-                Target field: `${field.qualifiedName}`.
-                Reason: the upper bound should end either with `)` for exclusive or `]` for inclusive values.
-                Examples of the correct upper bounds: `5)`, `3]`.
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the upper bound must end either with `)` for exclusive or `]` for inclusive values.
+            Examples: `5)`, `3]`.
             """.trimIndent()
         }
     }
@@ -205,11 +205,11 @@ private fun RangeOptionMetadata.checkBrackets(
 private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
         """
-            The `($RANGE)` option could not parse the passed range value.
-            The passed value: `$range`.
-            Target field: `${field.qualifiedName}`.
-            Reason: the lower bound `${lower.value}` must be less than the upper `${upper.value}` bound.
-            Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
+        The `($RANGE)` option could not parse the passed range value.
+        Value: `$range`.
+        Target field: `${field.qualifiedName}`.
+        Reason: the lower bound `${lower.value}` must be less than the upper bound `${upper.value}`.
+        Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
         """.trimIndent()
     }
 }
