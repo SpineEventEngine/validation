@@ -58,9 +58,10 @@ import java.util.Optional;
 public final class Require implements ValidatingOption<String, MessageType, Descriptor> {
 
     @Override
+    @SuppressWarnings("ImpossibleNullComparison")
     public Optional<String> valueFrom(Descriptor message) {
-        String result = message.getOptions()
-                                      .getExtension(OptionsProto.requiredField);
+        var result = message.getOptions()
+                            .getExtension(OptionsProto.requiredField);
         return result == null || result.isEmpty()
                ? Optional.empty()
                : Optional.of(result);

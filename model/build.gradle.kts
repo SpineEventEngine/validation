@@ -27,6 +27,7 @@
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
+import io.spine.dependency.test.JUnit
 
 plugins {
     java
@@ -48,6 +49,8 @@ dependencies {
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(ProtoData.testlib)
 
+    testFixturesImplementation(platform(JUnit.bom))
+    testFixturesImplementation(JUnit.Jupiter.params)
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
