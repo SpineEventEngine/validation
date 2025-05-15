@@ -93,7 +93,8 @@ internal fun KNumericBound.toProto(): NumericBound {
         is FieldPath -> builder.setFieldValue(value)
 
         else -> error(
-            "Cannot convert `KotlinNumericBound` to `NumericBound` due to unexpected" +
+            "Cannot convert `${KNumericBound::class.simpleName}` to" +
+                    " `${NumericBound::class.simpleName}` due to unexpected" +
                     " value type: `${value::class}`."
         )
     }
