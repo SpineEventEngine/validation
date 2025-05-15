@@ -55,8 +55,8 @@ internal data class KNumericBound(
         if (otherValue::class != value::class) {
             error(
                 "Illegal comparison of numeric bounds with incompatible value types." +
-                        " Type of the instance value: `${simpleNameOf(value)}`, the other value has" +
-                        " the type of `${simpleNameOf(otherValue)}`."
+                        " Type of the instance value: `${simpleNameOf(value)}`, the other value" +
+                        " has the type of `${simpleNameOf(otherValue)}`."
             )
         }
         return when (value) {

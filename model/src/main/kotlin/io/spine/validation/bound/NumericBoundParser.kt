@@ -166,6 +166,7 @@ internal class NumericBoundParser(
             fieldName.addAll(fieldPath.split("."))
         }
 
+        @Suppress("SwallowedException")
         val boundField = try {
             val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
             typeSystem.resolve(boundFieldPath, messageType)
