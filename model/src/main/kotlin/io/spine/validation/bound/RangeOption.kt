@@ -205,12 +205,12 @@ private fun RangeOptionMetadata.checkBrackets(
 private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
         """
-                The `($RANGE)` option could not parse the passed range value.
-                The passed value: `$range`.
-                Target field: `${field.qualifiedName}`.
-                Reason: the lower bound `${lower.value}` must be less than the upper `${upper.value}` bound.
-                Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
-            """.trimIndent()
+            The `($RANGE)` option could not parse the passed range value.
+            The passed value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower bound `${lower.value}` must be less than the upper `${upper.value}` bound.
+            Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
+        """.trimIndent()
     }
 }
 

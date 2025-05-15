@@ -82,10 +82,12 @@ internal class NumericBoundParser(
     internal fun parse(bound: String, exclusive: Boolean): KNumericBound {
         with(metadata) {
             Compilation.check(bound.isNotEmpty(), file, field.span) {
-                "The `($optionName)` option could not parse the bound value specified for" +
-                        " `${field.qualifiedName}` field because it is empty. Please provide" +
-                        " either a numeric value or refer to a value of another field via" +
-                        " its name or a path, if the field is nested."
+                """
+                    The `($optionName)` option could not parse the passed bound value.
+                    Target field: `${field.qualifiedName}`.
+                    Reason: the passed value is empty.
+                    Please provide either a numeric value or refer to a value of another field via its name or a path, if the field is nested.
+                """.trimIndent()
             }
         }
         return if (bound.isFieldReference()) {
@@ -101,15 +103,25 @@ internal class NumericBoundParser(
     ): KNumericBound {
         if (fieldType in listOf(TYPE_FLOAT, TYPE_DOUBLE)) {
             Compilation.check(FLOAT.matches(number), file, field.span) {
-                "The `($optionName)` option could not parse the `$number` bound value specified" +
-                        " for `${field.qualifiedName}` field. Please make sure the provided value" +
-                        " is a floating-point number. Examples: `12.3`, `-0.1`, `6.02E2`."
+                """
+                    The `($optionName)` option could not parse the passed bound value.
+                    The passed value: `$number`.
+                    Target field: `${field.qualifiedName}`.
+                    Field type: `${field.type.name}`.
+                    Reason: a floating-point number is expected for floating-point fields.
+                    Examples: `12.3`, `-0.1`, `6.02E2`.
+                """.trimIndent()
             }
         } else {
             Compilation.check(INTEGER.matches(number), file, field.span) {
-                "The `($optionName)` option could not parse the `$number` bound value specified" +
-                        " for `${field.qualifiedName}` field. Please make sure the provided value" +
-                        " is an integer number. Examples: `123`, `-567823`."
+                """
+                    The `($optionName)` option could not parse the passed bound value.
+                    The passed value: `$number`.
+                    Target field: `${field.qualifiedName}`.
+                    Field type: `${field.type.name}`.
+                    Reason: an integer number is expected for integer fields.
+                    Examples: `123`, `-567823`.
+                """.trimIndent()
             }
         }
 
@@ -124,9 +136,13 @@ internal class NumericBoundParser(
         }
 
         Compilation.check(parsed != null, file, field.span) {
-            "The `($optionName)` option could not parse the `$number` bound value specified for" +
-                    " `${field.qualifiedName}` field. The value is out of range for the field" +
-                    " type `${field.type.name}` the option is applied to."
+            """
+                The `($optionName)` option could not parse the passed bound value.
+                The passed value: `$number`.
+                Target field: `${field.qualifiedName}`.
+                Field type: `${field.type.name}`.
+                Reason: the value is out of range for the field type.
+            """.trimIndent()
         }
 
         return KNumericBound(parsed!!, exclusive)
@@ -137,9 +153,13 @@ internal class NumericBoundParser(
         exclusive: Boolean
     ): KNumericBound {
         Compilation.check(fieldPath != field.name.value, file, field.span) {
-            "The `($optionName)` option cannot use `$fieldPath` field as a bound value for" +
-                    " the `${field.qualifiedName}` because self-referencing is prohibited." +
-                    " Please use other message fields."
+            """
+                The `($optionName)` option cannot use the specified field value as a bound.
+                The specified field: `$fieldPath`.
+                Target field: `${field.qualifiedName}`.
+                Reason: self-referencing is prohibited.
+                Please refer to a value of another field via its name or a path, if the field is nested.
+            """.trimIndent()
         }
 
         val boundFieldPath = io.spine.base.fieldPath {
@@ -151,17 +171,26 @@ internal class NumericBoundParser(
             typeSystem.resolve(boundFieldPath, messageType)
         } catch (e: IllegalStateException) {
             Compilation.error(file, field.span) {
-                "The `($optionName)` option could not parse the `$fieldPath` field path specified" +
-                        " for `${field.qualifiedName}` field. Please make sure the provided field" +
-                        " path is valid: `${e.message}`."
+                """
+                    The `($optionName)` option could not parse the specified field path.
+                    The specified field path: `$fieldPath`.
+                    Target field: `${field.qualifiedName}`.
+                    Reason: the specified field does not exist, or one of the components of the field path represents a non-message field.
+                    Please make sure the provided field path references an existing field.
+                """.trimIndent()
             }
         }
 
         val boundFieldType = boundField.type.primitive
         Compilation.check(boundFieldType in numericPrimitives, file, field.span) {
-            "The `($optionName)` option cannot use `$fieldPath` field as a bound value for" +
-                    " the `${field.qualifiedName}` field due to its type" +
-                    " `${boundFieldType.name}`. Only singular numeric fields are supported."
+            """
+                The `($optionName)` option cannot use the specified field as a bound value.
+                The specified field: `$fieldPath`.
+                Type of the specified field: `${boundFieldType.name}`.
+                Target field: `${field.qualifiedName}`.
+                Reason: the specified field is not of numeric type.
+                Please specify a field of singular numeric type.
+            """.trimIndent()
         }
 
         return KNumericBound(boundFieldPath, exclusive)
