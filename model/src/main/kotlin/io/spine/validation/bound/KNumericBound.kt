@@ -27,6 +27,8 @@
 package io.spine.validation.bound
 
 import io.spine.base.FieldPath
+import io.spine.string.simply
+import io.spine.validation.api.simpleNameOf
 
 /**
  * One-to-one Kotlin representation of [NumericBound].
@@ -53,8 +55,8 @@ internal data class KNumericBound(
         if (otherValue::class != value::class) {
             error(
                 "Illegal comparison of numeric bounds with incompatible value types." +
-                        " Type of the instance value: `${value::class}`, the other value has" +
-                        " the type of `${otherValue::class}`."
+                        " Type of the instance value: `${simpleNameOf(value)}`, the other value has" +
+                        " the type of `${simpleNameOf(otherValue)}`."
             )
         }
         return when (value) {
@@ -65,8 +67,8 @@ internal data class KNumericBound(
             is UInt -> value.compareTo(otherValue as UInt)
             is ULong -> value.compareTo(otherValue as ULong)
             else -> error(
-                "Illegal comparison of numeric bound with unsupported" +
-                        " value type: `${value::class}`."
+                "Illegal comparison of numeric bound with unsupported value type:" +
+                        " `${simpleNameOf(value)}`."
             )
         }
     }
@@ -93,9 +95,8 @@ internal fun KNumericBound.toProto(): NumericBound {
         is FieldPath -> builder.setFieldValue(value)
 
         else -> error(
-            "Cannot convert `${KNumericBound::class.simpleName}` to" +
-                    " `${NumericBound::class.simpleName}` due to unexpected" +
-                    " value type: `${value::class}`."
+            "Cannot convert `${simply<KNumericBound>()}` to `${simply<NumericBound>()}`" +
+                    " due to unexpected value type: `${simpleNameOf(value)}`."
         )
     }
     return builder.build()
