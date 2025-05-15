@@ -27,6 +27,6 @@
 package io.spine.validation.api
 
 /**
- * Returns the simple class name of the given [any].
+ * Returns the simple class name of the given [instance].
  */
-public fun simpleNameOf(any: Any): String = any::class.simpleName!!
+public fun simpleNameOf(instance: Any): String = instance::class.simpleName!!
