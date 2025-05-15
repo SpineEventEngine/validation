@@ -44,7 +44,7 @@ import io.spine.validation.RANGE
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [NumericOptionMetadata.checkNumericBound]
+ * @see [NumericBoundParser.parse]
  */
 internal open class NumericOptionMetadata(
     val optionName: String,
@@ -65,7 +65,7 @@ internal open class NumericOptionMetadata(
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [NumericOptionMetadata.checkNumericBound]
+ * @see [NumericBoundParser.parse]
  */
 internal class RangeOptionMetadata(
     val range: String,
