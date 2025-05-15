@@ -52,7 +52,8 @@ import io.spine.validation.bound.BoundFieldSupport.numericPrimitives
  *
  * The parser supports both number literals and field references.
  *
- * @param metadata the metadata of the numeric option, for which the bound is parsed.
+ * @param metadata The information about the numeric option and the field it constrains,
+ *   used to interpret and validate the bound value.
  */
 internal class NumericBoundParser(
     private val metadata: NumericOptionMetadata
