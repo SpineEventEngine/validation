@@ -26,16 +26,12 @@
 
 package io.spine.validation.test
 
-import io.spine.validate.ValidatorRegistry
 import org.junit.jupiter.api.Test
 
 class TimestampValidatorSpec {
 
     @Test
     fun test() {
-        val registrySize = ValidatorRegistry.size()
-        println("Registry size: $registrySize")
-
         val path = "META-INF/message-validators"
         val resources = Thread.currentThread()
             .contextClassLoader
