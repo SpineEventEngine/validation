@@ -24,32 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
-
-import io.kotest.matchers.string.shouldContain
-import io.spine.protodata.ast.qualifiedName
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+package io.spine.validation.api
 
 /**
- * Tests [MinPolicy][io.spine.validation.bound.MinPolicy]-specific conditions.
- *
- * [MinPolicy][io.spine.validation.bound.MinPolicy] is not extensively
- * tested here because it largely relies on the implementation of
- * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
- *
- * Both policies share the same mechanism of the option value parsing.
- *
- * @see RangePolicySpec
+ * Returns the simple class name of the given [instance].
  */
-@DisplayName("`MinPolicy` should reject the option")
-internal class MinPolicySpec : CompilationErrorTest() {
-
-    @Test
-    fun `with empty value`() =
-        assertCompilationFails(MinWithEmptyValue::class) { field ->
-            shouldContain(MIN)
-            shouldContain(field.qualifiedName)
-            shouldContain("the value is empty")
-        }
-}
+public fun simpleNameOf(instance: Any): String = instance::class.simpleName!!

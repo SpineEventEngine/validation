@@ -28,37 +28,49 @@ package io.spine.validation.bound
 
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.PrimitiveType
 import io.spine.protodata.type.TypeSystem
 import io.spine.validation.RANGE
 
 /**
- * The context of validating a numeric option that constrains a field's value
- * with a minimum or maximum bound.
+ * Protobuf metadata related to a numeric option, which restricts the allowed
+ * range of the field values.
  *
- * Contains the data required to report a compilation error for the option.
+ * This metadata is required to parse and validate the option value.
+ *
+ * @param optionName The name of the option.
+ * @param field The field, to which the option is applied.
+ * @param fieldType The field type.
+ * @param file The file that contains the field declaration.
+ * @param typeSystem The type system used to resolve field references, if any.
+ *
+ * @see [NumericBoundParser.parse]
  */
-internal open class BoundContext(
+internal open class NumericOptionMetadata(
     val optionName: String,
-    val typeSystem: TypeSystem,
-    val messageType: MessageType,
-    val primitiveType: PrimitiveType,
     val field: Field,
-    val file: File
+    val fieldType: PrimitiveType,
+    val file: File,
+    val typeSystem: TypeSystem
 )
 
 /**
- * The [BoundContext] for the `(range)` option.
+ * Protobuf metadata related to the `(range)` option.
  *
- * Introduces the [range] property to report the originally passed range definition
- * in compilation errors.
+ * This metadata is required to parse and validate the option value.
+ *
+ * @param range The option value as passed by a user.
+ * @param field The field, to which the option is applied.
+ * @param fieldType The field type.
+ * @param file The file that contains the field declaration.
+ * @param typeSystem The type system used to resolve field references, if any.
+ *
+ * @see [NumericBoundParser.parse]
  */
-internal class RangeContext(
+internal class RangeOptionMetadata(
     val range: String,
-    typeSystem: TypeSystem,
-    messageType: MessageType,
-    primitiveType: PrimitiveType,
     field: Field,
-    file: File
-) : BoundContext(RANGE, typeSystem, messageType, primitiveType, field, file)
+    fieldType: PrimitiveType,
+    file: File,
+    typeSystem: TypeSystem,
+) : NumericOptionMetadata(RANGE, field, fieldType, file, typeSystem)

@@ -73,9 +73,9 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, MAX)
 
         val option = event.option.unpack<MaxOption>()
-        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
-        val context = BoundContext(MAX, typeSystem, messageType, fieldType, field, file)
-        val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
+        val metadata = NumericOptionMetadata(MAX, field, fieldType, file, typeSystem)
+        val bound = NumericBoundParser(metadata)
+            .parse(option.value, option.exclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
@@ -85,7 +85,7 @@ internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
             subject = field
             errorMessage = message
             this.max = option.value
-            bound = kotlinBound.toProto()
+            this.bound = bound.toProto()
             this.file = file
         }.just()
     }

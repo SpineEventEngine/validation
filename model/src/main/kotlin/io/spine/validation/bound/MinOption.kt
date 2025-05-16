@@ -73,9 +73,9 @@ internal class MinPolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, MIN)
 
         val option = event.option.unpack<MinOption>()
-        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
-        val context = BoundContext(MIN, typeSystem, messageType, fieldType, field, file)
-        val kotlinBound = context.checkNumericBound(option.value, option.exclusive)
+        val metadata = NumericOptionMetadata(MIN, field, fieldType, file, typeSystem)
+        val bound = NumericBoundParser(metadata)
+            .parse(option.value, option.exclusive)
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
@@ -85,7 +85,7 @@ internal class MinPolicy : Policy<FieldOptionDiscovered>() {
             subject = field
             errorMessage = message
             this.min = option.value
-            bound = kotlinBound.toProto()
+            this.bound = bound.toProto()
             this.file = file
         }.just()
     }

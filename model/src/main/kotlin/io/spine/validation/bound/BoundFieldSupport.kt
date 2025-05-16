@@ -47,6 +47,7 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
+import io.spine.validation.RANGE
 
 /**
  * Determines whether the field type can be validated with a range-constraining option.
@@ -65,9 +66,12 @@ internal object BoundFieldSupport {
     internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
         val primitive = field.type.extractPrimitive()
         Compilation.check(primitive in numericPrimitives, file, field.span) {
-            "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                    " the `($option)` option. Supported field types: numbers and repeated" +
-                    " of numbers."
+            """
+            The `($option)` option was applied to a filed of an unsupported type.
+            Target field: `${field.qualifiedName}`.
+            Field type: `${field.type.name}`.
+            Supported field types: floating-point and integer numbers (including repeated fields).
+            """.trimIndent()
         }
         return primitive!!
     }

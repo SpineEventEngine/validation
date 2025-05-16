@@ -50,6 +50,6 @@ internal class MaxPolicySpec : CompilationErrorTest() {
         assertCompilationFails(MaxWithEmptyValue::class) { field ->
             shouldContain(MAX)
             shouldContain(field.qualifiedName)
-            shouldContain("because it is empty")
+            shouldContain("the value is empty")
         }
 }

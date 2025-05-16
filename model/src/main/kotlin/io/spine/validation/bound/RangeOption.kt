@@ -109,18 +109,21 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
         val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val (messageType, _) = typeSystem.findMessage(field.declaringType)!!
-        val context = RangeContext(option.value, typeSystem, messageType, fieldType, field, file)
-        val delimiter = context.checkDelimiter()
+        val metadata = RangeOptionMetadata(option.value, field, fieldType, file, typeSystem)
+        val delimiter = metadata.checkDelimiter()
 
-        val (left, right) = context.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
-        val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
-        val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
+        val (lower, upper) = metadata.range.split(delimiter)
+        val (isLowerExclusive, isUpperExclusive) = metadata.checkBrackets(lower, upper)
+
+        val boundParser = NumericBoundParser(metadata)
+        val lowerBound = lower.substring(1) // Removes a leading bracket.
+        val lowerKBound = boundParser.parse(lowerBound, isLowerExclusive)
+        val upperBound = upper.dropLast(1) // Removes a trailing bracket.
+        val upperKBound = boundParser.parse(upperBound, isUpperExclusive)
 
         // Check `lower < upper` only if both bounds are numbers.
-        if (lower.value !is FieldPath && upper.value !is FieldPath) {
-            context.checkRelation(lower, upper)
+        if (lowerKBound.value !is FieldPath && upperKBound.value !is FieldPath) {
+            metadata.checkRelation(lowerKBound, upperKBound)
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
@@ -130,9 +133,9 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = context.range
-            lowerBound = lower.toProto()
-            upperBound = upper.toProto()
+            this.range = metadata.range
+            this.lowerBound = lowerKBound.toProto()
+            this.upperBound = upperKBound.toProto()
             this.file = file
         }.just()
     }
@@ -154,44 +157,60 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
     }
 }
 
-private fun RangeContext.checkDelimiter(): String =
+private fun RangeOptionMetadata.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The lower and upper bounds should be" +
-                    " separated either with `..` or ` .. ` delimiter. Examples of the correct " +
-                    " ranges: `(0..10]`, `[0 .. 10)`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower and upper bounds must be separated either with `..` or ` .. `.
+            Examples of correct ranges: `(0..10]`, `[0 .. 10)`.
+            """.trimIndent()
         }
 
-private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
+private fun RangeOptionMetadata.checkBrackets(
+    lower: String,
+    upper: String
+): Pair<Boolean, Boolean> {
     val lowerExclusive = when (lower.first()) {
         '(' -> true
         '[' -> false
         else -> Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The lower bound should begin either" +
-                    " with `(` for exclusive or `[` for inclusive values. Examples of" +
-                    " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower bound must begin either with `(` for exclusive or `[` for inclusive values.
+            Examples: `(5`, `[3`.
+            """.trimIndent()
         }
     }
     val upperExclusive = when (upper.last()) {
         ')' -> true
         ']' -> false
         else -> Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The upper bound should end either" +
-                    " with `)` for exclusive or `]` for inclusive values. Examples of" +
-                    " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the upper bound must end either with `)` for exclusive or `]` for inclusive values.
+            Examples: `5)`, `3]`.
+            """.trimIndent()
         }
     }
     return lowerExclusive to upperExclusive
 }
 
-private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
+private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
-        "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +
-                " less than the upper `${upper.value}`."
+        """
+        The `($RANGE)` option could not parse the passed range value.
+        Value: `$range`.
+        Target field: `${field.qualifiedName}`.
+        Reason: the lower bound `${lower.value}` must be less than the upper bound `${upper.value}`.
+        Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
+        """.trimIndent()
     }
 }
 
