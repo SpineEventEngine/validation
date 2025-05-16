@@ -25,6 +25,7 @@
  */
 
 import io.spine.dependency.lib.AutoService
+import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
@@ -38,6 +39,7 @@ buildscript {
 }
 
 plugins {
+    ksp
     `build-proto-model`
     module
 }
@@ -51,6 +53,7 @@ protobuf {
 }
 
 dependencies {
+    ksp(AutoServiceKsp.processor)
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
