@@ -37,7 +37,7 @@ import io.spine.annotation.Internal
 @AutoService(ValidatingOptionFactory::class)
 @Internal
 @Immutable
-public class NonPrimitiveOptionFactory public constructor() : StandardOptionFactory {
+public class NonPrimitiveOptionFactory : StandardOptionFactory {
 
     override fun forString(): Set<FieldValidatingOption<*>> {
         return Sets.union<FieldValidatingOption<*>>(stringOptions, collectionOptions)
