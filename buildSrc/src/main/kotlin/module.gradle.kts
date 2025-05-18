@@ -28,6 +28,8 @@ import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
+import io.spine.dependency.lib.Grpc
+import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJava
@@ -141,9 +143,12 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
+                Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 force(
+                    Kotlin.bom,
                     Reflect.lib,
                     Base.lib,
+                    Protobuf.compiler,
                     Time.lib,
                     TestLib.lib,
                     ToolBase.lib,
