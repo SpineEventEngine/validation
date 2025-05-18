@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("`(distinct)` option should be compiled, so that")
+@DisplayName("`[I-Test] (distinct)` option should be compiled, so that")
 internal class DistinctITest {
 
     @Nested inner class
