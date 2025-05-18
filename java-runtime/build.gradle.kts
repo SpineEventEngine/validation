@@ -39,7 +39,9 @@ buildscript {
 }
 
 plugins {
-    ksp
+    // We use it the KSP plugin via its ID because it's added to the build classpath
+    // in the root project.
+    id("com.google.devtools.ksp")
     `build-proto-model`
     module
 }

@@ -29,11 +29,11 @@ import io.spine.dependency.lib.Protobuf
 buildscript {
     standardSpineSdkRepositories()
     dependencies {
-        classpath(mcJava.pluginLib)
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         protoData.run {
             classpath("$module:$dogfoodingVersion")
         }
+        classpath(mcJava.pluginLib)
     }
 }
 
