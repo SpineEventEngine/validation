@@ -72,7 +72,8 @@ public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
 public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
         isSingular -> when {
-            isMessage || isEnum -> SpineJson.call("toCompactJson", value)
+            isMessage -> SpineJson.call("toCompactJson", value)
+            isEnum -> value.stringify()
             isPrimitive -> value.stringifyPrimitive(primitive)
             else -> error(
                 "Cannot convert `$value` expression to `String` expression." +
