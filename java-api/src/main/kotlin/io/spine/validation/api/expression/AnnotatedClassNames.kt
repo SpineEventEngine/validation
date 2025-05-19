@@ -28,10 +28,10 @@ package io.spine.validation.api.expression
 
 import io.spine.protodata.java.AnnotatedClassName
 import io.spine.protodata.java.ClassName
-import org.checkerframework.checker.nullness.qual.Nullable
+import org.jspecify.annotations.Nullable
 
 /**
- * The [ClassName] of [org.checkerframework.checker.nullness.qual.Nullable].
+ * The [ClassName] of [org.jspecify.annotations.Nullable].
  */
 public val NullableAnnotation: ClassName = ClassName(Nullable::class)
 

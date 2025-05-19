@@ -27,6 +27,7 @@
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
+import io.spine.dependency.test.JUnit.Jupiter
 
 plugins {
     java
@@ -51,4 +52,5 @@ dependencies {
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
+    testFixturesImplementation(Jupiter.artifact(Jupiter.params))
 }

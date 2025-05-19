@@ -24,19 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+@CheckReturnValue
+@NullMarked
+package io.spine.test.validation;
 
-/**
- * Spine Time library.
- *
- * @see <a href="https://github.com/SpineEventEngine/time">spine-time</a>
- */
-@Suppress("ConstPropertyName")
-object Time {
-    const val version = "2.0.0-SNAPSHOT.203"
-    const val group = Spine.group
-    const val artifact = "spine-time"
-    const val lib = "$group:$artifact:$version"
-
-    const val testLib = "${Spine.toolsGroup}:spine-time-testlib:$version"
-}
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

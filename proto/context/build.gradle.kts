@@ -27,10 +27,6 @@
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.ProtoData
 
-plugins {
-    `build-proto-model`
-}
-
 dependencies {
     api(ProtoData.backend)
     implementation(Base.lib)

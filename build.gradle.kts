@@ -40,6 +40,14 @@ import io.spine.gradle.report.coverage.JacocoConfig
 import io.spine.gradle.report.license.LicenseReporter
 import io.spine.gradle.report.pom.PomGenerator
 
+buildscript {
+    standardSpineSdkRepositories()
+    dependencies {
+        // Use newer KSP in the classpath to avoid the "too old" warnings.
+        classpath(io.spine.dependency.build.Ksp.run { artifact(gradlePlugin) })
+    }
+}
+
 plugins {
     idea
     jacoco
