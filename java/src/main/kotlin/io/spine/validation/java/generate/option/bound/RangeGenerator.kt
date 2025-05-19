@@ -31,6 +31,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.plus
 import io.spine.server.query.select
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -42,7 +43,6 @@ import io.spine.validation.RANGE
 import io.spine.validation.api.expression.IntegerClass
 import io.spine.validation.api.expression.LongClass
 import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.plus
 import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
