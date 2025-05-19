@@ -73,7 +73,7 @@ internal class SetOnceMessageField(
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
             readerStartsWith = "input.readMessage",
-            readerContains = "${fieldGetterName}FieldBuilder().getBuilder()"
+            readerContains = "internalGet${fieldNameCamel}FieldBuilder().getBuilder()"
         )
     }
 
