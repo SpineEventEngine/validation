@@ -173,3 +173,12 @@ public val TimestampsClass: ClassName = ClassName(Timestamps::class)
  * The [ClassName] of [io.spine.base.Time].
  */
 public val SpineTime: ClassName = ClassName(Time::class)
+
+/**
+ * The [ClassName] for `io.spine.type.Json`.
+ *
+ * Note: `Json` is a synthetic Java class, which contains Kotlin extensions.
+ * It is available from Java, but not from Kotlin. So, we specify it as
+ * a string literal here.
+ */
+public val SpineJson: ClassName = ClassName("io.spine.type", "Json")
