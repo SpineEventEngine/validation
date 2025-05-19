@@ -171,6 +171,6 @@ private class GenerateDistinct(private val view: DistinctField) {
         FIELD_VALUE to fieldType.stringValueOf(getter),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        FIELD_DUPLICATES to duplicates.call("toString")
+        FIELD_DUPLICATES to fieldType.stringValueOf(duplicates)
     )
 }
