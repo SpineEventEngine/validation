@@ -31,7 +31,6 @@ import com.google.protobuf.Descriptors.Descriptor;
 import io.spine.option.OptionsProto;
 import io.spine.type.MessageType;
 import io.spine.validate.Constraint;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -58,9 +57,12 @@ import java.util.Optional;
 public final class Require implements ValidatingOption<String, MessageType, Descriptor> {
 
     @Override
+    @SuppressWarnings({"ImpossibleNullComparison", "ConstantValue"}) /*
+        Keep `result == null` check for the backward compatibility.
+    */
     public Optional<String> valueFrom(Descriptor message) {
-        String result = message.getOptions()
-                                      .getExtension(OptionsProto.requiredField);
+        var result = message.getOptions()
+                            .getExtension(OptionsProto.requiredField);
         return result == null || result.isEmpty()
                ? Optional.empty()
                : Optional.of(result);
