@@ -106,7 +106,7 @@ private class GenerateDistinct(private val view: DistinctField) {
                 """
                 if (!$list.isEmpty() && $list.size() != $setOfItems.size()) {
                     var frequencies = $HashMultiSetClass.create($list);
-                    var duplicates = $list().stream()
+                    var duplicates = $list.stream()
                         .filter(e -> frequencies.count(e) > 1)
                         .toList();
                     var fieldPath = ${parentPath.resolve(field.name)};
