@@ -38,13 +38,21 @@ import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.server.query.select
+import io.spine.string.qualified
+import io.spine.string.ti
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.PATTERN
-import io.spine.validation.api.expression.CollectorsClass
+import io.spine.validation.api.expression.HashMultiSetClass
 import io.spine.validation.api.expression.ImmutableSetClass
-import io.spine.validation.api.expression.LinkedHashMultisetClass
-import io.spine.validation.api.expression.MultiSetEntryClass
+import io.spine.validation.api.expression.MapsClass
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
@@ -55,13 +63,6 @@ import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.java.expression.templateString
 
 /**
@@ -91,84 +92,78 @@ private class GenerateDistinct(private val view: DistinctField) {
 
     private val field = view.subject
     private val fieldType = field.type
-    private val getter = message.field(field).getter<List<*>>()
+    private val fieldAccess = message.field(field)
     private val declaringType = field.declaringType
 
     /**
      * Returns the generated code.
      */
-    fun code(): SingleOptionCode {
-        val collection = validatedCollection()
-        val set = ImmutableSetClass.call<Set<*>>("copyOf", collection)
-        val constraint = CodeBlock(
-            """
-            if (!$collection.isEmpty() && $collection.size() != $set.size()) {
-                var duplicates = ${extractDuplicates(collection)};
-                var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  ${parentName.orElse(declaringType)};
-                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), ReadVar("duplicates"))};
-                violations.add(violation);
-            }
-            """.trimIndent()
-        )
-        return SingleOptionCode(constraint)
-    }
-
-    /**
-     * Returns an expression containing the collection that should not have duplicate values.
-     *
-     * The resulting expression depends on the [fieldType]:
-     *
-     * 1. For `repeated` fields, it is a field value itself.
-     * 2. For `map` fields, it is a collection of map values.
-     */
-    private fun validatedCollection(): Expression<Collection<*>> = when {
-        fieldType.isList -> getter
-        fieldType.isMap -> getter.call("values")
+    fun code(): SingleOptionCode = when {
+        fieldType.isList -> {
+            val list = fieldAccess.getter<List<*>>()
+            val setOfItems = ImmutableSetClass.call<Set<*>>("copyOf", list)
+            val constraint = CodeBlock(
+                """
+                if (!$list.isEmpty() && $list.size() != $setOfItems.size()) {
+                    var frequencies = $HashMultiSetClass.create($list);
+                    var duplicates = $list().stream()
+                        .filter(e -> frequencies.count(e) > 1)
+                        .toList();
+                    var fieldPath = ${parentPath.resolve(field.name)};
+                    var typeName =  ${parentName.orElse(declaringType)};
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), list, ReadVar<List<*>>("duplicates"))};
+                    violations.add(violation);
+                }
+                """.trimIndent()
+            )
+            SingleOptionCode(constraint)
+        }
+        fieldType.isMap -> {
+            val map = fieldAccess.getter<Map<*, *>>()
+            val mapValues = map.call<Collection<*>>("values")
+            val setOfValues = ImmutableSetClass.call<Set<*>>("copyOf", mapValues)
+            val constraint = CodeBlock(
+                """
+                if (!$map.isEmpty() && $mapValues.size() != $setOfValues.size()) {
+                    var frequencies = $HashMultiSetClass.create($mapValues);
+                    var duplicates = $MapsClass.filterValues($map, v -> frequencies.count(v) > 1);
+                    var fieldPath = ${parentPath.resolve(field.name)};
+                    var typeName =  ${parentName.orElse(declaringType)};
+                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), map, ReadVar<Map<*, *>>("duplicates"))};
+                    violations.add(violation);
+                }
+                """.trimIndent()
+            )
+            SingleOptionCode(constraint)
+        }
         else -> error(
-            "The field type `${fieldType.name}` is not supported by `DistinctFieldGenerator`." +
-                    " Please ensure that the supported field types in this generator match those" +
-                    " used by `DistinctPolicy` when validating the `DistinctFieldDiscovered` event."
+            """
+            The field type `${fieldType.name}` is not supported by `${qualified<DistinctGenerator>()}`.
+            Please ensure that the supported field types in this generator match those used by the policy when emitting the `DistinctFieldDiscovered` event.
+            """.ti()
         )
     }
-
-    /**
-     * Returns an expression that extracts values occurring multiple times
-     * in the provided [collection].
-     *
-     * This method uses Guava's [LinkedHashMultisetClass] to ensure that the resulting
-     * list preserves the order of element occurrences in the original collection.
-     */
-    private fun extractDuplicates(collection: Expression<Collection<*>>): Expression<List<*>> =
-        Expression(
-            """
-            $LinkedHashMultisetClass.create($collection)
-                .entrySet()
-                .stream()
-                .filter(e -> e.getCount() > 1)
-                .map($MultiSetEntryClass::getElement)
-                .collect($CollectorsClass.toList())
-            """.trimIndent()
-        )
 
     private fun violation(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<io.spine.type.TypeName>,
-        duplicates: Expression<List<*>>
+        fieldValue: Expression<*>,
+        duplicates: Expression<*>
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
-        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, duplicates)
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue, duplicates)
         val errorMessage = templateString(view.errorMessage, placeholders, PATTERN)
-        return constraintViolation(errorMessage, typeNameStr, fieldPath, getter)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 
     private fun supportedPlaceholders(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
-        duplicates: Expression<List<*>>
+        fieldValue: Expression<*>,
+        duplicates: Expression<*>
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(getter),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         FIELD_DUPLICATES to fieldType.stringValueOf(duplicates)
