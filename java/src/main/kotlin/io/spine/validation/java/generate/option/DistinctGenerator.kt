@@ -163,9 +163,9 @@ private class GenerateDistinct(private val view: DistinctField) {
         duplicates: Expression<*>
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.jsonOf(fieldValue),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        FIELD_DUPLICATES to fieldType.jsonOf(duplicates)
+        FIELD_DUPLICATES to fieldType.stringValueOf(duplicates)
     )
 }

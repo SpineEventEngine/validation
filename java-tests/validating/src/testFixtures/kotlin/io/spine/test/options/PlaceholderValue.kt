@@ -31,24 +31,22 @@ import com.google.protobuf.Message
 import io.spine.type.toCompactJson
 
 /**
- * Returns a JSON string for this [Any].
+ * Returns a string representation for this [Any].
  *
  * The method performs conversion similarly to
- * [jsonValueOf][io.spine.validation.api.expression.jsonOf] extension,
+ * [stringValueOf][io.spine.validation.api.expression.stringValueOf] extension,
  * but for [Any] instances.
  */
-internal fun Any?.toJson(): String = when (this) {
+internal fun Any?.asPlaceholderValue(): String = when (this) {
 
     is Message -> toCompactJson()
 
     // We don't need `ByteString` to be handled as `Iterable<Byte>`.
     is ByteString -> toString()
 
-    is Iterable<*> -> joinToString(",", "[", "]") { it.toJson() }
+    is Iterable<*> -> map { it.asPlaceholderValue() }.toString()
 
-    is Map<*, *> -> entries.joinToString(",", "{", "}") { (key, value) ->
-        "\"$key\":${value.toJson()}"
-    }
+    is Map<*, *> -> mapValues { (_, value) -> value.asPlaceholderValue() }.toString()
 
     else -> toString()
 }

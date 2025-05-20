@@ -43,7 +43,7 @@ import io.spine.validation.api.expression.EmptyFieldCheck
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
-import io.spine.validation.api.expression.jsonOf
+import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
@@ -130,7 +130,7 @@ private class GenerateGoes(
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.jsonOf(fieldValue),
+        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         GOES_COMPANION to StringLiteral(view.companion.name.value)

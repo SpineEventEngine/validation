@@ -42,17 +42,17 @@ import io.spine.protodata.java.call
 import io.spine.string.ti
 
 /**
- * Returns an expression that converts the provided field [value] to JSON string.
+ * Returns an expression that converts the provided field [value] to a string.
  *
- * See [FieldType.jsonOf] for details upon how the value is converted.
+ * See [FieldType.stringValueOf] for details upon how the value is converted.
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun Field.jsonOf(value: Expression<*>): Expression<String> =
-    type.jsonOf(value)
+public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
+    type.stringValueOf(value)
 
 /**
- * Returns an expression that converts the provided field [value] to JSON string.
+ * Returns an expression that converts the provided field [value] to a string.
  *
  * Depending on this [FieldType], different conversion rules take place.
  *
@@ -68,49 +68,54 @@ public fun Field.jsonOf(value: Expression<*>): Expression<String> =
  *
  * **List types**:
  *
- * Each element is converted as a singular value and joined into a JSON-like array string.
- * For example: `"[1,2,3]"`.
+ * Each element is converted as a singular type and `toString()`
+ * is invoked for the resulting list.
  *
  * **Map types**:
  *
  * Keys are assumed to be either integers or strings (Protobuf restriction)
  * and are stringified directly.
  *
- * Each value is converted as a singular value and joined into a JSON-like map string.
- * For example: `{"key":"value"}`.
+ * Each map value is converted as a singular type and `toString()`
+ * is invoked for the resulting map.
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun FieldType.jsonOf(value: Expression<*>): Expression<String> =
+public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
-        isSingular -> jsonOfSingular(value)
+        isSingular -> stringifySingular(value)
         isList -> {
             val itemType = list.toFieldType()
-            val stringifyItem = itemType.jsonOfSingular(ReadVar<Any?>("e"))
+            val stringifyItem = itemType.stringifySingular(ReadVar<Any?>("e"))
             Expression(
                 """
                 $value.stream()
                     .map(e -> $stringifyItem)
-                    .collect($CollectorsClass.joining(",", "[", "]"))
+                    .toList()
+                    .toString()
                 """.trimIndent()
             )
         }
         isMap -> {
             val valueType = map.valueType.toFieldType()
-            val stringifyValue = valueType.jsonOfSingular(ReadVar<Any?>("e.getValue()"))
+            val stringifyValue = valueType.stringifySingular(ReadVar<Any?>("entry.getValue()"))
             Expression(
                 """
-                $value.entrySet()
-                    .stream()
-                    .map(e -> "\"" + e.getKey() + "\":" + $stringifyValue)
-                    .collect($CollectorsClass.joining(",", "{", "}"))
+                $value.entrySet().stream()
+                        .collect($CollectorsClass.toMap(
+                            $MapClass.Entry::getKey,
+                            entry -> $stringifyValue,
+                            (v1, v2) -> v1, // We don't expect key duplicates, so no merge logic.
+                            $LinkedHashMapClass::new
+                        ))
+                        .toString()
                 """.trimIndent()
             )
         }
         else -> unsupportedFieldType(value)
     }
 
-private fun FieldType.jsonOfSingular(value: Expression<*>) = when {
+private fun FieldType.stringifySingular(value: Expression<*>) = when {
     isMessage -> SpineJson.call("toCompactJson", value)
     isEnum -> value.stringify()
     isPrimitive -> value.stringifyPrimitive(primitive)

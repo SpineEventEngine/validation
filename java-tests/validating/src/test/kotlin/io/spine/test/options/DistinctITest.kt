@@ -60,7 +60,7 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2).toJson()
+            val duplicates = listOf(duplicate1, duplicate2).asPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("element")
                 message.placeholderValueMap shouldContain ("field.duplicates" to duplicates)
@@ -89,7 +89,7 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2).toJson()
+            val duplicates = listOf(duplicate1, duplicate2).asPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("element")
                 message.placeholderValueMap shouldContain ("field.duplicates" to duplicates)
@@ -143,7 +143,7 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicatesJson = duplicates.toJson()
+            val duplicatesJson = duplicates.asPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("mapping")
                 message.placeholderValueMap shouldContain ("field.duplicates" to duplicatesJson)
@@ -175,7 +175,7 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicatesJson = duplicates.toJson()
+            val duplicatesJson = duplicates.asPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("mapping")
                 message.placeholderValueMap shouldContain ("field.duplicates" to duplicatesJson)
