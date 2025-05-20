@@ -44,12 +44,12 @@ import io.spine.string.ti
 /**
  * Returns an expression that converts the provided field [value] to JSON string.
  *
- * See [FieldType.jsonValueOf] for details upon how the value is converted.
+ * See [FieldType.jsonOf] for details upon how the value is converted.
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun Field.jsonValueOf(value: Expression<*>): Expression<String> =
-    type.jsonValueOf(value)
+public fun Field.jsonOf(value: Expression<*>): Expression<String> =
+    type.jsonOf(value)
 
 /**
  * Returns an expression that converts the provided field [value] to JSON string.
@@ -81,12 +81,12 @@ public fun Field.jsonValueOf(value: Expression<*>): Expression<String> =
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun FieldType.jsonValueOf(value: Expression<*>): Expression<String> =
+public fun FieldType.jsonOf(value: Expression<*>): Expression<String> =
     when {
-        isSingular -> stringifySingular(value)
+        isSingular -> jsonOfSingular(value)
         isList -> {
             val itemType = list.toFieldType()
-            val stringifyItem = itemType.stringifySingular(ReadVar<Any?>("e"))
+            val stringifyItem = itemType.jsonOfSingular(ReadVar<Any?>("e"))
             Expression(
                 """
                 $value.stream()
@@ -97,7 +97,7 @@ public fun FieldType.jsonValueOf(value: Expression<*>): Expression<String> =
         }
         isMap -> {
             val valueType = map.valueType.toFieldType()
-            val stringifyValue = valueType.stringifySingular(ReadVar<Any?>("e.getValue()"))
+            val stringifyValue = valueType.jsonOfSingular(ReadVar<Any?>("e.getValue()"))
             Expression(
                 """
                 $value.entrySet()
@@ -110,7 +110,7 @@ public fun FieldType.jsonValueOf(value: Expression<*>): Expression<String> =
         else -> unsupportedFieldType(value)
     }
 
-private fun FieldType.stringifySingular(value: Expression<*>) = when {
+private fun FieldType.jsonOfSingular(value: Expression<*>) = when {
     isMessage -> SpineJson.call("toCompactJson", value)
     isEnum -> value.stringify()
     isPrimitive -> value.stringifyPrimitive(primitive)

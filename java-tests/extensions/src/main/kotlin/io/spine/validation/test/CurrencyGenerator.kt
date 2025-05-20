@@ -34,7 +34,7 @@ import io.spine.protodata.java.field
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.api.expression.orElse
-import io.spine.validation.api.expression.jsonValueOf
+import io.spine.validation.api.expression.jsonOf
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
@@ -108,5 +108,5 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
     private fun supportedPlaceholders(
         minorValue: Expression<Int>
     ): Map<String, Expression<String>> =
-        mapOf("minor.value" to minorField.jsonValueOf(minorValue))
+        mapOf("minor.value" to minorField.jsonOf(minorValue))
 }

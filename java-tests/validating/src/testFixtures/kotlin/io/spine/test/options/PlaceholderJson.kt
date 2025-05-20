@@ -31,21 +31,22 @@ import com.google.protobuf.Message
 import io.spine.type.toCompactJson
 
 /**
- * Returns a string representation of this [Any] to be used as a placeholder value.
+ * Returns a JSON string for this [Any].
  *
- * If this [Any] is a [Message], then the compact JSON is returned.
- * Otherwise, the result of [Any.toString] is returned.
+ * The method performs conversion similarly to
+ * [jsonValueOf][io.spine.validation.api.expression.jsonOf] extension,
+ * but for [Any] instances.
  */
-internal fun Any?.toPlaceholderValue(): String = when (this) {
+internal fun Any?.toJson(): String = when (this) {
 
     is Message -> toCompactJson()
 
     is ByteString -> toString()
 
-    is Iterable<*> -> joinToString(",", "[", "]") { it.toPlaceholderValue() }
+    is Iterable<*> -> joinToString(",", "[", "]") { it.toJson() }
 
     is Map<*, *> -> entries.joinToString(",", "{", "}") { (key, value) ->
-        "\"$key\":${value.toPlaceholderValue()}"
+        "\"$key\":${value.toJson()}"
     }
 
     else -> this.toString()

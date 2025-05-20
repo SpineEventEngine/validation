@@ -56,7 +56,7 @@ import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
-import io.spine.validation.api.expression.jsonValueOf
+import io.spine.validation.api.expression.jsonOf
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
@@ -163,9 +163,9 @@ private class GenerateDistinct(private val view: DistinctField) {
         duplicates: Expression<*>
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.jsonValueOf(fieldValue),
+        FIELD_VALUE to fieldType.jsonOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        FIELD_DUPLICATES to fieldType.jsonValueOf(duplicates)
+        FIELD_DUPLICATES to fieldType.jsonOf(duplicates)
     )
 }
