@@ -72,6 +72,16 @@ public val TemplateStringClass: ClassName = ClassName(TemplateString::class)
 public val PatternClass: ClassName = ClassName(Pattern::class)
 
 /**
+ * The [ClassName] of [Map].
+ */
+public val MapClass: ClassName = ClassName(Map::class)
+
+/**
+ * The [ClassName] of [LinkedHashMap].
+ */
+public val LinkedHashMapClass: ClassName = ClassName(LinkedHashMap::class)
+
+/**
  * The [ClassName] of [ImmutableList].
  */
 public val ImmutableListClass: ClassName = ClassName(ImmutableList::class)

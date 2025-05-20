@@ -49,14 +49,16 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.PATTERN
+import io.spine.validation.api.expression.CollectorsClass
 import io.spine.validation.api.expression.ImmutableSetClass
+import io.spine.validation.api.expression.LinkedHashMapClass
 import io.spine.validation.api.expression.LinkedHashMultisetClass
-import io.spine.validation.api.expression.MapsClass
+import io.spine.validation.api.expression.MapClass
 import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
-import io.spine.validation.api.expression.jsonOf
+import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
@@ -126,7 +128,14 @@ private class GenerateDistinct(private val view: DistinctField) {
                 """
                 if (!$map.isEmpty() && $mapValues.size() != $setOfValues.size()) {
                     var frequencies = $LinkedHashMultisetClass.create($mapValues);
-                    var duplicates = $MapsClass.filterValues($map, v -> frequencies.count(v) > 1);
+                    var duplicates = $map.entrySet().stream()
+                        .filter(entry -> frequencies.count(entry.getValue()) > 1)
+                        .collect($CollectorsClass.toMap(
+                            $MapClass.Entry::getKey,
+                            $MapClass.Entry::getValue,
+                            (v1, v2) -> v1, // We don't expect key duplicates, so no merge logic.
+                            $LinkedHashMapClass::new
+                        ));
                     var fieldPath = ${parentPath.resolve(field.name)};
                     var typeName =  ${parentName.orElse(declaringType)};
                     var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), map, ReadVar<Map<*, *>>("duplicates"))};
