@@ -35,8 +35,11 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
+import io.spine.protodata.ast.toFieldType
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.call
+import io.spine.string.ti
 
 /**
  * Returns an expression that converts the provided field [value] to a [String].
@@ -69,23 +72,45 @@ public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
  * 1. `string` remains unchanged.
  * 2. Scalar types (except `bytes`) are converted using the `String.valueOf` method.
  */
+// TODO:2025-05-20:yevhenii.nadtochii: Update docs.
 public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
-        isSingular -> when {
-            isMessage -> SpineJson.call("toCompactJson", value)
-            isEnum -> value.stringify()
-            isPrimitive -> value.stringifyPrimitive(primitive)
-            else -> error(
-                "Cannot convert `$value` expression to `String` expression." +
-                        " Unsupported field type: `${name}`."
+        isSingular -> stringifySingular(value)
+        isList -> {
+            val itemType = list.toFieldType()
+            val stringifyItem = itemType.stringifySingular(ReadVar<Any?>("e"))
+            Expression(
+                """
+                $value.stream()
+                    .map(e -> $stringifyItem)
+                    .collect($CollectorsClass.joining(", ", "[", "]"))
+                """.trimIndent()
             )
         }
-        isList || isMap -> value.stringify()
-        else -> error(
-            "Cannot convert `$value` expression to `String` expression." +
-                    " Unsupported field type: `${name}`."
-        )
+        isMap -> {
+            // We create a stringifying function only for values because keys in Protobuf
+            // can only be represented with either integers or strings. So, these types
+            // will be converted to string automatically during the string concatenation.
+            val valueType = map.valueType.toFieldType()
+            val stringifyValue = valueType.stringifySingular(ReadVar<Any?>("e.getValue()"))
+            Expression(
+                """
+                $value.entrySet()
+                    .stream()
+                    .map(e -> "\"" + e.getKey() + "\":" + $stringifyValue)
+                    .collect($CollectorsClass.joining(", ", "{", "}"))
+                """.trimIndent()
+            )
+        }
+        else -> unsupportedFieldType(value)
     }
+
+private fun FieldType.stringifySingular(value: Expression<*>) = when {
+    isMessage -> SpineJson.call("toCompactJson", value)
+    isEnum -> value.stringify()
+    isPrimitive -> value.stringifyPrimitive(primitive)
+    else -> unsupportedFieldType(value)
+}
 
 @Suppress("UNCHECKED_CAST") // Casting string field's value to `String` is safe.
 private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
@@ -94,3 +119,10 @@ private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
         TYPE_BYTES -> stringify()
         else -> StringClass.call("valueOf", this)
     }
+
+private fun FieldType.unsupportedFieldType(value: Expression<*>): Nothing = error(
+    """
+    Cannot convert `$value` expression to `Expression<String>`.
+    Unsupported field type: `${name}`.
+    """.ti()
+)
