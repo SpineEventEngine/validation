@@ -28,7 +28,6 @@
 
 package io.spine.validation.api.expression
 
-import com.google.common.collect.HashMultiset
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.LinkedHashMultiset
@@ -91,11 +90,6 @@ public val LinkedHashMultisetClass: ClassName = ClassName(LinkedHashMultiset::cl
  * The [ClassName] of [Multiset.Entry] class.
  */
 public val MultiSetEntryClass: ClassName = ClassName(Multiset.Entry::class)
-
-/**
- * The [ClassName] of [HashMultiset] class.
- */
-public val HashMultiSetClass: ClassName = ClassName(HashMultiset::class)
 
 /**
  * The [ClassName] of [Maps] class.

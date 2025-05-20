@@ -49,8 +49,8 @@ import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.PATTERN
-import io.spine.validation.api.expression.HashMultiSetClass
 import io.spine.validation.api.expression.ImmutableSetClass
+import io.spine.validation.api.expression.LinkedHashMultisetClass
 import io.spine.validation.api.expression.MapsClass
 import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
@@ -105,8 +105,8 @@ private class GenerateDistinct(private val view: DistinctField) {
             val constraint = CodeBlock(
                 """
                 if (!$list.isEmpty() && $list.size() != $setOfItems.size()) {
-                    var frequencies = $HashMultiSetClass.create($list);
-                    var duplicates = $list.stream()
+                    var frequencies = $LinkedHashMultisetClass.create($list);
+                    var duplicates = frequencies.elementSet().stream()
                         .filter(e -> frequencies.count(e) > 1)
                         .toList();
                     var fieldPath = ${parentPath.resolve(field.name)};
@@ -125,7 +125,7 @@ private class GenerateDistinct(private val view: DistinctField) {
             val constraint = CodeBlock(
                 """
                 if (!$map.isEmpty() && $mapValues.size() != $setOfValues.size()) {
-                    var frequencies = $HashMultiSetClass.create($mapValues);
+                    var frequencies = $LinkedHashMultisetClass.create($mapValues);
                     var duplicates = $MapsClass.filterValues($map, v -> frequencies.count(v) > 1);
                     var fieldPath = ${parentPath.resolve(field.name)};
                     var typeName =  ${parentName.orElse(declaringType)};
