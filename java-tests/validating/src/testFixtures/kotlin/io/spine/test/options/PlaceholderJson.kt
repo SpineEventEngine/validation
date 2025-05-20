@@ -41,6 +41,7 @@ internal fun Any?.toJson(): String = when (this) {
 
     is Message -> toCompactJson()
 
+    // We don't need `ByteString` to be handled as `Iterable<Byte>`.
     is ByteString -> toString()
 
     is Iterable<*> -> joinToString(",", "[", "]") { it.toJson() }
@@ -49,5 +50,5 @@ internal fun Any?.toJson(): String = when (this) {
         "\"$key\":${value.toJson()}"
     }
 
-    else -> this.toString()
+    else -> toString()
 }
