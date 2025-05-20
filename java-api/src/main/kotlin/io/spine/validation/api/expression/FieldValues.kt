@@ -83,7 +83,7 @@ public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
                 """
                 $value.stream()
                     .map(e -> $stringifyItem)
-                    .collect($CollectorsClass.joining(", ", "[", "]"))
+                    .collect($CollectorsClass.joining(",", "[", "]"))
                 """.trimIndent()
             )
         }
@@ -98,7 +98,7 @@ public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
                 $value.entrySet()
                     .stream()
                     .map(e -> "\"" + e.getKey() + "\":" + $stringifyValue)
-                    .collect($CollectorsClass.joining(", ", "{", "}"))
+                    .collect($CollectorsClass.joining(",", "{", "}"))
                 """.trimIndent()
             )
         }
