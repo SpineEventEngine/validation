@@ -33,7 +33,7 @@ import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.protobuf.field
 import io.spine.test.options.set
-import io.spine.test.options.toPlaceholderString
+import io.spine.test.options.toPlaceholderValue
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
 import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
@@ -102,8 +102,8 @@ private fun <T : Any> Builder.assertConstraintViolation(
         message.placeholderValueMap shouldContainExactly mapOf(
             FIELD_PATH to fieldName,
             FIELD_TYPE to fieldType,
-            FIELD_VALUE to fieldValue1.toPlaceholderString(),
-            FIELD_PROPOSED_VALUE to fieldValue2.toPlaceholderString(),
+            FIELD_VALUE to fieldValue1.toPlaceholderValue(),
+            FIELD_PROPOSED_VALUE to fieldValue2.toPlaceholderValue(),
             PARENT_TYPE to parentType
         ).mapKeys { it.key.toString() }
 

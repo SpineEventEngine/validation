@@ -60,10 +60,10 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2)
+            val duplicates = listOf(duplicate1, duplicate2).toPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("element")
-                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+                message.placeholderValueMap shouldContain ("field.duplicates" to duplicates)
             }
         }
 
@@ -89,10 +89,10 @@ internal class DistinctITest {
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2)
+            val duplicates = listOf(duplicate1, duplicate2).toPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("element")
-                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+                message.placeholderValueMap shouldContain ("field.duplicates" to duplicates)
             }
         }
 
@@ -122,28 +122,31 @@ internal class DistinctITest {
         fun `duplicated primitive values result in a violation`() {
             val duplicate1 = 123
             val duplicate2 = 321
+            val duplicates = mapOf(
+                "key1" to duplicate1,
+                "key3" to duplicate1,
+                "key5" to duplicate2,
+                "key7" to duplicate2,
+            )
 
             val exception = assertThrows<ValidationException> {
                 uniquePrimitiveCollections {
+                    mapping.putAll(duplicates)
                     mapping.putAll(
                         mapOf(
-                            "key1" to duplicate1,
                             "key2" to 1,
-                            "key3" to duplicate1,
                             "key4" to 2,
-                            "key5" to duplicate2,
                             "key6" to 3,
-                            "key7" to duplicate2,
                         )
                     )
                 }
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2)
+            val duplicatesJson = duplicates.toPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("mapping")
-                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+                message.placeholderValueMap shouldContain ("field.duplicates" to duplicatesJson)
             }
         }
 
@@ -151,28 +154,31 @@ internal class DistinctITest {
         fun `duplicated message values result in a violation`() {
             val duplicate1 = hoursAndMinutes(2, 20)
             val duplicate2 = hoursAndMinutes(18, 40)
+            val duplicates = mapOf(
+                "key1" to duplicate1,
+                "key3" to duplicate1,
+                "key5" to duplicate2,
+                "key7" to duplicate2,
+            )
 
             val exception = assertThrows<ValidationException> {
                 uniqueMessageCollections {
+                    mapping.putAll(duplicates)
                     mapping.putAll(
                         mapOf(
-                            "key1" to duplicate1,
                             "key2" to minutes(15),
-                            "key3" to duplicate1,
                             "key4" to minutes(30),
-                            "key5" to duplicate2,
                             "key6" to minutes(45),
-                            "key7" to duplicate2,
                         )
                     )
                 }
             }
 
             val violation = exception.constraintViolations.first()
-            val duplicates = listOf(duplicate1, duplicate2)
+            val duplicatesJson = duplicates.toPlaceholderValue()
             with(violation) {
                 fieldPath shouldBe FieldPath("mapping")
-                message.placeholderValueMap shouldContain ("field.duplicates" to "$duplicates")
+                message.placeholderValueMap shouldContain ("field.duplicates" to duplicatesJson)
             }
         }
 

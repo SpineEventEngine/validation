@@ -26,6 +26,7 @@
 
 package io.spine.test.options
 
+import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import io.spine.type.toCompactJson
 
@@ -35,5 +36,17 @@ import io.spine.type.toCompactJson
  * If this [Any] is a [Message], then the compact JSON is returned.
  * Otherwise, the result of [Any.toString] is returned.
  */
-internal fun Any.toPlaceholderString() =
-    if (this is Message) this.toCompactJson() else "$this"
+internal fun Any?.toPlaceholderValue(): String = when (this) {
+
+    is Message -> toCompactJson()
+
+    is ByteString -> toString()
+
+    is Iterable<*> -> joinToString(",", "[", "]") { it.toPlaceholderValue() }
+
+    is Map<*, *> -> entries.joinToString(",", "{", "}") { (key, value) ->
+        "\"$key\":${value.toPlaceholderValue()}"
+    }
+
+    else -> this.toString()
+}
