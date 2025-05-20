@@ -42,17 +42,17 @@ import io.spine.protodata.java.call
 import io.spine.string.ti
 
 /**
- * Returns an expression that converts the provided field [value] to a [String].
+ * Returns an expression that converts the provided field [value] to JSON string.
  *
- * See [FieldType.stringValueOf] for details upon how the value is converted.
+ * See [FieldType.jsonValueOf] for details upon how the value is converted.
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
-    type.stringValueOf(value)
+public fun Field.jsonValueOf(value: Expression<*>): Expression<String> =
+    type.jsonValueOf(value)
 
 /**
- * Returns an expression that converts the provided field [value] to a JSON [String].
+ * Returns an expression that converts the provided field [value] to JSON string.
  *
  * Depending on this [FieldType], different conversion rules take place.
  *
@@ -81,7 +81,7 @@ public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
  *
  * @throws IllegalStateException if the field type is not supported.
  */
-public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
+public fun FieldType.jsonValueOf(value: Expression<*>): Expression<String> =
     when {
         isSingular -> stringifySingular(value)
         isList -> {
