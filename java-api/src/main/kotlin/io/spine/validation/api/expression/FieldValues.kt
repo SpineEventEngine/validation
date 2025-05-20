@@ -45,34 +45,42 @@ import io.spine.string.ti
  * Returns an expression that converts the provided field [value] to a [String].
  *
  * See [FieldType.stringValueOf] for details upon how the value is converted.
+ *
+ * @throws IllegalStateException if the field type is not supported.
  */
 public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
     type.stringValueOf(value)
 
 /**
- * Returns an expression that converts the provided field [value] to a [String].
+ * Returns an expression that converts the provided field [value] to a JSON [String].
  *
- * How the value is converted to [String] is determined by this [FieldType].
+ * Depending on this [FieldType], different conversion rules take place.
  *
- * For most field types, an invocation of `toString()` is used because these
- * Protobuf types are represented as Java objects in the generated code.
+ * **Singular types**:
  *
- * The following field types use `toString()`:
+ * - If a [Message][com.google.protobuf.Message]: [toCompactJson][io.spine.type.toCompactJson]
+ *   is used.
+ * - If an enum: `toString()` is used.
+ * - If a primitive:
+ *      - `string`: used as-is.
+ *      - `bytes`: `toString()` is used.
+ *      - Other primitives: converted via `String.valueOf(...)`.
  *
- * 1. Messages and enums.
- * 2. Lists and maps.
- * 3. Bytes.
+ * **List types**:
  *
- * Note that the `bytes` field type is represented with [com.google.protobuf.ByteString]
- * in the generated code. An invocation of `toString()` on this type is completely safe.
- * It prints a truncated, escaped version of its content along with its size.
+ * Each element is converted as a singular value and joined into a JSON-like array string.
+ * For example: `"[1,2,3]"`.
  *
- * The remaining field types are handled as follows:
+ * **Map types**:
  *
- * 1. `string` remains unchanged.
- * 2. Scalar types (except `bytes`) are converted using the `String.valueOf` method.
+ * Keys are assumed to be either integers or strings (Protobuf restriction)
+ * and are stringified directly.
+ *
+ * Each value is converted as a singular value and joined into a JSON-like map string.
+ * For example: `{"key":"value"}`.
+ *
+ * @throws IllegalStateException if the field type is not supported.
  */
-// TODO:2025-05-20:yevhenii.nadtochii: Update docs.
 public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
         isSingular -> stringifySingular(value)
@@ -88,9 +96,6 @@ public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
             )
         }
         isMap -> {
-            // We create a stringifying function only for values because keys in Protobuf
-            // can only be represented with either integers or strings. So, these types
-            // will be converted to string automatically during the string concatenation.
             val valueType = map.valueType.toFieldType()
             val stringifyValue = valueType.stringifySingular(ReadVar<Any?>("e.getValue()"))
             Expression(
