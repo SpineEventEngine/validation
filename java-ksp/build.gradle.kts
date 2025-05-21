@@ -24,17 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.artifact
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 
 plugins {
-    ksp
+    id("com.google.devtools.ksp")
 }
 
 dependencies {
     ksp(AutoServiceKsp.processor)
     implementation(AutoService.annotations)
-    implementation(Ksp.symbolProcessingApi)
+    implementation(Ksp.artifact { symbolProcessingApi })
     implementation(project(":java-api"))
 }
