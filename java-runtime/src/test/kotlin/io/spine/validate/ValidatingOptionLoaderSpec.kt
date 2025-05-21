@@ -27,6 +27,7 @@
 package io.spine.validate
 
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.spine.time.validate.WhenFactory
 import io.spine.validate.option.NonPrimitiveOptionFactory
 import io.spine.validate.option.NumberOptionFactory
 import io.spine.validate.option.ValidatingOptionsLoader
@@ -44,7 +45,8 @@ internal class ValidatingOptionLoaderSpec {
 
         loadedClasses.shouldContainExactlyInAnyOrder(
             NumberOptionFactory::class.java,
-            NonPrimitiveOptionFactory::class.java
+            NonPrimitiveOptionFactory::class.java,
+            WhenFactory::class.java,
         )
     }
 }
