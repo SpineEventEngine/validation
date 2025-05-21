@@ -58,7 +58,7 @@ abstract class Dependency {
     /**
      * The [modules] given with the [version].
      */
-    final val artifacts: Map<String, String> by lazy {
+    val artifacts: Map<String, String> by lazy {
         modules.associateWith { "$it:$version" }
     }
 
@@ -114,3 +114,9 @@ private fun ResolutionStrategy.forceWithLogging(
     force(artifact)
     project.log { "Forced the version of `$artifact` in " + configuration.diagSuffix(project) }
 }
+
+/**
+ * Obtains full Maven coordinates for the requested [module].
+ */
+fun <T : Dependency> T.artifact(module: T.() -> String): String =
+    artifact(module())
