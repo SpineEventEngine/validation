@@ -31,11 +31,13 @@ import com.google.protobuf.Message
 import io.spine.type.toCompactJson
 
 /**
- * Returns a string representation for this [Any].
+ * Converts this [Any] to a string suitable for placeholder substitution
+ * in error messages.
  *
  * The method performs conversion similarly to
- * [stringValueOf][io.spine.validation.api.expression.stringValueOf] extension,
- * but for [Any] instances.
+ * [stringValueOf][io.spine.validation.api.expression.stringValueOf] function,
+ * which generators use to prepare placeholder values. We cannot re-use the original
+ * function because it operates upon Java expressions rather than runtime objects.
  */
 internal fun Any?.asPlaceholderValue(): String = when (this) {
 
