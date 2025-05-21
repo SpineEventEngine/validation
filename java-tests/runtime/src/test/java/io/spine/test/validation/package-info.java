@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,46 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.AutoService
-import io.spine.dependency.lib.AutoServiceKsp
-import io.spine.dependency.local.Base
-import io.spine.dependency.local.Logging
-import io.spine.dependency.local.TestLib
-import io.spine.gradle.protobuf.setup
+@CheckReturnValue
+@NullMarked
+package io.spine.test.validation;
 
-buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(mcJava.pluginLib)
-    }
-}
-
-plugins {
-    // We use it the KSP plugin via its ID because it's added to the build classpath
-    // in the root project.
-    id("com.google.devtools.ksp")
-    `build-proto-model`
-    module
-}
-
-// This cannot be moved under the `build-proto-model` script. It would not work from there.
-// Please see the documentation for `GenerateProtoTask.setup()` for details.
-protobuf {
-    generateProtoTasks.all().configureEach {
-        setup()
-    }
-}
-
-dependencies {
-    ksp(AutoServiceKsp.processor)
-    annotationProcessor(AutoService.processor)
-    compileOnly(AutoService.annotations)
-
-    implementation(project(":java-api"))
-    implementation(Base.lib)
-    implementation(Logging.lib)
-
-    testImplementation(TestLib.lib)
-}
-
-forceSpineBase()
+import com.google.errorprone.annotations.CheckReturnValue;
+import org.jspecify.annotations.NullMarked;

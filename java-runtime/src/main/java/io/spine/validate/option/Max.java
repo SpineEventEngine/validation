@@ -27,7 +27,6 @@
 package io.spine.validate.option;
 
 import com.google.errorprone.annotations.Immutable;
-import com.google.errorprone.annotations.ImmutableTypeParameter;
 import io.spine.code.proto.FieldContext;
 import io.spine.option.MaxOption;
 import io.spine.option.OptionsProto;
@@ -44,7 +43,7 @@ final class Max extends FieldValidatingOption<MaxOption> {
     }
 
     /** Returns a new instance of this option. */
-    static <@ImmutableTypeParameter V extends Number & Comparable<V>> Max create() {
+    static Max create() {
         return new Max();
     }
 

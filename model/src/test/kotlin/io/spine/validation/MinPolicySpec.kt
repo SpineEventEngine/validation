@@ -24,35 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.validation
 
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.validation.RANGE
-
-/**
- * The context of validating a numeric option that constrains a field's value
- * with a minimum or maximum bound.
- *
- * Contains the data required to report a compilation error for the option.
- */
-internal open class BoundContext(
-    val optionName: String,
-    val primitiveType: PrimitiveType,
-    val field: Field,
-    val file: File
-)
+import io.kotest.matchers.string.shouldContain
+import io.spine.protodata.ast.qualifiedName
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
- * The [BoundContext] for the `(range)` option.
+ * Tests [MinPolicy][io.spine.validation.bound.MinPolicy]-specific conditions.
  *
- * Introduces the [range] property to report the originally passed range definition
- * in compilation errors.
+ * [MinPolicy][io.spine.validation.bound.MinPolicy] is not extensively
+ * tested here because it largely relies on the implementation of
+ * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ *
+ * Both policies share the same mechanism of the option value parsing.
+ *
+ * @see RangePolicySpec
  */
-internal class RangeContext(
-    val range: String,
-    primitiveType: PrimitiveType,
-    field: Field,
-    file: File
-) : BoundContext(RANGE, primitiveType, field, file)
+@DisplayName("`MinPolicy` should reject the option")
+internal class MinPolicySpec : CompilationErrorTest() {
+
+    @Test
+    fun `with empty value`() =
+        assertCompilationFails(MinWithEmptyValue::class) { field ->
+            shouldContain(MIN)
+            shouldContain(field.qualifiedName)
+            shouldContain("the value is empty")
+        }
+}

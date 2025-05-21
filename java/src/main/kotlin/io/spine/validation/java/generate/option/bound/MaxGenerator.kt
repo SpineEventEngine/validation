@@ -32,17 +32,6 @@ import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.select
-import io.spine.validation.MAX
-import io.spine.validation.bound.MaxField
-import io.spine.validation.bound.NumericBound
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.stringValueOf
-import io.spine.validation.api.generate.SingleOptionCode
-import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -50,6 +39,17 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.MAX
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.bound.MaxField
+import io.spine.validation.bound.NumericBound.ValueCase
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 
 /**
  * The generator for the `(max)` option.
@@ -79,7 +79,7 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
     private val bound = view.bound
     private val isExclusive = bound.exclusive
 
-    override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
+    override val boundPrimitive: ValueCase = bound.valueCase
 
     /**
      * Returns a boolean expression that checks if the given [value] exceeds
@@ -87,12 +87,12 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
-        val literal = bound.asLiteral()
+        val upperBound = bound.asNumberExpression()
         val operator = if (isExclusive) ">=" else ">"
         return when (boundPrimitive) {
-            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $literal) $operator 0")
-            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $literal) $operator 0")
-            else -> Expression("$value $operator $literal")
+            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $upperBound) $operator 0")
+            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $upperBound) $operator 0")
+            else -> Expression("$value $operator $upperBound")
         }
     }
 
@@ -105,7 +105,7 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MAX_VALUE to StringLiteral(view.max),
+        MAX_VALUE to view.max.withFieldValue(bound),
         MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
     )
 }

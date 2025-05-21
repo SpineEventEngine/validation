@@ -32,17 +32,6 @@ import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
 import io.spine.server.query.select
-import io.spine.validation.MIN
-import io.spine.validation.bound.MinField
-import io.spine.validation.bound.NumericBound
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.stringValueOf
-import io.spine.validation.api.generate.SingleOptionCode
-import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -50,6 +39,17 @@ import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.MIN
+import io.spine.validation.api.expression.IntegerClass
+import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.joinToString
+import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.bound.MinField
+import io.spine.validation.bound.NumericBound.ValueCase
+import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 
 /**
  * The generator for `(min)` option.
@@ -79,7 +79,7 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
     private val bound = view.bound
     private val isExclusive = bound.exclusive
 
-    override val boundPrimitive: NumericBound.ValueCase = bound.valueCase
+    override val boundPrimitive: ValueCase = bound.valueCase
 
     /**
      * Returns a boolean expression that checks if the given [value] falls back
@@ -87,12 +87,12 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
      */
     @Suppress("MaxLineLength") // Easier to read.
     override fun isOutOfBounds(value: Expression<Number>): Expression<Boolean> {
-        val literal = bound.asLiteral()
+        val lowerBound = bound.asNumberExpression()
         val operator = if (isExclusive) "<=" else "<"
         return when (boundPrimitive) {
-            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $literal) $operator 0")
-            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $literal) $operator 0")
-            else -> Expression("$value $operator $literal")
+            UINT32_VALUE -> Expression("$IntegerClass.compareUnsigned($value, $lowerBound) $operator 0")
+            UINT64_VALUE -> Expression("$LongClass.compareUnsigned($value, $lowerBound) $operator 0")
+            else -> Expression("$value $operator $lowerBound")
         }
     }
 
@@ -105,7 +105,7 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         FIELD_VALUE to fieldType.stringValueOf(fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
-        MIN_VALUE to StringLiteral(view.min),
+        MIN_VALUE to view.min.withFieldValue(bound),
         MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }

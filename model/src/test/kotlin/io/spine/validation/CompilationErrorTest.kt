@@ -26,13 +26,18 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Message
 import io.spine.option.OptionsProto
+import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.filePattern
 import io.spine.protodata.plugin.Plugin
+import io.spine.protodata.protobuf.descriptor
+import io.spine.protodata.protobuf.field
 import io.spine.protodata.settings.SettingsDirectory
 import io.spine.protodata.settings.defaultConsumerId
 import io.spine.protodata.testing.AbstractCompilationErrorTest
 import io.spine.protodata.util.Format
+import kotlin.reflect.KClass
 
 /**
  * An abstract base for compilation error tests of [ValidationPlugin].
@@ -58,4 +63,22 @@ internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
             config.toByteArray()
         )
     }
+}
+
+/**
+ * Asserts that the given [message] does not compile.
+ *
+ * @param message The class of the message to compile.
+ * @param fieldName The name of the field to use for assertions.
+ * @param errorMessageAssertions Assertions to run upon the returned error message.
+ */
+internal fun CompilationErrorTest.assertCompilationFails(
+    message: KClass<out Message>,
+    fieldName: String = "value",
+    errorMessageAssertions: String.(Field) -> Unit
+) {
+    val descriptor = message.descriptor
+    val error = assertCompilationFails(descriptor)
+    val field = descriptor.field(fieldName)
+    error.message!!.errorMessageAssertions(field)
 }

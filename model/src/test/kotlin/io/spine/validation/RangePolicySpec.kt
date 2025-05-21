@@ -29,11 +29,8 @@ package io.spine.validation
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.descriptor
-import io.spine.protodata.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -49,7 +46,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
         assertCompilationFails(message) { field ->
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
+            shouldContain("a filed of an unsupported type")
         }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithInvalidDelimiters")
@@ -57,7 +54,7 @@ internal class RangePolicySpec : CompilationErrorTest() {
     fun withInvalidDelimiter(message: KClass<out Message>) =
         assertCompilationFails(message) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("The lower and upper bounds should be separated")
+            shouldContain("the lower and upper bounds must be separated either with")
         }
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithOverflowValues")
@@ -75,91 +72,112 @@ internal class RangePolicySpec : CompilationErrorTest() {
         assertCompilationFails(message) { field ->
             shouldContain(field.qualifiedName)
             shouldContain(value)
-            shouldContain("should be less than the upper")
+            shouldContain("must be less than the upper bound")
         }
 
     @Test
     fun `with an invalid opening symbol`() =
         assertCompilationFails(RangeInvalidOpening::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("The lower bound should begin either")
+            shouldContain("the lower bound must begin either with")
         }
 
     @Test
     fun `with an invalid closing symbol`() =
         assertCompilationFails(RangeInvalidClosing::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("The upper bound should end either")
+            shouldContain("the upper bound must end either with")
         }
 
     @Test
     fun `with integer number specified for lower bound of 'float' field`() =
         assertCompilationFails(RangeInvalidLowerFloat::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `0` bound value")
-            shouldContain("make sure the provided value is a floating-point number")
+            shouldContain("Value: `0`")
+            shouldContain("a floating-point number is required for this field type")
         }
 
     @Test
     fun `with integer number specified for upper bound of 'float' field`() =
         assertCompilationFails(RangeInvalidUpperFloat::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `15` bound value")
-            shouldContain("make sure the provided value is a floating-point number")
+            shouldContain("Value: `15`")
+            shouldContain("a floating-point number is required for this field type")
         }
 
     @Test
     fun `with integer number specified for lower bound of 'double' field`() =
         assertCompilationFails(RangeInvalidLowerDouble::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `0` bound value")
-            shouldContain("make sure the provided value is a floating-point number")
+            shouldContain("Value: `0`")
+            shouldContain("a floating-point number is required for this field type")
         }
 
     @Test
     fun `with integer number specified for upper bound of 'double' field`() =
         assertCompilationFails(RangeInvalidUpperDouble::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `15` bound value")
-            shouldContain("make sure the provided value is a floating-point number")
+            shouldContain("Value: `15`")
+            shouldContain("a floating-point number is required for this field type")
         }
 
     @Test
     fun `with floating-point number specified for lower bound of 'int32' field`() =
         assertCompilationFails(RangeInvalidLowerInt::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `0.0` bound value")
-            shouldContain("make sure the provided value is an integer number")
+            shouldContain("Value: `0.0`") // The bound value.
+            shouldContain("an integer number is required for this field type")
         }
 
     @Test
     fun `with floating-point number specified for upper bound of 'int32' field`() =
         assertCompilationFails(RangeInvalidUpperInt::class) { field ->
             shouldContain(field.qualifiedName)
-            shouldContain("could not parse the `15.0` bound value")
-            shouldContain("make sure the provided value is an integer number")
+            shouldContain("Value: `15.0`") // The bound value.
+            shouldContain("an integer number is required for this field type")
         }
 
     @Test
-    fun `with unsupported placeholders in the error message`() {
-        val message = RangeWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
+    fun `with unsupported placeholders in the error message`() =
+        assertCompilationFails(RangeWithInvalidPlaceholders::class) { field ->
             shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
             shouldContain("unsupported placeholders")
             shouldInclude("[field.name, range]")
         }
-    }
-}
 
-private fun CompilationErrorTest.assertCompilationFails(
-    message: KClass<out Message>,
-    errorMessageAssertions: String.(Field) -> Unit
-) {
-    val descriptor = message.descriptor
-    val error = assertCompilationFails(descriptor)
-    val field = descriptor.field("value")
-    error.message!!.errorMessageAssertions(field)
+    @Test
+    fun `with a non-existing field as a bound`() =
+        assertCompilationFails(RangeWithNonExistingFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("Field path: `timestamp.minutes`")
+            shouldContain("make sure the field path refers to a valid field")
+        }
+
+    @Test
+    fun `with a non-numeric field as a bound`() =
+        assertCompilationFails(RangeWithNonNumericFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("Field path: `error.type`")
+            shouldContain("the specified field is not of a numeric type")
+        }
+
+    @Test
+    fun `with a repeated field as a bound`() =
+        assertCompilationFails(RangeWithRepeatedFieldBound::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("Field path: `error_code`")
+            shouldContain("the specified field is not of a numeric type")
+        }
+
+    @Test
+    fun `with self as a bound`() =
+        assertCompilationFails(RangeWithSelfReferencing::class) { field ->
+            shouldContain(RANGE)
+            shouldContain(field.qualifiedName)
+            shouldContain("self-referencing is not allowed")
+        }
 }

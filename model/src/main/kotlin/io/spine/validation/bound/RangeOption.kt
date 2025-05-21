@@ -26,6 +26,7 @@
 
 package io.spine.validation.bound
 
+import io.spine.base.FieldPath
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
@@ -59,17 +60,29 @@ import io.spine.validation.checkPlaceholders
 /**
  * Controls whether a field should be validated with the `(range)` option.
  *
- * Whenever a field marked with `(range)` option is discovered, emits
+ * Whenever a field marked with the `(range)` option is discovered, emits
  * [RangeFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
  * 2. Either `..` or ` .. ` is used as a range delimiter.
  * 3. Either `()` for exclusive or `[]` for inclusive bounds is used.
- * 4. The provided number has `.` for floating-point fields, and does not have `.`
+ * 4. Both lower and upper bounds must be specified.
+ * 5. The error message does not contain unsupported placeholders.
+ *
+ * Conditions for number-based bounds:
+ *
+ * 1. The provided number has `.` for floating-point fields, and does not have `.`
  *    for integer fields.
- * 5. The provided bounds fit into the range of the target field type.
- * 6. The lower bound is strictly less than the upper one.
- * 7. The error message does not contain unsupported placeholders.
+ * 2. The provided number fits into the range of the target field type.
+ * 3. If both bounds are numbers, the lower bound must be strictly less than the upper one.
+ *
+ * Conditions for field-based bounds:
+ *
+ * 1. The specified field path must point to an exciting field.
+ * 2. The field must be of numeric type. Repeated fields are not supported.
+ *    Strict consistency between target and bound fields is not required,
+ *    floating-point fields can be used as bounds for integer fields and vice versa.
+ * 3. The field doesn't specify self as its bound.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
@@ -93,17 +106,25 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
     ): Just<RangeFieldDiscovered> {
         val field = event.subject
         val file = event.file
-        val primitiveType = checkFieldType(field, file, RANGE)
+        val fieldType = checkFieldType(field, file, RANGE)
 
         val option = event.option.unpack<RangeOption>()
-        val context = RangeContext(option.value, primitiveType, field, file)
-        val delimiter = context.checkDelimiter()
+        val metadata = RangeOptionMetadata(option.value, field, fieldType, file, typeSystem)
+        val delimiter = metadata.checkDelimiter()
 
-        val (left, right) = context.range.split(delimiter)
-        val (lowerExclusive, upperExclusive) = context.checkBoundTypes(left, right)
-        val lower = context.checkNumericBound(left.substring(1), lowerExclusive)
-        val upper = context.checkNumericBound(right.dropLast(1), upperExclusive)
-        context.checkRelation(lower, upper)
+        val (lower, upper) = metadata.range.split(delimiter)
+        val (isLowerExclusive, isUpperExclusive) = metadata.checkBrackets(lower, upper)
+
+        val boundParser = NumericBoundParser(metadata)
+        val lowerBound = lower.substring(1) // Removes a leading bracket.
+        val lowerKBound = boundParser.parse(lowerBound, isLowerExclusive)
+        val upperBound = upper.dropLast(1) // Removes a trailing bracket.
+        val upperKBound = boundParser.parse(upperBound, isUpperExclusive)
+
+        // Check `lower < upper` only if both bounds are numbers.
+        if (lowerKBound.value !is FieldPath && upperKBound.value !is FieldPath) {
+            metadata.checkRelation(lowerKBound, upperKBound)
+        }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
         message.checkPlaceholders(SUPPORTED_PLACEHOLDERS,  field, file, RANGE)
@@ -112,9 +133,9 @@ internal class RangePolicy : Policy<FieldOptionDiscovered>() {
             id = field.ref
             subject = field
             errorMessage = message
-            this.range = context.range
-            lowerBound = lower.toProto()
-            upperBound = upper.toProto()
+            this.range = metadata.range
+            this.lowerBound = lowerKBound.toProto()
+            this.upperBound = upperKBound.toProto()
             this.file = file
         }.just()
     }
@@ -136,48 +157,73 @@ internal class RangeFieldView : View<FieldRef, RangeField, RangeField.Builder>()
     }
 }
 
-private fun RangeContext.checkDelimiter(): String =
+private fun RangeOptionMetadata.checkDelimiter(): String =
     DELIMITER.find(range)?.value
         ?: Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The lower and upper bounds should be" +
-                    " separated either with `..` or ` .. ` delimiter. Examples of the correct " +
-                    " ranges: `(0..10]`, `[0 .. 10)`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower and upper bounds must be separated either with `..` or ` .. `.
+            Examples of correct ranges: `(0..10]`, `[0 .. 10)`.
+            """.trimIndent()
         }
 
-private fun RangeContext.checkBoundTypes(lower: String, upper: String): Pair<Boolean, Boolean> {
+private fun RangeOptionMetadata.checkBrackets(
+    lower: String,
+    upper: String
+): Pair<Boolean, Boolean> {
     val lowerExclusive = when (lower.first()) {
         '(' -> true
         '[' -> false
         else -> Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The lower bound should begin either" +
-                    " with `(` for exclusive or `[` for inclusive values. Examples of" +
-                    " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the lower bound must begin either with `(` for exclusive or `[` for inclusive values.
+            Examples: `(5`, `[3`.
+            """.trimIndent()
         }
     }
     val upperExclusive = when (upper.last()) {
         ')' -> true
         ']' -> false
         else -> Compilation.error(file, field.span) {
-            "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                    " `${field.qualifiedName}` field. The upper bound should end either" +
-                    " with `)` for exclusive or `]` for inclusive values. Examples of" +
-                    " the correct ranges: `(0..10]`, `(0..10)`, `[5..100]`."
+            """
+            The `($RANGE)` option could not parse the passed range value.
+            Value: `$range`.
+            Target field: `${field.qualifiedName}`.
+            Reason: the upper bound must end either with `)` for exclusive or `]` for inclusive values.
+            Examples: `5)`, `3]`.
+            """.trimIndent()
         }
     }
     return lowerExclusive to upperExclusive
 }
 
-private fun RangeContext.checkRelation(lower: KotlinNumericBound, upper: KotlinNumericBound) {
+private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNumericBound) {
     Compilation.check(lower <= upper, file, field.span) {
-        "The `($RANGE)` option could not parse the range value `$range` specified for" +
-                " `${field.qualifiedName}` field. The lower bound `${lower.value}` should be" +
-                " less than the upper `${upper.value}`."
+        """
+        The `($RANGE)` option could not parse the passed range value.
+        Value: `$range`.
+        Target field: `${field.qualifiedName}`.
+        Reason: the lower bound `${lower.value}` must be less than the upper bound `${upper.value}`.
+        Examples of the correct ranges: `(-5..5]`, `[0 .. 10)`.
+        """.trimIndent()
     }
 }
 
-private val DELIMITER = Regex("""(?<=\d)\s?\.\.\s?(?=[\d-+])""")
+/**
+ * Finds `..` or ` .. ` delimiter only when it is used between identifiers or numbers.
+ *
+ * Additionally, `-+_` symbols are allowed on the right side form the delimiter
+ * for the following reasons:
+ *
+ * 1. A number may begin with the minus or plus symbol.
+ * 2. A Protobuf identifier may begin with the underscore.
+ */
+private val DELIMITER = Regex("""(?<=[\p{Alnum}_])\s?\.\.\s?(?=[\p{Alnum}-+_])""")
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_PATH,

@@ -51,7 +51,7 @@ internal class IsRequiredSpec {
         val violations = violationsOf(message)
         assertThat(violations)
             .hasSize(1)
-        assertThat(violations[0]!!.message.format())
+        assertThat(violations[0].message.format())
             .contains("choice")
     }
 

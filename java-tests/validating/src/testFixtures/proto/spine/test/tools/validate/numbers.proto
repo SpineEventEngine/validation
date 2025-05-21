@@ -48,3 +48,33 @@ message Year {
 
     uint32 day_count = 1 [(min).value = "365", (max).value = "366"];
 }
+
+message SchoolClass {
+
+    // Let one of the field names begin with the underscore,
+    // so that we are sure such fields are also correctly handled.
+    int32 _number_of_students = 1;
+
+    int32 honor_students = 2 [(range).value = "[targets.honor_students .. _number_of_students]"];
+
+    int32 disciplinary_incidents = 3 [(range).value = "[0 .. targets.disciplinary_incidents]"];
+
+    double average_grade = 4 [(range).value = "[targets.average_grade .. 100.0]"];
+
+    int32 failing_students = 5 [(max).value = "_number_of_students"];
+
+    float attendance_rate = 6 [(min).value = "targets.attendance_rate"];
+
+    TargetMetrics targets = 7;
+}
+
+message TargetMetrics {
+
+    uint64 honor_students = 1;
+
+    double attendance_rate = 2;
+
+    int32 disciplinary_incidents = 3;
+
+    float average_grade = 4;
+}

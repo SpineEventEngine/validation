@@ -47,6 +47,7 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.check
+import io.spine.validation.RANGE
 
 /**
  * Determines whether the field type can be validated with a range-constraining option.
@@ -65,12 +66,27 @@ internal object BoundFieldSupport {
     internal fun checkFieldType(field: Field, file: File, option: String): PrimitiveType {
         val primitive = field.type.extractPrimitive()
         Compilation.check(primitive in numericPrimitives, file, field.span) {
-            "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported by" +
-                    " the `($option)` option. Supported field types: numbers and repeated" +
-                    " of numbers."
+            """
+            The `($option)` option was applied to a filed of an unsupported type.
+            Target field: `${field.qualifiedName}`.
+            Field type: `${field.type.name}`.
+            Supported field types: floating-point and integer numbers (including repeated fields).
+            """.trimIndent()
         }
         return primitive!!
     }
+
+    /**
+     * Enumerates all numeric primitive field types.
+     */
+    internal val numericPrimitives = listOf(
+        TYPE_FLOAT, TYPE_DOUBLE,
+        TYPE_INT32, TYPE_INT64,
+        TYPE_UINT32, TYPE_UINT64,
+        TYPE_SINT32, TYPE_SINT64,
+        TYPE_FIXED32, TYPE_FIXED64,
+        TYPE_SFIXED32, TYPE_SFIXED64,
+    )
 }
 
 /**
@@ -84,12 +100,3 @@ private fun FieldType.extractPrimitive(): PrimitiveType? = when {
     isList -> list.primitive
     else -> null
 }
-
-private val numericPrimitives = listOf(
-    TYPE_FLOAT, TYPE_DOUBLE,
-    TYPE_INT32, TYPE_INT64,
-    TYPE_UINT32, TYPE_UINT64,
-    TYPE_SINT32, TYPE_SINT64,
-    TYPE_FIXED32, TYPE_FIXED64,
-    TYPE_SFIXED32, TYPE_SFIXED64,
-)
