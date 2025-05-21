@@ -133,7 +133,7 @@ private class GenerateDistinct(private val view: DistinctField) {
                         .collect($CollectorsClass.toMap(
                             $MapClass.Entry::getKey,
                             $MapClass.Entry::getValue,
-                            (v1, v2) -> v1, // We don't expect key duplicates, so no merge logic.
+                            (v1, v2) -> v1, // We don't expect key duplicates here.
                             $LinkedHashMapClass::new
                         ));
                     var fieldPath = ${parentPath.resolve(field.name)};

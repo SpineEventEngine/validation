@@ -105,7 +105,7 @@ public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
                         .collect($CollectorsClass.toMap(
                             $MapClass.Entry::getKey,
                             entry -> $stringifyValue,
-                            (v1, v2) -> v1, // We don't expect key duplicates, so no merge logic.
+                            (v1, v2) -> v1, // We don't expect key duplicate keys here.
                             $LinkedHashMapClass::new
                         ))
                         .toString()
