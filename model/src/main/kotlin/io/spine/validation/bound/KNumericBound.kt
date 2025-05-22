@@ -106,7 +106,7 @@ internal fun KNumericBound.toProto(): NumericBound {
         else -> error(
             """
             Cannot convert `${qualified<KNumericBound>()}` to its Protobuf counterpart: `${simply<NumericBound>()}`.
-            `${simply<KNumericBound>()}` contain a value with unsupported type.
+            `${simply<KNumericBound>()}` contains a value of unsupported type.
             The type of the value: `${value.qualifiedClassName}`.
             The value itself: `$value`.
             """.ti()
