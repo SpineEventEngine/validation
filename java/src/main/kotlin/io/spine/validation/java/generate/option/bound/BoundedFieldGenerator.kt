@@ -40,6 +40,7 @@ import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
 import io.spine.protodata.java.call
 import io.spine.protodata.java.field
+import io.spine.protodata.java.plus
 import io.spine.string.camelCase
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
@@ -66,7 +67,6 @@ import io.spine.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.plus
 import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
 import io.spine.validation.java.expression.templateString
 

@@ -27,8 +27,10 @@
 package io.spine.validation.bound
 
 import io.spine.base.FieldPath
+import io.spine.string.qualified
+import io.spine.string.qualifiedClassName
 import io.spine.string.simply
-import io.spine.validation.api.simpleNameOf
+import io.spine.string.ti
 
 /**
  * One-to-one Kotlin representation of [NumericBound].
@@ -54,9 +56,13 @@ internal data class KNumericBound(
         val otherValue = other.value
         if (otherValue::class != value::class) {
             error(
-                "Illegal comparison of numeric bounds with incompatible value types." +
-                        " Type of the instance value: `${simpleNameOf(value)}`, the other value" +
-                        " has the type of `${simpleNameOf(otherValue)}`."
+                """
+                Cannot compare two numeric bounds with different value types.
+                `${qualified<KNumericBound>()}` stores a bound value as `${simply<Any>()}`.
+                In order to compare two numeric bounds their `value::class` must be the same.
+                Type of this instance value: `${value.qualifiedClassName}`.
+                Type of the other value: `${otherValue.qualifiedClassName}`.
+                """.ti()
             )
         }
         return when (value) {
@@ -67,8 +73,11 @@ internal data class KNumericBound(
             is UInt -> value.compareTo(otherValue as UInt)
             is ULong -> value.compareTo(otherValue as ULong)
             else -> error(
-                "Illegal comparison of numeric bound with unsupported value type:" +
-                        " `${simpleNameOf(value)}`."
+                """
+                `${qualified<KNumericBound>()}` does not support comparison of non-numeric bounds.
+                Only numeric values can be compared.
+                The type of the bound: `${value.qualifiedClassName}`.
+                """.ti()
             )
         }
     }
@@ -95,8 +104,12 @@ internal fun KNumericBound.toProto(): NumericBound {
         is FieldPath -> builder.setFieldValue(value)
 
         else -> error(
-            "Cannot convert `${simply<KNumericBound>()}` to `${simply<NumericBound>()}`" +
-                    " due to unexpected value type: `${simpleNameOf(value)}`."
+            """
+            Cannot convert `${qualified<KNumericBound>()}` to its Protobuf counterpart: `${simply<NumericBound>()}`.
+            `${simply<KNumericBound>()}` contains a value of unsupported type.
+            The type of the value: `${value.qualifiedClassName}`.
+            The value itself: `$value`.
+            """.ti()
         )
     }
     return builder.build()

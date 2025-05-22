@@ -34,6 +34,7 @@ import io.spine.protodata.java.Expression
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
@@ -50,12 +51,12 @@ import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.JsonExtensionsClass
 import io.spine.validation.api.expression.SpineTime
 import io.spine.validation.api.expression.TimestampsClass
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
-import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
@@ -172,7 +173,7 @@ private class GenerateWhen(
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_VALUE to JsonExtensionsClass.call("toCompactJson", fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         WHEN_IN to StringLiteral("${view.bound}".lowercase())

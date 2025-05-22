@@ -31,6 +31,7 @@ import io.spine.protodata.ast.TypeName
 import io.spine.protodata.ast.name
 import io.spine.protodata.java.Expression
 import io.spine.protodata.java.StringLiteral
+import io.spine.protodata.java.call
 import io.spine.server.query.select
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -42,8 +43,8 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MIN
 import io.spine.validation.api.expression.IntegerClass
 import io.spine.validation.api.expression.LongClass
+import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.stringValueOf
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.bound.MinField
@@ -102,7 +103,7 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
+        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         MIN_VALUE to view.min.withFieldValue(bound),

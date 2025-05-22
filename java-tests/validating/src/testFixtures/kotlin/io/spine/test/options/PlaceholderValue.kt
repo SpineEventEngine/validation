@@ -24,21 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.test.options
 
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-
-/**
- * Yields a new string [Expression] by appending the given [String]
- * literal to this string [Expression].
- */
-public operator fun Expression<String>.plus(value: String): Expression<String> =
-    plus(StringLiteral(value))
+import com.google.protobuf.ByteString
+import com.google.protobuf.Message
+import io.spine.type.toCompactJson
 
 /**
- * Yields a new string [Expression] by concatenating this [Expression]
- * with another [Expression].
+ * Converts this [Any] to a string suitable for placeholder substitution
+ * in error messages.
+ *
+ * The method performs conversion similarly to
+ * [stringValueOf][io.spine.validation.api.expression.stringValueOf] function,
+ * which generators use to prepare placeholder values. We cannot re-use the original
+ * function because it operates upon Java expressions rather than runtime objects.
  */
-public operator fun Expression<String>.plus(value: Expression<String>): Expression<String> =
-    Expression("$this + $value")
+internal fun Any?.asPlaceholderValue(): String = when (this) {
+
+    is Message -> toCompactJson()
+
+    // We don't need `ByteString` to be handled as `Iterable<Byte>`.
+    is ByteString -> toString()
+
+    is Iterable<*> -> map { it.asPlaceholderValue() }.toString()
+
+    is Map<*, *> -> mapValues { (_, value) -> value.asPlaceholderValue() }.toString()
+
+    else -> toString()
+}
