@@ -51,7 +51,7 @@ import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
-import io.spine.validation.api.expression.SpineJson
+import io.spine.validation.api.expression.JsonExtensionsClass
 import io.spine.validation.api.expression.SpineTime
 import io.spine.validation.api.expression.TimestampsClass
 import io.spine.validation.api.expression.joinToString
@@ -173,7 +173,7 @@ private class GenerateWhen(
         fieldValue: Expression<*>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to SpineJson.call("toCompactJson", fieldValue),
+        FIELD_VALUE to JsonExtensionsClass.call("toCompactJson", fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),
         PARENT_TYPE to typeName,
         WHEN_IN to StringLiteral("${view.bound}".lowercase())

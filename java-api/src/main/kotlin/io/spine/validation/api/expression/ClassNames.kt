@@ -191,4 +191,4 @@ public val SpineTime: ClassName = ClassName(Time::class)
  * It is available from Java, but not from Kotlin. So, we specify it as
  * a string literal here.
  */
-public val SpineJson: ClassName = ClassName("io.spine.type", "Json")
+public val JsonExtensionsClass: ClassName = ClassName("io.spine.type", "Json")

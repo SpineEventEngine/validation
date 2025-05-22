@@ -116,7 +116,7 @@ public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     }
 
 private fun FieldType.stringifySingular(value: Expression<*>) = when {
-    isMessage -> SpineJson.call("toCompactJson", value)
+    isMessage -> JsonExtensionsClass.call("toCompactJson", value)
     isEnum -> value.stringify()
     isPrimitive -> value.stringifyPrimitive(primitive)
     else -> unsupportedFieldType(value)
