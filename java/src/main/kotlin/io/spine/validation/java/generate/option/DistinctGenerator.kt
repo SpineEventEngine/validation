@@ -65,6 +65,7 @@ import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
+import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.java.expression.templateString
 
 /**
@@ -111,10 +112,7 @@ private class GenerateDistinct(private val view: DistinctField) {
                     var duplicates = frequencies.elementSet().stream()
                         .filter(e -> frequencies.count(e) > 1)
                         .toList();
-                    var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  ${parentName.orElse(declaringType)};
-                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), list, ReadVar<List<*>>("duplicates"))};
-                    violations.add(violation);
+                    ${reportViolation(list, ReadVar<Map<*, *>>("duplicates"))}
                 }
                 """.trimIndent()
             )
@@ -136,10 +134,7 @@ private class GenerateDistinct(private val view: DistinctField) {
                             (v1, v2) -> v1, // We don't expect key duplicates here.
                             $LinkedHashMapClass::new
                         ));
-                    var fieldPath = ${parentPath.resolve(field.name)};
-                    var typeName =  ${parentName.orElse(declaringType)};
-                    var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), map, ReadVar<Map<*, *>>("duplicates"))};
-                    violations.add(violation);
+                    ${reportViolation(map, ReadVar<Map<*, *>>("duplicates"))}
                 }
                 """.trimIndent()
             )
@@ -151,6 +146,20 @@ private class GenerateDistinct(private val view: DistinctField) {
             Please ensure that the generator supports all field types allowed by its policy.
             """.ti()
         )
+    }
+
+    /**
+     * Creates an instance of [ConstraintViolation] for the given [fieldValue]
+     * and [duplicates] it contains, then adds the created instance to the [violations] list.
+     */
+    private fun reportViolation(
+        fieldValue: Expression<*>,
+        duplicates: Expression<*>
+    ): Expression<Unit> {
+        val fieldPath = parentPath.resolve(field.name)
+        val typeName = parentName.orElse(declaringType)
+        val violation = violation(fieldPath, typeName, fieldValue, duplicates)
+        return Expression("$violations.add($violation);")
     }
 
     private fun violation(
