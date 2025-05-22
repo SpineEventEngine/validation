@@ -71,6 +71,16 @@ public val TemplateStringClass: ClassName = ClassName(TemplateString::class)
 public val PatternClass: ClassName = ClassName(Pattern::class)
 
 /**
+ * The [ClassName] of [Map].
+ */
+public val MapClass: ClassName = ClassName(Map::class)
+
+/**
+ * The [ClassName] of [LinkedHashMap].
+ */
+public val LinkedHashMapClass: ClassName = ClassName(LinkedHashMap::class)
+
+/**
  * The [ClassName] of [ImmutableList].
  */
 public val ImmutableListClass: ClassName = ClassName(ImmutableList::class)
@@ -173,3 +183,12 @@ public val TimestampsClass: ClassName = ClassName(Timestamps::class)
  * The [ClassName] of [io.spine.base.Time].
  */
 public val SpineTime: ClassName = ClassName(Time::class)
+
+/**
+ * The [ClassName] for `io.spine.type.Json`.
+ *
+ * Note: `Json` is a synthetic Java class, which contains Kotlin extensions.
+ * It is available from Java, but not from Kotlin. So, we specify it as
+ * a string literal here.
+ */
+public val JsonExtensionsClass: ClassName = ClassName("io.spine.type", "Json")

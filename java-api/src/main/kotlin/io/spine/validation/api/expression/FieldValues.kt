@@ -35,56 +35,92 @@ import io.spine.protodata.ast.isList
 import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
+import io.spine.protodata.ast.toFieldType
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.ReadVar
 import io.spine.protodata.java.call
+import io.spine.string.ti
 
 /**
- * Returns an expression that converts the provided field [value] to a [String].
+ * Returns an expression that converts the provided field [value] to a string.
  *
  * See [FieldType.stringValueOf] for details upon how the value is converted.
+ *
+ * @throws IllegalStateException if the field type is not supported.
  */
 public fun Field.stringValueOf(value: Expression<*>): Expression<String> =
     type.stringValueOf(value)
 
 /**
- * Returns an expression that converts the provided field [value] to a [String].
+ * Returns an expression that converts the provided field [value] to a string.
  *
- * How the value is converted to [String] is determined by this [FieldType].
+ * Depending on this [FieldType], different conversion rules take place.
  *
- * For most field types, an invocation of `toString()` is used because these
- * Protobuf types are represented as Java objects in the generated code.
+ * **Singular types**:
  *
- * The following field types use `toString()`:
+ * - If a [Message][com.google.protobuf.Message]: [toCompactJson][io.spine.type.toCompactJson]
+ *   is used.
+ * - If an enum: `toString()` is used.
+ * - If a primitive:
+ *      - `string`: used as-is.
+ *      - `bytes`: `toString()` is used.
+ *      - Other primitives: converted via `String.valueOf(...)`.
  *
- * 1. Messages and enums.
- * 2. Lists and maps.
- * 3. Bytes.
+ * **List types**:
  *
- * Note that the `bytes` field type is represented with [com.google.protobuf.ByteString]
- * in the generated code. An invocation of `toString()` on this type is completely safe.
- * It prints a truncated, escaped version of its content along with its size.
+ * Each element is converted as a singular type and `toString()`
+ * is invoked for the resulting list.
  *
- * The remaining field types are handled as follows:
+ * **Map types**:
  *
- * 1. `string` remains unchanged.
- * 2. Scalar types (except `bytes`) are converted using the `String.valueOf` method.
+ * Keys are assumed to be either integers or strings (Protobuf restriction)
+ * and are stringified directly.
+ *
+ * Each map value is converted as a singular type and `toString()`
+ * is invoked for the resulting map.
+ *
+ * @throws IllegalStateException if the field type is not supported.
  */
 public fun FieldType.stringValueOf(value: Expression<*>): Expression<String> =
     when {
-        isSingular -> when {
-            isMessage || isEnum -> value.stringify()
-            isPrimitive -> value.stringifyPrimitive(primitive)
-            else -> error(
-                "Cannot convert `$value` expression to `String` expression." +
-                        " Unsupported field type: `${name}`."
+        isSingular -> stringifySingular(value)
+        isList -> {
+            val itemType = list.toFieldType()
+            val stringifyItem = itemType.stringifySingular(ReadVar<Any?>("e"))
+            Expression(
+                """
+                $value.stream()
+                    .map(e -> $stringifyItem)
+                    .toList()
+                    .toString()
+                """.trimIndent()
             )
         }
-        isList || isMap -> value.stringify()
-        else -> error(
-            "Cannot convert `$value` expression to `String` expression." +
-                    " Unsupported field type: `${name}`."
-        )
+        isMap -> {
+            val valueType = map.valueType.toFieldType()
+            val stringifyValue = valueType.stringifySingular(ReadVar<Any?>("entry.getValue()"))
+            Expression(
+                """
+                $value.entrySet().stream()
+                        .collect($CollectorsClass.toMap(
+                            $MapClass.Entry::getKey,
+                            entry -> $stringifyValue,
+                            (v1, v2) -> v1, // We don't expect key duplicate keys here.
+                            $LinkedHashMapClass::new
+                        ))
+                        .toString()
+                """.trimIndent()
+            )
+        }
+        else -> unsupportedFieldType(value)
     }
+
+private fun FieldType.stringifySingular(value: Expression<*>) = when {
+    isMessage -> JsonExtensionsClass.call("toCompactJson", value)
+    isEnum -> value.stringify()
+    isPrimitive -> value.stringifyPrimitive(primitive)
+    else -> unsupportedFieldType(value)
+}
 
 @Suppress("UNCHECKED_CAST") // Casting string field's value to `String` is safe.
 private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
@@ -93,3 +129,10 @@ private fun Expression<*>.stringifyPrimitive(primitive: PrimitiveType) =
         TYPE_BYTES -> stringify()
         else -> StringClass.call("valueOf", this)
     }
+
+private fun FieldType.unsupportedFieldType(value: Expression<*>): Nothing = error(
+    """
+    Cannot convert `$value` expression to `Expression<String>`.
+    Unsupported field type: `${name}`.
+    """.ti()
+)

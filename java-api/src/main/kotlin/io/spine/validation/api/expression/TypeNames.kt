@@ -40,5 +40,5 @@ import io.spine.protodata.ast.TypeName as AstTypeName
  */
 public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
     val nameLiteral = StringLiteral(typeName.qualifiedName)
-    return Expression("$this != null ? $this : $TypeNameClass.of($nameLiteral)")
+    return Expression("($this != null ? $this : $TypeNameClass.of($nameLiteral))")
 }
