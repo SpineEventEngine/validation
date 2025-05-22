@@ -24,25 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.validation.api
 
-import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Test
+import io.spine.annotation.Internal
 
-class TimestampValidatorSpec {
+/**
+ * A container for the discovered message validators.
+ *
+ * Holds the resource path for the message-validators configuration file
+ * used by the `:model` to generate the corresponding constraints.
+ */
+@Internal
+public object MessageValidatorsDescriptor {
 
-    @Test
-    fun test() {
-        val path = "spine/validation/message-validators.txt"
-        val resources = Thread.currentThread()
-            .contextClassLoader
-            .getResources(path)
-            .toList()
-        resources.size shouldBe 1
-
-        val content = resources.first()
-            .openStream()
-            .use { it.reader().readLines() }
-        content.size shouldBe 2
-    }
+    /**
+     * The path in resources to the file with the discovered message validators.
+     */
+   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators.txt"
 }

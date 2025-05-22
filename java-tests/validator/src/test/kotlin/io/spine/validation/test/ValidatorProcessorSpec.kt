@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,29 +23,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.validation.test;
+package io.spine.validation.test
 
-import "spine/options.proto";
+import io.kotest.matchers.shouldBe
+import io.spine.validation.api.MessageValidatorsDescriptor
+import org.junit.jupiter.api.Test
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.test";
-option java_outer_classname = "ValidatedDescriptorsProto";
-option java_multiple_files = true;
+class ValidatorProcessorSpec {
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/descriptor.proto";
+    @Test
+    fun test() {
+        val resources = Thread.currentThread()
+            .contextClassLoader
+            .getResources(MessageValidatorsDescriptor.RESOURCES_LOCATION)
+            .toList()
+        resources.size shouldBe 1
 
-// Tests how custom message validators work
-message ValidatedDescriptors {
-
-    // Built-in primitive type with a constraint.
-    string set_name = 1 [(pattern).regex = "^[A-Za-z ]+\\$"];
-
-    // External, nested Protobuf message.
-    google.protobuf.FileDescriptorSet set = 2 [(required) = true];
-
-    // External, top-level Protobuf message.
-    google.protobuf.Timestamp created_at = 3;
+        val content = resources.first()
+            .openStream()
+            .use { it.reader().readLines() }
+        content.size shouldBe 2
+    }
 }

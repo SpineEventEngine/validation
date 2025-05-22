@@ -26,9 +26,12 @@
 
 package io.spine.validation.java
 
+import io.spine.protodata.java.ClassName
 import io.spine.validation.ValidationPlugin
+import io.spine.validation.api.MessageValidatorsDescriptor
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
+import java.io.File
 import java.util.*
 
 /**
@@ -59,4 +62,18 @@ public class JavaValidationPlugin : ValidationPlugin(
 private val customOptions by lazy {
     ServiceLoader.load(ValidationOption::class.java)
         .filterNotNull()
+}
+
+private val customValidators = run {
+    val protoDataWorkingDir = System.getProperty("user.dir")
+    val kspOutput = "$protoDataWorkingDir/build/generated/ksp/main/resources"
+    val messageValidatorsPath = "$kspOutput/${MessageValidatorsDescriptor.RESOURCES_LOCATION}"
+    val messageValidators = File(messageValidatorsPath).readLines()
+        .map {
+            val (validator, message) = it.split(":")
+            ClassName.guess(validator) to ClassName.guess(message)
+        }
+
+    // List of Validator to Message.
+    messageValidators
 }

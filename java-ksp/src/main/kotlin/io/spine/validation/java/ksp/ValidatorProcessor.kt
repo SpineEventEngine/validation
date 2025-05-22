@@ -35,6 +35,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
+import io.spine.validation.api.MessageValidatorsDescriptor
 import io.spine.validation.api.Validator
 
 internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : SymbolProcessor {
@@ -43,7 +44,7 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
     private val output by lazy {
         codeGenerator.createNewFileByPath(
             dependencies = Dependencies(aggregating = true),
-            path = "spine/validation/message-validators.txt",
+            path = MessageValidatorsDescriptor.RESOURCES_LOCATION,
             extensionName = ""
         ).writer()
     }
@@ -63,10 +64,12 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
 
         output.use { writer ->
             validators.forEach { (message, validator) ->
-                val validatorName = validator.jvmName() // ?: must be class decl.
-                val messageName = message.jvmName() // ?: must be class decl.
-                if (discoveredValidators.add(validatorName)) {
-                    writer.appendLine("$validatorName:$messageName")
+                val validatorFQN = validator.qualifiedName?.asString()
+                    ?: noQualifiedName(validator)
+                val messageFQN = message.qualifiedName?.asString()
+                    ?: noQualifiedName(validator)
+                if (discoveredValidators.add(validatorFQN)) {
+                    writer.appendLine("$validatorFQN:$messageFQN")
                 }
             }
         }
@@ -75,18 +78,9 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
         return emptyList()
     }
 
-    /**
-     * For a KSClassDeclaration, returns the JVM-binary name.
-     * e.g. com.pkg.Outer.Inner → "com.pkg.Outer$Inner"
-     */
-    private fun KSClassDeclaration.jvmName(): String {
-        val fqn = qualifiedName!!.asString()
-        val pkg = packageName.asString()
-        // strip off the package + dot, or get the whole name if no package
-        val clsPart = if (pkg.isEmpty()) fqn else fqn.removePrefix("$pkg.")
-        val binarySimple = clsPart.replace('.', '$')
-        return if (pkg.isEmpty()) binarySimple else "$pkg.$binarySimple"
-    }
+    private fun noQualifiedName(validator: KSClassDeclaration): Nothing = error(
+        "Validator `$validator` has no qualified name."
+    )
 
     private fun KSAnnotation.argumentValue(argumentName: String = "value"): KSClassDeclaration {
         val valueArg = arguments.firstOrNull { it.name?.asString() == argumentName }
