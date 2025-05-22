@@ -43,7 +43,7 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
     private val output by lazy {
         codeGenerator.createNewFileByPath(
             dependencies = Dependencies(aggregating = true),
-            path = "META-INF/message-validators",
+            path = "spine/validation/message-validators.txt",
             extensionName = ""
         ).writer()
     }
@@ -64,7 +64,7 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
         output.use { writer ->
             validators.forEach { (message, validator) ->
                 val validatorName = validator.jvmName() // ?: must be class decl.
-                val messageName = message.jvmName() // ?: must be class decl
+                val messageName = message.jvmName() // ?: must be class decl.
                 if (discoveredValidators.add(validatorName)) {
                     writer.appendLine("$validatorName:$messageName")
                 }

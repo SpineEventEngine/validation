@@ -24,8 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.devtools.ksp.gradle.KspTask
-
 plugins {
     id("com.google.devtools.ksp")
 }
@@ -43,15 +41,17 @@ protoData {
     )
 }
 
-tasks.withType<KspTask> {
-    // make sure stdout (println) appears at INFO level
-    logging.captureStandardOutput(LogLevel.INFO)
-}
-
 // ProtoData codegen needs output from `:java-ksp`.
 project.afterEvaluate {
-    val kspKotlin by tasks.getting
+    val kspKotlin by tasks.getting {
+        outputs.upToDateWhen { false }
+    }
+
     val launchProtoData by tasks.getting {
         dependsOn(kspKotlin)
+    }
+
+    val kspTestKotlin by tasks.getting {
+        outputs.upToDateWhen { false }
     }
 }

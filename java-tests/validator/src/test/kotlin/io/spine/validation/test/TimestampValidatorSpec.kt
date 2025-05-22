@@ -26,22 +26,23 @@
 
 package io.spine.validation.test
 
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class TimestampValidatorSpec {
 
     @Test
     fun test() {
-        val path = "META-INF/message-validators"
+        val path = "spine/validation/message-validators.txt"
         val resources = Thread.currentThread()
             .contextClassLoader
             .getResources(path)
             .toList()
+        resources.size shouldBe 1
 
-        println("Found ${resources.size} resource(s) at '$path':")
-        resources.forEach { url ->
-            println("  → $url")
-            println("    contents: '${url.openStream().bufferedReader().use { it.readText() }}'")
-        }
+        val content = resources.first()
+            .openStream()
+            .use { it.reader().readLines() }
+        content.size shouldBe 2
     }
 }
