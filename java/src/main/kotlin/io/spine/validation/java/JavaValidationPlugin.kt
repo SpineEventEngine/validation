@@ -26,7 +26,6 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.java.ClassName
 import io.spine.validation.ValidationPlugin
 import io.spine.validation.api.MessageValidatorsDescriptor
 import io.spine.validation.api.ValidationOption
@@ -49,7 +48,7 @@ import java.util.*
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }),
+        JavaValidationRenderer(customOptions.map { it.generator }, customValidators),
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),
@@ -64,16 +63,21 @@ private val customOptions by lazy {
         .filterNotNull()
 }
 
-private val customValidators = run {
+/**
+ * Dynamically discovered instances of custom [io.spine.validation.api.MessageValidator]s.
+ *
+ * KSP module is responsible for discovering message validators and dumping the discovered
+ * validators to a text file to the default `:kspKotlin` task output location.
+ */
+private val customValidators by lazy {
     val protoDataWorkingDir = System.getProperty("user.dir")
     val kspOutput = "$protoDataWorkingDir/build/generated/ksp/main/resources"
     val messageValidatorsPath = "$kspOutput/${MessageValidatorsDescriptor.RESOURCES_LOCATION}"
-    val messageValidators = File(messageValidatorsPath).readLines()
-        .map {
-            val (validator, message) = it.split(":")
-            ClassName.guess(validator) to ClassName.guess(message)
-        }
-
-    // List of Validator to Message.
-    messageValidators
+    val messageValidators =  File(messageValidatorsPath)
+    MessageValidators.fromFile(messageValidators)
 }
+
+/**
+ * The default location to which KSP module dumps the generated resources.
+ */
+private const val KSP_OUTPUT_RESOURCES = "build/generated/ksp/main/resources"

@@ -59,7 +59,10 @@ import io.spine.validation.java.generate.option.WhenGenerator
  * This renderer is applied to every compilation [Message],
  * even if the message does not have any declared constraints.
  */
-public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : JavaRenderer() {
+internal class JavaValidationRenderer(
+    customGenerators: List<OptionGenerator>,
+    customValidators: MessageValidators
+) : JavaRenderer() {
 
     private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
