@@ -38,6 +38,11 @@ import kotlin.reflect.KClass
 @Retention(RUNTIME)
 public annotation class Validator(
 
+    // TODO:2025-05-23:yevhenii.nadtochii:
+    //  + must implement `MessageValidator`.
+    //  + must have a public no-args constructor.
+    //  + a new instance is created per validation.
+
     /**
      * The validated message class.
      */
