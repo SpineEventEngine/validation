@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,29 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+plugins {
+    id("com.google.devtools.ksp")
+}
 
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.spine.time.validate.WhenFactory
-import io.spine.validate.option.NonPrimitiveOptionFactory
-import io.spine.validate.option.NumberOptionFactory
-import io.spine.validate.option.ValidatingOptionsLoader
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+dependencies {
+    ksp(project(":java-ksp"))
+    protoData(project(":java"))
+    implementation(project(":java-api"))
+}
 
-@DisplayName("`ValidatingOptionsLoader` should")
-internal class ValidatingOptionLoaderSpec {
+protoData {
+    plugins(
+        "io.spine.validation.java.JavaValidationPlugin",
+        "io.spine.protodata.java.style.JavaCodeStyleFormatterPlugin"
+    )
+}
 
-    @Test
-    fun `load common options`() {
-        val loadedClasses = ValidatingOptionsLoader.INSTANCE.implementations()
-            .map { it::class.java }
-            .toSet()
+// ProtoData codegen needs output from `:java-ksp`.
+project.afterEvaluate {
+    val kspKotlin by tasks.getting {
+        outputs.upToDateWhen { false }
+    }
 
-        loadedClasses.shouldContainExactlyInAnyOrder(
-            NumberOptionFactory::class.java,
-            NonPrimitiveOptionFactory::class.java,
-            WhenFactory::class.java,
-        )
+    val launchProtoData by tasks.getting {
+        dependsOn(kspKotlin)
+    }
+
+    val kspTestKotlin by tasks.getting {
+        outputs.upToDateWhen { false }
     }
 }

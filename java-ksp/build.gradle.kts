@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,29 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+import io.spine.dependency.artifact
+import io.spine.dependency.build.Ksp
+import io.spine.dependency.lib.AutoService
+import io.spine.dependency.lib.AutoServiceKsp
 
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.spine.time.validate.WhenFactory
-import io.spine.validate.option.NonPrimitiveOptionFactory
-import io.spine.validate.option.NumberOptionFactory
-import io.spine.validate.option.ValidatingOptionsLoader
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+plugins {
+    id("com.google.devtools.ksp")
+}
 
-@DisplayName("`ValidatingOptionsLoader` should")
-internal class ValidatingOptionLoaderSpec {
-
-    @Test
-    fun `load common options`() {
-        val loadedClasses = ValidatingOptionsLoader.INSTANCE.implementations()
-            .map { it::class.java }
-            .toSet()
-
-        loadedClasses.shouldContainExactlyInAnyOrder(
-            NumberOptionFactory::class.java,
-            NonPrimitiveOptionFactory::class.java,
-            WhenFactory::class.java,
-        )
-    }
+dependencies {
+    ksp(AutoServiceKsp.processor)
+    implementation(AutoService.annotations)
+    implementation(Ksp.artifact { symbolProcessingApi })
+    implementation(project(":java-api"))
 }

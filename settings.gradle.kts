@@ -42,6 +42,7 @@ include(
     "java-runtime",
     "java-bundle",
     ":java-api",
+    ":java-ksp",
     ":java-tests",
     ":java-tests:extensions",
     ":java-tests:consumer",
@@ -49,4 +50,5 @@ include(
     ":java-tests:runtime",
     ":java-tests:vanilla",
     ":java-tests:validating",
+    ":java-tests:validator"
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,29 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validate
+package io.spine.validation.api
 
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.spine.time.validate.WhenFactory
-import io.spine.validate.option.NonPrimitiveOptionFactory
-import io.spine.validate.option.NumberOptionFactory
-import io.spine.validate.option.ValidatingOptionsLoader
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import com.google.protobuf.Message
+import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.reflect.KClass
 
-@DisplayName("`ValidatingOptionsLoader` should")
-internal class ValidatingOptionLoaderSpec {
+/**
+ * Marks the class as a message validator.
+ */
+@Target(CLASS)
+@Retention(RUNTIME)
+public annotation class Validator(
 
-    @Test
-    fun `load common options`() {
-        val loadedClasses = ValidatingOptionsLoader.INSTANCE.implementations()
-            .map { it::class.java }
-            .toSet()
+    // TODO:2025-05-23:yevhenii.nadtochii:
+    //  + must implement `MessageValidator`.
+    //  + must have a public no-args constructor.
+    //  + a new instance is created per validation.
 
-        loadedClasses.shouldContainExactlyInAnyOrder(
-            NumberOptionFactory::class.java,
-            NonPrimitiveOptionFactory::class.java,
-            WhenFactory::class.java,
-        )
-    }
-}
+    /**
+     * The validated message class.
+     */
+    val value: KClass<out Message>
+)
