@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
-import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.MessageType
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
@@ -52,6 +52,9 @@ import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
+import io.spine.validation.java.validator.MessageClass
+import io.spine.validation.java.validator.ValidatorClass
+import io.spine.validation.java.validator.ValidatorGenerator
 
 /**
  * The main Java renderer of the validation library.
@@ -61,14 +64,16 @@ import io.spine.validation.java.generate.option.WhenGenerator
  */
 internal class JavaValidationRenderer(
     customGenerators: List<OptionGenerator>,
-    customValidators: MessageValidators
+    validators: Map<MessageClass, ValidatorClass>
 ) : JavaRenderer() {
 
-    private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
-    private val generators by lazy {
-        (builtInGenerators() + customGenerators)
+    private val validatorGenerator by lazy {
+        ValidatorGenerator(validators, typeSystem)
+    }
+    private val optionGenerators by lazy {
+        (buildInGenerators() + customGenerators)
             .onEach { it.inject(querying) }
     }
 
@@ -81,7 +86,7 @@ internal class JavaValidationRenderer(
 
         findMessageTypes()
             .forEach { message ->
-                val code = generateCode(message.name)
+                val code = generateCode(message)
                 val file = sources.javaFileOf(message)
                 file.render(code)
             }
@@ -91,29 +96,33 @@ internal class JavaValidationRenderer(
      * Returns code generators for the built-in options.
      *
      * Note that some generators cannot be created outside of [JavaRenderer] because
-     * they need [valueConverter], which in turn needs [JavaRenderer.typeSystem].
+     * they need [JavaValueConverter], which in turn needs [JavaRenderer.typeSystem].
      *
      * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
      * is addressed, all generators must be created outside of [JavaValidationRenderer],
      * and just passed to the renderer.
      */
-    private fun builtInGenerators() = listOf(
-        RequiredGenerator(valueConverter),
-        PatternGenerator(),
-        GoesGenerator(valueConverter),
-        DistinctGenerator(),
-        ValidateGenerator(valueConverter),
-        RangeGenerator(),
-        MaxGenerator(),
-        MinGenerator(),
-        ChoiceGenerator(),
-        WhenGenerator(valueConverter),
-        RequireOptionGenerator(valueConverter),
-    )
+    private fun buildInGenerators(): List<OptionGenerator> {
+        val valueConverter = JavaValueConverter(typeSystem)
+        return listOf(
+            RequiredGenerator(valueConverter),
+            PatternGenerator(),
+            GoesGenerator(valueConverter),
+            DistinctGenerator(),
+            ValidateGenerator(valueConverter),
+            RangeGenerator(),
+            MaxGenerator(),
+            MinGenerator(),
+            ChoiceGenerator(),
+            WhenGenerator(valueConverter),
+            RequireOptionGenerator(valueConverter),
+        )
+    }
 
-    private fun generateCode(message: TypeName): MessageValidationCode {
-        val fieldOptions = generators.flatMap { it.codeFor(message) }
-        val messageCode = with(fieldOptions) {
+    private fun generateCode(message: MessageType): MessageValidationCode {
+        val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }
+        val validatorFields = validatorGenerator.codeFor(message)
+        val messageCode = with(fieldOptions + validatorFields) {
             MessageValidationCode(
                 message = message.javaClassName(typeSystem),
                 constraints = map { it.constraint },
