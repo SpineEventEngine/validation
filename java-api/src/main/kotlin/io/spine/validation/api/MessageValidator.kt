@@ -28,6 +28,8 @@ package io.spine.validation.api
 
 import com.google.protobuf.Message
 import io.spine.annotation.SPI
+import io.spine.base.FieldPath
+import io.spine.protodata.ast.TypeName
 import io.spine.validate.ConstraintViolation
 
 /**
@@ -43,7 +45,22 @@ public interface MessageValidator<M : Message> {
     /**
      * Validates the given [message].
      *
-     * @return an error or {@link Optional#empty()} if no violations found
+     * Please note that this method can be invoked in the scope of another message's validation.
+     * Any constraint violations reported by this method must include the path to the original
+     * field and the name of the message that initiated in-depth validation if such takes place.
+     * For this, [parentPath] and [parentName] are always provided.
+     *
+     * @param message The message to validate.
+     * @param parentPath The path to the parent field that initiated in-depth validation.
+     *   Can be the default instance, which means no parent path.
+     * @param parentName The name of the parent type that initiated in-depth validation
+     *   Can be {@code null}, which means no parent name.
+     *
+     * @return zero, one or more violations.
      */
-    public fun validate(message: M): List<ConstraintViolation>
+    public fun validate(
+        message: M,
+        parentPath: FieldPath,
+        parentName: TypeName?
+    ): List<ConstraintViolation>
 }
