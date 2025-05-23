@@ -29,7 +29,8 @@ package io.spine.validation.test
 import com.google.protobuf.DescriptorProtos.FileDescriptorSet
 import com.google.protobuf.fileDescriptorProto
 import com.google.protobuf.fileDescriptorSet
-import io.spine.base.fieldPath
+import io.spine.base.FieldPath
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.constraintViolation
 import io.spine.validate.templateString
@@ -39,7 +40,11 @@ import io.spine.validation.api.Validator
 @Validator(FileDescriptorSet::class)
 public class FileDescriptorSetValidator : MessageValidator<FileDescriptorSet> {
 
-    override fun validate(message: FileDescriptorSet): List<ConstraintViolation> {
+    public override fun validate(
+        message: FileDescriptorSet,
+        fieldPath: FieldPath,
+        typeName: TypeName
+    ): List<ConstraintViolation> {
         if (message == ValidSet) {
             return emptyList()
         }
@@ -48,10 +53,10 @@ public class FileDescriptorSetValidator : MessageValidator<FileDescriptorSet> {
             this.message = templateString {
                 withPlaceholders = "Invalid file descriptor set."
             }
-            typeName = FileDescriptorSet.getDescriptor().name
-            fieldPath = fieldPath {
-                fieldName.add("file")
-            }
+            this.fieldPath = fieldPath.toBuilder()
+                .addFieldName("file")
+                .build()
+            this.typeName = typeName.toString()
         }
 
         return listOf(violation)

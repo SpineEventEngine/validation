@@ -28,7 +28,8 @@ package io.spine.validation.test
 
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
-import io.spine.base.fieldPath
+import io.spine.base.FieldPath
+import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.constraintViolation
 import io.spine.validate.templateString
@@ -38,7 +39,11 @@ import io.spine.validation.api.Validator
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
-    override fun validate(message: Timestamp): List<ConstraintViolation> {
+    public override fun validate(
+        message: Timestamp,
+        fieldPath: FieldPath,
+        typeName: TypeName
+    ): List<ConstraintViolation> {
         if (message == ValidTimestamp) {
             return emptyList()
         }
@@ -47,10 +52,10 @@ public class TimestampValidator : MessageValidator<Timestamp> {
             this.message = templateString {
                 withPlaceholders = "Invalid timestamp."
             }
-            typeName = Timestamp.getDescriptor().name
-            fieldPath = fieldPath {
-                fieldName.add("seconds")
-            }
+            this.fieldPath = fieldPath.toBuilder()
+                .addFieldName("seconds")
+                .build()
+            this.typeName = typeName.toString()
         }
 
         return listOf(violation)
