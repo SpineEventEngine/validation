@@ -69,7 +69,7 @@ internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : Sy
                 val messageFQN = message.qualifiedName?.asString()
                     ?: noQualifiedName(validator)
                 if (discoveredValidators.add(validatorFQN)) {
-                    writer.appendLine("$validatorFQN:$messageFQN")
+                    writer.appendLine("$messageFQN:$validatorFQN")
                 }
             }
         }
