@@ -71,7 +71,7 @@ private val customOptions by lazy {
  */
 private val customValidators by lazy {
     val protoDataWorkingDir = System.getProperty("user.dir")
-    val kspOutput = "$protoDataWorkingDir/build/generated/ksp/main/resources"
+    val kspOutput = "$protoDataWorkingDir/$KSP_GENERATED_RESOURCES"
     val messageValidatorsPath = "$kspOutput/${MessageValidatorsDescriptor.RESOURCES_LOCATION}"
     val messageValidators =  File(messageValidatorsPath)
     MessageValidators.fromFile(messageValidators)
@@ -80,4 +80,4 @@ private val customValidators by lazy {
 /**
  * The default location to which KSP module dumps the generated resources.
  */
-private const val KSP_OUTPUT_RESOURCES = "build/generated/ksp/main/resources"
+private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main/resources"
