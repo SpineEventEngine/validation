@@ -38,16 +38,14 @@ import com.google.devtools.ksp.symbol.KSTypeReference
 import io.spine.validation.api.MessageValidatorsDescriptor
 import io.spine.validation.api.Validator
 
-internal class ValidatorProcessor(private val codeGenerator: CodeGenerator) : SymbolProcessor {
+internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
     private val discoveredValidators = mutableSetOf<String>()
-    private val output by lazy {
-        codeGenerator.createNewFileByPath(
-            dependencies = Dependencies(aggregating = true),
-            path = MessageValidatorsDescriptor.RESOURCES_LOCATION,
-            extensionName = ""
-        ).writer()
-    }
+    private val output = codeGenerator.createNewFileByPath(
+        dependencies = Dependencies(aggregating = true),
+        path = MessageValidatorsDescriptor.RESOURCES_LOCATION,
+        extensionName = ""
+    ).writer()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val validators = resolver.getSymbolsWithAnnotation(validator.qualifiedName!!)
