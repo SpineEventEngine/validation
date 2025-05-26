@@ -31,7 +31,10 @@ import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.MessageType
 import io.spine.protodata.ast.extractMessageType
+import io.spine.protodata.ast.isList
+import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.name
 import io.spine.protodata.ast.refersToMessage
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
@@ -41,6 +44,8 @@ import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
+import io.spine.string.simply
+import io.spine.string.ti
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.api.ValidatorViolation
@@ -107,24 +112,50 @@ private class ApplyValidator(
 ) {
 
     private val discovered = mangled("discovered")
+    private val getter = message.field(field).getter<Any>()
     private val fieldType = field.type
 
+    @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
     fun code(): SingleOptionCode = when {
-        fieldType.isSingular -> {
-            val getter = message.field(field).getter<Message>()
-            val vv = ReadVar<ValidatorViolation>("vv")
-            val constraint = CodeBlock("""
+        fieldType.isSingular -> applyValidator(getter as Expression<Message>)
+
+        fieldType.isList ->
+            CodeBlock(
+                """
+                for (var element : $getter) {
+                    ${applyValidator(ReadVar("element"))}
+                }
+                """.trimIndent()
+            )
+
+        fieldType.isMap ->
+            CodeBlock(
+                """
+                for (var element : $getter.values()) {
+                    ${applyValidator(ReadVar("element"))}
+                }     
+                """.trimIndent()
+            )
+
+        else -> error(
+            """
+            The field type `${fieldType.name}` is not supported by `${simply<ValidatorGenerator>()}`.
+            This generator supports singular message fields, repeated and maps of messages.
+            """.ti()
+        )
+    }.run { SingleOptionCode(this) }
+
+    private fun applyValidator(message: Expression<Message>): CodeBlock {
+        val vv = ReadVar<ValidatorViolation>("vv")
+        val constraint = CodeBlock("""
                 var $discovered = new $validator()
-                    .validate($getter)
+                    .validate($message)
                     .stream()
                     .map($vv -> ${vv.toConstraintViolation()})
                     .toList();
                 $violations.addAll($discovered);
             """.trimIndent())
-            SingleOptionCode(constraint)
-        }
-
-        else -> error("Unsupported field type: $fieldType.")
+        return constraint
     }
 
     private fun Expression<ValidatorViolation>.toConstraintViolation():
