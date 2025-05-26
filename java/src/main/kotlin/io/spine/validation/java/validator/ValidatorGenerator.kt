@@ -30,7 +30,9 @@ import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.extractMessageType
 import io.spine.protodata.ast.isSingular
+import io.spine.protodata.ast.refersToMessage
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
@@ -83,12 +85,16 @@ internal class ValidatorGenerator(
      */
 
     fun codeFor(type: MessageType): List<SingleOptionCode> {
-        val validatorsToApply = type.fieldList.mapNotNull { field ->
-            val messageClass = field.type.javaClassName(typeSystem)
-            validators[messageClass]?.let {
-                field to it
+        val messageFields = type.fieldList.filter { it.type.refersToMessage() }
+            .associateWith { it.type.extractMessageType(typeSystem)!! }
+        val validatorsToApply = messageFields.mapNotNull { (field, message) ->
+            val javaClass = message.javaClassName(typeSystem)
+            if (validators.containsKey(javaClass)) {
+                field to validators[javaClass]!!
+            } else {
+                null
             }
-        }.toMap()
+        }
         return validatorsToApply.map { (field, validator) ->
             ApplyValidator(field, validator).code()
         }
@@ -117,9 +123,8 @@ private class ApplyValidator(
             """.trimIndent())
             SingleOptionCode(constraint)
         }
-        else -> SingleOptionCode(
-            CodeBlock("")
-        )
+
+        else -> error("Unsupported field type: $fieldType.")
     }
 
     private fun Expression<ValidatorViolation>.toConstraintViolation():
