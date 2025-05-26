@@ -27,22 +27,30 @@
 package io.spine.validation.java.validator
 
 import com.google.protobuf.Message
+import io.spine.base.FieldPath
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.MessageType
+import io.spine.protodata.ast.isSingular
 import io.spine.protodata.java.ClassName
 import io.spine.protodata.java.CodeBlock
 import io.spine.protodata.java.Expression
+import io.spine.protodata.java.ReadVar
+import io.spine.protodata.java.call
 import io.spine.protodata.java.field
 import io.spine.protodata.java.javaClassName
 import io.spine.protodata.type.TypeSystem
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.TemplateString
+import io.spine.validation.api.ValidatorViolation
+import io.spine.validation.api.expression.mergeFrom
 import io.spine.validation.api.expression.orElse
-import io.spine.validation.api.expression.resolve
+import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.api.generate.mangled
 
 internal typealias ValidatorClass = ClassName
 internal typealias MessageClass = ClassName
@@ -92,14 +100,43 @@ private class ApplyValidator(
     private val validator: ValidatorClass
 ) {
 
-    fun code(): SingleOptionCode {
-        val getter = message.field(field).getter<Message>()
-        val fieldPath = parentPath.resolve(field.name)
-        val typeName = parentName.orElse(field.declaringType)
-        val invokeValidator = Expression<List<ConstraintViolation>>(
-            "new $validator().validate($getter, $fieldPath, $typeName)"
+    private val discovered = mangled("discovered")
+    private val fieldType = field.type
+
+    fun code(): SingleOptionCode = when {
+        fieldType.isSingular -> {
+            val getter = message.field(field).getter<Message>()
+            val vv = ReadVar<ValidatorViolation>("vv")
+            val constraint = CodeBlock("""
+                var $discovered = new $validator()
+                    .validate($getter)
+                    .stream()
+                    .map($vv -> ${vv.toConstraintViolation()})
+                    .toList();
+                $violations.addAll($discovered);
+            """.trimIndent())
+            SingleOptionCode(constraint)
+        }
+        else -> SingleOptionCode(
+            CodeBlock("")
         )
-        val constraint = CodeBlock("$violations.addAll($invokeValidator);")
-        return SingleOptionCode(constraint)
+    }
+
+    private fun Expression<ValidatorViolation>.toConstraintViolation():
+            Expression<ConstraintViolation> {
+        val message = call<TemplateString>("getMessage")
+        val fieldValue = call<Any?>("getFieldValue")
+        val fieldPath = resolveFieldPath()
+        val typeName = parentName.orElse(field.declaringType).stringify()
+        return io.spine.validation.api.expression.constraintViolation(
+            message, typeName, fieldPath, fieldValue
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST") // After the null-check, the cast is safe.
+    private fun Expression<ValidatorViolation>.resolveFieldPath(): Expression<FieldPath> {
+        val local = call<FieldPath?>("getFieldPath")
+        val merged = parentPath.mergeFrom(local as Expression<FieldPath>)
+        return Expression("($local == null ? $parentPath : $merged)")
     }
 }

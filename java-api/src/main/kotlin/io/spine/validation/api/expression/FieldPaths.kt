@@ -26,6 +26,7 @@
 
 package io.spine.validation.api.expression
 
+import com.google.protobuf.Message
 import io.spine.base.FieldPath
 import io.spine.protodata.ast.FieldName
 import io.spine.protodata.ast.OneofName
@@ -51,6 +52,16 @@ public fun Expression<FieldPath>.joinToString(): Expression<String> =
 public fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
     toBuilder()
         .chainAdd("field_name", StringLiteral(field.value))
+        .chainBuild()
+
+/**
+ * Returns an expression that merges the provided [FieldPath] expression into this one.
+ *
+ * To perform merging, this method uses the [Message.Builder.mergeFrom] method.
+ */
+public fun Expression<FieldPath>.mergeFrom(other: Expression<FieldPath>): Expression<FieldPath> =
+    toBuilder()
+        .chain<Message.Builder>("mergeFrom", other)
         .chainBuild()
 
 /**

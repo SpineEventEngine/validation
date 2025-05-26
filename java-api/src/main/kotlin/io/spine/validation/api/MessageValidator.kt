@@ -53,7 +53,7 @@ public interface MessageValidator<M : Message> {
 
 public abstract class ValidatorViolation(
     public val message: TemplateString,
-    public val fieldPath: FieldPath,
+    public val fieldPath: FieldPath?,
     public val fieldValue: Any?,
 )
 
@@ -65,4 +65,4 @@ public class FieldViolation(
 
 public class MessageViolation(
     message: TemplateString
-) : ValidatorViolation(message, fieldPath = FieldPath.getDefaultInstance(), fieldValue = null)
+) : ValidatorViolation(message, fieldPath = null, fieldValue = null)
