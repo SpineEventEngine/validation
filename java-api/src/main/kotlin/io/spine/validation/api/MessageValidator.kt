@@ -51,14 +51,18 @@ public interface MessageValidator<M : Message> {
     public fun validate(message: M): List<ValidatorViolation>
 }
 
-public interface ValidatorViolation
-
-public class FieldViolation(
+public abstract class ValidatorViolation(
     public val message: TemplateString,
     public val fieldPath: FieldPath,
-    public val fieldValue: Any? = null,
-) : ValidatorViolation
+    public val fieldValue: Any?,
+)
+
+public class FieldViolation(
+    message: TemplateString,
+    fieldPath: FieldPath,
+    fieldValue: Any? = null,
+) : ValidatorViolation(message, fieldPath, fieldValue)
 
 public class MessageViolation(
-    public val message: TemplateString
-) : ValidatorViolation
+    message: TemplateString
+) : ValidatorViolation(message, fieldPath = FieldPath.getDefaultInstance(), fieldValue = null)
