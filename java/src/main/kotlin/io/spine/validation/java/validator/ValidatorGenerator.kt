@@ -54,13 +54,26 @@ internal class ValidatorGenerator(
 
     /*
     // TODO:2025-05-23:yevhenii.nadtochii: Check out.
+
          - Should we handle `repeated` and `map` fields?
+           Yes -> We support.
+
          - Do we allow custom validators for local messages?
+           No -> Error.
+
          - Can one message have several validators?
-         - Validator must be top-level or nested are also ok?
-         - Validator must have a public, no args constructor.
-         - Validator authors are fully responsible for the instance of `ConstraintViolation`.
+           No -> Error.
+
+         + Validator must be a top-level class or nested.
+
+         + Validator must have a public, no args constructor.
+
+         + Validator authors are fully responsible for the instance of `ConstraintViolation`.
+
+         + Specs of this feature must go to the interface `MessageValidator`.
+
      */
+
     fun codeFor(type: MessageType): List<SingleOptionCode> {
         val validatorsToApply = type.fieldList.mapNotNull { field ->
             val messageClass = field.type.javaClassName(typeSystem)
