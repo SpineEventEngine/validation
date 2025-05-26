@@ -29,7 +29,6 @@ package io.spine.validation.api
 import com.google.protobuf.Message
 import io.spine.annotation.SPI
 import io.spine.base.FieldPath
-import io.spine.type.TypeName
 import io.spine.validate.TemplateString
 
 /**
@@ -45,21 +44,11 @@ public interface MessageValidator<M : Message> {
     /**
      * Validates the given [message].
      *
-     * Please note that constraint violations reported by this method must include
-     * the [fieldPath] to the field containing the [message] instance and the [typeName]
-     * of the message that initiated the validation.
-     *
      * @param message The message to validate.
-     * @param fieldPath The path to the field that containing the [message] instance.
-     * @param typeName The name of the message type that initiated validation.
      *
-     * @return zero, one or more violations.
+     * @return the detected violations or empty list.
      */
-    public fun validate(
-        message: M,
-        fieldPath: FieldPath,
-        typeName: TypeName
-    ): List<ValidatorViolation>
+    public fun validate(message: M): List<ValidatorViolation>
 }
 
 public interface ValidatorViolation

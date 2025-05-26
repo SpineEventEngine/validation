@@ -28,35 +28,30 @@ package io.spine.validation.test
 
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
-import io.spine.base.FieldPath
-import io.spine.type.TypeName
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.constraintViolation
+import io.spine.base.fieldPath
 import io.spine.validate.templateString
+import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
+import io.spine.validation.api.ValidatorViolation
 
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
-    public override fun validate(
-        message: Timestamp,
-        fieldPath: FieldPath,
-        typeName: TypeName
-    ): List<ConstraintViolation> {
+    public override fun validate(message: Timestamp): List<ValidatorViolation> {
         if (message == ValidTimestamp) {
             return emptyList()
         }
 
-        val violation = constraintViolation {
-            this.message = templateString {
+        val violation = FieldViolation(
+            message = templateString {
                 withPlaceholders = "Invalid timestamp."
-            }
-            this.fieldPath = fieldPath.toBuilder()
-                .addFieldName("seconds")
-                .build()
-            this.typeName = typeName.toString()
-        }
+            },
+            fieldPath = fieldPath {
+                fieldName.add("seconds")
+            },
+            fieldValue = message.seconds
+        )
 
         return listOf(violation)
     }
