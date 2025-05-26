@@ -117,13 +117,13 @@ private class ApplyValidator(
 
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
     fun code(): SingleOptionCode = when {
-        fieldType.isSingular -> applyValidator(getter as Expression<Message>)
+        fieldType.isSingular -> validate(getter as Expression<Message>)
 
         fieldType.isList ->
             CodeBlock(
                 """
                 for (var element : $getter) {
-                    ${applyValidator(ReadVar("element"))}
+                    ${validate(ReadVar("element"))}
                 }
                 """.trimIndent()
             )
@@ -132,7 +132,7 @@ private class ApplyValidator(
             CodeBlock(
                 """
                 for (var element : $getter.values()) {
-                    ${applyValidator(ReadVar("element"))}
+                    ${validate(ReadVar("element"))}
                 }     
                 """.trimIndent()
             )
@@ -145,7 +145,7 @@ private class ApplyValidator(
         )
     }.run { SingleOptionCode(this) }
 
-    private fun applyValidator(message: Expression<Message>): CodeBlock {
+    private fun validate(message: Expression<Message>): CodeBlock {
         val vv = ReadVar<ValidatorViolation>("vv")
         val constraint = CodeBlock("""
                 var $discovered = new $validator()
