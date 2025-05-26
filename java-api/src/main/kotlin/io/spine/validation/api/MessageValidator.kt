@@ -30,7 +30,7 @@ import com.google.protobuf.Message
 import io.spine.annotation.SPI
 import io.spine.base.FieldPath
 import io.spine.type.TypeName
-import io.spine.validate.ConstraintViolation
+import io.spine.validate.TemplateString
 
 /**
  * Defines a validator for Protobuf messages of type [M].
@@ -59,5 +59,17 @@ public interface MessageValidator<M : Message> {
         message: M,
         fieldPath: FieldPath,
         typeName: TypeName
-    ): List<ConstraintViolation>
+    ): List<ValidatorViolation>
 }
+
+public interface ValidatorViolation
+
+public class FieldViolation(
+    public val message: TemplateString,
+    public val fieldPath: FieldPath,
+    public val fieldValue: Any? = null,
+) : ValidatorViolation
+
+public class MessageViolation(
+    public val message: TemplateString
+) : ValidatorViolation
