@@ -32,6 +32,7 @@ dependencies {
     ksp(project(":java-ksp"))
     protoData(project(":java"))
     implementation(project(":java-api"))
+    implementation(project(":java-tests:validator-dependency"))
 }
 
 protoData {

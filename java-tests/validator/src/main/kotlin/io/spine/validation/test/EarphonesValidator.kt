@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,32 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.validation.test
+
+import io.spine.validation.api.MessageValidator
+import io.spine.validation.api.Validator
+import io.spine.validation.api.ValidatorViolation
+
+@Validator(Earphones::class)
+public class EarphonesValidator : MessageValidator<Earphones> {
+    override fun validate(message: Earphones): List<ValidatorViolation> {
+        return emptyList()
     }
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-ksp",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-    ":java-tests:validator",
-    ":java-tests:validator-dependency",
-)
