@@ -40,7 +40,7 @@ import io.spine.validation.api.ValidatorViolation
 public class FileDescriptorSetValidator : MessageValidator<FileDescriptorSet> {
 
     public override fun validate(message: FileDescriptorSet): List<ValidatorViolation> {
-        if (message == ValidSet) {
+        if (message === ValidSet) {
             return emptyList()
         }
 

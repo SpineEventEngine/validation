@@ -39,7 +39,7 @@ import io.spine.validation.api.ValidatorViolation
 public class TimestampValidator : MessageValidator<Timestamp> {
 
     public override fun validate(message: Timestamp): List<ValidatorViolation> {
-        if (message == ValidTimestamp) {
+        if (message === ValidTimestamp) {
             return emptyList()
         }
 
