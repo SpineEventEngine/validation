@@ -51,6 +51,7 @@ import io.spine.validate.TemplateString
 import io.spine.validation.api.ValidatorViolation
 import io.spine.validation.api.expression.mergeFrom
 import io.spine.validation.api.expression.orElse
+import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.SingleOptionCode
@@ -172,7 +173,8 @@ private class ApplyValidator(
     @Suppress("UNCHECKED_CAST") // After the null-check, the cast is safe.
     private fun Expression<ValidatorViolation>.resolveFieldPath(): Expression<FieldPath> {
         val local = call<FieldPath?>("getFieldPath")
-        val merged = parentPath.mergeFrom(local as Expression<FieldPath>)
-        return Expression("($local == null ? $parentPath : $merged)")
+        val resolved = parentPath.resolve(field.name)
+        val merged = resolved.mergeFrom(local as Expression<FieldPath>)
+        return Expression("($local == null ? $resolved : $merged)")
     }
 }

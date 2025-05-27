@@ -31,44 +31,26 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.test";
-option java_outer_classname = "ValidatedDescriptorsProto";
+option java_outer_classname = "ExternalMessagesProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/descriptor.proto";
+import "google/protobuf/empty.proto";
 
 // Tests a singular field of external message type.
-message ValidatorTimestamp {
+message SingularExternalMessage {
 
-    google.protobuf.Timestamp created_at = 1;
+    google.protobuf.Timestamp value = 1;
 }
 
 // Tests a repeated field of external message type.
-message ValidatorRepeatedTimestamp {
+message RepeatedExternalMessage {
 
-    repeated google.protobuf.Timestamp join_date = 1;
+    repeated google.protobuf.Timestamp value = 1;
 }
 
 // Tests a map field of external message type.
-message ValidatorMapTimestamp {
+message MappedExternalMessage {
 
-    map<string, google.protobuf.Timestamp> arranged_events = 1;
-}
-
-// Tests a singular field of external, nested message type.
-message ValidatorDescriptorSet {
-
-    google.protobuf.FileDescriptorSet set = 1;
-}
-
-// Tests a repeated field of external, nested message type.
-message ValidatorRepeatedDescriptorSet {
-
-    repeated google.protobuf.FileDescriptorSet set = 1;
-}
-
-// Tests a map field of external, nested message type.
-message ValidatorMapDescriptorSet {
-
-    map<string, google.protobuf.FileDescriptorSet> named_set = 1;
+    map<string, google.protobuf.Timestamp> value = 1;
 }

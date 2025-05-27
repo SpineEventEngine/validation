@@ -26,15 +26,21 @@
 
 package io.spine.validation.test
 
+import com.google.common.annotations.VisibleForTesting
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
+import io.spine.base.FieldPath
 import io.spine.base.fieldPath
+import io.spine.validate.TemplateString
 import io.spine.validate.templateString
 import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 import io.spine.validation.api.ValidatorViolation
 
+/**
+ * Validates [Timestamp]s, treating all instances as invalid except for [ValidTimestamp].
+ */
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
@@ -44,23 +50,38 @@ public class TimestampValidator : MessageValidator<Timestamp> {
         }
 
         val violation = FieldViolation(
-            message = templateString {
-                withPlaceholders = "Invalid timestamp."
-            },
-            fieldPath = fieldPath {
-                fieldName.add("seconds")
-            },
+            message = Violation.message,
+            fieldPath = Violation.fieldPath,
             fieldValue = message.seconds
         )
 
         return listOf(violation)
     }
 
+    @VisibleForTesting
     public companion object {
 
         /**
-         * The [TimestampValidator] passes only this instance as valid.
+         * The [TimestampValidator] considers only this instance as valid.
          */
         public val ValidTimestamp: Timestamp = Timestamps.fromMillis(893755250000L)
+    }
+
+    @VisibleForTesting
+    public object Violation {
+
+        /**
+         * The error message used for the reported violations.
+         */
+        public val message: TemplateString = templateString {
+            withPlaceholders = "Invalid timestamp."
+        }
+
+        /**
+         * The field path used for the reported violations.
+         */
+        public val fieldPath: FieldPath = fieldPath {
+            fieldName.add("seconds")
+        }
     }
 }
