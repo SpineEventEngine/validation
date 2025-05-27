@@ -65,7 +65,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
                 val validatorFQN = validator.qualifiedName?.asString()
                     ?: noQualifiedName(validator)
                 val messageFQN = message.qualifiedName?.asString()
-                    ?: noQualifiedName(validator)
+                    ?: noQualifiedName(message) // May indicate a local message.
                 if (discoveredValidators.add(validatorFQN)) {
                     writer.appendLine("$messageFQN:$validatorFQN")
                 }
@@ -76,8 +76,8 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
         return emptyList()
     }
 
-    private fun noQualifiedName(validator: KSClassDeclaration): Nothing = error(
-        "Validator `$validator` has no qualified name."
+    private fun noQualifiedName(ksclass: KSClassDeclaration): Nothing = error(
+        "The class `$ksclass` has no qualified name."
     )
 
     private fun KSAnnotation.argumentValue(argumentName: String = "value"): KSClassDeclaration {

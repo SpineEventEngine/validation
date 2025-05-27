@@ -37,6 +37,7 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
+import io.spine.string.ti
 import io.spine.tools.code.Java
 import io.spine.validation.java.generate.MessageValidationCode
 import io.spine.validation.api.generate.OptionGenerator
@@ -64,7 +65,7 @@ import io.spine.validation.java.validator.ValidatorGenerator
  */
 internal class JavaValidationRenderer(
     customGenerators: List<OptionGenerator>,
-    validators: Map<MessageClass, ValidatorClass>
+    private val validators: Map<MessageClass, ValidatorClass>
 ) : JavaRenderer() {
 
     private val codeInjector = ValidationCodeInjector()
@@ -86,6 +87,7 @@ internal class JavaValidationRenderer(
 
         findMessageTypes()
             .forEach { message ->
+                checkDoesNotHaveValidator(message)
                 val code = generateCode(message)
                 val file = sources.javaFileOf(message)
                 file.render(code)
@@ -138,5 +140,22 @@ internal class JavaValidationRenderer(
         val messageClass = psiFile.findClass(code.message)
         codeInjector.inject(code, messageClass)
         overwrite(psiFile.text)
+    }
+
+    /**
+     * Ensures that the given compilation [message] does not have a validator declared.
+     *
+     * Local messages are prohibited from having validators.
+     */
+    private fun checkDoesNotHaveValidator(message: MessageType) {
+        val javaClass = message.javaClassName(typeSystem)
+        val validator = validators[javaClass]
+        check(validator == null) {
+            """
+            The validator `$validator` cannot be used to validate the `$javaClass` messages.
+            Validators can be defined only for external message types, which are not generated locally.
+            Use built-in or custom validation options to declare constraints for the local messages.
+            """.ti()
+        }
     }
 }
