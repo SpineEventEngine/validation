@@ -26,13 +26,64 @@
 
 package io.spine.validation.test
 
+import com.google.common.annotations.VisibleForTesting
+import io.spine.base.FieldPath
+import io.spine.base.fieldPath
+import io.spine.validate.TemplateString
+import io.spine.validate.templateString
+import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 import io.spine.validation.api.ValidatorViolation
 
+/**
+ * Validates [Earphones]s, treating all instances as invalid except for [ValidEarphones].
+ */
 @Validator(Earphones::class)
 public class EarphonesValidator : MessageValidator<Earphones> {
-    override fun validate(message: Earphones): List<ValidatorViolation> {
-        return emptyList()
+
+    public override fun validate(message: Earphones): List<ValidatorViolation> {
+        if (message === ValidEarphones) {
+            return emptyList()
+        }
+
+        val violation = FieldViolation(
+            message = Violation.message,
+            fieldPath = Violation.fieldPath,
+            fieldValue = message.price
+        )
+
+        return listOf(violation)
+    }
+
+    @VisibleForTesting
+    public companion object {
+
+        /**
+         * The [EarphonesValidator] considers only this instance as valid.
+         */
+        public val ValidEarphones: Earphones = earphones {
+            modelName = "SN532"
+            manufacturer = "Earphones Inc."
+            price = 100.0
+        }
+    }
+
+    @VisibleForTesting
+    public object Violation {
+
+        /**
+         * The error message used for the reported violations.
+         */
+        public val message: TemplateString = templateString {
+            withPlaceholders = "Price is too high."
+        }
+
+        /**
+         * The field path used for the reported violations.
+         */
+        public val fieldPath: FieldPath = fieldPath {
+            fieldName.add("price")
+        }
     }
 }
