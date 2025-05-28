@@ -34,7 +34,6 @@ import io.spine.validate.templateString
 import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
-import io.spine.validation.api.ValidatorViolation
 
 /**
  * Validates [Earphones]s, treating all instances as invalid except for [ValidEarphones].
@@ -42,7 +41,7 @@ import io.spine.validation.api.ValidatorViolation
 @Validator(Earphones::class)
 public class EarphonesValidator : MessageValidator<Earphones> {
 
-    public override fun validate(message: Earphones): List<ValidatorViolation> {
+    public override fun validate(message: Earphones): List<io.spine.validation.api.DetectedViolation> {
         if (message === ValidEarphones) {
             return emptyList()
         }

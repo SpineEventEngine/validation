@@ -36,7 +36,6 @@ import io.spine.validate.templateString
 import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
-import io.spine.validation.api.ValidatorViolation
 
 /**
  * Validates [Timestamp]s, treating all instances as invalid except for [ValidTimestamp].
@@ -44,7 +43,7 @@ import io.spine.validation.api.ValidatorViolation
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
-    public override fun validate(message: Timestamp): List<ValidatorViolation> {
+    public override fun validate(message: Timestamp): List<io.spine.validation.api.DetectedViolation> {
         if (message === ValidTimestamp) {
             return emptyList()
         }

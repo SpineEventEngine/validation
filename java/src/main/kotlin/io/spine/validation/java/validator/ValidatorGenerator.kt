@@ -48,7 +48,7 @@ import io.spine.string.simply
 import io.spine.string.ti
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
-import io.spine.validation.api.ValidatorViolation
+import io.spine.validation.api.DetectedViolation
 import io.spine.validation.api.expression.mergeFrom
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
@@ -145,7 +145,7 @@ private class ApplyValidator(
     }.run { SingleOptionCode(this) }
 
     private fun validate(message: Expression<Message>): CodeBlock {
-        val vv = ReadVar<ValidatorViolation>("vv")
+        val vv = ReadVar<DetectedViolation>("vv")
         val constraint = CodeBlock("""
                 var $discovered = new $validator()
                     .validate($message)
@@ -157,7 +157,7 @@ private class ApplyValidator(
         return constraint
     }
 
-    private fun Expression<ValidatorViolation>.toConstraintViolation():
+    private fun Expression<DetectedViolation>.toConstraintViolation():
             Expression<ConstraintViolation> {
         val message = call<TemplateString>("getMessage")
         val fieldValue = call<Any?>("getFieldValue")
@@ -169,7 +169,7 @@ private class ApplyValidator(
     }
 
     @Suppress("UNCHECKED_CAST") // After the null-check, the cast is safe.
-    private fun Expression<ValidatorViolation>.resolveFieldPath(): Expression<FieldPath> {
+    private fun Expression<DetectedViolation>.resolveFieldPath(): Expression<FieldPath> {
         val local = call<FieldPath?>("getFieldPath")
         val resolved = parentPath.resolve(field.name)
         val merged = resolved.mergeFrom(local as Expression<FieldPath>)

@@ -26,25 +26,40 @@
 
 package io.spine.validation.api
 
-import com.google.protobuf.Message
-import io.spine.annotation.SPI
+import io.spine.base.FieldPath
+import io.spine.validate.TemplateString
 
 /**
- * Defines a validator for Protobuf messages of type [M].
+ * Abstract base for violations detected by [MessageValidator]s.
  *
- * Implementations should perform domain-specific validation on the given message.
- *
- * @param M the type of Protobuf [Message] being validated.
+ * @param message The error message describing the violation.
+ * @param fieldPath The path to the field where the violation occurred, if applicable.
+ * @param fieldValue The field value that caused the violation, if any.
  */
-@SPI
-public interface MessageValidator<M : Message> {
+public abstract class DetectedViolation(
+    public val message: TemplateString,
+    public val fieldPath: FieldPath?,
+    public val fieldValue: Any?,
+)
 
-    /**
-     * Validates the given [message].
-     *
-     * @param message The message to validate.
-     *
-     * @return the detected violations or empty list.
-     */
-    public fun validate(message: M): List<DetectedViolation>
-}
+/**
+ * A [MessageValidator] violation associated with a specific field.
+ *
+ * @param message The error message describing the violation.
+ * @param fieldPath The path to the field where the violation occurred.
+ * @param fieldValue The field value that caused the violation, if any.
+ */
+public class FieldViolation(
+    message: TemplateString,
+    fieldPath: FieldPath,
+    fieldValue: Any? = null,
+) : DetectedViolation(message, fieldPath, fieldValue)
+
+/**
+ * A [MessageValidator] violation related to the message level (not tied to a specific field).
+ *
+ * @param message The error message describing the violation.
+ */
+public class MessageViolation(
+    message: TemplateString
+) : DetectedViolation(message, fieldPath = null, fieldValue = null)
