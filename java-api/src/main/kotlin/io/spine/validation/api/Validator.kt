@@ -27,24 +27,26 @@
 package io.spine.validation.api
 
 import com.google.protobuf.Message
-import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlin.annotation.AnnotationRetention.SOURCE
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.reflect.KClass
 
 /**
  * Marks the class as a message validator.
+ *
+ * The following requirements are imposed to the marked class:
+ *
+ * 1. The class must implement the [MessageValidator] interface.
+ * 2. The class must have a public, no-args constructor.
+ *
+ * @see MessageValidator
  */
 @Target(CLASS)
-@Retention(RUNTIME)
+@Retention(SOURCE)
 public annotation class Validator(
 
-    // TODO:2025-05-23:yevhenii.nadtochii:
-    //  + must implement `MessageValidator`.
-    //  + must have a public no-args constructor.
-    //  + a new instance is created per validation.
-
     /**
-     * The validated message class.
+     * The class of the validated external message.
      */
     val value: KClass<out Message>
 )
