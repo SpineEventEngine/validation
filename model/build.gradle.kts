@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.artifact
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.ProtoData
@@ -52,5 +53,5 @@ dependencies {
     testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(ProtoData.api)
     testFixturesImplementation(ProtoData.testlib)
-    testFixturesImplementation(Jupiter.artifact(Jupiter.params))
+    testFixturesImplementation(Jupiter.artifact { params })
 }
