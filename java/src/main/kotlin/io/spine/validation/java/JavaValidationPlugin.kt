@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import io.spine.protodata.java.ClassName
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.api.MessageValidatorsDescriptor
+import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
 import java.io.File
@@ -73,7 +73,7 @@ private val customOptions by lazy {
 private val customValidators by lazy {
     val protoDataWorkingDir = System.getProperty("user.dir")
     val kspOutput = "$protoDataWorkingDir/$KSP_GENERATED_RESOURCES"
-    val messageValidatorsPath = "$kspOutput/${MessageValidatorsDescriptor.RESOURCES_LOCATION}"
+    val messageValidatorsPath = "$kspOutput/${DiscoveredValidators.RESOURCES_LOCATION}"
     val messageValidators =  File(messageValidatorsPath)
     if (!messageValidators.exists()) {
         return@lazy emptyMap()

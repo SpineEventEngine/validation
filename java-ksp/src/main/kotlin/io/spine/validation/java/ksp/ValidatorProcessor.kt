@@ -35,7 +35,7 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
-import io.spine.validation.api.MessageValidatorsDescriptor
+import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.Validator
 
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
@@ -43,7 +43,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
     private val discoveredValidators = mutableSetOf<String>()
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
-        path = MessageValidatorsDescriptor.RESOURCES_LOCATION,
+        path = DiscoveredValidators.RESOURCES_LOCATION,
         extensionName = ""
     ).writer()
 

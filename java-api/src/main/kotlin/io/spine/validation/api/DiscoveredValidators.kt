@@ -29,16 +29,18 @@ package io.spine.validation.api
 import io.spine.annotation.Internal
 
 /**
- * A container for the discovered message validators.
+ * Holds a path to a file with the discovered validators.
  *
- * Holds the resource path for the message-validators configuration file
- * used by the `:model` to generate the corresponding constraints.
+ * KSP processor generates a resource file using the [RESOURCES_LOCATION].
+ * Then, the codegen plugin picks up the file using the same location.
  */
 @Internal
-public object MessageValidatorsDescriptor {
+public object DiscoveredValidators {
 
     /**
-     * The path in resources to the file with the discovered message validators.
+     * The path to the file with the discovered message validators.
+     *
+     * The path is relative to the output directory of the KSP processor.
      */
-   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators.txt"
+   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators"
 }
