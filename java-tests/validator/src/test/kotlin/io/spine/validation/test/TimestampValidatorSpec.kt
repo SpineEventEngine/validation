@@ -26,7 +26,7 @@ class TimestampValidatorSpec {
         fun `of a singular field`() {
             val timestamp = Timestamps.now()
             val exception = assertThrows<ValidationException> {
-                singularExternalMessage {
+                singularWellKnownMessage {
                     value = timestamp
                 }
             }
@@ -35,14 +35,14 @@ class TimestampValidatorSpec {
             violations.size shouldBe 1
 
             val violation = violations.first()
-            violation.assert<SingularExternalMessage>(timestamp)
+            violation.assert<SingularWellKnownMessage>(timestamp)
         }
 
         @Test
         fun `of a repeated field`() {
             val timestamps = List(3) { Timestamps.now() }
             val exception = assertThrows<ValidationException> {
-                repeatedExternalMessage {
+                repeatedWellKnownMessage {
                     value.addAll(timestamps)
                 }
             }
@@ -52,7 +52,7 @@ class TimestampValidatorSpec {
 
             violations.forEachIndexed { index, violation ->
                 val timestamp = timestamps[index]
-                violation.assert<RepeatedExternalMessage>(timestamp)
+                violation.assert<RepeatedWellKnownMessage>(timestamp)
             }
         }
 
@@ -61,7 +61,7 @@ class TimestampValidatorSpec {
             val timestamps = List(3) { "Timestamp #$it" }
                 .associateWith { Timestamps.now() }
             val exception = assertThrows<ValidationException> {
-                mappedExternalMessage {
+                mappedWellKnownMessage {
                     value.putAll(timestamps)
                 }
             }
@@ -71,7 +71,7 @@ class TimestampValidatorSpec {
 
             violations.forEachIndexed { index, violation ->
                 val timestamp = timestamps["Timestamp #$index"]!!
-                violation.assert<MappedExternalMessage>(timestamp)
+                violation.assert<MappedWellKnownMessage>(timestamp)
             }
         }
     }
@@ -82,7 +82,7 @@ class TimestampValidatorSpec {
         @Test
         fun `of a singular field`() {
             assertDoesNotThrow {
-                singularExternalMessage {
+                singularWellKnownMessage {
                     value = ValidTimestamp
                 }
             }
@@ -92,7 +92,7 @@ class TimestampValidatorSpec {
         fun `of a repeated field`() {
             val timestamps = List(3) { ValidTimestamp }
             assertDoesNotThrow {
-                repeatedExternalMessage {
+                repeatedWellKnownMessage {
                     value.addAll(timestamps)
                 }
             }
@@ -103,7 +103,7 @@ class TimestampValidatorSpec {
             val timestamps = List(3) { "Timestamp #$it" }
                 .associateWith { ValidTimestamp }
             assertDoesNotThrow {
-                mappedExternalMessage {
+                mappedWellKnownMessage {
                     value.putAll(timestamps)
                 }
             }

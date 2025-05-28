@@ -31,25 +31,25 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.test";
-option java_outer_classname = "ExternalMessageProto";
+option java_outer_classname = "WellKnownMessageProto";
 option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
 
-// Tests a singular field of external message type.
-message SingularExternalMessage {
+// Tests a singular field of well-known message type.
+message SingularWellKnownMessage {
 
     google.protobuf.Timestamp value = 1;
 }
 
-// Tests a repeated field of external message type.
-message RepeatedExternalMessage {
+// Tests a repeated field of well-known message type.
+message RepeatedWellKnownMessage {
 
     repeated google.protobuf.Timestamp value = 1;
 }
 
-// Tests a map field of external message type.
-message MappedExternalMessage {
+// Tests a map field of well-known message type.
+message MappedWellKnownMessage {
 
     map<string, google.protobuf.Timestamp> value = 1;
 }
