@@ -31,6 +31,7 @@ import io.spine.base.FieldPath
 import io.spine.base.fieldPath
 import io.spine.validate.TemplateString
 import io.spine.validate.templateString
+import io.spine.validation.api.DetectedViolation
 import io.spine.validation.api.FieldViolation
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
@@ -41,7 +42,7 @@ import io.spine.validation.api.Validator
 @Validator(Earphones::class)
 public class EarphonesValidator : MessageValidator<Earphones> {
 
-    public override fun validate(message: Earphones): List<io.spine.validation.api.DetectedViolation> {
+    public override fun validate(message: Earphones): List<DetectedViolation> {
         if (message === ValidEarphones) {
             return emptyList()
         }
