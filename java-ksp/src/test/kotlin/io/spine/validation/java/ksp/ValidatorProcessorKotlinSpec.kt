@@ -27,7 +27,9 @@
 package io.spine.validation.java.ksp
 
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK
+import com.tschuchort.compiletesting.kspSourcesDir
 import io.kotest.matchers.shouldBe
+import io.spine.validation.api.DiscoveredValidators
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -63,11 +65,14 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
             }
 
             val result = compilation.compileSilently()
-            with(result) {
-                println(result.messages)
-                exitCode shouldBe OK
-                generatedFiles.size shouldBe 1
-                generatedFiles.first().readText() shouldBe "TimestampValidator.kt"
+            result.exitCode shouldBe OK
+
+            val discovered = compilation.kspSourcesDir
+                .resolve("resources")
+                .resolve(DiscoveredValidators.RESOURCES_LOCATION)
+            with(discovered) {
+                exists() shouldBe true
+                readText().trim() shouldBe "com.google.protobuf.Timestamp:io.spine.validation.java.ksp.test.TimestampValidator"
             }
         }
 

@@ -70,9 +70,6 @@ internal sealed class ValidatorCompilationTest {
 
     @BeforeEach
     fun prepareCompilation() {
-        compilation = KotlinCompilation()
-        compilation.jvmTarget = JavaVersion.current().toString()
-
         val dependencyJars = setOf(
             Validator::class.java, // The annotation.
             MessageValidator::class.java, // The validator interface.
@@ -81,12 +78,15 @@ internal sealed class ValidatorCompilationTest {
             ValidatorProcessorProvider::class.java, // The test subject.
         ).map { it.classpathFile() }
 
+        compilation = KotlinCompilation()
         compilation.apply {
+            jvmTarget = JavaVersion.current().toFeatureString()
             javaPackagePrefix = "io.spine.validation.java.ksp"
+            classpaths = classpaths + dependencyJars
+            messageOutputStream = System.out
             configureKsp (useKsp2 = true) {
                 symbolProcessorProviders += ValidatorProcessorProvider()
             }
-            classpaths = classpaths + dependencyJars
         }
     }
 
@@ -114,14 +114,14 @@ private fun Class<*>.classpathFile(): File = File(protectionDomain.codeSource.lo
 /**
  * The package used to define Java and Kotlin files.
  */
-private const val packageDir = "io/spine/validation/java/ksp/test"
+private const val PACKAGE_DIR = "io/spine/validation/java/ksp/test"
 
 /**
  * Creates an instance of [SourceFile] with the Java file containing the class
  * with the specified name and contents.
  */
 internal fun javaFile(simpleClassName: String, contents: String): SourceFile = java(
-    name = "$packageDir/${simpleClassName}.java",
+    name = "$PACKAGE_DIR/${simpleClassName}.java",
     contents = contents,
     trimIndent = true
 )
@@ -131,7 +131,7 @@ internal fun javaFile(simpleClassName: String, contents: String): SourceFile = j
  * with the specified name and contents.
  */
 internal fun kotlinFile(simpleClassName: String, contents: String): SourceFile = kotlin(
-    name = "$packageDir/${simpleClassName}.kt",
+    name = "$PACKAGE_DIR/${simpleClassName}.kt",
     contents = contents,
     trimIndent = true
 )
