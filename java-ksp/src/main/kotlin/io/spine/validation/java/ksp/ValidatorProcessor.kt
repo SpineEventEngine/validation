@@ -192,6 +192,7 @@ private fun KSClassDeclaration.validatedMessage(messageValidator: KSType): KSCla
  * Walks the inheritance tree of this [KSClassDeclaration] and, if it implements
  * the generic interface [messageValidator], returns its single type‐argument.
  */
+@Suppress("ReturnCount") // It is a recursive function.
 private fun KSClassDeclaration.interfaceMessage(
     messageValidator: KSClassDeclaration,
     visited: MutableSet<KSClassDeclaration> = mutableSetOf()
