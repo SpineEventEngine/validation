@@ -153,7 +153,7 @@ internal class JavaValidationRenderer(
         check(validator == null) {
             """
             The validator `$validator` cannot be used to validate the `$javaClass` messages.
-            Validators can be defined only for external message types, which are not generated locally.
+            Validators can be used only for external message types, which are not generated locally.
             Use built-in or custom validation options to declare constraints for the local messages.
             """.ti()
         }

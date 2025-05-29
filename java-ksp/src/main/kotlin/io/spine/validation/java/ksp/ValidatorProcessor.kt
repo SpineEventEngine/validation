@@ -26,16 +26,23 @@
 
 package io.spine.validation.java.ksp
 
+import com.google.devtools.ksp.getClassDeclarationByName
+import com.google.devtools.ksp.getConstructors
+import com.google.devtools.ksp.isPublic
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
+import com.google.devtools.ksp.symbol.Modifier
+import io.spine.string.qualified
+import io.spine.string.qualifiedClassName
+import io.spine.string.simply
 import io.spine.validation.api.DiscoveredValidators
+import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 
 /**
@@ -46,7 +53,24 @@ import io.spine.validation.api.Validator
  */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
-    private val discoveredValidators = mutableSetOf<String>()
+    /**
+     * Already discovered validators.
+     * 
+     * The map contains a mapping of the message class to the validator.
+     *
+     * The same validator can be discovered several times because
+     * KSP may have several rounds of the code analysis.
+     * 
+     * This map is used to prevent outputting the same validator twice
+     * and to check is the same message has more than one validator.
+     */
+    private val alreadyDiscovered = mutableMapOf<KSClassDeclaration, KSClassDeclaration>()
+
+    /**
+     * The output file with the discovered validators.
+     *
+     * Each line represents a single mapping: `${MESSAGE_CLASS}:${VALIDATOR_CLASS}`.
+     */
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
         path = DiscoveredValidators.RESOURCES_LOCATION,
@@ -54,57 +78,160 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
     ).writer()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val validators = resolver.getSymbolsWithAnnotation(validator.qualifiedName!!)
-            .filterIsInstance<KSClassDeclaration>().associateBy { kclass ->
-                val annotation = kclass.annotations.find {
-                    it.shortName.getShortName() == validator.simpleName
-                }!!
-                annotation.argumentValue()
+        val messageValidatorInterface = resolver
+            .getClassDeclarationByName<MessageValidator<*>>()!!
+            .asStarProjectedType()
+        val annotatedValidators = resolver
+            .getSymbolsWithAnnotation(ValidatorAnnotation.qualifiedName!!)
+            .filterIsInstance<KSClassDeclaration>() // Matches the declared annotation target.
+            .onEach { it.checkApplicability(messageValidatorInterface) }
+        val newlyDiscovered = annotatedValidators
+            .map { validator ->
+                val message = validator.validatedMessage(messageValidatorInterface)
+                message to validator
             }
-
-        if (validators.isEmpty()) {
-            return emptyList()
-        }
-
-        output.use { writer ->
-            validators.forEach { (message, validator) ->
-                val validatorFQN = validator.qualifiedName?.asString()
-                    ?: noQualifiedName(validator)
-                val messageFQN = message.qualifiedName?.asString()
-                    ?: noQualifiedName(message) // May indicate a local message.
-                if (discoveredValidators.add(validatorFQN)) {
-                    writer.appendLine("$messageFQN:$validatorFQN")
+            .filterNot { (message, validator) ->
+                when (val previous = alreadyDiscovered[message]) {
+                    validator -> true // Prevents the same validator being discovered twice.
+                    null -> {
+                        alreadyDiscovered[message] = validator
+                        false
+                    }
+                    else -> message.reportDuplicateValidator(validator, previous)
                 }
             }
+
+        output.use { writer ->
+            newlyDiscovered.forEach { (message, validator) ->
+                val validatorFQN = validator.qualifiedName?.asString()!!
+                val messageFQN = message.qualifiedName?.asString()!!
+                writer.appendLine("$messageFQN:$validatorFQN")
+            }
         }
 
-        // Return an empty list: no deferred symbols
         return emptyList()
     }
+}
 
-    private fun noQualifiedName(ksclass: KSClassDeclaration): Nothing = error(
-        "The class `$ksclass` has no qualified name."
-    )
-
-    private fun KSAnnotation.argumentValue(argumentName: String = "value"): KSClassDeclaration {
-        val valueArg = arguments.firstOrNull { it.name?.asString() == argumentName }
-            ?: error("Annotation `@$shortName` has no argument named `$argumentName`.")
-
-        // the raw .value can be a KSType or a KSTypeReference
-        val kType: KSType = when (val raw = valueArg.value) {
-            is KSType -> raw
-            is KSTypeReference -> raw.resolve()
-            else -> error("Unsupported annotation parameter type: `${raw?.javaClass}`.")
-        }
-
-        // its declaration is a KSClassDeclaration
-        val declaration = kType.declaration as? KSClassDeclaration
-            ?: error("Expected a class declaration, but got `$kType`.")
-
-        return declaration
+/**
+ * Checks if the [Validator] annotation can be used with this [KSClassDeclaration].
+ *
+ * The method ensures the following:
+ *
+ * 1. This class is not `inner`.
+ * 2. It implements [MessageValidator] interface.
+ * 3. It has a public, no-args constructor.
+ */
+private fun KSClassDeclaration.checkApplicability(messageValidator: KSType) {
+    check(!modifiers.contains(Modifier.INNER)) {
+        """
+        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        This annotation is not applicable to the `inner` classes.
+        Please consider making the class nested or top-level.
+        """.trimIndent()
     }
-
-    private companion object {
-        val validator = Validator::class
+    check(messageValidator.isAssignableFrom(asStarProjectedType())) {
+        """
+        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        This annotation requires the target class to implement the `${qualified<MessageValidator<*>>()}` interface.
+        """.trimIndent()
+    }
+    check(hasPublicNoArgConstructor()) {
+        """
+        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        This annotation requires the target class to have a public, no-args constructor.
+        """.trimIndent()
     }
 }
+
+/**
+ * Returns `true` if this class has a public, no-args constructor.
+ */
+private fun KSClassDeclaration.hasPublicNoArgConstructor(): Boolean =
+    getConstructors()
+        .any { it.isPublic() && it.parameters.isEmpty() }
+
+/**
+ * Returns a class of the validated message of this validator [KSClassDeclaration].
+ */
+private fun KSClassDeclaration.validatedMessage(messageValidator: KSType): KSClassDeclaration {
+
+    val annotation = annotations.first { it.shortName.asString() == ValidatorAnnotation.simpleName }
+    val annotationArg = annotation.arguments
+        .first { it.name?.asString() == VALIDATOR_ARGUMENT_NAME }
+        .value
+
+    // The argument value can be a `KSType` or a `KSTypeReference`.
+    // The latter must be resolved.
+    val annotationMessage = when (annotationArg) {
+        is KSType -> annotationArg
+        is KSTypeReference -> annotationArg.resolve()
+        else -> error(
+            """
+            `${simply<ValidatorProcessor>()}` cannot parse the argument parameter of the `@${annotation.shortName.asString()}` annotation.
+            Unexpected KSP type of the argument value: `${annotationArg?.qualifiedClassName}`.
+            The argument value: `$annotationArg`.
+            """.trimIndent()
+        )
+    }
+
+    val interfaceMessage = interfaceMessage(messageValidator.declaration as KSClassDeclaration)!!
+    check(annotationMessage == interfaceMessage) {
+        """
+        The `@${annotation.shortName.asString()}` annotation is applied to incompatible `${qualifiedName?.asString()}` validator.
+        The validated message type of the annotation and the validator must match.
+        The message type specified for the annotation: `${annotationMessage.declaration.qualifiedName?.asString()}`.
+        The message type specified for the validator: `${interfaceMessage.declaration.qualifiedName?.asString()}`.
+        """.trimIndent()
+    }
+
+    return annotationMessage.declaration as KSClassDeclaration
+}
+
+/**
+ * Walks the inheritance tree of this [KSClassDeclaration] and, if it implements
+ * the generic interface [messageValidator], returns its single type‐argument.
+ */
+private fun KSClassDeclaration.interfaceMessage(
+    messageValidator: KSClassDeclaration,
+    visited: MutableSet<KSClassDeclaration> = mutableSetOf()
+): KSType? {
+
+    // Prevents cycles.
+    if (!visited.add(this)) {
+        return null
+    }
+
+    for (superRef: KSTypeReference in superTypes) {
+        val superType = superRef.resolve()
+        val superDecl = superType.declaration as? KSClassDeclaration ?: continue
+
+        if (superDecl.qualifiedName?.asString() == messageValidator.qualifiedName?.asString()) {
+            return superType.arguments.first().type?.resolve()
+        }
+
+        superDecl.interfaceMessage(messageValidator, visited)
+            ?.let { return it }
+    }
+
+    return null
+}
+
+private fun KSClassDeclaration.reportDuplicateValidator(
+    newValidator: KSClassDeclaration,
+    oldValidator: KSClassDeclaration
+): Nothing = error("""
+    Cannot register the `${newValidator.qualifiedName?.asString()}` validator.
+    The message type `${qualifiedName?.asString()}` is already validated by the `${oldValidator.qualifiedName?.asString()}` validator.
+    Only one validator is allowed per message type.
+""".trimIndent())
+
+/**
+ * The name of the [Validator.value] property.
+ */
+private const val VALIDATOR_ARGUMENT_NAME = "value"
+
+/**
+ * The class of the [Validator] annotation.
+ */
+private val ValidatorAnnotation = Validator::class

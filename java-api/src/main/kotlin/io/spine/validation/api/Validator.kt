@@ -38,6 +38,7 @@ import kotlin.reflect.KClass
  *
  * 1. The class must implement the [MessageValidator] interface.
  * 2. The class must have a public, no-args constructor.
+ * 3. The class cannot be `inner`.
  *
  * @see MessageValidator
  */

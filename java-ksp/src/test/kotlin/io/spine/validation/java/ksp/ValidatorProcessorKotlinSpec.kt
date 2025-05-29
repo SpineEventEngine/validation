@@ -26,10 +26,14 @@
 
 package io.spine.validation.java.ksp
 
+import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.INTERNAL_ERROR
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK
 import com.tschuchort.compiletesting.kspSourcesDir
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
+import io.spine.string.qualified
 import io.spine.validation.api.DiscoveredValidators
+import io.spine.validation.api.MessageValidator
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -43,7 +47,7 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
     Discover {
 
         @Test
-        fun `a top level validator`() = assertDiscovered(
+        fun `a top level validator`() = assertDiscovered("TimestampValidator") {
             """
             @Validator(Timestamp::class)
             public class TimestampValidator : MessageValidator<Timestamp> {
@@ -51,12 +55,11 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     return emptyList() // Always valid.
                 }
             }    
-            """.trimIndent(),
-            "TimestampValidator"
-        )
+            """.trimIndent()
+        }
 
         @Test
-        fun `a nested validator`() = assertDiscovered(
+        fun `a nested validator`() = assertDiscovered("Outer.TimestampValidator") {
             """
             public class Outer {
                 @Validator(Timestamp::class)
@@ -66,11 +69,120 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     }
                 }
             }   
+            """.trimIndent()
+        }
+
+        private fun assertDiscovered(validator: String, declaration: () -> String) {
+            val sourceFile = kotlinFile("TimestampValidator", """
+                package $VALIDATOR_PACKAGE
+                
+                $IMPORTS
+                
+                ${declaration()}
+                """.trimIndent()
+            )
+
+            compilation.sources = listOf(sourceFile)
+            val result = compilation.compileSilently()
+            result.exitCode shouldBe OK
+
+            val output = compilation.kspSourcesDir
+                .resolve("resources")
+                .resolve(DiscoveredValidators.RESOURCES_LOCATION)
+
+            with(output) {
+                exists() shouldBe true
+                readText() shouldBe "$TIMESTAMP_CLASS:$VALIDATOR_PACKAGE.$validator\n"
+            }
+        }
+    }
+
+    @Nested inner class
+    RejectValidator {
+
+        @Test
+        fun `declared as inner class`() = assertRejects(
+            """
+            public class Outer {
+                @Validator(Timestamp::class)
+                public inner class TimestampValidator : MessageValidator<Timestamp> {
+                    public override fun validate(message: Timestamp): List<DetectedViolation> {
+                        return emptyList() // Always valid.
+                    }
+                }
+            }   
             """.trimIndent(),
-            "Outer.TimestampValidator"
+            "$VALIDATOR_PACKAGE.Outer.TimestampValidator",
+            "This annotation is not applicable to the `inner` classes."
         )
 
-        private fun assertDiscovered(declaration: String, expected: String) {
+        @Test
+        fun `not implementing 'MessageValidator' interface`() = assertRejects(
+            """
+            @Validator(Timestamp::class)
+            public class TimestampValidator {
+                public fun validate(message: Timestamp): List<DetectedViolation> {
+                    return emptyList() // Always valid.
+                }
+            }
+            """.trimIndent(),
+            "$VALIDATOR_PACKAGE.TimestampValidator",
+            "requires the target class to implement the `${qualified<MessageValidator<*>>()}`"
+        )
+
+        @Test
+        fun `not having a public, no-args constructor`() = assertRejects(
+            """
+            @Validator(Timestamp::class)
+            public class TimestampValidator private constructor() : MessageValidator<Timestamp> {
+                public fun validate(message: Timestamp): List<DetectedViolation> {
+                    return emptyList() // Always valid.
+                }
+            }
+            """.trimIndent(),
+            "$VALIDATOR_PACKAGE.TimestampValidator",
+            "requires the target class to have a public, no-args constructor"
+        )
+
+        @Test
+        fun `having different message type for annotation and interface`() = assertRejects(
+            """
+            @Validator(Timestamp::class)
+            public class DurationValidator : MessageValidator<Duration> {
+                public override fun validate(message: Duration): List<DetectedViolation> {
+                    return emptyList() // Always valid.
+                }
+            }    
+            """.trimIndent(),
+            "$VALIDATOR_PACKAGE.DurationValidator",
+            TIMESTAMP_CLASS, DURATION_CLASS,
+            "message type of the annotation and the validator must match"
+        )
+
+        @Test
+        fun `validating the same message twice`() = assertRejects(
+            """
+            @Validator(Timestamp::class)
+            public class TimestampValidator : MessageValidator<Timestamp> {
+                public override fun validate(message: Timestamp): List<DetectedViolation> {
+                    return emptyList() // Always valid.
+                }
+            }
+            
+            @Validator(Timestamp::class)
+            public class TimestampValidator2 : MessageValidator<Timestamp> {
+                public override fun validate(message: Timestamp): List<DetectedViolation> {
+                    return emptyList() // Always valid.
+                }
+            }    
+            """.trimIndent(),
+            TIMESTAMP_CLASS,
+            "$VALIDATOR_PACKAGE.TimestampValidator",
+            "$VALIDATOR_PACKAGE.TimestampValidator2",
+            "Only one validator is allowed per message type"
+        )
+
+        private fun assertRejects(declaration: String, vararg errorMessage: String) {
             val sourceFile = kotlinFile("TimestampValidator", """
                 package $VALIDATOR_PACKAGE
                 
@@ -82,56 +194,22 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
 
             compilation.sources = listOf(sourceFile)
             val result = compilation.compileSilently()
-            result.exitCode shouldBe OK
 
-            val discovered = compilation.kspSourcesDir
-                .resolve("resources")
-                .resolve(DiscoveredValidators.RESOURCES_LOCATION)
-
-            with(discovered) {
-                exists() shouldBe true
-                readText() shouldBe "$MESSAGE_CLASS:$VALIDATOR_PACKAGE.$expected\n"
+            result.exitCode shouldBe INTERNAL_ERROR
+            errorMessage.forEach { fragment ->
+                result.messages shouldContain fragment
             }
         }
     }
+}
 
-    @Nested inner class
-    RejectValidator {
-
-        @Test
-        fun `declared as inner class`() {
-
-        }
-
-        @Test
-        fun `not implementing 'MessageValidator' interface`() {
-
-        }
-
-        @Test
-        fun `not having a public, no-args constructor`() {
-
-        }
-
-        @Test
-        fun `validating a local message`() {
-
-        }
-
-        @Test
-        fun `validating the same message twice`() {
-
-        }
-    }
-
-    companion object {
-        private const val MESSAGE_CLASS = "com.google.protobuf.Timestamp"
-        private const val VALIDATOR_PACKAGE = "io.spine.validation.java.ksp.test"
-        private val IMPORTS = """
+private const val TIMESTAMP_CLASS = "com.google.protobuf.Timestamp"
+private const val DURATION_CLASS = "com.google.protobuf.Duration"
+private const val VALIDATOR_PACKAGE = "io.spine.validation.java.ksp.test"
+private val IMPORTS = """
             import io.spine.validation.api.DetectedViolation
             import io.spine.validation.api.MessageValidator
             import io.spine.validation.api.Validator
-            import com.google.protobuf.Timestamp
+            import $TIMESTAMP_CLASS
+            import $DURATION_CLASS
         """.trimIndent()
-    }
-}
