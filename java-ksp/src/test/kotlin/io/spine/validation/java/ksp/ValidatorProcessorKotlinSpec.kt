@@ -42,48 +42,66 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
     @Nested inner class
     Discover {
 
-        private val topLevelValidator = kotlinFile("TimestampValidator", """
-            package io.spine.validation.java.ksp.test
-            
-            import io.spine.validation.api.DetectedViolation
-            import io.spine.validation.api.MessageValidator
-            import io.spine.validation.api.Validator
-            import com.google.protobuf.Timestamp
-            
+        @Test
+        fun `a top level validator`() = assertDiscovered(
+            """
             @Validator(Timestamp::class)
             public class TimestampValidator : MessageValidator<Timestamp> {
                 public override fun validate(message: Timestamp): List<DetectedViolation> {
                     return emptyList() // Always valid.
                 }
-            }
-            """.trimIndent())
+            }    
+            """.trimIndent(),
+            "TimestampValidator"
+        )
 
         @Test
-        fun `a top level validator`() {
-            compilation.apply {
-                sources = listOf(topLevelValidator)
-            }
+        fun `a nested validator`() = assertDiscovered(
+            """
+            public class Outer {
+                @Validator(Timestamp::class)
+                public class TimestampValidator : MessageValidator<Timestamp> {
+                    public override fun validate(message: Timestamp): List<DetectedViolation> {
+                        return emptyList() // Always valid.
+                    }
+                }
+            }   
+            """.trimIndent(),
+            "Outer.TimestampValidator"
+        )
 
+        private fun assertDiscovered(declaration: String, expected: String) {
+            val sourceFile = kotlinFile("TimestampValidator", """
+                package $VALIDATOR_PACKAGE
+                
+                $IMPORTS
+                
+                $declaration
+                """.trimIndent()
+            )
+
+            compilation.sources = listOf(sourceFile)
             val result = compilation.compileSilently()
             result.exitCode shouldBe OK
 
             val discovered = compilation.kspSourcesDir
                 .resolve("resources")
                 .resolve(DiscoveredValidators.RESOURCES_LOCATION)
+
             with(discovered) {
                 exists() shouldBe true
-                readText().trim() shouldBe "com.google.protobuf.Timestamp:io.spine.validation.java.ksp.test.TimestampValidator"
+                readText() shouldBe "$MESSAGE_CLASS:$VALIDATOR_PACKAGE.$expected\n"
             }
-        }
-
-        @Test
-        fun `a nested validator`() {
-
         }
     }
 
     @Nested inner class
     RejectValidator {
+
+        @Test
+        fun `declared as inner class`() {
+
+        }
 
         @Test
         fun `not implementing 'MessageValidator' interface`() {
@@ -104,5 +122,16 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
         fun `validating the same message twice`() {
 
         }
+    }
+
+    companion object {
+        private const val MESSAGE_CLASS = "com.google.protobuf.Timestamp"
+        private const val VALIDATOR_PACKAGE = "io.spine.validation.java.ksp.test"
+        private val IMPORTS = """
+            import io.spine.validation.api.DetectedViolation
+            import io.spine.validation.api.MessageValidator
+            import io.spine.validation.api.Validator
+            import com.google.protobuf.Timestamp
+        """.trimIndent()
     }
 }
