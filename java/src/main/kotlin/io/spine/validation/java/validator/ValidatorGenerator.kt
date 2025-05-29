@@ -68,26 +68,6 @@ internal class ValidatorGenerator(
     private val typeSystem: TypeSystem
 ) {
 
-    /*
-    // TODO:2025-05-23:yevhenii.nadtochii: Check out.
-
-        Generator responsible:
-         - Should we handle `repeated` and `map` fields?
-           Yes -> We support.
-
-         - Do we allow custom validators for local messages?
-           No -> Error.
-
-        Processor responsible:
-         - Can one message have several validators?
-           No -> Error.
-
-         + Validator must be a top-level class or nested.
-
-         + Validator must have a public, no args constructor.
-
-     */
-
     fun codeFor(type: MessageType): List<SingleOptionCode> {
         val messageFields = type.fieldList.filter { it.type.refersToMessage() }
             .associateWith { it.type.extractMessageType(typeSystem)!! }

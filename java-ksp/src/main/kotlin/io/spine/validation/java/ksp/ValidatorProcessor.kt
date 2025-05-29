@@ -38,6 +38,12 @@ import com.google.devtools.ksp.symbol.KSTypeReference
 import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.Validator
 
+/**
+ * Discovers classes annotated with the [@Validator][Validator] annotation.
+ *
+ * The discovered validator and their validated message classes are written
+ * to the [DiscoveredValidators.RESOURCES_LOCATION] file.
+ */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
     private val discoveredValidators = mutableSetOf<String>()
