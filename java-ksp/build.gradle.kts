@@ -28,6 +28,8 @@ import io.spine.dependency.artifact
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
+import io.spine.dependency.local.Logging
+import io.spine.dependency.test.KotlinCompileTesting
 
 plugins {
     id("com.google.devtools.ksp")
@@ -35,7 +37,11 @@ plugins {
 
 dependencies {
     ksp(AutoServiceKsp.processor)
+
     implementation(AutoService.annotations)
     implementation(Ksp.artifact { symbolProcessingApi })
     implementation(project(":java-api"))
+
+    testImplementation(KotlinCompileTesting.libKsp)
+    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
 }
