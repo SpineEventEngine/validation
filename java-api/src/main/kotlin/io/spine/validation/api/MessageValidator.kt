@@ -57,7 +57,7 @@ import io.spine.annotation.SPI
  * ## Validation of external messages
  *
  * The Validation library provides a mechanism that allows validating of
- * the external messages, **which are embedded within local messages**.
+ * the external messages, **which are used for fields within local messages**.
  * Implement this interface and annotate the implementing class with
  * the [@Validator][Validator] annotation, specifying the message type to validate.
  *
@@ -113,7 +113,7 @@ import io.spine.annotation.SPI
  * It is a responsibility of the validator to provide the correct instances
  * of [DetectedViolation]. Before reporting to the user, the library converts
  * [DetectedViolation] to a [ConstraintViolation][io.spine.validate.ConstraintViolation].
- * Returning of an empty list of violations means that the passed message is valid.
+ * Returning of an empty list of violations means that the given message is valid.
  *
  * Please keep in mind that for each invocation a new instance of [MessageValidator]
  * is created. Every implementation of [MessageValidator] must have a public,
