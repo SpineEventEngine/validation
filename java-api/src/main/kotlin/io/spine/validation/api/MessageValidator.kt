@@ -30,7 +30,7 @@ import com.google.protobuf.Message
 import io.spine.annotation.SPI
 
 /**
- * A custom validator for an external Protobuf message of type [M].
+ * A validator for an external Protobuf message of type [M].
  *
  * ## "External" and "local" `Message`s types
  *
@@ -47,10 +47,10 @@ import io.spine.annotation.SPI
  *
  * ## Validation of external messages
  *
- * The Validation library provides a customization mechanism that allows validating
- * of the external messages, **which are embedded within local messages**.
+ * The Validation library provides a mechanism that allows validating of
+ * the external messages, **which are embedded within local messages**.
  * Implement this interface and annotate the implementing class with
- * the [@Validator][Validator] annotation, specifying the type of the message to validate.
+ * the [@Validator][Validator] annotation, specifying the message type to validate.
  *
  * For each field of type [M] within any local message, the library will invoke
  * the [MessageValidator.validate] method when validating the local message.
