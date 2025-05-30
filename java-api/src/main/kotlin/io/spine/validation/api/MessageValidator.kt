@@ -48,12 +48,12 @@ import io.spine.annotation.SPI
  * ## Validation of external messages
  *
  * The validation library provides a customization mechanism that allows validating
- * of the external messages, **which are part of the local ones**. To be able to validate
- * external messages, one must implement this interface and annotate the implementing class
- * with the [Validator] annotation, specifying the type of the message to validate.
+ * of the external messages, **which are embedded within local messages**.
+ * Implement this interface and annotate the implementing class with
+ * the [@Validator][Validator] annotation, specifying the type of the message to validate.
  *
- * For each local message that has a field of type [M], the library will invoke
- * a validator when validating that message.
+ * For each field of type [M] within any local message, the library will invoke
+ * the [MessageValidator.validate] method when validating the local message.
  *
  * The following Protobuf field types are supported:
  *
@@ -73,7 +73,7 @@ import io.spine.annotation.SPI
  * ```
  *
  * Please note that standalone instances of [M] and fields of [M] type that occur in
- * other external messages **will not be validated** using the validator.
+ * other external messages **will not be validated**.
  *
  * Consider the following example:
  *
@@ -90,14 +90,9 @@ import io.spine.annotation.SPI
  * }
  * ```
  *
- * Supposing that `WorkingSetup` and `EarphonesValidator` are declared within
- * the same module, then every instance of `WorkingSetup.earphones` will be validated
- * using the validator.
- *
- * Also keep in mind restrictions applicable to this example:
- *
- * - Standalone instances of `Earphones` will not be validated.
- * - External messages that use `Earphones` as a field will not be validated.
+ * Supposing that the validation library applied to the module where both `WorkingSetup`
+ * and `EarphonesValidator` classes are declared, then the generated code of `WorkingSetup`
+ * will apple the validator to each instance passed to the `WorkingSetup.earphones` field.
  *
  * ## Implementation
  *
