@@ -28,7 +28,7 @@ package io.spine.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
-import io.spine.protodata.ast.TypeName
+import io.spine.protodata.ast.MessageType
 import io.spine.protodata.java.JavaValueConverter
 import io.spine.protodata.java.file.hasJavaRoot
 import io.spine.protodata.java.javaClassName
@@ -37,6 +37,7 @@ import io.spine.protodata.java.render.findClass
 import io.spine.protodata.java.render.findMessageTypes
 import io.spine.protodata.render.SourceFile
 import io.spine.protodata.render.SourceFileSet
+import io.spine.string.ti
 import io.spine.tools.code.Java
 import io.spine.validation.java.generate.MessageValidationCode
 import io.spine.validation.api.generate.OptionGenerator
@@ -52,6 +53,9 @@ import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
+import io.spine.validation.java.generate.MessageClass
+import io.spine.validation.java.generate.ValidatorClass
+import io.spine.validation.java.generate.ValidatorGenerator
 
 /**
  * The main Java renderer of the validation library.
@@ -59,13 +63,18 @@ import io.spine.validation.java.generate.option.WhenGenerator
  * This renderer is applied to every compilation [Message],
  * even if the message does not have any declared constraints.
  */
-public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : JavaRenderer() {
+internal class JavaValidationRenderer(
+    customGenerators: List<OptionGenerator>,
+    private val validators: Map<MessageClass, ValidatorClass>
+) : JavaRenderer() {
 
-    private val valueConverter by lazy { JavaValueConverter(typeSystem) }
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
-    private val generators by lazy {
-        (builtInGenerators() + customGenerators)
+    private val validatorGenerator by lazy {
+        ValidatorGenerator(validators, typeSystem)
+    }
+    private val optionGenerators by lazy {
+        (buildInGenerators() + customGenerators)
             .onEach { it.inject(querying) }
     }
 
@@ -78,7 +87,8 @@ public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : J
 
         findMessageTypes()
             .forEach { message ->
-                val code = generateCode(message.name)
+                checkDoesNotHaveValidator(message)
+                val code = generateCode(message)
                 val file = sources.javaFileOf(message)
                 file.render(code)
             }
@@ -88,36 +98,38 @@ public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : J
      * Returns code generators for the built-in options.
      *
      * Note that some generators cannot be created outside of [JavaRenderer] because
-     * they need [valueConverter], which in turn needs [JavaRenderer.typeSystem].
+     * they need [JavaValueConverter], which in turn needs [JavaRenderer.typeSystem].
      *
      * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
      * is addressed, all generators must be created outside of [JavaValidationRenderer],
      * and just passed to the renderer.
      */
-    private fun builtInGenerators() = listOf(
-        RequiredGenerator(valueConverter),
-        PatternGenerator(),
-        GoesGenerator(valueConverter),
-        DistinctGenerator(),
-        ValidateGenerator(valueConverter),
-        RangeGenerator(),
-        MaxGenerator(),
-        MinGenerator(),
-        ChoiceGenerator(),
-        WhenGenerator(valueConverter),
-        RequireOptionGenerator(valueConverter),
-    )
+    private fun buildInGenerators(): List<OptionGenerator> {
+        val valueConverter = JavaValueConverter(typeSystem)
+        return listOf(
+            RequiredGenerator(valueConverter),
+            PatternGenerator(),
+            GoesGenerator(valueConverter),
+            DistinctGenerator(),
+            ValidateGenerator(valueConverter),
+            RangeGenerator(),
+            MaxGenerator(),
+            MinGenerator(),
+            ChoiceGenerator(),
+            WhenGenerator(valueConverter),
+            RequireOptionGenerator(valueConverter),
+        )
+    }
 
-    private fun generateCode(message: TypeName): MessageValidationCode {
-        val fieldOptions = generators.flatMap { it.codeFor(message) }
-        val messageCode = with(fieldOptions) {
-            MessageValidationCode(
-                message = message.javaClassName(typeSystem),
-                constraints = map { it.constraint },
-                fields = flatMap { it.fields },
-                methods = flatMap { it.methods }
-            )
-        }
+    private fun generateCode(message: MessageType): MessageValidationCode {
+        val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }
+        val validatorFields = validatorGenerator.codeFor(message)
+        val messageCode = MessageValidationCode(
+            message = message.javaClassName(typeSystem),
+            constraints = fieldOptions.map { it.constraint } + validatorFields,
+            fields = fieldOptions.flatMap { it.fields },
+            methods = fieldOptions.flatMap { it.methods }
+        )
         return messageCode
     }
 
@@ -126,5 +138,22 @@ public class JavaValidationRenderer(customGenerators: List<OptionGenerator>) : J
         val messageClass = psiFile.findClass(code.message)
         codeInjector.inject(code, messageClass)
         overwrite(psiFile.text)
+    }
+
+    /**
+     * Ensures that the given compilation [message] does not have an assigned validator.
+     *
+     * Local messages are prohibited from having validators.
+     */
+    private fun checkDoesNotHaveValidator(message: MessageType) {
+        val javaClass = message.javaClassName(typeSystem)
+        val validator = validators[javaClass]
+        check(validator == null) {
+            """
+            The validator `$validator` cannot be used to validate the `$javaClass` messages.
+            Validators can be used only for external message types, which are not generated locally.
+            Use built-in or custom validation options to declare constraints for the local messages.
+            """.ti()
+        }
     }
 }

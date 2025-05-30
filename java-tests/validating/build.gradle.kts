@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.artifact
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
@@ -56,7 +57,7 @@ dependencies {
         testFixturesImplementation(it)
     }
 
-    testImplementation((Jupiter.artifact(Jupiter.params)))
+    testImplementation(Jupiter.artifact { params })
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
     testImplementation(ProtoData.api)

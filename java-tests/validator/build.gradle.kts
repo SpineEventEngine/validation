@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,32 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+plugins {
+    id("com.google.devtools.ksp")
 }
 
-rootProject.name = "validation"
+dependencies {
+    ksp(project(":java-ksp"))
+    protoData(project(":java"))
+    implementation(project(":java-api"))
+    implementation(project(":java-tests:validator-dependency"))
+}
 
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-ksp",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-    ":java-tests:validator",
-    ":java-tests:validator-dependency",
-)
+protoData {
+    plugins(
+        "io.spine.validation.java.JavaValidationPlugin",
+        "io.spine.protodata.java.style.JavaCodeStyleFormatterPlugin"
+    )
+}
+
+// ProtoData codegen uses output from the KSP task.
+project.afterEvaluate {
+    val kspKotlin by tasks.getting
+    val launchProtoData by tasks.getting {
+        dependsOn(kspKotlin)
+    }
+}

@@ -26,9 +26,14 @@
 
 package io.spine.validation.java
 
+import io.spine.protodata.java.ClassName
 import io.spine.validation.ValidationPlugin
+import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
+import io.spine.validation.java.generate.MessageClass
+import io.spine.validation.java.generate.ValidatorClass
+import java.io.File
 import java.util.*
 
 /**
@@ -46,7 +51,7 @@ import java.util.*
 @Suppress("unused") // Accessed via reflection.
 public class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }),
+        JavaValidationRenderer(customOptions.map { it.generator }, customValidators),
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),
@@ -56,7 +61,34 @@ public class JavaValidationPlugin : ValidationPlugin(
 /**
  * Dynamically discovered instances of custom [ValidationOption]s.
  */
-private val customOptions by lazy {
+private val customOptions: List<ValidationOption> by lazy {
     ServiceLoader.load(ValidationOption::class.java)
         .filterNotNull()
 }
+
+/**
+ * Dynamically discovered instances of custom
+ * [MessageValidator][io.spine.validation.api.MessageValidator]s.
+ *
+ * Please note that the KSP module is responsible for the actual discovering
+ * of the message validators. The discovered validators are written to a text file
+ * in the KSP task output. This property loads the validators from that file.
+ */
+private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
+    val workingDir = System.getProperty("user.dir")
+    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
+    val messageValidators =  DiscoveredValidators.resolve(kspOutput)
+    if (!messageValidators.exists()) {
+        return@lazy emptyMap()
+    }
+
+    messageValidators.readLines().associate {
+        val (message, validator) = it.split(":")
+        ClassName.guess(message) to ClassName.guess(validator)
+    }
+}
+
+/**
+ * The default location to which the KSP task puts the generated output.
+ */
+private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"

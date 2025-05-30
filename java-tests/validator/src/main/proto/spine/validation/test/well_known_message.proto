@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,33 +23,33 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+package spine.validation.test;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "WellKnownMessageProto";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+// Tests a singular field of well-known message type.
+message SingularWellKnownMessage {
+
+    google.protobuf.Timestamp value = 1;
 }
 
-rootProject.name = "validation"
+// Tests a repeated field of well-known message type.
+message RepeatedWellKnownMessage {
 
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-ksp",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-    ":java-tests:validator",
-    ":java-tests:validator-dependency",
-)
+    repeated google.protobuf.Timestamp value = 1;
+}
+
+// Tests a map field of well-known message type.
+message MappedWellKnownMessage {
+
+    map<string, google.protobuf.Timestamp> value = 1;
+}
