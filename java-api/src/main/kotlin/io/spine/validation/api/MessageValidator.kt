@@ -32,18 +32,27 @@ import io.spine.annotation.SPI
 /**
  * A validator for an external Protobuf message of type [M].
  *
- * ## "External" and "local" `Message`s types
+ * This interface allows adding validation logic to messages, for which there is
+ * no control over the generated code.
  *
- * **Local messages** are message types for which end-users generate and control
- * the Java/Kotlin classes by compiling the corresponding `.proto` definitions
- * within their own codebase. For such messages, the Validation library allows
- * declaring validation constraints and enforces them with the generated code.
+ * ## Problem
  *
- * **External messages** are message types for which end-users do not generate or control
- * the Java/Kotlin classes (for example, pre-compiled classes from third-party dependencies).
- * Because these classes are already generated, users cannot modify the underlying `.proto`
- * definitions and add validation options at compile time. There is no control of
- * the code generation.
+ * Java/Kotlin libraries that use Protobuf messages often distribute both the `.proto`
+ * definitions and the compiled class files (.class) for these messages.
+ * As these classes are pre-generated, consumers cannot modify their underlying
+ * `.proto` files to define validation constraints and the Validation library
+ * cannot use code generation to enforce the constraints.
+ *
+ * Thus, the library effectively deals with the two types of messages:
+ *
+ * 1. **Local messages** are message types for which end-users generate and control
+ *    the Java/Kotlin classes by compiling the corresponding `.proto` definitions
+ *    within their own codebase. For such messages, the Validation library allows
+ *    declaring validation constraints and enforces them with the generated code.
+ *
+ * 2. **External messages** are message types for which end-users do not generate or control
+ *    the Java/Kotlin classes. Because the classes are already generated, users cannot modify
+ *    the underlying `.proto` definitions and add validation options at compile time.
  *
  * ## Validation of external messages
  *
