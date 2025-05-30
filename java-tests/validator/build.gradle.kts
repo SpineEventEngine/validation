@@ -42,17 +42,10 @@ protoData {
     )
 }
 
-// ProtoData codegen needs output from `:java-ksp`.
+// ProtoData codegen uses output from the KSP task.
 project.afterEvaluate {
-    val kspKotlin by tasks.getting {
-        outputs.upToDateWhen { false }
-    }
-
+    val kspKotlin by tasks.getting
     val launchProtoData by tasks.getting {
         dependsOn(kspKotlin)
-    }
-
-    val kspTestKotlin by tasks.getting {
-        outputs.upToDateWhen { false }
     }
 }
