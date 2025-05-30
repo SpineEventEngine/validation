@@ -101,7 +101,7 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
     RejectValidator {
 
         @Test
-        fun `declared as inner class`() = assertRejects(
+        fun `declared as 'inner' class`() = assertRejects(
             """
             public class Outer {
                 @Validator(Timestamp::class)
@@ -111,10 +111,11 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     }
                 }
             }   
-            """.trimIndent(),
-            "$VALIDATOR_PACKAGE.Outer.TimestampValidator",
-            "This annotation is not applicable to the `inner` classes."
-        )
+            """.trimIndent()
+        ) { error ->
+            error shouldContain "$VALIDATOR_PACKAGE.Outer.TimestampValidator"
+            error shouldContain "This annotation is not applicable to the `inner` classes."
+        }
 
         @Test
         fun `not implementing 'MessageValidator' interface`() = assertRejects(
@@ -125,10 +126,12 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     return emptyList() // Always valid.
                 }
             }
-            """.trimIndent(),
-            "$VALIDATOR_PACKAGE.TimestampValidator",
-            "requires the target class to implement the `${qualified<MessageValidator<*>>()}`"
-        )
+            """.trimIndent()
+        ) { error ->
+            error shouldContain "$VALIDATOR_PACKAGE.TimestampValidator"
+            error shouldContain "requires the target class to implement" +
+                    " the `${qualified<MessageValidator<*>>()}`"
+        }
 
         @Test
         fun `not having a public, no-args constructor`() = assertRejects(
@@ -139,10 +142,11 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     return emptyList() // Always valid.
                 }
             }
-            """.trimIndent(),
-            "$VALIDATOR_PACKAGE.TimestampValidator",
-            "requires the target class to have a public, no-args constructor"
-        )
+            """.trimIndent()
+        ) { error ->
+            error shouldContain "$VALIDATOR_PACKAGE.TimestampValidator"
+            error shouldContain "requires the target class to have a public, no-args constructor"
+        }
 
         @Test
         fun `having different message type for annotation and interface`() = assertRejects(
@@ -153,11 +157,13 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     return emptyList() // Always valid.
                 }
             }    
-            """.trimIndent(),
-            "$VALIDATOR_PACKAGE.DurationValidator",
-            TIMESTAMP_CLASS, DURATION_CLASS,
-            "message type of the annotation and the validator must match"
-        )
+            """.trimIndent()
+        ) { error ->
+            error shouldContain "$VALIDATOR_PACKAGE.DurationValidator"
+            error shouldContain TIMESTAMP_CLASS
+            error shouldContain DURATION_CLASS
+            error shouldContain "message type of the annotation and the validator must match"
+        }
 
         @Test
         fun `validating the same message twice`() = assertRejects(
@@ -175,14 +181,15 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
                     return emptyList() // Always valid.
                 }
             }    
-            """.trimIndent(),
-            TIMESTAMP_CLASS,
-            "$VALIDATOR_PACKAGE.TimestampValidator",
-            "$VALIDATOR_PACKAGE.TimestampValidator2",
-            "Only one validator is allowed per message type"
-        )
+            """.trimIndent()
+        ) { error ->
+            error shouldContain TIMESTAMP_CLASS
+            error shouldContain "$VALIDATOR_PACKAGE.TimestampValidator"
+            error shouldContain "$VALIDATOR_PACKAGE.TimestampValidator2"
+            error shouldContain "Only one validator is allowed per message type"
+        }
 
-        private fun assertRejects(declaration: String, vararg errorMessage: String) {
+        private fun assertRejects(declaration: String, errorMessageAssertions: (String) -> Unit) {
             val sourceFile = kotlinFile("TimestampValidator", """
                 package $VALIDATOR_PACKAGE
                 
@@ -196,9 +203,7 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
             val result = compilation.compileSilently()
 
             result.exitCode shouldBe INTERNAL_ERROR
-            errorMessage.forEach { fragment ->
-                result.messages shouldContain fragment
-            }
+            errorMessageAssertions(result.messages)
         }
     }
 }
