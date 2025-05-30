@@ -31,8 +31,8 @@ import io.spine.validation.ValidationPlugin
 import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
-import io.spine.validation.java.validator.MessageClass
-import io.spine.validation.java.validator.ValidatorClass
+import io.spine.validation.java.generate.MessageClass
+import io.spine.validation.java.generate.ValidatorClass
 import java.io.File
 import java.util.*
 

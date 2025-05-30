@@ -53,9 +53,9 @@ import io.spine.validation.java.generate.option.RequireOptionGenerator
 import io.spine.validation.java.generate.option.RequiredGenerator
 import io.spine.validation.java.generate.option.ValidateGenerator
 import io.spine.validation.java.generate.option.WhenGenerator
-import io.spine.validation.java.validator.MessageClass
-import io.spine.validation.java.validator.ValidatorClass
-import io.spine.validation.java.validator.ValidatorGenerator
+import io.spine.validation.java.generate.MessageClass
+import io.spine.validation.java.generate.ValidatorClass
+import io.spine.validation.java.generate.ValidatorGenerator
 
 /**
  * The main Java renderer of the validation library.
