@@ -30,17 +30,36 @@ import com.google.protobuf.Message
 import io.spine.annotation.SPI
 
 /**
- * A custom validator for Protobuf messages of type [M] that are defined externally.
+ * A custom validator for an external Protobuf message of type [M].
  *
- * External messages are those that come from dependencies.
- * Protobuf [well-known](https://protobuf.dev/reference/protobuf/google.protobuf/)
- * messages should also be considered external. For such messages, it is impossible
- * to declare validation constraints using the validation options because there's
- * no access to their proto definitions.
+ * ## Notation of external and local messages
  *
- * To be able to validate external messages, one must implement this interface
- * and annotate the implementing class with the [Validator] annotation, specifying
- * the type of the message to validate.
+ * **Local messages** are message types for which end-users generate and control
+ * the Java/Kotlin classes by compiling the corresponding `.proto` definitions
+ * within their own codebase. For such messages, the validation library allows
+ * declaring validation constraints and enforces them with the generated code.
+ *
+ * **External messages** are message types for which end-users do not generate or control
+ * the Java/Kotlin classes (for example, pre-compiled classes from third-party dependencies).
+ * Because these classes are already generated, users cannot modify the underlying `.proto`
+ * definitions and add validation options at compile time. There is no control of
+ * the code generation.
+ *
+ * ## Validation of external messages
+ *
+ * The validation library provides a customization mechanism that allows validating
+ * of the external messages, **which are part of the local ones**. To be able to validate
+ * external messages, one must implement this interface and annotate the implementing class
+ * with the [Validator] annotation, specifying the type of the message to validate.
+ *
+ * For each local message that has a field of type [M], the library will invoke
+ * a validator when validating that message.
+ *
+ * The following Protobuf field types are supported:
+ *
+ * 1. Singular fields of type [M].
+ * 2. Repeated field of type [M].
+ * 3. Map field with values of type [M].
  *
  * An example of the validator declaration for the `Earphones` message:
  *
@@ -53,25 +72,15 @@ import io.spine.annotation.SPI
  * }
  * ```
  *
- * ## Applicability
- *
- * A validator is applied only to the local messages of the module it is declared in.
- * For each local message that has a field of type [M], the validation library
- * will invoke a validator when validating that message.
- *
- * The following field types are supported:
- *
- * 1. Singular fields of type [M].
- * 2. Repeated field of type [M].
- * 3. Map field with values of type [M].
- *
  * Please note that standalone instances of [M] and fields of [M] type that occur in
- * external messages will not be validated using the validator.
+ * other external messages **will not be validated** using the validator.
  *
  * Consider the following example:
  *
  * ```proto
- * import "earphones.proto"; // Brings the `Earphones` message from dependencies.
+ * // Brings the `Earphones` message from dependencies.
+ * // Suppose we don't control the generated code of declarations from this file.
+ * import "earphones.proto";
  *
  * // A locally-declared message.
  * message WorkingSetup {
@@ -83,36 +92,35 @@ import io.spine.annotation.SPI
  *
  * Supposing that `WorkingSetup` and `EarphonesValidator` are declared within
  * the same module, then every instance of `WorkingSetup.earphones` will be validated
- * with the validator.
+ * using the validator.
  *
- * Also note the restrictions:
+ * Also keep in mind restrictions applicable to this example:
  *
- * - Standalone instantiations of `Earphones` will not be validated.
+ * - Standalone instances of `Earphones` will not be validated.
  * - External messages that use `Earphones` as a field will not be validated.
  *
  * ## Implementation
  *
  * The message validator does not have restrictions upon how exactly the message
- * must be validated. It can validate a particular field or several fields,
- * the whole message instance (for example, checking the field relations) and
- * perform a deep validation.
+ * must be validated. It can validate a particular field, several fields,
+ * the whole message instance (for example, checking the field relations),
+ * and perform a deep validation.
  *
  * It is a responsibility of the validator to provide the correct instances
  * of [DetectedViolation]. Before reporting to the user, the validation library
  * converts [DetectedViolation] to a [ConstraintViolation][io.spine.validate.ConstraintViolation].
- * Returning of an empty list of violations means that the message is valid.
+ * Returning of an empty list of violations means that the passed message is valid.
  *
  * Please keep in mind that for each invocation a new instance of [MessageValidator]
  * is created. Every implementation of [MessageValidator] must have a public,
  * no-args constructor.
  *
- * ## Restrictions
- *
- * A [MessageValidator] will be rejected by the validation library in the following cases:
+ * An implementation of [MessageValidator] will be rejected by the validation library
+ * in the following cases:
  *
  * 1) It is used to validate a local message. Only external messages are allowed
  *    to have a validator.
- * 2) There already exists a validator for the validated message type. Having several
+ * 2) There already exists a validator for the specified message type. Having several
  *    validators for the same message type is prohibited.
  *
  * @param M the type of Protobuf [Message] being validated.
