@@ -36,7 +36,7 @@ import io.spine.annotation.SPI
  *
  * **Local messages** are message types for which end-users generate and control
  * the Java/Kotlin classes by compiling the corresponding `.proto` definitions
- * within their own codebase. For such messages, the validation library allows
+ * within their own codebase. For such messages, the Validation library allows
  * declaring validation constraints and enforces them with the generated code.
  *
  * **External messages** are message types for which end-users do not generate or control
@@ -47,7 +47,7 @@ import io.spine.annotation.SPI
  *
  * ## Validation of external messages
  *
- * The validation library provides a customization mechanism that allows validating
+ * The Validation library provides a customization mechanism that allows validating
  * of the external messages, **which are embedded within local messages**.
  * Implement this interface and annotate the implementing class with
  * the [@Validator][Validator] annotation, specifying the type of the message to validate.
@@ -90,7 +90,7 @@ import io.spine.annotation.SPI
  * }
  * ```
  *
- * Supposing that the validation library applied to the module where both `WorkingSetup`
+ * Supposing that the Validation library applied to the module where both `WorkingSetup`
  * and `EarphonesValidator` classes are declared, then the generated code of `WorkingSetup`
  * will apple the validator to each instance passed to the `WorkingSetup.earphones` field.
  *
@@ -102,15 +102,15 @@ import io.spine.annotation.SPI
  * and perform a deep validation.
  *
  * It is a responsibility of the validator to provide the correct instances
- * of [DetectedViolation]. Before reporting to the user, the validation library
- * converts [DetectedViolation] to a [ConstraintViolation][io.spine.validate.ConstraintViolation].
+ * of [DetectedViolation]. Before reporting to the user, the library converts
+ * [DetectedViolation] to a [ConstraintViolation][io.spine.validate.ConstraintViolation].
  * Returning of an empty list of violations means that the passed message is valid.
  *
  * Please keep in mind that for each invocation a new instance of [MessageValidator]
  * is created. Every implementation of [MessageValidator] must have a public,
  * no-args constructor.
  *
- * An implementation of [MessageValidator] will be rejected by the validation library
+ * An implementation of [MessageValidator] will be rejected by the library
  * in the following cases:
  *
  * 1) It is used to validate a local message. Only external messages are allowed
