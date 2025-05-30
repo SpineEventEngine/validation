@@ -144,6 +144,12 @@ all modules and does not describe the project structure per-subproject.
     <scope>test</scope>
   </dependency>
   <dependency>
+    <groupId>dev.zacsweers.kctfork</groupId>
+    <artifactId>ksp</artifactId>
+    <version>0.7.1</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
     <version>5.9.1</version>
