@@ -31,8 +31,8 @@ import io.spine.annotation.Internal
 /**
  * Holds a path to a file with the discovered validators.
  *
- * KSP processor generates a resource file using the [RESOURCES_LOCATION].
- * Then, the codegen plugin picks up the file using the same location.
+ * The KSP processor generates a resource file using this path.
+ * Then, the Java codegen plugin picks up this file.
  */
 @Internal
 public object DiscoveredValidators {

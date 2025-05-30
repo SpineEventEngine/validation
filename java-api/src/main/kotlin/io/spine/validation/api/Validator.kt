@@ -34,13 +34,15 @@ import kotlin.reflect.KClass
 /**
  * Marks the class as a message validator.
  *
- * The following requirements are imposed to the marked class:
+ * Applying this annotation to an implementation of [MessageValidator]
+ * makes the class visible to the validation library.
+ *
+ * Please note that the following requirements are imposed to the marked class:
  *
  * 1. The class must implement the [MessageValidator] interface.
  * 2. The class must have a public, no-args constructor.
- * 3. The class cannot be `inner`.
- *
- * @see MessageValidator
+ * 3. The class cannot be `inner`, but nested classes are allowed.
+ * 4. The message type of [Validator.value] and [MessageValidator] must match.
  */
 @Target(CLASS)
 @Retention(SOURCE)

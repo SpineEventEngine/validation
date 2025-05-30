@@ -37,11 +37,9 @@ plugins {
 
 dependencies {
     ksp(AutoServiceKsp.processor)
-
     implementation(AutoService.annotations)
     implementation(Ksp.artifact { symbolProcessingApi })
     implementation(project(":java-api"))
-
     testImplementation(KotlinCompileTesting.libKsp)
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
 }

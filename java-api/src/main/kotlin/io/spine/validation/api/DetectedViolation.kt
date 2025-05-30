@@ -43,7 +43,7 @@ public abstract class DetectedViolation(
 )
 
 /**
- * A [MessageValidator] violation associated with a specific field.
+ * A violation tied to a specific field in a message.
  *
  * @param message The error message describing the violation.
  * @param fieldPath The path to the field where the violation occurred.
@@ -56,7 +56,7 @@ public class FieldViolation(
 ) : DetectedViolation(message, fieldPath, fieldValue)
 
 /**
- * A [MessageValidator] violation related to the message level (not tied to a specific field).
+ * A violation related to the message level (not tied to a specific field).
  *
  * @param message The error message describing the violation.
  */

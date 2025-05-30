@@ -45,31 +45,36 @@ import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 
+private typealias MessageDeclaration = KSClassDeclaration
+private typealias ValidatorDeclaration = KSClassDeclaration
+
 /**
  * Discovers classes annotated with the [@Validator][Validator] annotation.
  *
- * The discovered validator and their validated message classes are written
- * to the [DiscoveredValidators.RESOURCES_LOCATION] file.
+ * The processor verifies that the annotation is applied correctly.
+ * Then, the discovered validators are written to
+ * the [DiscoveredValidators.RESOURCES_LOCATION] file.
  */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
     /**
      * Already discovered validators.
      * 
-     * The map contains a mapping of the message class to the validator.
+     * Contains the mapping of the message class to the validator class declaration.
      *
-     * The same validator can be discovered several times because
-     * KSP may have several rounds of the code analysis.
-     * 
+     * The same validator may be discovered several times because
+     * KSP can perform several rounds of the code analysis.
      * This map is used to prevent outputting the same validator twice
-     * and to check is the same message has more than one validator.
+     * and to enforce the message type have exactly one validator.
      */
-    private val alreadyDiscovered = mutableMapOf<KSClassDeclaration, KSClassDeclaration>()
+    private val alreadyDiscovered = mutableMapOf<MessageDeclaration, ValidatorDeclaration>()
 
     /**
-     * The output file with the discovered validators.
+     * The output file that contains the discovered validators.
      *
-     * Each line represents a single mapping: `${MESSAGE_CLASS}:${VALIDATOR_CLASS}`.
+     * Each line represents a single mapping:
+     *
+     * `${MESSAGE_CLASS_FQN}:${VALIDATOR_CLASS_FQN}`.
      */
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
@@ -78,13 +83,18 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
     ).writer()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
+
+        // The resolved `KSType` of the `MessageValidator` interface is needed
+        // only for verifying the annotation is applied correctly.
         val messageValidatorInterface = resolver
             .getClassDeclarationByName<MessageValidator<*>>()!!
             .asStarProjectedType()
+
         val annotatedValidators = resolver
             .getSymbolsWithAnnotation(ValidatorAnnotation.qualifiedName!!)
-            .filterIsInstance<KSClassDeclaration>() // Matches the declared annotation target.
+            .filterIsInstance<KSClassDeclaration>()
             .onEach { it.checkApplicability(messageValidatorInterface) }
+
         val newlyDiscovered = annotatedValidators
             .map { validator ->
                 val message = validator.validatedMessage(messageValidatorInterface)
@@ -92,11 +102,17 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
             }
             .filterNot { (message, validator) ->
                 when (val previous = alreadyDiscovered[message]) {
-                    validator -> true // Prevents the same validator being discovered twice.
+
+                    // This validator was already discovered.
+                    validator -> true
+
+                    // The `message` does not have an assigned validator yet.
                     null -> {
                         alreadyDiscovered[message] = validator
                         false
                     }
+
+                    // The `message` already has another validator assigned.
                     else -> message.reportDuplicateValidator(validator, previous)
                 }
             }
@@ -114,15 +130,18 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
 }
 
 /**
- * Checks if the [Validator] annotation can be used with this [KSClassDeclaration].
+ * Checks if this [MessageValidator] implementation satisfies requirements
+ * of the [Validator] annotation.
  *
  * The method ensures the following:
  *
  * 1. This class is not `inner`.
  * 2. It implements [MessageValidator] interface.
  * 3. It has a public, no-args constructor.
+ *
+ * @param messageValidator The type of the [MessageValidator] interface.
  */
-private fun KSClassDeclaration.checkApplicability(messageValidator: KSType) {
+private fun ValidatorDeclaration.checkApplicability(messageValidator: KSType) {
     check(!modifiers.contains(Modifier.INNER)) {
         """
         The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
@@ -144,17 +163,19 @@ private fun KSClassDeclaration.checkApplicability(messageValidator: KSType) {
     }
 }
 
-/**
- * Returns `true` if this class has a public, no-args constructor.
- */
-private fun KSClassDeclaration.hasPublicNoArgConstructor(): Boolean =
+private fun ValidatorDeclaration.hasPublicNoArgConstructor(): Boolean =
     getConstructors()
         .any { it.isPublic() && it.parameters.isEmpty() }
 
 /**
- * Returns a class of the validated message of this validator [KSClassDeclaration].
+ * Returns the message type this [ValidatorDeclaration] is declared for.
+ *
+ * Also, the method makes sure that the message type of the [Validator] annotation
+ * and [MessageValidator] interface match.
+ *
+ * @param messageValidator The type of the [MessageValidator] interface.
  */
-private fun KSClassDeclaration.validatedMessage(messageValidator: KSType): KSClassDeclaration {
+private fun ValidatorDeclaration.validatedMessage(messageValidator: KSType): KSClassDeclaration {
 
     val annotation = annotations.first { it.shortName.asString() == ValidatorAnnotation.simpleName }
     val annotationArg = annotation.arguments
@@ -189,11 +210,11 @@ private fun KSClassDeclaration.validatedMessage(messageValidator: KSType): KSCla
 }
 
 /**
- * Walks the inheritance tree of this [KSClassDeclaration] and, if it implements
+ * Walks the inheritance tree of this [ValidatorDeclaration] and, if it implements
  * the generic interface [messageValidator], returns its single type‐argument.
  */
-@Suppress("ReturnCount") // It is a recursive function.
-private fun KSClassDeclaration.interfaceMessage(
+@Suppress("ReturnCount") // This is a recursive function.
+private fun ValidatorDeclaration.interfaceMessage(
     messageValidator: KSClassDeclaration,
     visited: MutableSet<KSClassDeclaration> = mutableSetOf()
 ): KSType? {
@@ -218,7 +239,7 @@ private fun KSClassDeclaration.interfaceMessage(
     return null
 }
 
-private fun KSClassDeclaration.reportDuplicateValidator(
+private fun MessageDeclaration.reportDuplicateValidator(
     newValidator: KSClassDeclaration,
     oldValidator: KSClassDeclaration
 ): Nothing = error("""
