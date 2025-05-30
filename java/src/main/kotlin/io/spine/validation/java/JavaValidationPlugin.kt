@@ -76,9 +76,8 @@ private val customOptions: List<ValidationOption> by lazy {
  */
 private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
     val workingDir = System.getProperty("user.dir")
-    val kspOutput = "$workingDir/$KSP_GENERATED_RESOURCES"
-    val messageValidatorsPath = "$kspOutput/${DiscoveredValidators.RESOURCES_LOCATION}"
-    val messageValidators =  File(messageValidatorsPath)
+    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
+    val messageValidators =  DiscoveredValidators.resolve(kspOutput)
     if (!messageValidators.exists()) {
         return@lazy emptyMap()
     }
@@ -92,4 +91,4 @@ private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
 /**
  * The default location to which the KSP task puts the generated output.
  */
-private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main/resources"
+private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"

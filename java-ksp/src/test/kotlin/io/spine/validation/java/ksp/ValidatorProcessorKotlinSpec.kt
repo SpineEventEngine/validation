@@ -86,11 +86,8 @@ internal class ValidatorProcessorKotlinSpec : ValidatorCompilationTest() {
             val result = compilation.compileSilently()
             result.exitCode shouldBe OK
 
-            val output = compilation.kspSourcesDir
-                .resolve("resources")
-                .resolve(DiscoveredValidators.RESOURCES_LOCATION)
-
-            with(output) {
+            val validators = DiscoveredValidators.resolve(compilation.kspSourcesDir)
+            with(validators) {
                 exists() shouldBe true
                 readText() shouldBe "$TIMESTAMP_CLASS:$VALIDATOR_PACKAGE.$validator\n"
             }
