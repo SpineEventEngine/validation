@@ -27,18 +27,15 @@
 package io.spine.validation.java.ksp
 
 import com.google.protobuf.Message
-import com.google.protobuf.Timestamp
 import com.intellij.util.lang.JavaVersion
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
-import com.tschuchort.compiletesting.SourceFile.Companion.java
 import com.tschuchort.compiletesting.SourceFile.Companion.kotlin
 import com.tschuchort.compiletesting.configureKsp
 import io.spine.logging.testing.ConsoleTap
 import io.spine.logging.testing.tapConsole
 import io.spine.validation.api.Validator
-import io.spine.validation.api.MessageValidator
 import java.io.File
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.BeforeAll
@@ -71,13 +68,9 @@ internal sealed class ValidatorCompilationTest {
     @BeforeEach
     fun prepareCompilation() {
         val dependencyJars = setOf(
-            Validator::class.java, // The annotation.
-            MessageValidator::class.java, // The validator interface.
-            Timestamp::class.java, // The external message to use.
+            Validator::class.java, // The annotation to discover.
             Message::class.java, // Protobuf.
-            ValidatorProcessorProvider::class.java, // The test subject.
         ).map { it.classpathFile() }
-
         compilation = KotlinCompilation()
         compilation.apply {
             jvmTarget = JavaVersion.current().toFeatureString()
@@ -115,16 +108,6 @@ private fun Class<*>.classpathFile(): File = File(protectionDomain.codeSource.lo
  * The package used to define Java and Kotlin files.
  */
 private const val PACKAGE_DIR = "io/spine/validation/java/ksp/test"
-
-/**
- * Creates an instance of [SourceFile] with the Java file containing the class
- * with the specified name and contents.
- */
-internal fun javaFile(simpleClassName: String, contents: String): SourceFile = java(
-    name = "$PACKAGE_DIR/${simpleClassName}.java",
-    contents = contents,
-    trimIndent = true
-)
 
 /**
  * Creates an instance of [SourceFile] with the Kotlin file containing the class
