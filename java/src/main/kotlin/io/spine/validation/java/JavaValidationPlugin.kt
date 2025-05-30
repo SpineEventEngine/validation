@@ -31,6 +31,8 @@ import io.spine.validation.ValidationPlugin
 import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.java.setonce.SetOnceRenderer
+import io.spine.validation.java.validator.MessageClass
+import io.spine.validation.java.validator.ValidatorClass
 import java.io.File
 import java.util.*
 
@@ -59,20 +61,22 @@ public class JavaValidationPlugin : ValidationPlugin(
 /**
  * Dynamically discovered instances of custom [ValidationOption]s.
  */
-private val customOptions by lazy {
+private val customOptions: List<ValidationOption> by lazy {
     ServiceLoader.load(ValidationOption::class.java)
         .filterNotNull()
 }
 
 /**
- * Dynamically discovered instances of custom [io.spine.validation.api.MessageValidator]s.
+ * Dynamically discovered instances of custom
+ * [MessageValidator][io.spine.validation.api.MessageValidator]s.
  *
- * KSP module is responsible for discovering message validators and dumping the discovered
- * validators to a text file to the default `:kspKotlin` task output location.
+ * Please note that the KSP module is responsible for the actual discovering
+ * of the message validators. The discovered validators are written to a text file
+ * in the KSP task output. This property loads the validators from that file.
  */
-private val customValidators by lazy {
-    val protoDataWorkingDir = System.getProperty("user.dir")
-    val kspOutput = "$protoDataWorkingDir/$KSP_GENERATED_RESOURCES"
+private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
+    val workingDir = System.getProperty("user.dir")
+    val kspOutput = "$workingDir/$KSP_GENERATED_RESOURCES"
     val messageValidatorsPath = "$kspOutput/${DiscoveredValidators.RESOURCES_LOCATION}"
     val messageValidators =  File(messageValidatorsPath)
     if (!messageValidators.exists()) {
@@ -86,6 +90,6 @@ private val customValidators by lazy {
 }
 
 /**
- * The default location to which KSP module dumps the generated resources.
+ * The default location to which the KSP task puts the generated output.
  */
 private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main/resources"

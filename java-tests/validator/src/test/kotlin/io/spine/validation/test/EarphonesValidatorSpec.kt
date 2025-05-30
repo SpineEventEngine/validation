@@ -44,8 +44,7 @@ import org.junit.jupiter.api.assertThrows
 @DisplayName("`EarphonesValidator` should")
 class EarphonesValidatorSpec {
 
-    @Nested
-    inner class
+    @Nested inner class
     `prohibit invalid instances` {
 
         @Test
@@ -102,8 +101,7 @@ class EarphonesValidatorSpec {
         }
     }
 
-    @Nested
-    inner class
+    @Nested inner class
     `allow valid instances` {
 
         @Test
@@ -139,7 +137,8 @@ class EarphonesValidatorSpec {
 }
 
 /**
- * Asserts that this [ConstraintViolation] has all required fields populated.
+ * Asserts that this [ConstraintViolation] has all required fields populated
+ * in accordance to [EarphonesValidator].
  */
 private inline fun <reified T : Message> ConstraintViolation.assert(earphones: Earphones) {
     message shouldBe EarphonesValidator.Violation.message
@@ -148,13 +147,6 @@ private inline fun <reified T : Message> ConstraintViolation.assert(earphones: E
     fieldValue shouldBe toAny(earphones.price)
 }
 
-/**
- * The field path consists of the field name that contains the external message type
- * plus the path relative to the message type.
- *
- * In test stubs, all fields containing external message types are named `value`.
- * The relative part is provided by the tested validator.
- */
 private val expectedFieldPath = FieldPath("value").toBuilder()
     .mergeFrom(EarphonesValidator.Violation.fieldPath)
     .build()

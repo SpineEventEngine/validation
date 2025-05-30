@@ -36,19 +36,19 @@ option java_multiple_files = true;
 
 import "spine/validation/test/earphones.proto";
 
-// Tests a singular field of a message type from dependencies.
+// Tests a singular field of an external message type from dependencies.
 message SingularDependencyMessage {
 
     Earphones value = 1;
 }
 
-// Tests a repeated field of a message type from dependencies.
+// Tests a repeated field of an external message type from dependencies.
 message RepeatedDependencyMessage {
 
     repeated Earphones value = 1;
 }
 
-// Tests a map field of a message type from dependencies.
+// Tests a map field of an external message type from dependencies.
 message MappedDependencyMessage {
 
     map<string, Earphones> value = 1;

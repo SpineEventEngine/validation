@@ -37,7 +37,8 @@ import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 
 /**
- * Validates [Earphones]s, treating all instances as invalid except for [ValidEarphones].
+ * Validates [Earphones] messages, treating all instances as invalid
+ * except for [ValidEarphones].
  */
 @Validator(Earphones::class)
 public class EarphonesValidator : MessageValidator<Earphones> {

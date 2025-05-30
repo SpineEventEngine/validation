@@ -49,35 +49,55 @@ import io.spine.string.ti
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.api.DetectedViolation
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.mergeFrom
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
-import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.api.generate.mangled
 
+/**
+ * A fully qualified Java class name of a validator class.
+ */
 internal typealias ValidatorClass = ClassName
+
+/**
+ * A fully qualified Java class name of a Protobuf message class.
+ */
 internal typealias MessageClass = ClassName
 
+/**
+ * Generates code to apply validators to the message fields,
+ * for which there is a validator assigned.
+ *
+ * Please note that this generator is not
+ * [OptionGenerator][io.spine.validation.api.generate.OptionGenerator] intentionally.
+ * This is a dedicated implementation, handling codegen for a specific use case not
+ * related to the validation options.
+ */
 internal class ValidatorGenerator(
     private val validators: Map<MessageClass, ValidatorClass>,
     private val typeSystem: TypeSystem
 ) {
 
-    fun codeFor(type: MessageType): List<SingleOptionCode> {
+    /**
+     * Applies validators for the fields in the given message [type], for which
+     * one is declared.
+     *
+     * The method inspects each field of the given [type], finding those that reference
+     * message types with an available validator, and produces [CodeBlock]s that
+     * invoke these validators.
+     */
+    fun codeFor(type: MessageType): List<CodeBlock> {
         val messageFields = type.fieldList.filter { it.type.refersToMessage() }
             .associateWith { it.type.extractMessageType(typeSystem)!! }
-        val validatorsToApply = messageFields.mapNotNull { (field, message) ->
-            val javaClass = message.javaClassName(typeSystem)
-            if (validators.containsKey(javaClass)) {
-                field to validators[javaClass]!!
-            } else {
-                null
-            }
+        val validatorsToApply = messageFields.mapNotNull { (field, type) ->
+            val javaClass = type.javaClassName(typeSystem)
+            validators[javaClass]?.let { field to it }
         }
         return validatorsToApply.map { (field, validator) ->
             ApplyValidator(field, validator).code()
@@ -85,17 +105,19 @@ internal class ValidatorGenerator(
     }
 }
 
+/**
+ * Applies the specified [validator] to the given [field].
+ */
 private class ApplyValidator(
     private val field: Field,
     private val validator: ValidatorClass
 ) {
-
     private val discovered = mangled("discovered")
     private val getter = message.field(field).getter<Any>()
     private val fieldType = field.type
 
     @Suppress("UNCHECKED_CAST") // The cast is guaranteed due to the field type checks.
-    fun code(): SingleOptionCode = when {
+    fun code(): CodeBlock = when {
         fieldType.isSingular -> validate(getter as Expression<Message>)
 
         fieldType.isList ->
@@ -122,8 +144,19 @@ private class ApplyValidator(
             This generator supports singular message fields, repeated and maps of messages.
             """.ti()
         )
-    }.run { SingleOptionCode(this) }
+    }
 
+    /**
+     * Yields an expression that invokes validator for the given [message] instance.
+     *
+     * The expression does the following:
+     *
+     * 1. Creates a new instances of [validator].
+     * 2. Invokes [MessageValidator.validate][io.spine.validation.api.MessageValidator.validate]
+     *   passing an instance of the [message].
+     * 3. Converts each [DetectedViolation] to [ConstraintViolation].
+     * 4. Puts all constraint violations to the list of discovered [violations].
+     */
     private fun validate(message: Expression<Message>): CodeBlock {
         val vv = ReadVar<DetectedViolation>("vv")
         val constraint = CodeBlock("""
@@ -137,22 +170,33 @@ private class ApplyValidator(
         return constraint
     }
 
+    /**
+     * Converts this [DetectedViolation] expression to the one
+     * returning [ConstraintViolation].
+     */
     private fun Expression<DetectedViolation>.toConstraintViolation():
             Expression<ConstraintViolation> {
         val message = call<TemplateString>("getMessage")
         val fieldValue = call<Any?>("getFieldValue")
         val fieldPath = resolveFieldPath()
         val typeName = parentName.orElse(field.declaringType).stringify()
-        return io.spine.validation.api.expression.constraintViolation(
-            message, typeName, fieldPath, fieldValue
-        )
+        return constraintViolation(message, typeName, fieldPath, fieldValue)
     }
 
+    /**
+     * Resolves a [FieldPath] from this [DetectedViolation] against the parent path.
+     *
+     * The resolved path contains the [parentPath] plus the name of the [field], for which
+     * [ApplyValidator] is invoked.
+     *
+     * If the validator returns a non-nullable path, it is also appended to the resulting path.
+     * Otherwise, just the one with the field name is returned.
+     */
     @Suppress("UNCHECKED_CAST") // After the null-check, the cast is safe.
     private fun Expression<DetectedViolation>.resolveFieldPath(): Expression<FieldPath> {
-        val local = call<FieldPath?>("getFieldPath")
+        val validatorPath = call<FieldPath?>("getFieldPath")
         val resolved = parentPath.resolve(field.name)
-        val merged = resolved.mergeFrom(local as Expression<FieldPath>)
-        return Expression("($local == null ? $resolved : $merged)")
+        val merged = resolved.mergeFrom(validatorPath as Expression<FieldPath>)
+        return Expression("($validatorPath == null ? $resolved : $merged)")
     }
 }

@@ -34,7 +34,7 @@ option java_package = "io.spine.validation.test";
 option java_outer_classname = "EarphonesProto";
 option java_multiple_files = true;
 
-// A custom message to be used as an external dependency for the `:validator` tests.
+// A message to be used as an external dependency for the `:validator` tests.
 message Earphones {
 
     string model_name = 1;

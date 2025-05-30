@@ -29,6 +29,7 @@ package io.spine.validation.test
 import com.google.common.annotations.VisibleForTesting
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
+import com.google.protobuf.util.Timestamps.fromMillis
 import io.spine.base.FieldPath
 import io.spine.base.fieldPath
 import io.spine.validate.TemplateString
@@ -39,7 +40,8 @@ import io.spine.validation.api.MessageValidator
 import io.spine.validation.api.Validator
 
 /**
- * Validates [Timestamp]s, treating all instances as invalid except for [ValidTimestamp].
+ * Validates [Timestamp] messages, treating all instances as invalid
+ * except for [ValidTimestamp].
  */
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
@@ -64,7 +66,7 @@ public class TimestampValidator : MessageValidator<Timestamp> {
         /**
          * The [TimestampValidator] considers only this instance as valid.
          */
-        public val ValidTimestamp: Timestamp = Timestamps.fromMillis(893755250000L)
+        public val ValidTimestamp: Timestamp = fromMillis(893755250000L)
     }
 
     @VisibleForTesting

@@ -124,14 +124,12 @@ internal class JavaValidationRenderer(
     private fun generateCode(message: MessageType): MessageValidationCode {
         val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }
         val validatorFields = validatorGenerator.codeFor(message)
-        val messageCode = with(fieldOptions + validatorFields) {
-            MessageValidationCode(
-                message = message.javaClassName(typeSystem),
-                constraints = map { it.constraint },
-                fields = flatMap { it.fields },
-                methods = flatMap { it.methods }
-            )
-        }
+        val messageCode = MessageValidationCode(
+            message = message.javaClassName(typeSystem),
+            constraints = fieldOptions.map { it.constraint } + validatorFields,
+            fields = fieldOptions.flatMap { it.fields },
+            methods = fieldOptions.flatMap { it.methods }
+        )
         return messageCode
     }
 
@@ -143,7 +141,7 @@ internal class JavaValidationRenderer(
     }
 
     /**
-     * Ensures that the given compilation [message] does not have a validator declared.
+     * Ensures that the given compilation [message] does not have an assigned validator.
      *
      * Local messages are prohibited from having validators.
      */

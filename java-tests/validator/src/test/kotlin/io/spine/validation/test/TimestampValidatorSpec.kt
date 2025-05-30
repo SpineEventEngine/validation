@@ -112,7 +112,8 @@ class TimestampValidatorSpec {
 }
 
 /**
- * Asserts that this [ConstraintViolation] has all required fields populated.
+ * Asserts that this [ConstraintViolation] has all required fields populated
+ * in accordance to [TimestampValidator].
  */
 private inline fun <reified T : Message> ConstraintViolation.assert(timestamp: Timestamp) {
     message shouldBe TimestampValidator.Violation.message
@@ -121,13 +122,6 @@ private inline fun <reified T : Message> ConstraintViolation.assert(timestamp: T
     fieldValue shouldBe toAny(timestamp.seconds)
 }
 
-/**
- * The field path consists of the field name that contains the external message type
- * plus the path relative to the message type.
- *
- * In test stubs, all fields containing external message types are named `value`.
- * The relative part is provided by the tested validator.
- */
 private val expectedFieldPath = FieldPath("value").toBuilder()
     .mergeFrom(TimestampValidator.Violation.fieldPath)
     .build()
