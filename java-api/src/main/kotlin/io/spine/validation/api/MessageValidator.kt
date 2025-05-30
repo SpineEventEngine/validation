@@ -32,7 +32,7 @@ import io.spine.annotation.SPI
 /**
  * A custom validator for an external Protobuf message of type [M].
  *
- * ## Notation of external and local messages
+ * ## "External" and "local" `Message`s types
  *
  * **Local messages** are message types for which end-users generate and control
  * the Java/Kotlin classes by compiling the corresponding `.proto` definitions
