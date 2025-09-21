@@ -28,6 +28,15 @@ import io.spine.dependency.lib.Protobuf
 
 buildscript {
     standardSpineSdkRepositories()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.Logging.grpcContext,
+                )
+            }
+        }
+    }
     dependencies {
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         protoData.run {
@@ -40,6 +49,16 @@ buildscript {
 subprojects {
     apply {
         plugin("io.spine.mc-java")
+    }
+
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.ToolBase.lib,
+                )
+            }
+        }
     }
 
     dependencies {

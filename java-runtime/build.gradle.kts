@@ -33,6 +33,15 @@ import io.spine.gradle.protobuf.setup
 
 buildscript {
     standardSpineSdkRepositories()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.Logging.grpcContext,
+                )
+            }
+        }
+    }
     dependencies {
         classpath(mcJava.pluginLib)
     }

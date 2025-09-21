@@ -26,6 +26,15 @@
 
 buildscript {
     forceCodegenPlugins()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.Logging.grpcContext,
+                )
+            }
+        }
+    }
 }
 
 /*

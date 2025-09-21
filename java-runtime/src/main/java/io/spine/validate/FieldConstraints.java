@@ -48,7 +48,7 @@ import static java.lang.String.format;
  */
 final class FieldConstraints {
 
-    private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
+    private static final Logger logger = LoggingFactory.forEnclosingClass();
     private static final ImmutableSet<ValidatingOptionFactory> allFactories =
             ValidatingOptionsLoader.INSTANCE.implementations();
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =

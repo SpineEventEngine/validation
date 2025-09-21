@@ -61,7 +61,7 @@ public final class Validate {
             "Attempted to change the value of the field " +
                     "`${" + PARENT_TYPE + "}.${" + FIELD_PATH + "}` which has " +
                     "`(set_once) = true` and already has a non-default value.";
-    private static final Logger<?> logger = LoggingFactory.forEnclosingClass();
+    private static final Logger logger = LoggingFactory.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
     private Validate() {
