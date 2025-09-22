@@ -26,9 +26,6 @@
 
 buildscript {
     forceCodegenPlugins()
-    dependencies {
-        classpath(io.spine.dependency.local.Compiler.jvm)
-    }
 }
 
 plugins {
@@ -46,7 +43,7 @@ spine {
     compiler {
         plugins(
             "io.spine.validation.java.JavaValidationPlugin",
-            "io.spine.compiler.jvm.style.JavaCodeStyleFormatterPlugin"
+            "io.spine.tools.compiler.jvm.style.JavaCodeStyleFormatterPlugin"
         )
     }
 
