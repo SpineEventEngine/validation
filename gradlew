@@ -64,6 +64,9 @@
 #
 ##############################################################################
 
+# Temporarily disable the runtime check of Protobuf version compatibility.
+export TEMPORARILY_DISABLE_PROTOBUF_VERSION_CHECK=true
+
 # Attempt to set APP_HOME
 
 # Resolve links: $0 may be a link
