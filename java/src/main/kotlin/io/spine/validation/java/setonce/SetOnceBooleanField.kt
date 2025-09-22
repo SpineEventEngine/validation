@@ -29,7 +29,7 @@ package io.spine.validation.java.setonce
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.java.Expression
+import io.spine.tools.compiler.jvm.Expression
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 

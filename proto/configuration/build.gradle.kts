@@ -24,12 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 
 plugins {
     `build-proto-model`
 }
 
 dependencies {
-    api(ProtoData.api)
+    api(Compiler.api)
 }

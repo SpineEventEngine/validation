@@ -28,9 +28,9 @@ package io.spine.validation.java.generate
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.FieldDeclaration
+import io.spine.tools.compiler.jvm.MethodDeclaration
 import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore

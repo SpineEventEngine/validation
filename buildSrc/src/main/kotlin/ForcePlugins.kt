@@ -44,17 +44,17 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
         mcJava.run {
             classpath(pluginLib(version))
         }
-        protoData.run {
+        spineCompiler.run {
             classpath("$module:$version")
         }
     }
 
     configurations.all {
         resolutionStrategy.force(
-            protoData.fatCli,
-            protoData.java,
-            protoData.backend,
-            protoData.protocPlugin,
+            spineCompiler.fatCli,
+            spineCompiler.jvm,
+            spineCompiler.backend,
+            spineCompiler.protocPlugin,
 
             mcJava.pluginsArtifact
         )

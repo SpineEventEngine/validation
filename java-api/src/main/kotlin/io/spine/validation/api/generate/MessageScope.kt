@@ -27,7 +27,7 @@
 package io.spine.validation.api.generate
 
 import com.google.protobuf.Message
-import io.spine.protodata.java.This
+import io.spine.tools.compiler.jvm.This
 
 /**
  * Scope variables available within the message class.

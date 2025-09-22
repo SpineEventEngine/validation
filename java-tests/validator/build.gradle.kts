@@ -38,7 +38,7 @@ dependencies {
 protoData {
     plugins(
         "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.protodata.java.style.JavaCodeStyleFormatterPlugin"
+        "io.spine.compiler.jvm.style.JavaCodeStyleFormatterPlugin"
     )
 }
 

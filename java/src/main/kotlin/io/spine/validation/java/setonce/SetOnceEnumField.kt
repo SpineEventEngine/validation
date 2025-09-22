@@ -31,9 +31,9 @@ import com.google.protobuf.ProtocolMessageEnum
 import com.intellij.psi.PsiClass
 import io.spine.protodata.ast.Field
 import io.spine.protodata.type.TypeSystem
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.call
-import io.spine.protodata.java.javaClassName
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.call
+import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.psi.java.method
 
 /**

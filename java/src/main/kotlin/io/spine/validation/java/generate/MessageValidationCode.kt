@@ -26,10 +26,10 @@
 
 package io.spine.validation.java.generate
 
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.tools.compiler.jvm.ClassName
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.FieldDeclaration
+import io.spine.tools.compiler.jvm.MethodDeclaration
 
 /**
  * Holds all generated validation code for a specific message type.

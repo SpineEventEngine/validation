@@ -40,7 +40,7 @@ import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
 import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.java.Expression
+import io.spine.tools.compiler.jvm.Expression
 import io.spine.protodata.type.TypeSystem
 import io.spine.tools.psi.java.method
 

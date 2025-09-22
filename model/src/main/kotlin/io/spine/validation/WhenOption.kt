@@ -43,7 +43,7 @@ import io.spine.protodata.ast.name
 import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.check
-import io.spine.protodata.java.javaClass
+import io.spine.tools.compiler.jvm.javaClass
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.protodata.type.TypeSystem
@@ -57,7 +57,7 @@ import io.spine.time.validation.Time
 import io.spine.time.validation.TimeOption
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
-import io.spine.protodata.java.findJavaClassName
+import io.spine.tools.compiler.jvm.findJavaClassName
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE

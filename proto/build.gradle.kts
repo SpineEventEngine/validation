@@ -39,7 +39,7 @@ buildscript {
     }
     dependencies {
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
-        protoData.run {
+        spineCompiler.run {
             classpath("$module:$dogfoodingVersion")
         }
         classpath(mcJava.pluginLib)

@@ -26,8 +26,8 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.call
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.call
 
 /**
  * Converts this [Expression] to its string representation by invoking `toString()`.

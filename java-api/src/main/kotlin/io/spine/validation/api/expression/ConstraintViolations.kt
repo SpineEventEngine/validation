@@ -30,12 +30,12 @@ package io.spine.validation.api.expression
 
 import io.spine.base.FieldPath
 import io.spine.protobuf.restoreProtobufEscapes
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.mapExpression
-import io.spine.protodata.java.newBuilder
-import io.spine.protodata.java.packToAny
+import io.spine.tools.compiler.jvm.ClassName
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.mapExpression
+import io.spine.tools.compiler.jvm.newBuilder
+import io.spine.tools.compiler.jvm.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
 import io.spine.validate.checkPlaceholdersHasValue

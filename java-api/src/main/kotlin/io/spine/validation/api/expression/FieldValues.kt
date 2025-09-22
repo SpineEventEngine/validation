@@ -36,9 +36,9 @@ import io.spine.protodata.ast.isMap
 import io.spine.protodata.ast.isSingular
 import io.spine.protodata.ast.name
 import io.spine.protodata.ast.toFieldType
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.call
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.ReadVar
+import io.spine.tools.compiler.jvm.call
 import io.spine.string.ti
 
 /**

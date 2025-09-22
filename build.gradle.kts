@@ -30,7 +30,7 @@ import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Spine
 import io.spine.dependency.local.ToolBase
 import io.spine.gradle.publish.PublishingRepos
@@ -97,11 +97,11 @@ allprojects {
             force(
                 Roaster.api,
                 Roaster.jdt,
-                ProtoData.api,
-                ProtoData.params,
-                ProtoData.pluginLib,
-                ProtoData.backend,
-                ProtoData.java,
+                Compiler.api,
+                Compiler.params,
+                Compiler.pluginLib,
+                Compiler.backend,
+                Compiler.jvm,
                 Spine.base,
                 Logging.lib,
                 CoreJava.client,

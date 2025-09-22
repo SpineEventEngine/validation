@@ -26,8 +26,8 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.java.AnnotatedClassName
-import io.spine.protodata.java.ClassName
+import io.spine.tools.compiler.jvm.AnnotatedClassName
+import io.spine.tools.compiler.jvm.ClassName
 import org.jspecify.annotations.Nullable
 
 /**

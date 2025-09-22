@@ -45,7 +45,7 @@ import io.spine.protodata.ast.qualifiedName
 import io.spine.protodata.ast.ref
 import io.spine.protodata.ast.unpack
 import io.spine.protodata.check
-import io.spine.protodata.java.findField
+import io.spine.tools.compiler.jvm.findField
 import io.spine.protodata.plugin.Policy
 import io.spine.protodata.plugin.View
 import io.spine.protodata.type.message

@@ -27,10 +27,10 @@
 package io.spine.validation.test
 
 import io.spine.protodata.ast.TypeName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.field
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.ReadVar
+import io.spine.tools.compiler.jvm.field
 import io.spine.server.query.select
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.api.expression.orElse

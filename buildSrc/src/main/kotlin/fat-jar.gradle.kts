@@ -62,7 +62,7 @@ tasks.shadowJar {
          * This file is only present in the `io:spine:protodata` artifact.
          */
         "io/spine/protodata/gradle/plugin/Plugin.class",
-        "META-INF/gradle-plugins/io.spine.protodata.properties",
+        "META-INF/gradle-plugins/io.spine.tools.compiler.properties",
 
         /*
          * Exclude Gradle types to reduce the size of the resulting JAR.

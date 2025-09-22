@@ -37,7 +37,7 @@ import io.spine.dependency.local.BaseTypes
 import io.spine.dependency.local.Change
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Reflect
 import io.spine.dependency.local.Text
 import io.spine.dependency.local.Time
@@ -59,7 +59,7 @@ dependencies {
             Roaster.group /* Available via `tool-base`. */,
 
             // Local dependencies.
-            ProtoData.group,
+            Compiler.group,
         ).forEach {
             exclude(group = it)
         }

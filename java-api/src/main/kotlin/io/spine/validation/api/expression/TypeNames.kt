@@ -27,8 +27,8 @@
 package io.spine.validation.api.expression
 
 import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.type.TypeName
 import io.spine.protodata.ast.TypeName as AstTypeName
 

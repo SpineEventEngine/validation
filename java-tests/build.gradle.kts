@@ -28,9 +28,8 @@
 
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.McJava
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 
@@ -89,12 +88,12 @@ fun Project.applyPlugins() {
     if (project.name in applyMcJava) {
         apply(plugin = McJava.pluginId)
     } else {
-        apply(plugin = ProtoData.pluginId)
+        apply(plugin = io.spine.dependency.local.Compiler.pluginId)
     }
 
     val forcedProtoData = listOf(
-        ProtoData.fatCli,
-        ProtoData.protocPlugin
+        Compiler.fatCli,
+        Compiler.protocPlugin
     )
 
     configurations.all {
