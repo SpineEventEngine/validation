@@ -58,7 +58,7 @@ allprojects {
 /**
  * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
  *
- * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
+ * Subprojects of `java-tests` which are not listed here will get Compiler Gradle Plugin applied.
  */
 val applyMcJava = setOf(
     "extensions",
@@ -91,7 +91,7 @@ fun Project.applyPlugins() {
         apply(plugin = Compiler.pluginId)
     }
 
-    val forcedProtoData = listOf(
+    val forcedCompiler = listOf(
         Compiler.fatCli,
         Compiler.protocPlugin
     )
@@ -106,7 +106,7 @@ fun Project.applyPlugins() {
                 // Use the current version of Java runtime in the generated code of tests.
                 substitute(module(runtimeModule)).using(project(":java-runtime"))
             }
-            forcedProtoData.forEach { force(it) }
+            forcedCompiler.forEach { force(it) }
         }
     }
 }
