@@ -40,7 +40,7 @@ buildscript {
     dependencies {
         // The below dependency is obtained from https://plugins.gradle.org/m2/.
         spineCompiler.run {
-            classpath("$module:$dogfoodingVersion")
+            classpath(pluginLib(dogfoodingVersion))
         }
         classpath(mcJava.pluginLib)
     }

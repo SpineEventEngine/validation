@@ -25,7 +25,6 @@
  */
 
 buildscript {
-    forceCodegenPlugins()
     configurations {
         all {
             resolutionStrategy {

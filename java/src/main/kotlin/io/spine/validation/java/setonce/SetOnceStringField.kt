@@ -30,11 +30,11 @@ import com.google.protobuf.ByteString
 import com.intellij.psi.PsiBlockStatement
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiIfStatement
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.MethodCall
-import io.spine.protodata.type.TypeSystem
+import io.spine.tools.compiler.type.TypeSystem
 import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.method
 import io.spine.tools.psi.java.methodWithSignature

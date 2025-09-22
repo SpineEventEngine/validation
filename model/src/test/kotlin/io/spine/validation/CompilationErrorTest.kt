@@ -28,15 +28,15 @@ package io.spine.validation
 
 import com.google.protobuf.Message
 import io.spine.option.OptionsProto
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.filePattern
-import io.spine.protodata.plugin.Plugin
-import io.spine.protodata.protobuf.descriptor
-import io.spine.protodata.protobuf.field
-import io.spine.protodata.settings.SettingsDirectory
-import io.spine.protodata.settings.defaultConsumerId
-import io.spine.protodata.testing.AbstractCompilationErrorTest
-import io.spine.protodata.util.Format
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.filePattern
+import io.spine.tools.compiler.plugin.Plugin
+import io.spine.tools.compiler.protobuf.descriptor
+import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.compiler.settings.SettingsDirectory
+import io.spine.tools.compiler.settings.defaultConsumerId
+import io.spine.testing.compiler.AbstractCompilationErrorTest
+import io.spine.format.Format
 import kotlin.reflect.KClass
 
 /**
@@ -59,7 +59,7 @@ internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
         }
         settings.write(
             ValidationPlugin::class.java.defaultConsumerId,
-            Format.PROTO_JSON,
+            Format.ProtoJson,
             config.toByteArray()
         )
     }

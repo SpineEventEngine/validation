@@ -26,7 +26,7 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.ast.Field
+import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.field

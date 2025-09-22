@@ -28,16 +28,16 @@ package io.spine.validation.test
 
 import io.spine.core.External
 import io.spine.core.Where
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.event.MessageOptionDiscovered
-import io.spine.protodata.ast.unpack
-import io.spine.protodata.check
-import io.spine.protodata.plugin.Policy
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.MessageType
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT64
+import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
+import io.spine.tools.compiler.ast.unpack
+import io.spine.tools.compiler.check
+import io.spine.tools.compiler.plugin.Policy
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just

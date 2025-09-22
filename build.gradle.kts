@@ -42,9 +42,21 @@ import io.spine.gradle.report.pom.PomGenerator
 
 buildscript {
     standardSpineSdkRepositories()
+    configurations.all {
+        resolutionStrategy {
+            force(
+                // Make sure we have the right Protobuf Runtime.
+                io.spine.dependency.lib.Protobuf.javaLib,
+                io.spine.dependency.local.Logging.grpcContext,
+            )
+        }
+    }
     dependencies {
         // Use newer KSP in the classpath to avoid the "too old" warnings.
         classpath(io.spine.dependency.build.Ksp.run { artifact(gradlePlugin) })
+
+        // Make sure we have the right Protobuf Runtime by adding it explicitly.
+        classpath(io.spine.dependency.lib.Protobuf.javaLib)
     }
 }
 

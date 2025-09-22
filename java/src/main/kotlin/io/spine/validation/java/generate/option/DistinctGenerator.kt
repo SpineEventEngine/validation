@@ -27,10 +27,10 @@
 package io.spine.validation.java.generate.option
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isMap
-import io.spine.protodata.ast.name
+import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isMap
+import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar

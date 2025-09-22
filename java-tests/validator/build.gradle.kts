@@ -24,28 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+buildscript {
+    forceCodegenPlugins()
+    dependencies {
+        classpath(io.spine.dependency.local.Compiler.jvm)
+    }
+}
+
 plugins {
     id("com.google.devtools.ksp")
 }
 
 dependencies {
     ksp(project(":java-ksp"))
-    protoData(project(":java"))
+    spineCompiler(project(":java"))
     implementation(project(":java-api"))
     implementation(project(":java-tests:validator-dependency"))
 }
 
-protoData {
-    plugins(
-        "io.spine.validation.java.JavaValidationPlugin",
-        "io.spine.compiler.jvm.style.JavaCodeStyleFormatterPlugin"
-    )
+spine {
+    compiler {
+        plugins(
+            "io.spine.validation.java.JavaValidationPlugin",
+            "io.spine.compiler.jvm.style.JavaCodeStyleFormatterPlugin"
+        )
+    }
+
 }
 
 // ProtoData codegen uses output from the KSP task.
 project.afterEvaluate {
     val kspKotlin by tasks.getting
-    val launchProtoData by tasks.getting {
+    @Suppress("unused")
+    val launchSpineCompiler by tasks.getting {
         dependsOn(kspKotlin)
     }
 }

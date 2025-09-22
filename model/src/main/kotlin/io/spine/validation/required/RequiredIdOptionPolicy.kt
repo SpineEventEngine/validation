@@ -27,9 +27,9 @@
 package io.spine.validation.required
 
 import io.spine.core.External
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.event.TypeDiscovered
-import io.spine.protodata.ast.firstField
+import io.spine.tools.compiler.ast.MessageType
+import io.spine.tools.compiler.ast.event.TypeDiscovered
+import io.spine.tools.compiler.ast.firstField
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2

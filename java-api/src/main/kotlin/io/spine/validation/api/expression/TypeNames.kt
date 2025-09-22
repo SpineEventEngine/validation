@@ -26,11 +26,11 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.ast.qualifiedName
+import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.type.TypeName
-import io.spine.protodata.ast.TypeName as AstTypeName
+import io.spine.tools.compiler.ast.TypeName as AstTypeName
 
 /**
  * Returns an expression that ensures a non-`null` [TypeName] value.

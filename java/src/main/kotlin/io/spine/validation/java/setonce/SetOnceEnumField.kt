@@ -29,8 +29,8 @@ package io.spine.validation.java.setonce
 import com.google.protobuf.Enum
 import com.google.protobuf.ProtocolMessageEnum
 import com.intellij.psi.PsiClass
-import io.spine.protodata.ast.Field
-import io.spine.protodata.type.TypeSystem
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.type.TypeSystem
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.javaClassName

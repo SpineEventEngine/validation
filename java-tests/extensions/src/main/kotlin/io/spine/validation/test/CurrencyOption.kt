@@ -27,8 +27,8 @@
 package io.spine.validation.test
 
 import com.google.auto.service.AutoService
-import io.spine.protodata.plugin.Policy
-import io.spine.protodata.plugin.View
+import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.View
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.api.generate.OptionGenerator
 

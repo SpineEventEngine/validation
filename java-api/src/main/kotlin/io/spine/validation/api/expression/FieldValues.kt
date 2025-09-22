@@ -26,16 +26,16 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isMap
-import io.spine.protodata.ast.isSingular
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.toFieldType
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.FieldType
+import io.spine.tools.compiler.ast.PrimitiveType
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BYTES
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
+import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isMap
+import io.spine.tools.compiler.ast.isSingular
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.toFieldType
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.call

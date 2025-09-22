@@ -28,8 +28,8 @@ package io.spine.validation.api.expression
 
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.FieldName
-import io.spine.protodata.ast.OneofName
+import io.spine.tools.compiler.ast.FieldName
+import io.spine.tools.compiler.ast.OneofName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call

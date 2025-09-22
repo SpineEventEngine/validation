@@ -27,9 +27,9 @@
 package io.spine.validation.java.setonce
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral

@@ -28,19 +28,6 @@ import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.McJava
 
-buildscript {
-    forceCodegenPlugins()
-    configurations {
-        all {
-            resolutionStrategy {
-                force(
-                    io.spine.dependency.local.Logging.grpcContext,
-                )
-            }
-        }
-    }
-}
-
 apply {
     plugin(Ksp.id)
 }

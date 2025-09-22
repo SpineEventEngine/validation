@@ -91,7 +91,7 @@ object Compiler {
      *
      * @see Compiler
      */
-    private fun pluginLib(version: String): String =
+    fun pluginLib(version: String): String =
         "$group:compiler-gradle-plugin:$version"
 
     fun api(version: String): String =

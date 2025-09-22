@@ -45,12 +45,14 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
             classpath(pluginLib(version))
         }
         spineCompiler.run {
-            classpath("$module:$version")
+            classpath(pluginLib(version))
         }
     }
 
     configurations.all {
         resolutionStrategy.force(
+            io.spine.dependency.lib.Protobuf.javaLib,
+
             spineCompiler.fatCli,
             spineCompiler.jvm,
             spineCompiler.backend,

@@ -32,4 +32,4 @@ dependencies {
     implementation(Base.lib)
 }
 
-protoDataRemoteDebug(enabled = false)
+// spineCompilerRemoteDebug(enabled = false)

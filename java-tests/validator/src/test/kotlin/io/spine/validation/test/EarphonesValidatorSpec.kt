@@ -30,7 +30,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
-import io.spine.protodata.protobuf.descriptor
+import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidationException
 import java.util.UUID

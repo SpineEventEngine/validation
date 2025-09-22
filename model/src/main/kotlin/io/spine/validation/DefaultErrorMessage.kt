@@ -29,7 +29,7 @@ package io.spine.validation
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
 import io.spine.option.OptionsProto
-import io.spine.protodata.protobuf.descriptor
+import io.spine.tools.compiler.protobuf.descriptor
 
 /**
  * Returns the default error message from the given option descriptor.

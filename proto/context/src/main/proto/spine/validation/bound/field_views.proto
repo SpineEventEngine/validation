@@ -10,18 +10,18 @@ option java_outer_classname = "FieldViewsProto";
 option java_multiple_files = true;
 
 import "spine/validation/bound/numeric_bound.proto";
-import "spine/protodata/ast.proto";
-import "spine/protodata/file.proto";
+import "spine/compiler/ast.proto";
+import "spine/compiler/file.proto";
 
 // A view of a field that is marked with `(range)` option.
 message RangeField {
     option (entity).kind = PROJECTION;
     option (is).java_type = "io.spine.validation.BoundedFieldView";
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -36,7 +36,7 @@ message RangeField {
     spine.validation.bound.NumericBound upper_bound = 6;
 
     // The file in which the option was discovered.
-    protodata.File file = 7;
+    compiler.File file = 7;
 }
 
 // A view of a field that is marked with `(max)` option.
@@ -44,10 +44,10 @@ message MaxField {
     option (entity).kind = PROJECTION;
     option (is).java_type = "io.spine.validation.BoundedFieldView";
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -59,7 +59,7 @@ message MaxField {
     spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
-    protodata.File file = 6;
+    compiler.File file = 6;
 }
 
 // A view of a field that is marked with `(min)` option.
@@ -67,10 +67,10 @@ message MinField {
     option (entity).kind = PROJECTION;
     option (is).java_type = "io.spine.validation.BoundedFieldView";
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -82,5 +82,5 @@ message MinField {
     spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
-    protodata.File file = 6;
+    compiler.File file = 6;
 }

@@ -26,9 +26,9 @@
 
 package io.spine.validation.required
 
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
+import io.spine.tools.compiler.ast.FieldType
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BYTES
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
 
 /**
  * Determines whether the field type can be validated as `(required)`.

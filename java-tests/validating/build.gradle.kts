@@ -63,7 +63,7 @@ dependencies {
     testImplementation(Compiler.api)
 }
 
-testProtoDataRemoteDebug(enabled = false)
+// testSpineCompilerRemoteDebug(enabled = false)
 
 /**
  * Sets a dependency for the KSP task to avoid the Gradle warning on a missing dependency.

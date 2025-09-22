@@ -27,13 +27,13 @@
 package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.FieldType
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.Span
-import io.spine.protodata.ast.isList
-import io.spine.protodata.ast.isSingular
-import io.spine.protodata.ast.name
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.FieldType
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.Span
+import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isSingular
+import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
