@@ -162,6 +162,8 @@ fun Module.forceConfigurations() {
                     Time.lib,
                     TestLib.lib,
                     ToolBase.lib,
+                    ToolBase.intellijPlatform,
+                    ToolBase.intellijPlatformJava,
                     Logging.libJvm,
                     Logging.testLib,
                     Logging.grpcContext,
