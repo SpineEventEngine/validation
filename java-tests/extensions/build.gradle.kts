@@ -61,10 +61,11 @@ spine {
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
-    val launchProtoData by tasks.getting
+    val launchSpineCompiler by tasks.getting
     val kspKotlin by tasks.getting {
-        dependsOn(launchProtoData)
+        dependsOn(launchSpineCompiler)
     }
+    @Suppress("unused")
     val compileKotlin by tasks.getting {
         dependsOn(kspKotlin)
     }

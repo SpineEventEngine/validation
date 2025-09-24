@@ -38,12 +38,12 @@ buildscript {
 
 /*
  * Disable the generation of rejections, since we don't want
- * other plugins (potentially, still not using the latest ProtoData API)
- * to interfere with the tests of Validation ProtoData plugin.
+ * other plugins (potentially, still not using the latest Compiler API)
+ * to interfere with the tests of Validation Compiler plugin.
  */
-modelCompiler {
-    java {
-        codegen {
+spine {
+    coreJvm {
+        compiler {
             rejections.enabled.set(false)
         }
     }
