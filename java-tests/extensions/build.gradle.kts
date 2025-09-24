@@ -26,7 +26,7 @@
 
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoServiceKsp
-import io.spine.dependency.local.McJava
+import io.spine.dependency.local.CoreJvmCompiler
 
 apply {
     plugin(Ksp.id)
@@ -39,7 +39,7 @@ dependencies {
 
 configurations.all {
     resolutionStrategy.force(
-        with(McJava) {
+        with(CoreJvmCompiler) {
             pluginLib(version)
         }
     )
@@ -50,9 +50,9 @@ configurations.all {
  * other plugins (potentially, still not using the latest ProtoData API)
  * to interfere with the tests of Validation ProtoData plugin.
  */
-modelCompiler {
-    java {
-        codegen {
+spine {
+    coreJvm {
+        compiler {
             rejections.enabled.set(false)
         }
     }

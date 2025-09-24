@@ -31,7 +31,6 @@ import io.spine.dependency.build.GradleDoctor
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.build.PluginPublishPlugin
 import io.spine.dependency.lib.Protobuf
-import io.spine.dependency.local.McJava
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ProtoTap
 import io.spine.dependency.test.Kotest
@@ -78,21 +77,6 @@ fun ScriptHandlerScope.standardSpineSdkRepositories() {
  */
 val ScriptHandlerScope.protobuf: Protobuf
     get() = Protobuf
-
-/**
- * Shortcut to [McJava] dependency object for using under `buildScript`.
- */
-val ScriptHandlerScope.mcJava: McJava
-    get() = McJava
-
-/**
- * Shortcut to [McJava] dependency object.
- *
- * This plugin is not published to Gradle Portal and cannot be applied directly to a project.
- * Firstly, it should be put to buildscript's classpath and then applied by ID only.
- */
-val PluginDependenciesSpec.mcJava: McJava
-    get() = McJava
 
 /**
  * Shortcut to [Compiler] dependency object for using under `buildscript`.

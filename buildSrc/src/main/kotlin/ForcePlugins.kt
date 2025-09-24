@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.CoreJvmCompiler
 import org.gradle.kotlin.dsl.ScriptHandlerScope
 
 /**
@@ -41,7 +42,7 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
     standardSpineSdkRepositories()
 
     dependencies {
-        mcJava.run {
+        CoreJvmCompiler.run {
             classpath(pluginLib(version))
         }
         spineCompiler.run {
@@ -58,7 +59,7 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
             spineCompiler.backend,
             spineCompiler.protocPlugin,
 
-            mcJava.pluginsArtifact
+            CoreJvmCompiler.pluginsArtifact
         )
     }
  }
