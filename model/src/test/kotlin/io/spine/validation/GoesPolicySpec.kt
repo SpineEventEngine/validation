@@ -30,11 +30,11 @@ import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.protobuf.descriptor
-import io.spine.protodata.protobuf.field
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.protobuf.descriptor
+import io.spine.tools.compiler.protobuf.field
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

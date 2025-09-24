@@ -28,7 +28,7 @@
 
 package io.spine.validation.java.expression
 
-import io.spine.protodata.java.Expression
+import io.spine.tools.compiler.jvm.Expression
 import io.spine.validate.TemplateString
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.api.expression.templateString as withStringPlaceholders

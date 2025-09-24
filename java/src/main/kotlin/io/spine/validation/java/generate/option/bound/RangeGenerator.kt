@@ -27,12 +27,12 @@
 package io.spine.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.name
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
-import io.spine.protodata.java.plus
+import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.call
+import io.spine.tools.compiler.jvm.plus
 import io.spine.server.query.select
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH

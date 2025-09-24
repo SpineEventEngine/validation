@@ -27,12 +27,12 @@
 package io.spine.validation.required
 
 import io.spine.option.OptionsProto
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.event.TypeDiscovered
-import io.spine.protodata.ast.findOption
-import io.spine.protodata.ast.ref
-import io.spine.protodata.plugin.Policy
-import io.spine.protodata.settings.loadSettings
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.event.TypeDiscovered
+import io.spine.tools.compiler.ast.findOption
+import io.spine.tools.compiler.ast.ref
+import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.settings.loadSettings
 import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2

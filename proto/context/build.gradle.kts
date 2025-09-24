@@ -25,11 +25,11 @@
  */
 
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 
 dependencies {
-    api(ProtoData.backend)
+    api(Compiler.backend)
     implementation(Base.lib)
 }
 
-protoDataRemoteDebug(enabled = false)
+// spineCompilerRemoteDebug(enabled = false)

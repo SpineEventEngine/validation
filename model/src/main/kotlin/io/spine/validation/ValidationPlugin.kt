@@ -26,11 +26,11 @@
 
 package io.spine.validation
 
-import io.spine.protodata.plugin.Plugin
-import io.spine.protodata.plugin.Policy
-import io.spine.protodata.plugin.View
-import io.spine.protodata.plugin.ViewRepository
-import io.spine.protodata.render.Renderer
+import io.spine.tools.compiler.plugin.Plugin
+import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.View
+import io.spine.tools.compiler.plugin.ViewRepository
+import io.spine.tools.compiler.render.Renderer
 import io.spine.validation.bound.MaxFieldView
 import io.spine.validation.bound.MaxPolicy
 import io.spine.validation.bound.MinFieldView

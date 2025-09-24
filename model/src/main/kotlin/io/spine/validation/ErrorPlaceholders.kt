@@ -26,14 +26,14 @@
 
 package io.spine.validation
 
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.OneofGroup
-import io.spine.protodata.ast.Span
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.check
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.MessageType
+import io.spine.tools.compiler.ast.OneofGroup
+import io.spine.tools.compiler.ast.Span
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.check
 import io.spine.validate.extractPlaceholders
 
 /**

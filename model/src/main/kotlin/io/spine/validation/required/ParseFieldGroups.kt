@@ -27,13 +27,13 @@
 package io.spine.validation.required
 
 import io.spine.option.RequireOption
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.MessageType
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.check
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.MessageType
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.check
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.fieldGroup

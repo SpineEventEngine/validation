@@ -28,7 +28,7 @@ import io.spine.dependency.artifact
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
@@ -60,10 +60,10 @@ dependencies {
     testImplementation(Jupiter.artifact { params })
     testImplementation(TestLib.lib)
     testImplementation(Time.lib)
-    testImplementation(ProtoData.api)
+    testImplementation(Compiler.api)
 }
 
-testProtoDataRemoteDebug(enabled = false)
+// testSpineCompilerRemoteDebug(enabled = false)
 
 /**
  * Sets a dependency for the KSP task to avoid the Gradle warning on a missing dependency.

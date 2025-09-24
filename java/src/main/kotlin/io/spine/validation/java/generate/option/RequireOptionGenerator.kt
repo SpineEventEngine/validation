@@ -26,14 +26,14 @@
 
 package io.spine.validation.java.generate.option
 
-import io.spine.protodata.ast.TypeName
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.MethodDeclaration
-import io.spine.protodata.java.ReadVar
-import io.spine.protodata.java.StringLiteral
+import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.JavaValueConverter
+import io.spine.tools.compiler.jvm.MethodDeclaration
+import io.spine.tools.compiler.jvm.ReadVar
+import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.server.query.select
 import io.spine.string.joinByLines
 import io.spine.validate.ConstraintViolation

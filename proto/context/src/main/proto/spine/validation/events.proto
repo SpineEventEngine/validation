@@ -35,7 +35,7 @@ option java_package = "io.spine.validation.event";
 option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
+import "spine/compiler/ast.proto";
 import "spine/validation/time_field_type.proto";
 import "spine/validation/field_group.proto";
 import "spine/time_options.proto";
@@ -52,10 +52,10 @@ import "spine/time_options.proto";
 //
 message RequiredFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The default error message template.
     string default_error_message = 3;
@@ -65,7 +65,7 @@ message RequiredFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message IfMissingOptionDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The custom error message template.
     string custom_error_message = 3;
@@ -75,10 +75,10 @@ message IfMissingOptionDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message PatternFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -94,26 +94,26 @@ message PatternFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message GoesFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
 
     // The required companion field.
-    protodata.Field companion = 4;
+    compiler.Field companion = 4;
 }
 
 // The event emitted whenever a field with `(distinct) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message DistinctFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The default error message template.
     string default_error_message = 3;
@@ -123,7 +123,7 @@ message DistinctFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message IfHasDuplicatesOptionDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The custom error message template.
     string custom_error_message = 3;
@@ -133,20 +133,20 @@ message IfHasDuplicatesOptionDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message ValidateFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 }
 
 // The event emitted whenever a field with `(set_once) = true` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message SetOnceFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The default error message template.
     string default_error_message = 3;
@@ -156,7 +156,7 @@ message SetOnceFieldDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message IfSetAgainOptionDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The custom error message template.
     string custom_error_message = 3;
@@ -166,10 +166,10 @@ message IfSetAgainOptionDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message WhenFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -185,10 +185,10 @@ message WhenFieldDiscovered {
 // discovered and has passed the necessary checks to confirm the option is applied correctly.
 message ChoiceOneofDiscovered {
 
-    protodata.OneofRef id = 1;
+    compiler.OneofRef id = 1;
 
     // The required `oneof` group.
-    protodata.OneofGroup subject = 2;
+    compiler.OneofGroup subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -198,7 +198,7 @@ message ChoiceOneofDiscovered {
 // and has passed the necessary checks to confirm the option is applied correctly.
 message RequireMessageDiscovered {
 
-    protodata.TypeName id = 1;
+    compiler.TypeName id = 1;
 
     // The error message template.
     string error_message = 2;

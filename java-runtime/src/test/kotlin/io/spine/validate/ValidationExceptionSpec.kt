@@ -28,7 +28,7 @@ package io.spine.validate
 
 import io.kotest.matchers.shouldBe
 import io.spine.base.Errors
-import io.spine.protobuf.unpackGuessingType
+import io.spine.protobuf.unpackKnownType
 import io.spine.validate.given.plainString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -56,6 +56,6 @@ internal class ValidationExceptionSpec {
         val exception = ValidationException(violation)
         val error = Errors.fromThrowable(exception)
 
-        error.details.unpackGuessingType() shouldBe exception.asMessage()
+        error.details.unpackKnownType() shouldBe exception.asMessage()
     }
 }

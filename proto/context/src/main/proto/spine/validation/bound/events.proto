@@ -35,18 +35,18 @@ option java_package = "io.spine.validation.bound.event";
 option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
-import "spine/protodata/file.proto";
+import "spine/compiler/ast.proto";
+import "spine/compiler/file.proto";
 import "spine/validation/bound/numeric_bound.proto";
 
 // The event emitted whenever a field with `(range)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message RangeFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -61,17 +61,17 @@ message RangeFieldDiscovered {
     spine.validation.bound.NumericBound upper_bound = 6;
 
     // The file in which the option was discovered.
-    protodata.File file = 7;
+    compiler.File file = 7;
 }
 
 // The event emitted whenever a field with `(max)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message MaxFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -83,17 +83,17 @@ message MaxFieldDiscovered {
     spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
-    protodata.File file = 6;
+    compiler.File file = 6;
 }
 
 // The event emitted whenever a field with `(min)` option is discovered
 // and has passed the necessary checks to confirm the option is applied correctly.
 message MinFieldDiscovered {
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -105,5 +105,5 @@ message MinFieldDiscovered {
     spine.validation.bound.NumericBound bound = 5;
 
     // The file in which the option was discovered.
-    protodata.File file = 6;
+    compiler.File file = 6;
 }

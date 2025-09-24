@@ -26,8 +26,8 @@
 
 package io.spine.validation
 
-import io.spine.protodata.settings.LoadsSettings
-import io.spine.protodata.settings.defaultConsumerId
+import io.spine.tools.compiler.settings.LoadsSettings
+import io.spine.tools.compiler.settings.defaultConsumerId
 
 /**
  * An interface common for components of [ValidationPlugin] that load settings

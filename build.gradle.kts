@@ -30,7 +30,7 @@ import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Spine
 import io.spine.dependency.local.ToolBase
 import io.spine.gradle.publish.PublishingRepos
@@ -42,9 +42,21 @@ import io.spine.gradle.report.pom.PomGenerator
 
 buildscript {
     standardSpineSdkRepositories()
+    configurations.all {
+        resolutionStrategy {
+            force(
+                // Make sure we have the right Protobuf Runtime.
+                io.spine.dependency.lib.Protobuf.javaLib,
+                io.spine.dependency.local.Logging.grpcContext,
+            )
+        }
+    }
     dependencies {
         // Use newer KSP in the classpath to avoid the "too old" warnings.
         classpath(io.spine.dependency.build.Ksp.run { artifact(gradlePlugin) })
+
+        // Make sure we have the right Protobuf Runtime by adding it explicitly.
+        classpath(io.spine.dependency.lib.Protobuf.javaLib)
     }
 }
 
@@ -97,11 +109,11 @@ allprojects {
             force(
                 Roaster.api,
                 Roaster.jdt,
-                ProtoData.api,
-                ProtoData.params,
-                ProtoData.pluginLib,
-                ProtoData.backend,
-                ProtoData.java,
+                Compiler.api,
+                Compiler.params,
+                Compiler.pluginLib,
+                Compiler.backend,
+                Compiler.jvm,
                 Spine.base,
                 Logging.lib,
                 CoreJava.client,

@@ -26,7 +26,7 @@
 
 package io.spine.validation.java
 
-import io.spine.protodata.java.ClassName
+import io.spine.tools.compiler.jvm.ClassName
 import io.spine.validation.ValidationPlugin
 import io.spine.validation.api.DiscoveredValidators
 import io.spine.validation.api.ValidationOption

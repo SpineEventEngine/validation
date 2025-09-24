@@ -28,12 +28,12 @@ package io.spine.validation.api.expression
 
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.FieldName
-import io.spine.protodata.ast.OneofName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.call
-import io.spine.protodata.java.toBuilder
+import io.spine.tools.compiler.ast.FieldName
+import io.spine.tools.compiler.ast.OneofName
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.call
+import io.spine.tools.compiler.jvm.toBuilder
 
 /**
  * Returns an expression that yields this [FieldPath] as a string using

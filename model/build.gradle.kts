@@ -27,7 +27,7 @@
 import io.spine.dependency.artifact
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.test.JUnit.Jupiter
 
 plugins {
@@ -39,8 +39,8 @@ plugins {
 
 dependencies {
     api(CoreJava.server)
-    api(ProtoData.java)
-    implementation(ProtoData.backend)
+    api(Compiler.jvm)
+    implementation(Compiler.backend)
 
     implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
@@ -48,10 +48,10 @@ dependencies {
     implementation(project(":java-runtime"))
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
-    testImplementation(ProtoData.testlib)
+    testImplementation(Compiler.testlib)
 
     testFixturesImplementation(project(":proto:configuration"))
-    testFixturesImplementation(ProtoData.api)
-    testFixturesImplementation(ProtoData.testlib)
+    testFixturesImplementation(Compiler.api)
+    testFixturesImplementation(Compiler.testlib)
     testFixturesImplementation(Jupiter.artifact { params })
 }

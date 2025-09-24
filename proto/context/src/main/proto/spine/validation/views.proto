@@ -35,7 +35,7 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "ViewsProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
+import "spine/compiler/ast.proto";
 import "spine/time_options.proto";
 import "spine/validation/time_field_type.proto";
 import "spine/validation/field_group.proto";
@@ -50,10 +50,10 @@ import "spine/validation/field_group.proto";
 message RequiredField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -63,20 +63,20 @@ message RequiredField {
 message ValidateField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 }
 
 // A view of a field that is marked with `(set_once) = true` option.
 message SetOnceField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -86,10 +86,10 @@ message SetOnceField {
 message PatternField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -105,26 +105,26 @@ message PatternField {
 message GoesField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
 
     // The required companion field.
-    protodata.Field companion = 4;
+    compiler.Field companion = 4;
 }
 
 // A view of a field that is marked with `(distinct) = true` option.
 message DistinctField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -134,10 +134,10 @@ message DistinctField {
 message WhenField {
     option (entity).kind = PROJECTION;
 
-    protodata.FieldRef id = 1;
+    compiler.FieldRef id = 1;
 
     // The field in which the option was discovered.
-    protodata.Field subject = 2;
+    compiler.Field subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -153,10 +153,10 @@ message WhenField {
 message ChoiceOneof {
     option (entity).kind = PROJECTION;
 
-    protodata.OneofRef id = 1;
+    compiler.OneofRef id = 1;
 
     // The required `oneof` group.
-    protodata.OneofGroup subject = 2;
+    compiler.OneofGroup subject = 2;
 
     // The error message template.
     string error_message = 3;
@@ -166,7 +166,7 @@ message ChoiceOneof {
 message RequireMessage {
     option (entity).kind = PROJECTION;
 
-    protodata.TypeName id = 1;
+    compiler.TypeName id = 1;
 
     // The error message template.
     string error_message = 2;

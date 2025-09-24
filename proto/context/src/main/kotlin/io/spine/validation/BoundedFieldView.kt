@@ -26,8 +26,8 @@
 
 package io.spine.validation
 
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
 
 /**
  * A common interface for the bounded numeric field views.

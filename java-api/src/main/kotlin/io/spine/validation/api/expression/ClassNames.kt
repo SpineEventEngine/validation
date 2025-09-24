@@ -38,7 +38,7 @@ import com.google.protobuf.util.Timestamps
 import io.spine.base.FieldPath
 import io.spine.base.Time
 import io.spine.protobuf.AnyPacker
-import io.spine.protodata.java.ClassName
+import io.spine.tools.compiler.jvm.ClassName
 import io.spine.type.KnownTypes
 import io.spine.type.TypeName
 import io.spine.type.TypeUrl

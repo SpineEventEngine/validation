@@ -26,9 +26,9 @@
 
 package io.spine.validation.api.generate
 
-import io.spine.protodata.java.CodeBlock
-import io.spine.protodata.java.FieldDeclaration
-import io.spine.protodata.java.MethodDeclaration
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.FieldDeclaration
+import io.spine.tools.compiler.jvm.MethodDeclaration
 
 /**
  * Java code handling a single application of a specific option.

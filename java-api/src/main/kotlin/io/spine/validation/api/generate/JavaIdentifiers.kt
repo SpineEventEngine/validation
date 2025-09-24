@@ -26,7 +26,7 @@
 
 package io.spine.validation.api.generate
 
-import io.spine.protodata.backend.SecureRandomString
+import io.spine.tools.compiler.backend.SecureRandomString
 
 /**
  * Returns a Java identifier with an appended hash in the format `<javaIdentifier>_<hash>`.

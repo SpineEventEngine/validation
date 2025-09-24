@@ -26,10 +26,10 @@
 
 package io.spine.validation.api.expression
 
-import io.spine.protodata.ast.Field
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.JavaValueConverter
-import io.spine.protodata.java.field
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.JavaValueConverter
+import io.spine.tools.compiler.jvm.field
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.UnsetValue
 

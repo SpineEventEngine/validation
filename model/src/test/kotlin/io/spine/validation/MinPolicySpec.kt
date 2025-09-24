@@ -27,7 +27,7 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.spine.protodata.ast.qualifiedName
+import io.spine.tools.compiler.ast.qualifiedName
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

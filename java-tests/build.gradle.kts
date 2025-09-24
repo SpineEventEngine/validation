@@ -26,10 +26,9 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
-import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.McJava
-import io.spine.dependency.local.ProtoData
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 
@@ -44,12 +43,22 @@ plugins {
 allprojects {
     // No need to generate documentation for these test environments.
     disableDocumentationTasks()
+
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.lib.Protobuf.javaLib
+                )
+            }
+        }
+    }
 }
 
 /**
  * The list of `java-tests` subprojects to which we apply McJava Gradle Plugin.
  *
- * Subprojects of `java-tests` which are not listed here will get ProtoData Gradle Plugin applied.
+ * Subprojects of `java-tests` which are not listed here will get Compiler Gradle Plugin applied.
  */
 val applyMcJava = setOf(
     "extensions",
@@ -68,23 +77,23 @@ subprojects {
 
     configureTaskDependencies()
 
-    protobuf {
-        protoc {
-            artifact = Protobuf.compiler
-        }
-    }
+//    protobuf {
+//        protoc {
+//            artifact = Protobuf.compiler
+//        }
+//    }
 }
 
 fun Project.applyPlugins() {
     if (project.name in applyMcJava) {
         apply(plugin = McJava.pluginId)
     } else {
-        apply(plugin = ProtoData.pluginId)
+        apply(plugin = Compiler.pluginId)
     }
 
-    val forcedProtoData = listOf(
-        ProtoData.fatCli,
-        ProtoData.protocPlugin
+    val forcedCompiler = listOf(
+        Compiler.fatCli,
+        Compiler.protocPlugin
     )
 
     configurations.all {
@@ -97,7 +106,7 @@ fun Project.applyPlugins() {
                 // Use the current version of Java runtime in the generated code of tests.
                 substitute(module(runtimeModule)).using(project(":java-runtime"))
             }
-            forcedProtoData.forEach { force(it) }
+            forcedCompiler.forEach { force(it) }
         }
     }
 }

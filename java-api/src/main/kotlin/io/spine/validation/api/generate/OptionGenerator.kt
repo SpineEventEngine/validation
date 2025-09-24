@@ -27,7 +27,7 @@
 package io.spine.validation.api.generate
 
 import io.spine.annotation.Internal
-import io.spine.protodata.ast.TypeName
+import io.spine.tools.compiler.ast.TypeName
 import io.spine.server.query.Querying
 
 /**

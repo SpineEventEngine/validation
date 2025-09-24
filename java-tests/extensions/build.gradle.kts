@@ -28,10 +28,6 @@ import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.McJava
 
-buildscript {
-    forceCodegenPlugins()
-}
-
 apply {
     plugin(Ksp.id)
 }

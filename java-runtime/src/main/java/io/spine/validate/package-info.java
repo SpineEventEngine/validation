@@ -28,7 +28,6 @@
  * This package provides validation classes and interfaces.
  */
 
-@Internal
 @CheckReturnValue
 @NullMarked
 package io.spine.validate;

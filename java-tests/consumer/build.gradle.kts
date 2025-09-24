@@ -26,14 +26,16 @@
 
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
-import io.spine.protodata.gradle.plugin.LaunchProtoData
+import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
 
-protoData {
-    plugins(
-        // Suppress warnings in the generated code.
-        "io.spine.protodata.java.annotation.SuppressWarningsAnnotation\$Plugin",
-        "io.spine.validation.java.JavaValidationPlugin",
-    )
+spine {
+    compiler {
+        plugins(
+            // Suppress warnings in the generated code.
+            "io.spine.tools.compiler.jvm.annotation.SuppressWarningsAnnotation\$Plugin",
+            "io.spine.validation.java.JavaValidationPlugin",
+        )
+    }
 }
 
 val copySettings by tasks.registering(Copy::class) {
@@ -43,17 +45,17 @@ val copySettings by tasks.registering(Copy::class) {
     into(project.layout.buildDirectory.dir("protodata/settings"))
 }
 
-tasks.withType<LaunchProtoData>().configureEach {
+tasks.withType<LaunchSpineCompiler>().configureEach {
     dependsOn(copySettings)
 }
 
 dependencies {
-    protoData(project(":java"))
-    protoData(project(":java-tests:extensions"))
+    spineCompiler(project(":java"))
+    spineCompiler(project(":java-tests:extensions"))
     implementation(project(":java-tests:extensions"))
     implementation(project(":java-tests:consumer-dependency"))
     implementation(Time.lib)
     testImplementation(TestLib.lib)
 }
 
-protoDataRemoteDebug(enabled = false)
+spineCompilerRemoteDebug(enabled = false)

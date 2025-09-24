@@ -35,7 +35,7 @@ option java_package = "io.spine.validation.test.money";
 option java_outer_classname = "EventsProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
+import "spine/compiler/ast.proto";
 import "spine/validation/test/money_options.proto";
 
 // The event emitted whenever a message with `(currency)` option is discovered
@@ -43,16 +43,16 @@ import "spine/validation/test/money_options.proto";
 message CurrencyMessageDiscovered {
 
     // The name of the discovered message.
-    protodata.TypeName type = 1;
+    compiler.TypeName type = 1;
 
     // The applied option.
     Currency currency = 2;
 
     // The field of the message which stores the major units of the currency.
-    protodata.Field major_unit_field = 3;
+    compiler.Field major_unit_field = 3;
 
     // The field of the message which stores the minor units of the currency.
-    protodata.Field minor_unit_field = 4;
+    compiler.Field minor_unit_field = 4;
 
     // The error message template.
     string error_message = 5;

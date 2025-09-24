@@ -27,13 +27,13 @@
 package io.spine.validation.java.setonce
 
 import io.spine.base.FieldPath
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.ClassName
-import io.spine.protodata.java.Expression
-import io.spine.protodata.java.StringLiteral
-import io.spine.protodata.java.newBuilder
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.jvm.ClassName
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.IF_SET_AGAIN
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH

@@ -35,11 +35,11 @@ option java_package = "io.spine.validation";
 option java_outer_classname = "FieldGroupProto";
 option java_multiple_files = true;
 
-import "spine/protodata/ast.proto";
+import "spine/compiler/ast.proto";
 
 // A group of related fields that are supposed to be set together.
 message FieldGroup {
 
     // One or more fields that constitute this group.
-    repeated protodata.Field field = 1;
+    repeated compiler.Field field = 1;
 }

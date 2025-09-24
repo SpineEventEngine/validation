@@ -26,16 +26,16 @@
 
 package io.spine.validation.java.setonce
 
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.ast.PrimitiveType.TYPE_BOOL
-import io.spine.protodata.ast.PrimitiveType.TYPE_BYTES
-import io.spine.protodata.ast.PrimitiveType.TYPE_STRING
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.java.file.hasJavaRoot
-import io.spine.protodata.java.render.JavaRenderer
-import io.spine.protodata.java.render.findMessageTypes
-import io.spine.protodata.render.SourceFileSet
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.PrimitiveType
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BOOL
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BYTES
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.jvm.file.hasJavaRoot
+import io.spine.tools.compiler.jvm.render.JavaRenderer
+import io.spine.tools.compiler.jvm.render.findMessageTypes
+import io.spine.tools.compiler.render.SourceFileSet
 import io.spine.server.query.Querying
 import io.spine.server.query.select
 import io.spine.string.shortly

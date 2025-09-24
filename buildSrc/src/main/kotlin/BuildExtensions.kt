@@ -32,7 +32,7 @@ import io.spine.dependency.build.Ksp
 import io.spine.dependency.build.PluginPublishPlugin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.McJava
-import io.spine.dependency.local.ProtoData
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ProtoTap
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Kover
@@ -95,21 +95,21 @@ val PluginDependenciesSpec.mcJava: McJava
     get() = McJava
 
 /**
- * Shortcut to [ProtoData] dependency object for using under `buildscript`.
+ * Shortcut to [Compiler] dependency object for using under `buildscript`.
  */
-val ScriptHandlerScope.protoData: ProtoData
-    get() = ProtoData
+val ScriptHandlerScope.spineCompiler: Compiler
+    get() = Compiler
 
 /**
- * Shortcut to [ProtoData] dependency object.
+ * Shortcut to [Compiler] dependency object.
  *
  * This plugin is published at Gradle Plugin Portal.
  * But when used in a pair with [mcJava], it cannot be applied directly to a project.
- * It is so, because [mcJava] uses [protoData] as its dependency.
+ * It is so, because [mcJava] uses [spineCompiler] as its dependency.
  * And the buildscript's classpath ends up with both of them.
  */
-val PluginDependenciesSpec.protoData: ProtoData
-    get() = ProtoData
+val PluginDependenciesSpec.spineCompiler: Compiler
+    get() = Compiler
 
 /**
  * Provides shortcuts for applying plugins from our dependency objects.
@@ -303,8 +303,8 @@ fun Project.setRemoteDebug(taskName: String, enabled: Boolean = true) {
  *
  * @see remoteDebug
  */
-fun Project.protoDataRemoteDebug(enabled: Boolean = true) =
-    setRemoteDebug("launchProtoData", enabled)
+fun Project.spineCompilerRemoteDebug(enabled: Boolean = true) =
+    setRemoteDebug("launchSpineCompiler", enabled)
 
 /**
  * Sets remote debug options for the `launchTestProtoData` task.
@@ -313,8 +313,8 @@ fun Project.protoDataRemoteDebug(enabled: Boolean = true) =
  *
  * @see remoteDebug
  */
-fun Project.testProtoDataRemoteDebug(enabled: Boolean = true) =
-    setRemoteDebug("launchTestProtoData", enabled)
+fun Project.testSpineCompilerRemoteDebug(enabled: Boolean = true) =
+    setRemoteDebug("launchTestSpineCompiler", enabled)
 
 /**
  * Sets remote debug options for the `launchTestFixturesProtoData` task.
@@ -323,5 +323,5 @@ fun Project.testProtoDataRemoteDebug(enabled: Boolean = true) =
  *
  * @see remoteDebug
  */
-fun Project.testFixturesProtoDataRemoteDebug(enabled: Boolean = true) =
-    setRemoteDebug("launchTestFixturesProtoData", enabled)
+fun Project.testFixturesSpineCompilerRemoteDebug(enabled: Boolean = true) =
+    setRemoteDebug("launchTestFixturesSpineCompiler", enabled)

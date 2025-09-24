@@ -40,6 +40,7 @@ import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
+import io.spine.dependency.test.JUnit
 import io.spine.gradle.javac.configureErrorProne
 import io.spine.gradle.javac.configureJavac
 import io.spine.gradle.javadoc.JavadocConfig
@@ -144,9 +145,15 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
+                dependencySubstitution {
+                    // Substitute the legacy artifact coordinates with the new `ToolBase.lib` alias.
+                    substitute(module("io.spine.tools:spine-tool-base")).using(module(ToolBase.lib))
+                }
+
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
                 force(
+                    JUnit.bom,
                     Kotlin.bom,
                     Kotlin.Compiler.embeddable,
                     Reflect.lib,
@@ -155,8 +162,11 @@ fun Module.forceConfigurations() {
                     Time.lib,
                     TestLib.lib,
                     ToolBase.lib,
+                    ToolBase.intellijPlatform,
+                    ToolBase.intellijPlatformJava,
                     Logging.libJvm,
-                    Logging.middleware,
+                    Logging.testLib,
+                    Logging.grpcContext,
                     CoreJava.server,
                     CoreJava.testUtilServer,
                     Validation.runtime,

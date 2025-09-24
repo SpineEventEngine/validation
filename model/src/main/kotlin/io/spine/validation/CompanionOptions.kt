@@ -27,12 +27,12 @@
 package io.spine.validation
 
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.File
-import io.spine.protodata.ast.findOption
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.check
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.findOption
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.check
 
 /**
  * Reports a compilation error if this [companion option][GeneratedExtension]

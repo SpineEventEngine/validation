@@ -27,21 +27,21 @@
 package io.spine.validation.java.setonce
 
 import com.intellij.psi.PsiClass
-import io.spine.protodata.ast.Field
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.java.Expression
-import io.spine.protodata.type.TypeSystem
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FIXED32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FIXED64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FLOAT
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SFIXED32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SFIXED64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SINT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SINT64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_UINT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_UINT64
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**

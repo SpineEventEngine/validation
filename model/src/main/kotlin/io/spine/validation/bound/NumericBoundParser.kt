@@ -26,24 +26,24 @@
 
 package io.spine.validation.bound
 
-import io.spine.protodata.Compilation
-import io.spine.protodata.ast.PrimitiveType
-import io.spine.protodata.ast.PrimitiveType.TYPE_DOUBLE
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_FIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_FLOAT
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_INT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SFIXED64
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_SINT64
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT32
-import io.spine.protodata.ast.PrimitiveType.TYPE_UINT64
-import io.spine.protodata.ast.name
-import io.spine.protodata.ast.qualifiedName
-import io.spine.protodata.check
-import io.spine.protodata.type.resolve
+import io.spine.tools.compiler.Compilation
+import io.spine.tools.compiler.ast.PrimitiveType
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_DOUBLE
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FIXED32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FIXED64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_FLOAT
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SFIXED32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SFIXED64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SINT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_SINT64
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_UINT32
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_UINT64
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.check
+import io.spine.tools.compiler.type.resolve
 import io.spine.validation.bound.BoundFieldSupport.numericPrimitives
 
 /**
