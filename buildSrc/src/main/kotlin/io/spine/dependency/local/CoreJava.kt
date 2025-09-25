@@ -26,6 +26,8 @@
 
 package io.spine.dependency.local
 
+import io.spine.dependency.local.ToolBase
+
 /**
  * Dependencies on `core-java` modules.
  *
@@ -44,5 +46,5 @@ object CoreJava {
     const val client = "$group:$clientArtifact:$version"
     const val server = "$group:$serverArtifact:$version"
 
-    const val testUtilServer = "${Spine.toolsGroup}:spine-testutil-server:$version"
+    const val testUtilServer = "${ToolBase.group}:spine-testutil-server:$version"
 }
