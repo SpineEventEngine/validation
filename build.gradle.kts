@@ -28,6 +28,7 @@
 
 import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Roaster
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Compiler
@@ -114,7 +115,7 @@ allprojects {
                 Compiler.pluginLib,
                 Compiler.backend,
                 Compiler.jvm,
-                Spine.base,
+                Base.lib,
                 Logging.lib,
                 CoreJava.client,
                 CoreJava.server,

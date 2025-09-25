@@ -26,7 +26,7 @@
 
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoServiceKsp
-import io.spine.dependency.local.McJava
+import io.spine.dependency.local.CoreJvmCompiler
 
 apply {
     plugin(Ksp.id)
@@ -39,32 +39,20 @@ dependencies {
 
 configurations.all {
     resolutionStrategy.force(
-        with(McJava) {
+        with(CoreJvmCompiler) {
             pluginLib(version)
         }
     )
 }
 
-/*
- * Disable the generation of rejections, since we don't want
- * other plugins (potentially, still not using the latest ProtoData API)
- * to interfere with the tests of Validation ProtoData plugin.
- */
-modelCompiler {
-    java {
-        codegen {
-            rejections.enabled.set(false)
-        }
-    }
-}
-
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
-    val launchProtoData by tasks.getting
+    val launchSpineCompiler by tasks.getting
     val kspKotlin by tasks.getting {
-        dependsOn(launchProtoData)
+        dependsOn(launchSpineCompiler)
     }
+    @Suppress("unused")
     val compileKotlin by tasks.getting {
         dependsOn(kspKotlin)
     }

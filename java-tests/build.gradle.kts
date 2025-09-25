@@ -28,7 +28,7 @@
 
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.McJava
+import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 
@@ -86,7 +86,7 @@ subprojects {
 
 fun Project.applyPlugins() {
     if (project.name in applyMcJava) {
-        apply(plugin = McJava.pluginId)
+        apply(plugin = CoreJvmCompiler.pluginId)
     } else {
         apply(plugin = Compiler.pluginId)
     }

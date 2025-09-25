@@ -63,6 +63,10 @@ public enum ValidatingOptionsLoader {
                 .forEach(target::add);
     }
 
+    @SuppressWarnings("deprecation" /* We keep using the deprecated `findMutableExtensionByName()`
+        call because we use it only for detecting extension registration.
+        We do not use the mutability of the extension. */
+    )
     private static boolean isExtensionRegistered(ExtensionRegistry registry,
                                                  Extension<?, ?> extension) {
         var name = extension.getDescriptor().getFullName();

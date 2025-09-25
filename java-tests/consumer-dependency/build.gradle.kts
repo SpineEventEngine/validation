@@ -35,16 +35,3 @@ buildscript {
         }
     }
 }
-
-/*
- * Disable the generation of rejections, since we don't want
- * other plugins (potentially, still not using the latest ProtoData API)
- * to interfere with the tests of Validation ProtoData plugin.
- */
-modelCompiler {
-    java {
-        codegen {
-            rejections.enabled.set(false)
-        }
-    }
-}

@@ -73,6 +73,6 @@ dependencies {
  */
 afterEvaluate {
     tasks.named("kspTestFixturesKotlin") {
-        mustRunAfter("launchTestFixturesProtoData")
+        mustRunAfter("launchTestFixturesSpineCompiler")
     }
 }

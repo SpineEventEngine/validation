@@ -26,6 +26,8 @@
 
 package io.spine.dependency.local
 
+import io.spine.dependency.local.ToolBase
+
 /**
  * Spine Time library.
  *
@@ -38,5 +40,5 @@ object Time {
     const val artifact = "spine-time"
     const val lib = "$group:$artifact:$version"
 
-    const val testLib = "${Spine.toolsGroup}:spine-time-testlib:$version"
+    const val testLib = "${ToolBase.group}:spine-time-testlib:$version"
 }

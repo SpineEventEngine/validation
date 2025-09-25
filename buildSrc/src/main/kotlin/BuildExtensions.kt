@@ -31,8 +31,9 @@ import io.spine.dependency.build.GradleDoctor
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.build.PluginPublishPlugin
 import io.spine.dependency.lib.Protobuf
-import io.spine.dependency.local.McJava
+import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.dependency.local.Compiler
+import io.spine.dependency.local.McJava
 import io.spine.dependency.local.ProtoTap
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Kover
@@ -80,19 +81,25 @@ val ScriptHandlerScope.protobuf: Protobuf
     get() = Protobuf
 
 /**
+ * Shortcut to [CoreJvmCompiler] dependency object for using under `buildScript`.
+ */
+val ScriptHandlerScope.coreJvmCompiler: CoreJvmCompiler
+    get() = CoreJvmCompiler
+
+/**
  * Shortcut to [McJava] dependency object for using under `buildScript`.
  */
 val ScriptHandlerScope.mcJava: McJava
     get() = McJava
 
 /**
- * Shortcut to [McJava] dependency object.
+ * Shortcut to [CoreJvmCompiler] dependency object.
  *
  * This plugin is not published to Gradle Portal and cannot be applied directly to a project.
  * Firstly, it should be put to buildscript's classpath and then applied by ID only.
  */
-val PluginDependenciesSpec.mcJava: McJava
-    get() = McJava
+val PluginDependenciesSpec.coreJvmCompiler: CoreJvmCompiler
+    get() = CoreJvmCompiler
 
 /**
  * Shortcut to [Compiler] dependency object for using under `buildscript`.
@@ -162,11 +169,11 @@ val PluginDependenciesSpec.`plugin-publish`: PluginDependencySpec
 
 /**
  * Configures the dependencies between third-party Gradle tasks
- * and those defined via ProtoData and Spine Model Compiler.
+ * and those defined via the Spine Compiler and its plugins.
  *
  * It is required to avoid warnings in build logs, detecting the undeclared
  * usage of Spine-specific task output by other tasks,
- * e.g., the output of `launchProtoData` is used by `compileKotlin`.
+ * e.g., the output of `launchSpineCompiler` is used by `compileKotlin`.
  */
 @Suppress("unused")
 fun Project.configureTaskDependencies() {
@@ -297,7 +304,7 @@ fun Project.setRemoteDebug(taskName: String, enabled: Boolean = true) {
 }
 
 /**
- * Sets remote debug options for the `launchProtoData` task.
+ * Sets remote debug options for the `launchSpineCompiler` task.
  *
  * @param enabled if `true` the task will be suspended.
  *
@@ -307,7 +314,7 @@ fun Project.spineCompilerRemoteDebug(enabled: Boolean = true) =
     setRemoteDebug("launchSpineCompiler", enabled)
 
 /**
- * Sets remote debug options for the `launchTestProtoData` task.
+ * Sets remote debug options for the `launchTestSpineCompiler` task.
  *
  * @param enabled if `true` the task will be suspended.
  *
@@ -317,7 +324,7 @@ fun Project.testSpineCompilerRemoteDebug(enabled: Boolean = true) =
     setRemoteDebug("launchTestSpineCompiler", enabled)
 
 /**
- * Sets remote debug options for the `launchTestFixturesProtoData` task.
+ * Sets remote debug options for the `launchTestFixturesSpineCompiler` task.
  *
  * @param enabled if `true` the task will be suspended.
  *
