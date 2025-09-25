@@ -31,8 +31,5 @@ package io.spine.dependency.local
  */
 @Suppress("unused", "ConstPropertyName")
 object Spine {
-
     const val group = "io.spine"
-
-    const val javadocFilter = "${ToolBase.group}:spine-javadoc-filter:2.0.0-SNAPSHOT.75"
 }

@@ -26,7 +26,7 @@
 
 package io.spine.gradle.javadoc
 
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.ToolBase
 import io.spine.gradle.javadoc.ExcludeInternalDoclet.Companion.taskName
 import io.spine.gradle.sourceSets
 import org.gradle.api.Project
@@ -40,7 +40,7 @@ import org.gradle.external.javadoc.StandardJavadocDocletOptions
 @Suppress("ConstPropertyName")
 class ExcludeInternalDoclet {
 
-    private val dependency = Spine.javadocFilter
+    private val dependency = ToolBase.JavadocFilter.artifact
 
     companion object {
 
