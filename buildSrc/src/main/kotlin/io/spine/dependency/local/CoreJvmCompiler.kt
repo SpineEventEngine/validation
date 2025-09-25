@@ -29,7 +29,7 @@ package io.spine.dependency.local
 import io.spine.dependency.local.ToolBase
 
 /**
- * Dependencies on the  CoreJvm Compiler artifacts.
+ * Dependencies on the CoreJvm Compiler artifacts.
  *
  * See [mc-java](https://github.com/SpineEventEngine/core-jvm-compiler).
  */
