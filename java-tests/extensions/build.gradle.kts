@@ -45,19 +45,6 @@ configurations.all {
     )
 }
 
-/*
- * Disable the generation of rejections, since we don't want
- * other plugins (potentially, still not using the latest ProtoData API)
- * to interfere with the tests of Validation ProtoData plugin.
- */
-spine {
-    coreJvm {
-        compiler {
-            rejections.enabled.set(false)
-        }
-    }
-}
-
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
