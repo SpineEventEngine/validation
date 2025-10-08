@@ -30,6 +30,7 @@ import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.Grpc
+import io.spine.dependency.lib.Jackson
 import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
@@ -152,7 +153,13 @@ fun Module.forceConfigurations() {
 
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
+                Jackson.forceArtifacts(project, this@all, this@resolutionStrategy)
+                Jackson.DataFormat.forceArtifacts(project, this@all, this@resolutionStrategy)
+                Jackson.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+
                 force(
+                    Jackson.bom,
+                    Jackson.annotations,
                     JUnit.bom,
                     Kotlin.bom,
                     Kotlin.Compiler.embeddable,
@@ -161,9 +168,12 @@ fun Module.forceConfigurations() {
                     Protobuf.compiler,
                     Time.lib,
                     TestLib.lib,
+                    ToolBase.gradlePluginApi,
+                    ToolBase.jvmTools,
                     ToolBase.lib,
                     ToolBase.intellijPlatform,
                     ToolBase.intellijPlatformJava,
+                    ToolBase.psiJava,
                     Logging.libJvm,
                     Logging.testLib,
                     Logging.grpcContext,

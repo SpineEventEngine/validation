@@ -332,3 +332,18 @@ fun Project.testSpineCompilerRemoteDebug(enabled: Boolean = true) =
  */
 fun Project.testFixturesSpineCompilerRemoteDebug(enabled: Boolean = true) =
     setRemoteDebug("launchTestFixturesSpineCompiler", enabled)
+
+/**
+ * Parts of names of configurations to be excluded by
+ * `artifactMeta/excludeConfigurations/containing` in the modules
+ * where `io.spine.atifact-meta` plugin is applied.
+ */
+val buildToolConfigurations: Array<String> = arrayOf(
+    "detekt",
+    "jacoco",
+    "pmd",
+    "checkstyle",
+    "checkerframework",
+    "ksp",
+    "dokka",
+)

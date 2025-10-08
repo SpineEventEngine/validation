@@ -26,8 +26,6 @@
 
 package io.spine.dependency.local
 
-import io.spine.dependency.local.ToolBase
-
 /**
  * Dependencies on the artifacts of the Spine Logging library.
  *
@@ -48,7 +46,7 @@ object Logging {
     const val grpcContext = "$group:spine-logging-grpc-context:$version"
     const val smokeTest = "$group:spine-logging-smoke-test:$version"
 
-    const val testLib = "${ToolBase.group}:spine-logging-testlib:$version"
+    const val testLib = "${Spine.toolsGroup}:spine-logging-testlib:$version"
 
     // Transitive dependencies.
     // Make `public` and use them to force a version in a particular repository, if needed.

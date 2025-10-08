@@ -26,7 +26,8 @@
 
 package io.spine.dependency.local
 
-import io.spine.dependency.local.ToolBase
+// For backward compatibility.
+typealias CoreJava = CoreJvm
 
 /**
  * Dependencies on `core-java` modules.
@@ -34,7 +35,7 @@ import io.spine.dependency.local.ToolBase
  * See [`SpineEventEngine/core-java`](https://github.com/SpineEventEngine/core-java/).
  */
 @Suppress("ConstPropertyName", "unused")
-object CoreJava {
+object CoreJvm {
     const val group = Spine.group
     const val version = "2.0.0-SNAPSHOT.330"
 
