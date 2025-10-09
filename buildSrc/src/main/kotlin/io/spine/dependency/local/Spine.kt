@@ -32,4 +32,5 @@ package io.spine.dependency.local
 @Suppress("unused", "ConstPropertyName")
 object Spine {
     const val group = "io.spine"
+    const val toolsGroup = "io.spine.tools"
 }

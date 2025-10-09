@@ -40,7 +40,7 @@ dependencies {
 configurations.all {
     resolutionStrategy.force(
         with(CoreJvmCompiler) {
-            pluginLib(version)
+            pluginLibNew(version)
         }
     )
 }

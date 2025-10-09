@@ -26,9 +26,12 @@
 
 @file:Suppress("RemoveRedundantQualifierName")
 
+import io.spine.dependency.lib.Jackson
+import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.CoreJvmCompiler
+import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 
@@ -47,8 +50,17 @@ allprojects {
     configurations {
         all {
             resolutionStrategy {
+                Jackson.forceArtifacts(project, this@all, this@resolutionStrategy)
+                Jackson.DataFormat.forceArtifacts(project, this@all, this@resolutionStrategy)
+                Jackson.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+
                 force(
-                    io.spine.dependency.lib.Protobuf.javaLib
+                    Jackson.annotations,
+                    Jackson.bom,
+                    Protobuf.javaLib,
+                    ToolBase.jvmTools,
+                    ToolBase.gradlePluginApi,
+                    ToolBase.psiJava,
                 )
             }
         }
@@ -76,12 +88,6 @@ subprojects {
     }
 
     configureTaskDependencies()
-
-//    protobuf {
-//        protoc {
-//            artifact = Protobuf.compiler
-//        }
-//    }
 }
 
 fun Project.applyPlugins() {

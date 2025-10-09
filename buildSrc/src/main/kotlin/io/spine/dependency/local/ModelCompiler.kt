@@ -26,8 +26,6 @@
 
 package io.spine.dependency.local
 
-import io.spine.dependency.local.ToolBase
-
 /**
  * Spine Model Compiler Gradle API.
  *
@@ -36,7 +34,7 @@ import io.spine.dependency.local.ToolBase
 @Suppress("ConstPropertyName")
 object ModelCompiler {
     const val version = "2.0.0-SNAPSHOT.133"
-    const val group = ToolBase.group
+    const val group = Spine.toolsGroup
     const val artifact = "spine-model-compiler"
     const val lib = "$group:$artifact:$version"
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,42 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.CoreJvmCompiler
-import org.gradle.kotlin.dsl.ScriptHandlerScope
+package io.spine.dependency.lib
+
+import io.spine.dependency.Dependency
 
 /**
- * Forces the version of McJava and ProtoData for a module.
+ * Palantir Java Format.
  *
- * The usage scenario is put the following code snippet at the top of a `build.gradle.kts` file:
- *
- * ```kotlin
- * buildscript {
- *     forceCodegenPlugins()
- * }
- * ```
+ * @see <a href="https://github.com/palantir/palantir-java-format">GitHub Repo</a>
  */
-fun ScriptHandlerScope.forceCodegenPlugins() {
-    standardSpineSdkRepositories()
+object PalantirJavaFormat : Dependency() {
 
-    dependencies {
-        CoreJvmCompiler.run {
-            classpath(pluginLibNew(version))
-        }
-        spineCompiler.run {
-            classpath(pluginLib(version))
-        }
-    }
+    override val group = "com.palantir.javaformat"
+    override val version = "2.75.0"
+    override val modules: List<String> = listOf("$group:palantir-java-format")
 
-    configurations.all {
-        resolutionStrategy.force(
-            io.spine.dependency.lib.Protobuf.javaLib,
-
-            spineCompiler.fatCli,
-            spineCompiler.jvm,
-            spineCompiler.backend,
-            spineCompiler.protocPlugin,
-
-            CoreJvmCompiler.pluginsArtifact
-        )
-    }
- }
+    val lib = artifact(modules[0])
+}

@@ -33,10 +33,11 @@ package io.spine.dependency.local
  */
 @Suppress("ConstPropertyName", "unused")
 object ToolBase {
-    const val group = "io.spine.tools"
-    const val version = "2.0.0-SNAPSHOT.355"
+    const val group = Spine.toolsGroup
+    const val version = "2.0.0-SNAPSHOT.361"
 
     const val lib = "$group:tool-base:$version"
+    const val classicCodegen = "$group:classic-codegen:$version"
     const val pluginBase = "$group:plugin-base:$version"
     const val pluginTestlib = "$group:plugin-testlib:$version"
 
