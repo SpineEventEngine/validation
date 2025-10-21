@@ -35,3 +35,10 @@ buildscript {
         }
     }
 }
+
+afterEvaluate {
+    // spineCompilerRemoteDebug(enabled = false)
+    val kspKotlin by tasks.getting
+    val launchSpineCompiler by tasks.getting
+    kspKotlin.dependsOn(launchSpineCompiler)
+}
