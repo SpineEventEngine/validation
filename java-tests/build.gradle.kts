@@ -116,3 +116,9 @@ fun Project.applyPlugins() {
         }
     }
 }
+
+// Temporarily disable this task for this parent Gradle project.
+// The tasks in its children still should execute fine.
+// See more [here](https://github.com/jk1/Gradle-License-Report/issues/337).
+val generateLicenseReport by tasks.getting
+generateLicenseReport.enabled = false

@@ -35,6 +35,7 @@ import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Reflect
 import io.spine.dependency.local.TestLib
@@ -164,6 +165,7 @@ fun Module.forceConfigurations() {
                     Kotlin.bom,
                     Kotlin.Compiler.embeddable,
                     Reflect.lib,
+                    Base.annotations,
                     Base.lib,
                     Protobuf.compiler,
                     Time.lib,
@@ -174,11 +176,12 @@ fun Module.forceConfigurations() {
                     ToolBase.intellijPlatform,
                     ToolBase.intellijPlatformJava,
                     ToolBase.psiJava,
+                    ToolBase.protobufSetupPlugins,
                     Logging.libJvm,
                     Logging.testLib,
                     Logging.grpcContext,
                     CoreJava.server,
-                    CoreJava.testUtilServer,
+                    CoreJvm.serverTestLib,
                     Validation.runtime,
                     Dokka.BasePlugin.lib
                 )
