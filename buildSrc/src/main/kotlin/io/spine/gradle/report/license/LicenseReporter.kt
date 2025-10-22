@@ -156,7 +156,10 @@ object LicenseReporter {
             "$buildDir/${Paths.relativePath}/${Paths.outputFilename}"
         }
         println("Merging the license reports from the all projects.")
-        val mergedContent = paths.joinToString("\n\n\n") { (File(it)).readText() }
+        val mergedContent = paths.joinToString("\n\n\n") {
+            val file = File(it)
+            if (file.exists()) file.readText() else ""
+        }
         val output = File("${rootProject.rootDir}/${Paths.outputFilename}")
         output.writeText(mergedContent)
     }
