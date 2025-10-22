@@ -43,7 +43,7 @@ internal object NumberConversion {
      * [anotherNumber] without loss of precision.
      */
     @JvmStatic
-    public fun check(number: Number, anotherNumber: Number): Boolean {
+    fun check(number: Number, anotherNumber: Number): Boolean {
         val unwrappedNumber = unwrap(number)
         val unwrappedAnotherNumber = unwrap(anotherNumber)
         for (caster in checkers) {
@@ -63,61 +63,70 @@ internal object NumberConversion {
 
 /**
  * Allows determining which types a number of type [T] can be converted to.
+ *
+ * @param T The type of the number.
+ * @property casterType The class of the number.
+ * @property convertibleTypes The list of types that the number can be safely converted to.
  */
-private interface ConversionChecker<T : Number> {
-
+private sealed class ConversionChecker<T : Number>(
+    val casterType: Class<T>,
+    val convertibleTypes: List<Class<out Number>>
+) {
     /**
      * Determines if the supplied [number] can be safely converted to the type of the caster.
      */
     fun isConvertible(number: Number): Boolean {
         val numberClass = number.javaClass
-        return convertibleTypes().any { it == numberClass }
+        return convertibleTypes.any { it == numberClass }
     }
 
-    /** Determines if the supplied [number] is supported by the caster. */
-    fun supports(number: Number): Boolean = casterType().isInstance(number)
-
-    /** Returns [T] type class instance. */
-    fun casterType(): Class<T>
-
-    /** Returns types which [T] type can be safely converted to. */
-    fun convertibleTypes(): List<Class<out Number>>
+    /**
+     * Determines if the supplied [number] is supported by the caster.
+     */
+    fun supports(number: Number): Boolean = casterType.isInstance(number)
 }
 
-private class ByteChecker : ConversionChecker<Byte> {
-    override fun casterType(): Class<Byte> = Byte::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> = listOf(Byte::class.javaObjectType)
-}
+private class ByteChecker : ConversionChecker<Byte>(
+    Byte::class.javaObjectType,
+    listOf(Byte::class.javaObjectType)
+)
 
-private class ShortChecker : ConversionChecker<Short> {
-    override fun casterType(): Class<Short> = Short::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> =
-        listOf(Byte::class.javaObjectType, Short::class.javaObjectType)
-}
+private class ShortChecker : ConversionChecker<Short>(
+    Short::class.javaObjectType,
+    listOf(
+        Byte::class.javaObjectType,
+        Short::class.javaObjectType
+    )
+)
 
-private class IntegerChecker : ConversionChecker<Int> {
-    override fun casterType(): Class<Int> = Int::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> =
-        listOf(Byte::class.javaObjectType, Short::class.javaObjectType, Int::class.javaObjectType)
-}
+private class IntegerChecker : ConversionChecker<Int>(
+    Int::class.javaObjectType,
+    listOf(
+        Byte::class.javaObjectType,
+        Short::class.javaObjectType,
+        Int::class.javaObjectType
+    )
+)
 
-private class LongChecker : ConversionChecker<Long> {
-    override fun casterType(): Class<Long> = Long::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> = listOf(
+private class LongChecker : ConversionChecker<Long>(
+    Long::class.javaObjectType,
+    listOf(
         Byte::class.javaObjectType,
         Short::class.javaObjectType,
         Int::class.javaObjectType,
         Long::class.javaObjectType
     )
-}
+)
 
-private class FloatChecker : ConversionChecker<Float> {
-    override fun casterType(): Class<Float> = Float::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> = listOf(Float::class.javaObjectType)
-}
+private class FloatChecker : ConversionChecker<Float>(
+    Float::class.javaObjectType,
+    listOf(Float::class.javaObjectType)
+)
 
-private class DoubleChecker : ConversionChecker<Double> {
-    override fun casterType(): Class<Double> = Double::class.javaObjectType
-    override fun convertibleTypes(): List<Class<out Number>> =
-        listOf(Float::class.javaObjectType, Double::class.javaObjectType)
-}
+private class DoubleChecker : ConversionChecker<Double>(
+    Double::class.javaObjectType,
+    listOf(
+        Float::class.javaObjectType,
+        Double::class.javaObjectType
+    )
+)
