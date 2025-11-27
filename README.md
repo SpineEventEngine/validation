@@ -55,7 +55,13 @@ At build time, Spine Validation injects assertions into the generated Java class
 ```java
 var card = CardNumber.newBuilder()
     .setDigits("invalid")
-    .build(); <- Validates here.
+    .build(); // <- Validates here.
+```
+
+```kotlin
+val card = cardNumber {
+    digits = "invalid"
+} // <- Validates here. 
 ```
 
 If any constraint is violated, a `ValidationException` is thrown from `build()`.
@@ -65,7 +71,7 @@ You can also validate without throwing:
 ```java
 var card = CardNumber.newBuilder()
     .setDigits("invalid")
-    .buildPartial(); <- No validation.
+    .buildPartial(); // <- No validation.
 var optionalError = card.validate();
 optionalError.ifPresent(err -> {
     System.out.println(err.getMessage());
@@ -76,7 +82,7 @@ optionalError.ifPresent(err -> {
 
 Validation options are defined by the following files:
 
-1. [options.proto](https://github.com/SpineEventEngine/base/blob/master/base/src/main/proto/spine/options.proto).
+1. [options.proto](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto).
 2. [time_options.proto](https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto).
 
 Users must import these .proto files to use the options they define.
@@ -88,9 +94,9 @@ import "spine/time_options.proto"; // Brings time-related options.
 
 ## Architecture
 
-The library is a set of plugins for [ProtoData](https://github.com/SpineEventEngine/ProtoData).
+The library is a set of plugins for [Spine Compiler](https://github.com/SpineEventEngine/compiler).
 
-Each target language is a separate ProtoData plugin.
+Each target language is a separate Compiler plugin.
 
 Take a look at the following diagram to grasp a high-level library structure:
 
