@@ -92,32 +92,7 @@ import "spine/options.proto"; // Brings all options, except for time-related one
 import "spine/time_options.proto"; // Brings time-related options.
 ```
 
-## Architecture
-
-The library is a set of plugins for [Spine Compiler](https://github.com/SpineEventEngine/compiler).
-
-Each target language is a separate Compiler plugin.
-
-Take a look at the following diagram to grasp a high-level library structure:
-
-![High-level library structure overview](.github/readme/high_level_overview.png)
-
-The workflow is the following:
-
-- (1), (2) – user defines Protobuf messages with validation options.
-- (3) – Protobuf compiler generates Java classes.
-- (4), (5) – policies and views build the validation model.
-- (6), (7) – Java plugin generates and injects validation code.
-
-### Key Modules
-
-| Module    | Description                                                          |
-|-----------|----------------------------------------------------------------------|
-| :model    | The language-agnostic model for the built-in options.                |
-| :java     | Generates and injects Java validation code based on applied options. |
-| :java-api | Extension API for custom options in Java.                            |
-
-# Extending the Library
+# Adding custom validation
 
 Users can extend the library by providing custom Protobuf options and code generation logic.
 
