@@ -58,6 +58,9 @@ buildscript {
 
         // Make sure we have the right Protobuf Runtime by adding it explicitly.
         classpath(io.spine.dependency.lib.Protobuf.javaLib)
+
+        // For `io.spine.generated-sources` plugin.
+        classpath(io.spine.dependency.local.ToolBase.protobufSetupPlugins)
     }
 }
 
@@ -88,11 +91,6 @@ spinePublishing {
         )
     }
     artifactPrefix = "spine-validation-"
-
-    dokkaJar {
-        java = true
-        kotlin = true
-    }
 }
 
 allprojects {
