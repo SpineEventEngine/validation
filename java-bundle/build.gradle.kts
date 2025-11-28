@@ -39,7 +39,6 @@ import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Reflect
-import io.spine.dependency.local.Text
 import io.spine.dependency.local.Time
 
 plugins {
@@ -78,7 +77,6 @@ dependencies {
             Change.group to Change.artifact,
             Logging.group to Logging.loggingArtifact,
             Reflect.group to Reflect.artifact,
-            Text.group to Text.artifact,
             Time.group to Time.artifact,
 
             CoreJava.group to CoreJava.serverArtifact,

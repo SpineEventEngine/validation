@@ -55,7 +55,13 @@ At build time, Spine Validation injects assertions into the generated Java class
 ```java
 var card = CardNumber.newBuilder()
     .setDigits("invalid")
-    .build(); <- Validates here.
+    .build(); // <- Validates here.
+```
+
+```kotlin
+val card = cardNumber {
+    digits = "invalid"
+} // <- Validates here. 
 ```
 
 If any constraint is violated, a `ValidationException` is thrown from `build()`.
@@ -65,7 +71,7 @@ You can also validate without throwing:
 ```java
 var card = CardNumber.newBuilder()
     .setDigits("invalid")
-    .buildPartial(); <- No validation.
+    .buildPartial(); // <- No validation.
 var optionalError = card.validate();
 optionalError.ifPresent(err -> {
     System.out.println(err.getMessage());
@@ -76,7 +82,7 @@ optionalError.ifPresent(err -> {
 
 Validation options are defined by the following files:
 
-1. [options.proto](https://github.com/SpineEventEngine/base/blob/master/base/src/main/proto/spine/options.proto).
+1. [options.proto](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto).
 2. [time_options.proto](https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto).
 
 Users must import these .proto files to use the options they define.
@@ -86,32 +92,7 @@ import "spine/options.proto"; // Brings all options, except for time-related one
 import "spine/time_options.proto"; // Brings time-related options.
 ```
 
-## Architecture
-
-The library is a set of plugins for [ProtoData](https://github.com/SpineEventEngine/ProtoData).
-
-Each target language is a separate ProtoData plugin.
-
-Take a look at the following diagram to grasp a high-level library structure:
-
-![High-level library structure overview](.github/readme/high_level_overview.png)
-
-The workflow is the following:
-
-- (1), (2) – user defines Protobuf messages with validation options.
-- (3) – Protobuf compiler generates Java classes.
-- (4), (5) – policies and views build the validation model.
-- (6), (7) – Java plugin generates and injects validation code.
-
-### Key Modules
-
-| Module    | Description                                                          |
-|-----------|----------------------------------------------------------------------|
-| :model    | The language-agnostic model for the built-in options.                |
-| :java     | Generates and injects Java validation code based on applied options. |
-| :java-api | Extension API for custom options in Java.                            |
-
-# Extending the Library
+# Adding custom validation
 
 Users can extend the library by providing custom Protobuf options and code generation logic.
 

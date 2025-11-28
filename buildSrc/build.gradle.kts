@@ -38,7 +38,7 @@ plugins {
     `kotlin-dsl`
 
     // https://github.com/jk1/Gradle-License-Report/releases
-    id("com.github.jk1.dependency-license-report").version("2.7")
+    id("com.github.jk1.dependency-license-report").version("2.9")
 }
 
 repositories {
@@ -65,7 +65,7 @@ val jacksonVersion = "2.18.3"
  */
 val googleAuthToolVersion = "2.1.5"
 
-val licenseReportVersion = "2.9"
+val licenseReportVersion = "2.7"
 
 val grGitVersion = "4.1.1"
 
@@ -75,7 +75,7 @@ val grGitVersion = "4.1.1"
  * This version may change from the [version of Kotlin][io.spine.dependency.lib.Kotlin.version]
  * used by the project.
  */
-val kotlinEmbeddedVersion = "2.2.20"
+val kotlinEmbeddedVersion = "2.2.21"
 
 /**
  * The version of Guava used in `buildSrc`.
@@ -113,7 +113,7 @@ val protobufPluginVersion = "0.9.5"
  * @see <a href="https://github.com/Kotlin/dokka/releases">
  *     Dokka Releases</a>
  */
-val dokkaVersion = "2.0.0"
+val dokkaVersion = "2.1.0"
 
 /**
  * The version of Detekt Gradle Plugin.
@@ -126,11 +126,6 @@ val detektVersion = "1.23.8"
  * @see [io.spine.dependency.test.Kotest]
  */
 val kotestJvmPluginVersion = "0.4.10"
-
-/**
- * @see [io.spine.dependency.test.Kotest.MultiplatformGradlePlugin]
- */
-val kotestMultiplatformPluginVersion = "5.9.1"
 
 /**
  * @see [io.spine.dependency.test.Kover]
@@ -185,7 +180,6 @@ dependencies {
         "com.gradleup.shadow:shadow-gradle-plugin:$shadowVersion",
         "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion",
         "io.kotest:kotest-gradle-plugin:$kotestJvmPluginVersion",
-        "io.kotest:kotest-framework-multiplatform-plugin-gradle:$kotestMultiplatformPluginVersion",
         // https://github.com/srikanth-lingala/zip4j
         "net.lingala.zip4j:zip4j:2.10.0",
         "net.ltgt.gradle:gradle-errorprone-plugin:$errorPronePluginVersion",
