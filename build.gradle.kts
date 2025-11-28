@@ -26,13 +26,14 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.Base
+import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
-import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.Spine
+import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
 import io.spine.gradle.publish.PublishingRepos
 import io.spine.gradle.publish.spinePublishing
@@ -61,6 +62,8 @@ buildscript {
 
         // For `io.spine.generated-sources` plugin.
         classpath(io.spine.dependency.local.ToolBase.protobufSetupPlugins)
+
+        classpath(io.spine.dependency.kotlinx.DateTime.lib)
     }
 }
 
@@ -106,20 +109,24 @@ allprojects {
         resolutionStrategy {
             @Suppress("DEPRECATION") // `Kotlin.stdLibJdk7` is a transitive dependency.
             force(
-                Roaster.api,
-                Roaster.jdt,
+                Base.lib,
                 Compiler.api,
+                Compiler.backend,
+                Compiler.gradleApi,
+                Compiler.jvm,
                 Compiler.params,
                 Compiler.pluginLib,
-                Compiler.backend,
-                Compiler.jvm,
-                Base.lib,
-                Logging.lib,
                 CoreJava.client,
                 CoreJava.server,
+                Grpc.bom,
+                KotlinPoet.lib,
+                Logging.lib,
+                Roaster.api,
+                Roaster.jdt,
+                Time.lib,
+                Time.javaExtensions,
                 ToolBase.lib,
                 ToolBase.pluginBase,
-                KotlinPoet.lib,
             )
         }
     }
