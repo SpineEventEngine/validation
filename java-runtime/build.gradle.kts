@@ -31,7 +31,6 @@ import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
-import io.spine.gradle.protobuf.setup
 
 buildscript {
     standardSpineSdkRepositories()
@@ -50,19 +49,13 @@ buildscript {
 }
 
 plugins {
+    id("io.spine.generated-sources")
+    id("io.spine.descriptor-set-file")
     // We use it the KSP plugin via its ID because it's added to the build classpath
     // in the root project.
     id("com.google.devtools.ksp")
     `build-proto-model`
     module
-}
-
-// This cannot be moved under the `build-proto-model` script. It would not work from there.
-// Please see the documentation for `GenerateProtoTask.setup()` for details.
-protobuf {
-    generateProtoTasks.all().configureEach {
-        setup()
-    }
 }
 
 dependencies {

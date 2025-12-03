@@ -156,15 +156,15 @@ val PluginDependenciesSpec.`gradle-doctor`: PluginDependencySpec
     get() = id(GradleDoctor.pluginId).version(GradleDoctor.version)
 
 val PluginDependenciesSpec.kotest: PluginDependencySpec
-    get() = Kotest.MultiplatformGradlePlugin.let {
-        return id(it.id).version(it.version)
+    get() = Kotest.let {
+        return id(it.gradlePluginId).version(it.version)
     }
 
 val PluginDependenciesSpec.kover: PluginDependencySpec
     get() = id(Kover.id).version(Kover.version)
 
 val PluginDependenciesSpec.ksp: PluginDependencySpec
-    get() = id(Ksp.id).version(Ksp.version)
+    get() = id(Ksp.id).version(Ksp.dogfoodingVersion)
 
 val PluginDependenciesSpec.`plugin-publish`: PluginDependencySpec
     get() = id(PluginPublishPlugin.id).version(PluginPublishPlugin.version)
@@ -199,43 +199,34 @@ fun Project.configureTaskDependencies() {
     }
 
     afterEvaluate {
-        val launchProtoData = "launchProtoData"
-        val launchTestProtoData = "launchTestProtoData"
         val generateProto = "generateProto"
         val createVersionFile = "createVersionFile"
         val compileKotlin = "compileKotlin"
         compileKotlin.run {
             dependOn(generateProto)
-            dependOn(launchProtoData)
         }
         val compileTestKotlin = "compileTestKotlin"
-        compileTestKotlin.dependOn(launchTestProtoData)
         val sourcesJar = "sourcesJar"
         val kspKotlin = "kspKotlin"
         sourcesJar.run {
             dependOn(generateProto)
-            dependOn(launchProtoData)
             dependOn(kspKotlin)
             dependOn(createVersionFile)
             dependOn("prepareProtocConfigVersions")
         }
-        val dokkaHtml = "dokkaHtml"
-        dokkaHtml.run {
+        val dokkaGenerate = "dokkaGenerate"
+        dokkaGenerate.run {
             dependOn(generateProto)
-            dependOn(launchProtoData)
             dependOn(kspKotlin)
         }
-        val dokkaJavadoc = "dokkaJavadoc"
-        dokkaJavadoc.run {
-            dependOn(launchProtoData)
-            dependOn(kspKotlin)
-        }
+        val dokkaGeneratePublicationJavadoc = "dokkaGeneratePublicationJavadoc"
+        dokkaGeneratePublicationJavadoc.dependOn(kspKotlin)
         "publishPluginJar".dependOn(createVersionFile)
         compileKotlin.dependOn(kspKotlin)
         compileTestKotlin.dependOn("kspTestKotlin")
         "compileTestFixturesKotlin".dependOn("kspTestFixturesKotlin")
-        "javadocJar".dependOn(dokkaHtml)
-        "dokkaKotlinJar".dependOn(dokkaJavadoc)
+        "javadocJar".dependOn(dokkaGeneratePublicationJavadoc)
+        "htmlDocsJar".dependOn(dokkaGenerate)
     }
 }
 

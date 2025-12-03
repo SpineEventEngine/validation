@@ -62,7 +62,7 @@ plugins {
     id("net.ltgt.errorprone")
     id("detekt-code-analysis")
     pmd
-    id("dokka-for-java")
+    id("dokka-setup")
     `maven-publish`
     jacoco
     idea
