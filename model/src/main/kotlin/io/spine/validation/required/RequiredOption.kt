@@ -31,6 +31,12 @@ import io.spine.core.Where
 import io.spine.option.IfMissingOption
 import io.spine.option.OptionsProto.ifMissing
 import io.spine.option.OptionsProto.required
+import io.spine.server.event.Just
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.event.just
+import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.File
@@ -41,21 +47,15 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
-import io.spine.tools.compiler.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.NoReaction
-import io.spine.server.event.React
-import io.spine.server.event.asA
-import io.spine.server.event.just
-import io.spine.server.tuple.EitherOf2
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_MISSING
 import io.spine.validation.REQUIRED
 import io.spine.validation.api.OPTION_NAME
-import io.spine.validation.checkPrimaryApplied
 import io.spine.validation.checkPlaceholders
+import io.spine.validation.checkPrimaryApplied
 import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
@@ -83,10 +83,10 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * the validation option. There are other policies that handle implicitly
  * required fields, i.e., ID fields in entities and signal messages.
  *
- * @see [RequiredIdOptionPolicy]
- * @see [RequiredIdPatternPolicy]
+ * @see [RequiredIdOptionReaction]
+ * @see [RequiredIdPatternReaction]
  */
-internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
+internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
@@ -122,7 +122,7 @@ internal class RequiredPolicy : Policy<FieldOptionDiscovered>() {
  *
  * A compilation error is reported in case of violation of any condition.
  */
-internal class IfMissingPolicy : Policy<FieldOptionDiscovered>() {
+internal class IfMissingReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

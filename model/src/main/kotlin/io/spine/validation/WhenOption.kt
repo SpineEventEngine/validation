@@ -44,7 +44,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.jvm.javaClass
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.TypeSystem
 import io.spine.server.entity.alter
@@ -85,7 +85,7 @@ import io.spine.validation.api.OPTION_NAME
  * disabled options. In this case, the policy emits [NoReaction] meaning
  * that the option is ignored.
  */
-internal class WhenPolicy : Policy<FieldOptionDiscovered>() {
+internal class WhenReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

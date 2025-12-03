@@ -26,60 +26,45 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
+import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`WhenPolicy` should reject")
-internal class WhenPolicySpec : CompilationErrorTest() {
+@DisplayName("`PatternPolicy` should reject the option")
+internal class PatternReactionSpec : CompilationErrorTest() {
 
-    @Test
-    fun `option on a boolean field`() {
-        val message = WhenBoolField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
+    @MethodSource("io.spine.validation.PatternPolicyTestEnv#messagesWithUnsupportedTarget")
+    @ParameterizedTest(name = "when target field type is `{0}`")
+    fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
+        val descriptor = message.descriptor
+        val error = assertCompilationFails(descriptor)
+        val field = descriptor.field("value")
         error.message.run {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
-        }    }
+        }
+    }
 
     @Test
-    fun `option on an integer field`() {
-        val message = WhenInt32Field.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `option on a string field`() {
-        val message = WhenStringField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `the error message with unsupported placeholders`() {
-        val message = WhenWithInvalidPlaceholders.getDescriptor()
+    fun `when the error message contains unsupported placeholders`() {
+        val message = PatternWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(WHEN)
+            shouldContain(PATTERN)
             shouldContain("unsupported placeholders")
-            shouldInclude("[when]")
+            shouldInclude("[field.name, pattern.value]")
         }
     }
 }

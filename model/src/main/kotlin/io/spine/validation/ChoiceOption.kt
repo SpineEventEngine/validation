@@ -35,7 +35,7 @@ import io.spine.tools.compiler.ast.OneofRef
 import io.spine.tools.compiler.ast.event.OneofOptionDiscovered
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -69,7 +69,7 @@ import io.spine.validation.event.choiceOneofDiscovered
  * Protobuf encodes a non-set value as a special case, allowing for checking whether
  * the `oneof` group value is set without relying on default values of field types.
  */
-internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
+internal class ChoiceReaction : Reaction<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(
@@ -97,7 +97,7 @@ internal class ChoicePolicy : Policy<OneofOptionDiscovered>() {
 /**
  * Reports a compilation warning if the deprecated `(is_required)` option is used.
  */
-internal class IsRequiredPolicy : Policy<OneofOptionDiscovered>() {
+internal class IsRequiredReaction : Reaction<OneofOptionDiscovered>() {
 
     @React
     override fun whenever(

@@ -40,7 +40,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.refersToMessage
 import io.spine.tools.compiler.check
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -69,7 +69,7 @@ import io.spine.validation.event.validateFieldDiscovered
  * disabled options. In this case, the policy emits [NoReaction] meaning
  * that the option is ignored.
  */
-internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
+internal class ValidateReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
@@ -94,7 +94,7 @@ internal class ValidatePolicy : Policy<FieldOptionDiscovered>() {
 /**
  * Reports a compilation warning if the deprecated `(if_invalid)` option is used.
  */
-internal class IfInvalidPolicy : Policy<FieldOptionDiscovered>() {
+internal class IfInvalidReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

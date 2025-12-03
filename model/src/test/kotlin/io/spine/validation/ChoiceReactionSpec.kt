@@ -27,29 +27,23 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.spine.tools.compiler.ast.qualifiedName
+import io.kotest.matchers.string.shouldInclude
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-/**
- * Tests [MaxPolicy][io.spine.validation.bound.MaxPolicy]-specific conditions.
- *
- * [MaxPolicy][io.spine.validation.bound.MaxPolicy] is not extensively
- * tested here because it largely relies on the implementation of
- * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
- *
- * Both policies share the same mechanism of the option value parsing.
- *
- * @see RangePolicySpec
- */
-@DisplayName("`MaxPolicy` should reject the option")
-internal class MaxPolicySpec : CompilationErrorTest() {
+@DisplayName("`ChoicePolicy` should reject the option")
+internal class ChoiceReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `with empty value`() =
-        assertCompilationFails(MaxWithEmptyValue::class) { field ->
-            shouldContain(MAX)
-            shouldContain(field.qualifiedName)
-            shouldContain("the value is empty")
+    fun `when the error message contains unsupported placeholders`() {
+        val message = ChoiceWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val oneof = message.oneofs.first { it.name == "value" }
+        error.message.run {
+            shouldContain(oneof.fullName)
+            shouldContain(CHOICE)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[group.fields]")
         }
+    }
 }

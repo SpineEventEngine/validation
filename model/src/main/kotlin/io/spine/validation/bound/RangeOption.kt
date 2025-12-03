@@ -38,7 +38,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -97,7 +97,7 @@ import io.spine.validation.checkPlaceholders
  *  - `[0 . . 1]` - wrong delimiter.
  *  - `( .. 0)` - missing lower bound.
  */
-internal class RangePolicy : Policy<FieldOptionDiscovered>() {
+internal class RangeReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

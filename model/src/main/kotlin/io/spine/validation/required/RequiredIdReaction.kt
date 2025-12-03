@@ -31,11 +31,11 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.event.TypeDiscovered
 import io.spine.tools.compiler.ast.findOption
 import io.spine.tools.compiler.ast.ref
-import io.spine.tools.compiler.plugin.Policy
 import io.spine.tools.compiler.settings.loadSettings
 import io.spine.server.event.NoReaction
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.validation.ValidationConfig
 import io.spine.validation.WithValidationSettings
 import io.spine.validation.event.RequiredFieldDiscovered
@@ -55,7 +55,7 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * Implementations define the ways of discovering signal and entity
  * state messages.
  */
-internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidationSettings {
+internal abstract class RequiredIdReaction : Reaction<TypeDiscovered>(), WithValidationSettings {
 
     /**
      * The validation config.
@@ -76,7 +76,7 @@ internal abstract class RequiredIdPolicy : Policy<TypeDiscovered>(), WithValidat
      * conditions are met:
      *
      * 1. The field does not have the `(required)` option applied explicitly.
-     *   If it has, the field is handled by the [RequiredPolicy] policy then.
+     *   If it has, the field is handled by the [RequiredReaction] policy then.
      * 2. The field type is supported by the option.
      *
      * The method emits [NoReaction] in case of violation of the above conditions.

@@ -38,7 +38,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @DisplayName("`RangePolicy` should reject the range")
-internal class RangePolicySpec : CompilationErrorTest() {
+internal class RangeReactionSpec : CompilationErrorTest() {
 
     @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithUnsupportedFieldType")
     @ParameterizedTest(name = "when the field type is `{0}`")

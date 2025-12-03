@@ -70,7 +70,7 @@ object Compiler {
      * The version of ProtoData dependencies.
      */
     val version: String
-    private const val fallbackVersion = "2.0.0-SNAPSHOT.030"
+    private const val fallbackVersion = "2.0.0-SNAPSHOT.032"
 
     /**
      * The distinct version of ProtoData used by other build tools.

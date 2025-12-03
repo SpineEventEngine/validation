@@ -33,7 +33,7 @@ import io.spine.option.RequireOption
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
 import io.spine.tools.compiler.ast.unpack
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -61,7 +61,7 @@ import io.spine.validation.event.requireMessageDiscovered
  *
  * Any violation of the above conditions leads to a compilation error.
  */
-internal class RequirePolicy : Policy<MessageOptionDiscovered>() {
+internal class RequireReaction : Reaction<MessageOptionDiscovered>() {
 
     @React
     override fun whenever(

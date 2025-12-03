@@ -34,12 +34,12 @@ import io.spine.tools.compiler.ast.FieldRef
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
-import io.spine.tools.compiler.plugin.Policy
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.React
 import io.spine.server.event.just
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
@@ -61,7 +61,7 @@ import io.spine.validation.checkPlaceholders
  *
  * The condition checks done by the policy are similar to the ones performed by [RangePolicy].
  */
-internal class MinPolicy : Policy<FieldOptionDiscovered>() {
+internal class MinReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

@@ -55,7 +55,7 @@ public class JavaValidationPlugin : ValidationPlugin(
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),
-    policies = customOptions.flatMap { it.policy }.toSet(),
+    reactions = customOptions.flatMap { it.reactions }.toSet(),
 )
 
 /**
