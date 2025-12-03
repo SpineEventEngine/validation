@@ -50,6 +50,7 @@ buildscript {
 
 plugins {
     id("io.spine.generated-sources")
+    id("io.spine.descriptor-set-file")
     // We use it the KSP plugin via its ID because it's added to the build classpath
     // in the root project.
     id("com.google.devtools.ksp")
