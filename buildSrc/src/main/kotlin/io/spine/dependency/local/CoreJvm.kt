@@ -27,12 +27,13 @@
 package io.spine.dependency.local
 
 // For backward compatibility.
+@Suppress("unused")
 typealias CoreJava = CoreJvm
 
 /**
  * Dependencies on `core-java` modules.
  *
- * See [`SpineEventEngine/core-java`](https://github.com/SpineEventEngine/core-java/).
+ * See [`SpineEventEngine/core-java`](https://github.com/SpineEventEngine/core-jvm/).
  */
 @Suppress("ConstPropertyName", "unused")
 object CoreJvm {
