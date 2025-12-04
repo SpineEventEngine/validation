@@ -1,0 +1,9 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.validation.java.expression////PointingToDeclaration/java/io.spine.validation.java.expression/index.html
+$dokka.location:io.spine.validation.java.expression//templateString/#kotlin.String#kotlin.collections.Map[io.spine.validation.ErrorPlaceholder,io.spine.tools.compiler.jvm.Expression[kotlin.String]]#kotlin.String/PointingToDeclaration/java/io.spine.validation.java.expression/template-string.html
+$dokka.location:io.spine.validation.java////PointingToDeclaration/java/io.spine.validation.java/index.html
+$dokka.location:io.spine.validation.java/JavaValidationPlugin///PointingToDeclaration/java/io.spine.validation.java/-java-validation-plugin/index.html
+$dokka.location:io.spine.validation.java/JavaValidationPlugin/JavaValidationPlugin/#/PointingToDeclaration/java/io.spine.validation.java/-java-validation-plugin/-java-validation-plugin.html
+io.spine.validation.java
+io.spine.validation.java.expression
