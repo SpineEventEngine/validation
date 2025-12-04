@@ -38,7 +38,7 @@ import io.spine.validation.api.generate.OptionGenerator
 @AutoService(ValidationOption::class)
 public class CurrencyOption : ValidationOption {
 
-    override val reactions: Set<Reaction<*>> = setOf(CurrencyPolicy())
+    override val reactions: Set<Reaction<*>> = setOf(CurrencyReaction())
 
     override val view: Set<Class<out View<*, *, *>>> = setOf(CurrencyView::class.java)
 
