@@ -1,0 +1,1 @@
+var packageSearchIndex = [{"l":"io.spine.validation.java.ksp","url":"io/spine/validation/java/ksp/package-summary.html"}, {"l":"All packages","url":"index.html"}]
