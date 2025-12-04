@@ -39,10 +39,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`PatternPolicy` should reject the option")
+@DisplayName("`PatternReaction` should reject the option")
 internal class PatternReactionSpec : CompilationErrorTest() {
 
-    @MethodSource("io.spine.validation.PatternPolicyTestEnv#messagesWithUnsupportedTarget")
+    @MethodSource("io.spine.validation.PatternReactionTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
     fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor

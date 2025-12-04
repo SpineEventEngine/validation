@@ -30,13 +30,13 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.PatternPolicySpec].
+ * Provides data for parametrized tests in [io.spine.validation.PatternReactionSpec].
  */
 @Suppress("unused") // Data provider for parameterized test.
-object PatternPolicyTestEnv {
+object PatternReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.PatternPolicySpec.targetFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.PatternReactionSpec.targetFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
