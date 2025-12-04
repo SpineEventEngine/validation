@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Dsl</title>
+    <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    java-runtime
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.360        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":java-runtime/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":java-runtime/main"
+                                       data-filter=":java-runtime/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    java-runtime
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="java-runtime::io.spine.validate/ConstraintViolationKt.Dsl///PointingToDeclaration//1345983533">
+  <div class="breadcrumbs"><a href="../../../../index.html">java-runtime</a><span class="delimiter">/</span><a href="../../index.html">io.spine.validate</a><span class="delimiter">/</span><a href="../index.html">ConstraintViolationKt</a><span class="delimiter">/</span><span class="current">Dsl</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Dsl</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Dsl</a></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-130921383%2FClasslikes%2F1345983533" anchor-label="Companion" id="-130921383%2FClasslikes%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-130921383%2FClasslikes%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="128472636%2FClasslikes%2F1345983533" anchor-label="ParamProxy" id="128472636%2FClasslikes%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-param-proxy/index.html"><span>Param</span><wbr></wbr><span><span>Proxy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="128472636%2FClasslikes%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-param-proxy/index.html">ParamProxy</a> : <span data-unresolved-link="com.google.protobuf.kotlin/DslProxy///PointingToDeclaration/">DslProxy</span></div><div class="brief "><p class="paragraph">An uninstantiable, behaviorless type to represent the field in generics.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2022031060%2FClasslikes%2F1345983533" anchor-label="ViolationProxy" id="2022031060%2FClasslikes%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-violation-proxy/index.html"><span>Violation</span><wbr></wbr><span><span>Proxy</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2022031060%2FClasslikes%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-violation-proxy/index.html">ViolationProxy</a> : <span data-unresolved-link="com.google.protobuf.kotlin/DslProxy///PointingToDeclaration/">DslProxy</span></div><div class="brief "><p class="paragraph">An uninstantiable, behaviorless type to represent the field in generics.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="431686579%2FProperties%2F1345983533" anchor-label="fieldPath" id="431686579%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="field-path.html"><span>field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="431686579%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;getFieldPath&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@set:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setFieldPath&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="field-path.html">fieldPath</a><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></div><div class="brief "><p class="paragraph">message Student { Contacts contacts = 1 (validate) = true; }</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1360435374%2FProperties%2F1345983533" anchor-label="fieldPathOrNull" id="1360435374%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="field-path-or-null.html"><span>field</span><wbr></wbr><span>Path</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1360435374%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html">ConstraintViolationKt.Dsl</a><span class="token punctuation">.</span><a href="field-path-or-null.html">fieldPathOrNull</a><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-943738287%2FProperties%2F1345983533" anchor-label="fieldValue" id="-943738287%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="field-value.html"><span>field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-943738287%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;getFieldValue&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@set:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setFieldValue&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="field-value.html">fieldValue</a><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any///PointingToDeclaration/">Any</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1898983888%2FProperties%2F1345983533" anchor-label="fieldValueOrNull" id="1898983888%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="field-value-or-null.html"><span>field</span><wbr></wbr><span>Value</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1898983888%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html">ConstraintViolationKt.Dsl</a><span class="token punctuation">.</span><a href="field-value-or-null.html">fieldValueOrNull</a><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any///PointingToDeclaration/">Any</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="618893867%2FProperties%2F1345983533" anchor-label="message" id="618893867%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="message.html"><span><span>message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="618893867%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;getMessage&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@set:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setMessage&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="message.html">message</a><span class="token operator">: </span><a href="../../-template-string/index.html">TemplateString</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-57038538%2FProperties%2F1345983533" anchor-label="messageOrNull" id="-57038538%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="message-or-null.html"><span>message</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-57038538%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="index.html">ConstraintViolationKt.Dsl</a><span class="token punctuation">.</span><a href="message-or-null.html">messageOrNull</a><span class="token operator">: </span><a href="../../-template-string/index.html">TemplateString</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1222195002%2FProperties%2F1345983533" anchor-label="msgFormat" id="1222195002%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="msg-format.html"><span>msg</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1222195002%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;getMsgFormat&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@set:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setMsgFormat&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="msg-format.html"><strike>msgFormat</strike></a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1554914725%2FProperties%2F1345983533" anchor-label="param" id="1554914725%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="param.html"><span><span>param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1554914725%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="param.html"><strike>param</strike></a><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1673848701%2FProperties%2F1345983533" anchor-label="typeName" id="-1673848701%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="type-name.html"><span>type</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1673848701%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;getTypeName&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@set:</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setTypeName&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">var </span><a href="type-name.html">typeName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">message Student { Contacts contacts = 1 (validate) = true; }</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2111487373%2FProperties%2F1345983533" anchor-label="violation" id="2111487373%2FProperties%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="violation.html"><span><span>violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2111487373%2FProperties%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="violation.html"><strike>violation</strike></a><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-2044809554%2FFunctions%2F1345983533" anchor-label="add" id="-2044809554%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add.html"><span><span>add</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2044809554%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;addViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="../../-constraint-violation/index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;addParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="941904522%2FFunctions%2F1345983533" anchor-label="addAll" id="941904522%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-all.html"><span>add</span><wbr></wbr><span><span>All</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="941904522%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;addAllViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="add-all.html"><span class="token function">addAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;addAllParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="add-all.html"><span class="token function">addAll</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1681329235%2FFunctions%2F1345983533" anchor-label="clear" id="-1681329235%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1681329235%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;clearViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1393230166%2FFunctions%2F1345983533" anchor-label="clearFieldPath" id="1393230166%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-field-path.html"><span>clear</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1393230166%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-field-path.html"><span class="token function">clearFieldPath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">message Student { Contacts contacts = 1 (validate) = true; }</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1200658162%2FFunctions%2F1345983533" anchor-label="clearFieldValue" id="-1200658162%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-field-value.html"><span>clear</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1200658162%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-field-value.html"><span class="token function">clearFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1806918514%2FFunctions%2F1345983533" anchor-label="clearMessage" id="-1806918514%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-message.html"><span>clear</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1806918514%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-message.html"><span class="token function">clearMessage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2111228707%2FFunctions%2F1345983533" anchor-label="clearMsgFormat" id="-2111228707%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-msg-format.html"><span>clear</span><wbr></wbr><span>Msg</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2111228707%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-msg-format.html"><span class="token function">clearMsgFormat</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="435378816%2FFunctions%2F1345983533" anchor-label="clearTypeName" id="435378816%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-type-name.html"><span>clear</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="435378816%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear-type-name.html"><span class="token function">clearTypeName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">message Student { Contacts contacts = 1 (validate) = true; }</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1313505571%2FFunctions%2F1345983533" anchor-label="hasFieldPath" id="1313505571%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-field-path.html"><span>has</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1313505571%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has-field-path.html"><span class="token function">hasFieldPath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">message Student { Contacts contacts = 1 (validate) = true; }</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="622846689%2FFunctions%2F1345983533" anchor-label="hasFieldValue" id="622846689%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-field-value.html"><span>has</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="622846689%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has-field-value.html"><span class="token function">hasFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1525437541%2FFunctions%2F1345983533" anchor-label="hasMessage" id="-1525437541%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-message.html"><span>has</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1525437541%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has-message.html"><span class="token function">hasMessage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="274899080%2FFunctions%2F1345983533" anchor-label="plusAssign" id="274899080%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="plus-assign.html"><span>plus</span><wbr></wbr><span><span>Assign</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="274899080%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;plusAssignViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">inline operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="plus-assign.html"><span class="token function">plusAssign</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="../../-constraint-violation/index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;plusAssignAllViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">inline operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="plus-assign.html"><span class="token function">plusAssign</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;plusAssignParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">inline operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="plus-assign.html"><span class="token function">plusAssign</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;plusAssignAllParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">inline operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="plus-assign.html"><span class="token function">plusAssign</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1035448100%2FFunctions%2F1345983533" anchor-label="set" id="1035448100%2FFunctions%2F1345983533" data-filterable-set=":java-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":java-runtime/main" data-filterable-set=":java-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set.html"><span><span>set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1035448100%2FFunctions%2F1345983533"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":java-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setViolation&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="../../-constraint-violation/index.html">ConstraintViolation</a><span class="token punctuation">, </span><a href="-violation-proxy/index.html">ConstraintViolationKt.Dsl.ViolationProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="../../-constraint-violation/index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></p></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;setParam&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">operator </span><span class="token keyword">fun </span><span data-unresolved-link="com.google.protobuf.kotlin/DslList///PointingToDeclaration/">DslList</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-param-proxy/index.html">ConstraintViolationKt.Dsl.ParamProxy</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2025, TeamDev</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
