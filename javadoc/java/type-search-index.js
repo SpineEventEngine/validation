@@ -1,0 +1,1 @@
+var typeSearchIndex = [{"p":"io.spine.validation.java","l":"JavaValidationPlugin","url":"io/spine/validation/java/JavaValidationPlugin.html"}, {"p":"io.spine.validation.java.expression","l":"ConstraintViolations","url":"io/spine/validation/java/expression/ConstraintViolations.html"}, {"l":"All classes","url":"allclasses.html"}]
