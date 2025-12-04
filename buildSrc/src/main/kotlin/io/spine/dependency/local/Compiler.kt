@@ -76,7 +76,7 @@ object Compiler {
      * The distinct version of the Compiler used by other build tools.
      *
      * When the Compiler is used both for building the project and as a part of the Project's
-     * transitional dependencies, this is the version used to build the project itself.
+     * transitive dependencies, this is the version used to build the project itself.
      */
     val dogfoodingVersion: String
     private const val fallbackDfVersion = "2.0.0-SNAPSHOT.030"
