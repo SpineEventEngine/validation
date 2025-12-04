@@ -280,7 +280,7 @@ fun Module.configureProtoc() {
 }
 
 /**
- * Configures publishing for this subproject.
+ * Configures documentation publishing for this subproject.
  */
 fun Module.setupDocPublishing() {
     updateGitHubPages {
