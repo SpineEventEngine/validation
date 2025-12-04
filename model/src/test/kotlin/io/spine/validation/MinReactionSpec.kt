@@ -32,11 +32,11 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 /**
- * Tests [MinPolicy][io.spine.validation.bound.MinReaction]-specific conditions.
+ * Tests [MinReaction][io.spine.validation.bound.MinReaction]-specific conditions.
  *
- * [MinPolicy][io.spine.validation.bound.MinReaction] is not extensively
+ * [MinReaction][io.spine.validation.bound.MinReaction] is not extensively
  * tested here because it largely relies on the implementation of
- * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
  *
  * Both policies share the same mechanism of the option value parsing.
  *

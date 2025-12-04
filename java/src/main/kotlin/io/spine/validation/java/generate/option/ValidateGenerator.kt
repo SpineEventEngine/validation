@@ -120,7 +120,8 @@ private class GenerateValidate(
         else -> error(
             "The field type `${fieldType.name}` is not supported by `ValidateFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by `ValidatePolicy` when validating the `ValidateFieldDiscovered` event."
+                    " used by `ValidateReaction` when validating" +
+                    " the `ValidateFieldDiscovered` event."
         )
     }.run { SingleOptionCode(this) }
 

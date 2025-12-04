@@ -39,7 +39,7 @@ import io.spine.validation.MessageMarkers
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
- * A policy that marks ID fields in entity state messages and signal
+ * A reaction that marks ID fields in entity state messages and signal
  * messages as required.
  *
  * The messages are discovered via the [file patterns][MessageMarkers],

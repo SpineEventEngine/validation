@@ -56,10 +56,10 @@ import io.spine.validation.bound.event.minFieldDiscovered
 import io.spine.validation.checkPlaceholders
 
 /**
- * A policy to add a validation rule to a type whenever the `(min)` field option
+ * A reaction to add a validation rule to a type whenever the `(min)` field option
  * is discovered.
  *
- * The condition checks done by the policy are similar to the ones performed by [RangePolicy].
+ * The condition checks done by the reaction are similar to the ones performed by [RangeReaction].
  */
 internal class MinReaction : Reaction<FieldOptionDiscovered>() {
 

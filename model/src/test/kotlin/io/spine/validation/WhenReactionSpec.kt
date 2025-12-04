@@ -34,7 +34,7 @@ import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`WhenPolicy` should reject")
+@DisplayName("`WhenReaction` should reject")
 internal class WhenReactionSpec : CompilationErrorTest() {
 
     @Test

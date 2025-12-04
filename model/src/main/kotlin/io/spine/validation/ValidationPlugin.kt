@@ -91,7 +91,7 @@ public abstract class ValidationPlugin(
         RequiredIdPatternReaction(),
         RequiredIdOptionReaction(),
         GoesReaction(),
-        SetOncePolicy(),
+        SetOnceReaction(),
         IfSetAgainReaction(),
         RequireReaction()
     )

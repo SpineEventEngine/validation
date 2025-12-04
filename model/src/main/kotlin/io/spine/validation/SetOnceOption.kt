@@ -75,14 +75,14 @@ import io.spine.validation.event.setOnceFieldDiscovered
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
  *
- * If (1) is violated, the policy reports a compilation error.
+ * If (1) is violated, the reaction reports a compilation error.
  *
  * Violation of (2) means that the `(set_once)` option is applied correctly,
  * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  */
-internal class SetOncePolicy : Reaction<FieldOptionDiscovered>() {
+internal class SetOnceReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

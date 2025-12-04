@@ -31,7 +31,7 @@ import io.kotest.matchers.string.shouldInclude
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`ChoicePolicy` should reject the option")
+@DisplayName("`ChoiceReaction` should reject the option")
 internal class ChoiceReactionSpec : CompilationErrorTest() {
 
     @Test

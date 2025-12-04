@@ -37,10 +37,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`RangePolicy` should reject the range")
+@DisplayName("`RangeReaction` should reject the range")
 internal class RangeReactionSpec : CompilationErrorTest() {
 
-    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithUnsupportedFieldType")
+    @MethodSource("io.spine.validation.RangeReactionTestEnv#messagesWithUnsupportedFieldType")
     @ParameterizedTest(name = "when the field type is `{0}`")
     fun whenFieldHasUnsupportedType(message: KClass<out Message>) =
         assertCompilationFails(message) { field ->
@@ -49,7 +49,7 @@ internal class RangeReactionSpec : CompilationErrorTest() {
             shouldContain("a filed of an unsupported type")
         }
 
-    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithInvalidDelimiters")
+    @MethodSource("io.spine.validation.RangeReactionTestEnv#messagesWithInvalidDelimiters")
     @ParameterizedTest(name = "with an invalid delimiter in `{0}`")
     fun withInvalidDelimiter(message: KClass<out Message>) =
         assertCompilationFails(message) { field ->
@@ -57,7 +57,7 @@ internal class RangeReactionSpec : CompilationErrorTest() {
             shouldContain("the lower and upper bounds must be separated either with")
         }
 
-    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithOverflowValues")
+    @MethodSource("io.spine.validation.RangeReactionTestEnv#messagesWithOverflowValues")
     @ParameterizedTest(name = "with a bound value causing an overflow in `{0}`")
     fun withOverflowValue(message: KClass<out Message>, value: String) =
         assertCompilationFails(message) { field ->
@@ -66,7 +66,7 @@ internal class RangeReactionSpec : CompilationErrorTest() {
             shouldContain("value is out of range")
         }
 
-    @MethodSource("io.spine.validation.RangePolicyTestEnv#messagesWithLowerEqualOrMoreThanUpper")
+    @MethodSource("io.spine.validation.RangeReactionTestEnv#messagesWithLowerEqualOrMoreThanUpper")
     @ParameterizedTest(name = "with the lower bound is equal or more than the upper one in `{0}`")
     fun withLowerEqualOrMoreThanUpper(message: KClass<out Message>, value: String) =
         assertCompilationFails(message) { field ->

@@ -60,7 +60,7 @@ import io.spine.validation.event.choiceOneofDiscovered
  *
  * Violation of (1) means that the `(choice)` option is applied correctly,
  * but effectively disabled. [ChoiceOneofDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  *
  * Violation of (2) leads to a compilation error.

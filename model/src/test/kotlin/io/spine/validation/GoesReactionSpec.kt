@@ -41,10 +41,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`GoesPolicy` should reject the option")
-internal class GoesPolicySpec : CompilationErrorTest() {
+@DisplayName("`GoesReaction` should reject the option")
+internal class GoesReactionSpec : CompilationErrorTest() {
 
-    @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedTarget")
+    @MethodSource("io.spine.validation.GoesReactionTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
     fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
@@ -53,7 +53,7 @@ internal class GoesPolicySpec : CompilationErrorTest() {
         error.message shouldContain unsupportedFieldType(field)
     }
 
-    @MethodSource("io.spine.validation.GoesPolicyTestEnv#messagesWithUnsupportedCompanion")
+    @MethodSource("io.spine.validation.GoesReactionTestEnv#messagesWithUnsupportedCompanion")
     @ParameterizedTest(name = "when companion's field type is `{0}`")
     fun whenCompanionFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor

@@ -72,14 +72,14 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * 1. The field type is supported by the option.
  * 2. The option value is `true`.
  *
- * If (1) is violated, the policy reports a compilation error.
+ * If (1) is violated, the reaction reports a compilation error.
  *
  * Violation of (2) means that the `(required)` option is applied correctly,
  * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  *
- * Note that this policy is responsible only for fields explicitly marked with
+ * Note that this reaction is responsible only for fields explicitly marked with
  * the validation option. There are other policies that handle implicitly
  * required fields, i.e., ID fields in entities and signal messages.
  *

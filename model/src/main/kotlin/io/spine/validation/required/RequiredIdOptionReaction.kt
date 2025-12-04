@@ -36,7 +36,7 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**
- * A policy that marks ID fields in entity state messages as required.
+ * A reaction that marks ID fields in entity state messages as required.
  *
  * The entity state messages are discovered via
  * the [options][io.spine.validation.MessageMarkers.getEntityOptionNameList],

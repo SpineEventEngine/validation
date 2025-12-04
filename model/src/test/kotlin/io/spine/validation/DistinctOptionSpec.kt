@@ -33,8 +33,8 @@ import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`IfHasDuplicatesPolicy` should")
-internal class IfHasDuplicatesPolicySpec : CompilationErrorTest() {
+@DisplayName("`IfHasDuplicatesReaction` should")
+internal class IfHasDuplicatesReactionSpec : CompilationErrorTest() {
 
     @Test
     fun `reject without '(distinct)'`() {

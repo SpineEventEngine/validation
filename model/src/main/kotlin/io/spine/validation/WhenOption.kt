@@ -78,11 +78,11 @@ import io.spine.validation.api.OPTION_NAME
  * 2) The error message does not contain unsupported placeholders.
  * 3) The option value is other than [Time.TIME_UNDEFINED].
  *
- * If (1) or (2) is violated, the policy reports a compilation error.
+ * If (1) or (2) is violated, the reaction reports a compilation error.
  *
  * Violation of (3) means that the `(when)` option is applied correctly,
  * but effectively disabled. [WhenFieldDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  */
 internal class WhenReaction : Reaction<FieldOptionDiscovered>() {

@@ -110,7 +110,7 @@ internal abstract class BoundedFieldGenerator(
         else -> error(
             "The field type `${fieldType.name}` is not supported by `${this::class.simpleName}`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by the policy, which verified `${view::class.simpleName}`."
+                    " used by the reaction, which verified `${view::class.simpleName}`."
         )
     }.run { SingleOptionCode(this) }
 
@@ -195,7 +195,7 @@ internal abstract class BoundedFieldGenerator(
             }
             else -> error(
                 "Unexpected field type `$valueCase` when converting range bounds to Java literal." +
-                        " Make sure the policy, which verified `${view::class.simpleName}`," +
+                        " Make sure the reaction, which verified `${view::class.simpleName}`," +
                         " correctly filtered out unsupported field types."
             )
         }

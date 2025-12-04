@@ -33,7 +33,7 @@ package io.spine.validation.api
  * filtering incoming events by the option name. It is usually used
  * in a pair with the constant containing the option name.
  *
- * An example of event filtering in a policy:
+ * An example of event filtering in a reaction:
  *
  * ```
  *     @React

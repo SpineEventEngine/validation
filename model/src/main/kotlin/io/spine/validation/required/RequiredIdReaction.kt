@@ -76,7 +76,7 @@ internal abstract class RequiredIdReaction : Reaction<TypeDiscovered>(), WithVal
      * conditions are met:
      *
      * 1. The field does not have the `(required)` option applied explicitly.
-     *   If it has, the field is handled by the [RequiredReaction] policy then.
+     *   If it has, the field is handled by the [RequiredReaction] then.
      * 2. The field type is supported by the option.
      *
      * The method emits [NoReaction] in case of violation of the above conditions.

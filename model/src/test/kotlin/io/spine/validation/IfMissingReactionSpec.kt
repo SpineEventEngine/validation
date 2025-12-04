@@ -27,34 +27,37 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.spine.tools.compiler.ast.Field
-import io.spine.tools.compiler.ast.name
+import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`SetOnceReaction` should")
-internal class SetOnceReactionSpec : CompilationErrorTest() {
+@DisplayName("`IfMissingReaction` should")
+internal class IfMissingReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `reject option on a repeated field`() {
-        val message = SetOnceRepeated.getDescriptor()
+    fun `reject without '(required)'`() {
+        val message = IfMissingWithoutRequired.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain(REQUIRED)
+        }
     }
 
     @Test
-    fun `reject option on a map field`() {
-        val message = SetOnceMap.getDescriptor()
+    fun `reject unsupported placeholders`() {
+        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[field.name, field.value]")
+        }
     }
-
 }
-
-private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type.name}` of the `${field.qualifiedName}` field is not supported" +
-            " by the `($SET_ONCE)` option."

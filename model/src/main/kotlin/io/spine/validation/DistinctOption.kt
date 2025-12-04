@@ -75,11 +75,11 @@ import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
  * 1. The field type is `repeated` or `map`.
  * 2. The option value is `true`.
  *
- * If (1) is violated, the policy reports a compilation error.
+ * If (1) is violated, the reaction reports a compilation error.
  *
  * Violation of (2) means that the `(distinct)` option is applied correctly,
  * but effectively disabled. [DistinctFieldDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  */
 internal class DistinctReaction : Reaction<FieldOptionDiscovered>() {
