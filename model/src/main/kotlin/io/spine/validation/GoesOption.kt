@@ -46,7 +46,7 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.jvm.findField
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.message
 import io.spine.server.entity.alter
@@ -76,7 +76,7 @@ import io.spine.validation.event.goesFieldDiscovered
  *
  * Any violation of the above conditions leads to a compilation error.
  */
-internal class GoesPolicy : Policy<FieldOptionDiscovered>() {
+internal class GoesReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

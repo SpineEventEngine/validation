@@ -27,29 +27,23 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.spine.tools.compiler.ast.qualifiedName
+import io.kotest.matchers.string.shouldInclude
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-/**
- * Tests [MinPolicy][io.spine.validation.bound.MinPolicy]-specific conditions.
- *
- * [MinPolicy][io.spine.validation.bound.MinPolicy] is not extensively
- * tested here because it largely relies on the implementation of
- * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
- *
- * Both policies share the same mechanism of the option value parsing.
- *
- * @see RangePolicySpec
- */
-@DisplayName("`MinPolicy` should reject the option")
-internal class MinPolicySpec : CompilationErrorTest() {
+@DisplayName("`ChoiceReaction` should reject the option")
+internal class ChoiceReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `with empty value`() =
-        assertCompilationFails(MinWithEmptyValue::class) { field ->
-            shouldContain(MIN)
-            shouldContain(field.qualifiedName)
-            shouldContain("the value is empty")
+    fun `when the error message contains unsupported placeholders`() {
+        val message = ChoiceWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val oneof = message.oneofs.first { it.name == "value" }
+        error.message.run {
+            shouldContain(oneof.fullName)
+            shouldContain(CHOICE)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[group.fields]")
         }
+    }
 }

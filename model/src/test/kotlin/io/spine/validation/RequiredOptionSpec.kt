@@ -27,7 +27,6 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
@@ -35,8 +34,8 @@ import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`RequiredPolicy` should")
-internal class RequiredPolicySpec : CompilationErrorTest() {
+@DisplayName("`RequiredReaction` should")
+internal class RequiredReactionSpec : CompilationErrorTest() {
 
     @Test
     fun `reject option on a boolean field`() {
@@ -68,35 +67,6 @@ internal class RequiredPolicySpec : CompilationErrorTest() {
         val error = assertCompilationFails(message)
         val field = message.field("temperature")
         error.message shouldContain unsupportedFieldType(field)
-    }
-}
-
-@DisplayName("`IfMissingPolicy` should")
-internal class IfMissingPolicySpec : CompilationErrorTest() {
-
-    @Test
-    fun `reject without '(required)'`() {
-        val message = IfMissingWithoutRequired.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_MISSING)
-            shouldContain(REQUIRED)
-        }
-    }
-
-    @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_MISSING)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, field.value]")
-        }
     }
 }
 

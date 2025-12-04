@@ -28,58 +28,36 @@ package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`WhenPolicy` should reject")
-internal class WhenPolicySpec : CompilationErrorTest() {
+@DisplayName("`IfSetAgainReaction` should")
+internal class IfSetAgainReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `option on a boolean field`() {
-        val message = WhenBoolField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `option on an integer field`() {
-        val message = WhenInt32Field.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `option on a string field`() {
-        val message = WhenStringField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `the error message with unsupported placeholders`() {
-        val message = WhenWithInvalidPlaceholders.getDescriptor()
+    fun `reject without '(set_once)'`() {
+        val message = IfSetAgainWithoutSetOnce.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(WHEN)
+            shouldContain(IF_SET_AGAIN)
+            shouldContain(SET_ONCE)
+        }
+    }
+
+    @Test
+    fun `reject unsupported placeholders`() {
+        val message = IfSetAgainWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_SET_AGAIN)
             shouldContain("unsupported placeholders")
-            shouldInclude("[when]")
+            shouldInclude("[field.name]")
         }
     }
 }

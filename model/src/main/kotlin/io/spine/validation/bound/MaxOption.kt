@@ -34,7 +34,7 @@ import io.spine.tools.compiler.ast.FieldRef
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -56,12 +56,12 @@ import io.spine.validation.bound.event.maxFieldDiscovered
 import io.spine.validation.checkPlaceholders
 
 /**
- * A policy to add a validation rule to a type whenever the `(max)` field option
+ * A reaction to add a validation rule to a type whenever the `(max)` field option
  * is discovered.
  *
- * The condition checks done by the policy are similar to the ones performed by [RangePolicy].
+ * The condition checks done by the reaction are similar to the ones performed by [RangeReaction].
  */
-internal class MaxPolicy : Policy<FieldOptionDiscovered>() {
+internal class MaxReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

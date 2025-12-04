@@ -28,6 +28,9 @@ package io.spine.validation.test
 
 import io.spine.core.External
 import io.spine.core.Where
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.server.event.just
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.File
@@ -37,10 +40,7 @@ import io.spine.tools.compiler.ast.PrimitiveType.TYPE_INT64
 import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
-import io.spine.tools.compiler.plugin.Policy
-import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.server.event.just
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.validation.api.OPTION_NAME
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
@@ -59,7 +59,7 @@ internal const val CURRENCY = "currency"
  *
  * Otherwise, a compilation error is reported.
  */
-internal class CurrencyPolicy : Policy<MessageOptionDiscovered>() {
+internal class CurrencyReaction : Reaction<MessageOptionDiscovered>() {
 
     @React
     override fun whenever(

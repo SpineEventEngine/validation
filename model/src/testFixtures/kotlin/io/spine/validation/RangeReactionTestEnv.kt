@@ -30,13 +30,13 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.RangePolicySpec].
+ * Provides data for parametrized tests in [io.spine.validation.RangeReactionSpec].
  */
 @Suppress("unused") // Data provider for parameterized test.
-object RangePolicyTestEnv {
+object RangeReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.whenFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.RangeReactionSpec.whenFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedFieldType() = listOf(
@@ -56,7 +56,7 @@ object RangePolicyTestEnv {
     ).map { arguments(named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.withInvalidDelimiters].
+     * Test data for [io.spine.validation.RangeReactionSpec.withInvalidDelimiters].
      */
     @JvmStatic
     fun messagesWithInvalidDelimiters() = listOf(
@@ -67,7 +67,7 @@ object RangePolicyTestEnv {
     ).map { arguments(it) }
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.withOverflowValue].
+     * Test data for [io.spine.validation.RangeReactionSpec.withOverflowValue].
      */
     @JvmStatic
     fun messagesWithOverflowValues() = listOf(
@@ -98,7 +98,7 @@ object RangePolicyTestEnv {
     ).map { arguments(it.first, it.second) }
 
     /**
-     * Test data for [io.spine.validation.RangePolicySpec.withLowerEqualOrMoreThanUpper].
+     * Test data for [io.spine.validation.RangeReactionSpec.withLowerEqualOrMoreThanUpper].
      */
     @JvmStatic
     fun messagesWithLowerEqualOrMoreThanUpper() = listOf(

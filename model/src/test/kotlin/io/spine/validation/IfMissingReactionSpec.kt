@@ -26,27 +26,38 @@
 
 package io.spine.validation
 
-import org.junit.jupiter.api.Named.named
-import org.junit.jupiter.params.provider.Arguments.arguments
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.protobuf.field
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-/**
- * Provides data for parametrized tests in [io.spine.validation.PatternPolicySpec].
- */
-@Suppress("unused") // Data provider for parameterized test.
-object PatternPolicyTestEnv {
+@DisplayName("`IfMissingReaction` should")
+internal class IfMissingReactionSpec : CompilationErrorTest() {
 
-    /**
-     * Test data for [io.spine.validation.PatternPolicySpec.targetFieldHasUnsupportedType].
-     */
-    @JvmStatic
-    fun messagesWithUnsupportedTarget() = listOf(
-        "bool" to PatternBoolField::class,
-        "repeated double" to PatternRepeatedBoolField::class,
-        "int32" to PatternIntField::class,
-        "repeated int32" to PatternRepeatedIntField::class,
-        "double" to PatternDoubleField::class,
-        "repeated double" to PatternRepeatedDoubleField::class,
-        "message" to PatternMessageField::class,
-        "repeated message" to PatternRepeatedMessageField::class,
-    ).map { arguments(named(it.first, it.second)) }
+    @Test
+    fun `reject without '(required)'`() {
+        val message = IfMissingWithoutRequired.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain(REQUIRED)
+        }
+    }
+
+    @Test
+    fun `reject unsupported placeholders`() {
+        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_MISSING)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[field.name, field.value]")
+        }
+    }
 }

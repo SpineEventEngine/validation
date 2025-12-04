@@ -183,6 +183,6 @@ private class GenerateWhen(
         error(
             "The field type `${field.type.name}` is not supported by `${this::class.simpleName}`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by the policy, which verified `${view::class.simpleName}`."
+                    " used by the reaction, which verified `${view::class.simpleName}`."
         )
 }

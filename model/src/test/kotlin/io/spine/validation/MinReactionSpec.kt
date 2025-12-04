@@ -32,23 +32,23 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 /**
- * Tests [MaxPolicy][io.spine.validation.bound.MaxPolicy]-specific conditions.
+ * Tests [MinReaction][io.spine.validation.bound.MinReaction]-specific conditions.
  *
- * [MaxPolicy][io.spine.validation.bound.MaxPolicy] is not extensively
+ * [MinReaction][io.spine.validation.bound.MinReaction] is not extensively
  * tested here because it largely relies on the implementation of
- * [RangePolicy][io.spine.validation.bound.RangePolicy] and its tests.
+ * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
  *
  * Both policies share the same mechanism of the option value parsing.
  *
- * @see RangePolicySpec
+ * @see RangeReactionSpec
  */
-@DisplayName("`MaxPolicy` should reject the option")
-internal class MaxPolicySpec : CompilationErrorTest() {
+@DisplayName("`MinReaction` should reject the option")
+internal class MinReactionSpec : CompilationErrorTest() {
 
     @Test
     fun `with empty value`() =
-        assertCompilationFails(MaxWithEmptyValue::class) { field ->
-            shouldContain(MAX)
+        assertCompilationFails(MinWithEmptyValue::class) { field ->
+            shouldContain(MIN)
             shouldContain(field.qualifiedName)
             shouldContain("the value is empty")
         }

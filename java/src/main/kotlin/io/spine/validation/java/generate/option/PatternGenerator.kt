@@ -136,7 +136,7 @@ private class GeneratePattern(private val view: PatternField) {
         else -> error(
             "The field type `${fieldType.name}` is not supported by `PatternFieldGenerator`." +
                     " Please ensure that the supported field types in this generator match those" +
-                    " used by `PatternPolicy` when validating the `PatternFieldDiscovered` event."
+                    " used by `PatternReaction` when validating the `PatternFieldDiscovered` event."
         )
     }
 

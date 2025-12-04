@@ -46,7 +46,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
@@ -75,14 +75,14 @@ import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
  * 1. The field type is `repeated` or `map`.
  * 2. The option value is `true`.
  *
- * If (1) is violated, the policy reports a compilation error.
+ * If (1) is violated, the reaction reports a compilation error.
  *
  * Violation of (2) means that the `(distinct)` option is applied correctly,
  * but effectively disabled. [DistinctFieldDiscovered] is not emitted for
- * disabled options. In this case, the policy emits [NoReaction] meaning
+ * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  */
-internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
+internal class DistinctReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
@@ -118,7 +118,7 @@ internal class DistinctPolicy : Policy<FieldOptionDiscovered>() {
  *
  * A compilation error is reported in case of violation of any condition.
  */
-internal class IfHasDuplicatesPolicy : Policy<FieldOptionDiscovered>() {
+internal class IfHasDuplicatesReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(

@@ -27,7 +27,7 @@
 package io.spine.validation.test
 
 import com.google.auto.service.AutoService
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.validation.api.ValidationOption
 import io.spine.validation.api.generate.OptionGenerator
@@ -38,7 +38,7 @@ import io.spine.validation.api.generate.OptionGenerator
 @AutoService(ValidationOption::class)
 public class CurrencyOption : ValidationOption {
 
-    override val policy: Set<Policy<*>> = setOf(CurrencyPolicy())
+    override val reactions: Set<Reaction<*>> = setOf(CurrencyReaction())
 
     override val view: Set<Class<out View<*, *, *>>> = setOf(CurrencyView::class.java)
 

@@ -228,5 +228,5 @@ private fun String.isFieldReference() = first().run {
 private fun unexpectedPrimitiveType(primitiveType: PrimitiveType): Nothing =
     error(
         "`${KNumericBound::class.simpleName}` cannot be created for `$primitiveType` field type." +
-                " Please make sure the policy correctly filtered unsupported field types."
+                " Please make sure the reaction correctly filtered unsupported field types."
     )

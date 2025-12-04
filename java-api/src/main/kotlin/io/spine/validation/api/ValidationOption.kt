@@ -27,7 +27,7 @@
 package io.spine.validation.api
 
 import io.spine.annotation.SPI
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.validation.api.generate.OptionGenerator
 
@@ -38,9 +38,9 @@ import io.spine.validation.api.generate.OptionGenerator
 public interface ValidationOption {
 
     /**
-     * The [policies][Policy] added by the option.
+     * The [reactions][Reaction] added by the option.
      */
-    public val policy: Set<Policy<*>>
+    public val reactions: Set<Reaction<*>>
 
     /**
      * The [views][View] added by the option.

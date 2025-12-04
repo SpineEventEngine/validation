@@ -30,13 +30,13 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.GoesPolicySpec].
+ * Provides data for parametrized tests in [io.spine.validation.GoesReactionSpec].
  */
 @Suppress("unused") // Data provider for parameterized test.
-object GoesPolicyTestEnv {
+object GoesReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.GoesPolicySpec.whenTargetFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.GoesReactionSpec.whenTargetFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
@@ -56,7 +56,7 @@ object GoesPolicyTestEnv {
     ).map { arguments(named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.GoesPolicySpec.whenCompanionFieldHasUnsupportedType].
+     * Test data for [io.spine.validation.GoesReactionSpec.whenCompanionFieldHasUnsupportedType].
      */
     @JvmStatic
     fun messagesWithUnsupportedCompanion() = listOf(

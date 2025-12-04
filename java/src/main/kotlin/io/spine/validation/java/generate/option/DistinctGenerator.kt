@@ -143,7 +143,7 @@ private class GenerateDistinct(private val view: DistinctField) {
         else -> error(
             """
             The field type `${fieldType.name}` is not supported by `${qualified<DistinctGenerator>()}`.
-            Please ensure that the generator supports all field types allowed by its policy.
+            Please ensure that the generator supports all field types allowed by its reaction.
             """.ti()
         )
     }

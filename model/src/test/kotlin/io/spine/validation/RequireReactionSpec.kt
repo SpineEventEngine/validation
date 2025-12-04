@@ -35,8 +35,8 @@ import io.spine.tools.compiler.protobuf.field
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`RequirePolicy` should")
-internal class RequirePolicySpec : CompilationErrorTest() {
+@DisplayName("`RequireReaction` should")
+internal class RequireReactionSpec : CompilationErrorTest() {
 
     @Test
     fun `reject a boolean field`() {

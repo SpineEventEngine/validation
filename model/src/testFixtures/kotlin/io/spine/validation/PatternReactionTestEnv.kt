@@ -24,32 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.protobuf.gradle.ProtobufExtension
-import io.spine.dependency.lib.Protobuf
-import io.spine.gradle.publish.excludeGoogleProtoFromArtifacts
+package io.spine.validation
 
-apply {
-    plugin(Protobuf.GradlePlugin.id)
-}
-
-dependencies {
-    Protobuf.libs.forEach { "api"(it) }
-}
-
-tasks {
-    excludeGoogleProtoFromArtifacts()
-
-    withType<ProcessResources>().configureEach {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
-}
+import org.junit.jupiter.api.Named.named
+import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Force `generated` directory and Kotlin code generation.
+ * Provides data for parametrized tests in [io.spine.validation.PatternReactionSpec].
  */
-val protobuf = project.extensions.getByName("protobuf") as ProtobufExtension
-protobuf.apply {
-    generateProtoTasks.all().configureEach {
-        builtins.maybeCreate("kotlin")
-    }
+@Suppress("unused") // Data provider for parameterized test.
+object PatternReactionTestEnv {
+
+    /**
+     * Test data for [io.spine.validation.PatternReactionSpec.targetFieldHasUnsupportedType].
+     */
+    @JvmStatic
+    fun messagesWithUnsupportedTarget() = listOf(
+        "bool" to PatternBoolField::class,
+        "repeated double" to PatternRepeatedBoolField::class,
+        "int32" to PatternIntField::class,
+        "repeated int32" to PatternRepeatedIntField::class,
+        "double" to PatternDoubleField::class,
+        "repeated double" to PatternRepeatedDoubleField::class,
+        "message" to PatternMessageField::class,
+        "repeated message" to PatternRepeatedMessageField::class,
+    ).map { arguments(named(it.first, it.second)) }
 }

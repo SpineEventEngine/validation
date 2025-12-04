@@ -26,45 +26,30 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
-import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.tools.compiler.protobuf.descriptor
-import io.spine.tools.compiler.protobuf.field
-import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`PatternPolicy` should reject the option")
-internal class PatternPolicySpec : CompilationErrorTest() {
-
-    @MethodSource("io.spine.validation.PatternPolicyTestEnv#messagesWithUnsupportedTarget")
-    @ParameterizedTest(name = "when target field type is `{0}`")
-    fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
-        val descriptor = message.descriptor
-        val error = assertCompilationFails(descriptor)
-        val field = descriptor.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }
-    }
+/**
+ * Tests [MaxReaction][io.spine.validation.bound.MaxReaction]-specific conditions.
+ *
+ * [MaxReaction][io.spine.validation.bound.MaxReaction] is not extensively
+ * tested here because it largely relies on the implementation of
+ * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
+ *
+ * Both policies share the same mechanism of the option value parsing.
+ *
+ * @see RangeReactionSpec
+ */
+@DisplayName("`MaxReaction` should reject the option")
+internal class MaxReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `when the error message contains unsupported placeholders`() {
-        val message = PatternWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
+    fun `with empty value`() =
+        assertCompilationFails(MaxWithEmptyValue::class) { field ->
+            shouldContain(MAX)
             shouldContain(field.qualifiedName)
-            shouldContain(PATTERN)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, pattern.value]")
+            shouldContain("the value is empty")
         }
-    }
 }

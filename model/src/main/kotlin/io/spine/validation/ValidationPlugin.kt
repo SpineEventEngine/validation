@@ -27,23 +27,23 @@
 package io.spine.validation
 
 import io.spine.tools.compiler.plugin.Plugin
-import io.spine.tools.compiler.plugin.Policy
+import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.plugin.ViewRepository
 import io.spine.tools.compiler.render.Renderer
 import io.spine.validation.bound.MaxFieldView
-import io.spine.validation.bound.MaxPolicy
+import io.spine.validation.bound.MaxReaction
 import io.spine.validation.bound.MinFieldView
-import io.spine.validation.bound.MinPolicy
+import io.spine.validation.bound.MinReaction
 import io.spine.validation.bound.RangeFieldView
-import io.spine.validation.bound.RangePolicy
-import io.spine.validation.required.IfMissingPolicy
+import io.spine.validation.bound.RangeReaction
+import io.spine.validation.required.IfMissingReaction
 import io.spine.validation.required.RequireMessageView
-import io.spine.validation.required.RequirePolicy
+import io.spine.validation.required.RequireReaction
 import io.spine.validation.required.RequiredFieldView
-import io.spine.validation.required.RequiredIdOptionPolicy
-import io.spine.validation.required.RequiredIdPatternPolicy
-import io.spine.validation.required.RequiredPolicy
+import io.spine.validation.required.RequiredIdOptionReaction
+import io.spine.validation.required.RequiredIdPatternReaction
+import io.spine.validation.required.RequiredReaction
 
 /**
  * The basic implementation of ProtoData validation plugin, which builds
@@ -56,7 +56,7 @@ public abstract class ValidationPlugin(
     renderers: List<Renderer<*>> = emptyList(),
     views: Set<Class<out View<*, *, *>>> = setOf(),
     viewRepositories: Set<ViewRepository<*, *, *>> = setOf(),
-    policies: Set<Policy<*>> = setOf(),
+    reactions: Set<Reaction<*>> = setOf(),
 ) : Plugin(
     renderers = renderers,
     views = views + setOf(
@@ -74,25 +74,25 @@ public abstract class ValidationPlugin(
         RequireMessageView::class.java,
     ),
     viewRepositories = viewRepositories,
-    policies = policies + setOf<Policy<*>>(
-        RequiredPolicy(),
-        IfMissingPolicy(),
-        RangePolicy(),
-        MinPolicy(),
-        MaxPolicy(),
-        DistinctPolicy(),
-        IfHasDuplicatesPolicy(),
-        ValidatePolicy(),
-        IfInvalidPolicy(),
-        PatternPolicy(),
-        ChoicePolicy(),
-        IsRequiredPolicy(),
-        WhenPolicy(),
-        RequiredIdPatternPolicy(),
-        RequiredIdOptionPolicy(),
-        GoesPolicy(),
-        SetOncePolicy(),
-        IfSetAgainPolicy(),
-        RequirePolicy()
+    reactions = reactions + setOf<Reaction<*>>(
+        RequiredReaction(),
+        IfMissingReaction(),
+        RangeReaction(),
+        MinReaction(),
+        MaxReaction(),
+        DistinctReaction(),
+        IfHasDuplicatesReaction(),
+        ValidateReaction(),
+        IfInvalidReaction(),
+        PatternReaction(),
+        ChoiceReaction(),
+        IsRequiredReaction(),
+        WhenReaction(),
+        RequiredIdPatternReaction(),
+        RequiredIdOptionReaction(),
+        GoesReaction(),
+        SetOnceReaction(),
+        IfSetAgainReaction(),
+        RequireReaction()
     )
 )
