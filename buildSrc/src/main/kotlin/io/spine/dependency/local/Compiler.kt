@@ -70,7 +70,7 @@ object Compiler {
      * The version of the Compiler dependencies.
      */
     val version: String
-    private const val fallbackVersion = "2.0.0-SNAPSHOT.033"
+    private const val fallbackVersion = "2.0.0-SNAPSHOT.034"
 
     /**
      * The distinct version of the Compiler used by other build tools.
