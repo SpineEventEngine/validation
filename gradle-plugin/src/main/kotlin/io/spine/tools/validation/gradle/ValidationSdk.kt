@@ -41,11 +41,11 @@ public object Meta : LazyMeta(Module("io.spine.tools", "validation-gradle-plugin
 @Suppress("ConstPropertyName")
 public object ValidationSdk {
 
-    private const val group = "io.spine.validation"
-    private const val prefix = "spine-validation"
-    private val javaCodegenBundle = Module(group, "$prefix-java-bundle")
-    private val javaRuntime = Module(group, "$prefix-java-runtime")
-    private val configuration = Module(group, "$prefix-configuration")
+    private const val toolsGroup = "io.spine.tools"
+    private const val prefix = "validation"
+    private val javaCodegenBundle = Module(toolsGroup, "$prefix-java-bundle")
+    private val jvmRuntime = Module("io.spine", "$prefix-java-runtime")
+    private val configuration = Module(toolsGroup, "$prefix-configuration")
 
     private fun MavenArtifact.withVersion(version: String): MavenArtifact {
         version.ifEmpty {
@@ -72,8 +72,8 @@ public object ValidationSdk {
      * @see javaCodegenBundle
      */
     @JvmStatic
-    public fun javaRuntime(version: String = ""): MavenArtifact =
-        Meta.dependency(javaRuntime).withVersion(version)
+    public fun jvmRuntime(version: String = ""): MavenArtifact =
+        Meta.dependency(jvmRuntime).withVersion(version)
 
     /**
      * The Maven artifact containing the `spine-validation-configuration` module.
