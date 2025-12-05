@@ -29,8 +29,8 @@ package io.spine.validation.test
 import com.google.auto.service.AutoService
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.validation.api.ValidationOption
-import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.jvm.ValidationOption
+import io.spine.validation.jvm.generate.OptionGenerator
 
 /**
  * Extends the Java validation with the custom `(currency)` option.

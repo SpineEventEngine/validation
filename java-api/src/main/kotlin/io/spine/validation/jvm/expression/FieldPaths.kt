@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.validation.jvm.expression
 
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
@@ -32,7 +32,6 @@ import io.spine.tools.compiler.ast.FieldName
 import io.spine.tools.compiler.ast.OneofName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.toBuilder
 
 /**

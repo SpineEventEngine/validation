@@ -24,33 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api
+package io.spine.validation.jvm
 
-import io.spine.annotation.Internal
-import java.io.File
+import io.spine.annotation.SPI
+import io.spine.tools.compiler.plugin.Reaction
+import io.spine.tools.compiler.plugin.View
+import io.spine.validation.jvm.generate.OptionGenerator
 
 /**
- * Holds a path to a file with the discovered validators.
- *
- * The KSP processor generates a resource file using this path.
- * Then, the Java codegen plugin picks up this file.
+ * Extends the Java validation library with the custom validation option.
  */
-@Internal
-public object DiscoveredValidators {
+@SPI
+public interface ValidationOption {
 
     /**
-     * The path to the file with the discovered message validators.
-     *
-     * The path is relative to the output directory of the KSP processor.
+     * The [reactions][Reaction] added by the option.
      */
-   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators"
+    public val reactions: Set<Reaction<*>>
 
     /**
-     * Resolves the path to the file containing discovered message validators.
-     *
-     * @param kspOutputDirectory The path to the KSP output.
+     * The [views][View] added by the option.
      */
-    public fun resolve(kspOutputDirectory: File): File = kspOutputDirectory
-        .resolve("resources")
-        .resolve(RESOURCES_LOCATION)
+    public val view: Set<Class<out View<*, *, *>>>
+
+    /**
+     * The option [generator][OptionGenerator] for Java.
+     */
+    public val generator: OptionGenerator
 }

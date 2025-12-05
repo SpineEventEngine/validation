@@ -24,12 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.validation.jvm.generate
 
-import io.spine.tools.compiler.jvm.Expression
-import io.spine.tools.compiler.jvm.call
+import com.google.protobuf.Message
+import io.spine.tools.compiler.jvm.This
 
 /**
- * Converts this [Expression] to its string representation by invoking `toString()`.
+ * Scope variables available within the message class.
  */
-public fun Expression<*>.stringify(): Expression<String> = call("toString")
+public object MessageScope {
+
+    /**
+     * An implicit `this` reference to the message class.
+     *
+     * Can be used to access methods and fields of the message class.
+     */
+    public val message: This<Message> = This(explicit = false)
+}

@@ -60,7 +60,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.event.DistinctFieldDiscovered
 import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.validation.event.distinctFieldDiscovered

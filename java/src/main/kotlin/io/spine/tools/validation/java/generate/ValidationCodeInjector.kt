@@ -50,9 +50,9 @@ import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.api.generate.ValidateScope.parentName
-import io.spine.validation.api.generate.ValidateScope.parentPath
-import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.jvm.generate.ValidateScope.parentName
+import io.spine.validation.jvm.generate.ValidateScope.parentPath
+import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * A [PsiClass] holding an instance of [Message].

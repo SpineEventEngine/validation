@@ -41,7 +41,7 @@ import com.google.devtools.ksp.symbol.Modifier
 import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
-import io.spine.validation.api.DiscoveredValidators
+import io.spine.validation.jvm.DiscoveredValidators
 import io.spine.validate.MessageValidator
 import io.spine.validate.Validator
 

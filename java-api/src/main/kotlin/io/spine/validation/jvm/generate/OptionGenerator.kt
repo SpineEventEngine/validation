@@ -24,31 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api
+package io.spine.validation.jvm.generate
 
-import io.spine.annotation.SPI
-import io.spine.tools.compiler.plugin.Reaction
-import io.spine.tools.compiler.plugin.View
-import io.spine.validation.api.generate.OptionGenerator
+import io.spine.annotation.Internal
+import io.spine.tools.compiler.ast.TypeName
+import io.spine.server.query.Querying
 
 /**
- * Extends the Java validation library with the custom validation option.
+ * Generates Java code for a specific option.
  */
-@SPI
-public interface ValidationOption {
+public abstract class OptionGenerator {
 
     /**
-     * The [reactions][Reaction] added by the option.
+     * A component capable of querying states of views.
+     *
+     * Note that the class inheritors are not responsible for providing [Querying].
+     * The instance is [injected][inject] by the Java validation plugin before
+     * the first invocation of the [codeFor] method.
      */
-    public val reactions: Set<Reaction<*>>
+    protected lateinit var querying: Querying
 
     /**
-     * The [views][View] added by the option.
+     * Generates validation code for all option applications within the provided
+     * message [type].
+     *
+     * @param type The message to generate code for.
      */
-    public val view: Set<Class<out View<*, *, *>>>
+    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
 
     /**
-     * The option [generator][OptionGenerator] for Java.
+     * Injects [Querying] into this instance of [OptionGenerator].
      */
-    public val generator: OptionGenerator
+    @Internal
+    public fun inject(querying: Querying) {
+        this.querying = querying
+    }
 }

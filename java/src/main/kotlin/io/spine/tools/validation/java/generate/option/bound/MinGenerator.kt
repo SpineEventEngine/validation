@@ -45,8 +45,8 @@ import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MIN
-import io.spine.validation.api.generate.OptionGenerator
-import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.jvm.generate.OptionGenerator
+import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE

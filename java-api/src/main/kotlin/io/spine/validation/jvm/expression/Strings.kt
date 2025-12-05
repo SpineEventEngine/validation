@@ -24,39 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.generate
+package io.spine.validation.jvm.expression
 
-import io.spine.annotation.Internal
-import io.spine.tools.compiler.ast.TypeName
-import io.spine.server.query.Querying
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.call
 
 /**
- * Generates Java code for a specific option.
+ * Converts this [Expression] to its string representation by invoking `toString()`.
  */
-public abstract class OptionGenerator {
-
-    /**
-     * A component capable of querying states of views.
-     *
-     * Note that the class inheritors are not responsible for providing [Querying].
-     * The instance is [injected][inject] by the Java validation plugin before
-     * the first invocation of the [codeFor] method.
-     */
-    protected lateinit var querying: Querying
-
-    /**
-     * Generates validation code for all option applications within the provided
-     * message [type].
-     *
-     * @param type The message to generate code for.
-     */
-    public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
-
-    /**
-     * Injects [Querying] into this instance of [OptionGenerator].
-     */
-    @Internal
-    public fun inject(querying: Querying) {
-        this.querying = querying
-    }
-}
+public fun Expression<*>.stringify(): Expression<String> = call("toString")

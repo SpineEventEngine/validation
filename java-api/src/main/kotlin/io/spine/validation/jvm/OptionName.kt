@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api
+package io.spine.validation.jvm
 
 /**
  * Path to the name field in `*OptionDiscovered` events.

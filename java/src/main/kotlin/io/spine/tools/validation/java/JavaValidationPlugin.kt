@@ -31,8 +31,8 @@ import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.setonce.SetOnceRenderer
 import io.spine.validation.ValidationPlugin
-import io.spine.validation.api.DiscoveredValidators
-import io.spine.validation.api.ValidationOption
+import io.spine.validation.jvm.DiscoveredValidators
+import io.spine.validation.jvm.ValidationOption
 import java.io.File
 import java.util.*
 
@@ -70,7 +70,7 @@ private val customOptions: List<ValidationOption> by lazy {
 
 /**
  * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validation.api.MessageValidator]s.
+ * [MessageValidator][io.spine.validation.jvm.MessageValidator]s.
  *
  * Please note that the KSP module is responsible for the actual discovering
  * of the message validators. The discovered validators are written to a text file

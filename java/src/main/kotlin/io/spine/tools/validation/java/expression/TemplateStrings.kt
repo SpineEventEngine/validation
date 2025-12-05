@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@file:JvmName("ConstraintViolations")
+@file:JvmName("TemplateStrings")
 
 package io.spine.tools.validation.java.expression
 

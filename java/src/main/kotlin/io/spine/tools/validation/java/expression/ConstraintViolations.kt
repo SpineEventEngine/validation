@@ -26,19 +26,15 @@
 
 @file:JvmName("ConstraintViolations")
 
-package io.spine.validation.api.expression
+package io.spine.tools.validation.java.expression
 
 import io.spine.base.FieldPath
-import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.compiler.jvm.Expression
-import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.tools.compiler.jvm.packToAny
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.TemplateString
-import io.spine.validate.checkPlaceholdersHasValue
 
 /**
  * Yields an expression that creates a new instance of [ConstraintViolation]

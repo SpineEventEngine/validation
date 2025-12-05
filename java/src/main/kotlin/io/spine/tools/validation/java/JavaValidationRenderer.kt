@@ -55,7 +55,7 @@ import io.spine.tools.validation.java.generate.option.WhenGenerator
 import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
-import io.spine.validation.api.generate.OptionGenerator
+import io.spine.validation.jvm.generate.OptionGenerator
 
 /**
  * The main Java renderer of the validation library.

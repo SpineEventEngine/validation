@@ -120,8 +120,8 @@ import io.spine.annotation.SPI
  * checking the field relations), and perform a deep validation.
  *
  * It is a responsibility of the validator to provide the correct instances
- * of [io.spine.validation.api.DetectedViolation]. Before reporting to the user, the library converts
- * [io.spine.validation.api.DetectedViolation] to a [ConstraintViolation][ConstraintViolation].
+ * of [io.spine.validation.jvm.DetectedViolation]. Before reporting to the user, the library converts
+ * [io.spine.validation.jvm.DetectedViolation] to a [ConstraintViolation][ConstraintViolation].
  * Returning of an empty list of violations means that the given message is valid.
  *
  * Please keep in mind that for each invocation a new instance of [MessageValidator]

@@ -46,18 +46,18 @@ import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.compiler.type.TypeSystem
+import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.mergeFrom
-import io.spine.validation.api.expression.resolve
-import io.spine.validation.api.expression.stringify
-import io.spine.validation.api.generate.MessageScope.message
-import io.spine.validation.api.generate.ValidateScope.parentName
-import io.spine.validation.api.generate.ValidateScope.parentPath
-import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.jvm.expression.mergeFrom
+import io.spine.validation.jvm.expression.resolve
+import io.spine.validation.jvm.expression.stringify
+import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.validation.jvm.generate.ValidateScope.parentName
+import io.spine.validation.jvm.generate.ValidateScope.parentPath
+import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * A fully qualified Java class name of a validator class.
@@ -74,7 +74,7 @@ internal typealias MessageClass = ClassName
  * for which there is a validator assigned.
  *
  * Please note that this generator is not
- * [OptionGenerator][io.spine.validation.api.generate.OptionGenerator] intentionally.
+ * [OptionGenerator][io.spine.validation.jvm.generate.OptionGenerator] intentionally.
  * This is a dedicated implementation, handling codegen for a specific use case not
  * related to the validation options.
  */
@@ -151,7 +151,7 @@ private class ApplyValidator(
      * The expression does the following:
      *
      * 1. Creates a new instances of [validator].
-     * 2. Invokes [MessageValidator.validate][io.spine.validation.api.MessageValidator.validate]
+     * 2. Invokes [MessageValidator.validate][io.spine.validation.jvm.MessageValidator.validate]
      *   passing an instance of the [message].
      * 3. Converts each [DetectedViolation] to [ConstraintViolation].
      * 4. Puts all constraint violations to the list of discovered [violations].

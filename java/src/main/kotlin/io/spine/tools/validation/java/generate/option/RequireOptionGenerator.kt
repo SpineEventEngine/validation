@@ -36,6 +36,7 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.MethodDeclaration
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.mangled
@@ -46,13 +47,12 @@ import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
-import io.spine.validation.api.expression.EmptyFieldCheck
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.stringify
-import io.spine.validation.api.generate.OptionGenerator
-import io.spine.validation.api.generate.SingleOptionCode
-import io.spine.validation.api.generate.ValidateScope.parentName
-import io.spine.validation.api.generate.ValidateScope.violations
+import io.spine.validation.jvm.expression.EmptyFieldCheck
+import io.spine.validation.jvm.expression.stringify
+import io.spine.validation.jvm.generate.OptionGenerator
+import io.spine.validation.jvm.generate.SingleOptionCode
+import io.spine.validation.jvm.generate.ValidateScope.parentName
+import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * The generator for the `(require)` option.

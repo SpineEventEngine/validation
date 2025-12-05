@@ -24,20 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.generate
+package io.spine.validation.jvm.generate
 
-import com.google.protobuf.Message
-import io.spine.tools.compiler.jvm.This
+import io.spine.tools.compiler.jvm.CodeBlock
+import io.spine.tools.compiler.jvm.FieldDeclaration
+import io.spine.tools.compiler.jvm.MethodDeclaration
 
 /**
- * Scope variables available within the message class.
+ * Java code handling a single application of a specific option.
+ *
+ * @property constraint A code block to be added to the `validate()` method of the message.
+ * @property fields Additional class-level fields required by the validation logic.
+ * @property methods Additional class-level methods required by the validation logic.
  */
-public object MessageScope {
-
-    /**
-     * An implicit `this` reference to the message class.
-     *
-     * Can be used to access methods and fields of the message class.
-     */
-    public val message: This<Message> = This(explicit = false)
-}
+public class SingleOptionCode(
+    public val constraint: CodeBlock,
+    public val fields: List<FieldDeclaration<*>> = emptyList(),
+    public val methods: List<MethodDeclaration> = emptyList(),
+)

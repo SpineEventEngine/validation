@@ -24,14 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.validation.jvm.expression
 
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.field
-import io.spine.validation.api.generate.MessageScope.message
-import io.spine.validation.api.UnsetValue
+import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.validation.jvm.UnsetValue
 
 /**
  * Provides an expression to check if a given [Field] holds

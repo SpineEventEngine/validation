@@ -45,8 +45,8 @@ import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MAX
-import io.spine.validation.api.generate.OptionGenerator
-import io.spine.validation.api.generate.SingleOptionCode
+import io.spine.validation.jvm.generate.OptionGenerator
+import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.bound.MaxField
 import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE

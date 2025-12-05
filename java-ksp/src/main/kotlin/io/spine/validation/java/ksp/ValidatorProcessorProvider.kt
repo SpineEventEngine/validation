@@ -33,7 +33,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 /**
  * Provides [ValidatorProcessor] that discovers classes annotated with
- * the [@Validator][io.spine.validation.api.Validator] annotation.
+ * the [@Validator][io.spine.validation.jvm.Validator] annotation.
  */
 @AutoService(SymbolProcessorProvider::class)
 public class ValidatorProcessorProvider : SymbolProcessorProvider {

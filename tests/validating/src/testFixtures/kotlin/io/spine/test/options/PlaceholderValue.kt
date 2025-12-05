@@ -35,7 +35,7 @@ import io.spine.type.toCompactJson
  * in error messages.
  *
  * The method performs conversion similarly to
- * [stringValueOf][io.spine.validation.api.expression.stringValueOf] function,
+ * [stringValueOf][io.spine.validation.jvm.expression.stringValueOf] function,
  * which generators use to prepare placeholder values. We cannot re-use the original
  * function because it operates upon Java expressions rather than runtime objects.
  */

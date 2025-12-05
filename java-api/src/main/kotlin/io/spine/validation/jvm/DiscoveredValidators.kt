@@ -24,21 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.generate
+package io.spine.validation.jvm
 
-import io.spine.tools.compiler.jvm.CodeBlock
-import io.spine.tools.compiler.jvm.FieldDeclaration
-import io.spine.tools.compiler.jvm.MethodDeclaration
+import io.spine.annotation.Internal
+import java.io.File
 
 /**
- * Java code handling a single application of a specific option.
+ * Holds a path to a file with the discovered validators.
  *
- * @property constraint A code block to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * The KSP processor generates a resource file using this path.
+ * Then, the Java codegen plugin picks up this file.
  */
-public class SingleOptionCode(
-    public val constraint: CodeBlock,
-    public val fields: List<FieldDeclaration<*>> = emptyList(),
-    public val methods: List<MethodDeclaration> = emptyList(),
-)
+@Internal
+public object DiscoveredValidators {
+
+    /**
+     * The path to the file with the discovered message validators.
+     *
+     * The path is relative to the output directory of the KSP processor.
+     */
+   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators"
+
+    /**
+     * Resolves the path to the file containing discovered message validators.
+     *
+     * @param kspOutputDirectory The path to the KSP output.
+     */
+    public fun resolve(kspOutputDirectory: File): File = kspOutputDirectory
+        .resolve("resources")
+        .resolve(RESOURCES_LOCATION)
+}

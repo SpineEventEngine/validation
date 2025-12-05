@@ -48,7 +48,7 @@ import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.event.asA
 import io.spine.server.tuple.EitherOf2
-import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.event.ValidateFieldDiscovered
 import io.spine.validation.event.validateFieldDiscovered
 

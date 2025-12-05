@@ -43,7 +43,7 @@ import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
-import io.spine.validation.api.OPTION_NAME
+import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultMessage
 import io.spine.validation.event.RequireMessageDiscovered
