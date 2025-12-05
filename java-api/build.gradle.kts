@@ -29,4 +29,5 @@ import io.spine.dependency.local.Compiler
 dependencies {
     api(Compiler.jvm)
     api(project(":proto:context"))
+    api(project(":java-runtime"))
 }

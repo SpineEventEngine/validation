@@ -28,6 +28,8 @@ package io.spine.validation.java.generate
 
 import com.google.protobuf.Message
 import io.spine.base.FieldPath
+import io.spine.string.simply
+import io.spine.string.ti
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.MessageType
 import io.spine.tools.compiler.ast.extractMessageType
@@ -44,11 +46,9 @@ import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.compiler.type.TypeSystem
-import io.spine.string.simply
-import io.spine.string.ti
 import io.spine.validate.ConstraintViolation
+import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
-import io.spine.validation.api.DetectedViolation
 import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.mergeFrom
 import io.spine.validation.api.expression.orElse

@@ -29,12 +29,13 @@ package io.spine.validation.test
 import com.google.common.annotations.VisibleForTesting
 import io.spine.base.FieldPath
 import io.spine.base.fieldPath
+import io.spine.validate.DetectedViolation
+import io.spine.validate.FieldViolation
+import io.spine.validate.MessageValidator
 import io.spine.validate.TemplateString
+import io.spine.validate.Validator
 import io.spine.validate.templateString
-import io.spine.validation.api.DetectedViolation
-import io.spine.validation.api.FieldViolation
-import io.spine.validation.api.MessageValidator
-import io.spine.validation.api.Validator
+import io.spine.validation.test.EarphonesValidator.Companion.ValidEarphones
 
 /**
  * Validates [Earphones] messages, treating all instances as invalid

@@ -42,8 +42,8 @@ import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
 import io.spine.validation.api.DiscoveredValidators
-import io.spine.validation.api.MessageValidator
-import io.spine.validation.api.Validator
+import io.spine.validate.MessageValidator
+import io.spine.validate.Validator
 
 private typealias MessageDeclaration = KSClassDeclaration
 private typealias ValidatorDeclaration = KSClassDeclaration

@@ -32,8 +32,8 @@ import com.tschuchort.compiletesting.kspSourcesDir
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.string.qualified
+import io.spine.validate.MessageValidator
 import io.spine.validation.api.DiscoveredValidators
-import io.spine.validation.api.MessageValidator
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -209,9 +209,9 @@ private const val TIMESTAMP_CLASS = "com.google.protobuf.Timestamp"
 private const val DURATION_CLASS = "com.google.protobuf.Duration"
 private const val VALIDATOR_PACKAGE = "io.spine.validation.java.ksp.test"
 private val IMPORTS = """
-            import io.spine.validation.api.DetectedViolation
-            import io.spine.validation.api.MessageValidator
-            import io.spine.validation.api.Validator
+            import io.spine.validate.DetectedViolation
+            import io.spine.validate.MessageValidator
+            import io.spine.validate.Validator
             import $TIMESTAMP_CLASS
             import $DURATION_CLASS
         """.trimIndent()

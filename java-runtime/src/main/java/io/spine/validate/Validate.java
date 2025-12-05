@@ -148,7 +148,7 @@ public final class Validate {
     public static List<ConstraintViolation>
     validateAtRuntime(Message message, FieldContext context) {
         var error = Constraints.of(MessageType.of(message), context)
-                               .runThrough(new MessageValidator(message, context));
+                               .runThrough(new RuntimeMessageValidator(message, context));
         var violations = error.map(ValidationError::getConstraintViolationList)
                               .orElse(ImmutableList.of());
         return violations;
@@ -168,7 +168,7 @@ public final class Validate {
     public static List<ConstraintViolation> violationsOfCustomConstraints(Message message) {
         checkNotNull(message);
         var error = Constraints.onlyCustom(MessageType.of(message), FieldContext.empty())
-                               .runThrough(new MessageValidator(message));
+                               .runThrough(new RuntimeMessageValidator(message));
         var violations = error.map(ValidationError::getConstraintViolationList)
                               .orElse(ImmutableList.of());
         return violations;

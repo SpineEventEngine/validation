@@ -35,7 +35,7 @@ import com.tschuchort.compiletesting.SourceFile.Companion.kotlin
 import com.tschuchort.compiletesting.configureKsp
 import io.spine.logging.testing.ConsoleTap
 import io.spine.logging.testing.tapConsole
-import io.spine.validation.api.Validator
+import io.spine.validate.Validator
 import java.io.File
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.BeforeAll
@@ -43,7 +43,7 @@ import org.junit.jupiter.api.BeforeEach
 
 /**
  * Abstract base for tests checking discovering of
- * the [@Validator][io.spine.validation.api.Validator] annotation.
+ * the [@Validator][io.spine.validate.Validator] annotation.
  */
 @OptIn(ExperimentalCompilerApi::class)
 internal sealed class ValidatorCompilationTest {

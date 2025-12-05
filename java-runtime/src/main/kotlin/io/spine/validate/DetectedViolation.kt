@@ -24,32 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api
+package io.spine.validate
 
-import com.google.protobuf.Message
-import kotlin.annotation.AnnotationRetention.SOURCE
-import kotlin.annotation.AnnotationTarget.CLASS
-import kotlin.reflect.KClass
+import io.spine.base.FieldPath
 
 /**
- * Marks the class as a message validator.
+ * Abstract base for violations detected by [MessageValidator]s.
  *
- * Applying this annotation to an implementation of [MessageValidator]
- * makes the class visible to the validation library.
- *
- * Please note that the following requirements are imposed to the marked class:
- *
- * 1. The class must implement the [MessageValidator] interface.
- * 2. The class must have a public, no-args constructor.
- * 3. The class cannot be `inner`, but nested classes are allowed.
- * 4. The message type of [Validator.value] and [MessageValidator] must match.
+ * @param message The error message describing the violation.
+ * @param fieldPath The path to the field where the violation occurred, if applicable.
+ * @param fieldValue The field value that caused the violation, if any.
  */
-@Target(CLASS)
-@Retention(SOURCE)
-public annotation class Validator(
-
-    /**
-     * The class of the validated external message.
-     */
-    val value: KClass<out Message>
+public abstract class DetectedViolation(
+    public val message: TemplateString,
+    public val fieldPath: FieldPath?,
+    public val fieldValue: Any?,
 )
+
+/**
+ * A violation tied to a specific field in a message.
+ *
+ * @param message The error message describing the violation.
+ * @param fieldPath The path to the field where the violation occurred.
+ * @param fieldValue The field value that caused the violation, if any.
+ */
+public class FieldViolation(
+    message: TemplateString,
+    fieldPath: FieldPath,
+    fieldValue: Any? = null,
+) : DetectedViolation(message, fieldPath, fieldValue)
+
+/**
+ * A violation related to the message level (not tied to a specific field).
+ *
+ * @param message The error message describing the violation.
+ */
+public class MessageViolation(
+    message: TemplateString
+) : DetectedViolation(message, fieldPath = null, fieldValue = null)
