@@ -24,6 +24,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.Validation
+
 plugins {
     module
+    id("io.spine.artifact-meta")
+    `java-gradle-plugin`
+}
+
+val moduleArtifactId = "validation-gradle-plugin"
+
+artifactMeta {
+    artifactId.set(moduleArtifactId)
+    addDependencies(
+        // Add Validation module dependencies that we use for project configuration
+        // to which the Validation Gradle Plugin is applied.
+        Validation.javaBundle,
+        Validation.runtime,
+        Validation.configuration,
+    )
+    excludeConfigurations {
+        containing(*buildToolConfigurations)
+    }
+}
+
+gradlePlugin {
+    website.set("https://spine.io/")
+    vcsUrl.set("https://github.com/SpineEventEngine/validation.git")
+    plugins {
+        val pluginTags = listOf(
+            "validation",
+            "ddd",
+            "codegen",
+            "java",
+            "kotlin",
+            "jvm"
+        )
+
+        create("spineValidation") {
+            id = "io.spine.validation"
+            implementationClass = "io.spine.tools.validation.gradle.ValidationPlugin"
+            displayName = "Spine Validation Compiler"
+            description = "Configures Spine Compiler to run the Validation Compiler in mode."
+            tags.set(pluginTags)
+        }
+    }
+}
+
+dependencies {
+    implementation(io.spine.dependency.local.Compiler.gradleApi)
+    implementation(io.spine.dependency.local.ToolBase.jvmTools)
 }

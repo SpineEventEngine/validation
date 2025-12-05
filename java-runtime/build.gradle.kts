@@ -31,6 +31,7 @@ import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
+import io.spine.gradle.publish.spinePublishing
 
 buildscript {
     standardSpineSdkRepositories()
@@ -57,6 +58,8 @@ plugins {
     `build-proto-model`
     module
 }
+
+group = "io.spine"
 
 dependencies {
     ksp(AutoServiceKsp.processor)
