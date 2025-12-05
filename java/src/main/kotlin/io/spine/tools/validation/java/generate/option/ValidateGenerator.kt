@@ -47,12 +47,12 @@ import io.spine.tools.validation.java.expression.TypeUrlClass
 import io.spine.tools.validation.java.expression.ValidatableMessageClass
 import io.spine.tools.validation.java.expression.ValidationErrorClass
 import io.spine.tools.validation.java.expression.orElse
+import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.validation.ValidateField
 import io.spine.validation.jvm.expression.EmptyFieldCheck
 import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.generate.MessageScope.message
-import io.spine.validation.jvm.generate.OptionGenerator
-import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

@@ -24,11 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm.generate
+package io.spine.tools.validation.java.generate
 
 import io.spine.annotation.Internal
-import io.spine.tools.compiler.ast.TypeName
 import io.spine.server.query.Querying
+import io.spine.tools.compiler.ast.TypeName
 
 /**
  * Generates Java code for a specific option.
@@ -38,7 +38,7 @@ public abstract class OptionGenerator {
     /**
      * A component capable of querying states of views.
      *
-     * Note that the class inheritors are not responsible for providing [Querying].
+     * Note that the class inheritors are not responsible for providing [io.spine.server.query.Querying].
      * The instance is [injected][inject] by the Java validation plugin before
      * the first invocation of the [codeFor] method.
      */

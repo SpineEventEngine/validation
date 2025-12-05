@@ -41,6 +41,7 @@ import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.render.SourceFileSet
 import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.MessageValidationCode
+import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.ValidationCodeInjector
 import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.generate.ValidatorGenerator
@@ -55,7 +56,6 @@ import io.spine.tools.validation.java.generate.option.WhenGenerator
 import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
-import io.spine.validation.jvm.generate.OptionGenerator
 
 /**
  * The main Java renderer of the validation library.

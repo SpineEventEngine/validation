@@ -24,21 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm.generate
+package io.spine.tools.validation.java
 
-import io.spine.tools.compiler.jvm.CodeBlock
-import io.spine.tools.compiler.jvm.FieldDeclaration
-import io.spine.tools.compiler.jvm.MethodDeclaration
+import io.spine.annotation.SPI
+import io.spine.tools.compiler.plugin.Reaction
+import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.java.generate.OptionGenerator
 
 /**
- * Java code handling a single application of a specific option.
- *
- * @property constraint A code block to be added to the `validate()` method of the message.
- * @property fields Additional class-level fields required by the validation logic.
- * @property methods Additional class-level methods required by the validation logic.
+ * Extends the Java validation library with the custom validation option.
  */
-public class SingleOptionCode(
-    public val constraint: CodeBlock,
-    public val fields: List<FieldDeclaration<*>> = emptyList(),
-    public val methods: List<MethodDeclaration> = emptyList(),
-)
+@SPI
+public interface ValidationOption {
+
+    /**
+     * The [reactions][io.spine.tools.compiler.plugin.Reaction] added by the option.
+     */
+    public val reactions: Set<Reaction<*>>
+
+    /**
+     * The [views][io.spine.tools.compiler.plugin.View] added by the option.
+     */
+    public val view: Set<Class<out View<*, *, *>>>
+
+    /**
+     * The option [generator][OptionGenerator] for Java.
+     */
+    public val generator: OptionGenerator
+}

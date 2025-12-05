@@ -37,6 +37,8 @@ import io.spine.tools.validation.java.expression.IntegerClass
 import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.joinToString
+import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -45,8 +47,6 @@ import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MIN
-import io.spine.validation.jvm.generate.OptionGenerator
-import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE

@@ -36,11 +36,11 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.expression.withStringPlaceholders
+import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
-import io.spine.validation.jvm.generate.OptionGenerator
-import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.violations
 import io.spine.validation.test.money.CurrencyMessage

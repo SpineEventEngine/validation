@@ -41,6 +41,8 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.expression.templateString
+import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -54,8 +56,6 @@ import io.spine.validation.jvm.expression.EmptyFieldCheck
 import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
-import io.spine.validation.jvm.generate.OptionGenerator
-import io.spine.validation.jvm.generate.SingleOptionCode
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations
