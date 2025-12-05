@@ -26,23 +26,23 @@
 
 package io.spine.validation.test
 
+import io.spine.server.query.select
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.field
-import io.spine.server.query.select
+import io.spine.tools.validation.java.expression.orElse
+import io.spine.tools.validation.java.expression.stringValueOf
+import io.spine.tools.validation.java.expression.withStringPlaceholders
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.api.expression.orElse
-import io.spine.validation.api.expression.stringValueOf
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.templateString
 import io.spine.validation.test.money.CurrencyMessage
 
 /**
@@ -101,7 +101,7 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(minorValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, CURRENCY)
+        val errorMessage = withStringPlaceholders(view.errorMessage, placeholders, CURRENCY)
         return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
 

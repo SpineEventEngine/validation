@@ -24,21 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.tools.validation.java.expression
 
-import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.base.FieldPath
 import io.spine.tools.compiler.jvm.Expression
-import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.type.TypeName
-import io.spine.tools.compiler.ast.TypeName as AstTypeName
+import io.spine.tools.compiler.jvm.call
 
 /**
- * Returns an expression that ensures a non-`null` [TypeName] value.
+ * Returns an expression that yields this [FieldPath] as a string using
+ * `FieldPath.joined` extension property.
  *
- * If this [Expression] is non-`null`, it remains unchanged.
- * Otherwise, it is replaced with the specified [typeName].
+ * Note that in Java, this extension becomes a static method upon [FieldPathsClass]
+ * with `get` prefix.
  */
-public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
-    val nameLiteral = StringLiteral(typeName.qualifiedName)
-    return Expression("($this != null ? $this : $TypeNameClass.of($nameLiteral))")
-}
+public fun Expression<FieldPath>.joinToString(): Expression<String> =
+    FieldPathsClass.call("getJoined", this)

@@ -42,6 +42,10 @@ import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.plus
+import io.spine.tools.validation.java.expression.IntegerClass
+import io.spine.tools.validation.java.expression.LongClass
+import io.spine.tools.validation.java.expression.StringClass
+import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
@@ -49,11 +53,7 @@ import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.BoundedFieldView
 import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.StringClass
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message

@@ -73,30 +73,3 @@ public fun constraintViolation(
     return builder.chainBuild()
 }
 
-/**
- * Yields an expression that creates a new instance of [TemplateString].
- *
- * @param placeholders The supported placeholders and their values.
- * @param optionName The name of the option, which declared the provided [placeholders].
- */
-public fun templateString(
-    template: String,
-    placeholders: Map<String, Expression<String>>,
-    optionName: String
-): Expression<TemplateString> {
-    checkPlaceholdersHasValue(template, placeholders) { missingKeys ->
-        "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
-                " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
-                " that the code that verifies the message placeholders and its code generator" +
-                " operate with the same set of placeholders."
-    }
-    val placeholderEntries = mapExpression(
-        StringClass, StringClass,
-        placeholders.mapKeys { StringLiteral(it.key) }
-    )
-    val escapedTemplate = restoreProtobufEscapes(template)
-    return TemplateStringClass.newBuilder()
-        .chainSet("withPlaceholders", StringLiteral(escapedTemplate))
-        .chainPutAll("placeholderValue", placeholderEntries)
-        .chainBuild()
-}

@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.api.expression
+package io.spine.tools.validation.java.expression
 
+import io.spine.string.ti
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldType
 import io.spine.tools.compiler.ast.PrimitiveType
@@ -39,7 +40,7 @@ import io.spine.tools.compiler.ast.toFieldType
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.call
-import io.spine.string.ti
+import io.spine.validation.api.expression.stringify
 
 /**
  * Returns an expression that converts the provided field [value] to a string.

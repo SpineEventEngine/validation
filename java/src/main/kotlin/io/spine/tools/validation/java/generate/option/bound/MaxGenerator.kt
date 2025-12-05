@@ -27,12 +27,16 @@
 package io.spine.tools.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
+import io.spine.server.query.select
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
-import io.spine.server.query.select
+import io.spine.tools.validation.java.expression.IntegerClass
+import io.spine.tools.validation.java.expression.LongClass
+import io.spine.tools.validation.java.expression.StringClass
+import io.spine.tools.validation.java.expression.joinToString
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -41,10 +45,6 @@ import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MAX_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MAX
-import io.spine.validation.api.expression.IntegerClass
-import io.spine.validation.api.expression.LongClass
-import io.spine.validation.api.expression.StringClass
-import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.bound.MaxField

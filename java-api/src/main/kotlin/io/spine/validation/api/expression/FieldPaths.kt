@@ -36,16 +36,6 @@ import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.toBuilder
 
 /**
- * Returns an expression that yields this [FieldPath] as a string using
- * `FieldPath.joined` extension property.
- *
- * Note that in Java, this extension becomes a static method upon [FieldPathsClass]
- * with `get` prefix.
- */
-public fun Expression<FieldPath>.joinToString(): Expression<String> =
-    FieldPathsClass.call("getJoined", this)
-
-/**
  * Returns an expression that yields a new instance of [FieldPath] by appending
  * the provided [field] name to this parental [FieldPath] expression.
  */

@@ -46,12 +46,12 @@ import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.compiler.type.TypeSystem
+import io.spine.tools.validation.java.expression.orElse
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
 import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.mergeFrom
-import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message

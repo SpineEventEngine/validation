@@ -33,7 +33,7 @@ apply {
 }
 
 dependencies {
-    implementation(project(":java-api"))
+    implementation(project(":java"))
     ksp(AutoServiceKsp.processor)
 }
 

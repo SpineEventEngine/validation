@@ -33,6 +33,8 @@ import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
+import io.spine.tools.validation.java.expression.joinToString
+import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.CHOICE
@@ -41,8 +43,6 @@ import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.joinToString
-import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.OptionGenerator

@@ -30,6 +30,8 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiStatement
+import io.spine.string.camelCase
+import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.Expression
@@ -40,13 +42,12 @@ import io.spine.tools.compiler.jvm.render.findClass
 import io.spine.tools.compiler.jvm.toPsi
 import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.type.TypeSystem
-import io.spine.string.camelCase
-import io.spine.tools.code.Java
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.execute
 import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.methodWithSignature
-import io.spine.validation.api.expression.stringValueOf
+import io.spine.tools.validation.java.expression.stringValueOf
+import io.spine.tools.validation.java.setonce.SetOnceJavaConstraints.Companion.MergeFromBytesSignature
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].

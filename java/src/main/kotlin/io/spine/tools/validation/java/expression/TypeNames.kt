@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    `build-proto-model`
-}
+package io.spine.tools.validation.java.expression
 
-dependencies {
-    api(project(":java-api"))
-    api(project(":model"))
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.type.TypeName
+import io.spine.tools.compiler.ast.TypeName as AstTypeName
+
+/**
+ * Returns an expression that ensures a non-`null` [TypeName] value.
+ *
+ * If this [Expression] is non-`null`, it remains unchanged.
+ * Otherwise, it is replaced with the specified [typeName].
+ */
+public fun Expression<TypeName?>.orElse(typeName: AstTypeName): Expression<TypeName> {
+    val nameLiteral = StringLiteral(typeName.qualifiedName)
+    return Expression("($this != null ? $this : $TypeNameClass.of($nameLiteral))")
 }

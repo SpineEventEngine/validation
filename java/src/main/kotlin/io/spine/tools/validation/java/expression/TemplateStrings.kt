@@ -28,10 +28,14 @@
 
 package io.spine.tools.validation.java.expression
 
+import io.spine.protobuf.restoreProtobufEscapes
 import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.mapExpression
+import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.validate.TemplateString
+import io.spine.validate.checkPlaceholdersHasValue
 import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.api.expression.templateString as withStringPlaceholders
 
 /**
  * Yields an expression that creates a new instance of [TemplateString].
@@ -49,3 +53,31 @@ public fun templateString(
     optionName: String
 ): Expression<TemplateString> =
     withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)
+
+/**
+ * Yields an expression that creates a new instance of [TemplateString].
+ *
+ * @param placeholders The supported placeholders and their values.
+ * @param optionName The name of the option, which declared the provided [placeholders].
+ */
+public fun withStringPlaceholders(
+    template: String,
+    placeholders: Map<String, Expression<String>>,
+    optionName: String
+): Expression<TemplateString> {
+    checkPlaceholdersHasValue(template, placeholders) { missingKeys ->
+        "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
+                " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
+                " that the code that verifies the message placeholders and its code generator" +
+                " operate with the same set of placeholders."
+    }
+    val placeholderEntries = mapExpression(
+        StringClass, StringClass,
+        placeholders.mapKeys { StringLiteral(it.key) }
+    )
+    val escapedTemplate = restoreProtobufEscapes(template)
+    return TemplateStringClass.newBuilder()
+        .chainSet("withPlaceholders", StringLiteral(escapedTemplate))
+        .chainPutAll("placeholderValue", placeholderEntries)
+        .chainBuild()
+}

@@ -28,10 +28,10 @@ package io.spine.tools.validation.java.generate
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass
+import io.spine.string.joinByLines
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.FieldDeclaration
 import io.spine.tools.compiler.jvm.MethodDeclaration
-import io.spine.string.joinByLines
 import io.spine.tools.psi.java.Environment.elementFactory
 import io.spine.tools.psi.java.addBefore
 import io.spine.tools.psi.java.addLast
@@ -43,13 +43,13 @@ import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.implement
 import io.spine.tools.psi.java.method
 import io.spine.tools.psi.java.nested
+import io.spine.tools.validation.java.expression.FieldPathClass
+import io.spine.tools.validation.java.expression.NullableTypeNameClass
+import io.spine.tools.validation.java.expression.ObjectsClass
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.api.expression.FieldPathClass
-import io.spine.validation.api.expression.NullableTypeNameClass
-import io.spine.validation.api.expression.ObjectsClass
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations

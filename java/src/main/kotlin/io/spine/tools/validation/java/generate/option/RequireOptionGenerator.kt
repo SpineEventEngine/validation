@@ -46,7 +46,7 @@ import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.api.expression.orElse
+import io.spine.tools.validation.java.expression.orElse
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.OptionGenerator
 import io.spine.validation.api.generate.SingleOptionCode
