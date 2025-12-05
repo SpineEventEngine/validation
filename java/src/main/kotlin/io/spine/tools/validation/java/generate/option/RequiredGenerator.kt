@@ -24,18 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.tools.validation.java.generate.option
 
 import io.spine.base.FieldPath
+import io.spine.server.query.select
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
-import io.spine.server.query.select
-import io.spine.string.lowerCamelCase
+import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.CHOICE
-import io.spine.validation.ChoiceOneof
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.IF_MISSING
+import io.spine.validation.RequiredField
+import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
@@ -45,51 +54,50 @@ import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.java.expression.templateString
 
 /**
- * The generator for the `(choice)` option.
+ * The generator for `(required)` option.
  */
-internal class ChoiceGenerator : OptionGenerator() {
+internal class RequiredGenerator(
+    private val converter: JavaValueConverter
+) : OptionGenerator() {
 
     /**
-     * All `oneof` groups with `(choice).enabled = true` in the current compilation process.
+     * All `(required)` fields in the current compilation process.
      */
-    private val allChoiceOneofs by lazy {
-        querying.select<ChoiceOneof>()
+    private val allRequiredFields by lazy {
+        querying.select<RequiredField>()
             .all()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
-        allChoiceOneofs
+        allRequiredFields
             .filter { it.id.type == type }
-            .map { GenerateChoice(it).code() }
+            .map { GenerateRequired(it, converter).code() }
 }
 
 /**
- * Generates code for a single application of the `(choice)` option
+ * Generates code for a single application of the `(required)` option
  * represented by the [view].
  */
-private class GenerateChoice(private val view: ChoiceOneof) {
+private class GenerateRequired(
+    private val view: RequiredField,
+    override val converter: JavaValueConverter
+) : EmptyFieldCheck {
 
-    private val oneof = view.subject
+    private val field = view.subject
+    private val declaringType = field.declaringType
 
     /**
      * Returns the generated code.
      */
     fun code(): SingleOptionCode {
-        val groupName = oneof.name
-        val caseField = "${groupName.value.lowerCamelCase()}Case_"
         val constraint = CodeBlock(
             """
-            if ($caseField == 0) {
-                var groupPath = ${parentPath.resolve(groupName)};
-                var typeName =  ${parentName.orElse(oneof.declaringType)};
-                var violation = ${violation(ReadVar("groupPath"), ReadVar("typeName"))};
+            if (${field.hasDefaultValue()}) {
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
                 $violations.add(violation);
             }
             """.trimIndent()
@@ -98,20 +106,21 @@ private class GenerateChoice(private val view: ChoiceOneof) {
     }
 
     private fun violation(
-        groupPath: Expression<FieldPath>,
+        fieldPath: Expression<FieldPath>,
         typeName: Expression<io.spine.type.TypeName>
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
-        val placeholders = supportedPlaceholders(groupPath, typeNameStr)
-        val errorMessage = templateString(view.errorMessage, placeholders, CHOICE)
-        return constraintViolation(errorMessage, typeNameStr, groupPath, fieldValue = null)
+        val placeholders = supportedPlaceholders(fieldPath, typeNameStr)
+        val errorMessage = templateString(view.errorMessage, placeholders, IF_MISSING)
+        return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue = null)
     }
 
     private fun supportedPlaceholders(
-        groupPath: Expression<FieldPath>,
+        fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
     ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        GROUP_PATH to groupPath.joinToString(),
+        FIELD_PATH to fieldPath.joinToString(),
+        FIELD_TYPE to StringLiteral(field.type.name),
         PARENT_TYPE to typeName
     )
 }

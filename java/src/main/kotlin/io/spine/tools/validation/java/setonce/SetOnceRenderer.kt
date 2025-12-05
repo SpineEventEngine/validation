@@ -24,8 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.setonce
+package io.spine.tools.validation.java.setonce
 
+import io.spine.server.query.Querying
+import io.spine.server.query.select
+import io.spine.string.shortly
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BOOL
@@ -36,12 +39,9 @@ import io.spine.tools.compiler.jvm.file.hasJavaRoot
 import io.spine.tools.compiler.jvm.render.JavaRenderer
 import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFileSet
-import io.spine.server.query.Querying
-import io.spine.server.query.select
-import io.spine.string.shortly
+import io.spine.tools.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
-import io.spine.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure

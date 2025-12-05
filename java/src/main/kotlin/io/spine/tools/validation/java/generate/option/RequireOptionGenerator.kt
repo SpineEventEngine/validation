@@ -24,8 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.tools.validation.java.generate.option
 
+import io.spine.server.query.select
+import io.spine.string.joinByLines
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.jvm.CodeBlock
@@ -34,13 +36,16 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.MethodDeclaration
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.server.query.select
-import io.spine.string.joinByLines
+import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
+import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.OptionGenerator
@@ -48,11 +53,6 @@ import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.violations
 import io.spine.validation.api.generate.mangled
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
-import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(require)` option.

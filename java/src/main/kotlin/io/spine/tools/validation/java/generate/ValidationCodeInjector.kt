@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate
+package io.spine.tools.validation.java.generate
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiClass

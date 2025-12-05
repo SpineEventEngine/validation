@@ -1,11 +1,11 @@
 /*
- * Copyright 2023, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,10 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java
+package io.spine.tools.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
+import io.spine.string.ti
+import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.MessageType
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.file.hasJavaRoot
@@ -37,25 +39,23 @@ import io.spine.tools.compiler.jvm.render.findClass
 import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.render.SourceFileSet
-import io.spine.string.ti
-import io.spine.tools.code.Java
-import io.spine.validation.java.generate.MessageValidationCode
+import io.spine.tools.validation.java.generate.MessageClass
+import io.spine.tools.validation.java.generate.MessageValidationCode
+import io.spine.tools.validation.java.generate.ValidationCodeInjector
+import io.spine.tools.validation.java.generate.ValidatorClass
+import io.spine.tools.validation.java.generate.ValidatorGenerator
+import io.spine.tools.validation.java.generate.option.ChoiceGenerator
+import io.spine.tools.validation.java.generate.option.DistinctGenerator
+import io.spine.tools.validation.java.generate.option.GoesGenerator
+import io.spine.tools.validation.java.generate.option.PatternGenerator
+import io.spine.tools.validation.java.generate.option.RequireOptionGenerator
+import io.spine.tools.validation.java.generate.option.RequiredGenerator
+import io.spine.tools.validation.java.generate.option.ValidateGenerator
+import io.spine.tools.validation.java.generate.option.WhenGenerator
+import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
+import io.spine.tools.validation.java.generate.option.bound.MinGenerator
+import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
 import io.spine.validation.api.generate.OptionGenerator
-import io.spine.validation.java.generate.ValidationCodeInjector
-import io.spine.validation.java.generate.option.DistinctGenerator
-import io.spine.validation.java.generate.option.GoesGenerator
-import io.spine.validation.java.generate.option.bound.MaxGenerator
-import io.spine.validation.java.generate.option.bound.MinGenerator
-import io.spine.validation.java.generate.option.PatternGenerator
-import io.spine.validation.java.generate.option.bound.RangeGenerator
-import io.spine.validation.java.generate.option.ChoiceGenerator
-import io.spine.validation.java.generate.option.RequireOptionGenerator
-import io.spine.validation.java.generate.option.RequiredGenerator
-import io.spine.validation.java.generate.option.ValidateGenerator
-import io.spine.validation.java.generate.option.WhenGenerator
-import io.spine.validation.java.generate.MessageClass
-import io.spine.validation.java.generate.ValidatorClass
-import io.spine.validation.java.generate.ValidatorGenerator
 
 /**
  * The main Java renderer of the validation library.

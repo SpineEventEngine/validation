@@ -24,9 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.tools.validation.java.generate.option
 
 import io.spine.base.FieldPath
+import io.spine.server.query.select
+import io.spine.string.qualified
+import io.spine.string.ti
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.isList
 import io.spine.tools.compiler.ast.isMap
@@ -37,9 +40,7 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
-import io.spine.server.query.select
-import io.spine.string.qualified
-import io.spine.string.ti
+import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
 import io.spine.validation.ErrorPlaceholder
@@ -66,7 +67,6 @@ import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.java.expression.templateString
 
 /**
  * The generator for the `(distinct)` option.

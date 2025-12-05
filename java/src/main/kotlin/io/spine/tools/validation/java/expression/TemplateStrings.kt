@@ -26,7 +26,7 @@
 
 @file:JvmName("ConstraintViolations")
 
-package io.spine.validation.java.expression
+package io.spine.tools.validation.java.expression
 
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.validate.TemplateString

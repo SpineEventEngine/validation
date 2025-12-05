@@ -24,52 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.setonce
+package io.spine.tools.validation.java.setonce
 
-import com.google.protobuf.ByteString
 import com.intellij.psi.PsiClass
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.jvm.Expression
-import io.spine.tools.compiler.jvm.MethodCall
 import io.spine.tools.compiler.type.TypeSystem
 import io.spine.tools.psi.java.method
 
 /**
- * Renders Java code to support `(set_once)` option for the given byte array [field].
+ * Renders Java code to support `(set_once)` option for the given boolean [field].
  *
- * Please note, in the generated Java code, Protobuf uses [ByteString] to represent
- * an array of bytes.
- *
- * @param field The byte array field that declared the option.
+ * @param field The boolean field that declared the option.
  * @param typeSystem The type system to resolve types.
  * @param errorMessage The error message pattern to use in case of the violation.
  */
-internal class SetOnceBytesField(
+internal class SetOnceBooleanField(
     field: Field,
     typeSystem: TypeSystem,
     errorMessage: String
-) : SetOnceJavaConstraints<ByteString>(field, typeSystem, errorMessage) {
+) : SetOnceJavaConstraints<Boolean>(field, typeSystem, errorMessage) {
 
     init {
-        check(field.type.primitive == PrimitiveType.TYPE_BYTES) {
-            "`${javaClass.simpleName}` handles only byte array fields. " +
+        check(field.type.primitive == PrimitiveType.TYPE_BOOL) {
+            "`${javaClass.simpleName}` handles only boolean fields. " +
                     "The passed field: `$field`."
         }
     }
 
     override fun defaultOrSame(
-        currentValue: Expression<ByteString>,
-        newValue: Expression<ByteString>
-    ): Expression<Boolean> = Expression(
-        "$currentValue == com.google.protobuf.ByteString.EMPTY || $currentValue.equals($newValue)"
-    )
+        currentValue: Expression<Boolean>,
+        newValue: Expression<Boolean>
+    ): Expression<Boolean> = Expression("$currentValue == false || $currentValue == $newValue")
 
     override fun PsiClass.renderConstraints() {
         alterSetter()
         alterBytesMerge(
             currentValue = Expression(fieldGetter),
-            readerStartsWith = "${fieldName}_ = input.readBytes();"
+            readerStartsWith = "${fieldName}_ = input.readBool();"
         )
     }
 
@@ -79,7 +72,7 @@ internal class SetOnceBytesField(
      * For example:
      *
      * ```
-     * public Builder setMyBytes(ByteString value)
+     * public Builder setMyBool(boolean value)
      * ```
      */
     private fun PsiClass.alterSetter() {

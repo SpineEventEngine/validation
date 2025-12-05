@@ -24,9 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.generate.option
+package io.spine.tools.validation.java.generate.option
 
 import io.spine.base.FieldPath
+import io.spine.server.query.select
+import io.spine.time.validation.Time.FUTURE
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
@@ -36,8 +38,7 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
-import io.spine.server.query.select
-import io.spine.time.validation.Time.FUTURE
+import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -49,11 +50,11 @@ import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
-import io.spine.validation.isRepeatedMessage
 import io.spine.validation.api.expression.EmptyFieldCheck
 import io.spine.validation.api.expression.JsonExtensionsClass
 import io.spine.validation.api.expression.SpineTime
 import io.spine.validation.api.expression.TimestampsClass
+import io.spine.validation.api.expression.constraintViolation
 import io.spine.validation.api.expression.joinToString
 import io.spine.validation.api.expression.orElse
 import io.spine.validation.api.expression.resolve
@@ -64,8 +65,7 @@ import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.api.expression.constraintViolation
-import io.spine.validation.java.expression.templateString
+import io.spine.validation.isRepeatedMessage
 
 /**
  * The generator for the `(when)` option.
