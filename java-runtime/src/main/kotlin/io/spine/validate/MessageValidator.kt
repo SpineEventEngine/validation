@@ -49,7 +49,6 @@ import io.spine.validate.option.ValidateConstraint
 import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors.toList
-import kotlin.streams.toList
 
 /**
  * Validates a given message according to the constraints.
