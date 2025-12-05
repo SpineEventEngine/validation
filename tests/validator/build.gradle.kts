@@ -36,7 +36,7 @@ dependencies {
     ksp(project(":java-ksp"))
     spineCompiler(project(":java"))
     implementation(project(":java-api"))
-    implementation(project(":java-tests:validator-dependency"))
+    implementation(project(":tests:validator-dependency"))
 }
 
 spine {

@@ -51,9 +51,9 @@ tasks.withType<LaunchSpineCompiler>().configureEach {
 
 dependencies {
     spineCompiler(project(":java"))
-    spineCompiler(project(":java-tests:extensions"))
-    implementation(project(":java-tests:extensions"))
-    implementation(project(":java-tests:consumer-dependency"))
+    spineCompiler(project(":tests:extensions"))
+    implementation(project(":tests:extensions"))
+    implementation(project(":tests:consumer-dependency"))
     implementation(Time.lib)
     testImplementation(TestLib.lib)
 }
