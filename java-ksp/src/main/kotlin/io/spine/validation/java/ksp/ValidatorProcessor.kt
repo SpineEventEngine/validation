@@ -142,22 +142,24 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
  * @param messageValidator The type of the [MessageValidator] interface.
  */
 private fun ValidatorDeclaration.checkApplicability(messageValidator: KSType) {
+    val className = qualifiedName?.asString()
+    val validator = simply<Validator>()
     check(!modifiers.contains(Modifier.INNER)) {
         """
-        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        The `$className` class cannot be marked with the `@$validator` annotation.
         This annotation is not applicable to the `inner` classes.
         Please consider making the class nested or top-level.
         """.trimIndent()
     }
     check(messageValidator.isAssignableFrom(asStarProjectedType())) {
         """
-        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        The `$className` class cannot be marked with the `@$validator` annotation.
         This annotation requires the target class to implement the `${qualified<MessageValidator<*>>()}` interface.
         """.trimIndent()
     }
     check(hasPublicNoArgConstructor()) {
         """
-        The `${qualifiedName?.asString()}` class cannot be marked with the `@${simply<Validator>()}` annotation.
+        The `$className` class cannot be marked with the `@$validator` annotation.
         This annotation requires the target class to have a public, no-args constructor.
         """.trimIndent()
     }
