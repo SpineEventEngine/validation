@@ -49,7 +49,10 @@ import io.spine.tools.validation.java.expression.ImmutableListClass
 import io.spine.tools.validation.java.expression.PatternClass
 import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.TypeNameClass
+import io.spine.tools.validation.java.expression.joinToString
+import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.templateString
+import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -61,8 +64,6 @@ import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.api.expression.constraintViolation
-import io.spine.tools.validation.java.expression.joinToString
-import io.spine.tools.validation.java.expression.orElse
 import io.spine.validation.api.expression.resolve
 import io.spine.validation.api.expression.stringify
 import io.spine.validation.api.generate.MessageScope.message
@@ -71,7 +72,6 @@ import io.spine.validation.api.generate.SingleOptionCode
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.api.generate.mangled
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
 import java.util.regex.Matcher

@@ -58,7 +58,6 @@ import io.spine.validation.api.generate.MessageScope.message
 import io.spine.validation.api.generate.ValidateScope.parentName
 import io.spine.validation.api.generate.ValidateScope.parentPath
 import io.spine.validation.api.generate.ValidateScope.violations
-import io.spine.validation.api.generate.mangled
 
 /**
  * A fully qualified Java class name of a validator class.
