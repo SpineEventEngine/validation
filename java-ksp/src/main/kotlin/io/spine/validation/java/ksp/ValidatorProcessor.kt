@@ -65,7 +65,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
      * The same validator may be discovered several times because
      * KSP can perform several rounds of the code analysis.
      * This map is used to prevent outputting the same validator twice
-     * and to enforce the message type have exactly one validator.
+     * and to enforce the message type has exactly one validator.
      */
     private val alreadyDiscovered = mutableMapOf<MessageDeclaration, ValidatorDeclaration>()
 
