@@ -24,33 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+plugins {
+    module
 }
-
-rootProject.name = "validation"
-
-include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
-    "gradle-plugin",
-    "java",
-    "model",
-    "java-runtime",
-    "java-bundle",
-    ":java-api",
-    ":java-ksp",
-    ":java-tests",
-    ":java-tests:extensions",
-    ":java-tests:consumer",
-    ":java-tests:consumer-dependency",
-    ":java-tests:runtime",
-    ":java-tests:vanilla",
-    ":java-tests:validating",
-    ":java-tests:validator",
-    ":java-tests:validator-dependency",
-)
