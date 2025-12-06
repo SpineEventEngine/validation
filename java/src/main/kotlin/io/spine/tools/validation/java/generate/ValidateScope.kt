@@ -24,17 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm.generate
+package io.spine.tools.validation.java.generate
 
 import io.spine.base.FieldPath
 import io.spine.tools.compiler.jvm.ReadVar
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 
 /**
  * Scope variables available within the `validate(FieldPath)` method.
  *
- * Use these variables to create an instance of [ConstraintViolation]
+ * Use these variables to create an instance of [io.spine.validate.ConstraintViolation]
  * for the failed option constraint.
  */
 public object ValidateScope {

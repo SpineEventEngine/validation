@@ -40,9 +40,9 @@ import io.spine.tools.validation.java.expression.withStringPlaceholders
 import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.violations
 import io.spine.validation.test.money.CurrencyMessage
 
 /**

@@ -44,8 +44,12 @@ import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
@@ -55,10 +59,6 @@ import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.parentPath
-import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * The generator for the `(goes)` option.

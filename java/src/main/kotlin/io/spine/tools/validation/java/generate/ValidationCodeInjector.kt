@@ -46,13 +46,13 @@ import io.spine.tools.psi.java.nested
 import io.spine.tools.validation.java.expression.FieldPathClass
 import io.spine.tools.validation.java.expression.NullableTypeNameClass
 import io.spine.tools.validation.java.expression.ObjectsClass
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.NonValidated
 import io.spine.validate.ValidatableMessage
 import io.spine.validate.Validated
 import io.spine.validate.ValidatingBuilder
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.parentPath
-import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * A [PsiClass] holding an instance of [Message].

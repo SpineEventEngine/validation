@@ -51,13 +51,13 @@ import io.spine.tools.validation.java.expression.mergeFrom
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
+import io.spine.tools.validation.java.generate.MessageScope.message
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
-import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.parentPath
-import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * A fully qualified Java class name of a validator class.

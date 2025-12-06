@@ -55,8 +55,12 @@ import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.ErrorPlaceholder
@@ -70,10 +74,6 @@ import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
-import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.parentPath
-import io.spine.validation.jvm.generate.ValidateScope.violations
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 

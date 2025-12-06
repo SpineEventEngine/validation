@@ -49,13 +49,13 @@ import io.spine.tools.validation.java.expression.ValidatableMessageClass
 import io.spine.tools.validation.java.expression.ValidationErrorClass
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
+import io.spine.tools.validation.java.generate.ValidateScope.parentName
+import io.spine.tools.validation.java.generate.ValidateScope.parentPath
+import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validation.ValidateField
-import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.validation.jvm.generate.ValidateScope.parentName
-import io.spine.validation.jvm.generate.ValidateScope.parentPath
-import io.spine.validation.jvm.generate.ValidateScope.violations
 
 /**
  * The generator for `(validate)` option.
