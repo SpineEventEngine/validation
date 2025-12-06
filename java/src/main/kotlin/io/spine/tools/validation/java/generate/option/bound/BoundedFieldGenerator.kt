@@ -65,7 +65,7 @@ import io.spine.validation.bound.NumericBound.ValueCase.INT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.INT64_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

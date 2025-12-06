@@ -55,7 +55,7 @@ import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

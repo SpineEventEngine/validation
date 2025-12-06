@@ -62,7 +62,7 @@ import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
-import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

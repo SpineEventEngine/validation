@@ -54,7 +54,7 @@ import io.spine.tools.validation.java.expression.stringify
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
-import io.spine.validation.jvm.generate.MessageScope.message
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

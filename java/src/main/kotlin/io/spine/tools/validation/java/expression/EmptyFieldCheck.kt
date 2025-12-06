@@ -30,8 +30,8 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.validation.java.generate.MessageScope
 import io.spine.validation.jvm.UnsetValue
-import io.spine.validation.jvm.generate.MessageScope
 
 /**
  * Provides an expression to check if a given [io.spine.tools.compiler.ast.Field] holds
