@@ -26,9 +26,14 @@
 
 package io.spine.tools.validation.java.expression
 
+import com.google.protobuf.Message
 import io.spine.base.FieldPath
+import io.spine.tools.compiler.ast.FieldName
+import io.spine.tools.compiler.ast.OneofName
 import io.spine.tools.compiler.jvm.Expression
+import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
+import io.spine.tools.compiler.jvm.toBuilder
 
 /**
  * Returns an expression that yields this [FieldPath] as a string using
@@ -39,3 +44,35 @@ import io.spine.tools.compiler.jvm.call
  */
 public fun Expression<FieldPath>.joinToString(): Expression<String> =
     FieldPathsClass.call("getJoined", this)
+
+/**
+ * Returns an expression that yields a new instance of [FieldPath] by appending
+ * the provided [field] name to this parental [FieldPath] expression.
+ */
+public fun Expression<FieldPath>.resolve(field: FieldName): Expression<FieldPath> =
+    toBuilder()
+        .chainAdd("field_name", StringLiteral(field.value))
+        .chainBuild()
+
+/**
+ * Returns an expression that merges the provided [FieldPath] expression into this one.
+ *
+ * To perform merging, this method uses the [Message.Builder.mergeFrom] method.
+ */
+public fun Expression<FieldPath>.mergeFrom(other: Expression<FieldPath>): Expression<FieldPath> =
+    toBuilder()
+        .chain<Message.Builder>("mergeFrom", other)
+        .chainBuild()
+
+/**
+ * Returns an expression that yields a new instance of [FieldPath] by appending
+ * the provided [oneof] group name to this parental [FieldPath] expression.
+ *
+ * Strictly speaking, [OneofName] does not represent a field, but a group of fields.
+ * But we still use [FieldPath] to provide a path to this message member because
+ * [io.spine.validate.ConstraintViolation] expects exactly [FieldPath] type.
+ */
+public fun Expression<FieldPath>.resolve(oneof: OneofName): Expression<FieldPath> =
+    toBuilder()
+        .chainAdd("field_name", StringLiteral(oneof.value))
+        .chainBuild()

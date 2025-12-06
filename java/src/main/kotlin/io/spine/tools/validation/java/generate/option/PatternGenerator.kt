@@ -52,6 +52,7 @@ import io.spine.tools.validation.java.expression.TypeNameClass
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
+import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
@@ -68,7 +69,6 @@ import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString
 import io.spine.validation.isSingularString
-import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName

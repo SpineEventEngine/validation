@@ -47,6 +47,7 @@ import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
+import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
@@ -63,7 +64,6 @@ import io.spine.validation.bound.NumericBound.ValueCase.INT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.INT64_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
