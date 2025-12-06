@@ -41,6 +41,7 @@ import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.getDefaultInstance
 import io.spine.tools.validation.java.expression.AnyClass
 import io.spine.tools.validation.java.expression.AnyPackerClass
+import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.KnownTypesClass
 import io.spine.tools.validation.java.expression.MessageClass
 import io.spine.tools.validation.java.expression.TypeUrlClass
@@ -50,7 +51,6 @@ import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.validation.ValidateField
-import io.spine.validation.jvm.expression.EmptyFieldCheck
 import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName

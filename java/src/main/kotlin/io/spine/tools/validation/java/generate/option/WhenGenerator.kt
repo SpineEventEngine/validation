@@ -38,6 +38,7 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.JsonExtensionsClass
 import io.spine.tools.validation.java.expression.SpineTime
 import io.spine.tools.validation.java.expression.TimestampsClass
@@ -59,7 +60,6 @@ import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
-import io.spine.validation.jvm.expression.EmptyFieldCheck
 import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message

@@ -36,6 +36,7 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
@@ -52,7 +53,6 @@ import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.GOES
 import io.spine.validation.GoesField
-import io.spine.validation.jvm.expression.EmptyFieldCheck
 import io.spine.validation.jvm.expression.resolve
 import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message

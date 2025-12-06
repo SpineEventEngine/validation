@@ -24,22 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm.expression
+package io.spine.tools.validation.java.expression
 
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.field
-import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.UnsetValue
+import io.spine.validation.jvm.generate.MessageScope
 
 /**
- * Provides an expression to check if a given [Field] holds
+ * Provides an expression to check if a given [io.spine.tools.compiler.ast.Field] holds
  * the default (unset) value.
  *
  * It takes a Protobuf instance of a default value for the field type
- * with [UnsetValue] utility, and then converts it to a Java expression
- * using [JavaValueConverter].
+ * with [io.spine.validation.jvm.UnsetValue] utility, and then converts it to a Java expression
+ * using [io.spine.tools.compiler.jvm.JavaValueConverter].
  */
 // TODO:2025-03-12:yevhenii.nadtochii: This trait can go without `JavaValueConverter`.
 //  See issue: https://github.com/SpineEventEngine/validation/issues/199
@@ -51,10 +51,10 @@ public interface EmptyFieldCheck {
     public val converter: JavaValueConverter
 
     /**
-     * Returns an expression that checks if this [Field] has the default (unset) value.
+     * Returns an expression that checks if this [io.spine.tools.compiler.ast.Field] has the default (unset) value.
      */
     public fun Field.hasDefaultValue(): Expression<Boolean> {
-        val getter = message.field(this).getter<Any>()
+        val getter = MessageScope.message.field(this).getter<Any>()
         return Expression("$getter.equals(${defaultValue()})")
     }
 
