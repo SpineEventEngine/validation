@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm.expression
+package io.spine.tools.validation.java.expression
 
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.call

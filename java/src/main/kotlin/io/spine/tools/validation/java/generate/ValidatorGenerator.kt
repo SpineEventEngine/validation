@@ -50,10 +50,10 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.mergeFrom
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
+import io.spine.tools.validation.java.expression.stringify
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.DetectedViolation
 import io.spine.validate.TemplateString
-import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath

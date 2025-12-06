@@ -40,7 +40,6 @@ import io.spine.tools.compiler.ast.toFieldType
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.call
-import io.spine.validation.jvm.expression.stringify
 
 /**
  * Returns an expression that converts the provided field [value] to a string.

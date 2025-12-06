@@ -37,6 +37,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
+import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
@@ -46,7 +47,6 @@ import io.spine.validation.ChoiceOneof
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
 import io.spine.validation.jvm.generate.ValidateScope.violations

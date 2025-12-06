@@ -46,6 +46,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
+import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
@@ -61,7 +62,6 @@ import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.WHEN
 import io.spine.validation.WhenField
 import io.spine.validation.isRepeatedMessage
-import io.spine.validation.jvm.expression.stringify
 import io.spine.validation.jvm.generate.MessageScope.message
 import io.spine.validation.jvm.generate.ValidateScope.parentName
 import io.spine.validation.jvm.generate.ValidateScope.parentPath
