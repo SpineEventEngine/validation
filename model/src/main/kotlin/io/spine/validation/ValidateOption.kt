@@ -29,6 +29,12 @@ package io.spine.validation
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
+import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
@@ -42,13 +48,6 @@ import io.spine.tools.compiler.ast.refersToMessage
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.server.entity.alter
-import io.spine.server.event.Just
-import io.spine.server.event.NoReaction
-import io.spine.server.event.React
-import io.spine.server.event.asA
-import io.spine.server.tuple.EitherOf2
-import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.event.ValidateFieldDiscovered
 import io.spine.validation.event.validateFieldDiscovered
 

@@ -31,6 +31,14 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.protobuf.unpack
+import io.spine.server.entity.alter
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
+import io.spine.time.Temporal
+import io.spine.time.validation.Time
+import io.spine.time.validation.TimeOption
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
@@ -43,21 +51,11 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.check
+import io.spine.tools.compiler.jvm.findJavaClassName
 import io.spine.tools.compiler.jvm.javaClass
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.TypeSystem
-import io.spine.server.entity.alter
-import io.spine.server.event.NoReaction
-import io.spine.server.event.React
-import io.spine.server.event.asA
-import io.spine.server.tuple.EitherOf2
-import io.spine.time.Temporal
-import io.spine.time.validation.Time
-import io.spine.time.validation.TimeOption
-import io.spine.validation.event.WhenFieldDiscovered
-import io.spine.validation.event.whenFieldDiscovered
-import io.spine.tools.compiler.jvm.findJavaClassName
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
@@ -66,7 +64,8 @@ import io.spine.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.validation.jvm.OPTION_NAME
+import io.spine.validation.event.WhenFieldDiscovered
+import io.spine.validation.event.whenFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

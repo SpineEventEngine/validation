@@ -30,6 +30,12 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.ChoiceOption
+import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.NoReaction
+import io.spine.server.event.React
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.OneofRef
 import io.spine.tools.compiler.ast.event.OneofOptionDiscovered
@@ -37,15 +43,8 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.server.entity.alter
-import io.spine.server.event.Just
-import io.spine.server.event.NoReaction
-import io.spine.server.event.React
-import io.spine.server.event.asA
-import io.spine.server.tuple.EitherOf2
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 

@@ -31,6 +31,10 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.RangeOption
+import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.server.event.just
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.FieldRef
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
@@ -40,22 +44,18 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.server.entity.alter
-import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.server.event.just
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.validation.OPTION_NAME
 import io.spine.validation.RANGE
-import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
-import io.spine.validation.defaultMessage
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
 import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultMessage
 
 /**
  * Controls whether a field should be validated with the `(range)` option.

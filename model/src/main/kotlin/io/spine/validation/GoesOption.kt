@@ -30,6 +30,10 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.GoesOption
+import io.spine.server.entity.alter
+import io.spine.server.event.Just
+import io.spine.server.event.React
+import io.spine.server.event.just
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
@@ -49,16 +53,11 @@ import io.spine.tools.compiler.jvm.findField
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.message
-import io.spine.server.entity.alter
-import io.spine.server.event.Just
-import io.spine.server.event.React
-import io.spine.server.event.just
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.jvm.OPTION_NAME
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 
