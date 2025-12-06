@@ -31,14 +31,13 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.validation.java.generate.MessageScope
-import io.spine.validation.jvm.UnsetValue
 
 /**
  * Provides an expression to check if a given [io.spine.tools.compiler.ast.Field] holds
  * the default (unset) value.
  *
  * It takes a Protobuf instance of a default value for the field type
- * with [io.spine.validation.jvm.UnsetValue] utility, and then converts it to a Java expression
+ * with [UnsetValue] utility, and then converts it to a Java expression
  * using [io.spine.tools.compiler.jvm.JavaValueConverter].
  */
 // TODO:2025-03-12:yevhenii.nadtochii: This trait can go without `JavaValueConverter`.

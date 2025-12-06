@@ -24,9 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm
+package io.spine.tools.validation.java.expression
 
 import com.google.protobuf.ByteString
+import io.spine.string.shortly
 import io.spine.tools.compiler.ast.Cardinality.CARDINALITY_LIST
 import io.spine.tools.compiler.ast.Cardinality.CARDINALITY_MAP
 import io.spine.tools.compiler.ast.Cardinality.CARDINALITY_SINGLE
@@ -48,7 +49,7 @@ import io.spine.tools.compiler.value.MapValue
 import io.spine.tools.compiler.value.MessageValue
 import io.spine.tools.compiler.value.Value
 import io.spine.tools.compiler.value.value
-import io.spine.string.shortly
+import io.spine.tools.validation.java.expression.UnsetValue.forField
 
 /**
  * A factory of [Value]s representing default states of Protobuf message fields.
