@@ -89,7 +89,7 @@ import io.spine.validation.event.requiredFieldDiscovered
  * required fields, i.e., ID fields in entities and signal messages.
  *
  * @see [io.spine.validation.required.RequiredIdOptionReaction]
- * @see [io.spine.validation.required.RequiredIdPatternReaction]
+ * @see [RequiredIdPatternReaction]
  */
 internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {
 
