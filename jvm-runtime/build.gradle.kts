@@ -85,7 +85,7 @@ afterEvaluate {
                 val rootExtension = rootProject.the<SpinePublishing>()
                 val defaultPrefix = SpinePublishing.DEFAULT_PREFIX
                 val projectPrefix = rootExtension.artifactPrefix
-                artifactId = "$defaultPrefix-$projectPrefix-${project.name}"
+                artifactId = "$defaultPrefix$projectPrefix${project.name}"
             }
         }
     }
