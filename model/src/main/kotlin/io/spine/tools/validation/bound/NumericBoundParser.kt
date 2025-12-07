@@ -218,7 +218,6 @@ private fun String.toFiniteFloatOrNull(): Float? =
 private fun String.toFiniteDoubleOrNull(): Double? =
     toDoubleOrNull()?.takeIf { it.isFinite() }
 
-
 /**
  * Tells whether this [String] bound value contains a field reference.
  */
