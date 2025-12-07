@@ -73,8 +73,8 @@ internal typealias MessageClass = ClassName
  * Generates code to apply validators to the message fields,
  * for which there is a validator assigned.
  *
- * Please note that this generator is not
- * [OptionGenerator][io.spine.validation.jvm.generate.OptionGenerator] intentionally.
+ * Note that this generator is not
+ * [OptionGenerator][io.spine.tools.validation.java.generate.OptionGenerator] intentionally.
  * This is a dedicated implementation, handling codegen for a specific use case not
  * related to the validation options.
  */
@@ -150,9 +150,9 @@ private class ApplyValidator(
      *
      * The expression does the following:
      *
-     * 1. Creates a new instances of [validator].
-     * 2. Invokes [MessageValidator.validate][io.spine.validation.jvm.MessageValidator.validate]
-     *   passing an instance of the [message].
+     * 1. Creates a new instance of [validator].
+     * 2. Invokes [MessageValidator.validate][io.spine.validate.MessageValidator.validate]
+     *   passing the [message] instance.
      * 3. Converts each [DetectedViolation] to [ConstraintViolation].
      * 4. Puts all constraint violations to the list of discovered [violations].
      */

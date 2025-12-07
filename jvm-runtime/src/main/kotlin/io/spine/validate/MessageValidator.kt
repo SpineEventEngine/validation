@@ -119,16 +119,15 @@ import io.spine.annotation.SPI
  * validate a particular field, several fields, the whole message instance (for example,
  * checking the field relations), and perform a deep validation.
  *
- * It is a responsibility of the validator to provide the correct instances
- * of [io.spine.validation.jvm.DetectedViolation]. Before reporting to the user, the library converts
- * [io.spine.validation.jvm.DetectedViolation] to a [ConstraintViolation][ConstraintViolation].
+ * It is a responsibility of the validator to provide the correct instances of [DetectedViolation].
+ * Before reporting to the user, the library converts [DetectedViolation] to
+ * a [ConstraintViolation][ConstraintViolation].
  * Returning of an empty list of violations means that the given message is valid.
  *
- * Please keep in mind that for each invocation a new instance of [MessageValidator]
- * is created. Every implementation of [MessageValidator] must have a public,
- * no-args constructor.
+ * Keep in mind that for each invocation a new instance of [MessageValidator] is created.
+ * Every implementation of [MessageValidator] must have a public, no-args constructor.
  *
- * @param M the type of Protobuf [com.google.protobuf.Message] being validated.
+ * @param M the type of Protobuf [Message][com.google.protobuf.Message] being validated.
  */
 @SPI
 public interface MessageValidator<M : Message> {
