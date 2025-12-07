@@ -38,7 +38,7 @@ import io.spine.tools.compiler.type.TypeSystem
  * This metadata is required to parse and validate the option value.
  *
  * @param optionName The name of the option.
- * @param field The field, to which the option is applied.
+ * @param field The field to which the option is applied.
  * @param fieldType The field type.
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
