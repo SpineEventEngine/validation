@@ -31,7 +31,8 @@ import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
-import io.spine.gradle.publish.spinePublishing
+import io.spine.gradle.publish.SpinePublishing
+import io.spine.gradle.publish.StandardJavaPublicationHandler
 
 buildscript {
     standardSpineSdkRepositories()
@@ -57,6 +58,7 @@ plugins {
     id("com.google.devtools.ksp")
     `build-proto-model`
     module
+    id("maven-publish")
 }
 
 group = "io.spine"
@@ -73,3 +75,18 @@ dependencies {
 }
 
 forceSpineBase()
+
+// Change the `artifactId` to have the `spine-validation-` prefix
+// instead of just `validation-` as for the rest of the tool modules.
+afterEvaluate {
+    publishing {
+        publications {
+            named<MavenPublication>(StandardJavaPublicationHandler.PUBLICATION_NAME) {
+                val rootExtension = rootProject.the<SpinePublishing>()
+                val defaultPrefix = SpinePublishing.DEFAULT_PREFIX
+                val projectPrefix = rootExtension.artifactPrefix
+                artifactId = "$defaultPrefix-$projectPrefix-${project.name}"
+            }
+        }
+    }
+}
