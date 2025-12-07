@@ -24,11 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.tools.validation.required
 
 import io.spine.tools.compiler.ast.FieldType
-import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BYTES
-import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
+import io.spine.tools.compiler.ast.PrimitiveType
 
 /**
  * Determines whether the field type can be validated as `(required)`.
@@ -36,12 +35,12 @@ import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
 internal object RequiredFieldSupport {
 
     /**
-     * Tells if this [FieldType] can be validated with the `(required)` option.
+     * Tells if this [io.spine.tools.compiler.ast.FieldType] can be validated with the `(required)` option.
      */
     fun FieldType.isSupported(): Boolean =
         !isPrimitive || primitive in SUPPORTED_PRIMITIVES
 
     private val SUPPORTED_PRIMITIVES = listOf(
-        TYPE_STRING, TYPE_BYTES
+        PrimitiveType.TYPE_STRING, PrimitiveType.TYPE_BYTES
     )
 }

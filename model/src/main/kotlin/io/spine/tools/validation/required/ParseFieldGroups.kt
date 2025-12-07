@@ -37,7 +37,7 @@ import io.spine.tools.compiler.check
 import io.spine.validation.FieldGroup
 import io.spine.validation.REQUIRE
 import io.spine.validation.fieldGroup
-import io.spine.validation.required.RequiredFieldSupport.isSupported
+import io.spine.tools.validation.required.RequiredFieldSupport.isSupported
 
 /**
  * Parses and validates field groups specified in the given [RequireOption].
