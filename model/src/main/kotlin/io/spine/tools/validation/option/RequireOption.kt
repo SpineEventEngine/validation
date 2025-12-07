@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -56,8 +56,8 @@ import io.spine.validation.event.requireMessageDiscovered
  * Whenever a message marked with `(require)` option is discovered, emits
  * [RequireMessageDiscovered] event if the following conditions are met:
  *
- * 1. The specified field groups are valid. Please take a look on docs to [ParseFieldGroups]
- *    to see how they are validated.
+ * 1. The specified field groups are valid.
+ *    Refer to the docs on [ParseFieldGroups] to see how they are validated.
  * 2. The error message does not contain unsupported placeholders.
  *
  * Any violation of the above conditions leads to a compilation error.

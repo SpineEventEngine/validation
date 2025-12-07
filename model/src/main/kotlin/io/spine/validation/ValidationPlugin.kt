@@ -38,8 +38,8 @@ import io.spine.tools.validation.bound.MinReaction
 import io.spine.tools.validation.bound.RangeFieldView
 import io.spine.tools.validation.bound.RangeReaction
 import io.spine.validation.required.IfMissingReaction
-import io.spine.validation.required.RequireMessageView
-import io.spine.validation.required.RequireReaction
+import io.spine.tools.validation.option.RequireMessageView
+import io.spine.tools.validation.option.RequireReaction
 import io.spine.validation.required.RequiredFieldView
 import io.spine.validation.required.RequiredIdOptionReaction
 import io.spine.validation.required.RequiredIdPatternReaction
