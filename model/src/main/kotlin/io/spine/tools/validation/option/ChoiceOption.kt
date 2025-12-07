@@ -48,9 +48,7 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.CHOICE
 import io.spine.validation.ChoiceOneof
-import io.spine.validation.IS_REQUIRED
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 

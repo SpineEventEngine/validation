@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -57,6 +57,7 @@ import io.spine.tools.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
+import io.spine.validation.PatternField
 import io.spine.validation.event.PatternFieldDiscovered
 import io.spine.validation.event.patternFieldDiscovered
 
@@ -114,7 +115,7 @@ internal class PatternFieldView : View<FieldRef, PatternField, PatternField.Buil
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
         "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
-                " by the `($PATTERN)` option. Supported field types: strings and repeated" +
+                " by the `(${PATTERN})` option. Supported field types: strings and repeated" +
                 " of strings."
     }
 

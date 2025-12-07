@@ -63,9 +63,7 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultErrorMessage
-import io.spine.validation.DISTINCT
 import io.spine.validation.DistinctField
-import io.spine.validation.IF_HAS_DUPLICATES
 import io.spine.validation.event.DistinctFieldDiscovered
 import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.validation.event.distinctFieldDiscovered

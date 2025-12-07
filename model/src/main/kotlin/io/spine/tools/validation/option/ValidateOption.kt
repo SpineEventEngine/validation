@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -49,6 +49,7 @@ import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.validation.ValidateField
 import io.spine.validation.event.ValidateFieldDiscovered
 import io.spine.validation.event.validateFieldDiscovered
 
@@ -102,8 +103,8 @@ internal class IfInvalidReaction : Reaction<FieldOptionDiscovered>() {
         event: FieldOptionDiscovered
     ): Just<NoReaction> {
         Compilation.warning(event.file, event.subject.span) {
-            "The `($IF_INVALID)` option is deprecated and should not longer be used. " +
-                    " Applying this option has no effect. The `($VALIDATE)` option no longer" +
+            "The `(${IF_INVALID})` option is deprecated and should not longer be used. " +
+                    " Applying this option has no effect. The `(${VALIDATE})` option no longer" +
                     " accepts custom error messages. It only propagates messages from violations" +
                     " of the validated message itself."
         }
@@ -125,6 +126,6 @@ internal class ValidatedFieldView : View<FieldRef, ValidateField, ValidateField.
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.refersToMessage(), file, field.span) {
         "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
-                " by the `($VALIDATE)` option. Supported field types: messages, repeated of" +
+                " by the `(${VALIDATE})` option. Supported field types: messages, repeated of" +
                 " messages, and maps with message values."
     }

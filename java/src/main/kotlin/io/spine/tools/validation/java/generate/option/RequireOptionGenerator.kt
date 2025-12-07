@@ -51,7 +51,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.FieldGroup
-import io.spine.validation.REQUIRE
+import io.spine.tools.validation.option.REQUIRE
 import io.spine.validation.RequireMessage
 
 /**

@@ -50,8 +50,8 @@ import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.MAX
-import io.spine.validation.RANGE
+import io.spine.tools.validation.option.MAX
+import io.spine.tools.validation.option.RANGE
 import io.spine.validation.bound.MaxField
 import io.spine.validation.bound.event.MaxFieldDiscovered
 import io.spine.validation.bound.event.maxFieldDiscovered

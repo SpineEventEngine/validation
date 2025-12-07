@@ -63,8 +63,6 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultErrorMessage
-import io.spine.validation.IF_SET_AGAIN
-import io.spine.validation.SET_ONCE
 import io.spine.validation.SetOnceField
 import io.spine.validation.event.IfSetAgainOptionDiscovered
 import io.spine.validation.event.SetOnceFieldDiscovered

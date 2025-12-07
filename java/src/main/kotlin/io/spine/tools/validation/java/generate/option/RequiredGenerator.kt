@@ -52,7 +52,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_MISSING
+import io.spine.tools.validation.option.IF_MISSING
 import io.spine.validation.RequiredField
 
 /**

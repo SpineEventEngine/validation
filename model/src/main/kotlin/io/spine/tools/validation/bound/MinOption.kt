@@ -50,8 +50,8 @@ import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.MIN
-import io.spine.validation.RANGE
+import io.spine.tools.validation.option.MIN
+import io.spine.tools.validation.option.RANGE
 import io.spine.validation.bound.MinField
 import io.spine.validation.bound.event.MinFieldDiscovered
 import io.spine.validation.bound.event.minFieldDiscovered

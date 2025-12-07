@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import com.google.protobuf.Timestamp
 import io.spine.core.External
@@ -64,9 +64,11 @@ import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
+import io.spine.validation.TimeFieldType
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.validation.WhenField
 import io.spine.validation.event.WhenFieldDiscovered
 import io.spine.validation.event.whenFieldDiscovered
 
@@ -121,7 +123,7 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
     val timeType = typeSystem.determineTimeType(field.type)
     Compilation.check(timeType != TFT_UNKNOWN, file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($WHEN)` option. Supported field types:" +
+                " is not supported by the `(${WHEN})` option. Supported field types:" +
                 " `google.protobuf.Timestamp` and types introduced in the `spine.time` package" +
                 " that describe time-related concepts."
     }

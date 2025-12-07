@@ -60,8 +60,8 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultErrorMessage
 import io.spine.tools.validation.option.checkPrimaryApplied
 import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
-import io.spine.validation.IF_MISSING
-import io.spine.validation.REQUIRED
+import io.spine.tools.validation.option.IF_MISSING
+import io.spine.tools.validation.option.REQUIRED
 import io.spine.validation.RequiredField
 import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered

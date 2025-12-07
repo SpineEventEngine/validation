@@ -63,9 +63,9 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.validation.WHEN
+import io.spine.tools.validation.option.WHEN
 import io.spine.validation.WhenField
-import io.spine.validation.isRepeatedMessage
+import io.spine.tools.validation.option.isRepeatedMessage
 
 /**
  * The generator for the `(when)` option.

@@ -35,7 +35,7 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
-import io.spine.validation.GOES
+import io.spine.tools.validation.option.GOES
 import io.spine.validation.GoesNonExistingCompanion
 import io.spine.validation.GoesSelfCompanion
 import io.spine.validation.GoesWithInvalidPlaceholders

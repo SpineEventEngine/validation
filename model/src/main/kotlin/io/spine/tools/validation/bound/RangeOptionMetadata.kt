@@ -30,7 +30,7 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.File
 import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.type.TypeSystem
-import io.spine.validation.RANGE
+import io.spine.tools.validation.option.RANGE
 
 /**
  * Protobuf metadata related to the `(range)` option.

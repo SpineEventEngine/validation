@@ -32,7 +32,7 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
-import io.spine.validation.REQUIRE
+import io.spine.tools.validation.option.REQUIRE
 import io.spine.validation.RequireDuplicateFields
 import io.spine.validation.RequireDuplicateGroups
 import io.spine.validation.RequireNonExistentField

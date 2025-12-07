@@ -31,7 +31,7 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.validation.RANGE
+import io.spine.tools.validation.option.RANGE
 import io.spine.validation.RangeInvalidClosing
 import io.spine.validation.RangeInvalidLowerDouble
 import io.spine.validation.RangeInvalidLowerFloat

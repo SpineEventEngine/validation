@@ -48,7 +48,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.CHOICE
+import io.spine.tools.validation.option.CHOICE
 import io.spine.validation.ChoiceOneof
 
 /**

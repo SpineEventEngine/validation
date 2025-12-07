@@ -30,10 +30,10 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
-import io.spine.validation.IF_SET_AGAIN
+import io.spine.tools.validation.option.IF_SET_AGAIN
 import io.spine.validation.IfSetAgainWithInvalidPlaceholders
 import io.spine.validation.IfSetAgainWithoutSetOnce
-import io.spine.validation.SET_ONCE
+import io.spine.tools.validation.option.SET_ONCE
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

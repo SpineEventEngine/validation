@@ -46,7 +46,7 @@ import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
-import io.spine.validation.MIN
+import io.spine.tools.validation.option.MIN
 import io.spine.validation.bound.MinField
 import io.spine.validation.bound.NumericBound.ValueCase
 import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE

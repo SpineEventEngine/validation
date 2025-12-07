@@ -42,7 +42,7 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.IF_SET_AGAIN
+import io.spine.tools.validation.option.IF_SET_AGAIN
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.

@@ -29,16 +29,16 @@ package io.spine.tools.validation
 import io.kotest.matchers.shouldBe
 import io.spine.option.OptionsProto
 import io.spine.time.validation.TimeOptionsProto
-import io.spine.validation.DISTINCT
-import io.spine.validation.IS_REQUIRED
-import io.spine.validation.MAX
-import io.spine.validation.MIN
-import io.spine.validation.PATTERN
-import io.spine.validation.RANGE
-import io.spine.validation.REQUIRED
-import io.spine.validation.SET_ONCE
-import io.spine.validation.VALIDATE
-import io.spine.validation.WHEN
+import io.spine.tools.validation.option.DISTINCT
+import io.spine.tools.validation.option.IS_REQUIRED
+import io.spine.tools.validation.option.MAX
+import io.spine.tools.validation.option.MIN
+import io.spine.tools.validation.option.PATTERN
+import io.spine.tools.validation.option.RANGE
+import io.spine.tools.validation.option.REQUIRED
+import io.spine.tools.validation.option.SET_ONCE
+import io.spine.tools.validation.option.VALIDATE
+import io.spine.tools.validation.option.WHEN
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

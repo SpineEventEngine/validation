@@ -45,7 +45,6 @@ import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.required.ParseFieldGroups
-import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.event.RequireMessageDiscovered
 import io.spine.validation.event.requireMessageDiscovered

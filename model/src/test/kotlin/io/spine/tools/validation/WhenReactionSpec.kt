@@ -31,7 +31,7 @@ import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
-import io.spine.validation.WHEN
+import io.spine.tools.validation.option.WHEN
 import io.spine.validation.WhenBoolField
 import io.spine.validation.WhenInt32Field
 import io.spine.validation.WhenStringField

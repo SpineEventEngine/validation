@@ -66,7 +66,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.DistinctField
-import io.spine.validation.PATTERN
+import io.spine.tools.validation.option.PATTERN
 
 /**
  * The generator for the `(distinct)` option.

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -61,6 +61,7 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
+import io.spine.validation.GoesField
 import io.spine.validation.event.GoesFieldDiscovered
 import io.spine.validation.event.goesFieldDiscovered
 
@@ -126,25 +127,25 @@ internal class GoesFieldView : View<FieldRef, GoesField, GoesField.Builder>() {
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($GOES)` option. Supported field types: messages," +
+                " is not supported by the `(${GOES})` option. Supported field types: messages," +
                 " enums, strings, bytes, repeated, and maps."
     }
 
 private fun checkCompanionType(companion: Field, file: File) =
     Compilation.check(companion.type.isSupported(), file, companion.span) {
         "The field type `${companion.type.name}` of the companion `${companion.qualifiedName}`" +
-                " field is not supported by the `($GOES)` option."
+                " field is not supported by the `(${GOES})` option."
     }
 
 private fun checkFieldExists(message: MessageType, companion: String, field: Field, file: File) =
     Compilation.check(message.findField(companion) != null, file, field.span) {
         "The message `${message.name.qualifiedName}` does not have `$companion` field" +
-                " declared as companion of `${field.name.value}` by the `($GOES)` option."
+                " declared as companion of `${field.name.value}` by the `(${GOES})` option."
     }
 
 private fun checkFieldsDistinct(field: Field, companion: Field, file: File) =
     Compilation.check(field != companion, file, field.span) {
-        "The `($GOES)` option cannot use the marked field as its own companion." +
+        "The `(${GOES})` option cannot use the marked field as its own companion." +
                 " Self-referencing is prohibited. Please specify another field." +
                 " The invalid field: `${field.qualifiedName}`."
     }

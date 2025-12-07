@@ -31,7 +31,7 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
-import io.spine.validation.REQUIRED
+import io.spine.tools.validation.option.REQUIRED
 import io.spine.validation.RequiredBoolField
 import io.spine.validation.RequiredDoubleField
 import io.spine.validation.RequiredIntField
