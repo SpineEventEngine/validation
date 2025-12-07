@@ -24,16 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
 import io.spine.base.FieldPath
 import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
 import io.spine.string.ti
+import io.spine.validation.bound.NumericBound
 
 /**
- * One-to-one Kotlin representation of [NumericBound].
+ * One-to-one Kotlin representation of [io.spine.validation.bound.NumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
  *
@@ -84,7 +85,7 @@ internal data class KNumericBound(
 }
 
 /**
- * Creates an instance of [NumericBound] from this [KNumericBound].
+ * Creates an instance of [io.spine.validation.bound.NumericBound] from this [KNumericBound].
  */
 internal fun KNumericBound.toProto(): NumericBound {
     val builder = NumericBound.newBuilder()

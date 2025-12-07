@@ -45,6 +45,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.type.resolve
 import io.spine.tools.validation.bound.BoundFieldSupport.numericPrimitives
+import io.spine.tools.validation.bound.KNumericBound
 
 /**
  * Parses bound values specified in Protobuf options that restrict
@@ -60,7 +61,7 @@ internal class NumericBoundParser(
 ) {
 
     /**
-     * Parses the given raw [bound] value to a [KNumericBound].
+     * Parses the given raw [bound] value to a [io.spine.tools.validation.bound.KNumericBound].
      *
      * For number-based bounds, the method checks the following:
      *

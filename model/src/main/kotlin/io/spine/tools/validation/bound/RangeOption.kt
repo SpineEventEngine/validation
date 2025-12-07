@@ -52,13 +52,11 @@ import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
-import io.spine.validation.bound.KNumericBound
 import io.spine.validation.bound.NumericBoundParser
 import io.spine.validation.bound.RangeField
 import io.spine.validation.bound.RangeOptionMetadata
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
-import io.spine.validation.bound.toProto
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultMessage
 
