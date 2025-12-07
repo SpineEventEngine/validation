@@ -27,10 +27,12 @@
 package io.spine.validation.required
 
 import io.spine.core.External
+import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.IfMissingOption
 import io.spine.option.OptionsProto.ifMissing
 import io.spine.option.OptionsProto.required
+import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
@@ -39,6 +41,7 @@ import io.spine.server.event.just
 import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.FieldRef
 import io.spine.tools.compiler.ast.File
 import io.spine.tools.compiler.ast.boolValue
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
@@ -48,6 +51,7 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
+import io.spine.tools.compiler.plugin.View
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
@@ -62,6 +66,8 @@ import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.ifMissingOptionDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 import io.spine.tools.validation.required.RequiredFieldSupport.isSupported
+import io.spine.validation.RequiredField
+import kotlin.text.ifEmpty
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -156,3 +162,24 @@ private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_TYPE,
     PARENT_TYPE,
 )
+
+/**
+ * A view of a field that is marked with `(required) = true` option.
+ */
+internal class RequiredFieldView : View<FieldRef, RequiredField, RequiredField.Builder>() {
+
+    @Subscribe
+    fun on(e: RequiredFieldDiscovered) {
+        val currentMessage = state().errorMessage
+        val message = currentMessage.ifEmpty { e.defaultErrorMessage }
+        alter {
+            subject = e.subject
+            errorMessage = message
+        }
+    }
+
+    @Subscribe
+    fun on(e: IfMissingOptionDiscovered) = alter {
+        errorMessage = e.customErrorMessage
+    }
+}
