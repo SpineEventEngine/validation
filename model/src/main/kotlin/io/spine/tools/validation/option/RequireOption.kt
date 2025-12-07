@@ -39,10 +39,10 @@ import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.option.required.ParseFieldGroups
 import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
 import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
-import io.spine.tools.validation.OPTION_NAME
-import io.spine.tools.validation.required.ParseFieldGroups
 import io.spine.validation.REQUIRE
 import io.spine.validation.RequireMessage
 import io.spine.validation.checkPlaceholders

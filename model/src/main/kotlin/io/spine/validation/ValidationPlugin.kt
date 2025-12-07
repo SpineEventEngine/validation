@@ -37,13 +37,13 @@ import io.spine.tools.validation.bound.MinFieldView
 import io.spine.tools.validation.bound.MinReaction
 import io.spine.tools.validation.bound.RangeFieldView
 import io.spine.tools.validation.bound.RangeReaction
-import io.spine.validation.required.IfMissingReaction
+import io.spine.tools.validation.option.required.IfMissingReaction
 import io.spine.tools.validation.option.RequireMessageView
 import io.spine.tools.validation.option.RequireReaction
-import io.spine.validation.required.RequiredFieldView
+import io.spine.tools.validation.option.required.RequiredFieldView
 import io.spine.validation.required.RequiredIdOptionReaction
 import io.spine.validation.required.RequiredIdPatternReaction
-import io.spine.validation.required.RequiredReaction
+import io.spine.tools.validation.option.required.RequiredReaction
 
 /**
  * The basic implementation of ProtoData validation plugin, which builds

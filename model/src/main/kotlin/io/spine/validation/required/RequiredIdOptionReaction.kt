@@ -33,6 +33,7 @@ import io.spine.tools.compiler.ast.firstField
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React
 import io.spine.server.tuple.EitherOf2
+import io.spine.tools.validation.option.required.RequiredIdReaction
 import io.spine.validation.event.RequiredFieldDiscovered
 
 /**

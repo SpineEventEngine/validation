@@ -24,23 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.tools.validation.option.required
 
 import io.spine.option.OptionsProto
+import io.spine.server.event.NoReaction
+import io.spine.server.event.asA
+import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.event.TypeDiscovered
 import io.spine.tools.compiler.ast.findOption
 import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.settings.loadSettings
-import io.spine.server.event.NoReaction
-import io.spine.server.event.asA
-import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.plugin.Reaction
+import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.validation.ValidationConfig
 import io.spine.validation.WithValidationSettings
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.tools.validation.required.RequiredFieldSupport.isSupported
 
 /**
  * An abstract base for policies that control whether an ID field

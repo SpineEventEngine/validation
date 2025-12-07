@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.tools.validation.option.required
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -52,12 +52,14 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_MISSING
-import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
+import io.spine.validation.RequiredField
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.checkPrimaryApplied
 import io.spine.validation.defaultErrorMessage
@@ -65,9 +67,6 @@ import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.ifMissingOptionDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
-import io.spine.tools.validation.required.RequiredFieldSupport.isSupported
-import io.spine.validation.RequiredField
-import kotlin.text.ifEmpty
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -89,8 +88,8 @@ import kotlin.text.ifEmpty
  * the validation option. There are other policies that handle implicitly
  * required fields, i.e., ID fields in entities and signal messages.
  *
- * @see [RequiredIdOptionReaction]
- * @see [RequiredIdPatternReaction]
+ * @see [io.spine.validation.required.RequiredIdOptionReaction]
+ * @see [io.spine.validation.required.RequiredIdPatternReaction]
  */
 internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {
 
