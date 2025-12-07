@@ -38,7 +38,7 @@ public abstract class OptionGenerator {
     /**
      * A component capable of querying states of views.
      *
-     * Note that the class inheritors are not responsible for providing [io.spine.server.query.Querying].
+     * Note that the class inheritors are not responsible for providing [Querying].
      * The instance is [injected][inject] by the Java validation plugin before
      * the first invocation of the [codeFor] method.
      */
