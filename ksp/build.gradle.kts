@@ -28,6 +28,8 @@ import io.spine.dependency.artifact
 import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
+import io.spine.dependency.lib.IntelliJ
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.test.KotlinCompileTesting
 
@@ -37,9 +39,16 @@ plugins {
 
 dependencies {
     ksp(AutoServiceKsp.processor)
+
     implementation(AutoService.annotations)
     implementation(Ksp.artifact { symbolProcessingApi })
-    implementation(project(":java-api"))
+    implementation(Base.annotations)
+    implementation(Base.lib)
+    implementation(project(":java-runtime"))
+
+    testImplementation(IntelliJ.Platform.util)
+        ?.because("We need `com.intellij.util.lang.JavaVersion`.")
     testImplementation(KotlinCompileTesting.libKsp)
-    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
+    testImplementation(Logging.testLib)
+        ?.because("We need `tapConsole`.")
 }

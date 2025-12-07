@@ -42,7 +42,6 @@ include(
     "model",
     "java-runtime",
     "java-bundle",
-    ":java-api",
     ":ksp",
     ":tests",
     ":tests:extensions",
