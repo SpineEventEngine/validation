@@ -43,7 +43,7 @@ include(
     "java-runtime",
     "java-bundle",
     ":java-api",
-    ":java-ksp",
+    ":ksp",
     ":tests",
     ":tests:extensions",
     ":tests:consumer",

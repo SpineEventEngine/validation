@@ -33,7 +33,7 @@ plugins {
 }
 
 dependencies {
-    ksp(project(":java-ksp"))
+    ksp(project(":ksp"))
     spineCompiler(project(":java"))
     implementation(project(":java-api"))
     implementation(project(":tests:validator-dependency"))
