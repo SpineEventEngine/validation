@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
+import io.spine.base.fieldPath
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.ast.PrimitiveType.TYPE_DOUBLE
@@ -45,7 +46,7 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.type.resolve
 import io.spine.tools.validation.bound.BoundFieldSupport.numericPrimitives
-import io.spine.tools.validation.bound.KNumericBound
+import io.spine.validation.bound.NumericOptionMetadata
 
 /**
  * Parses bound values specified in Protobuf options that restrict
@@ -61,7 +62,7 @@ internal class NumericBoundParser(
 ) {
 
     /**
-     * Parses the given raw [bound] value to a [io.spine.tools.validation.bound.KNumericBound].
+     * Parses the given raw [bound] value to a [KNumericBound].
      *
      * For number-based bounds, the method checks the following:
      *
@@ -163,7 +164,7 @@ internal class NumericBoundParser(
             """.trimIndent()
         }
 
-        val boundFieldPath = io.spine.base.fieldPath {
+        val boundFieldPath = fieldPath {
             fieldName.addAll(fieldPath.split("."))
         }
 

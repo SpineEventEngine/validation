@@ -50,6 +50,7 @@ import io.spine.validation.MIN
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
+import io.spine.tools.validation.bound.NumericBoundParser
 import io.spine.tools.validation.bound.toProto
 import io.spine.validation.bound.event.MinFieldDiscovered
 import io.spine.validation.bound.event.minFieldDiscovered
