@@ -42,6 +42,7 @@ import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.plus
+import io.spine.tools.validation.ErrorPlaceholder
 import io.spine.tools.validation.java.expression.IntegerClass
 import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
@@ -60,7 +61,6 @@ import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
 import io.spine.validation.BoundedFieldView
-import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.bound.NumericBound
 import io.spine.validation.bound.NumericBound.ValueCase.DOUBLE_VALUE
 import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE

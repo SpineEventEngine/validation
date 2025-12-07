@@ -40,21 +40,21 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.MAX_OPERATOR
+import io.spine.tools.validation.ErrorPlaceholder.MAX_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
-import io.spine.validation.ErrorPlaceholder.MAX_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.checkPlaceholders
+import io.spine.tools.validation.defaultMessage
 import io.spine.validation.MAX
 import io.spine.validation.RANGE
 import io.spine.validation.bound.MaxField
 import io.spine.validation.bound.event.MaxFieldDiscovered
 import io.spine.validation.bound.event.maxFieldDiscovered
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 
 /**
  * A reaction to add a validation rule to a type whenever the `(max)` field option

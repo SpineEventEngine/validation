@@ -43,14 +43,14 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.ErrorPlaceholder.GROUP_PATH
+import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.checkPlaceholders
+import io.spine.tools.validation.defaultMessage
 import io.spine.validation.CHOICE
 import io.spine.validation.ChoiceOneof
-import io.spine.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IS_REQUIRED
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 

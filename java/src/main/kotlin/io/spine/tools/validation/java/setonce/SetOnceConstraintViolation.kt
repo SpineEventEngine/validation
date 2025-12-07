@@ -34,14 +34,14 @@ import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.newBuilder
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_SET_AGAIN
 
 /**

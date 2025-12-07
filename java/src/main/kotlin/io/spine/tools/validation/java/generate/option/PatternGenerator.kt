@@ -43,6 +43,13 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.validation.ErrorPlaceholder
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.REGEX_MODIFIERS
+import io.spine.tools.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.tools.validation.java.expression.ConstraintViolationClass
 import io.spine.tools.validation.java.expression.FieldPathClass
 import io.spine.tools.validation.java.expression.ImmutableListClass
@@ -63,13 +70,6 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
-import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.validation.PATTERN
 import io.spine.validation.PatternField
 import io.spine.validation.isRepeatedString

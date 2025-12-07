@@ -44,19 +44,19 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.tools.validation.checkPlaceholders
+import io.spine.tools.validation.defaultMessage
 import io.spine.validation.RANGE
 import io.spine.validation.bound.RangeField
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
-import io.spine.validation.checkPlaceholders
-import io.spine.validation.defaultMessage
 
 /**
  * Controls whether a field should be validated with the `(range)` option.
