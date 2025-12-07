@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.jvm
+package io.spine.tools.validation.ksp
 
 import io.spine.annotation.Internal
 import java.io.File

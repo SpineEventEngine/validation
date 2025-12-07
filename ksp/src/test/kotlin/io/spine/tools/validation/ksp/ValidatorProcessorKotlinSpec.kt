@@ -33,7 +33,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.string.qualified
 import io.spine.validate.MessageValidator
-import io.spine.validation.jvm.DiscoveredValidators
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
