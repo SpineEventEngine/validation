@@ -48,6 +48,7 @@ import io.spine.tools.compiler.ast.refersToMessage
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.event.ValidateFieldDiscovered
 import io.spine.validation.event.validateFieldDiscovered
 

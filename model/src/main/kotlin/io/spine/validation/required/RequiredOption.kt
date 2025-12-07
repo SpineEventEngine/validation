@@ -52,7 +52,7 @@ import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.IF_MISSING
-import io.spine.validation.OPTION_NAME
+import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.REQUIRED
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.checkPrimaryApplied

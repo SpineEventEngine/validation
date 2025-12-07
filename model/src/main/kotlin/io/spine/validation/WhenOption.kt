@@ -56,6 +56,7 @@ import io.spine.tools.compiler.jvm.javaClass
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.TypeSystem
+import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE

@@ -41,7 +41,7 @@ import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
-import io.spine.validation.OPTION_NAME
+import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.test.money.Currency
 import io.spine.validation.test.money.CurrencyMessageDiscovered
 import io.spine.validation.test.money.currencyMessageDiscovered

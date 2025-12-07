@@ -47,7 +47,7 @@ import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MIN
-import io.spine.validation.OPTION_NAME
+import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.bound.event.MinFieldDiscovered
