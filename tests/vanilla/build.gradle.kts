@@ -39,7 +39,7 @@ spine {
 
 dependencies {
     spineCompiler(project(":java"))
-    implementation(project(":java-runtime"))
+    implementation(project(":jvm-runtime"))
 
     testImplementation(Base.lib)
     testImplementation(TestLib.lib)

@@ -84,7 +84,7 @@ spinePublishing {
         ":proto:context",
         "java",
         "java-bundle",
-        "java-runtime",
+        "jvm-runtime",
     )
     modulesWithCustomPublishing = setOf(
         "java-bundle",

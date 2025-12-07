@@ -84,7 +84,7 @@ subprojects {
 
     dependencies {
         implementation(Base.lib)
-        implementation(project(":java-runtime"))
+        implementation(project(":jvm-runtime"))
     }
 
     configureTaskDependencies()
@@ -110,7 +110,7 @@ fun Project.applyPlugins() {
                 substitute(module(javaBundleModule)).using(project(":java"))
 
                 // Use the current version of Java runtime in the generated code of tests.
-                substitute(module(runtimeModule)).using(project(":java-runtime"))
+                substitute(module(runtimeModule)).using(project(":jvm-runtime"))
             }
             forcedCompiler.forEach { force(it) }
         }

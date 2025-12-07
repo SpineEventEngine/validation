@@ -40,7 +40,7 @@ include(
     "gradle-plugin",
     "java",
     "model",
-    "java-runtime",
+    "jvm-runtime",
     "java-bundle",
     ":ksp",
     ":tests",

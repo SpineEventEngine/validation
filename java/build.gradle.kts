@@ -35,5 +35,5 @@ dependencies {
     api(project(":ksp"))
     api(project(":model"))
     api(project(":proto:context"))
-    api(project(":java-runtime"))
+    api(project(":jvm-runtime"))
 }

@@ -44,7 +44,7 @@ dependencies {
     implementation(Ksp.artifact { symbolProcessingApi })
     implementation(Base.annotations)
     implementation(Base.lib)
-    implementation(project(":java-runtime"))
+    implementation(project(":jvm-runtime"))
 
     testImplementation(IntelliJ.Platform.util)
         ?.because("We need `com.intellij.util.lang.JavaVersion`.")
