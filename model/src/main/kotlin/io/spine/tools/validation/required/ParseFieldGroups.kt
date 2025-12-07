@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.required
+package io.spine.tools.validation.required
 
 import io.spine.option.RequireOption
 import io.spine.tools.compiler.Compilation
@@ -45,7 +45,7 @@ import io.spine.validation.required.RequiredFieldSupport.isSupported
  * The class ensures the following conditions:
  *
  * 1. Each specified field is declared in the [message] type.
- * 2. Each field has a [compatible][RequiredFieldSupport] field type.
+ * 2. Each field has a [compatible][io.spine.validation.required.RequiredFieldSupport] field type.
  * 3. Each field group has a unique set of fields.
  * 4. Each field group is unique.
  *
