@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
@@ -47,7 +47,6 @@ import io.spine.tools.compiler.ast.isList
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
-import io.spine.validation.RANGE
 
 /**
  * Determines whether the field type can be validated with a range-constraining option.

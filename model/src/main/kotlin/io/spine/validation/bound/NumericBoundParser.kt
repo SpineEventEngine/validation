@@ -44,7 +44,7 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.type.resolve
-import io.spine.validation.bound.BoundFieldSupport.numericPrimitives
+import io.spine.tools.validation.bound.BoundFieldSupport.numericPrimitives
 
 /**
  * Parses bound values specified in Protobuf options that restrict

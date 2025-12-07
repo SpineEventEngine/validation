@@ -51,7 +51,7 @@ import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
-import io.spine.validation.bound.BoundFieldSupport.checkFieldType
+import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.bound.KNumericBound
 import io.spine.validation.bound.NumericBoundParser
 import io.spine.validation.bound.RangeField
