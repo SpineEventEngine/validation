@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,14 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.spine.tools.compiler.settings.LoadsSettings
 import io.spine.tools.compiler.settings.defaultConsumerId
+import io.spine.validation.ValidationPlugin
 
 /**
- * An interface common for components of [ValidationPlugin] that load settings
- * passed as a file containing [ValidationConfig] instance written using
+ * An interface common for components of [io.spine.validation.ValidationPlugin] that load settings
+ * passed as a file containing [io.spine.validation.ValidationConfig] instance written using
  * the plugin class name.
  */
 public interface WithValidationSettings: LoadsSettings {

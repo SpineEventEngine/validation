@@ -34,11 +34,11 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.event.TypeDiscovered
 import io.spine.tools.compiler.ast.findOption
 import io.spine.tools.compiler.ast.ref
-import io.spine.tools.compiler.settings.loadSettings
 import io.spine.tools.compiler.plugin.Reaction
+import io.spine.tools.compiler.settings.loadSettings
+import io.spine.tools.validation.WithValidationSettings
 import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.validation.ValidationConfig
-import io.spine.validation.WithValidationSettings
 import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 
