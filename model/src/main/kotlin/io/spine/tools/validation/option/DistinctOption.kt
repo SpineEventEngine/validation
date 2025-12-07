@@ -24,14 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
-import io.spine.option.IfSetAgainOption
-import io.spine.option.OptionsProto.ifSetAgain
-import io.spine.option.OptionsProto.setOnce
+import io.spine.option.IfHasDuplicatesOption
+import io.spine.option.OptionsProto.distinct
+import io.spine.option.OptionsProto.ifHasDuplicates
 import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
@@ -56,39 +56,44 @@ import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.validation.DISTINCT
+import io.spine.validation.DistinctField
+import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.event.IfSetAgainOptionDiscovered
-import io.spine.validation.event.SetOnceFieldDiscovered
-import io.spine.validation.event.ifSetAgainOptionDiscovered
-import io.spine.validation.event.setOnceFieldDiscovered
+import io.spine.validation.IF_HAS_DUPLICATES
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultErrorMessage
+import io.spine.validation.event.DistinctFieldDiscovered
+import io.spine.validation.event.IfHasDuplicatesOptionDiscovered
+import io.spine.validation.event.distinctFieldDiscovered
+import io.spine.validation.event.ifHasDuplicatesOptionDiscovered
 
 /**
- * Controls whether a field should be validated with the `(set_once)` option.
+ * Controls whether a field should be validated as `(distinct)`.
  *
- * Whenever a field marked with `(set_once)` option is discovered, emits
- * [SetOnceFieldDiscovered] event if the following conditions are met:
+ * Whenever a field marked with `(distinct)` option is discovered, emits
+ * [DistinctFieldDiscovered] event if the following conditions are met:
  *
- * 1. The field type is supported by the option.
+ * 1. The field type is `repeated` or `map`.
  * 2. The option value is `true`.
  *
  * If (1) is violated, the reaction reports a compilation error.
  *
- * Violation of (2) means that the `(set_once)` option is applied correctly,
- * but effectively disabled. [SetOnceFieldDiscovered] is not emitted for
+ * Violation of (2) means that the `(distinct)` option is applied correctly,
+ * but effectively disabled. [DistinctFieldDiscovered] is not emitted for
  * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
  */
-internal class SetOnceReaction : Reaction<FieldOptionDiscovered>() {
+internal class DistinctReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = SET_ONCE)
+        @External @Where(field = OPTION_NAME, equals = DISTINCT)
         event: FieldOptionDiscovered
-    ): EitherOf2<SetOnceFieldDiscovered, NoReaction> {
+    ): EitherOf2<DistinctFieldDiscovered, NoReaction> {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
@@ -97,43 +102,43 @@ internal class SetOnceReaction : Reaction<FieldOptionDiscovered>() {
             return ignore()
         }
 
-        val defaultMessage = defaultErrorMessage<IfSetAgainOption>()
-        return setOnceFieldDiscovered {
+        val message = defaultErrorMessage<IfHasDuplicatesOption>()
+        return distinctFieldDiscovered {
             id = field.ref
+            defaultErrorMessage = message
             subject = field
-            defaultErrorMessage = defaultMessage
         }.asA()
     }
 }
 
 /**
- * Controls whether the `(if_set_again)` option is applied correctly.
+ * Controls whether the `(if_has_duplicates)` option is applied correctly.
  *
- * Whenever a field marked with the `(if_set_again)` option is discovered,
- * emits [IfSetAgainOptionDiscovered] event if the following conditions are met:
+ * Whenever a field marked with the `(if_has_duplicates)` option is discovered,
+ * emits [IfHasDuplicatesOptionDiscovered] event if the following conditions are met:
  *
- * 1. The target field is also marked with the `(set_once)` option.
+ * 1. The target field is also marked with the `(distinct)` option.
  * 2. The specified error message template does not contain placeholders
  * not supported by the option.
  *
  * A compilation error is reported in case of violation of any condition.
  */
-internal class IfSetAgainReaction : Reaction<FieldOptionDiscovered>() {
+internal class IfHasDuplicatesReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = IF_SET_AGAIN)
+        @External @Where(field = OPTION_NAME, equals = IF_HAS_DUPLICATES)
         event: FieldOptionDiscovered
-    ): Just<IfSetAgainOptionDiscovered> {
+    ): Just<IfHasDuplicatesOptionDiscovered> {
         val field = event.subject
         val file = event.file
-        ifSetAgain.checkPrimaryApplied(setOnce, field, file)
+        ifHasDuplicates.checkPrimaryApplied(distinct, field,  file)
 
-        val option = event.option.unpack<IfSetAgainOption>()
+        val option = event.option.unpack<IfHasDuplicatesOption>()
         val message = option.errorMsg
-        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_SET_AGAIN)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, IF_HAS_DUPLICATES)
 
-        return ifSetAgainOptionDiscovered {
+        return ifHasDuplicatesOptionDiscovered {
             id = field.ref
             customErrorMessage = message
         }.just()
@@ -141,12 +146,12 @@ internal class IfSetAgainReaction : Reaction<FieldOptionDiscovered>() {
 }
 
 /**
- * A view of a field that is marked with `(set_once) = true` option.
+ * A view of a field that is marked with `(distinct) = true` option.
  */
-internal class SetOnceFieldView : View<FieldRef, SetOnceField, SetOnceField.Builder>() {
+internal class DistinctFieldView : View<FieldRef, DistinctField, DistinctField.Builder>() {
 
     @Subscribe
-    fun on(e: SetOnceFieldDiscovered) {
+    fun on(e: DistinctFieldDiscovered) {
         val currentMessage = state().errorMessage
         val message = currentMessage.ifEmpty { e.defaultErrorMessage }
         alter {
@@ -156,26 +161,25 @@ internal class SetOnceFieldView : View<FieldRef, SetOnceField, SetOnceField.Buil
     }
 
     @Subscribe
-    fun on(e: IfSetAgainOptionDiscovered) = alter {
+    fun on(e: IfHasDuplicatesOptionDiscovered) = alter {
         errorMessage = e.customErrorMessage
     }
 }
 
 private fun checkFieldType(field: Field, file: File) =
     Compilation.check(field.type.isSupported(), file, field.span) {
-        "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `($SET_ONCE)` option. Supported field types: messages," +
-                " enums, strings, bytes, bools and all numeric fields."
+        "The field type `${field.type.name}` of `${field.qualifiedName}` is not supported" +
+                " by the `(${DISTINCT})` option. This options supports `map` and `repeated` fields."
     }
 
 /**
- * Tells if this [FieldType] can be validated with the `(set_once)` option.
+ * Tells if this [FieldType] can be validated with the `(distinct)` option.
  */
-private fun FieldType.isSupported(): Boolean = !isList && !isMap
+private fun FieldType.isSupported(): Boolean = isMap || isList
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
+    FIELD_DUPLICATES,
     FIELD_PATH,
-    FIELD_PROPOSED_VALUE,
     FIELD_TYPE,
     FIELD_VALUE,
     PARENT_TYPE,

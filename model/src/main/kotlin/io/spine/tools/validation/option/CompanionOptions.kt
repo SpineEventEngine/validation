@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import com.google.protobuf.GeneratedMessage.GeneratedExtension
 import io.spine.tools.compiler.Compilation

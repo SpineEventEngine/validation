@@ -37,8 +37,17 @@ import io.spine.tools.validation.bound.MinFieldView
 import io.spine.tools.validation.bound.MinReaction
 import io.spine.tools.validation.bound.RangeFieldView
 import io.spine.tools.validation.bound.RangeReaction
+import io.spine.tools.validation.option.ChoiceGroupView
+import io.spine.tools.validation.option.ChoiceReaction
+import io.spine.tools.validation.option.DistinctFieldView
+import io.spine.tools.validation.option.DistinctReaction
+import io.spine.tools.validation.option.IfHasDuplicatesReaction
+import io.spine.tools.validation.option.IfSetAgainReaction
+import io.spine.tools.validation.option.IsRequiredReaction
 import io.spine.tools.validation.option.RequireMessageView
 import io.spine.tools.validation.option.RequireReaction
+import io.spine.tools.validation.option.SetOnceFieldView
+import io.spine.tools.validation.option.SetOnceReaction
 import io.spine.tools.validation.option.required.IfMissingReaction
 import io.spine.tools.validation.option.required.RequiredFieldView
 import io.spine.tools.validation.option.required.RequiredIdOptionReaction

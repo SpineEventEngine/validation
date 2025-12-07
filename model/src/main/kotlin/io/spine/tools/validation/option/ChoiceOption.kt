@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation.option
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -44,8 +44,13 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.validation.CHOICE
+import io.spine.validation.ChoiceOneof
 import io.spine.validation.ErrorPlaceholder.GROUP_PATH
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.IS_REQUIRED
+import io.spine.validation.checkPlaceholders
+import io.spine.validation.defaultMessage
 import io.spine.validation.event.ChoiceOneofDiscovered
 import io.spine.validation.event.choiceOneofDiscovered
 
@@ -105,7 +110,7 @@ internal class IsRequiredReaction : Reaction<OneofOptionDiscovered>() {
         event: OneofOptionDiscovered
     ): Just<NoReaction> {
         Compilation.warning(event.file, event.subject.span) {
-            "The `($IS_REQUIRED)` option is deprecated and no longer supported. " +
+            "The `(${IS_REQUIRED})` option is deprecated and no longer supported. " +
                     " Please use `(choice).required = true` instead."
         }
         return Just.noReaction

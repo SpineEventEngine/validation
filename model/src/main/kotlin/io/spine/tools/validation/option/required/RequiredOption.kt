@@ -61,7 +61,7 @@ import io.spine.validation.IF_MISSING
 import io.spine.validation.REQUIRED
 import io.spine.validation.RequiredField
 import io.spine.validation.checkPlaceholders
-import io.spine.validation.checkPrimaryApplied
+import io.spine.tools.validation.option.checkPrimaryApplied
 import io.spine.validation.defaultErrorMessage
 import io.spine.validation.event.IfMissingOptionDiscovered
 import io.spine.validation.event.RequiredFieldDiscovered
