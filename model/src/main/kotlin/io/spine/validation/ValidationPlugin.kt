@@ -31,10 +31,10 @@ import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.plugin.ViewRepository
 import io.spine.tools.compiler.render.Renderer
-import io.spine.validation.bound.MaxFieldView
-import io.spine.validation.bound.MaxReaction
-import io.spine.validation.bound.MinFieldView
-import io.spine.validation.bound.MinReaction
+import io.spine.tools.validation.bound.MaxFieldView
+import io.spine.tools.validation.bound.MaxReaction
+import io.spine.tools.validation.bound.MinFieldView
+import io.spine.tools.validation.bound.MinReaction
 import io.spine.tools.validation.bound.RangeFieldView
 import io.spine.tools.validation.bound.RangeReaction
 import io.spine.validation.required.IfMissingReaction

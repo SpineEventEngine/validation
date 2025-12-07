@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -40,6 +40,8 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
+import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
@@ -47,11 +49,8 @@ import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
 import io.spine.validation.ErrorPlaceholder.MIN_VALUE
 import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.MIN
-import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
-import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
-import io.spine.tools.validation.bound.NumericBoundParser
-import io.spine.tools.validation.bound.toProto
+import io.spine.validation.bound.MinField
 import io.spine.validation.bound.event.MinFieldDiscovered
 import io.spine.validation.bound.event.minFieldDiscovered
 import io.spine.validation.checkPlaceholders
@@ -61,7 +60,7 @@ import io.spine.validation.defaultMessage
  * A reaction to add a validation rule to a type whenever the `(min)` field option
  * is discovered.
  *
- * The condition checks done by the reaction are similar to the ones performed by [io.spine.tools.validation.bound.RangeReaction].
+ * The condition checks done by the reaction are similar to the ones performed by [RangeReaction].
  */
 internal class MinReaction : Reaction<FieldOptionDiscovered>() {
 

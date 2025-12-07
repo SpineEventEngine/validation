@@ -34,9 +34,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 /**
- * Tests [MinReaction][io.spine.validation.bound.MinReaction]-specific conditions.
+ * Tests [MinReaction][io.spine.tools.validation.bound.MinReaction]-specific conditions.
  *
- * [MinReaction][io.spine.validation.bound.MinReaction] is not extensively
+ * [MinReaction][io.spine.tools.validation.bound.MinReaction] is not extensively
  * tested here because it largely relies on the implementation of
  * [RangeReaction][io.spine.tools.validation.bound.RangeReaction] and its tests.
  *

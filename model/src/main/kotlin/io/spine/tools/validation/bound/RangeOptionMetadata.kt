@@ -24,34 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.tools.validation.bound
 
-import io.kotest.matchers.string.shouldContain
-import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.validation.MAX
-import io.spine.validation.MaxWithEmptyValue
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.PrimitiveType
+import io.spine.tools.compiler.type.TypeSystem
+import io.spine.validation.RANGE
 
 /**
- * Tests [MaxReaction][io.spine.tools.validation.bound.MaxReaction]-specific conditions.
+ * Protobuf metadata related to the `(range)` option.
  *
- * [MaxReaction][io.spine.tools.validation.bound.MaxReaction] is not extensively
- * tested here because it largely relies on the implementation of
- * [RangeReaction][io.spine.tools.validation.bound.RangeReaction] and its tests.
+ * This metadata is required to parse and validate the option value.
  *
- * Both policies share the same mechanism of the option value parsing.
+ * @param range The option value as passed by a user.
+ * @param field The field to which the option is applied.
+ * @param fieldType The field type.
+ * @param file The file that contains the field declaration.
+ * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see io.spine.tools.validation.RangeReactionSpec
+ * @see [NumericBoundParser.parse]
  */
-@DisplayName("`MaxReaction` should reject the option")
-internal class MaxReactionSpec : CompilationErrorTest() {
-
-    @Test
-    fun `with empty value`() =
-        assertCompilationFails(MaxWithEmptyValue::class) { field ->
-            shouldContain(MAX)
-            shouldContain(field.qualifiedName)
-            shouldContain("the value is empty")
-        }
-}
+internal class RangeOptionMetadata(
+    val range: String,
+    field: Field,
+    fieldType: PrimitiveType,
+    file: File,
+    typeSystem: TypeSystem,
+) : NumericOptionMetadata(RANGE, field, fieldType, file, typeSystem)

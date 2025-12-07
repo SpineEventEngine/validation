@@ -24,13 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.File
 import io.spine.tools.compiler.ast.PrimitiveType
 import io.spine.tools.compiler.type.TypeSystem
-import io.spine.validation.RANGE
 
 /**
  * Protobuf metadata related to a numeric option, which restricts the allowed
@@ -44,7 +43,7 @@ import io.spine.validation.RANGE
  * @param file The file that contains the field declaration.
  * @param typeSystem The type system used to resolve field references, if any.
  *
- * @see [io.spine.tools.validation.bound.NumericBoundParser.parse]
+ * @see [NumericBoundParser.parse]
  */
 internal open class NumericOptionMetadata(
     val optionName: String,
@@ -53,24 +52,3 @@ internal open class NumericOptionMetadata(
     val file: File,
     val typeSystem: TypeSystem
 )
-
-/**
- * Protobuf metadata related to the `(range)` option.
- *
- * This metadata is required to parse and validate the option value.
- *
- * @param range The option value as passed by a user.
- * @param field The field, to which the option is applied.
- * @param fieldType The field type.
- * @param file The file that contains the field declaration.
- * @param typeSystem The type system used to resolve field references, if any.
- *
- * @see [io.spine.tools.validation.bound.NumericBoundParser.parse]
- */
-internal class RangeOptionMetadata(
-    val range: String,
-    field: Field,
-    fieldType: PrimitiveType,
-    file: File,
-    typeSystem: TypeSystem,
-) : NumericOptionMetadata(RANGE, field, fieldType, file, typeSystem)
