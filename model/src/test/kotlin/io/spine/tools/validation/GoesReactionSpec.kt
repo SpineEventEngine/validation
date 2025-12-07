@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
@@ -35,6 +35,10 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.GOES
+import io.spine.validation.GoesNonExistingCompanion
+import io.spine.validation.GoesSelfCompanion
+import io.spine.validation.GoesWithInvalidPlaceholders
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

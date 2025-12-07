@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
@@ -32,6 +32,15 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.REQUIRE
+import io.spine.validation.RequireDuplicateFields
+import io.spine.validation.RequireDuplicateGroups
+import io.spine.validation.RequireNonExistentField
+import io.spine.validation.RequireWithBool
+import io.spine.validation.RequireWithDouble
+import io.spine.validation.RequireWithInvalidPlaceholders
+import io.spine.validation.RequireWithSignedInt
+import io.spine.validation.RequireWithUnsignedInt
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

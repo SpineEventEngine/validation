@@ -24,40 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.IF_MISSING
+import io.spine.validation.IfMissingWithInvalidPlaceholders
+import io.spine.validation.IfMissingWithoutRequired
+import io.spine.validation.REQUIRED
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`IfHasDuplicatesReaction` should")
-internal class IfHasDuplicatesReactionSpec : CompilationErrorTest() {
+@DisplayName("`IfMissingReaction` should")
+internal class IfMissingReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `reject without '(distinct)'`() {
-        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
+    fun `reject without '(required)'`() {
+        val message = IfMissingWithoutRequired.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
-            shouldContain(DISTINCT)
+            shouldContain(IF_MISSING)
+            shouldContain(REQUIRED)
         }
     }
 
     @Test
     fun `reject unsupported placeholders`() {
-        val message = IfHasDuplicatesWithInvalidPlaceholders.getDescriptor()
+        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(IF_HAS_DUPLICATES)
+            shouldContain(IF_MISSING)
             shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, duplicates.size]")
+            shouldInclude("[field.name, field.value]")
         }
     }
 }

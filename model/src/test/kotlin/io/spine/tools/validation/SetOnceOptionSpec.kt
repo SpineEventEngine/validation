@@ -24,40 +24,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.SET_ONCE
+import io.spine.validation.SetOnceMap
+import io.spine.validation.SetOnceRepeated
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`IfSetAgainReaction` should")
-internal class IfSetAgainReactionSpec : CompilationErrorTest() {
+@DisplayName("`SetOnceReaction` should")
+internal class SetOnceReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `reject without '(set_once)'`() {
-        val message = IfSetAgainWithoutSetOnce.getDescriptor()
+    fun `reject option on a repeated field`() {
+        val message = SetOnceRepeated.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_SET_AGAIN)
-            shouldContain(SET_ONCE)
-        }
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfSetAgainWithInvalidPlaceholders.getDescriptor()
+    fun `reject option on a map field`() {
+        val message = SetOnceMap.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_SET_AGAIN)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[field.name]")
-        }
+        error.message shouldContain unsupportedFieldType(field)
     }
+
 }
+
+private fun unsupportedFieldType(field: Field) =
+    "The field type `${field.type.name}` of the `${field.qualifiedName}` field is not supported" +
+            " by the `(${SET_ONCE})` option."

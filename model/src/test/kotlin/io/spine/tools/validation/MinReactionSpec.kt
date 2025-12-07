@@ -24,10 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.validation.MIN
+import io.spine.validation.MinWithEmptyValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -40,7 +42,7 @@ import org.junit.jupiter.api.Test
  *
  * Both policies share the same mechanism of the option value parsing.
  *
- * @see RangeReactionSpec
+ * @see io.spine.tools.validation.RangeReactionSpec
  */
 @DisplayName("`MinReaction` should reject the option")
 internal class MinReactionSpec : CompilationErrorTest() {

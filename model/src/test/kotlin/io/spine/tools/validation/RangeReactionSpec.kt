@@ -24,13 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.validation.RANGE
+import io.spine.validation.RangeInvalidClosing
+import io.spine.validation.RangeInvalidLowerDouble
+import io.spine.validation.RangeInvalidLowerFloat
+import io.spine.validation.RangeInvalidLowerInt
+import io.spine.validation.RangeInvalidOpening
+import io.spine.validation.RangeInvalidUpperDouble
+import io.spine.validation.RangeInvalidUpperFloat
+import io.spine.validation.RangeInvalidUpperInt
+import io.spine.validation.RangeWithInvalidPlaceholders
+import io.spine.validation.RangeWithNonExistingFieldBound
+import io.spine.validation.RangeWithNonNumericFieldBound
+import io.spine.validation.RangeWithRepeatedFieldBound
+import io.spine.validation.RangeWithSelfReferencing
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

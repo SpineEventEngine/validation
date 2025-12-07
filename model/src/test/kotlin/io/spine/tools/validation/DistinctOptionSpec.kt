@@ -24,47 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
-import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
-import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
-import kotlin.reflect.KClass
+import io.spine.validation.DISTINCT
+import io.spine.validation.IF_HAS_DUPLICATES
+import io.spine.validation.IfHasDuplicatesWithInvalidPlaceholders
+import io.spine.validation.IfHasDuplicatesWithoutDistinct
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
 
-@DisplayName("`PatternReaction` should reject the option")
-internal class PatternReactionSpec : CompilationErrorTest() {
-
-    @MethodSource("io.spine.validation.PatternReactionTestEnv#messagesWithUnsupportedTarget")
-    @ParameterizedTest(name = "when target field type is `{0}`")
-    fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
-        val descriptor = message.descriptor
-        val error = assertCompilationFails(descriptor)
-        val field = descriptor.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }
-    }
+@DisplayName("`IfHasDuplicatesReaction` should")
+internal class IfHasDuplicatesReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `when the error message contains unsupported placeholders`() {
-        val message = PatternWithInvalidPlaceholders.getDescriptor()
+    fun `reject without '(distinct)'`() {
+        val message = IfHasDuplicatesWithoutDistinct.getDescriptor()
         val error = assertCompilationFails(message)
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(PATTERN)
+            shouldContain(IF_HAS_DUPLICATES)
+            shouldContain(DISTINCT)
+        }
+    }
+
+    @Test
+    fun `reject unsupported placeholders`() {
+        val message = IfHasDuplicatesWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_HAS_DUPLICATES)
             shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, pattern.value]")
+            shouldInclude("[field.name, duplicates.size]")
         }
     }
 }

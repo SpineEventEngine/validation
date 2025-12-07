@@ -24,37 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.spine.tools.compiler.ast.Field
-import io.spine.tools.compiler.ast.name
-import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.tools.compiler.protobuf.field
+import io.kotest.matchers.string.shouldInclude
+import io.spine.validation.CHOICE
+import io.spine.validation.ChoiceWithInvalidPlaceholders
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`SetOnceReaction` should")
-internal class SetOnceReactionSpec : CompilationErrorTest() {
+@DisplayName("`ChoiceReaction` should reject the option")
+internal class ChoiceReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `reject option on a repeated field`() {
-        val message = SetOnceRepeated.getDescriptor()
+    fun `when the error message contains unsupported placeholders`() {
+        val message = ChoiceWithInvalidPlaceholders.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
+        val oneof = message.oneofs.first { it.name == "value" }
+        error.message.run {
+            shouldContain(oneof.fullName)
+            shouldContain(CHOICE)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[group.fields]")
+        }
     }
-
-    @Test
-    fun `reject option on a map field`() {
-        val message = SetOnceMap.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message shouldContain unsupportedFieldType(field)
-    }
-
 }
-
-private fun unsupportedFieldType(field: Field) =
-    "The field type `${field.type.name}` of the `${field.qualifiedName}` field is not supported" +
-            " by the `($SET_ONCE)` option."

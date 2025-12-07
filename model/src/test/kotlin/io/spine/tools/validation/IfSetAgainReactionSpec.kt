@@ -24,32 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.IF_SET_AGAIN
+import io.spine.validation.IfSetAgainWithInvalidPlaceholders
+import io.spine.validation.IfSetAgainWithoutSetOnce
+import io.spine.validation.SET_ONCE
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-/**
- * Tests [MaxReaction][io.spine.validation.bound.MaxReaction]-specific conditions.
- *
- * [MaxReaction][io.spine.validation.bound.MaxReaction] is not extensively
- * tested here because it largely relies on the implementation of
- * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
- *
- * Both policies share the same mechanism of the option value parsing.
- *
- * @see RangeReactionSpec
- */
-@DisplayName("`MaxReaction` should reject the option")
-internal class MaxReactionSpec : CompilationErrorTest() {
+@DisplayName("`IfSetAgainReaction` should")
+internal class IfSetAgainReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `with empty value`() =
-        assertCompilationFails(MaxWithEmptyValue::class) { field ->
-            shouldContain(MAX)
+    fun `reject without '(set_once)'`() {
+        val message = IfSetAgainWithoutSetOnce.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain("the value is empty")
+            shouldContain(IF_SET_AGAIN)
+            shouldContain(SET_ONCE)
         }
+    }
+
+    @Test
+    fun `reject unsupported placeholders`() {
+        val message = IfSetAgainWithInvalidPlaceholders.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("value")
+        error.message.run {
+            shouldContain(field.qualifiedName)
+            shouldContain(IF_SET_AGAIN)
+            shouldContain("unsupported placeholders")
+            shouldInclude("[field.name]")
+        }
+    }
 }

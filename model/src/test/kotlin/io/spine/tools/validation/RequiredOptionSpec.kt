@@ -24,63 +24,57 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
+import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.REQUIRED
+import io.spine.validation.RequiredBoolField
+import io.spine.validation.RequiredDoubleField
+import io.spine.validation.RequiredIntField
+import io.spine.validation.RequiredSignedInt
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`WhenReaction` should reject")
-internal class WhenReactionSpec : CompilationErrorTest() {
+@DisplayName("`RequiredReaction` should")
+internal class RequiredReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `option on a boolean field`() {
-        val message = WhenBoolField.getDescriptor()
+    fun `reject option on a boolean field`() {
+        val message = RequiredBoolField.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `option on an integer field`() {
-        val message = WhenInt32Field.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }    }
-
-    @Test
-    fun `option on a string field`() {
-        val message = WhenStringField.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.type.name)
-            shouldContain(field.qualifiedName)
-            shouldContain("is not supported")
-        }
+        val field = message.field("really")
+        error.message shouldContain unsupportedFieldType(field)
     }
 
     @Test
-    fun `the error message with unsupported placeholders`() {
-        val message = WhenWithInvalidPlaceholders.getDescriptor()
+    fun `reject option on an integer field`() {
+        val message = RequiredIntField.getDescriptor()
         val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(WHEN)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[when]")
-        }
+        val field = message.field("zero")
+        error.message shouldContain unsupportedFieldType(field)
+    }
+
+    @Test
+    fun `reject option on a signed integer field`() {
+        val message = RequiredSignedInt.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("signed")
+        error.message shouldContain unsupportedFieldType(field)
+    }
+
+    @Test
+    fun `reject option on a double field`() {
+        val message = RequiredDoubleField.getDescriptor()
+        val error = assertCompilationFails(message)
+        val field = message.field("temperature")
+        error.message shouldContain unsupportedFieldType(field)
     }
 }
+
+private fun unsupportedFieldType(field: Field) =
+    "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
+            " by the `($REQUIRED)` option."

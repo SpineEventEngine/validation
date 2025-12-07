@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import com.google.protobuf.Message
 import io.spine.option.OptionsProto
@@ -37,6 +37,9 @@ import io.spine.tools.compiler.settings.SettingsDirectory
 import io.spine.tools.compiler.settings.defaultConsumerId
 import io.spine.testing.compiler.AbstractCompilationErrorTest
 import io.spine.format.Format
+import io.spine.validation.ValidationPlugin
+import io.spine.validation.messageMarkers
+import io.spine.validation.validationConfig
 import kotlin.reflect.KClass
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.shouldBe
-import io.spine.option.OptionsProto.distinct
-import io.spine.option.OptionsProto.isRequired
-import io.spine.option.OptionsProto.max
-import io.spine.option.OptionsProto.min
-import io.spine.option.OptionsProto.pattern
-import io.spine.option.OptionsProto.range
-import io.spine.option.OptionsProto.required
-import io.spine.option.OptionsProto.setOnce
-import io.spine.option.OptionsProto.validate
-import io.spine.time.validation.TimeOptionsProto.`when`
+import io.spine.option.OptionsProto
+import io.spine.time.validation.TimeOptionsProto
+import io.spine.validation.DISTINCT
+import io.spine.validation.IS_REQUIRED
+import io.spine.validation.MAX
+import io.spine.validation.MIN
+import io.spine.validation.PATTERN
+import io.spine.validation.RANGE
+import io.spine.validation.REQUIRED
+import io.spine.validation.SET_ONCE
+import io.spine.validation.VALIDATE
+import io.spine.validation.WHEN
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -45,51 +47,51 @@ internal class OptionNamesSpec {
 
     @Test
     fun distinct() {
-        DISTINCT shouldBe distinct.descriptor.name
+        DISTINCT shouldBe OptionsProto.distinct.descriptor.name
     }
 
     @Test
     fun is_required() {
-        IS_REQUIRED shouldBe isRequired.descriptor.name
+        IS_REQUIRED shouldBe OptionsProto.isRequired.descriptor.name
     }
 
     @Test
     fun max() {
-        MAX shouldBe max.descriptor.name
+        MAX shouldBe OptionsProto.max.descriptor.name
     }
 
     @Test
     fun min() {
-        MIN shouldBe min.descriptor.name
+        MIN shouldBe OptionsProto.min.descriptor.name
     }
 
     @Test
     fun pattern() {
-        PATTERN shouldBe pattern.descriptor.name
+        PATTERN shouldBe OptionsProto.pattern.descriptor.name
     }
 
     @Test
     fun range() {
-        RANGE shouldBe range.descriptor.name
+        RANGE shouldBe OptionsProto.range.descriptor.name
     }
 
     @Test
     fun required() {
-        REQUIRED shouldBe required.descriptor.name
+        REQUIRED shouldBe OptionsProto.required.descriptor.name
     }
 
     @Test
     fun set_once() {
-        SET_ONCE shouldBe setOnce.descriptor.name
+        SET_ONCE shouldBe OptionsProto.setOnce.descriptor.name
     }
 
     @Test
     fun validate() {
-        VALIDATE shouldBe validate.descriptor.name
+        VALIDATE shouldBe OptionsProto.validate.descriptor.name
     }
 
     @Test
     fun `when`() {
-        WHEN shouldBe `when`.descriptor.name
+        WHEN shouldBe TimeOptionsProto.`when`.descriptor.name
     }
 }

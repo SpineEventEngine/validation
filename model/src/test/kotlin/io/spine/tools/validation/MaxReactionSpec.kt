@@ -24,40 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
-import io.spine.tools.compiler.protobuf.field
+import io.spine.validation.MAX
+import io.spine.validation.MaxWithEmptyValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`IfMissingReaction` should")
-internal class IfMissingReactionSpec : CompilationErrorTest() {
+/**
+ * Tests [MaxReaction][io.spine.validation.bound.MaxReaction]-specific conditions.
+ *
+ * [MaxReaction][io.spine.validation.bound.MaxReaction] is not extensively
+ * tested here because it largely relies on the implementation of
+ * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
+ *
+ * Both policies share the same mechanism of the option value parsing.
+ *
+ * @see io.spine.validation.RangeReactionSpec
+ */
+@DisplayName("`MaxReaction` should reject the option")
+internal class MaxReactionSpec : CompilationErrorTest() {
 
     @Test
-    fun `reject without '(required)'`() {
-        val message = IfMissingWithoutRequired.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
+    fun `with empty value`() =
+        assertCompilationFails(MaxWithEmptyValue::class) { field ->
+            shouldContain(MAX)
             shouldContain(field.qualifiedName)
-            shouldContain(IF_MISSING)
-            shouldContain(REQUIRED)
+            shouldContain("the value is empty")
         }
-    }
-
-    @Test
-    fun `reject unsupported placeholders`() {
-        val message = IfMissingWithInvalidPlaceholders.getDescriptor()
-        val error = assertCompilationFails(message)
-        val field = message.field("value")
-        error.message.run {
-            shouldContain(field.qualifiedName)
-            shouldContain(IF_MISSING)
-            shouldContain("unsupported placeholders")
-            shouldInclude("[field.name, field.value]")
-        }
-    }
 }
