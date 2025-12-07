@@ -24,18 +24,6 @@ all modules and does not describe the project structure per-subproject.
 
 <dependencies>
   <dependency>
-    <groupId>com.google.auto.service</groupId>
-    <artifactId>auto-service-annotations</artifactId>
-    <version>1.1.1</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
-    <groupId>com.google.devtools.ksp</groupId>
-    <artifactId>symbol-processing-api</artifactId>
-    <version>2.3.0</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
     <groupId>com.google.protobuf</groupId>
     <artifactId>protobuf-java</artifactId>
     <version>4.33.1</version>
@@ -228,8 +216,19 @@ all modules and does not describe the project structure per-subproject.
     <scope>provided</scope>
   </dependency>
   <dependency>
+    <groupId>com.google.auto.service</groupId>
+    <artifactId>auto-service-annotations</artifactId>
+    <version>1.1.1</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
     <groupId>com.google.devtools.ksp</groupId>
     <artifactId>symbol-processing</artifactId>
+    <version>2.3.0</version>
+  </dependency>
+  <dependency>
+    <groupId>com.google.devtools.ksp</groupId>
+    <artifactId>symbol-processing-api</artifactId>
     <version>2.3.0</version>
   </dependency>
   <dependency>
