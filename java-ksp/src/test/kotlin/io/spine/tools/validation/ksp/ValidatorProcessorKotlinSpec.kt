@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.ksp
+package io.spine.tools.validation.ksp
 
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.INTERNAL_ERROR
 import com.tschuchort.compiletesting.KotlinCompilation.ExitCode.OK

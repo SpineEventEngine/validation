@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.ksp
+package io.spine.tools.validation.ksp
 
 import com.google.auto.service.AutoService
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -33,7 +33,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
 /**
  * Provides [ValidatorProcessor] that discovers classes annotated with
- * the [@Validator][io.spine.validation.jvm.Validator] annotation.
+ * the [@Validator][io.spine.validate.Validator] annotation.
  */
 @AutoService(SymbolProcessorProvider::class)
 public class ValidatorProcessorProvider : SymbolProcessorProvider {

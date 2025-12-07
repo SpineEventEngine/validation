@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.java.ksp
+package io.spine.tools.validation.ksp
 
 import com.google.protobuf.Message
 import com.intellij.util.lang.JavaVersion
