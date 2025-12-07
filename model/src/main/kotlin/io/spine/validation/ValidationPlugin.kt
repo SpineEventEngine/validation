@@ -35,8 +35,8 @@ import io.spine.validation.bound.MaxFieldView
 import io.spine.validation.bound.MaxReaction
 import io.spine.validation.bound.MinFieldView
 import io.spine.validation.bound.MinReaction
-import io.spine.validation.bound.RangeFieldView
-import io.spine.validation.bound.RangeReaction
+import io.spine.tools.validation.bound.RangeFieldView
+import io.spine.tools.validation.bound.RangeReaction
 import io.spine.validation.required.IfMissingReaction
 import io.spine.validation.required.RequireMessageView
 import io.spine.validation.required.RequireReaction

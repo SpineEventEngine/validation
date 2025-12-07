@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test
  *
  * [MinReaction][io.spine.validation.bound.MinReaction] is not extensively
  * tested here because it largely relies on the implementation of
- * [RangeReaction][io.spine.validation.bound.RangeReaction] and its tests.
+ * [RangeReaction][io.spine.tools.validation.bound.RangeReaction] and its tests.
  *
  * Both policies share the same mechanism of the option value parsing.
  *

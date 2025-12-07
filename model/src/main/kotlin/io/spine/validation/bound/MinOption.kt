@@ -59,7 +59,7 @@ import io.spine.validation.defaultMessage
  * A reaction to add a validation rule to a type whenever the `(min)` field option
  * is discovered.
  *
- * The condition checks done by the reaction are similar to the ones performed by [RangeReaction].
+ * The condition checks done by the reaction are similar to the ones performed by [io.spine.tools.validation.bound.RangeReaction].
  */
 internal class MinReaction : Reaction<FieldOptionDiscovered>() {
 

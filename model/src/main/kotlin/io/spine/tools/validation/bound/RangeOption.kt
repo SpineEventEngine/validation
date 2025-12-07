@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.bound
+package io.spine.tools.validation.bound
 
 import io.spine.base.FieldPath
 import io.spine.core.External
@@ -52,8 +52,13 @@ import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.validation.RANGE
 import io.spine.validation.bound.BoundFieldSupport.checkFieldType
+import io.spine.validation.bound.KNumericBound
+import io.spine.validation.bound.NumericBoundParser
+import io.spine.validation.bound.RangeField
+import io.spine.validation.bound.RangeOptionMetadata
 import io.spine.validation.bound.event.RangeFieldDiscovered
 import io.spine.validation.bound.event.rangeFieldDiscovered
+import io.spine.validation.bound.toProto
 import io.spine.validation.checkPlaceholders
 import io.spine.validation.defaultMessage
 
@@ -79,10 +84,10 @@ import io.spine.validation.defaultMessage
  * Conditions for field-based bounds:
  *
  * 1. The specified field path must point to an exciting field.
- * 2. The field must be of numeric type. Repeated fields are not supported.
- *    Strict consistency between target and bound fields is not required,
+ * 2. The field must be of a numeric type. Repeated fields are not supported.
+ *    Strict consistency between the target and bound fields is not required,
  *    floating-point fields can be used as bounds for integer fields and vice versa.
- * 3. The field doesn't specify self as its bound.
+ * 3. The field does not specify self as its bound.
  *
  * Any violation of the above conditions leads to a compilation error.
  *
@@ -92,10 +97,10 @@ import io.spine.validation.defaultMessage
  *  - `[+1..+100)`
  *
  * Examples of invalid number ranges:
- *  - `1..5` - missing brackets.
- *  - `[0 - 1]` - wrong divider.
- *  - `[0 . . 1]` - wrong delimiter.
- *  - `( .. 0)` - missing lower bound.
+ *  - `1..5` — missing brackets.
+ *  - `[0 - 1]` — wrong divider.
+ *  - `[0 . . 1]` — wrong delimiter.
+ *  - `( .. 0)` — missing lower bound.
  */
 internal class RangeReaction : Reaction<FieldOptionDiscovered>() {
 
