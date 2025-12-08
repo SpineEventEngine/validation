@@ -26,20 +26,15 @@
 
 package io.spine.tools.validation.gradle
 
-import io.spine.tools.meta.LazyMeta
 import io.spine.tools.meta.MavenArtifact
 import io.spine.tools.meta.Module
-
-/**
- * The meta information about the Validation Gradle Plugin.
- */
-public object Meta : LazyMeta(Module("io.spine.tools", "validation-gradle-plugin"))
+import io.spine.tools.validation.gradle.ValidationSdk.javaCodegenBundle
 
 /**
  * Artifacts of the Spine Validation SDK.
  */
 @Suppress("ConstPropertyName")
-public object ValidationSdk {
+internal object ValidationSdk {
 
     private const val toolsGroup = "io.spine.tools"
     private const val prefix = "validation"
@@ -55,6 +50,11 @@ public object ValidationSdk {
         }
         return MavenArtifact(group, name, version, classifier, extension)
     }
+
+    /**
+     * The fully qualified name of the Validation Java Compiler plugin.
+     */
+    internal const val javaCompilerPlugin = "io.spine.tools.validation.java.JavaValidationPlugin"
 
     /**
      * The Maven artifact containing the `io.spine.tools:validation-java-bundle` module.
