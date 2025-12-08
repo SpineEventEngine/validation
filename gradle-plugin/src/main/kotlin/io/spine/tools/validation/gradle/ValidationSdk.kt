@@ -57,7 +57,7 @@ public object ValidationSdk {
     }
 
     /**
-     * The Maven artifact containing the `spine-validation-java-bundle` module.
+     * The Maven artifact containing the `io.spine.tools:validation-java-bundle` module.
      *
      * @param version The version of the Validation library to be used.
      *        If empty, the version of the build-time dependency is used.
@@ -67,7 +67,7 @@ public object ValidationSdk {
         Meta.dependency(javaCodegenBundle).withVersion(version)
 
     /**
-     * The Maven artifact containing the `spine-validation-java-runtime` module.
+     * The Maven artifact containing the `io.spine:spine-validation-jvm-runtime` module.
      *
      * @param version The version of the Validation library to be used.
      *        If empty, the version of the build-time dependency is used.
@@ -78,7 +78,7 @@ public object ValidationSdk {
         Meta.dependency(jvmRuntime).withVersion(version)
 
     /**
-     * The Maven artifact containing the `spine-validation-configuration` module.
+     * The Maven artifact containing the `io.spine.tools:validation-configuration` module.
      *
      * @param version The version of the Validation library to be used.
      *        If empty, the version of the build-time dependency is used.
