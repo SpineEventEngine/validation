@@ -44,7 +44,7 @@ public object ValidationSdk {
     private const val toolsGroup = "io.spine.tools"
     private const val prefix = "validation"
 
-    private val jvmRuntime = Module("io.spine", "$prefix-jvm-runtime")
+    private val jvmRuntime = Module("io.spine", "spine-$prefix-jvm-runtime")
 
     private val javaCodegenBundle = Module(toolsGroup, "$prefix-java-bundle")
     private val configuration = Module(toolsGroup, "$prefix-configuration")
