@@ -61,10 +61,10 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.tools.validation.option.WHEN
-import io.spine.validation.WhenField
+import io.spine.tools.validation.WhenField
 import io.spine.tools.validation.option.isRepeatedMessage
 
 /**

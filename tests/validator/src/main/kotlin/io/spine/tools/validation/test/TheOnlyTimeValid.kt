@@ -24,11 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.test
 
 import com.google.common.annotations.VisibleForTesting
 import com.google.protobuf.Timestamp
-import com.google.protobuf.util.Timestamps.fromMillis
+import com.google.protobuf.util.Timestamps
 import io.spine.base.FieldPath
 import io.spine.base.fieldPath
 import io.spine.validate.DetectedViolation
@@ -37,10 +37,9 @@ import io.spine.validate.MessageValidator
 import io.spine.validate.TemplateString
 import io.spine.validate.Validator
 import io.spine.validate.templateString
-import io.spine.validation.test.TheOnlyTimeValid.Companion.ValidTimestamp
 
 /**
- * Validates [Timestamp] messages, treating all instances as invalid
+ * Validates [com.google.protobuf.Timestamp] messages, treating all instances as invalid
  * except for [ValidTimestamp].
  */
 @Validator(Timestamp::class)
@@ -66,7 +65,7 @@ public class TheOnlyTimeValid : MessageValidator<Timestamp> {
         /**
          * The [TheOnlyTimeValid] considers only this instance as valid.
          */
-        public val ValidTimestamp: Timestamp = fromMillis(893755250000L)
+        public val ValidTimestamp: Timestamp = Timestamps.fromMillis(893755250000L)
     }
 
     @VisibleForTesting

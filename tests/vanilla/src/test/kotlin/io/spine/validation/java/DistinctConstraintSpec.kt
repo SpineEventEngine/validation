@@ -34,7 +34,7 @@ import io.spine.validate.NonValidated
 import io.spine.validate.Validated
 import io.spine.validate.ValidationError
 import io.spine.validate.constraintViolation
-import io.spine.validation.java.given.ProtoSet
+import io.spine.tools.validation.java.given.ProtoSet
 import java.util.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

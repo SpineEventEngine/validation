@@ -35,9 +35,9 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
 import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
-import io.spine.validation.FieldGroup
+import io.spine.tools.validation.FieldGroup
 import io.spine.tools.validation.option.REQUIRE
-import io.spine.validation.fieldGroup
+import io.spine.tools.validation.fieldGroup
 
 /**
  * Parses and validates field groups specified in the given [RequireOption].

@@ -48,9 +48,9 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.ChoiceOneof
-import io.spine.validation.event.ChoiceOneofDiscovered
-import io.spine.validation.event.choiceOneofDiscovered
+import io.spine.tools.validation.ChoiceOneof
+import io.spine.tools.validation.event.ChoiceOneofDiscovered
+import io.spine.tools.validation.event.choiceOneofDiscovered
 
 /**
  * Controls whether a `oneof` group should be validated with the `(choice)` option.

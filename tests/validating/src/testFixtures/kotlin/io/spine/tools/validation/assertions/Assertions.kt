@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
 
 @file:JvmName("Assertions")
 
-package io.spine.validation.assertions
+package io.spine.tools.validation.assertions
 
 import com.google.common.truth.Correspondence
 import com.google.common.truth.Truth.assertThat

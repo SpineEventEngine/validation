@@ -52,9 +52,9 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MAX
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.bound.MaxField
-import io.spine.validation.bound.event.MaxFieldDiscovered
-import io.spine.validation.bound.event.maxFieldDiscovered
+import io.spine.tools.validation.bound.MaxField
+import io.spine.tools.validation.bound.event.MaxFieldDiscovered
+import io.spine.tools.validation.bound.event.maxFieldDiscovered
 
 /**
  * A reaction to add a validation rule to a type whenever the `(max)` field option

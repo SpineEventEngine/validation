@@ -50,9 +50,9 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.FieldGroup
+import io.spine.tools.validation.FieldGroup
 import io.spine.tools.validation.option.REQUIRE
-import io.spine.validation.RequireMessage
+import io.spine.tools.validation.RequireMessage
 
 /**
  * The generator for the `(require)` option.

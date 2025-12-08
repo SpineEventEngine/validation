@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.test
 
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
@@ -151,7 +151,7 @@ private val expectedFieldPath = FieldPath("value").toBuilder()
     .mergeFrom(EarphonesValidator.Violation.fieldPath)
     .build()
 
-private fun earphones() = earphones {
+private fun earphones(): Earphones = earphones {
     modelName = "SN532"
     manufacturer = UUID.randomUUID().toString()
     price = Random.nextDouble() * 100

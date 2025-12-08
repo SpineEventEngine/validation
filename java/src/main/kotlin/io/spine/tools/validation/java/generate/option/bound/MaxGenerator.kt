@@ -47,10 +47,10 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.MAX
-import io.spine.validation.bound.MaxField
-import io.spine.validation.bound.NumericBound.ValueCase
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
+import io.spine.tools.validation.bound.MaxField
+import io.spine.tools.validation.bound.NumericBound.ValueCase
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 
 /**
  * The generator for the `(max)` option.

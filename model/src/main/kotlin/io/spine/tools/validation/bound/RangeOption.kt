@@ -54,9 +54,9 @@ import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.bound.RangeField
-import io.spine.validation.bound.event.RangeFieldDiscovered
-import io.spine.validation.bound.event.rangeFieldDiscovered
+import io.spine.tools.validation.bound.RangeField
+import io.spine.tools.validation.bound.event.RangeFieldDiscovered
+import io.spine.tools.validation.bound.event.rangeFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(range)` option.

@@ -35,8 +35,8 @@ import io.spine.base.Identifier
 import io.spine.base.Time.currentTime
 import io.spine.validate.ConstraintViolation
 import io.spine.validate.ValidatableMessage
-import io.spine.validation.java.given.ArchiveId
-import io.spine.validation.java.given.Paper
+import io.spine.tools.validation.java.given.ArchiveId
+import io.spine.tools.validation.java.given.Paper
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

@@ -53,7 +53,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.tools.validation.option.IF_MISSING
-import io.spine.validation.RequiredField
+import io.spine.tools.validation.RequiredField
 
 /**
  * The generator for `(required)` option.

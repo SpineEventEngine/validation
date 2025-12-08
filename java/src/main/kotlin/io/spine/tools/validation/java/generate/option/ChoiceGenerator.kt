@@ -49,7 +49,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.tools.validation.option.CHOICE
-import io.spine.validation.ChoiceOneof
+import io.spine.tools.validation.ChoiceOneof
 
 /**
  * The generator for the `(choice)` option.

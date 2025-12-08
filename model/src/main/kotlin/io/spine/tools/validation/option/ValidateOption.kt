@@ -49,9 +49,9 @@ import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.OPTION_NAME
-import io.spine.validation.ValidateField
-import io.spine.validation.event.ValidateFieldDiscovered
-import io.spine.validation.event.validateFieldDiscovered
+import io.spine.tools.validation.ValidateField
+import io.spine.tools.validation.event.ValidateFieldDiscovered
+import io.spine.tools.validation.event.validateFieldDiscovered
 
 /**
  * Controls whether a field with the `(validate)` option should be

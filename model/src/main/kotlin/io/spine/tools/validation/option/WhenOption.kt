@@ -64,13 +64,13 @@ import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.TimeFieldType
-import io.spine.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.validation.WhenField
-import io.spine.validation.event.WhenFieldDiscovered
-import io.spine.validation.event.whenFieldDiscovered
+import io.spine.tools.validation.TimeFieldType
+import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.tools.validation.WhenField
+import io.spine.tools.validation.event.WhenFieldDiscovered
+import io.spine.tools.validation.event.whenFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

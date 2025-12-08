@@ -43,6 +43,15 @@ import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.plus
 import io.spine.tools.validation.ErrorPlaceholder
+import io.spine.tools.validation.bound.BoundedFieldView
+import io.spine.tools.validation.bound.NumericBound
+import io.spine.tools.validation.bound.NumericBound.ValueCase.DOUBLE_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.FIELD_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.FLOAT_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.INT32_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.INT64_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 import io.spine.tools.validation.java.expression.IntegerClass
 import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
@@ -60,15 +69,6 @@ import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.BoundedFieldView
-import io.spine.validation.bound.NumericBound
-import io.spine.validation.bound.NumericBound.ValueCase.DOUBLE_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.FIELD_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.FLOAT_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.INT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.INT64_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.validation.bound.NumericBound.ValueCase.UINT64_VALUE
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
@@ -81,7 +81,6 @@ internal abstract class BoundedFieldGenerator(
     private val view: BoundedFieldView,
     private val option: String
 ) {
-
     private val field = view.subject
     private val declaringType = field.declaringType
     private val getter = message.field(field).getter<Any>()

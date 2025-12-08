@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.test
 
 import com.google.auto.service.AutoService
 import io.spine.tools.compiler.plugin.Reaction

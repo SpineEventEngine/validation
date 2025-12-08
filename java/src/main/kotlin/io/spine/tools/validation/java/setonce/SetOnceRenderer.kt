@@ -41,7 +41,7 @@ import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFileSet
 import io.spine.tools.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 import io.spine.tools.validation.option.SET_ONCE
-import io.spine.validation.SetOnceField
+import io.spine.tools.validation.SetOnceField
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure

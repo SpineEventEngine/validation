@@ -30,8 +30,8 @@ import com.google.protobuf.ByteString
 import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
-import io.spine.validation.assertions.assertValid
-import io.spine.validation.assertions.assertViolation
+import io.spine.tools.validation.assertions.assertValid
+import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

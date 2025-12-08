@@ -46,7 +46,7 @@ import io.spine.test.options.setonce.SetOnceTestEnv.THIRD_YEAR
 import io.spine.test.options.setonce.SetOnceTestEnv.YES
 import io.spine.test.tools.validate.studentSetOnceFalse
 import io.spine.test.tools.validate.studentUnconstrained
-import io.spine.validation.assertions.assertValidationPasses
+import io.spine.tools.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

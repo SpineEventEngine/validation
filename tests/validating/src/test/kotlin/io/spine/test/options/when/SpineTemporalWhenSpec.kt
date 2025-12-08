@@ -33,8 +33,8 @@ import io.spine.test.tools.validate.futureSpineTemporals
 import io.spine.test.tools.validate.pastSpineTemporal
 import io.spine.test.tools.validate.pastSpineTemporals
 import io.spine.time.LocalDateTimes
-import io.spine.validation.assertions.assertValidationFails
-import io.spine.validation.assertions.assertValidationPasses
+import io.spine.tools.validation.assertions.assertValidationFails
+import io.spine.tools.validation.assertions.assertValidationPasses
 import java.time.Instant
 import java.time.LocalDateTime.ofInstant
 import java.time.ZoneOffset.UTC

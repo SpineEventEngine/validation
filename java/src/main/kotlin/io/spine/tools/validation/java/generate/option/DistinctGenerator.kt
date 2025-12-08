@@ -65,7 +65,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.DistinctField
+import io.spine.tools.validation.DistinctField
 import io.spine.tools.validation.option.PATTERN
 
 /**

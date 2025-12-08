@@ -55,7 +55,7 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validation.ValidateField
+import io.spine.tools.validation.ValidateField
 
 /**
  * The generator for `(validate)` option.

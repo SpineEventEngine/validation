@@ -62,11 +62,11 @@ import io.spine.tools.validation.option.checkPrimaryApplied
 import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.tools.validation.option.IF_MISSING
 import io.spine.tools.validation.option.REQUIRED
-import io.spine.validation.RequiredField
-import io.spine.validation.event.IfMissingOptionDiscovered
-import io.spine.validation.event.RequiredFieldDiscovered
-import io.spine.validation.event.ifMissingOptionDiscovered
-import io.spine.validation.event.requiredFieldDiscovered
+import io.spine.tools.validation.RequiredField
+import io.spine.tools.validation.event.IfMissingOptionDiscovered
+import io.spine.tools.validation.event.RequiredFieldDiscovered
+import io.spine.tools.validation.event.ifMissingOptionDiscovered
+import io.spine.tools.validation.event.requiredFieldDiscovered
 
 /**
  * Controls whether a field should be validated as `(required)`.

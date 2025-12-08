@@ -61,9 +61,9 @@ import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.validation.GoesField
-import io.spine.validation.event.GoesFieldDiscovered
-import io.spine.validation.event.goesFieldDiscovered
+import io.spine.tools.validation.GoesField
+import io.spine.tools.validation.event.GoesFieldDiscovered
+import io.spine.tools.validation.event.goesFieldDiscovered
 
 /**
  * Controls whether a field should be validated with the `(goes)` option.

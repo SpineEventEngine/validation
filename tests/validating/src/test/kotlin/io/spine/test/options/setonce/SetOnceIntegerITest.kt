@@ -32,8 +32,8 @@ import io.spine.test.options.setonce.SetOnceTestEnv.TWO
 import io.spine.test.options.setonce.SetOnceTestEnv.EIGHT
 import io.spine.test.tools.validate.StudentSetOnce
 import io.spine.test.tools.validate.studentSetOnce
-import io.spine.validation.assertions.assertValidationFails
-import io.spine.validation.assertions.assertValidationPasses
+import io.spine.tools.validation.assertions.assertValidationFails
+import io.spine.tools.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

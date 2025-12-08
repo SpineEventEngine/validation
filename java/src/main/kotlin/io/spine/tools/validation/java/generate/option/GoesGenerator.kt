@@ -58,7 +58,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
 import io.spine.tools.validation.option.GOES
-import io.spine.validation.GoesField
+import io.spine.tools.validation.GoesField
 
 /**
  * The generator for the `(goes)` option.

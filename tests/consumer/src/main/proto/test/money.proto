@@ -5,7 +5,7 @@ package spine.validation.test.money;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.validation.test.money";
+option java_package = "io.spine.tools.validation.test.money";
 option java_outer_classname = "MoneyProto";
 option java_multiple_files = true;
 

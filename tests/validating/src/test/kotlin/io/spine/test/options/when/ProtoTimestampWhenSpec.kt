@@ -36,8 +36,8 @@ import io.spine.test.tools.validate.futureProtoTimestamp
 import io.spine.test.tools.validate.futureProtoTimestamps
 import io.spine.test.tools.validate.pastProtoTimestamp
 import io.spine.test.tools.validate.pastProtoTimestamps
-import io.spine.validation.assertions.assertValidationFails
-import io.spine.validation.assertions.assertValidationPasses
+import io.spine.tools.validation.assertions.assertValidationFails
+import io.spine.tools.validation.assertions.assertValidationPasses
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

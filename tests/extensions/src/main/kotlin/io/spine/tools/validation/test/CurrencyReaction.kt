@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.test
 
 import io.spine.core.External
 import io.spine.core.Where
@@ -42,9 +42,9 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.validation.OPTION_NAME
-import io.spine.validation.test.money.Currency
-import io.spine.validation.test.money.CurrencyMessageDiscovered
-import io.spine.validation.test.money.currencyMessageDiscovered
+import io.spine.tools.validation.test.money.Currency
+import io.spine.tools.validation.test.money.CurrencyMessageDiscovered
+import io.spine.tools.validation.test.money.currencyMessageDiscovered
 
 /**
  * The name of the `(currency)` option.

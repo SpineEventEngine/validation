@@ -32,9 +32,9 @@ import io.spine.testing.TestValues.randomString
 import io.spine.validate.NonValidated
 import io.spine.validate.Validate.violationsOf
 import io.spine.validate.format
-import io.spine.validation.java.given.Fish
-import io.spine.validation.java.given.Meal
-import io.spine.validation.java.given.Sauce
+import io.spine.tools.validation.java.given.Fish
+import io.spine.tools.validation.java.given.Meal
+import io.spine.tools.validation.java.given.Sauce
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

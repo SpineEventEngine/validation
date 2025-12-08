@@ -71,7 +71,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.validate.ConstraintViolation
 import io.spine.tools.validation.option.PATTERN
-import io.spine.validation.PatternField
+import io.spine.tools.validation.PatternField
 import io.spine.tools.validation.option.isRepeatedString
 import io.spine.tools.validation.option.isSingularString
 import java.util.regex.Matcher

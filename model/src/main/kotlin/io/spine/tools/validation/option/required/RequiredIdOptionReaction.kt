@@ -33,7 +33,7 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.ast.MessageType
 import io.spine.tools.compiler.ast.event.TypeDiscovered
 import io.spine.tools.compiler.ast.firstField
-import io.spine.validation.event.RequiredFieldDiscovered
+import io.spine.tools.validation.event.RequiredFieldDiscovered
 
 /**
  * A reaction that marks ID fields in entity state messages as required.

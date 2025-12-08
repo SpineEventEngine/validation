@@ -24,26 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.bound
 
-import io.spine.core.Subscribe
-import io.spine.tools.compiler.ast.TypeName
-import io.spine.tools.compiler.plugin.View
-import io.spine.server.entity.alter
-import io.spine.validation.test.money.CurrencyMessage
-import io.spine.validation.test.money.CurrencyMessageDiscovered
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.ast.File
 
 /**
- * A view of a message that is marked with the `(currency)` option.
+ * A common interface for the bounded numeric field views.
  */
-internal class CurrencyView : View<TypeName, CurrencyMessage, CurrencyMessage.Builder>() {
+public interface BoundedFieldView {
 
-    @Subscribe
-    fun on(e: CurrencyMessageDiscovered): Unit = alter {
-        type = e.type
-        currency = e.currency
-        majorUnitField = e.majorUnitField
-        minorUnitField = e.minorUnitField
-        errorMessage = e.errorMessage
-    }
+    /**
+     * The field in which the option was discovered.
+     */
+    public val subject: Field
+
+    /**
+     * The error message template.
+     */
+    public val errorMessage: String
+
+    /**
+     * The file in which the option was discovered.
+     */
+    public val file: File
 }

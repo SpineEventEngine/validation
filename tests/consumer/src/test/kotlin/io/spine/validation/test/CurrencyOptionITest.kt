@@ -26,7 +26,7 @@
 
 package io.spine.validation.test
 
-import io.spine.validation.test.money.Mru
+import io.spine.tools.validation.test.money.Mru
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

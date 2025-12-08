@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+package io.spine.tools.validation.test
 
 import io.spine.server.query.select
 import io.spine.tools.compiler.ast.TypeName
@@ -43,7 +43,7 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validate.ConstraintViolation
-import io.spine.validation.test.money.CurrencyMessage
+import io.spine.tools.validation.test.money.CurrencyMessage
 
 /**
  * The generator for the `(currency)` option.

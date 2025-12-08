@@ -33,7 +33,7 @@ import com.google.common.truth.Truth.assertThat
 import io.spine.validate.ValidatableMessage
 import io.spine.testing.isInstanceOf
 
-import io.spine.validation.java.given.Meal
+import io.spine.tools.validation.java.given.Meal
 
 @DisplayName("Validation code for Java should")
 internal class JavaValidationSpec {

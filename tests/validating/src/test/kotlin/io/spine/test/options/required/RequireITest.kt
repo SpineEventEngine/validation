@@ -35,8 +35,8 @@ import io.spine.test.tools.validate.Due
 import io.spine.test.tools.validate.FieldGroup
 import io.spine.type.TypeName
 import io.spine.validate.format
-import io.spine.validation.assertions.assertInvalid
-import io.spine.validation.assertions.assertValid
+import io.spine.tools.validation.assertions.assertInvalid
+import io.spine.tools.validation.assertions.assertValid
 import java.nio.charset.StandardCharsets.UTF_16
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
