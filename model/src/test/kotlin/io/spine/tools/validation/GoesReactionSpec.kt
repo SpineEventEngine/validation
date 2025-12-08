@@ -48,7 +48,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @DisplayName("`GoesReaction` should reject the option")
 internal class GoesReactionSpec : CompilationErrorTest() {
 
-    @MethodSource("io.spine.validation.GoesReactionTestEnv#messagesWithUnsupportedTarget")
+    @MethodSource("io.spine.tools.validation.GoesReactionTestEnv#messagesWithUnsupportedTarget")
     @ParameterizedTest(name = "when target field type is `{0}`")
     fun whenTargetFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor
@@ -57,7 +57,7 @@ internal class GoesReactionSpec : CompilationErrorTest() {
         error.message shouldContain unsupportedFieldType(field)
     }
 
-    @MethodSource("io.spine.validation.GoesReactionTestEnv#messagesWithUnsupportedCompanion")
+    @MethodSource("io.spine.tools.validation.GoesReactionTestEnv#messagesWithUnsupportedCompanion")
     @ParameterizedTest(name = "when companion's field type is `{0}`")
     fun whenCompanionFieldHasUnsupportedType(message: KClass<out Message>) {
         val descriptor = message.descriptor

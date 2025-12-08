@@ -24,19 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
-import org.junit.jupiter.api.Named.named
-import org.junit.jupiter.params.provider.Arguments.arguments
+import io.spine.validation.GoesBoolCompanion
+import io.spine.validation.GoesBoolTarget
+import io.spine.validation.GoesDoubleCompanion
+import io.spine.validation.GoesDoubleTarget
+import io.spine.validation.GoesFixed32Companion
+import io.spine.validation.GoesFixed32Target
+import io.spine.validation.GoesFixed64Companion
+import io.spine.validation.GoesFixed64Target
+import io.spine.validation.GoesFloatCompanion
+import io.spine.validation.GoesFloatTarget
+import io.spine.validation.GoesInt32Companion
+import io.spine.validation.GoesInt32Target
+import io.spine.validation.GoesInt64Companion
+import io.spine.validation.GoesInt64Target
+import io.spine.validation.GoesSFixed32Companion
+import io.spine.validation.GoesSFixed32Target
+import io.spine.validation.GoesSFixed64Companion
+import io.spine.validation.GoesSFixed64Target
+import io.spine.validation.GoesSInt32Companion
+import io.spine.validation.GoesSInt32Target
+import io.spine.validation.GoesSInt64Companion
+import io.spine.validation.GoesSInt64Target
+import io.spine.validation.GoesUInt32Companion
+import io.spine.validation.GoesUInt32Target
+import io.spine.validation.GoesUInt64Companion
+import io.spine.validation.GoesUInt64Target
+import org.junit.jupiter.api.Named
+import org.junit.jupiter.params.provider.Arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.GoesReactionSpec].
+ * Provides data for parametrized tests in `GoesReactionSpec`.
  */
 @Suppress("unused") // Data provider for parameterized test.
 object GoesReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.GoesReactionSpec.whenTargetFieldHasUnsupportedType].
+     * Test data for `GoesReactionSpec.whenTargetFieldHasUnsupportedType`.
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
@@ -53,10 +79,10 @@ object GoesReactionTestEnv {
         "fixed64" to GoesFixed64Target::class,
         "sfixed32" to GoesSFixed32Target::class,
         "sfixed64" to GoesSFixed64Target::class,
-    ).map { arguments(named(it.first, it.second)) }
+    ).map { Arguments.arguments(Named.named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.GoesReactionSpec.whenCompanionFieldHasUnsupportedType].
+     * Test data for `GoesReactionSpec.whenCompanionFieldHasUnsupportedType`.
      */
     @JvmStatic
     fun messagesWithUnsupportedCompanion() = listOf(
@@ -73,5 +99,5 @@ object GoesReactionTestEnv {
         "fixed64" to GoesFixed64Companion::class,
         "sfixed32" to GoesSFixed32Companion::class,
         "sfixed64" to GoesSFixed64Companion::class,
-    ).map { arguments(named(it.first, it.second)) }
+    ).map { Arguments.arguments(Named.named(it.first, it.second)) }
 }
