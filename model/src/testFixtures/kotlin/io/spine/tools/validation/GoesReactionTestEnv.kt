@@ -62,7 +62,7 @@ import org.junit.jupiter.params.provider.Arguments
 object GoesReactionTestEnv {
 
     /**
-     * Test data for `GoesReactionSpec.whenTargetFieldHasUnsupportedType`.
+     * Test data for `GoesReactionSpec.whenTargetFieldHasUnsupportedType()`.
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
@@ -82,7 +82,7 @@ object GoesReactionTestEnv {
     ).map { Arguments.arguments(Named.named(it.first, it.second)) }
 
     /**
-     * Test data for `GoesReactionSpec.whenCompanionFieldHasUnsupportedType`.
+     * Test data for `GoesReactionSpec.whenCompanionFieldHasUnsupportedType()`.
      */
     @JvmStatic
     fun messagesWithUnsupportedCompanion() = listOf(

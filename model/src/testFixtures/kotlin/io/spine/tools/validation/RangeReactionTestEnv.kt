@@ -24,19 +24,72 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
-import org.junit.jupiter.api.Named.named
-import org.junit.jupiter.params.provider.Arguments.arguments
+import io.spine.validation.RangeDoubleLowerOverflow
+import io.spine.validation.RangeDoubleMinMax
+import io.spine.validation.RangeDoubleUpperOverflow
+import io.spine.validation.RangeFixed32LowerOverflow
+import io.spine.validation.RangeFixed32MinMax
+import io.spine.validation.RangeFixed32UpperOverflow
+import io.spine.validation.RangeFixed64LowerOverflow
+import io.spine.validation.RangeFixed64MinMax
+import io.spine.validation.RangeFixed64UpperOverflow
+import io.spine.validation.RangeFloatLowerOverflow
+import io.spine.validation.RangeFloatMinMax
+import io.spine.validation.RangeFloatUpperOverflow
+import io.spine.validation.RangeInt32LowerOverflow
+import io.spine.validation.RangeInt32MinMax
+import io.spine.validation.RangeInt32UpperOverflow
+import io.spine.validation.RangeInt64LowerOverflow
+import io.spine.validation.RangeInt64MinMax
+import io.spine.validation.RangeInt64UpperOverflow
+import io.spine.validation.RangeInvalidDelimiter1
+import io.spine.validation.RangeInvalidDelimiter2
+import io.spine.validation.RangeInvalidDelimiter3
+import io.spine.validation.RangeInvalidDelimiter4
+import io.spine.validation.RangeOnBool
+import io.spine.validation.RangeOnBoolRepeated
+import io.spine.validation.RangeOnBytes
+import io.spine.validation.RangeOnBytesRepeated
+import io.spine.validation.RangeOnDoubleMap
+import io.spine.validation.RangeOnEnum
+import io.spine.validation.RangeOnEnumRepeated
+import io.spine.validation.RangeOnIntMap
+import io.spine.validation.RangeOnMessage
+import io.spine.validation.RangeOnMessageRepeated
+import io.spine.validation.RangeOnString
+import io.spine.validation.RangeOnStringMap
+import io.spine.validation.RangeOnStringRepeated
+import io.spine.validation.RangeSFixed32LowerOverflow
+import io.spine.validation.RangeSFixed32MinMax
+import io.spine.validation.RangeSFixed32UpperOverflow
+import io.spine.validation.RangeSFixed64LowerOverflow
+import io.spine.validation.RangeSFixed64MinMax
+import io.spine.validation.RangeSFixed64UpperOverflow
+import io.spine.validation.RangeSInt32LowerOverflow
+import io.spine.validation.RangeSInt32MinMax
+import io.spine.validation.RangeSInt32UpperOverflow
+import io.spine.validation.RangeSInt64LowerOverflow
+import io.spine.validation.RangeSInt64MinMax
+import io.spine.validation.RangeSInt64UpperOverflow
+import io.spine.validation.RangeUInt32LowerOverflow
+import io.spine.validation.RangeUInt32MinMax
+import io.spine.validation.RangeUInt32UpperOverflow
+import io.spine.validation.RangeUInt64LowerOverflow
+import io.spine.validation.RangeUInt64MinMax
+import io.spine.validation.RangeUInt64UpperOverflow
+import org.junit.jupiter.api.Named
+import org.junit.jupiter.params.provider.Arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.RangeReactionSpec].
+ * Provides data for parametrized tests in `RangeReactionSpec`.
  */
 @Suppress("unused") // Data provider for parameterized test.
 object RangeReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.RangeReactionSpec.whenFieldHasUnsupportedType].
+     * Test data for `RangeReactionSpec.whenFieldHasUnsupportedType()`.
      */
     @JvmStatic
     fun messagesWithUnsupportedFieldType() = listOf(
@@ -53,10 +106,10 @@ object RangeReactionTestEnv {
         "map of int32" to RangeOnIntMap::class,
         "map of double" to RangeOnDoubleMap::class,
         "map of string" to RangeOnStringMap::class,
-    ).map { arguments(named(it.first, it.second)) }
+    ).map { Arguments.arguments(Named.named(it.first, it.second)) }
 
     /**
-     * Test data for [io.spine.validation.RangeReactionSpec.withInvalidDelimiters].
+     * Test data for `RangeReactionSpec.withInvalidDelimiters()`.
      */
     @JvmStatic
     fun messagesWithInvalidDelimiters() = listOf(
@@ -64,10 +117,10 @@ object RangeReactionTestEnv {
         RangeInvalidDelimiter2::class,
         RangeInvalidDelimiter3::class,
         RangeInvalidDelimiter4::class,
-    ).map { arguments(it) }
+    ).map { Arguments.arguments(it) }
 
     /**
-     * Test data for [io.spine.validation.RangeReactionSpec.withOverflowValue].
+     * Test data for `RangeReactionSpec.withOverflowValue()`.
      */
     @JvmStatic
     fun messagesWithOverflowValues() = listOf(
@@ -95,10 +148,10 @@ object RangeReactionTestEnv {
         RangeSFixed32UpperOverflow::class to "2147483648",
         RangeSFixed64LowerOverflow::class to "-9223372036854775809",
         RangeSFixed64UpperOverflow::class to "9223372036854775808",
-    ).map { arguments(it.first, it.second) }
+    ).map { Arguments.arguments(it.first, it.second) }
 
     /**
-     * Test data for [io.spine.validation.RangeReactionSpec.withLowerEqualOrMoreThanUpper].
+     * Test data for `RangeReactionSpec.withLowerEqualOrMoreThanUpper()`.
      */
     @JvmStatic
     fun messagesWithLowerEqualOrMoreThanUpper() = listOf(
@@ -114,5 +167,5 @@ object RangeReactionTestEnv {
         RangeFixed64MinMax::class to "8",
         RangeSFixed32MinMax::class to "5",
         RangeSFixed64MinMax::class to "5",
-    ).map { arguments(it.first, it.second) }
+    ).map { Arguments.arguments(it.first, it.second) }
 }

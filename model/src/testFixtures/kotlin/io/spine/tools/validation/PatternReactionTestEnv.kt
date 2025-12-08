@@ -24,19 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
-import org.junit.jupiter.api.Named.named
-import org.junit.jupiter.params.provider.Arguments.arguments
+import io.spine.validation.PatternBoolField
+import io.spine.validation.PatternDoubleField
+import io.spine.validation.PatternIntField
+import io.spine.validation.PatternMessageField
+import io.spine.validation.PatternRepeatedBoolField
+import io.spine.validation.PatternRepeatedDoubleField
+import io.spine.validation.PatternRepeatedIntField
+import io.spine.validation.PatternRepeatedMessageField
+import org.junit.jupiter.api.Named
+import org.junit.jupiter.params.provider.Arguments
 
 /**
- * Provides data for parametrized tests in [io.spine.validation.PatternReactionSpec].
+ * Provides data for parametrized tests in `PatternReactionSpec`.
  */
 @Suppress("unused") // Data provider for parameterized test.
 object PatternReactionTestEnv {
 
     /**
-     * Test data for [io.spine.validation.PatternReactionSpec.targetFieldHasUnsupportedType].
+     * Test data for `PatternReactionSpec.targetFieldHasUnsupportedType()`.
      */
     @JvmStatic
     fun messagesWithUnsupportedTarget() = listOf(
@@ -48,5 +56,5 @@ object PatternReactionTestEnv {
         "repeated double" to PatternRepeatedDoubleField::class,
         "message" to PatternMessageField::class,
         "repeated message" to PatternRepeatedMessageField::class,
-    ).map { arguments(named(it.first, it.second)) }
+    ).map { Arguments.arguments(Named.named(it.first, it.second)) }
 }
