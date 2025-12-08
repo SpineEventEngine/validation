@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.local.Compiler
+import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
 
 plugins {
@@ -63,15 +65,16 @@ gradlePlugin {
 
         create("spineValidation") {
             id = "io.spine.validation"
-            implementationClass = "io.spine.tools.validation.gradle.ValidationPlugin"
-            displayName = "Spine Validation Compiler"
-            description = "Configures Spine Compiler to run the Validation Compiler in mode."
+            implementationClass = "io.spine.tools.validation.gradle.ValidationGradlePlugin"
+            displayName = "Spine Validation Compiler Gradle Plugin"
+            description = "Configures Spine Compiler to run the Validation Compiler."
             tags.set(pluginTags)
         }
     }
 }
 
 dependencies {
-    implementation(io.spine.dependency.local.Compiler.gradleApi)
-    implementation(io.spine.dependency.local.ToolBase.jvmTools)
+    implementation(Compiler.pluginLib)
+    implementation(Compiler.gradleApi)
+    implementation(ToolBase.jvmTools)
 }
