@@ -30,7 +30,7 @@ import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.setonce.SetOnceRenderer
-import io.spine.validation.ValidationPlugin
+import io.spine.tools.validation.ValidationPlugin
 import io.spine.tools.validation.ksp.DiscoveredValidators
 import java.io.File
 import java.util.*

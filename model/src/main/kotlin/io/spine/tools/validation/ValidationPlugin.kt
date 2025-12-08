@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 import io.spine.tools.compiler.plugin.Plugin
 import io.spine.tools.compiler.plugin.Reaction
@@ -60,8 +60,8 @@ import io.spine.tools.validation.option.WhenReaction
 import io.spine.tools.validation.option.required.IfMissingReaction
 import io.spine.tools.validation.option.required.RequiredFieldView
 import io.spine.tools.validation.option.required.RequiredIdOptionReaction
-import io.spine.tools.validation.option.required.RequiredReaction
 import io.spine.tools.validation.option.required.RequiredIdPatternReaction
+import io.spine.tools.validation.option.required.RequiredReaction
 
 /**
  * The basic implementation of ProtoData validation plugin, which builds

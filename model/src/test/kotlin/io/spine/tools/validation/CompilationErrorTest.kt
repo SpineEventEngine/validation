@@ -27,7 +27,9 @@
 package io.spine.tools.validation
 
 import com.google.protobuf.Message
+import io.spine.format.Format
 import io.spine.option.OptionsProto
+import io.spine.testing.compiler.AbstractCompilationErrorTest
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.filePattern
 import io.spine.tools.compiler.plugin.Plugin
@@ -35,9 +37,6 @@ import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
 import io.spine.tools.compiler.settings.SettingsDirectory
 import io.spine.tools.compiler.settings.defaultConsumerId
-import io.spine.testing.compiler.AbstractCompilationErrorTest
-import io.spine.format.Format
-import io.spine.validation.ValidationPlugin
 import io.spine.validation.messageMarkers
 import io.spine.validation.validationConfig
 import kotlin.reflect.KClass

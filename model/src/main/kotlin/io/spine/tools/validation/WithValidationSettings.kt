@@ -28,15 +28,17 @@ package io.spine.tools.validation
 
 import io.spine.tools.compiler.settings.LoadsSettings
 import io.spine.tools.compiler.settings.defaultConsumerId
-import io.spine.validation.ValidationPlugin
 
 /**
- * An interface common for components of [io.spine.validation.ValidationPlugin] that load settings
+ * An interface common for components of [ValidationPlugin] that load settings
  * passed as a file containing [io.spine.validation.ValidationConfig] instance written using
  * the plugin class name.
  */
 public interface WithValidationSettings: LoadsSettings {
 
     override val consumerId: String
-        get() = ValidationPlugin::class.java.defaultConsumerId
+        //TODO:2025-12-08:alexander.yevsyukov: Replace with the line below once CoreJvm Compiler
+        // migrates to new Validation.
+        // ValidationPlugin::class.java.defaultConsumerId
+        get() = "io.spine.validation.ValidationPlugin"
 }
