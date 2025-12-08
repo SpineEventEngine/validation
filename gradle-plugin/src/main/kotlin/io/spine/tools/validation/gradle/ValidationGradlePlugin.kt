@@ -26,14 +26,12 @@
 
 package io.spine.tools.validation.gradle
 
-import io.spine.tools.compiler.gradle.api.Names
 import io.spine.tools.compiler.gradle.api.compilerSettings
+import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
-import io.spine.tools.meta.MavenArtifact
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
 
 /**
  * Gradle plugin that configures the Spine Compiler to run the Validation Compiler in solo mode.
@@ -68,22 +66,3 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
  */
 private val Project.validationExtension: ValidationExtension
     get() = spineExtension<ValidationExtension>()
-
-private fun Project.addUserClasspathDependency(vararg artifacts: MavenArtifact) =
-    artifacts.forEach {
-        addDependency(Names.USER_CLASSPATH_CONFIGURATION, it)
-    }
-
-private fun Project.addDependency(configuration: String, artifact: MavenArtifact) {
-    val dependency = findDependency(artifact) ?: artifact.coordinates
-    dependencies.add(configuration, dependency)
-}
-
-private fun Project.findDependency(artifact: MavenArtifact): Dependency? {
-    val dependencies = configurations.flatMap { c -> c.dependencies }
-    val found = dependencies.firstOrNull { d ->
-        artifact.group == d.group // `d.group` could be `null`.
-                && artifact.name == d.name
-    }
-    return found
-}
