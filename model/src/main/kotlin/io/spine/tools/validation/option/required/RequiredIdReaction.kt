@@ -43,7 +43,7 @@ import io.spine.validation.event.RequiredFieldDiscovered
 import io.spine.validation.event.requiredFieldDiscovered
 
 /**
- * An abstract base for policies that control whether an ID field
+ * An abstract base for reactions that control whether an ID field
  * should be implicitly validated as required.
  *
  * The ID of a signal message or an entity state is the first field

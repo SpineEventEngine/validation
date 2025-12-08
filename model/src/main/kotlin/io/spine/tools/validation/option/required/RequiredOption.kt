@@ -85,10 +85,10 @@ import io.spine.validation.event.requiredFieldDiscovered
  * that the option is ignored.
  *
  * Note that this reaction is responsible only for fields explicitly marked with
- * the validation option. There are other policies that handle implicitly
+ * the validation option. There are other reactions that handle implicitly
  * required fields, i.e., ID fields in entities and signal messages.
  *
- * @see [io.spine.validation.required.RequiredIdOptionReaction]
+ * @see [RequiredIdOptionReaction]
  * @see [RequiredIdPatternReaction]
  */
 internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {

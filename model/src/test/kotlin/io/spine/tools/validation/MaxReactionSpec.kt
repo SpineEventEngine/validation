@@ -40,9 +40,10 @@ import org.junit.jupiter.api.Test
  * tested here because it largely relies on the implementation of
  * [RangeReaction][io.spine.tools.validation.bound.RangeReaction] and its tests.
  *
- * Both policies share the same mechanism of the option value parsing.
+ * Both reactions share the same mechanism of the option value parsing.
  *
- * @see io.spine.tools.validation.RangeReactionSpec
+ * @see MinReactionSpec
+ * @see RangeReactionSpec
  */
 @DisplayName("`MaxReaction` should reject the option")
 internal class MaxReactionSpec : CompilationErrorTest() {
