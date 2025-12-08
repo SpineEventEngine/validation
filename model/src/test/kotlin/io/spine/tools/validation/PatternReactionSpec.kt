@@ -33,8 +33,8 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.PatternWithInvalidPlaceholders
 import io.spine.tools.validation.option.PATTERN
-import io.spine.validation.PatternWithInvalidPlaceholders
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

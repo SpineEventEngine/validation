@@ -28,8 +28,8 @@ package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.validation.given.MinWithEmptyValue
 import io.spine.tools.validation.option.MIN
-import io.spine.validation.MinWithEmptyValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

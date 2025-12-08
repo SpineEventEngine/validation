@@ -32,15 +32,15 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.RequireDuplicateFields
+import io.spine.tools.validation.given.RequireDuplicateGroups
+import io.spine.tools.validation.given.RequireNonExistentField
+import io.spine.tools.validation.given.RequireWithBool
+import io.spine.tools.validation.given.RequireWithDouble
+import io.spine.tools.validation.given.RequireWithInvalidPlaceholders
+import io.spine.tools.validation.given.RequireWithSignedInt
+import io.spine.tools.validation.given.RequireWithUnsignedInt
 import io.spine.tools.validation.option.REQUIRE
-import io.spine.validation.RequireDuplicateFields
-import io.spine.validation.RequireDuplicateGroups
-import io.spine.validation.RequireNonExistentField
-import io.spine.validation.RequireWithBool
-import io.spine.validation.RequireWithDouble
-import io.spine.validation.RequireWithInvalidPlaceholders
-import io.spine.validation.RequireWithSignedInt
-import io.spine.validation.RequireWithUnsignedInt
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

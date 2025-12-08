@@ -31,9 +31,9 @@ import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.SetOnceMap
+import io.spine.tools.validation.given.SetOnceRepeated
 import io.spine.tools.validation.option.SET_ONCE
-import io.spine.validation.SetOnceMap
-import io.spine.validation.SetOnceRepeated
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

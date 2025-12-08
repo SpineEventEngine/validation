@@ -26,14 +26,14 @@
 
 package io.spine.tools.validation
 
-import io.spine.validation.PatternBoolField
-import io.spine.validation.PatternDoubleField
-import io.spine.validation.PatternIntField
-import io.spine.validation.PatternMessageField
-import io.spine.validation.PatternRepeatedBoolField
-import io.spine.validation.PatternRepeatedDoubleField
-import io.spine.validation.PatternRepeatedIntField
-import io.spine.validation.PatternRepeatedMessageField
+import io.spine.tools.validation.given.PatternBoolField
+import io.spine.tools.validation.given.PatternDoubleField
+import io.spine.tools.validation.given.PatternIntField
+import io.spine.tools.validation.given.PatternMessageField
+import io.spine.tools.validation.given.PatternRepeatedBoolField
+import io.spine.tools.validation.given.PatternRepeatedDoubleField
+import io.spine.tools.validation.given.PatternRepeatedIntField
+import io.spine.tools.validation.given.PatternRepeatedMessageField
 import org.junit.jupiter.api.Named
 import org.junit.jupiter.params.provider.Arguments
 

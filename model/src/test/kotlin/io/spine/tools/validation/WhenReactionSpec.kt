@@ -31,11 +31,11 @@ import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.WhenBoolField
+import io.spine.tools.validation.given.WhenInt32Field
+import io.spine.tools.validation.given.WhenStringField
+import io.spine.tools.validation.given.WhenWithInvalidPlaceholders
 import io.spine.tools.validation.option.WHEN
-import io.spine.validation.WhenBoolField
-import io.spine.validation.WhenInt32Field
-import io.spine.validation.WhenStringField
-import io.spine.validation.WhenWithInvalidPlaceholders
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

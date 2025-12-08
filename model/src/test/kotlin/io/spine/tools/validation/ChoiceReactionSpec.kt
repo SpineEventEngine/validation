@@ -28,8 +28,8 @@ package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
+import io.spine.tools.validation.given.ChoiceWithInvalidPlaceholders
 import io.spine.tools.validation.option.CHOICE
-import io.spine.validation.ChoiceWithInvalidPlaceholders
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

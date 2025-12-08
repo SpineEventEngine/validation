@@ -35,10 +35,10 @@ import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.GoesNonExistingCompanion
+import io.spine.tools.validation.given.GoesSelfCompanion
+import io.spine.tools.validation.given.GoesWithInvalidPlaceholders
 import io.spine.tools.validation.option.GOES
-import io.spine.validation.GoesNonExistingCompanion
-import io.spine.validation.GoesSelfCompanion
-import io.spine.validation.GoesWithInvalidPlaceholders
 import kotlin.reflect.KClass
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

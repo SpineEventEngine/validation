@@ -30,9 +30,9 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.IfMissingWithInvalidPlaceholders
+import io.spine.tools.validation.given.IfMissingWithoutRequired
 import io.spine.tools.validation.option.IF_MISSING
-import io.spine.validation.IfMissingWithInvalidPlaceholders
-import io.spine.validation.IfMissingWithoutRequired
 import io.spine.tools.validation.option.REQUIRED
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

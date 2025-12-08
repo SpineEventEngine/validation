@@ -30,10 +30,10 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.validation.given.IfHasDuplicatesWithInvalidPlaceholders
+import io.spine.tools.validation.given.IfHasDuplicatesWithoutDistinct
 import io.spine.tools.validation.option.DISTINCT
 import io.spine.tools.validation.option.IF_HAS_DUPLICATES
-import io.spine.validation.IfHasDuplicatesWithInvalidPlaceholders
-import io.spine.validation.IfHasDuplicatesWithoutDistinct
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

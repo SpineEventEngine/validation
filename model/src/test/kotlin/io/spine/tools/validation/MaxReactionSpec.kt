@@ -28,8 +28,8 @@ package io.spine.tools.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.validation.given.MaxWithEmptyValue
 import io.spine.tools.validation.option.MAX
-import io.spine.validation.MaxWithEmptyValue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
