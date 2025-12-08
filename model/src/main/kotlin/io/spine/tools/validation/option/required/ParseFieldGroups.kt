@@ -45,7 +45,8 @@ import io.spine.tools.validation.fieldGroup
  * The class ensures the following conditions:
  *
  * 1. Each specified field is declared in the [message] type.
- * 2. Each field has a [compatible][RequiredFieldSupport] field type.
+ * 2. Each field has a [compatible][io.spine.tools.validation.option.required.RequiredFieldSupport]
+ *    field type.
  * 3. Each field group has a unique set of fields.
  * 4. Each field group is unique.
  *
