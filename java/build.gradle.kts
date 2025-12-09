@@ -1,3 +1,5 @@
+import io.spine.dependency.local.Compiler
+
 /*
  * Copyright 2024, TeamDev. All rights reserved.
  *
@@ -29,6 +31,9 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":java-api"))
-    implementation(project(":model"))
+    api(Compiler.jvm)
+    api(project(":ksp"))
+    api(project(":model"))
+    api(project(":proto:context"))
+    api(project(":jvm-runtime"))
 }

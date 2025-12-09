@@ -64,6 +64,9 @@ buildscript {
         classpath(io.spine.dependency.local.ToolBase.protobufSetupPlugins)
 
         classpath(io.spine.dependency.kotlinx.DateTime.lib)
+
+        // For `io.spine.artifact-meta` plugin.
+        classpath(io.spine.dependency.local.ToolBase.jvmToolPluginDogfooding)
     }
 }
 
@@ -81,8 +84,7 @@ spinePublishing {
         ":proto:context",
         "java",
         "java-bundle",
-        "java-runtime",
-        "java-api"
+        "jvm-runtime",
     )
     modulesWithCustomPublishing = setOf(
         "java-bundle",
@@ -93,13 +95,13 @@ spinePublishing {
             cloudArtifactRegistry
         )
     }
-    artifactPrefix = "spine-validation-"
+    artifactPrefix = "validation-"
 }
 
 allprojects {
     apply(from = "$rootDir/version.gradle.kts")
     repositories.standardToSpineSdk()
-    group = "io.spine.validation"
+    group = "io.spine.tools"
     version = extra["validationVersion"]!!
 
     configurations.all {

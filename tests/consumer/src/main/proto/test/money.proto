@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package spine.validation.test.money;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.tools.validation.test.money";
+option java_outer_classname = "MoneyProto";
+option java_multiple_files = true;
+
+import "spine/validation/test/money_options.proto";
+
+// An amount of money in US Dollars.
+//
+// A single Dollar is equal to exactly 100 Cents.
+//
+message Usd {
+    option (currency) = { name: "US Dollar" code: "USD" minor_units: 100 };
+
+    int32 dollars = 1;
+
+    int32 cents = 2;
+}
+
+// An amount of money in Mauritanian Ouguiyas.
+//
+// A single Ouguiya is equal to exactly 5 Khoums.
+//
+message Mru {
+    option (currency) = { name: "Mauritanian Ouguiya" code: "MRU" minor_units: 5 };
+
+    int32 ouguiyas = 1;
+
+    int32 khoums = 2;
+}

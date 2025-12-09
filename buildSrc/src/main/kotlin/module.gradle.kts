@@ -85,7 +85,7 @@ project.run {
     configureKotlin(javaVersion)
 
     configureTaskDependencies()
-    dependTestOnJavaRuntime()
+    dependTestOnJvmRuntime()
     configureProtoc()
     setupDocPublishing()
 }
@@ -109,8 +109,8 @@ fun Module.addDependencies() {
 }
 
 /**
- * Sets dependencies on `:java-runtime-bundle:shadowJar` for Java-related modules,
- * unless it's ":java-runtime-bundle" itself.
+ * Sets dependencies on `:jvm-runtime-bundle:shadowJar` for Java-related modules,
+ * unless it's ":jvm-runtime-bundle" itself.
  *
  * The dependencies are set for the tasks:
  *   1. `test`
@@ -118,8 +118,8 @@ fun Module.addDependencies() {
  *   3. `launchTestProtoData`
  *   4. `pmdMain`.
  */
-fun Module.dependTestOnJavaRuntime() {
-    val javaBundleModule = ":java-runtime"
+fun Module.dependTestOnJvmRuntime() {
+    val javaBundleModule = ":jvm-runtime"
     if (!name.startsWith(":java") || name == javaBundleModule) {
         return
     }

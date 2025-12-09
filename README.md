@@ -105,11 +105,11 @@ Follow these steps to create a custom option:
    - Policy (`MyOptionPolicy`) – discovers and validates the option.
    - View (`MyOptionView`) – accumulates valid option applications.
    - Generator (`MyOptionGenerator`) – generates Java code for the option.
-4. Register them via `io.spine.validation.api.ValidationOption`.
+4. Register them via `io.spine.tools.validation.java.ValidationOption`.
 
 Below is a workflow diagram for a typical option:
 
-![Typical custom option](.github/readme/typical_custom_option.png)
+![Typical custom option](.github/readme/typical_custom_option.jpg)
 
 Take a look at the `:java-tests:extensions` module that contains a full example of
 implementation of the custom `(currency)` option.

@@ -112,9 +112,9 @@ tasks.shadowJar {
         "org/intellij/**",
         "org/jetbrains/**",
 
-        // Exclude the descriptor set file which comes from `spine-validation-java-runtime`
+        // Exclude the descriptor set file which comes from `spine-validation-jvm-runtime`
         // used to build Validation itself.
-        "io.spine.validation_java-runtime_main_${Validation.version}.desc",
+        "io.spine.validation_jvm-runtime_main_${Validation.version}.desc",
     )
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */

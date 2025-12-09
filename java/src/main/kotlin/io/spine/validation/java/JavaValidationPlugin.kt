@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,69 +26,8 @@
 
 package io.spine.validation.java
 
-import io.spine.tools.compiler.jvm.ClassName
-import io.spine.validation.ValidationPlugin
-import io.spine.validation.api.DiscoveredValidators
-import io.spine.validation.api.ValidationOption
-import io.spine.validation.java.setonce.SetOnceRenderer
-import io.spine.validation.java.generate.MessageClass
-import io.spine.validation.java.generate.ValidatorClass
-import java.io.File
-import java.util.*
-
 /**
- * An implementation of [ValidationPlugin] for Java language.
- *
- * The validation constraints for Java are implemented with two renderers:
- *
- * 1. [JavaValidationRenderer] is the main renderer for Java. It renders the validation
- * code for all options that perform an assertion upon a message field value.
- * 2. [SetOnceRenderer] is responsible for the validation code of `(set_once)` option.
- * It is a standalone renderer because it significantly differs from the rest of constraints.
- * Its implementation modifies the message builder behavior, affecting every setter or merge
- * method that can change the field value.
+ * Provided for backward compatibility.
  */
-@Suppress("unused") // Accessed via reflection.
-public class JavaValidationPlugin : ValidationPlugin(
-    renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }, customValidators),
-        SetOnceRenderer()
-    ),
-    views = customOptions.flatMap { it.view }.toSet(),
-    reactions = customOptions.flatMap { it.reactions }.toSet(),
-)
-
-/**
- * Dynamically discovered instances of custom [ValidationOption]s.
- */
-private val customOptions: List<ValidationOption> by lazy {
-    ServiceLoader.load(ValidationOption::class.java)
-        .filterNotNull()
-}
-
-/**
- * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validation.api.MessageValidator]s.
- *
- * Please note that the KSP module is responsible for the actual discovering
- * of the message validators. The discovered validators are written to a text file
- * in the KSP task output. This property loads the validators from that file.
- */
-private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
-    val workingDir = System.getProperty("user.dir")
-    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
-    val messageValidators =  DiscoveredValidators.resolve(kspOutput)
-    if (!messageValidators.exists()) {
-        return@lazy emptyMap()
-    }
-
-    messageValidators.readLines().associate {
-        val (message, validator) = it.split(":")
-        ClassName.guess(message) to ClassName.guess(validator)
-    }
-}
-
-/**
- * The default location to which the KSP task puts the generated output.
- */
-private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"
+@Deprecated("Use `io.spine.tools.validation.java.JavaValidationPlugin`.")
+public class JavaValidationPlugin : io.spine.tools.validation.java.JavaValidationPlugin()
