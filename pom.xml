@@ -74,25 +74,25 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-backend</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-gradle-api</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-gradle-plugin</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-jvm</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -176,13 +176,13 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-api</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-testlib</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -277,12 +277,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-cli-all</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-protoc-plugin</artifactId>
-    <version>2.0.0-SNAPSHOT.034</version>
+    <version>2.0.0-SNAPSHOT.035</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
