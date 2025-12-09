@@ -33,12 +33,12 @@ import io.spine.code.proto.Option;
 import io.spine.validate.Constraint;
 
 /**
- * An option that validates a Protobuf entity.
+ * The interface common to all standard validation options.
  *
  * @param <T>
- *         data type that this option holds, e.g.
- *         {@linkplain io.spine.option.OptionsProto#required required option} would hold a {@code
- *         Boolean}
+ *         data type that this option holds, e.g.,
+ *         {@linkplain io.spine.option.OptionsProto#required required option} would
+ *         hold a {@code Boolean}
  * @param <C>
  *         reflective container which describes the entity this option is applied to
  * @param <K>
