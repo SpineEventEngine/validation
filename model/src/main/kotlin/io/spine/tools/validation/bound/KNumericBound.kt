@@ -84,7 +84,7 @@ internal data class KNumericBound(
 }
 
 /**
- * Creates an instance of [io.spine.validation.bound.NumericBound] from this [KNumericBound].
+ * Creates an instance of [NumericBound] from this [KNumericBound].
  */
 internal fun KNumericBound.toProto(): NumericBound {
     val builder = NumericBound.newBuilder()
