@@ -31,10 +31,9 @@ import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
 import io.spine.string.ti
-import io.spine.tools.validation.bound.NumericBound
 
 /**
- * One-to-one Kotlin representation of [io.spine.validation.bound.NumericBound].
+ * One-to-one Kotlin representation of [NumericBound].
  *
  * We would like to have a Kotlin counterpart because of [UInt] and [ULong] types.
  *
