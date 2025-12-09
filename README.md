@@ -105,7 +105,7 @@ Follow these steps to create a custom option:
    - Policy (`MyOptionPolicy`) – discovers and validates the option.
    - View (`MyOptionView`) – accumulates valid option applications.
    - Generator (`MyOptionGenerator`) – generates Java code for the option.
-4. Register them via `io.spine.validation.jvm.ValidationOption`.
+4. Register them via `io.spine.tools.validation.java.ValidationOption`.
 
 Below is a workflow diagram for a typical option:
 
