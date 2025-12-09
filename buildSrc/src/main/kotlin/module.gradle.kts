@@ -85,7 +85,7 @@ project.run {
     configureKotlin(javaVersion)
 
     configureTaskDependencies()
-    dependTestOnJavaRuntime()
+    dependTestOnJvmRuntime()
     configureProtoc()
     setupDocPublishing()
 }
@@ -118,7 +118,7 @@ fun Module.addDependencies() {
  *   3. `launchTestProtoData`
  *   4. `pmdMain`.
  */
-fun Module.dependTestOnJavaRuntime() {
+fun Module.dependTestOnJvmRuntime() {
     val javaBundleModule = ":jvm-runtime"
     if (!name.startsWith(":java") || name == javaBundleModule) {
         return
