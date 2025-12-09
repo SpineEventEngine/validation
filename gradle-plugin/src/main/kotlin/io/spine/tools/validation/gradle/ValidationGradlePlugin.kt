@@ -34,13 +34,7 @@ import io.spine.tools.gradle.lib.spineExtension
 import org.gradle.api.Project
 
 /**
- * Gradle plugin that configures the Spine Compiler to run the Validation Compiler in solo mode.
- *
- * The plugin applies the Spine Compiler Gradle plugin (id = `io.spine.compiler`) and then
- * registers the Validation compiler implementation using the Compiler's Gradle extension.
- *
- * We avoid hard dependencies on the Compiler Gradle API types and configure the extension
- * reflectively to stay compatible across minor API changes.
+ * Gradle plugin that configures the Spine Compiler to run the Validation Compiler.
  */
 public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
     DslSpec(ValidationExtension.NAME, ValidationExtension::class)
