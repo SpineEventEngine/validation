@@ -97,13 +97,13 @@ val RepositoryHandler.intellijReleases: MavenArtifactRepository
     get() = maven("https://www.jetbrains.com/intellij-repository/releases")
 
 val RepositoryHandler.intellijDependencies: MavenArtifactRepository
-    get() = maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies", {
+    get() = maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") {
         content {
             includeGroupByRegex("com\\.jetbrains\\.intellij.*")
             includeGroupByRegex("org\\.jetbrains\\.intellij.*")
             includeGroupByRegex("com\\.intellij.*")
         }
-    })
+    }
 
 /**
  * Applies repositories commonly used by Spine Event Engine projects.
