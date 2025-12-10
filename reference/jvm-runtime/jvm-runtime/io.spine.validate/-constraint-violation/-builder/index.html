@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Builder</title>
+    <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    jvm-runtime
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.372        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":jvm-runtime/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":jvm-runtime/main"
+                                       data-filter=":jvm-runtime/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    jvm-runtime
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="jvm-runtime::io.spine.validate/ConstraintViolation.Builder///PointingToDeclaration//-1635795110">
+  <div class="breadcrumbs"><a href="../../../../index.html">jvm-runtime</a><span class="delimiter">/</span><a href="../../index.html">io.spine.validate</a><span class="delimiter">/</span><a href="../index.html">ConstraintViolation</a><span class="delimiter">/</span><span class="current">Builder</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Builder</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage.Builder///PointingToDeclaration/">GeneratedMessage.Builder</span><span class="token operator">&lt;</span><a href="index.html">ConstraintViolation.Builder</a><span class="token operator">&gt; </span>, <a href="../../-constraint-violation-or-builder/index.html">ConstraintViolationOrBuilder</a></div><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Describes the violation of a validation constraint found in a message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-kotlin">spine.validate.ConstraintViolation</code></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="533737517%2FFunctions%2F-1635795110" anchor-label="addAllParam" id="533737517%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-all-param.html"><span>add</span><wbr></wbr><span>All</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="533737517%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-all-param.html"><span class="token function"><strike>addAllParam</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html">Iterable</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="974125617%2FFunctions%2F-1635795110" anchor-label="addAllViolation" id="974125617%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-all-violation.html"><span>add</span><wbr></wbr><span>All</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="974125617%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-all-violation.html"><span class="token function"><strike>addAllViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html">Iterable</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../index.html">ConstraintViolation</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-834631444%2FFunctions%2F-1635795110" anchor-label="addParam" id="-834631444%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-param.html"><span>add</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-834631444%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-param.html"><span class="token function"><strike>addParam</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1713265942%2FFunctions%2F-1635795110" anchor-label="addParamBytes" id="-1713265942%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-param-bytes.html"><span>add</span><wbr></wbr><span>Param</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1713265942%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-param-bytes.html"><span class="token function"><strike>addParamBytes</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1559169346%2FFunctions%2F-1635795110" anchor-label="addViolation" id="1559169346%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-violation.html"><span>add</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1559169346%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation.html"><span class="token function"><strike>addViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation.html"><span class="token function"><strike>addViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builderForValue<span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation.html"><span class="token function"><strike>addViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation.html"><span class="token function"><strike>addViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">builderForValue<span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1126387059%2FFunctions%2F-1635795110" anchor-label="addViolationBuilder" id="1126387059%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="add-violation-builder.html"><span>add</span><wbr></wbr><span>Violation</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1126387059%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation-builder.html"><span class="token function"><strike>addViolationBuilder</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="add-violation-builder.html"><span class="token function"><strike>addViolationBuilder</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1691504401%2FFunctions%2F-1635795110" anchor-label="build" id="-1691504401%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build.html"><span><span>build</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1691504401%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1702496246%2FFunctions%2F-1635795110" anchor-label="buildPartial" id="-1702496246%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build-partial.html"><span>build</span><wbr></wbr><span><span>Partial</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1702496246%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="build-partial.html"><span class="token function">buildPartial</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="137234928%2FFunctions%2F-1635795110" anchor-label="clear" id="137234928%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="137234928%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1879215019%2FFunctions%2F-1635795110" anchor-label="clearFieldPath" id="1879215019%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-field-path.html"><span>clear</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1879215019%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-field-path.html"><span class="token function">clearFieldPath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="979970393%2FFunctions%2F-1635795110" anchor-label="clearFieldValue" id="979970393%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-field-value.html"><span>clear</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="979970393%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-field-value.html"><span class="token function">clearFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1797474269%2FFunctions%2F-1635795110" anchor-label="clearMessage" id="-1797474269%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-message.html"><span>clear</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1797474269%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-message.html"><span class="token function">clearMessage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1625243854%2FFunctions%2F-1635795110" anchor-label="clearMsgFormat" id="-1625243854%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-msg-format.html"><span>clear</span><wbr></wbr><span>Msg</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1625243854%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-msg-format.html"><span class="token function"><strike>clearMsgFormat</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1109942685%2FFunctions%2F-1635795110" anchor-label="clearParam" id="1109942685%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-param.html"><span>clear</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1109942685%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-param.html"><span class="token function"><strike>clearParam</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="728150411%2FFunctions%2F-1635795110" anchor-label="clearTypeName" id="728150411%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-type-name.html"><span>clear</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="728150411%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-type-name.html"><span class="token function">clearTypeName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The name of the validated message type.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the name of the root message, which triggered the validation.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email`
+message is invalid, this property will contain the `Student` type name, not `Email`.
+This is so because this type is an entry point to the nested validation.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string type_name = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-735951483%2FFunctions%2F-1635795110" anchor-label="clearViolation" id="-735951483%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-violation.html"><span>clear</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-735951483%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-violation.html"><span class="token function"><strike>clearViolation</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1527288518%2FFunctions%2F-1635795110" anchor-label="getDefaultInstanceForType" id="-1527288518%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-default-instance-for-type.html"><span>get</span><wbr></wbr><span>Default</span><wbr></wbr><span>Instance</span><wbr></wbr><span>For</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1527288518%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-default-instance-for-type.html"><span class="token function">getDefaultInstanceForType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-772948008%2FFunctions%2F-1635795110" anchor-label="getDescriptor" id="-772948008%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-descriptor.html"><span>get</span><wbr></wbr><span><span>Descriptor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-772948008%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-descriptor.html"><span class="token function">getDescriptor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="753340703%2FFunctions%2F-1635795110" anchor-label="getDescriptorForType" id="753340703%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-descriptor-for-type.html"><span>get</span><wbr></wbr><span>Descriptor</span><wbr></wbr><span>For</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="753340703%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-descriptor-for-type.html"><span class="token function">getDescriptorForType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1929931380%2FFunctions%2F-1635795110" anchor-label="getFieldPath" id="1929931380%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-path.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1929931380%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-path.html"><span class="token function">getFieldPath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-434669045%2FFunctions%2F-1635795110" anchor-label="getFieldPathBuilder" id="-434669045%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-path-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Path</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-434669045%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-path-builder.html"><span class="token function">getFieldPathBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath.Builder///PointingToDeclaration/">FieldPath.Builder</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-599195186%2FFunctions%2F-1635795110" anchor-label="getFieldPathOrBuilder" id="-599195186%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-path-or-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Path</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-599195186%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-path-or-builder.html"><span class="token function">getFieldPathOrBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPathOrBuilder///PointingToDeclaration/">FieldPathOrBuilder</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1742789712%2FFunctions%2F-1635795110" anchor-label="getFieldValue" id="-1742789712%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1742789712%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value.html"><span class="token function">getFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any///PointingToDeclaration/">Any</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="242558287%2FFunctions%2F-1635795110" anchor-label="getFieldValueBuilder" id="242558287%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Value</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="242558287%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value-builder.html"><span class="token function">getFieldValueBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any.Builder///PointingToDeclaration/">Any.Builder</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1676209170%2FFunctions%2F-1635795110" anchor-label="getFieldValueOrBuilder" id="1676209170%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value-or-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Value</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1676209170%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value-or-builder.html"><span class="token function">getFieldValueOrBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/AnyOrBuilder///PointingToDeclaration/">AnyOrBuilder</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="674084140%2FFunctions%2F-1635795110" anchor-label="getMessage" id="674084140%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-message.html"><span>get</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="674084140%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-message.html"><span class="token function">getMessage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../-template-string/index.html">TemplateString</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-836554669%2FFunctions%2F-1635795110" anchor-label="getMessageBuilder" id="-836554669%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-message-builder.html"><span>get</span><wbr></wbr><span>Message</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-836554669%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-message-builder.html"><span class="token function">getMessageBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../-template-string/-builder/index.html">TemplateString.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-264223210%2FFunctions%2F-1635795110" anchor-label="getMessageOrBuilder" id="-264223210%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-message-or-builder.html"><span>get</span><wbr></wbr><span>Message</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-264223210%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-message-or-builder.html"><span class="token function">getMessageOrBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../-template-string-or-builder/index.html">TemplateStringOrBuilder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1574527493%2FFunctions%2F-1635795110" anchor-label="getMsgFormat" id="-1574527493%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-msg-format.html"><span>get</span><wbr></wbr><span>Msg</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1574527493%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-msg-format.html"><span class="token function"><strike>getMsgFormat</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1799088724%2FFunctions%2F-1635795110" anchor-label="getMsgFormatBytes" id="1799088724%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-msg-format-bytes.html"><span>get</span><wbr></wbr><span>Msg</span><wbr></wbr><span>Format</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1799088724%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-msg-format-bytes.html"><span class="token function"><strike>getMsgFormatBytes</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="530588237%2FFunctions%2F-1635795110" anchor-label="getParam" id="530588237%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-param.html"><span>get</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="530588237%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-param.html"><span class="token function"><strike>getParam</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1613202934%2FFunctions%2F-1635795110" anchor-label="getParamBytes" id="-1613202934%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-param-bytes.html"><span>get</span><wbr></wbr><span>Param</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1613202934%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-param-bytes.html"><span class="token function"><strike>getParamBytes</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="823445029%2FFunctions%2F-1635795110" anchor-label="getParamCount" id="823445029%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-param-count.html"><span>get</span><wbr></wbr><span>Param</span><wbr></wbr><span><span>Count</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="823445029%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-param-count.html"><span class="token function"><strike>getParamCount</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1338745496%2FFunctions%2F-1635795110" anchor-label="getParamList" id="-1338745496%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-param-list.html"><span>get</span><wbr></wbr><span>Param</span><wbr></wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1338745496%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-param-list.html"><span class="token function"><strike>getParamList</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ProtocolStringList///PointingToDeclaration/">ProtocolStringList</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="37049762%2FFunctions%2F-1635795110" anchor-label="getTypeName" id="37049762%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-type-name.html"><span>get</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="37049762%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-type-name.html"><span class="token function">getTypeName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The name of the validated message type.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the name of the root message, which triggered the validation.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email`
+message is invalid, this property will contain the `Student` type name, not `Email`.
+This is so because this type is an entry point to the nested validation.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string type_name = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1203823373%2FFunctions%2F-1635795110" anchor-label="getTypeNameBytes" id="1203823373%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-type-name-bytes.html"><span>get</span><wbr></wbr><span>Type</span><wbr></wbr><span>Name</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1203823373%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-type-name-bytes.html"><span class="token function">getTypeNameBytes</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The name of the validated message type.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the name of the root message, which triggered the validation.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email`
+message is invalid, this property will contain the `Student` type name, not `Email`.
+This is so because this type is an entry point to the nested validation.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string type_name = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2012410341%2FFunctions%2F-1635795110" anchor-label="getViolation" id="2012410341%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation.html"><span>get</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2012410341%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation.html"><span class="token function"><strike>getViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1897260958%2FFunctions%2F-1635795110" anchor-label="getViolationBuilder" id="-1897260958%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-builder.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1897260958%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-builder.html"><span class="token function"><strike>getViolationBuilder</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="707340787%2FFunctions%2F-1635795110" anchor-label="getViolationBuilderList" id="707340787%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-builder-list.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span>Builder</span><wbr></wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="707340787%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-builder-list.html"><span class="token function"><strike>getViolationBuilderList</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html">List</a><span class="token operator">&lt;</span><a href="index.html">ConstraintViolation.Builder</a><span class="token operator">&gt;</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1074655299%2FFunctions%2F-1635795110" anchor-label="getViolationCount" id="-1074655299%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-count.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span><span>Count</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1074655299%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-count.html"><span class="token function"><strike>getViolationCount</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1648066768%2FFunctions%2F-1635795110" anchor-label="getViolationList" id="1648066768%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-list.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1648066768%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-list.html"><span class="token function"><strike>getViolationList</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html">List</a><span class="token operator">&lt;</span><a href="../index.html">ConstraintViolation</a><span class="token operator">&gt;</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1013507903%2FFunctions%2F-1635795110" anchor-label="getViolationOrBuilder" id="1013507903%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-or-builder.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1013507903%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-or-builder.html"><span class="token function"><strike>getViolationOrBuilder</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../-constraint-violation-or-builder/index.html">ConstraintViolationOrBuilder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="746862262%2FFunctions%2F-1635795110" anchor-label="getViolationOrBuilderList" id="746862262%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-violation-or-builder-list.html"><span>get</span><wbr></wbr><span>Violation</span><wbr></wbr><span>Or</span><wbr></wbr><span>Builder</span><wbr></wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="746862262%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-violation-or-builder-list.html"><span class="token function"><strike>getViolationOrBuilderList</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html">List</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../../-constraint-violation-or-builder/index.html">ConstraintViolationOrBuilder</a><span class="token operator">&gt;</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1322949816%2FFunctions%2F-1635795110" anchor-label="hasFieldPath" id="1322949816%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-field-path.html"><span>has</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1322949816%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-field-path.html"><span class="token function">hasFieldPath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="915618284%2FFunctions%2F-1635795110" anchor-label="hasFieldValue" id="915618284%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-field-value.html"><span>has</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="915618284%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-field-value.html"><span class="token function">hasFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="481273968%2FFunctions%2F-1635795110" anchor-label="hasMessage" id="481273968%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-message.html"><span>has</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="481273968%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-message.html"><span class="token function">hasMessage</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1716525001%2FFunctions%2F-1635795110" anchor-label="internalGetFieldAccessorTable" id="-1716525001%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="internal-get-field-accessor-table.html"><span>internal</span><wbr></wbr><span>Get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Accessor</span><wbr></wbr><span><span>Table</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1716525001%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">protected </span><span class="token keyword">open </span><span class="token keyword">fun </span><a href="internal-get-field-accessor-table.html"><span class="token function">internalGetFieldAccessorTable</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/GeneratedMessage.FieldAccessorTable///PointingToDeclaration/">GeneratedMessage.FieldAccessorTable</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1868841875%2FFunctions%2F-1635795110" anchor-label="isInitialized" id="1868841875%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-initialized.html"><span>is</span><wbr></wbr><span><span>Initialized</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1868841875%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-initialized.html"><span class="token function">isInitialized</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="522514967%2FFunctions%2F-1635795110" anchor-label="mergeFieldPath" id="522514967%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-field-path.html"><span>merge</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="522514967%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-field-path.html"><span class="token function">mergeFieldPath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1767621053%2FFunctions%2F-1635795110" anchor-label="mergeFieldValue" id="-1767621053%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-field-value.html"><span>merge</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1767621053%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-field-value.html"><span class="token function">mergeFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any///PointingToDeclaration/">Any</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1946185750%2FFunctions%2F-1635795110" anchor-label="mergeFrom" id="-1946185750%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-from.html"><span>merge</span><wbr></wbr><span><span>From</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1946185750%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Message///PointingToDeclaration/">Message</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/CodedInputStream///PointingToDeclaration/">CodedInputStream</span><span class="token punctuation">, </span></span><span class="parameter ">extensionRegistry<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ExtensionRegistryLite///PointingToDeclaration/">ExtensionRegistryLite</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="472943166%2FFunctions%2F-1635795110" anchor-label="mergeMessage" id="472943166%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-message.html"><span>merge</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="472943166%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-message.html"><span class="token function">mergeMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="../../-template-string/index.html">TemplateString</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1107966391%2FFunctions%2F-1635795110" anchor-label="removeViolation" id="1107966391%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="remove-violation.html"><span>remove</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1107966391%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="remove-violation.html"><span class="token function"><strike>removeViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1512674143%2FFunctions%2F-1635795110" anchor-label="setFieldPath" id="-1512674143%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-field-path.html"><span>set</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1512674143%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-path.html"><span class="token function">setFieldPath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-path.html"><span class="token function">setFieldPath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builderForValue<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath.Builder///PointingToDeclaration/">FieldPath.Builder</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A path to the field containing an invalid value.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the path to the invalid field. If there is no nesting, the path
+consists only of the field name.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email` message
+is invalid, this property will contain the full path to the invalid field: `contacts.email.value`.
+However, if the `Email` message is validated independently (not as part of `Student`),
+the path will consist only of the field name: `value`.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.base.FieldPath field_path = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1160885305%2FFunctions%2F-1635795110" anchor-label="setFieldValue" id="1160885305%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-field-value.html"><span>set</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1160885305%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-value.html"><span class="token function">setFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any///PointingToDeclaration/">Any</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-value.html"><span class="token function">setFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builderForValue<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Any.Builder///PointingToDeclaration/">Any.Builder</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The value of the field which violates the validation constraint.
+
+Contains a corresponding wrapper message for primitives
+(google.protobuf.StringValue for &quot;string&quot; field type and so on).
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.google.protobuf.Any field_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1019304537%2FFunctions%2F-1635795110" anchor-label="setMessage" id="1019304537%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-message.html"><span>set</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1019304537%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-message.html"><span class="token function">setMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="../../-template-string/index.html">TemplateString</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-message.html"><span class="token function">setMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builderForValue<span class="token operator">: </span><a href="../../-template-string/-builder/index.html">TemplateString.Builder</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">An error message for this violation.
+
+The returned message can be formatted using one of the following approaches:
+
+1. In Kotlin, use the `TemplateString.format()` extension.
+2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">.spine.validate.TemplateString message = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2046540798%2FFunctions%2F-1635795110" anchor-label="setMsgFormat" id="-2046540798%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-msg-format.html"><span>set</span><wbr></wbr><span>Msg</span><wbr></wbr><span><span>Format</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2046540798%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-msg-format.html"><span class="token function"><strike>setMsgFormat</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-323062764%2FFunctions%2F-1635795110" anchor-label="setMsgFormatBytes" id="-323062764%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-msg-format-bytes.html"><span>set</span><wbr></wbr><span>Msg</span><wbr></wbr><span>Format</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-323062764%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-msg-format-bytes.html"><span class="token function"><strike>setMsgFormatBytes</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string msg_format = 1 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-462768679%2FFunctions%2F-1635795110" anchor-label="setParam" id="-462768679%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-param.html"><span>set</span><wbr></wbr><span><span>Param</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-462768679%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-param.html"><span class="token function"><strike>setParam</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: use `message` field to access the error message.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated string param = 2 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1644447727%2FFunctions%2F-1635795110" anchor-label="setTypeName" id="-1644447727%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-type-name.html"><span>set</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1644447727%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-type-name.html"><span class="token function">setTypeName</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The name of the validated message type.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the name of the root message, which triggered the validation.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email`
+message is invalid, this property will contain the `Student` type name, not `Email`.
+This is so because this type is an entry point to the nested validation.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string type_name = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="856035237%2FFunctions%2F-1635795110" anchor-label="setTypeNameBytes" id="856035237%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-type-name-bytes.html"><span>set</span><wbr></wbr><span>Type</span><wbr></wbr><span>Name</span><wbr></wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="856035237%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-type-name-bytes.html"><span class="token function">setTypeNameBytes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ByteString///PointingToDeclaration/">ByteString</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">The name of the validated message type.
+
+If the `(validate)` option is applied and a nested field contains an invalid value,
+this property holds the name of the root message, which triggered the validation.
+
+Example:
+
+```
+message Student {
+Contacts contacts = 1 [(validate) = true];
+}
+
+message Contacts {
+Email email = 1 [(validate) = true];
+}
+
+message Email {
+string value = 1 [(pattern).regex = &quot;^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$&quot;];
+}
+```
+
+When the `Student` message is validated and the `value` field in the nested `Email`
+message is invalid, this property will contain the `Student` type name, not `Email`.
+This is so because this type is an entry point to the nested validation.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">string type_name = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="997570809%2FFunctions%2F-1635795110" anchor-label="setViolation" id="997570809%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-violation.html"><span>set</span><wbr></wbr><span><span>Violation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="997570809%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-violation.html"><span class="token function"><strike>setViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">value<span class="token operator">: </span><a href="../index.html">ConstraintViolation</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-violation.html"><span class="token function"><strike>setViolation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">builderForValue<span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">ConstraintViolation.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">repeated .spine.validate.ConstraintViolation violation = 5 [deprecated = true];</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2025, TeamDev</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

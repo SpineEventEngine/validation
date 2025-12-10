@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>MessageValidator</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../index.html" tabindex="1">
+                    jvm-runtime
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.372        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":jvm-runtime/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":jvm-runtime/main"
+                                       data-filter=":jvm-runtime/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    jvm-runtime
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="jvm-runtime::io.spine.validate/MessageValidator///PointingToDeclaration//-1635795110">
+  <div class="breadcrumbs"><a href="../../../index.html">jvm-runtime</a><span class="delimiter">/</span><a href="../index.html">io.spine.validate</a><span class="delimiter">/</span><span class="current">MessageValidator</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Message</span><wbr></wbr><span><span>Validator</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="io.spine.annotation/SPI///PointingToDeclaration/"><span class="token annotation builtin">SPI</span></span></div></div><span class="token keyword">interface </span><a href="index.html">MessageValidator</a><span class="token operator">&lt;</span><a href="index.html">M</a><span class="token operator"> : </span><span data-unresolved-link="com.google.protobuf/Message///PointingToDeclaration/">Message</span><span class="token operator">&gt;</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/SpineEventEngine/validation/tree/master/jvm-runtime/src/main/kotlin/io/spine/validate/MessageValidator.kt#L133">source</a>)</span></span></div><p class="paragraph">A validator for an external Protobuf message of type <a href="index.html">M</a>.</p><p class="paragraph">This interface enforces validation rules for <code class="lang-kotlin">Message</code>s whose Java/Kotlin classes are already generated by third parties, in case they are used in the Protobuf codebase to which the Validation library is applied.</p><h2 class="">Problem</h2><p class="paragraph">Java/Kotlin libraries that use Protobuf messages often distribute both the <code class="lang-kotlin">.proto</code> definitions and the compiled class files (<code class="lang-kotlin">.class</code>) for these messages. As these classes are pre-generated, consumers cannot modify their underlying <code class="lang-kotlin">.proto</code> files to define validation constraints and the Validation library cannot use code generation to enforce the constraints.</p><p class="paragraph">Thus, the library effectively deals with the two types of messages:</p><ol><li><p class="paragraph"><strong>Local messages</strong> are message types for which end-users generate and control     the Java/Kotlin classes by compiling the corresponding <code class="lang-kotlin">.proto</code> definitions     within their own codebase. For such messages, the Validation library allows     declaring validation constraints and enforces them with the generated code.</p></li><li><p class="paragraph"><strong>External messages</strong> are message types for which end-users do not generate or control     the Java/Kotlin classes. Because the classes are already generated, users cannot modify     the underlying <code class="lang-kotlin">.proto</code> definitions and add validation options at compile time.</p></li></ol><h2 class="">Validation of external messages</h2><p class="paragraph">The Validation library provides a mechanism that allows validating of the external messages, <strong>which are used for fields within local messages</strong>. Implement this interface and annotate the implementing class with the <a href="../-validator/index.html">@Validator</a> annotation, specifying the message type to validate.</p><p class="paragraph">For each field of type <a href="index.html">M</a> within any local message, the library will invoke the <a href="validate.html">MessageValidator.validate</a> method when validating the local message.</p><p class="paragraph">The following Protobuf field types are supported:</p><ol><li><p class="paragraph">Singular fields of type <a href="index.html">M</a>.</p></li><li><p class="paragraph">Repeated field of type <a href="index.html">M</a>.</p></li><li><p class="paragraph">Map field with values of type <a href="index.html">M</a>.</p></li></ol><p class="paragraph">An example of the validator declaration for the <code class="lang-kotlin">Earphones</code> message:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">@Validator(Earphones::class)<br>public class EarphonesValidator : MessageValidator&lt;Earphones&gt; {<br>    public override fun validate(message: Earphones): List&lt;DetectedViolation&gt; {<br>        return emptyList() // Always valid.<br>    }<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><p class="paragraph">Please note that standalone instances of <a href="index.html">M</a> and fields of <a href="index.html">M</a> type that occur in other external messages <strong>will not be validated</strong>.</p><p class="paragraph">Consider the following example:</p><div class="sample-container"><pre><code class="block lang-proto" theme="idea">// Brings the `Earphones` message from dependencies.<br>// Suppose we don't control the generated code of declarations from this file.<br>import &quot;earphones.proto&quot;;<br><br>// A locally-declared message.<br>message WorkingSetup {<br><br>    // The field of external message type.<br>    Earphones earphones = 1;<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><p class="paragraph">Supposing that the Validation library applied to the module where both <code class="lang-kotlin">WorkingSetup</code> and <code class="lang-kotlin">EarphonesValidator</code> classes are declared, then the generated code of <code class="lang-kotlin">WorkingSetup</code> will apple the validator to each instance passed to the <code class="lang-kotlin">WorkingSetup.earphones</code> field.</p><p class="paragraph">Please note that the following use cases are NOT supported and will lead to an error:</p><ol><li><p class="paragraph">Declaring a validator for a local message is prohibited. Only external messages are     allowed to have a validator. Use built-in or custom validation options to declare     constraints for local messages.</p></li><li><p class="paragraph">Declaring multiple validators for the same message type is prohibited. The library     scans the module’s classpath to discover validators, and expects exactly one validator     per message type.</p></li></ol><h2 class="">Implementation</h2><p class="paragraph">The interface offers flexible validation strategies. Implementations can choose to validate a particular field, several fields, the whole message instance (for example, checking the field relations), and perform a deep validation.</p><p class="paragraph">It is a responsibility of the validator to provide the correct instances of <a href="../-detected-violation/index.html">DetectedViolation</a>. Before reporting to the user, the library converts <a href="../-detected-violation/index.html">DetectedViolation</a> to a <a href="../-constraint-violation/index.html">ConstraintViolation</a>. Returning of an empty list of violations means that the given message is valid.</p><p class="paragraph">Keep in mind that for each invocation a new instance of <a href="index.html">MessageValidator</a> is created. Every implementation of <a href="index.html">MessageValidator</a> must have a public, no-args constructor.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>M</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the type of Protobuf <span data-unresolved-link="com.google.protobuf/Message///PointingToDeclaration/">Message</span> being validated.</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-2012665943%2FFunctions%2F-1635795110" anchor-label="validate" id="-2012665943%2FFunctions%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="validate.html"><span><span>validate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2012665943%2FFunctions%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="validate.html"><span class="token function">validate</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="index.html">M</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-detected-violation/index.html">DetectedViolation</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Validates the given <a href="validate.html">message</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2025, TeamDev</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
