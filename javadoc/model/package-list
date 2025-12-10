@@ -1,4 +1,5 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
 
-io.spine.validation
+io.spine.tools.validation
+io.spine.tools.validation.option
