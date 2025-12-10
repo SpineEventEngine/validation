@@ -1,0 +1,12 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.validation/MessageMarkers.Builder///PointingToDeclaration/io/spine/validation/MessageMarkers.Builder.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl.CommandPatternProxy///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.CommandPatternProxy.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl.EntityOptionNameProxy///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.EntityOptionNameProxy.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl.EntityPatternProxy///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.EntityPatternProxy.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl.EventPatternProxy///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.EventPatternProxy.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl.RejectionPatternProxy///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.RejectionPatternProxy.html
+$dokka.location:io.spine.validation/MessageMarkersKt.Dsl///PointingToDeclaration/io/spine/validation/MessageMarkersKt.Dsl.html
+$dokka.location:io.spine.validation/ValidationConfig.Builder///PointingToDeclaration/io/spine/validation/ValidationConfig.Builder.html
+$dokka.location:io.spine.validation/ValidationConfigKt.Dsl///PointingToDeclaration/io/spine/validation/ValidationConfigKt.Dsl.html
+io.spine.validation
