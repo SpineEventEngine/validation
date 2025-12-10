@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<!-- NewPage -->
+<html lang="en"><head>
+    <title>MessageValidator 2.0.0-SNAPSHOT.372 API </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="dc.created" content="2020-03-25">
+    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../dokka-javadoc-stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../jquery/jquery-ui.css" title="Style">
+    <script type="text/javascript" src="../../../jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../../jquery/jquery-migrate-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../../../jquery/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="../../../search.js"></script>
+    <script async type="text/javascript" src="../../../module-search-index.js"></script>
+    <script async type="text/javascript" src="../../../package-search-index.js"></script>
+    <script async type="text/javascript" src="../../../type-search-index.js"></script>
+    <script async type="text/javascript" src="../../../member-search-index.js"></script>
+    <script async type="text/javascript" src="../../../tag-search-index.js"></script>
+</head><body>
+<script type="text/javascript">
+var pathtoroot = "../../../";
+</script>
+<noscript>
+    <div>JavaScript is disabled on your browser.</div>
+</noscript><header role="banner">
+    <nav role="navigation">
+        <div class="fixedNav">
+            <!-- ========= START OF TOP NAVBAR ======= -->
+            <div class="topNav"><a id="navbar.top">
+                <!--   -->
+            </a>
+                <div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a>
+                </div>
+                <a id="navbar.top.firstrow">
+                    <!--   -->
+                </a>
+                <ul class="navList" title="Navigation">
+    <li><a href="../../../index.html">Overview</a></li>
+    
+    <li><a href="package-summary.html">Package</a></li>
+    
+    <li>Class</li>
+    
+    <li><a href="package-tree.html">Tree</a></li>
+    
+    <li><a href="../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../index-files/index-1.html">Index</a></li>
+    <li>Help</li>
+</ul></div>
+            <div class="subNav">
+<ul class="navList" id="allclasses_navbar_top" style="display: block;">
+    <li><a href="../../../allclasses.html">All&nbsp;Classes</a></li>
+</ul>
+
+<ul class="navListSearch">
+<li><label for="search">SEARCH:</label>
+<input type="text" id="search" value="search" class="ui-autocomplete-input" autocomplete="off" placeholder="Search">
+<input type="reset" id="reset" value="reset">
+</li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+</div>
+<a id="skip.navbar.top">
+<!--   -->
+</a></div><!-- ========= END OF TOP NAVBAR ========= -->
+        </div>
+        <div class="navPadding">&nbsp;</div>
+        <script type="text/javascript"><!--
+        $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
+        //-->
+        </script>
+    </nav>
+</header>
+
+<main role="main">
+    <div class="header">
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">io.spine.validate</a></div>
+        <h2 title="Interface MessageValidator" class="title">Interface MessageValidator</h2>
+    </div>
+    <div class="contentContainer">
+        <!-- <ul class="inheritance">
+            <li>java.lang.Object</li>
+            <li>
+                <ul class="inheritance">
+                    <li>adaptation.Adaptation</li>
+                </ul>
+            </li>
+        </ul> TODO inheritance tree -->
+        <div class="description">
+            <ul class="blockList">
+                <li class="blockList">
+                    
+                    <dl>
+                        <dt>All Implemented Interfaces:</dt>
+                        <dd>
+                            
+                        </dd>
+                    </dl>
+                    
+                    <hr>
+                    <pre class="wrap-overflow">
+@SPI() 
+public interface <span class="typeNameLabel"><a href=MessageValidator.html>MessageValidator</a>&lt;M extends Message&gt;</span>
+
+                    </pre>
+                    <div class="block"><p>A validator for an external Protobuf message of type <a href=MessageValidator.html>M</a>.</p><p>This interface enforces validation rules for <code>Message</code>s whose Java/Kotlin classes are already generated by third parties, in case they are used in the Protobuf codebase to which the Validation library is applied.</p><p>Java/Kotlin libraries that use Protobuf messages often distribute both the <code>.proto</code> definitions and the compiled class files (<code>.class</code>) for these messages. As these classes are pre-generated, consumers cannot modify their underlying <code>.proto</code> files to define validation constraints and the Validation library cannot use code generation to enforce the constraints.</p><p>Thus, the library effectively deals with the two types of messages:</p><ul><li><p>Local messages are message types for which end-users generate and control     the Java/Kotlin classes by compiling the corresponding <code>.proto</code> definitions     within their own codebase. For such messages, the Validation library allows     declaring validation constraints and enforces them with the generated code.</p></li><li><p>External messages are message types for which end-users do not generate or control     the Java/Kotlin classes. Because the classes are already generated, users cannot modify     the underlying <code>.proto</code> definitions and add validation options at compile time.</p></li></ul><p>The Validation library provides a mechanism that allows validating of the external messages, which are used for fields within local messages. Implement this interface and annotate the implementing class with the <a href=Validator.html>@Validator</a> annotation, specifying the message type to validate.</p><p>For each field of type <a href=MessageValidator.html>M</a> within any local message, the library will invoke the <a href=MessageValidator.html#validate(M)>MessageValidator.validate</a> method when validating the local message.</p><p>The following Protobuf field types are supported:</p><ul><li><p>Singular fields of type <a href=MessageValidator.html>M</a>.</p></li><li><p>Repeated field of type <a href=MessageValidator.html>M</a>.</p></li><li><p>Map field with values of type <a href=MessageValidator.html>M</a>.</p></li></ul><p>An example of the validator declaration for the <code>Earphones</code> message:</p><pre><code>@Validator(Earphones::class)
+public class EarphonesValidator : MessageValidator&lt;Earphones&gt; {
+    public override fun validate(message: Earphones): List&lt;DetectedViolation&gt; {
+        return emptyList() // Always valid.
+    }
+}</code></pre><p>Please note that standalone instances of <a href=MessageValidator.html>M</a> and fields of <a href=MessageValidator.html>M</a> type that occur in other external messages will not be validated.</p><p>Consider the following example:</p><pre><code>// Brings the `Earphones` message from dependencies.
+// Suppose we don't control the generated code of declarations from this file.
+import &quot;earphones.proto&quot;;
+
+// A locally-declared message.
+message WorkingSetup {
+
+    // The field of external message type.
+    Earphones earphones = 1;
+}</code></pre><p>Supposing that the Validation library applied to the module where both <code>WorkingSetup</code> and <code>EarphonesValidator</code> classes are declared, then the generated code of <code>WorkingSetup</code> will apple the validator to each instance passed to the <code>WorkingSetup.earphones</code> field.</p><p>Please note that the following use cases are NOT supported and will lead to an error:</p><ul><li><p>Declaring a validator for a local message is prohibited. Only external messages are     allowed to have a validator. Use built-in or custom validation options to declare     constraints for local messages.</p></li><li><p>Declaring multiple validators for the same message type is prohibited. The library     scans the module’s classpath to discover validators, and expects exactly one validator     per message type.</p></li></ul><p>The interface offers flexible validation strategies. Implementations can choose to validate a particular field, several fields, the whole message instance (for example, checking the field relations), and perform a deep validation.</p><p>It is a responsibility of the validator to provide the correct instances of <a href=DetectedViolation.html>DetectedViolation</a>. Before reporting to the user, the library converts <a href=DetectedViolation.html>DetectedViolation</a> to a <a href=ConstraintViolation.html>ConstraintViolation</a>. Returning of an empty list of violations means that the given message is valid.</p><p>Keep in mind that for each invocation a new instance of <a href=MessageValidator.html>MessageValidator</a> is created. Every implementation of <a href=MessageValidator.html>MessageValidator</a> must have a public, no-args constructor.</p></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                <!-- ======== NESTED CLASS SUMMARY ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="nested.class.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Nested Class Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Class</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- =========== FIELD SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="field.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Field Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Field</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ======== CONSTRUCTOR SUMMARY ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="constructor.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Constructor Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tbody>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Constructor</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+
+                                        
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- =========== ENUM CONSTANT SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="enum.constant.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Enum Constant Summary</h3>
+                                <table class="memberSummary">
+                                    <caption><span>Enum Constants</span><span class="tabEnd">&nbsp;</span></caption>
+                                    <tr>
+                                        <th class="colFirst" scope="col">Enum Constant</th>
+                                        <th class="colLast" scope="col">Description</th>
+                                    </tr>
+                                    
+                                </table>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ========== METHOD SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="method.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Method Summary</h3>
+                                <div class="memberSummary">
+                                    <div role="tablist" aria-orientation="horizontal">
+                                        <button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button>
+                                        <!-- TODO: Instance and Concrete Methods #1118 -->
+                                    </div>
+                                    <div id="memberSummary_tabpanel" role="tabpanel">
+                                    <table aria-labelledby="t0">
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Method</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                        <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=DetectedViolation.html>DetectedViolation</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MessageValidator.html#validate(M)>validate</a>(<a href=MessageValidator.html>M</a> message) </code>
+                                            </th>
+                                            <td class="colLast">Validates the given <a href=MessageValidator.html#validate(M)>message</a>.</td>
+                                        </tr>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <ul class="blockList">
+                                
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+                                        <!--   -->
+                                    </a>
+                                        <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+                                        <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString,
+                                            wait, wait, wait</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                </li>
+            </ul>
+        </div>
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <!-- ========= CONSTRUCTOR DETAIL ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="constructor.detail">
+                                <!--   -->
+                            </a>
+                                <h3>Constructor Detail</h3>
+                                
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ============ METHOD DETAIL ========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="method.detail">
+                                <!--   -->
+                            </a>
+                                <h3>Method Detail</h3>
+                                
+                                <a id="validate(M)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>validate</h4>
+                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=DetectedViolation.html>DetectedViolation</a>&gt; <a href=MessageValidator.html#validate(M)>validate</a>(<a href=MessageValidator.html>M</a> message)</pre>
+                                        <div class="block"><p>Validates the given <a href=MessageValidator.html#validate(M)>message</a>.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>the detected violations or empty list.</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                            </li>
+                        </ul>
+                    </section>
+                    
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<footer role="contentinfo">
+    <nav role="navigation">
+        <!-- ======= START OF BOTTOM NAVBAR ====== -->
+        <div class="bottomNav"><a id="navbar.bottom">
+            <!--   -->
+        </a>
+            <div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a>
+            </div>
+            <a id="navbar.bottom.firstrow">
+                <!--   -->
+            </a>
+            <ul class="navList" title="Navigation">
+    <li><a href="../../../index.html">Overview</a></li>
+    
+    <li><a href="package-summary.html">Package</a></li>
+    
+    <li>Class</li>
+    
+    <li><a href="package-tree.html">Tree</a></li>
+    
+    <li><a href="../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../index-files/index-1.html">Index</a></li>
+    <li>Help</li>
+</ul></div>
+        <a id="skip.navbar.bottom">
+            <!--   -->
+        </a>
+        <div class="subNav">
+<ul class="navList" id="allclasses_navbar_top" style="display: block;">
+    <li><a href="../../../allclasses.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+</div>
+<a id="skip.navbar.top">
+<!--   -->
+</a></div><!-- ======== END OF BOTTOM NAVBAR ======= -->
+    </nav>
+</footer><ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-1" tabindex="0"
+    style="display: none;"></ul>
+<span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
+</body>
+</html>
