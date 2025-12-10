@@ -199,9 +199,9 @@ class Repository private constructor(
  */
 @Suppress("TooGenericExceptionCaught", "LongParameterList")
 private fun <T> withRetries(
-    times: Int = 3,
-    initialDelay: Long = 100,      // ms
-    maxDelay: Long = 2000,         // ms
+    times: Int = 5,
+    initialDelay: Long = 2000,      // ms
+    maxDelay: Long = 20000,         // ms
     factor: Double = 2.0,
     description: String = "",
     block: () -> T
