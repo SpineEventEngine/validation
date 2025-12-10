@@ -61,6 +61,7 @@ allprojects {
                     ToolBase.jvmTools,
                     ToolBase.gradlePluginApi,
                     ToolBase.psiJava,
+                    "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
                 )
             }
         }
