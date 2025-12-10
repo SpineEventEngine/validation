@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Builder</title>
+    <link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    context
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.373        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":proto:context/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":proto:context/main"
+                                       data-filter=":proto:context/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    context
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="context::io.spine.tools.validation.bound/NumericBound.Builder///PointingToDeclaration//-1380849397">
+  <div class="breadcrumbs"><a href="../../../../index.html">context</a><span class="delimiter">/</span><a href="../../index.html">io.spine.tools.validation.bound</a><span class="delimiter">/</span><a href="../index.html">NumericBound</a><span class="delimiter">/</span><span class="current">Builder</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Builder</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Builder</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage.Builder///PointingToDeclaration/">GeneratedMessage.Builder</span><span class="token operator">&lt;</span><a href="index.html">NumericBound.Builder</a><span class="token operator">&gt; </span>, <a href="../../-numeric-bound-or-builder/index.html">NumericBoundOrBuilder</a>, <span data-unresolved-link="io.spine.validate/ValidatingBuilder///PointingToDeclaration/">ValidatingBuilder</span><span class="token operator">&lt;</span><a href="../index.html">NumericBound</a><span class="token operator">&gt; </span></div><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A numeric value or a field value that restricts the range of numeric fields.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-kotlin">spine.validation.bound.NumericBound</code></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1943763776%2FFunctions%2F-1380849397" anchor-label="build" id="1943763776%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build.html"><span><span>build</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1943763776%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="build.html"><span class="token function">build</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="io.spine.validate/Validated///PointingToDeclaration/"><span class="token annotation builtin">Validated</span></span> </span><a href="../index.html">NumericBound</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1595924327%2FFunctions%2F-1380849397" anchor-label="buildPartial" id="-1595924327%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="build-partial.html"><span>build</span><wbr></wbr><span><span>Partial</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1595924327%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="build-partial.html"><span class="token function">buildPartial</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="io.spine.validate/NonValidated///PointingToDeclaration/"><span class="token annotation builtin">NonValidated</span></span> </span><a href="../index.html">NumericBound</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-522464191%2FFunctions%2F-1380849397" anchor-label="clear" id="-522464191%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-522464191%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="239218873%2FFunctions%2F-1380849397" anchor-label="clearDoubleValue" id="239218873%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-double-value.html"><span>clear</span><wbr></wbr><span>Double</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="239218873%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-double-value.html"><span class="token function">clearDoubleValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">double double_value = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-6647045%2FFunctions%2F-1380849397" anchor-label="clearExclusive" id="-6647045%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-exclusive.html"><span>clear</span><wbr></wbr><span><span>Exclusive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-6647045%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-exclusive.html"><span class="token function">clearExclusive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Whether the bound value itself should be excluded from the range.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">bool exclusive = 1;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1883177578%2FFunctions%2F-1380849397" anchor-label="clearFieldValue" id="1883177578%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-field-value.html"><span>clear</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1883177578%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-field-value.html"><span class="token function">clearFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2038076340%2FFunctions%2F-1380849397" anchor-label="clearFloatValue" id="-2038076340%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-float-value.html"><span>clear</span><wbr></wbr><span>Float</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2038076340%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-float-value.html"><span class="token function">clearFloatValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">float float_value = 2;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-841562882%2FFunctions%2F-1380849397" anchor-label="clearInt32Value" id="-841562882%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-int32-value.html"><span>clear</span><wbr></wbr><span><span>Int32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-841562882%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-int32-value.html"><span class="token function">clearInt32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">int32 int32_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1875307235%2FFunctions%2F-1380849397" anchor-label="clearInt64Value" id="-1875307235%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-int64-value.html"><span>clear</span><wbr></wbr><span><span>Int64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1875307235%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-int64-value.html"><span class="token function">clearInt64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">int64 int64_value = 5;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="227487265%2FFunctions%2F-1380849397" anchor-label="clearUint32Value" id="227487265%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-uint32-value.html"><span>clear</span><wbr></wbr><span><span>Uint32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="227487265%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-uint32-value.html"><span class="token function">clearUint32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">uint32 uint32_value = 6;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-806257088%2FFunctions%2F-1380849397" anchor-label="clearUint64Value" id="-806257088%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-uint64-value.html"><span>clear</span><wbr></wbr><span><span>Uint64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-806257088%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-uint64-value.html"><span class="token function">clearUint64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">uint64 uint64_value = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-713952888%2FFunctions%2F-1380849397" anchor-label="clearValue" id="-713952888%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear-value.html"><span>clear</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-713952888%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="clear-value.html"><span class="token function">clearValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="323085579%2FFunctions%2F-1380849397" anchor-label="getDefaultInstanceForType" id="323085579%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-default-instance-for-type.html"><span>get</span><wbr></wbr><span>Default</span><wbr></wbr><span>Instance</span><wbr></wbr><span>For</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="323085579%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-default-instance-for-type.html"><span class="token function">getDefaultInstanceForType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">NumericBound</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1764185815%2FFunctions%2F-1380849397" anchor-label="getDescriptor" id="-1764185815%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-descriptor.html"><span>get</span><wbr></wbr><span><span>Descriptor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764185815%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-descriptor.html"><span class="token function">getDescriptor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1127007570%2FFunctions%2F-1380849397" anchor-label="getDescriptorForType" id="-1127007570%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-descriptor-for-type.html"><span>get</span><wbr></wbr><span>Descriptor</span><wbr></wbr><span>For</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1127007570%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-descriptor-for-type.html"><span class="token function">getDescriptorForType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1160218366%2FFunctions%2F-1380849397" anchor-label="getDoubleValue" id="-1160218366%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-double-value.html"><span>get</span><wbr></wbr><span>Double</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1160218366%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-double-value.html"><span class="token function">getDoubleValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><code class="lang-kotlin">double double_value = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="814242180%2FFunctions%2F-1380849397" anchor-label="getExclusive" id="814242180%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-exclusive.html"><span>get</span><wbr></wbr><span><span>Exclusive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="814242180%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-exclusive.html"><span class="token function">getExclusive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Whether the bound value itself should be excluded from the range.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">bool exclusive = 1;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1560939777%2FFunctions%2F-1380849397" anchor-label="getFieldValue" id="1560939777%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1560939777%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value.html"><span class="token function">getFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1637789986%2FFunctions%2F-1380849397" anchor-label="getFieldValueBuilder" id="-1637789986%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Value</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1637789986%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value-builder.html"><span class="token function">getFieldValueBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath.Builder///PointingToDeclaration/">FieldPath.Builder</span></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1452216863%2FFunctions%2F-1380849397" anchor-label="getFieldValueOrBuilder" id="-1452216863%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-field-value-or-builder.html"><span>get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Value</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1452216863%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-field-value-or-builder.html"><span class="token function">getFieldValueOrBuilder</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPathOrBuilder///PointingToDeclaration/">FieldPathOrBuilder</span></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1934653155%2FFunctions%2F-1380849397" anchor-label="getFloatValue" id="1934653155%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-float-value.html"><span>get</span><wbr></wbr><span>Float</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1934653155%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-float-value.html"><span class="token function">getFloatValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></div><div class="brief "><code class="lang-kotlin">float float_value = 2;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1163800683%2FFunctions%2F-1380849397" anchor-label="getInt32Value" id="-1163800683%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-int32-value.html"><span>get</span><wbr></wbr><span><span>Int32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1163800683%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-int32-value.html"><span class="token function">getInt32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><code class="lang-kotlin">int32 int32_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2097422260%2FFunctions%2F-1380849397" anchor-label="getInt64Value" id="2097422260%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-int64-value.html"><span>get</span><wbr></wbr><span><span>Int64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2097422260%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-int64-value.html"><span class="token function">getInt64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><code class="lang-kotlin">int64 int64_value = 5;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1171949974%2FFunctions%2F-1380849397" anchor-label="getUint32Value" id="-1171949974%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-uint32-value.html"><span>get</span><wbr></wbr><span><span>Uint32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1171949974%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-uint32-value.html"><span class="token function">getUint32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><code class="lang-kotlin">uint32 uint32_value = 6;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2089272969%2FFunctions%2F-1380849397" anchor-label="getUint64Value" id="2089272969%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-uint64-value.html"><span>get</span><wbr></wbr><span><span>Uint64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2089272969%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-uint64-value.html"><span class="token function">getUint64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><code class="lang-kotlin">uint64 uint64_value = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2061681985%2FFunctions%2F-1380849397" anchor-label="getValueCase" id="2061681985%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-value-case.html"><span>get</span><wbr></wbr><span>Value</span><wbr></wbr><span><span>Case</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2061681985%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="get-value-case.html"><span class="token function">getValueCase</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-value-case/index.html">NumericBound.ValueCase</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-353949114%2FFunctions%2F-1380849397" anchor-label="hasDoubleValue" id="-353949114%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-double-value.html"><span>has</span><wbr></wbr><span>Double</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-353949114%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-double-value.html"><span class="token function">hasDoubleValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">double double_value = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-75619523%2FFunctions%2F-1380849397" anchor-label="hasFieldValue" id="-75619523%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-field-value.html"><span>has</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-75619523%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-field-value.html"><span class="token function">hasFieldValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="298093855%2FFunctions%2F-1380849397" anchor-label="hasFloatValue" id="298093855%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-float-value.html"><span>has</span><wbr></wbr><span>Float</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="298093855%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-float-value.html"><span class="token function">hasFloatValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">float float_value = 2;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1494607313%2FFunctions%2F-1380849397" anchor-label="hasInt32Value" id="1494607313%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-int32-value.html"><span>has</span><wbr></wbr><span><span>Int32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1494607313%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-int32-value.html"><span class="token function">hasInt32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">int32 int32_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="460862960%2FFunctions%2F-1380849397" anchor-label="hasInt64Value" id="460862960%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-int64-value.html"><span>has</span><wbr></wbr><span><span>Int64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="460862960%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-int64-value.html"><span class="token function">hasInt64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">int64 int64_value = 5;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-365680722%2FFunctions%2F-1380849397" anchor-label="hasUint32Value" id="-365680722%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-uint32-value.html"><span>has</span><wbr></wbr><span><span>Uint32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-365680722%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-uint32-value.html"><span class="token function">hasUint32Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">uint32 uint32_value = 6;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1399425075%2FFunctions%2F-1380849397" anchor-label="hasUint64Value" id="-1399425075%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-uint64-value.html"><span>has</span><wbr></wbr><span><span>Uint64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1399425075%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-uint64-value.html"><span class="token function">hasUint64Value</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><code class="lang-kotlin">uint64 uint64_value = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1801981832%2FFunctions%2F-1380849397" anchor-label="internalGetFieldAccessorTable" id="1801981832%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="internal-get-field-accessor-table.html"><span>internal</span><wbr></wbr><span>Get</span><wbr></wbr><span>Field</span><wbr></wbr><span>Accessor</span><wbr></wbr><span><span>Table</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1801981832%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">protected </span><span class="token keyword">open </span><span class="token keyword">fun </span><a href="internal-get-field-accessor-table.html"><span class="token function">internalGetFieldAccessorTable</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/GeneratedMessage.FieldAccessorTable///PointingToDeclaration/">GeneratedMessage.FieldAccessorTable</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="877604068%2FFunctions%2F-1380849397" anchor-label="isInitialized" id="877604068%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-initialized.html"><span>is</span><wbr></wbr><span><span>Initialized</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="877604068%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-initialized.html"><span class="token function">isInitialized</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1434782254%2FFunctions%2F-1380849397" anchor-label="mergeFieldValue" id="1434782254%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-field-value.html"><span>merge</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1434782254%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-field-value.html"><span class="token function">mergeFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1712114664%2FFunctions%2F-1380849397" anchor-label="mergeFrom" id="-1712114664%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="merge-from.html"><span>merge</span><wbr></wbr><span><span>From</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1712114664%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/Message///PointingToDeclaration/">Message</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="../index.html">NumericBound</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="merge-from.html"><span class="token function">mergeFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">input<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/CodedInputStream///PointingToDeclaration/">CodedInputStream</span><span class="token punctuation">, </span></span><span class="parameter ">extensionRegistry<span class="token operator">: </span><span data-unresolved-link="com.google.protobuf/ExtensionRegistryLite///PointingToDeclaration/">ExtensionRegistryLite</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-418175139%2FFunctions%2F-1380849397" anchor-label="setDoubleValue" id="-418175139%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-double-value.html"><span>set</span><wbr></wbr><span>Double</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-418175139%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-double-value.html"><span class="token function">setDoubleValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">double double_value = 3;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-958138742%2FFunctions%2F-1380849397" anchor-label="setExclusive" id="-958138742%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-exclusive.html"><span>set</span><wbr></wbr><span><span>Exclusive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-958138742%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-exclusive.html"><span class="token function">setExclusive</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">Whether the bound value itself should be excluded from the range.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><code class="lang-kotlin">bool exclusive = 1;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="601394935%2FFunctions%2F-1380849397" anchor-label="setFieldValue" id="601394935%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-field-value.html"><span>set</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="601394935%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-value.html"><span class="token function">setFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath///PointingToDeclaration/">FieldPath</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-field-value.html"><span class="token function">setFieldValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">builderForValue<span class="token operator">: </span><span data-unresolved-link="io.spine.base/FieldPath.Builder///PointingToDeclaration/">FieldPath.Builder</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">.spine.base.FieldPath field_value = 8;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-870837329%2FFunctions%2F-1380849397" anchor-label="setFloatValue" id="-870837329%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-float-value.html"><span>set</span><wbr></wbr><span>Float</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-870837329%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-float-value.html"><span class="token function">setFloatValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">float float_value = 2;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1690848950%2FFunctions%2F-1380849397" anchor-label="setInt32Value" id="-1690848950%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-int32-value.html"><span>set</span><wbr></wbr><span><span>Int32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1690848950%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-int32-value.html"><span class="token function">setInt32Value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">int32 int32_value = 4;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="681558444%2FFunctions%2F-1380849397" anchor-label="setInt64Value" id="681558444%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-int64-value.html"><span>set</span><wbr></wbr><span><span>Int64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="681558444%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-int64-value.html"><span class="token function">setInt64Value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">int64 int64_value = 5;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-706242627%2FFunctions%2F-1380849397" anchor-label="setUint32Value" id="-706242627%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-uint32-value.html"><span>set</span><wbr></wbr><span><span>Uint32Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-706242627%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-uint32-value.html"><span class="token function">setUint32Value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">uint32 uint32_value = 6;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1139583385%2FFunctions%2F-1380849397" anchor-label="setUint64Value" id="1139583385%2FFunctions%2F-1380849397" data-filterable-set=":proto:context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":proto:context/main" data-filterable-set=":proto:context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-uint64-value.html"><span>set</span><wbr></wbr><span><span>Uint64Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1139583385%2FFunctions%2F-1380849397"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":proto:context/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-uint64-value.html"><span class="token function">setUint64Value</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">NumericBound.Builder</a></div><div class="brief "><code class="lang-kotlin">uint64 uint64_value = 7;</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2025, TeamDev</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
