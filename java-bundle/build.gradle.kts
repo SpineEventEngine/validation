@@ -67,7 +67,7 @@ dependencies {
             JavaPoet.group to JavaPoet.artifact /* Available via `tool-base` */,
 
             // Local dependencies.
-            Base.group to Base.artifact,
+            Base.group to Base.libModule,
             BaseTypes.group to BaseTypes.artifact,
 
             CoreJava.group to CoreJava.coreArtifact,

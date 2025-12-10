@@ -185,7 +185,8 @@ fun Module.forceConfigurations() {
                     CoreJava.server,
                     CoreJvm.serverTestLib,
                     Validation.runtime,
-                    Dokka.BasePlugin.lib
+                    Dokka.BasePlugin.lib,
+                    "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
                 )
             }
 

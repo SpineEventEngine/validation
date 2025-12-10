@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.372</version>
+<version>2.0.0-SNAPSHOT.373</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -171,6 +171,12 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
     <version>6.0.4</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-validation-jvm-runtime</artifactId>
+    <version>2.0.0-SNAPSHOT.373</version>
     <scope>test</scope>
   </dependency>
   <dependency>
