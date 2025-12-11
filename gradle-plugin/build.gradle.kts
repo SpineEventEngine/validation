@@ -97,6 +97,6 @@ afterEvaluate {
     }
 
     val sourcesJar by tasks.getting(Jar::class)
-    val writeArtifactMeta  by tasks.getting
+    val writeArtifactMeta by tasks.getting
     sourcesJar.dependsOn(writeArtifactMeta)
 }
