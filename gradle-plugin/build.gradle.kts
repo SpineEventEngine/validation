@@ -81,8 +81,8 @@ dependencies {
     implementation(ToolBase.jvmTools)
 }
 
-// Change the `artifactId` to have the `spine-validation-` prefix
-// instead of just `validation-` as for the rest of the tool modules.
+// Change the `artifactId` to have the `validation-` prefix.
+// This is needed because this module has custom publication.
 afterEvaluate {
     publishing {
         publications {
