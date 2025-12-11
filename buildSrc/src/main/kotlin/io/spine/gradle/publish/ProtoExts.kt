@@ -40,8 +40,8 @@ import org.gradle.api.tasks.bundling.Jar
 fun Project.hasProto(): Boolean {
     val protoSources = protoSources()
     val result = protoSources.any {
-        it.isDirectory
-                && it.exists()
+        it.exists()
+                && it.isDirectory
                 && it.listFiles()?.isNotEmpty() ?: false
     }
     return result
