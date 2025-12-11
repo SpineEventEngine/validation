@@ -27,6 +27,7 @@
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
+import io.spine.gradle.publish.SpinePublishing
 
 plugins {
     module
@@ -77,4 +78,18 @@ dependencies {
     implementation(Compiler.pluginLib)
     implementation(Compiler.gradleApi)
     implementation(ToolBase.jvmTools)
+}
+
+// Change the `artifactId` to have the `spine-validation-` prefix
+// instead of just `validation-` as for the rest of the tool modules.
+afterEvaluate {
+    publishing {
+        publications {
+            named<MavenPublication>("pluginMaven") {
+                val rootExtension = rootProject.the<SpinePublishing>()
+                val projectPrefix = rootExtension.artifactPrefix
+                artifactId = "$projectPrefix${project.name}"
+            }
+        }
+    }
 }

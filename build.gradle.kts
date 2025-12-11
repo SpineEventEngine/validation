@@ -88,6 +88,7 @@ spinePublishing {
     )
     modulesWithCustomPublishing = setOf(
         "java-bundle",
+        "gradle-plugin",
     )
     destinations = with(PublishingRepos) {
         setOf(
