@@ -36,6 +36,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.publish.PublicationContainer
 import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
@@ -316,4 +317,20 @@ internal fun Project.artifacts(jarFlags: JarFlags): Set<TaskProvider<Jar>> {
     }
 
     return tasks
+}
+
+/**
+ * Adds the source code and documentation JARs to the publication.
+ */
+fun MavenPublication.addSourceAndDocJars(project: Project) {
+    val tasks = mutableSetOf<TaskProvider<Jar>>()
+    tasks.add(project.sourcesJar())
+    tasks.add(project.javadocJar())
+    tasks.add(project.htmlDocsJar())
+    if (project.hasProto()) {
+        tasks.add(project.protoJar())
+    }
+    tasks.forEach {
+        artifact(it)
+    }
 }

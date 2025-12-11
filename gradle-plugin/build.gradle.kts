@@ -28,10 +28,7 @@ import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.SpinePublishing
-import io.spine.gradle.publish.hasProto
-import io.spine.gradle.publish.javadocJar
-import io.spine.gradle.publish.protoJar
-import io.spine.gradle.publish.sourcesJar
+import io.spine.gradle.publish.addSourceAndDocJars
 
 plugins {
     module
@@ -94,19 +91,7 @@ afterEvaluate {
                 val projectPrefix = rootExtension.artifactPrefix
                 artifactId = "$projectPrefix${project.name}"
 
-                // Standard Java components have been already added by the `java-gradle-plugin`.
-
-                // Let's add our custom JARs via their tasks.
-                val tasks = mutableSetOf<TaskProvider<Jar>>()
-                tasks.add(sourcesJar())
-                tasks.add(javadocJar())
-                tasks.add(htmlDocsJar())
-                if (hasProto()) {
-                    tasks.add(protoJar())
-                }
-                tasks.forEach {
-                    artifact(it)
-                }
+                addSourceAndDocJars(project)
             }
         }
     }
