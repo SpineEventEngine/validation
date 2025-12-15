@@ -47,7 +47,10 @@ object Validation {
     private const val prefix = "validation"
 
     const val runtimeModule = "${Spine.group}:spine-$prefix-jvm-runtime"
-    const val runtime = "$runtimeModule:$version"
+
+    fun runtime(version: String) = "$runtimeModule:$version"
+    val runtime = runtime(version)
+
     const val javaModule = "$group:$prefix-java"
     const val java = "$javaModule:$version"
 
