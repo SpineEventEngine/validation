@@ -34,57 +34,39 @@ import io.spine.tools.validation.gradle.ValidationSdk.javaCodegenBundle
  * Artifacts of the Spine Validation SDK.
  */
 @Suppress("ConstPropertyName")
-internal object ValidationSdk {
+public object ValidationSdk {
 
     private const val toolsGroup = "io.spine.tools"
     private const val prefix = "validation"
 
-    private val jvmRuntime = Module("io.spine", "spine-$prefix-jvm-runtime")
-
-    private val javaCodegenBundle = Module(toolsGroup, "$prefix-java-bundle")
-    private val configuration = Module(toolsGroup, "$prefix-configuration")
-
-    private fun MavenArtifact.withVersion(version: String): MavenArtifact {
-        version.ifEmpty {
-            return this
-        }
-        return MavenArtifact(group, name, version, classifier, extension)
-    }
-
-    /**
-     * The fully qualified name of the Validation Java Compiler plugin.
-     */
-    internal const val javaCompilerPlugin = "io.spine.tools.validation.java.JavaValidationPlugin"
-
-    /**
-     * The Maven artifact containing the `io.spine.tools:validation-java-bundle` module.
-     *
-     * @param version The version of the Validation library to be used.
-     *        If empty, the version of the build-time dependency is used.
-     */
-    @JvmStatic
-    public fun javaCodegenBundle(version: String = ""): MavenArtifact =
-        Meta.dependency(javaCodegenBundle).withVersion(version)
-
     /**
      * The Maven artifact containing the `io.spine:spine-validation-jvm-runtime` module.
      *
-     * @param version The version of the Validation library to be used.
-     *        If empty, the version of the build-time dependency is used.
      * @see javaCodegenBundle
      */
-    @JvmStatic
-    public fun jvmRuntime(version: String = ""): MavenArtifact =
-        Meta.dependency(jvmRuntime).withVersion(version)
+    public val jvmRuntime: MavenArtifact = Meta.dependency(
+        Module("io.spine", "spine-$prefix-jvm-runtime")
+    )
+
+    /**
+     * The Maven artifact containing the `io.spine.tools:validation-java-bundle` module.
+     */
+    public val javaCodegenBundle: MavenArtifact = Meta.dependency(
+        Module(toolsGroup, "$prefix-java-bundle")
+    )
 
     /**
      * The Maven artifact containing the `io.spine.tools:validation-configuration` module.
      *
-     * @param version The version of the Validation library to be used.
-     *        If empty, the version of the build-time dependency is used.
      * @see javaCodegenBundle
      */
-    @JvmStatic
-    public fun configuration(version: String = ""): MavenArtifact =
-        Meta.dependency(configuration).withVersion(version)
+    public  val configuration : MavenArtifact = Meta.dependency(
+        Module(toolsGroup, "$prefix-configuration")
+    )
+
+    /**
+     * The fully qualified name of the Validation Java Compiler plugin.
+     */
+    public const val javaCompilerPlugin: String =
+        "io.spine.tools.validation.java.JavaValidationPlugin"
 }
