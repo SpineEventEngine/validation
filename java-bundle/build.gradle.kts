@@ -60,7 +60,7 @@ dependencies {
             exclude(group = it)
         }
 
-        // Transitive dependencies to Compiler.
+        // Transitive dependencies to the Compiler.
         Compiler.modules.forEach {
             it.split(":").let { (group, artifact, _) ->
                 exclude(group = group, module = artifact)
