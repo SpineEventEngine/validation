@@ -56,15 +56,6 @@ public object ValidationSdk {
     )
 
     /**
-     * The Maven artifact containing the `io.spine.tools:validation-configuration` module.
-     *
-     * @see javaCodegenBundle
-     */
-    public  val configuration : MavenArtifact = Meta.dependency(
-        Module(toolsGroup, "$prefix-configuration")
-    )
-
-    /**
      * The fully qualified name of the Validation Java Compiler plugin.
      */
     public const val javaCompilerPlugin: String =
