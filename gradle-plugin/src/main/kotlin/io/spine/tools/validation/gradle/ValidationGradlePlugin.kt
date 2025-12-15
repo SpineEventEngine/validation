@@ -28,10 +28,13 @@ package io.spine.tools.validation.gradle
 
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
+import io.spine.tools.compiler.gradle.plugin.Extension
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
+import io.spine.tools.meta.MavenArtifact
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency
 
 /**
  * Gradle plugin that configures the Spine Compiler to run the Validation Compiler.
@@ -41,16 +44,29 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
 ) {
     override fun apply(project: Project) {
         super.apply(project)
-        val version = Meta.version
-        val javaBundle = ValidationSdk.javaCodegenBundle(version)
+        val javaBundle = ValidationSdk.javaCodegenBundle
         project.run {
             addUserClasspathDependency(javaBundle)
             afterEvaluate {
                 // Add the Validation Java Compiler only if `spine/validation/enabled` is true.
                 if (validationExtension.enabled.get()) {
-                    compilerSettings.plugins(ValidationSdk.javaCompilerPlugin)
+                    (compilerSettings as Extension).run {
+                        // Put the Validation Java Compiler first in the list of the plugins.
+                        // Other plugins may rely on the validation code.
+                        val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
+                        plugins.set(ordered)
+                    }
                 }
             }
+            // We add the dependency on runtime anyway for the following reasons:
+            //  1. We do not want users to change their Gradle build files when they turn on or off
+            //     code generation for the validation code.
+            //
+            //  2. We have run-time validation rules that are going to be used in parallel with
+            //     the generated code. This includes current and new implementation for validation
+            //     rules for the already existing generated Protobuf code.
+            //
+            addDependency("implementation", ValidationSdk.jvmRuntime)
         }
     }
 }
@@ -60,3 +76,17 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
  */
 private val Project.validationExtension: ValidationExtension
     get() = spineExtension<ValidationExtension>()
+
+private fun Project.addDependency(configuration: String, artifact: MavenArtifact) {
+    val dependency = findDependency(artifact) ?: artifact.coordinates
+    dependencies.add(configuration, dependency)
+}
+
+private fun Project.findDependency(artifact: MavenArtifact): Dependency? {
+    val dependencies = configurations.flatMap { c -> c.dependencies }
+    val found = dependencies.firstOrNull { d ->
+        artifact.group == d.group // `d.group` could be `null`.
+                && artifact.name == d.name
+    }
+    return found
+}

@@ -38,14 +38,17 @@ plugins {
 
 val moduleArtifactId = "validation-gradle-plugin"
 
+apply(from = "$rootDir/version.gradle.kts")
+
+val validationVersion: String by extra
+
 artifactMeta {
     artifactId.set(moduleArtifactId)
     addDependencies(
         // Add Validation module dependencies that we use for project configuration
         // to which the Validation Gradle Plugin is applied.
-        Validation.javaBundle,
-        Validation.runtime,
-        Validation.configuration,
+        Validation.javaBundle(validationVersion),
+        Validation.runtime(validationVersion),
     )
     excludeConfigurations {
         containing(*buildToolConfigurations)

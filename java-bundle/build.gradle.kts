@@ -56,11 +56,15 @@ dependencies {
             ErrorProne.group,
             Grpc.group /* Available via ProtoData backend. */,
             Roaster.group /* Available via `tool-base`. */,
-
-            // Local dependencies.
-            Compiler.group,
         ).forEach {
             exclude(group = it)
+        }
+
+        // Transitive dependencies to the Compiler.
+        Compiler.modules.forEach {
+            it.split(":").let { (group, artifact, _) ->
+                exclude(group = group, module = artifact)
+            }
         }
 
         listOf(
