@@ -28,6 +28,7 @@ package io.spine.tools.validation.gradle
 
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
+import io.spine.tools.compiler.gradle.plugin.Extension
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
@@ -49,7 +50,12 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
             afterEvaluate {
                 // Add the Validation Java Compiler only if `spine/validation/enabled` is true.
                 if (validationExtension.enabled.get()) {
-                    compilerSettings.plugins(ValidationSdk.javaCompilerPlugin)
+                    (compilerSettings as Extension).run {
+                        // Put the Validation Java Compiler first in the list of the plugins.
+                        // Other plugins may rely on the validation code.
+                        val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
+                        plugins.set(ordered)
+                    }
                 }
             }
             // We add the dependency on runtime anyway for the following reasons:
