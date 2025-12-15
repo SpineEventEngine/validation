@@ -1,0 +1,55 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.tools.validation.option////PointingToDeclaration/model/io.spine.tools.validation.option/index.html
+$dokka.location:io.spine.tools.validation.option//CHOICE/#/PointingToDeclaration/model/io.spine.tools.validation.option/-c-h-o-i-c-e.html
+$dokka.location:io.spine.tools.validation.option//DISTINCT/#/PointingToDeclaration/model/io.spine.tools.validation.option/-d-i-s-t-i-n-c-t.html
+$dokka.location:io.spine.tools.validation.option//GOES/#/PointingToDeclaration/model/io.spine.tools.validation.option/-g-o-e-s.html
+$dokka.location:io.spine.tools.validation.option//IF_HAS_DUPLICATES/#/PointingToDeclaration/model/io.spine.tools.validation.option/-i-f_-h-a-s_-d-u-p-l-i-c-a-t-e-s.html
+$dokka.location:io.spine.tools.validation.option//IF_INVALID/#/PointingToDeclaration/model/io.spine.tools.validation.option/-i-f_-i-n-v-a-l-i-d.html
+$dokka.location:io.spine.tools.validation.option//IF_MISSING/#/PointingToDeclaration/model/io.spine.tools.validation.option/-i-f_-m-i-s-s-i-n-g.html
+$dokka.location:io.spine.tools.validation.option//IF_SET_AGAIN/#/PointingToDeclaration/model/io.spine.tools.validation.option/-i-f_-s-e-t_-a-g-a-i-n.html
+$dokka.location:io.spine.tools.validation.option//IS_REQUIRED/#/PointingToDeclaration/model/io.spine.tools.validation.option/-i-s_-r-e-q-u-i-r-e-d.html
+$dokka.location:io.spine.tools.validation.option//MAX/#/PointingToDeclaration/model/io.spine.tools.validation.option/-m-a-x.html
+$dokka.location:io.spine.tools.validation.option//MIN/#/PointingToDeclaration/model/io.spine.tools.validation.option/-m-i-n.html
+$dokka.location:io.spine.tools.validation.option//PATTERN/#/PointingToDeclaration/model/io.spine.tools.validation.option/-p-a-t-t-e-r-n.html
+$dokka.location:io.spine.tools.validation.option//RANGE/#/PointingToDeclaration/model/io.spine.tools.validation.option/-r-a-n-g-e.html
+$dokka.location:io.spine.tools.validation.option//REQUIRE/#/PointingToDeclaration/model/io.spine.tools.validation.option/-r-e-q-u-i-r-e.html
+$dokka.location:io.spine.tools.validation.option//REQUIRED/#/PointingToDeclaration/model/io.spine.tools.validation.option/-r-e-q-u-i-r-e-d.html
+$dokka.location:io.spine.tools.validation.option//SET_ONCE/#/PointingToDeclaration/model/io.spine.tools.validation.option/-s-e-t_-o-n-c-e.html
+$dokka.location:io.spine.tools.validation.option//VALIDATE/#/PointingToDeclaration/model/io.spine.tools.validation.option/-v-a-l-i-d-a-t-e.html
+$dokka.location:io.spine.tools.validation.option//WHEN/#/PointingToDeclaration/model/io.spine.tools.validation.option/-w-h-e-n.html
+$dokka.location:io.spine.tools.validation.option//isRepeatedMessage/io.spine.tools.compiler.ast.FieldType#/PointingToDeclaration/model/io.spine.tools.validation.option/is-repeated-message.html
+$dokka.location:io.spine.tools.validation.option//isRepeatedString/io.spine.tools.compiler.ast.FieldType#/PointingToDeclaration/model/io.spine.tools.validation.option/is-repeated-string.html
+$dokka.location:io.spine.tools.validation.option//isSingularString/io.spine.tools.compiler.ast.FieldType#/PointingToDeclaration/model/io.spine.tools.validation.option/is-singular-string.html
+$dokka.location:io.spine.tools.validation////PointingToDeclaration/model/io.spine.tools.validation/index.html
+$dokka.location:io.spine.tools.validation//OPTION_NAME/#/PointingToDeclaration/model/io.spine.tools.validation/-o-p-t-i-o-n_-n-a-m-e.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.FIELD_DUPLICATES///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-f-i-e-l-d_-d-u-p-l-i-c-a-t-e-s/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.FIELD_PATH///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-f-i-e-l-d_-p-a-t-h/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.FIELD_PROPOSED_VALUE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-f-i-e-l-d_-p-r-o-p-o-s-e-d_-v-a-l-u-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.FIELD_TYPE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-f-i-e-l-d_-t-y-p-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.FIELD_VALUE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-f-i-e-l-d_-v-a-l-u-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.GOES_COMPANION///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-g-o-e-s_-c-o-m-p-a-n-i-o-n/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.GROUP_PATH///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-g-r-o-u-p_-p-a-t-h/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.MAX_OPERATOR///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-m-a-x_-o-p-e-r-a-t-o-r/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.MAX_VALUE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-m-a-x_-v-a-l-u-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.MESSAGE_TYPE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-m-e-s-s-a-g-e_-t-y-p-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.MIN_OPERATOR///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-m-i-n_-o-p-e-r-a-t-o-r/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.MIN_VALUE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-m-i-n_-v-a-l-u-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.PARENT_TYPE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-p-a-r-e-n-t_-t-y-p-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.RANGE_VALUE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-r-a-n-g-e_-v-a-l-u-e/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.REGEX_MODIFIERS///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-r-e-g-e-x_-m-o-d-i-f-i-e-r-s/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.REGEX_PATTERN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-r-e-g-e-x_-p-a-t-t-e-r-n/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.REQUIRE_FIELDS///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-r-e-q-u-i-r-e_-f-i-e-l-d-s/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder.WHEN_IN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}model/io.spine.tools.validation/-error-placeholder/-w-h-e-n_-i-n/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder///PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/index.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder/entries/#/PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/entries.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder/toString/#/PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/to-string.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder/value/#/PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/value.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder/valueOf/#kotlin.String/PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/value-of.html
+$dokka.location:io.spine.tools.validation/ErrorPlaceholder/values/#/PointingToDeclaration/model/io.spine.tools.validation/-error-placeholder/values.html
+$dokka.location:io.spine.tools.validation/ValidationPlugin///PointingToDeclaration/model/io.spine.tools.validation/-validation-plugin/index.html
+$dokka.location:io.spine.tools.validation/ValidationPlugin/ValidationPlugin/#kotlin.collections.List[io.spine.tools.compiler.render.Renderer[*]]#kotlin.collections.Set[java.lang.Class[io.spine.tools.compiler.plugin.View[*,*,*]]]#kotlin.collections.Set[io.spine.tools.compiler.plugin.ViewRepository[*,*,*]]#kotlin.collections.Set[io.spine.tools.compiler.plugin.Reaction[*]]/PointingToDeclaration/model/io.spine.tools.validation/-validation-plugin/-validation-plugin.html
+$dokka.location:io.spine.tools.validation/WithValidationSettings///PointingToDeclaration/model/io.spine.tools.validation/-with-validation-settings/index.html
+$dokka.location:io.spine.tools.validation/WithValidationSettings/consumerId/#/PointingToDeclaration/model/io.spine.tools.validation/-with-validation-settings/consumer-id.html
+io.spine.tools.validation
+io.spine.tools.validation.option
