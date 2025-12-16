@@ -32,12 +32,12 @@ import io.spine.tools.compiler.ast.PrimitiveType
 /**
  * Determines whether the field type can be validated as `(required)`.
  */
-internal object RequiredFieldSupport {
+public object RequiredFieldSupport {
 
     /**
-     * Tells if this [FieldType] can be validated with the `(required)` option.
+     * Tells if this [io.spine.tools.compiler.ast.FieldType] can be validated with the `(required)` option.
      */
-    fun FieldType.isSupported(): Boolean =
+    public fun FieldType.isSupported(): Boolean =
         !isPrimitive || primitive in SUPPORTED_PRIMITIVES
 
     private val SUPPORTED_PRIMITIVES = listOf(
