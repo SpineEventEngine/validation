@@ -46,6 +46,8 @@ object Validation {
     const val group = Spine.toolsGroup
     private const val prefix = "validation"
 
+    const val gradlePluginLib = "$group:$prefix-gradle-plugin:$version"
+
     const val runtimeModule = "${Spine.group}:spine-$prefix-jvm-runtime"
 
     fun runtime(version: String) = "$runtimeModule:$version"
