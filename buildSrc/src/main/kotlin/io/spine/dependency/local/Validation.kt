@@ -36,7 +36,7 @@ object Validation {
     /**
      * The version of the Validation library artifacts.
      */
-    const val version = "2.0.0-SNAPSHOT.373"
+    const val version = "2.0.0-SNAPSHOT.375"
 
     /**
      * The last version of Validation compatible with ProtoData.
@@ -53,7 +53,6 @@ object Validation {
 
     const val javaModule = "$group:$prefix-java"
     const val java = "$javaModule:$version"
-
     const val javaBundleModule = "$group:$prefix-java-bundle"
 
     /** Obtains the artifact for the `java-bundle` artifact of the given version. */
