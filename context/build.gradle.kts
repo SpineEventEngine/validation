@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.Compiler
 
 buildscript {
     standardSpineSdkRepositories()
@@ -38,7 +39,6 @@ buildscript {
         }
     }
     dependencies {
-        // The below dependency is obtained from https://plugins.gradle.org/m2/.
         spineCompiler.run {
             classpath(pluginLib(dogfoodingVersion))
         }
@@ -46,28 +46,15 @@ buildscript {
     }
 }
 
-subprojects {
-    apply {
-        plugin("io.spine.core-jvm")
-    }
+apply(plugin = "io.spine.core-jvm")
 
-    configurations {
-        all {
-            resolutionStrategy {
-                force(
-                    io.spine.dependency.local.ToolBase.lib,
-                )
-            }
-        }
-    }
-
-    dependencies {
-        Protobuf.libs.forEach { implementation(it) }
-    }
+dependencies {
+    api(Compiler.backend)
+    implementation(Base.lib)
 }
 
-// Temporarily disable this task for this parent Gradle project.
-// The tasks in its children still should execute fine.
-// See more [here](https://github.com/jk1/Gradle-License-Report/issues/337).
-val generateLicenseReport by tasks.getting
-generateLicenseReport.enabled = false
+afterEvaluate {
+    val kspKotlin by tasks.getting
+    val launchSpineCompiler by tasks.getting
+    kspKotlin.dependsOn(launchSpineCompiler)
+}

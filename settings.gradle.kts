@@ -34,8 +34,7 @@ pluginManagement {
 rootProject.name = "validation"
 
 include(
-    "proto",
-    ":proto:context",
+    "context",
     "gradle-plugin",
     "java",
     "model",

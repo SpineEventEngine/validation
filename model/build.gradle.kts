@@ -42,7 +42,7 @@ dependencies {
     api(Compiler.jvm)
     implementation(Compiler.backend)
 
-    implementation(project(":proto:context"))
+    implementation(project(":context"))
     implementation(project(":jvm-runtime"))
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
