@@ -59,8 +59,6 @@ import io.spine.tools.validation.option.WhenFieldView
 import io.spine.tools.validation.option.WhenReaction
 import io.spine.tools.validation.option.required.IfMissingReaction
 import io.spine.tools.validation.option.required.RequiredFieldView
-import io.spine.tools.validation.option.required.RequiredIdOptionReaction
-import io.spine.tools.validation.option.required.RequiredIdPatternReaction
 import io.spine.tools.validation.option.required.RequiredReaction
 
 /**
@@ -106,8 +104,6 @@ public abstract class ValidationPlugin(
         ChoiceReaction(),
         IsRequiredReaction(),
         WhenReaction(),
-        RequiredIdPatternReaction(),
-        RequiredIdOptionReaction(),
         GoesReaction(),
         SetOnceReaction(),
         IfSetAgainReaction(),
