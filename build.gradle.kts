@@ -80,7 +80,6 @@ plugins {
 spinePublishing {
     modules = setOf(
         "model",
-        ":proto:configuration",
         ":proto:context",
         "java",
         "java-bundle",

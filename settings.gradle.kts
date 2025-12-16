@@ -35,7 +35,6 @@ rootProject.name = "validation"
 
 include(
     "proto",
-    ":proto:configuration",
     ":proto:context",
     "gradle-plugin",
     "java",

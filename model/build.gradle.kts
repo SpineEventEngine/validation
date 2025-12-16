@@ -42,14 +42,12 @@ dependencies {
     api(Compiler.jvm)
     implementation(Compiler.backend)
 
-    implementation(project(":proto:configuration"))
     implementation(project(":proto:context"))
     implementation(project(":jvm-runtime"))
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(Compiler.testlib)
 
-    testFixturesImplementation(project(":proto:configuration"))
     testFixturesImplementation(Compiler.api)
     testFixturesImplementation(Compiler.testlib)
     testFixturesImplementation(Jupiter.artifact { params })
