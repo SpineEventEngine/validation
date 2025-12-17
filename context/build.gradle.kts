@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.376")
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.Compiler
+
+buildscript {
+    standardSpineSdkRepositories()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.Logging.grpcContext,
+                )
+            }
+        }
+    }
+    dependencies {
+        spineCompiler.run {
+            classpath(pluginLib(dogfoodingVersion))
+        }
+        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
+    }
+}
+
+apply(plugin = "io.spine.core-jvm")
+
+dependencies {
+    api(Compiler.backend)
+    api(Compiler.jvm)
+    implementation(Base.lib)
+}
+
+afterEvaluate {
+    val kspKotlin by tasks.getting
+    val launchSpineCompiler by tasks.getting
+    kspKotlin.dependsOn(launchSpineCompiler)
+}

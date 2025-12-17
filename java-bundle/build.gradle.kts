@@ -35,9 +35,9 @@ import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.BaseTypes
 import io.spine.dependency.local.Change
-import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Compiler
+import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Reflect
 import io.spine.dependency.local.Time
 
@@ -62,7 +62,7 @@ dependencies {
 
         // Transitive dependencies to the Compiler.
         Compiler.modules.forEach {
-            it.split(":").let { (group, artifact, _) ->
+            it.split(":").let { (group, artifact) ->
                 exclude(group = group, module = artifact)
             }
         }
@@ -74,16 +74,16 @@ dependencies {
             Base.group to Base.libModule,
             BaseTypes.group to BaseTypes.artifact,
 
-            CoreJava.group to CoreJava.coreArtifact,
-            CoreJava.group to CoreJava.clientArtifact,
-            CoreJava.group to CoreJava.serverArtifact,
+            CoreJvm.group to CoreJvm.coreArtifact,
+            CoreJvm.group to CoreJvm.clientArtifact,
+            CoreJvm.group to CoreJvm.serverArtifact,
 
             Change.group to Change.artifact,
             Logging.group to Logging.loggingArtifact,
             Reflect.group to Reflect.artifact,
             Time.group to Time.artifact,
 
-            CoreJava.group to CoreJava.serverArtifact,
+            CoreJvm.group to CoreJvm.serverArtifact,
         ).forEach { (group, artifact) ->
             exclude(group = group, module = artifact)
         }

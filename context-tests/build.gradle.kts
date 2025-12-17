@@ -1,11 +1,11 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,9 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
- */
-val validationVersion by extra("2.0.0-SNAPSHOT.376")
+import io.spine.dependency.artifact
+import io.spine.dependency.local.Compiler
+import io.spine.dependency.local.Logging
+import io.spine.dependency.test.JUnit.Jupiter
+
+plugins {
+    java
+    protobuf
+    `java-test-fixtures`
+    prototap
+}
+
+dependencies {
+    implementation(project(":context"))
+    implementation(project(":jvm-runtime"))
+
+    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
+    testImplementation(Compiler.testlib)
+
+    testFixturesImplementation(Compiler.api)
+    testFixturesImplementation(Compiler.testlib)
+    testFixturesImplementation(Jupiter.artifact { params })
+}

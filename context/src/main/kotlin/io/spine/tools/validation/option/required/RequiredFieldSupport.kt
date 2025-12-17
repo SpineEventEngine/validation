@@ -24,9 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.validation.option.required
+
+import io.spine.tools.compiler.ast.FieldType
+import io.spine.tools.compiler.ast.PrimitiveType
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * Determines whether the field type can be validated as `(required)`.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.376")
+public object RequiredFieldSupport {
+
+    /**
+     * Tells if this [io.spine.tools.compiler.ast.FieldType] can
+     * be validated with the `(required)` option.
+     */
+    public fun FieldType.isSupported(): Boolean =
+        !isPrimitive || primitive in SUPPORTED_PRIMITIVES
+
+    private val SUPPORTED_PRIMITIVES = listOf(
+        PrimitiveType.TYPE_STRING, PrimitiveType.TYPE_BYTES
+    )
+}

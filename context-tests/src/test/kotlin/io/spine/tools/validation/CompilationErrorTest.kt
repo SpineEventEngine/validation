@@ -24,9 +24,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.validation
+
+import com.google.protobuf.Message
+import io.spine.testing.compiler.AbstractCompilationErrorTest
+import io.spine.tools.compiler.ast.Field
+import io.spine.tools.compiler.plugin.Plugin
+import io.spine.tools.compiler.protobuf.descriptor
+import io.spine.tools.compiler.protobuf.field
+import kotlin.reflect.KClass
+
 /**
- * The version of the Validation SDK to publish.
- *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * An abstract base for compilation error tests of [ValidationPlugin].
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.376")
+internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
+
+    override fun plugins(): List<Plugin> = listOf(
+        object : ValidationPlugin() {}
+    )
+}
+
+/**
+ * Asserts that the given [message] does not compile.
+ *
+ * @param message The class of the message to compile.
+ * @param fieldName The name of the field to use for assertions.
+ * @param errorMessageAssertions Assertions to run upon the returned error message.
+ */
+internal fun CompilationErrorTest.assertCompilationFails(
+    message: KClass<out Message>,
+    fieldName: String = "value",
+    errorMessageAssertions: String.(Field) -> Unit
+) {
+    val descriptor = message.descriptor
+    val error = assertCompilationFails(descriptor)
+    val field = descriptor.field(fieldName)
+    error.message!!.errorMessageAssertions(field)
+}

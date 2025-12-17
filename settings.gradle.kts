@@ -34,12 +34,10 @@ pluginManagement {
 rootProject.name = "validation"
 
 include(
-    "proto",
-    ":proto:configuration",
-    ":proto:context",
+    "context",
+    "context-tests",
     "gradle-plugin",
     "java",
-    "model",
     "jvm-runtime",
     "java-bundle",
     ":ksp",
