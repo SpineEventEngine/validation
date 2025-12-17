@@ -372,3 +372,5 @@ io.spine.tools.validation
 io.spine.tools.validation.bound
 io.spine.tools.validation.bound.event
 io.spine.tools.validation.event
+io.spine.tools.validation.option
+io.spine.tools.validation.option.required
