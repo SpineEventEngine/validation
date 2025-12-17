@@ -33,7 +33,6 @@ plugins {
 dependencies {
     api(Compiler.jvm)
     api(project(":ksp"))
-    api(project(":model"))
     api(project(":context"))
     api(project(":jvm-runtime"))
 }

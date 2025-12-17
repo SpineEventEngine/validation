@@ -31,7 +31,7 @@ import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.CoreJava
+import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
@@ -80,7 +80,6 @@ plugins {
 spinePublishing {
     modules = setOf(
         "context",
-        "model",
         "java",
         "java-bundle",
         "jvm-runtime",
@@ -118,8 +117,8 @@ allprojects {
                 Compiler.jvm,
                 Compiler.params,
                 Compiler.pluginLib,
-                CoreJava.client,
-                CoreJava.server,
+                CoreJvm.client,
+                CoreJvm.server,
                 Grpc.bom,
                 KotlinPoet.lib,
                 Logging.lib,

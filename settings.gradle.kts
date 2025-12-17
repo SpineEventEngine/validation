@@ -35,9 +35,9 @@ rootProject.name = "validation"
 
 include(
     "context",
+    "context-tests",
     "gradle-plugin",
     "java",
-    "model",
     "jvm-runtime",
     "java-bundle",
     ":ksp",
