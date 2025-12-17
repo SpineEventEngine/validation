@@ -50,6 +50,7 @@ apply(plugin = "io.spine.core-jvm")
 
 dependencies {
     api(Compiler.backend)
+    api(Compiler.jvm)
     implementation(Base.lib)
 }
 

@@ -25,9 +25,8 @@
  */
 
 import io.spine.dependency.artifact
-import io.spine.dependency.local.CoreJava
-import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Compiler
+import io.spine.dependency.local.Logging
 import io.spine.dependency.test.JUnit.Jupiter
 
 plugins {
@@ -38,10 +37,6 @@ plugins {
 }
 
 dependencies {
-    api(CoreJava.server)
-    api(Compiler.jvm)
-    implementation(Compiler.backend)
-
     implementation(project(":context"))
     implementation(project(":jvm-runtime"))
 

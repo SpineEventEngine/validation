@@ -52,7 +52,6 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MIN
 import io.spine.tools.validation.option.RANGE
-import io.spine.tools.validation.bound.MinField
 import io.spine.tools.validation.bound.event.MinFieldDiscovered
 import io.spine.tools.validation.bound.event.minFieldDiscovered
 

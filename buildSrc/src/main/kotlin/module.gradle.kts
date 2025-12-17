@@ -34,7 +34,6 @@ import io.spine.dependency.lib.Jackson
 import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.CoreJava
 import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Reflect
@@ -182,7 +181,7 @@ fun Module.forceConfigurations() {
                     Logging.libJvm,
                     Logging.testLib,
                     Logging.grpcContext,
-                    CoreJava.server,
+                    CoreJvm.server,
                     CoreJvm.serverTestLib,
                     Validation.runtime,
                     Dokka.BasePlugin.lib,

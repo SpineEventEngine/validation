@@ -52,7 +52,6 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MAX
 import io.spine.tools.validation.option.RANGE
-import io.spine.tools.validation.bound.MaxField
 import io.spine.tools.validation.bound.event.MaxFieldDiscovered
 import io.spine.tools.validation.bound.event.maxFieldDiscovered
 
