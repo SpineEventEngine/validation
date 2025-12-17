@@ -54,7 +54,7 @@ dependencies {
             JavaX.annotationGroup,
             Protobuf.group,
             ErrorProne.group,
-            Grpc.group /* Available via ProtoData backend. */,
+            Grpc.group /* Available via the Compiler backend. */,
             Roaster.group /* Available via `tool-base`. */,
         ).forEach {
             exclude(group = it)
