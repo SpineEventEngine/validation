@@ -32,8 +32,6 @@ import io.spine.test.tools.validate.command.AssignTask
 import io.spine.test.tools.validate.command.CreateProject
 import io.spine.test.tools.validate.entity.Project
 import io.spine.test.tools.validate.entity.Task
-import io.spine.test.tools.validate.event.ProjectCreated
-import io.spine.test.tools.validate.rejection.TestRejections
 import io.spine.tools.validation.assertions.assertInvalid
 import io.spine.tools.validation.assertions.assertValid
 import io.spine.tools.validation.assertions.assertViolation
