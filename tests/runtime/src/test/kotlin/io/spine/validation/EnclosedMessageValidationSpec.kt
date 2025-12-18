@@ -32,7 +32,8 @@ import io.spine.test.validate.ValidateEnclosed
 import io.spine.test.validate.ValidateWithRequiredString
 import io.spine.test.validate.notValidateEnclosed
 import io.spine.validation.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import io.spine.validation.given.MessageValidatorTestEnv
+import io.spine.validation.given.MessageValidatorTestEnv.EMAIL
+import io.spine.validation.given.MessageValidatorTestEnv.ENCLOSED_FIELD_NAME
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -91,9 +92,6 @@ internal class EnclosedMessageValidationSpec : ValidationOfConstraintTest() {
 
         val violation = singleViolation()
         violation.message.format() shouldContain "field must match the regular expression"
-        assertFieldPathIs(violation,
-            MessageValidatorTestEnv.ENCLOSED_FIELD_NAME,
-            MessageValidatorTestEnv.EMAIL
-        )
+        assertFieldPathIs(violation, ENCLOSED_FIELD_NAME, EMAIL)
     }
 }
