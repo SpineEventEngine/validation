@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.378</version>
+<version>2.0.0-SNAPSHOT.380</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -66,6 +66,12 @@ all modules and does not describe the project structure per-subproject.
     <scope>compile</scope>
   </dependency>
   <dependency>
+    <groupId>io.spine</groupId>
+    <artifactId>spine-validation-jvm-runtime</artifactId>
+    <version>2.0.0-SNAPSHOT.378</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-backend</artifactId>
     <version>2.0.0-SNAPSHOT.035</version>
@@ -93,12 +99,6 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.spine.tools</groupId>
     <artifactId>jvm-tools</artifactId>
     <version>2.0.0-SNAPSHOT.371</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
-    <groupId>io.spine.validation</groupId>
-    <artifactId>spine-validation-java-runtime</artifactId>
-    <version>2.0.0-SNAPSHOT.360</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -165,12 +165,6 @@ all modules and does not describe the project structure per-subproject.
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
     <version>6.0.4</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>io.spine</groupId>
-    <artifactId>spine-validation-jvm-runtime</artifactId>
-    <version>2.0.0-SNAPSHOT.375</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -287,12 +281,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>core-jvm-gradle-plugins</artifactId>
-    <version>2.0.0-SNAPSHOT.040</version>
+    <version>2.0.0-SNAPSHOT.042</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>core-jvm-routing</artifactId>
-    <version>2.0.0-SNAPSHOT.040</version>
+    <version>2.0.0-SNAPSHOT.042</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
@@ -305,9 +299,9 @@ all modules and does not describe the project structure per-subproject.
     <version>2.0.0-SNAPSHOT.7</version>
   </dependency>
   <dependency>
-    <groupId>io.spine.validation</groupId>
-    <artifactId>spine-validation-java-bundle</artifactId>
-    <version>2.0.0-SNAPSHOT.360</version>
+    <groupId>io.spine.tools</groupId>
+    <artifactId>validation-java-bundle</artifactId>
+    <version>2.0.0-SNAPSHOT.378</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
