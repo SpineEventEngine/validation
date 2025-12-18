@@ -26,9 +26,6 @@
 
 package io.spine.validate;
 
-import io.spine.validation.NonValidated;
-import io.spine.validation.ValidatingBuilder;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
