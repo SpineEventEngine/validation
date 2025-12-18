@@ -36,19 +36,19 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_VALUE
-import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
-import io.spine.validate.ValidationException
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(set_once)`.
+ * Tests [ConstraintViolation][io.spine.validation.ConstraintViolation]s created by `(set_once)`.
  */
 @DisplayName("`(set_once)` constraint should")
 internal class SetOnceViolationITest {

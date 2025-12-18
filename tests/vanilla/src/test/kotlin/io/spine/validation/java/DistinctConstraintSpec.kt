@@ -30,10 +30,10 @@ import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.extensions.proto.ProtoTruth.assertThat
 import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter.toAny
-import io.spine.validate.NonValidated
-import io.spine.validate.Validated
-import io.spine.validate.ValidationError
-import io.spine.validate.constraintViolation
+import io.spine.validation.NonValidated
+import io.spine.validation.Validated
+import io.spine.validation.ValidationError
+import io.spine.validation.constraintViolation
 import io.spine.tools.validation.java.given.ProtoSet
 import java.util.*
 import org.junit.jupiter.api.DisplayName

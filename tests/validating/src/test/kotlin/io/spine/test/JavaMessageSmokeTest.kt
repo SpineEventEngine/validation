@@ -33,11 +33,11 @@ import io.kotest.matchers.shouldNotBe
 import io.spine.base.FieldPath
 import io.spine.test.protobuf.CardNumber
 import io.spine.type.TypeName
-import io.spine.validate.NonValidated
-import io.spine.validate.ValidatableMessage
-import io.spine.validate.Validate.check
-import io.spine.validate.ValidatingBuilder
-import io.spine.validate.ValidationException
+import io.spine.validation.NonValidated
+import io.spine.validation.ValidatableMessage
+import io.spine.validation.Validate.check
+import io.spine.validation.ValidatingBuilder
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -100,6 +100,7 @@ internal class JavaMessageSmokeTest {
 
     @Test
     fun `make the message builder implement 'ValidatingBuilder'`() {
-        CardNumber.Builder::class.java.interfaces shouldContain ValidatingBuilder::class.java
+        CardNumber.Builder::class.java.interfaces shouldContain
+                io.spine.validate.ValidatingBuilder::class.java
     }
 }

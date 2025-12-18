@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -27,55 +27,13 @@
 package io.spine.validate;
 
 import com.google.protobuf.Message;
-import io.spine.annotation.GeneratedMixin;
 
 /**
- * Implementation base for generated message builders.
+ * Provided for backward compatibility.
  *
- * <p>This interface defines a method {@link #build()} which validates the built message
- * before returning it to the user.
- *
- * <p>If a user specifically needs to skip validation, they should use
- * {@link #buildPartial()} to make the intent explicit.
- *
- * @param <M>
- *         the type of the message to build
+ * @deprecated Use {@link io.spine.validation.ValidatingBuilder} instead.
  */
-@GeneratedMixin
-public interface ValidatingBuilder<M extends Message> extends Message.Builder {
-
-    /**
-     * Constructs the message and validates it according to the constraints
-     * declared in Protobuf.
-     *
-     * @return the built message
-     * @throws ValidationException
-     *         if the message is invalid
-     */
-    @Override
-    @Validated M build() throws ValidationException;
-
-    /**
-     * Constructs the message with the given fields without validation.
-     *
-     * <p>Users should prefer {@link #build()} over this method.
-     *
-     * @return the build message, potentially invalid
-     */
-    @Override
-    @NonValidated M buildPartial();
-
-    /**
-     * Constructs the message and {@linkplain Validate validates} it according to the constraints
-     * declared in Protobuf.
-     *
-     * @return the built message
-     * @throws ValidationException
-     *         if the message is invalid
-     * @deprecated please use {@link #build()}
-     */
-    @Deprecated
-    default @Validated M vBuild() throws ValidationException {
-        return build();
-    }
+@Deprecated
+public interface ValidatingBuilder<M extends Message>
+        extends io.spine.validation.ValidatingBuilder<M> {
 }

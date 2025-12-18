@@ -70,7 +70,7 @@ public fun Expression<FieldPath>.mergeFrom(other: Expression<FieldPath>): Expres
  *
  * Strictly speaking, [OneofName] does not represent a field, but a group of fields.
  * But we still use [FieldPath] to provide a path to this message member because
- * [io.spine.validate.ConstraintViolation] expects exactly [FieldPath] type.
+ * [io.spine.validation.ConstraintViolation] expects exactly [FieldPath] type.
  */
 public fun Expression<FieldPath>.resolve(oneof: OneofName): Expression<FieldPath> =
     toBuilder()

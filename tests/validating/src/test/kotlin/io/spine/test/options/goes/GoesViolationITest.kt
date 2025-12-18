@@ -36,19 +36,19 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.GoesCustomMessage
 import io.spine.test.tools.validate.GoesDefaultMessage
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validate.RuntimeErrorPlaceholder.FIELD_VALUE
-import io.spine.validate.RuntimeErrorPlaceholder.GOES_COMPANION
-import io.spine.validate.RuntimeErrorPlaceholder.PARENT_TYPE
-import io.spine.validate.ValidationException
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.RuntimeErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.RuntimeErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Tests [ConstraintViolation][io.spine.validate.ConstraintViolation]s created by `(goes)`.
+ * Tests [ConstraintViolation][io.spine.validation.ConstraintViolation]s created by `(goes)`.
  */
 @DisplayName("`(goes)` constraint should")
 internal class GoesViolationITest {

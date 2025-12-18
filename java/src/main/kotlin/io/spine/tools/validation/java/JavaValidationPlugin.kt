@@ -69,7 +69,7 @@ private val customOptions: List<ValidationOption> by lazy {
 
 /**
  * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validate.MessageValidator]s.
+ * [MessageValidator][io.spine.validation.MessageValidator]s.
  *
  * Please note that the KSP module is responsible for the actual discovering
  * of the message validators. The discovered validators are written to a text file

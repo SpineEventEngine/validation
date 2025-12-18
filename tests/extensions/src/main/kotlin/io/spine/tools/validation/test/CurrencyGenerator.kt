@@ -42,7 +42,7 @@ import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validate.ConstraintViolation
+import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.test.money.CurrencyMessage
 
 /**

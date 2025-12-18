@@ -48,6 +48,7 @@ import io.spine.tools.psi.java.getFirstByText
 import io.spine.tools.psi.java.methodWithSignature
 import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.setonce.SetOnceJavaConstraints.Companion.MergeFromBytesSignature
+import io.spine.validation.ValidationException
 
 /**
  * Renders Java code to support `(set_once)` option for the given [field].
@@ -189,10 +190,11 @@ internal sealed class SetOnceJavaConstraints<T>(
             asString(newValue),
             asPayload(newValue)
         )
+        val validationException = ValidationException::class.java.canonicalName
         return elementFactory.createStatement(
             """
             if (!(${defaultOrSame(currentValue, newValue)})) {
-                throw new io.spine.validate.ValidationException($violation);
+                throw new $validationException($violation);
             }""".trimIndent()
         )
     }

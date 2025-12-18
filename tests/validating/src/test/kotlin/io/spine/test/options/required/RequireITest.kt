@@ -34,7 +34,7 @@ import io.spine.test.tools.validate.Citizen
 import io.spine.test.tools.validate.Due
 import io.spine.test.tools.validate.FieldGroup
 import io.spine.type.TypeName
-import io.spine.validate.format
+import io.spine.validation.format
 import io.spine.tools.validation.assertions.assertInvalid
 import io.spine.tools.validation.assertions.assertValid
 import java.nio.charset.StandardCharsets.UTF_16

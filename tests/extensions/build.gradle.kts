@@ -34,6 +34,7 @@ apply {
 
 dependencies {
     implementation(project(":java"))
+    implementation(project(":jvm-runtime"))
     ksp(AutoServiceKsp.processor)
 }
 

@@ -49,10 +49,13 @@ import io.spine.tools.validation.java.expression.ObjectsClass
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validate.NonValidated
-import io.spine.validate.ValidatableMessage
-import io.spine.validate.Validated
-import io.spine.validate.ValidatingBuilder
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.NonValidated
+import io.spine.validation.ValidatableMessage
+import io.spine.validation.Validated
+import io.spine.validation.ValidatingBuilder
+import io.spine.validation.ValidationError
+import io.spine.validation.ValidationException
 
 /**
  * A [PsiClass] holding an instance of [Message].
@@ -111,6 +114,10 @@ private fun MessagePsiClass.implementValidatableMessage() {
     implement(reference)
 }
 
+private val validationError by lazy {
+    ValidationError::class.java.canonicalName
+}
+
 /**
  * Declares the `validate(parentPath, parentName)` method in this [MessagePsiClass].
  *
@@ -127,7 +134,7 @@ private fun MessagePsiClass.implementValidatableMessage() {
 private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) {
     val psiMethod = elementFactory.createMethodFromText(
         """
-        public java.util.Optional<io.spine.validate.ValidationError> validate($FieldPathClass $parentPath, $NullableTypeNameClass $parentName) {
+        public java.util.Optional<$validationError> validate($FieldPathClass $parentPath, $NullableTypeNameClass $parentName) {
             $ObjectsClass.requireNonNull($parentPath);
             ${validateMethodBody(constraints)}
         }
@@ -138,19 +145,20 @@ private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) 
 }
 
 private fun validateMethodBody(constraints: List<CodeBlock>): String =
-    if (constraints.isEmpty())
+    if (constraints.isEmpty()) {
         """
-        // This message does not have any validation constraints.
-        return java.util.Optional.empty();
-        """.trimIndent()
-    else
+            // This message does not have any validation constraints.
+            return java.util.Optional.empty();
+            """.trimIndent()
+    } else {
+        val constraintViolation = ConstraintViolation::class.java.canonicalName
         """
-        var $violations = new java.util.ArrayList<io.spine.validate.ConstraintViolation>();
+        var $violations = new java.util.ArrayList<$constraintViolation>();
         
         ${constraints.joinByLines()}
         
         if (!$violations.isEmpty()) {
-            var error = io.spine.validate.ValidationError.newBuilder()
+            var error = $validationError.newBuilder()
                 .addAllConstraintViolation($violations)
                 .build();
             return java.util.Optional.of(error);
@@ -158,6 +166,7 @@ private fun validateMethodBody(constraints: List<CodeBlock>): String =
             return java.util.Optional.empty();
         }
         """.trimIndent()
+    }
 
 /**
  * Adds declarations of the given [fields] to this [MessagePsiClass].
@@ -180,7 +189,11 @@ private fun MessagePsiClass.declareSupportingMethods(methods: List<MethodDeclara
  * the provided [message] class name as its type parameter.
  */
 private fun BuilderPsiClass.implementValidatingBuilder(message: PsiClass) {
-    val qualifiedName = ValidatingBuilder::class.java.canonicalName
+    // We use `ValidatingBuilder` at the old package to maintain backward compatibility
+    // for CoreJvm runtime. Once CoreJvm migrates to the new Validation Runtime, this
+    // line should be updated to use `io.spine.validation.ValidatingBuilder`.
+    @Suppress("DEPRECATION")
+    val qualifiedName = io.spine.validate.ValidatingBuilder::class.java.canonicalName
     val genericParameter = message.qualifiedName!!
     val reference = elementFactory.createInterfaceReference(qualifiedName, genericParameter)
     implement(reference)
@@ -196,12 +209,13 @@ private fun BuilderPsiClass.implementValidatingBuilder(message: PsiClass) {
 private fun BuilderPsiClass.injectValidationIntoBuildMethod() = method("build")
     .run {
         val returningResult = getFirstByText("return result;")
+        val validationException = ValidationException::class.java.canonicalName
         val runValidation = elementFactory.createCodeBlockAdapterFromText(
             """
-            java.util.Optional<io.spine.validate.ValidationError> error = result.validate();
+            java.util.Optional<$validationError> error = result.validate();
             if (error.isPresent()) {
                 var violations = error.get().getConstraintViolationList();
-                throw new io.spine.validate.ValidationException(violations);
+                throw new $validationException(violations);
             }
             """.trimIndent(), this
         )

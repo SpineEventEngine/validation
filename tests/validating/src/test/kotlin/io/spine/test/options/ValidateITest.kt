@@ -35,7 +35,7 @@ import io.spine.test.tools.validate.inDepthValidatedMaps
 import io.spine.test.tools.validate.inDepthValidatedMessage
 import io.spine.test.tools.validate.inDepthValidatedRepeated
 import io.spine.test.tools.validate.personName
-import io.spine.validate.ValidationException
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

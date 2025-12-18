@@ -41,8 +41,8 @@ import com.google.devtools.ksp.symbol.Modifier
 import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
-import io.spine.validate.MessageValidator
-import io.spine.validate.Validator
+import io.spine.validation.MessageValidator
+import io.spine.validation.Validator
 
 private typealias MessageDeclaration = KSClassDeclaration
 private typealias ValidatorDeclaration = KSClassDeclaration

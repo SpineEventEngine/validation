@@ -30,11 +30,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.validate.ConstraintTranslator;
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.CustomConstraint;
-import io.spine.validate.MessageValue;
-import io.spine.validate.option.FieldConstraint;
+import io.spine.validation.ConstraintTranslator;
+import io.spine.validation.ConstraintViolation;
+import io.spine.validation.CustomConstraint;
+import io.spine.validation.MessageValue;
+import io.spine.validation.option.FieldConstraint;
 
 import static java.lang.String.format;
 

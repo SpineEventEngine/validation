@@ -33,7 +33,7 @@ import io.spine.protobuf.Durations2.hoursAndMinutes
 import io.spine.protobuf.Durations2.minutes
 import io.spine.test.tools.validate.uniqueMessageCollections
 import io.spine.test.tools.validate.uniquePrimitiveCollections
-import io.spine.validate.ValidationException
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

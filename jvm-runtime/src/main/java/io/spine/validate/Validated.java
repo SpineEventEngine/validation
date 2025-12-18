@@ -1,11 +1,11 @@
 /*
- * Copyright 2022, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,6 +26,9 @@
 
 package io.spine.validate;
 
+import io.spine.validation.NonValidated;
+import io.spine.validation.ValidatingBuilder;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -35,20 +38,11 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
- * Marks a message which is guaranteed to be valid.
+ * Provided for backward compatibility.
  *
- * <p>In most cases this annotation is implied. However, sometimes users may want to state
- * explicitly that the message is validated. For example, if a method marked as {@link NonValidated}
- * is overridden with a version which returns only valid messages, that version should be marked
- * with this annotation.
- *
- * <p>Note: {@link java.lang.annotation.RetentionPolicy#CLASS RetentionPolicy.CLASS}
- * is explicitly specified because this annotation is designed to improve method semantics
- * in source files, and is intended for programmers. It does not affect runtime behavior.
- *
- * @see ValidatingBuilder
- * @see NonValidated
+ * @deprecated Use {@link io.spine.validation.Validated} instead.
  */
+@Deprecated
 @Documented
 @Retention(CLASS)
 @Target({TYPE_USE, TYPE_PARAMETER})

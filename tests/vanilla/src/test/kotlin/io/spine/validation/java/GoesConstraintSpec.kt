@@ -33,8 +33,8 @@ import io.kotest.matchers.optional.shouldBePresent
 import io.spine.base.FieldPath
 import io.spine.base.Identifier
 import io.spine.base.Time.currentTime
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.ValidatableMessage
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ValidatableMessage
 import io.spine.tools.validation.java.given.ArchiveId
 import io.spine.tools.validation.java.given.Paper
 import org.junit.jupiter.api.DisplayName

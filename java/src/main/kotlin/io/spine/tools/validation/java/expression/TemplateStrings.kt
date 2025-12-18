@@ -34,8 +34,8 @@ import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.validate.TemplateString
-import io.spine.validate.checkPlaceholdersHasValue
+import io.spine.validation.TemplateString
+import io.spine.validation.checkPlaceholdersHasValue
 
 /**
  * Yields an expression that creates a new instance of [TemplateString].
