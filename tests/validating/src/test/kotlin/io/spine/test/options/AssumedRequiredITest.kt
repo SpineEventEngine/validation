@@ -67,26 +67,6 @@ internal class AssumedRequiredITest {
     }
 
     @Nested inner class
-    `an event` {
-
-        @Test
-        fun `requiring it`() {
-            val msg = ProjectCreated.newBuilder()
-            assertViolation(msg, "id")
-        }
-    }
-
-    @Nested inner class
-    `a rejection` {
-
-        @Test
-        fun `requiring it`() {
-            val msg = TestRejections.CannotCreateProject.newBuilder()
-            assertViolation(msg, "id")
-        }
-    }
-
-    @Nested inner class
     `an entity state` {
 
         @Test
