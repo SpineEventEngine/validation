@@ -1,0 +1,7 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+
+io.spine.tools.validation.java
+io.spine.tools.validation.java.expression
+io.spine.tools.validation.java.generate
+io.spine.validation.java
