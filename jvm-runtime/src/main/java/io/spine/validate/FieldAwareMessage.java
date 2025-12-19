@@ -24,9 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validate;
+
 /**
- * The version of the Validation SDK to publish.
+ * Provided for backward compatibility.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * @deprecated Use {@link io.spine.validation.FieldAwareMessage} instead.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.381")
+@Deprecated
+public interface FieldAwareMessage extends io.spine.validation.FieldAwareMessage {
+}
