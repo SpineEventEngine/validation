@@ -35,7 +35,7 @@ package io.spine.tools.validation
  *
  * ### Important Note
  *
- * we have the same items in this enum as in `io.spine.validation.RuntimeErrorPlaceholder`
+ * We have the same items in this enum as in `io.spine.validation.RuntimeErrorPlaceholder`
  * in the runtime library, which is exactly as this one. Please keep them in sync.
  * This duplication is done intentionally to prevent clash between the runtime library,
  * which is added to the classpath of the Compiler and the runtime library, which is part
