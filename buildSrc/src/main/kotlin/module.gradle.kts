@@ -65,7 +65,6 @@ plugins {
     id("dokka-setup")
     `maven-publish`
     jacoco
-    idea
     id("project-report")
     id("pmd-settings")
 }
@@ -77,7 +76,6 @@ JavadocConfig.applyTo(project)
 project.run {
     addDependencies()
     forceConfigurations()
-    applyGeneratedDirectories("$projectDir/generated")
 
     val javaVersion = BuildSettings.javaVersion
     configureJava(javaVersion)
@@ -226,50 +224,6 @@ fun Module.configureKotlin(javaVersion: JavaLanguageVersion) {
 
     tasks.withType<KotlinJvmCompile>().configureEach {
         compilerOptions.setFreeCompilerArgs()
-    }
-}
-
-/**
- * Adds directories with the generated source code to source sets of the project and
- * to IntelliJ IDEA module settings.
- *
- * @param generatedDir
- *          the name of the root directory with the generated code.
- */
-fun Module.applyGeneratedDirectories(generatedDir: String) {
-    val generatedMain = "$generatedDir/main"
-    val generatedJava = "$generatedMain/java"
-    val generatedKotlin = "$generatedMain/kotlin"
-    val generatedGrpc = "$generatedMain/grpc"
-    val generatedSpine = "$generatedMain/spine"
-
-    val generatedTest = "$generatedDir/test"
-    val generatedTestJava = "$generatedTest/java"
-    val generatedTestKotlin = "$generatedTest/kotlin"
-    val generatedTestGrpc = "$generatedTest/grpc"
-    val generatedTestSpine = "$generatedTest/spine"
-
-    idea {
-        module {
-            generatedSourceDirs.addAll(files(
-                generatedJava,
-                generatedTestJava,
-                generatedKotlin,
-                generatedTestKotlin,
-                generatedGrpc,
-                generatedTestGrpc,
-                generatedSpine,
-                generatedTestSpine,
-            ))
-            testSources.from(
-                generatedTestJava,
-                generatedTestKotlin,
-                generatedTestGrpc,
-                generatedTestSpine,
-            )
-            isDownloadJavadoc = true
-            isDownloadSources = true
-        }
     }
 }
 
