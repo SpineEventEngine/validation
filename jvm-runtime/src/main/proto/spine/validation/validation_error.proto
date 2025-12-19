@@ -25,7 +25,7 @@
  */
 syntax = "proto3";
 
-package spine.validate;
+package spine.validation;
 
 import "spine/options.proto";
 
@@ -36,7 +36,7 @@ option java_package = "io.spine.validation";
 
 import "google/protobuf/any.proto";
 
-import "spine/validate/error_message.proto";
+import "spine/validation/error_message.proto";
 import "spine/base/field_path.proto";
 
 // An error indicating that a message did not pass validation.
@@ -62,7 +62,7 @@ message ConstraintViolation {
     // 1. In Kotlin, use the `TemplateString.format()` extension.
     // 2. In Java, use the `io.spine.validate.TemplateStrings.format()` static method.
     //
-    spine.validate.TemplateString message = 8;
+    TemplateString message = 8;
 
     // The name of the validated message type.
     //

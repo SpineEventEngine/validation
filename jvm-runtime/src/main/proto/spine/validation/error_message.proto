@@ -25,7 +25,7 @@
  */
 syntax = "proto3";
 
-package spine.validate;
+package spine.validation;
 
 import "spine/options.proto";
 
