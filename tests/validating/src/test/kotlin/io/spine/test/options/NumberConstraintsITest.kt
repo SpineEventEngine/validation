@@ -35,7 +35,7 @@ import io.spine.test.tools.validate.Probability
 import io.spine.test.tools.validate.SchoolClass
 import io.spine.test.tools.validate.Year
 import io.spine.test.tools.validate.targetMetrics
-import io.spine.validate.format
+import io.spine.validation.format
 import io.spine.tools.validation.RangeFieldExtrema
 import io.spine.tools.validation.assertions.assertInvalid
 import io.spine.tools.validation.assertions.assertValid

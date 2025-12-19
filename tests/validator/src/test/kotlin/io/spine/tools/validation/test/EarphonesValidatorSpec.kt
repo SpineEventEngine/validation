@@ -31,8 +31,8 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter.toAny
 import io.spine.tools.compiler.protobuf.descriptor
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.ValidationException
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ValidationException
 import java.util.UUID
 import kotlin.random.Random
 import org.junit.jupiter.api.DisplayName

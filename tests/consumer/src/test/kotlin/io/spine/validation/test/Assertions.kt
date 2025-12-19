@@ -30,8 +30,8 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue
 import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldNotBe
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.ValidationException
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

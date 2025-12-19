@@ -31,12 +31,12 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.type.TypeName
-import io.spine.validate.ConstraintViolation
+import io.spine.validation.ConstraintViolation
 
 /**
  * Scope variables available within the `validate(FieldPath)` method.
  *
- * Use these variables to create an instance of [io.spine.validate.ConstraintViolation]
+ * Use these variables to create an instance of [io.spine.validation.ConstraintViolation]
  * for the failed option constraint.
  */
 public object ValidateScope {

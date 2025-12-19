@@ -127,7 +127,7 @@ private class GenerateValidate(
 
     /**
      * Yields an expression to validate the provided [message] if it implements
-     * [io.spine.validate.ValidatableMessage] interface.
+     * [io.spine.validation.ValidatableMessage] interface.
      *
      * The reported violations are appended to [violations] list, if any.
      *

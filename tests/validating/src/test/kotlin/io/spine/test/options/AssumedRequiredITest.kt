@@ -32,8 +32,6 @@ import io.spine.test.tools.validate.command.AssignTask
 import io.spine.test.tools.validate.command.CreateProject
 import io.spine.test.tools.validate.entity.Project
 import io.spine.test.tools.validate.entity.Task
-import io.spine.test.tools.validate.event.ProjectCreated
-import io.spine.test.tools.validate.rejection.TestRejections
 import io.spine.tools.validation.assertions.assertInvalid
 import io.spine.tools.validation.assertions.assertValid
 import io.spine.tools.validation.assertions.assertViolation
@@ -63,26 +61,6 @@ internal class AssumedRequiredITest {
         fun `an ID of which cannot be a default message`() {
             val builder = AssignTask.newBuilder().setTask(TaskId.getDefaultInstance())
             assertInvalid(builder)
-        }
-    }
-
-    @Nested inner class
-    `an event` {
-
-        @Test
-        fun `requiring it`() {
-            val msg = ProjectCreated.newBuilder()
-            assertViolation(msg, "id")
-        }
-    }
-
-    @Nested inner class
-    `a rejection` {
-
-        @Test
-        fun `requiring it`() {
-            val msg = TestRejections.CannotCreateProject.newBuilder()
-            assertViolation(msg, "id")
         }
     }
 

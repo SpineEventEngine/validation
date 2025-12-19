@@ -29,8 +29,8 @@ package io.spine.tools.validate.rule;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.option.OptionsProto;
-import io.spine.validate.Constraint;
-import io.spine.validate.option.FieldValidatingOption;
+import io.spine.validation.Constraint;
+import io.spine.validation.option.FieldValidatingOption;
 
 /**
  * A field validating option which creates {@link AllRequiredConstraint}s.

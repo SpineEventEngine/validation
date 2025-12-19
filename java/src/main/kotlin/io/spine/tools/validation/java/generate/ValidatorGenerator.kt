@@ -55,9 +55,9 @@ import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.DetectedViolation
-import io.spine.validate.TemplateString
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.DetectedViolation
+import io.spine.validation.TemplateString
 
 /**
  * A fully qualified Java class name of a validator class.
@@ -151,7 +151,7 @@ private class ApplyValidator(
      * The expression does the following:
      *
      * 1. Creates a new instance of [validator].
-     * 2. Invokes [MessageValidator.validate][io.spine.validate.MessageValidator.validate]
+     * 2. Invokes [MessageValidator.validate][io.spine.validation.MessageValidator.validate]
      *   passing the [message] instance.
      * 3. Converts each [DetectedViolation] to [ConstraintViolation].
      * 4. Puts all constraint violations to the list of discovered [violations].

@@ -30,7 +30,7 @@ import com.google.protobuf.Message
 import io.spine.protobuf.newBuilder
 import io.spine.tools.compiler.protobuf.descriptor
 import io.spine.test.options.set
-import io.spine.validate.ValidationException
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

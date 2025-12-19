@@ -42,10 +42,10 @@ import io.spine.tools.compiler.jvm.ClassName
 import io.spine.type.KnownTypes
 import io.spine.type.TypeName
 import io.spine.type.TypeUrl
-import io.spine.validate.ConstraintViolation
-import io.spine.validate.TemplateString
-import io.spine.validate.ValidatableMessage
-import io.spine.validate.ValidationError
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.TemplateString
+import io.spine.validation.ValidatableMessage
+import io.spine.validation.ValidationError
 import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors

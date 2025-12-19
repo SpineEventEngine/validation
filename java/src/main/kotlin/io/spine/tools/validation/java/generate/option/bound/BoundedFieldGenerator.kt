@@ -68,7 +68,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
-import io.spine.validate.ConstraintViolation
+import io.spine.validation.ConstraintViolation
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.

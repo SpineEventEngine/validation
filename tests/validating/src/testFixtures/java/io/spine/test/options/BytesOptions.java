@@ -29,8 +29,8 @@ package io.spine.test.options;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
-import io.spine.validate.option.FieldValidatingOption;
-import io.spine.validate.option.ValidatingOptionFactory;
+import io.spine.validation.option.FieldValidatingOption;
+import io.spine.validation.option.ValidatingOptionFactory;
 
 import java.util.Set;
 

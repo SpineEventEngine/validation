@@ -41,7 +41,7 @@ import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.templateString
-import io.spine.validate.ConstraintViolation
+import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.option.IF_SET_AGAIN
 
 /**
