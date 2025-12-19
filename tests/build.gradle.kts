@@ -34,6 +34,7 @@ import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
+import io.spine.gradle.report.license.LicenseReporter
 
 buildscript {
     forceCodegenPlugins()
@@ -41,7 +42,9 @@ buildscript {
 
 plugins {
     java
+    kotlin("jvm")
 }
+LicenseReporter.generateReportIn(project)
 
 allprojects {
     // No need to generate documentation for these test environments.
@@ -73,7 +76,7 @@ allprojects {
  *
  * Subprojects of `java-tests` which are not listed here will get Compiler Gradle Plugin applied.
  */
-val applyMcJava = setOf(
+val applyCoreJvmCompiler = setOf(
     "extensions",
     "consumer-dependency",
     "runtime",
@@ -92,7 +95,9 @@ subprojects {
 }
 
 fun Project.applyPlugins() {
-    if (project.name in applyMcJava) {
+    apply(plugin = "java")
+    apply(plugin = "com.google.protobuf")
+    if (project.name in applyCoreJvmCompiler) {
         apply(plugin = CoreJvmCompiler.pluginId)
     } else {
         apply(plugin = Compiler.pluginId)

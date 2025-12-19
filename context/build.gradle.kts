@@ -46,6 +46,10 @@ buildscript {
     }
 }
 
+plugins {
+    module
+}
+
 apply(plugin = "io.spine.core-jvm")
 
 dependencies {

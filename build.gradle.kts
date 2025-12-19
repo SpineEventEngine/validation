@@ -136,12 +136,6 @@ allprojects {
     }
 }
 
-subprojects {
-    apply {
-        plugin("module")
-    }
-}
-
 JacocoConfig.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)

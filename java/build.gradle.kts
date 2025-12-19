@@ -27,6 +27,7 @@ import io.spine.dependency.local.Compiler
  */
 
 plugins {
+    module
     `build-proto-model`
 }
 

@@ -24,9 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
+import io.spine.gradle.report.license.LicenseReporter
 import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
+
+apply<BomsPlugin>()
+LicenseReporter.generateReportIn(project)
 
 spine {
     compiler {

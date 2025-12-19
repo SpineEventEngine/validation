@@ -24,8 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.TestLib
+import io.spine.gradle.report.license.LicenseReporter
+
+plugins {
+    java
+    id("module-testing")
+}
+apply<BomsPlugin>()
+LicenseReporter.generateReportIn(project)
 
 spine {
     compiler {
