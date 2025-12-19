@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>io.spine.validation.option</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    jvm-runtime
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.381        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":jvm-runtime/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":jvm-runtime/main"
+                                       data-filter=":jvm-runtime/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    jvm-runtime
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="jvm-runtime::io.spine.validation.option////PointingToDeclaration//-1635795110">
+  <div class="breadcrumbs"><a href="../../index.html">jvm-runtime</a><span class="delimiter">/</span><span class="current">io.spine.validation.option</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><p class="paragraph">This package contains the options and the option factories used for message validation.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="453755005%2FClasslikes%2F-1635795110" anchor-label="Distinct" id="453755005%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-distinct/index.html"><span><span>Distinct</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="453755005%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-distinct/index.html">Distinct</a> : <a href="-field-validating-option/index.html">FieldValidatingOption</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">An option that can be applied to <code class="lang-kotlin">repeated</code> and <code class="lang-kotlin">map</code> Protobuf fields to specify that values represented by that field should not contain duplicates.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="574858784%2FClasslikes%2F-1635795110" anchor-label="DistinctConstraint" id="574858784%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-distinct-constraint/index.html"><span>Distinct</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="574858784%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-distinct-constraint/index.html">DistinctConstraint</a> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">A repeated field constraint that requires values to be distinct.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-88702766%2FClasslikes%2F-1635795110" anchor-label="FieldConstraint" id="-88702766%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-constraint/index.html"><span>Field</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-88702766%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><span><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/ImmutableTypeParameter///PointingToDeclaration/"><span class="token annotation builtin">ImmutableTypeParameter</span></span> </span><a href="-field-constraint/index.html">V</a><span class="token operator">&gt;</span> : <a href="../io.spine.validation/-constraint/index.html">Constraint</a></div><div class="brief ">A rule that limits a set of values that a Protobuf field can have.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="822718439%2FClasslikes%2F-1635795110" anchor-label="FieldValidatingOption" id="822718439%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-validating-option/index.html"><span>Field</span><wbr></wbr><span>Validating</span><wbr></wbr><span><span>Option</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="822718439%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-field-validating-option/index.html">FieldValidatingOption</a><span class="token operator">&lt;</span><span><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/ImmutableTypeParameter///PointingToDeclaration/"><span class="token annotation builtin">ImmutableTypeParameter</span></span> </span><a href="-field-validating-option/index.html">T</a><span class="token operator">&gt;</span> : <span data-unresolved-link="io.spine.code.proto/FieldOption///PointingToDeclaration/">FieldOption</span><span class="token operator">&lt;</span><a href="-field-validating-option/index.html">T</a><span class="token operator">&gt; </span>, <span data-unresolved-link="io.spine.validation.option/ValidatingOption///PointingToDeclaration/">ValidatingOption</span><span class="token operator">&lt;</span><a href="-field-validating-option/index.html">T</a><span class="token punctuation">, </span><span data-unresolved-link="io.spine.code.proto/FieldContext///PointingToDeclaration/">FieldContext</span><span class="token punctuation">, </span><span data-unresolved-link="com.google.protobuf/Descriptors.FieldDescriptor///PointingToDeclaration/">Descriptors.FieldDescriptor</span><span class="token operator">&gt; </span></div><div class="brief ">An option that validates a field.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1478453981%2FClasslikes%2F-1635795110" anchor-label="Goes" id="-1478453981%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-goes/index.html"><span><span>Goes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1478453981%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-goes/index.html">Goes</a> : <a href="-field-validating-option/index.html">FieldValidatingOption</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/GoesOption///PointingToDeclaration/">GoesOption</span><span class="token operator">&gt; </span>, <span data-unresolved-link="io.spine.logging/WithLogging///PointingToDeclaration/">WithLogging</span></div><div class="brief ">An option that defines field bond to another field within the message.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1502911674%2FClasslikes%2F-1635795110" anchor-label="GoesConstraint" id="-1502911674%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-goes-constraint/index.html"><span>Goes</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1502911674%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-goes-constraint/index.html">GoesConstraint</a> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/GoesOption///PointingToDeclaration/">GoesOption</span><span class="token operator">&gt; </span></div><div class="brief ">A constraint which checks whether a field is set only if the specific related field is also set.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-392027136%2FClasslikes%2F-1635795110" anchor-label="IfMissing" id="-392027136%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-if-missing/index.html"><span>If</span><wbr></wbr><span><span>Missing</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-392027136%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-if-missing/index.html">IfMissing</a> : <span data-unresolved-link="io.spine.code.proto/FieldOption///PointingToDeclaration/">FieldOption</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/IfMissingOption///PointingToDeclaration/">IfMissingOption</span><span class="token operator">&gt; </span></div><div class="brief ">A field option that defines custom error message if a field is <code class="lang-kotlin">required</code> but missing.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1572004048%2FClasslikes%2F-1635795110" anchor-label="IsRequired" id="-1572004048%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-required/index.html"><span>Is</span><wbr></wbr><span><span>Required</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1572004048%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">class </span><a href="-is-required/index.html">IsRequired</a> : <span data-unresolved-link="io.spine.validation.option/ValidatingOption///PointingToDeclaration/">ValidatingOption</span><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token punctuation">, </span><span data-unresolved-link="io.spine.code.proto/OneofDeclaration///PointingToDeclaration/">OneofDeclaration</span><span class="token punctuation">, </span><span data-unresolved-link="com.google.protobuf/Descriptors.OneofDescriptor///PointingToDeclaration/">Descriptors.OneofDescriptor</span><span class="token operator">&gt; </span></div><div class="brief ">A <code class="lang-kotlin">oneof</code> validation option which constrains the target <code class="lang-kotlin">oneof</code> group to be set.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1641054483%2FClasslikes%2F-1635795110" anchor-label="IsRequiredConstraint" id="1641054483%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-required-constraint/index.html"><span>Is</span><wbr></wbr><span>Required</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1641054483%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-is-required-constraint/index.html">IsRequiredConstraint</a> : <a href="../io.spine.validation/-constraint/index.html">Constraint</a></div><div class="brief ">A <code class="lang-kotlin">oneof</code> group constraint which signifies that one of the fields must be set.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1070906840%2FClasslikes%2F-1635795110" anchor-label="MaxConstraint" id="-1070906840%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-max-constraint/index.html"><span>Max</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1070906840%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-max-constraint/index.html">MaxConstraint</a> : <a href="-ranged-constraint/index.html">RangedConstraint</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/MaxOption///PointingToDeclaration/">MaxOption</span><span class="token operator">&gt; </span></div><div class="brief ">A constraint, which checks whether a numeric field value exceeds a max value, when applied.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-755914118%2FClasslikes%2F-1635795110" anchor-label="MinConstraint" id="-755914118%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-min-constraint/index.html"><span>Min</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-755914118%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-min-constraint/index.html">MinConstraint</a> : <a href="-ranged-constraint/index.html">RangedConstraint</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/MinOption///PointingToDeclaration/">MinOption</span><span class="token operator">&gt; </span></div><div class="brief ">A constraint that, when applied to a numeric field, checks whether the value of that field is greater than (or equal to, if specified by the value of the respective option) a min value.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1144156036%2FClasslikes%2F-1635795110" anchor-label="PatternConstraint" id="-1144156036%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pattern-constraint/index.html"><span>Pattern</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1144156036%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-pattern-constraint/index.html">PatternConstraint</a> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/PatternOption///PointingToDeclaration/">PatternOption</span><span class="token operator">&gt; </span></div><div class="brief ">A constraint, which when applied to a string field, checks whether that field matches the specified pattern.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1173727663%2FClasslikes%2F-1635795110" anchor-label="RangeConstraint" id="1173727663%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-range-constraint/index.html"><span>Range</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1173727663%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-range-constraint/index.html">RangeConstraint</a> : <a href="-ranged-constraint/index.html">RangedConstraint</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.option/RangeOption///PointingToDeclaration/">RangeOption</span><span class="token operator">&gt; </span></div><div class="brief ">A constraint that checks whether a value fits the ranged described by expressions such as <code class="lang-kotlin">int32 value = 5 [(range).value = &quot;[3..5)]</code>, describing a value that is at least 3 and less than 5.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-483423115%2FClasslikes%2F-1635795110" anchor-label="RangedConstraint" id="-483423115%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-ranged-constraint/index.html"><span>Ranged</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-483423115%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-ranged-constraint/index.html">RangedConstraint</a><span class="token operator">&lt;</span><span><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/ImmutableTypeParameter///PointingToDeclaration/"><span class="token annotation builtin">ImmutableTypeParameter</span></span> </span><a href="-ranged-constraint/index.html">T</a><span class="token operator">&gt;</span> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><a href="-ranged-constraint/index.html">T</a><span class="token operator">&gt; </span></div><div class="brief ">A constraint that puts a numeric field value into a range.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-149462620%2FClasslikes%2F-1635795110" anchor-label="Require" id="-149462620%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-require/index.html"><span><span>Require</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-149462620%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-require/index.html">Require</a> : <span data-unresolved-link="io.spine.validation.option/ValidatingOption///PointingToDeclaration/">ValidatingOption</span><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="io.spine.type/MessageType///PointingToDeclaration/">MessageType</span><span class="token punctuation">, </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span><span class="token operator">&gt; </span></div><div class="brief ">A message option that defines a combination of required fields for the message.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-884788934%2FClasslikes%2F-1635795110" anchor-label="Required" id="-884788934%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-required/index.html"><span><span>Required</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-884788934%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">class </span><a href="-required/index.html">Required</a> : <a href="-field-validating-option/index.html">FieldValidatingOption</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span>, <span data-unresolved-link="io.spine.logging/WithLogging///PointingToDeclaration/">WithLogging</span></div><div class="brief ">An option that makes a field <code class="lang-kotlin">required</code>.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="885460637%2FClasslikes%2F-1635795110" anchor-label="RequiredConstraint" id="885460637%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-required-constraint/index.html"><span>Required</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="885460637%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-required-constraint/index.html">RequiredConstraint</a> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">A constraint that, when applied to a field, checks whether the field is set to a non-default value.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="666668433%2FClasslikes%2F-1635795110" anchor-label="RequiredFieldConstraint" id="666668433%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-required-field-constraint/index.html"><span>Required</span><wbr></wbr><span>Field</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="666668433%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-required-field-constraint/index.html">RequiredFieldConstraint</a> : <a href="../io.spine.validation/-constraint/index.html">Constraint</a></div><div class="brief ">A constraint that, when applied to a message, checks whether the specified combination of fields has non-default values.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1211702586%2FClasslikes%2F-1635795110" anchor-label="SetOnce" id="-1211702586%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-set-once/index.html"><span>Set</span><wbr></wbr><span><span>Once</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1211702586%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-set-once/index.html">SetOnce</a> : <span data-unresolved-link="io.spine.code.proto/FieldOption///PointingToDeclaration/">FieldOption</span><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">An option that indicates that a field value cannot be changed.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1408010477%2FClasslikes%2F-1635795110" anchor-label="Valid" id="1408010477%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-valid/index.html"><span><span>Valid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1408010477%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">class </span><a href="-valid/index.html">Valid</a> : <a href="-field-validating-option/index.html">FieldValidatingOption</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">An option that indicates that the message field should be validated according to its constraints.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="256062918%2FClasslikes%2F-1635795110" anchor-label="ValidateConstraint" id="256062918%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validate-constraint/index.html"><span>Validate</span><wbr></wbr><span><span>Constraint</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="256062918%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-validate-constraint/index.html">ValidateConstraint</a> : <a href="-field-constraint/index.html">FieldConstraint</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html">Boolean</a><span class="token operator">&gt; </span></div><div class="brief ">A constraint that, when applied to a message field, signifies that the message should have valid properties.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="553684071%2FClasslikes%2F-1635795110" anchor-label="ValidatingOptionFactory" id="553684071%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validating-option-factory/index.html"><span>Validating</span><wbr></wbr><span>Option</span><wbr></wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="553684071%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="io.spine.annotation/SPI///PointingToDeclaration/"><span class="token annotation builtin">SPI</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.errorprone.annotations/Immutable///PointingToDeclaration/"><span class="token annotation builtin">Immutable</span></span></div></div><span class="token keyword">interface </span><a href="-validating-option-factory/index.html">ValidatingOptionFactory</a></div><div class="brief ">A factory of validation options for message fields.</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-379824371%2FClasslikes%2F-1635795110" anchor-label="ValidatingOptionsProvider" id="-379824371%2FClasslikes%2F-1635795110" data-filterable-set=":jvm-runtime/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":jvm-runtime/main" data-filterable-set=":jvm-runtime/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validating-options-provider/index.html"><span>Validating</span><wbr></wbr><span>Options</span><wbr></wbr><span><span>Provider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-379824371%2FClasslikes%2F-1635795110"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":jvm-runtime/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.auto.service/AutoService///PointingToDeclaration/"><span class="token annotation builtin">AutoService</span></span><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span data-unresolved-link="io.spine.option/OptionsProvider///PointingToDeclaration/">OptionsProvider::class</span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">class </span><a href="-validating-options-provider/index.html">ValidatingOptionsProvider</a> : <span data-unresolved-link="io.spine.option/OptionsProvider///PointingToDeclaration/">OptionsProvider</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2025, TeamDev</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
