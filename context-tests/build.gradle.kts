@@ -25,9 +25,11 @@
  */
 
 import io.spine.dependency.artifact
+import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Logging
 import io.spine.dependency.test.JUnit.Jupiter
+import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
     java
@@ -35,6 +37,7 @@ plugins {
     `java-test-fixtures`
     prototap
 }
+LicenseReporter.generateReportIn(project)
 
 dependencies {
     implementation(project(":context"))
@@ -46,4 +49,8 @@ dependencies {
     testFixturesImplementation(Compiler.api)
     testFixturesImplementation(Compiler.testlib)
     testFixturesImplementation(Jupiter.artifact { params })
+}
+
+protobuf {
+    protoc { artifact = Protobuf.compiler }
 }

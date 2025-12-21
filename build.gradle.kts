@@ -50,6 +50,7 @@ buildscript {
                 // Make sure we have the right Protobuf Runtime.
                 io.spine.dependency.lib.Protobuf.javaLib,
                 io.spine.dependency.local.Logging.grpcContext,
+                "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
             )
         }
     }
@@ -129,14 +130,9 @@ allprojects {
                 Time.javaExtensions,
                 ToolBase.lib,
                 ToolBase.pluginBase,
+                "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
             )
         }
-    }
-}
-
-subprojects {
-    apply {
-        plugin("module")
     }
 }
 

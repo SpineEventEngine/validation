@@ -1,5 +1,7 @@
+import io.spine.gradle.report.license.LicenseReporter
+
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,40 +26,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.build.Ksp
-import io.spine.dependency.lib.AutoServiceKsp
-import io.spine.dependency.local.CoreJvmCompiler
-import io.spine.gradle.report.license.LicenseReporter
-
 plugins {
+    `java-library`
     kotlin("jvm")
-    id("com.google.devtools.ksp")
+    id("com.google.protobuf")
 }
 LicenseReporter.generateReportIn(project)
-
-dependencies {
-    implementation(project(":java"))
-    implementation(project(":jvm-runtime"))
-    ksp(AutoServiceKsp.processor)
-}
-
-configurations.all {
-    resolutionStrategy.force(
-        with(CoreJvmCompiler) {
-            pluginLibNew(version)
-        }
-    )
-}
-
-// Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
-// on missing explicit dependency.
-project.afterEvaluate {
-    val launchSpineCompiler by tasks.getting
-    val kspKotlin by tasks.getting {
-        dependsOn(launchSpineCompiler)
-    }
-    @Suppress("unused")
-    val compileKotlin by tasks.getting {
-        dependsOn(kspKotlin)
-    }
-}

@@ -24,10 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
+import io.spine.gradle.report.license.LicenseReporter
+
+plugins {
+    java
+    `java-library`
+    kotlin("jvm")
+    id("module-testing")
+}
+apply<BomsPlugin>()
+LicenseReporter.generateReportIn(project)
 
 dependencies {
     testImplementation(Logging.lib)
     testImplementation(TestLib.lib)
 }
+
+configureTaskDependencies()

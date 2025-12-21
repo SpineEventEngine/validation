@@ -36,10 +36,14 @@ import io.spine.dependency.test.JUnit
 import io.spine.dependency.test.JUnit.Jupiter
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Truth
+import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
     `java-test-fixtures`
+    kotlin("jvm")
+    id("module-testing")
 }
+LicenseReporter.generateReportIn(project)
 
 dependencies {
     testFixturesAnnotationProcessor(AutoService.processor)
@@ -75,4 +79,8 @@ afterEvaluate {
     tasks.named("kspTestFixturesKotlin") {
         mustRunAfter("launchTestFixturesSpineCompiler")
     }
+}
+
+val testFixturesJar by tasks.getting(Jar::class) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

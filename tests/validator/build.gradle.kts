@@ -1,3 +1,5 @@
+import io.spine.gradle.report.license.LicenseReporter
+
 /*
  * Copyright 2025, TeamDev. All rights reserved.
  *
@@ -29,8 +31,13 @@ buildscript {
 }
 
 plugins {
+    java
+    id("com.google.protobuf")
+    kotlin("jvm")
     id("com.google.devtools.ksp")
+    id("module-testing")
 }
+LicenseReporter.generateReportIn(project)
 
 dependencies {
     ksp(project(":ksp"))

@@ -40,10 +40,12 @@ import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Reflect
 import io.spine.dependency.local.Time
+import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
     `fat-jar`
 }
+LicenseReporter.generateReportIn(project)
 
 dependencies {
 

@@ -35,6 +35,7 @@ import io.spine.dependency.test.KotlinCompileTesting
 
 plugins {
     id("com.google.devtools.ksp")
+    module
 }
 
 dependencies {

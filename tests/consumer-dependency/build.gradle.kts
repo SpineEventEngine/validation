@@ -1,3 +1,5 @@
+import io.spine.gradle.report.license.LicenseReporter
+
 /*
  * Copyright 2024, TeamDev. All rights reserved.
  *
@@ -35,6 +37,11 @@ buildscript {
         }
     }
 }
+
+plugins {
+    kotlin("jvm")
+}
+LicenseReporter.generateReportIn(project)
 
 afterEvaluate {
     val kspKotlin by tasks.getting
