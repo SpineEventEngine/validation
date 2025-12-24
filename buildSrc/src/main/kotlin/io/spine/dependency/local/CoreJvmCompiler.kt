@@ -29,7 +29,7 @@ package io.spine.dependency.local
 /**
  * Dependencies on the CoreJvm Compiler artifacts.
  *
- * See [mc-java](https://github.com/SpineEventEngine/core-jvm-compiler).
+ * See [CoreJvm Compiler](https://github.com/SpineEventEngine/core-jvm-compiler).
  */
 @Suppress(
     "MemberVisibilityCanBePrivate" /* `pluginLib()` is used by subprojects. */,
