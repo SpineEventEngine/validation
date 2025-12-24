@@ -35,6 +35,7 @@ import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
+import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.PublishingRepos
 import io.spine.gradle.publish.spinePublishing
 import io.spine.gradle.repo.standardToSpineSdk
@@ -130,6 +131,7 @@ allprojects {
                 Time.javaExtensions,
                 ToolBase.lib,
                 ToolBase.pluginBase,
+                Validation.javaBundle,
                 "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
             )
         }

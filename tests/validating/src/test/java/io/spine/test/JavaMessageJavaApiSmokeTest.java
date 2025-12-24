@@ -24,23 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.local
+package io.spine.test;
 
-/**
- * Spine Base module.
- *
- * @see <a href="https://github.com/SpineEventEngine/base-libraries">spine-base-libraries</a>
- */
-@Suppress("ConstPropertyName", "unused")
-object Base {
-    const val version = "2.0.0-SNAPSHOT.384"
-    const val versionForBuildScript = "2.0.0-SNAPSHOT.384"
-    const val group = Spine.group
-    private const val prefix = "spine"
-    const val libModule = "$prefix-base"
-    const val lib = "$group:$libModule:$version"
-    const val libForBuildScript = "$group:$libModule:$versionForBuildScript"
-    const val annotations = "$group:$prefix-annotations:$version"
-    const val environment = "$group:$prefix-environment:$version"
-    const val format = "$group:$prefix-format:$version"
+import io.spine.test.protobuf.CardNumber;
+import io.spine.type.TypeName;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@DisplayName("Generated Java code for a message when called from Java should")
+class JavaMessageJavaApiSmokeTest {
+
+    /**
+     * The builder which should produce a valid instance.
+     */
+    private final CardNumber.Builder valid =
+            CardNumber.newBuilder()
+                    .setDigits("0000 0000 0000 0000");
+
+    @Test
+    @DisplayName("throw `NullPointerException` if given 'null' for the parent path")
+    @SuppressWarnings("DataFlowIssue" /* We pass `null` intentionally */)
+    void rejectNullParentPath() {
+        var message = valid.build();
+        assertThrows(NullPointerException.class, () ->
+                message.validate(null, TypeName.of("Something"))
+        );
+    }
 }

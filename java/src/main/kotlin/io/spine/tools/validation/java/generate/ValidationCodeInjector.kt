@@ -189,11 +189,7 @@ private fun MessagePsiClass.declareSupportingMethods(methods: List<MethodDeclara
  * the provided [message] class name as its type parameter.
  */
 private fun BuilderPsiClass.implementValidatingBuilder(message: PsiClass) {
-    // We use `ValidatingBuilder` at the old package to maintain backward compatibility
-    // for CoreJvm runtime. Once CoreJvm migrates to the new Validation Runtime, this
-    // line should be updated to use `io.spine.validation.ValidatingBuilder`.
-    @Suppress("DEPRECATION")
-    val qualifiedName = io.spine.validate.ValidatingBuilder::class.java.canonicalName
+    val qualifiedName = ValidatingBuilder::class.java.canonicalName
     val genericParameter = message.qualifiedName!!
     val reference = elementFactory.createInterfaceReference(qualifiedName, genericParameter)
     implement(reference)

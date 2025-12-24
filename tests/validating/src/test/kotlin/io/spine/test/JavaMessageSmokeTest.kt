@@ -30,9 +30,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldNotBe
-import io.spine.base.FieldPath
 import io.spine.test.protobuf.CardNumber
-import io.spine.type.TypeName
 import io.spine.validation.NonValidated
 import io.spine.validation.ValidatableMessage
 import io.spine.validation.Validate.check
@@ -75,16 +73,6 @@ internal class JavaMessageSmokeTest {
     }
 
     @Test
-    fun `throw 'NullPointerException' if given 'null' for the parent path`() {
-        val message = valid.build()
-        assertThrows<NullPointerException> {
-            // The cast prevents the Kotlin compiler warning about passing `null`
-            // to a non-`@Nullable` Java parameter.
-            message.validate(null as FieldPath, TypeName.of("Something"))
-        }
-    }
-
-    @Test
     fun `ignore invalid message when skipping validation intentionally via 'buildPartial'`() {
         val number: @NonValidated Message = invalid.buildPartial()
         number shouldNotBe null
@@ -100,7 +88,6 @@ internal class JavaMessageSmokeTest {
 
     @Test
     fun `make the message builder implement 'ValidatingBuilder'`() {
-        CardNumber.Builder::class.java.interfaces shouldContain
-                io.spine.validate.ValidatingBuilder::class.java
+        CardNumber.Builder::class.java.interfaces shouldContain ValidatingBuilder::class.java
     }
 }
