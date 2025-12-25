@@ -33,7 +33,6 @@ import io.spine.base.CommandMessage;
 import io.spine.base.EntityState;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.logging.WithLogging;
 import io.spine.option.OptionsProto;
 import io.spine.validation.Constraint;
 
@@ -41,7 +40,6 @@ import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.BYTE_STRI
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.ENUM;
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.MESSAGE;
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING;
-import static java.lang.String.format;
 
 /**
  * An option that makes a field {@code required}.
@@ -49,7 +47,7 @@ import static java.lang.String.format;
  * <p>If a {@code required} field is missing, an error is produced.
  */
 @Immutable
-public class Required extends FieldValidatingOption<Boolean> implements WithLogging {
+public class Required extends FieldValidatingOption<Boolean> {
 
     static final ImmutableSet<JavaType> CAN_BE_REQUIRED = ImmutableSet.of(
             MESSAGE, ENUM, STRING, BYTE_STRING
@@ -100,6 +98,9 @@ public class Required extends FieldValidatingOption<Boolean> implements WithLogg
      * @param field
      *         a value that the option is applied to
      */
+    @SuppressWarnings("UseOfSystemOutOrSystemErr") /* We're migrating off runtime validation
+        AND we do not want dependency of Validation Runtime on Spine Logging.
+        So we use `System.err` for the warnings. */
     void checkUsage(FieldDeclaration field) {
         var type = field.javaType();
         if (!CAN_BE_REQUIRED.contains(type) && field.isNotCollection()) {
@@ -116,10 +117,10 @@ public class Required extends FieldValidatingOption<Boolean> implements WithLogg
                 }
             }
             var typeName = field.descriptor().getType().name();
-            logger().atWarning().log(() -> format(
+            System.err.printf(
                     "The field `%s.%s` has the type %s and" +
                             " should not be declared as `(required)`.",
-                    field.declaringType().name(), field.name(), typeName));
+                    field.declaringType().name(), field.name(), typeName);
         }
     }
 

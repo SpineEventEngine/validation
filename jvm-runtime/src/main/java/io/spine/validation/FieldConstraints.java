@@ -28,8 +28,6 @@ package io.spine.validation;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.proto.FieldContext;
-import io.spine.logging.Logger;
-import io.spine.logging.LoggingFactory;
 import io.spine.validation.option.FieldValidatingOption;
 import io.spine.validation.option.StandardOptionFactory;
 import io.spine.validation.option.ValidatingOptionFactory;
@@ -41,14 +39,12 @@ import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static java.lang.String.format;
 
 /**
  * A factory of field validation {@link Constraint}s.
  */
 final class FieldConstraints {
 
-    private static final Logger logger = LoggingFactory.forEnclosingClass();
     private static final ImmutableSet<ValidatingOptionFactory> allFactories =
             ValidatingOptionsLoader.INSTANCE.implementations();
     private static final ImmutableSet<ValidatingOptionFactory> customFactories =
@@ -87,30 +83,18 @@ final class FieldConstraints {
         checkNotNull(field);
         var declaration = field.targetDeclaration();
         var type = declaration.javaType();
-        switch (type) {
-            case INT:
-                return constraintsFrom(factories, ValidatingOptionFactory::forInt, field);
-            case LONG:
-                return constraintsFrom(factories, ValidatingOptionFactory::forLong, field);
-            case FLOAT:
-                return constraintsFrom(factories, ValidatingOptionFactory::forFloat, field);
-            case DOUBLE:
-                return constraintsFrom(factories, ValidatingOptionFactory::forDouble, field);
-            case BOOLEAN:
-                return constraintsFrom(factories, ValidatingOptionFactory::forBoolean, field);
-            case STRING:
-                return constraintsFrom(factories, ValidatingOptionFactory::forString, field);
-            case BYTE_STRING:
-                return constraintsFrom(factories, ValidatingOptionFactory::forByteString, field);
-            case ENUM:
-                return constraintsFrom(factories, ValidatingOptionFactory::forEnum, field);
-            case MESSAGE:
-                return constraintsFrom(factories, ValidatingOptionFactory::forMessage, field);
-            default:
-                logger.atWarning()
-                      .log(() -> format("Unknown field type `%s` at `%s`.", type, declaration));
-                return Stream.of();
-        }
+        return switch (type) {
+            case INT -> constraintsFrom(factories, ValidatingOptionFactory::forInt, field);
+            case LONG -> constraintsFrom(factories, ValidatingOptionFactory::forLong, field);
+            case FLOAT -> constraintsFrom(factories, ValidatingOptionFactory::forFloat, field);
+            case DOUBLE -> constraintsFrom(factories, ValidatingOptionFactory::forDouble, field);
+            case BOOLEAN -> constraintsFrom(factories, ValidatingOptionFactory::forBoolean, field);
+            case STRING -> constraintsFrom(factories, ValidatingOptionFactory::forString, field);
+            case BYTE_STRING ->
+                    constraintsFrom(factories, ValidatingOptionFactory::forByteString, field);
+            case ENUM -> constraintsFrom(factories, ValidatingOptionFactory::forEnum, field);
+            case MESSAGE -> constraintsFrom(factories, ValidatingOptionFactory::forMessage, field);
+        };
     }
 
     private static Stream<Constraint>

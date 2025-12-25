@@ -29,7 +29,6 @@ package io.spine.validation.option;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.logging.WithLogging;
 import io.spine.option.GoesOption;
 import io.spine.option.OptionsProto;
 import io.spine.validation.Constraint;
@@ -41,8 +40,7 @@ import static java.lang.String.format;
  */
 @Immutable
 public final class Goes
-        extends FieldValidatingOption<GoesOption>
-        implements WithLogging {
+        extends FieldValidatingOption<GoesOption> {
 
     private Goes() {
         super(OptionsProto.goes);
@@ -64,7 +62,7 @@ public final class Goes
                 && canPairedBeRequired(field);
     }
 
-    private boolean canBeRequired(FieldContext context) {
+    private static boolean canBeRequired(FieldContext context) {
         var field = context.targetDeclaration();
         var warning = format(
                 "Field `%s` cannot be checked for presence. `(goes).with` is obsolete.",
@@ -90,13 +88,15 @@ public final class Goes
         return checkType(pairedField, warningMessage);
     }
 
-    @SuppressWarnings("FloggerLogString")
-    private boolean checkType(FieldDeclaration field, String warningMessage) {
+    @SuppressWarnings("UseOfSystemOutOrSystemErr") /* We're migrating off runtime validation. AND
+        we do not want the dependency of Validation Runtime on Spine Logging.
+        So we use `System.err` for warnings. */
+    private static boolean checkType(FieldDeclaration field, String warningMessage) {
         var type = field.javaType();
         if (field.isCollection() || Required.CAN_BE_REQUIRED.contains(type)) {
             return true;
         } else {
-            logger().atWarning().log(() -> warningMessage);
+            System.err.println(warningMessage);
             return false;
         }
     }
