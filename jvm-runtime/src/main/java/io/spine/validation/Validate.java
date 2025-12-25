@@ -98,7 +98,7 @@ public final class Validate {
                 msg = unpack(packed);
             } else {
                 System.err.printf(
-                    "Could not validate packed message of an unknown type `%s`.",
+                    "Could not validate packed message of an unknown type `%s`.%n",
                     packed.getTypeUrl());
             }
         }
