@@ -263,7 +263,7 @@ public final class Validate {
         var fieldName = field.name();
         System.err.printf(
                 "Error found in `%s`. " +
-                        "Repeated and map fields cannot be marked as `(set_once) = true`.",
+                        "Repeated and map fields cannot be marked as `(set_once) = true`.%n",
                 fieldName);
     }
 
