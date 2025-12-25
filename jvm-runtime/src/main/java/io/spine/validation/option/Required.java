@@ -119,7 +119,7 @@ public class Required extends FieldValidatingOption<Boolean> {
             var typeName = field.descriptor().getType().name();
             System.err.printf(
                     "The field `%s.%s` has the type %s and" +
-                            " should not be declared as `(required)`.",
+                            " should not be declared as `(required)`.%n",
                     field.declaringType().name(), field.name(), typeName);
         }
     }
