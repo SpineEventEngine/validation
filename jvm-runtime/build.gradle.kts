@@ -69,7 +69,6 @@ dependencies {
     compileOnly(AutoService.annotations)
 
     implementation(Base.lib)
-    implementation(Logging.lib)
 
     testImplementation(TestLib.lib)
 }

@@ -41,7 +41,7 @@ import io.spine.annotation.Internal
 public class NonPrimitiveOptionFactory : StandardOptionFactory {
 
     override fun forString(): MutableSet<FieldValidatingOption<*>> {
-        return Sets.union<FieldValidatingOption<*>>(stringOptions, collectionOptions)
+        return Sets.union(stringOptions, collectionOptions)
     }
 
     override fun forByteString(): Set<FieldValidatingOption<*>> = collectionOptions

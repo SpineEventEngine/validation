@@ -29,14 +29,11 @@ package io.spine.validation;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import com.google.errorprone.annotations.InlineMe;
 import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.logging.Logger;
-import io.spine.logging.LoggingFactory;
 import io.spine.protobuf.Diff;
 import io.spine.type.KnownTypes;
 import io.spine.type.MessageType;
@@ -51,18 +48,20 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
 import static io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH;
 import static io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE;
-import static java.lang.String.format;
 
 /**
  * This class provides general validation routines.
  */
+@SuppressWarnings("UseOfSystemOutOrSystemErr" /*
+    We do not want the dependency of Validation Runtime on Spine Logging.
+    So we use `System.err` for warnings and errors. */
+)
 public final class Validate {
 
     private static final String SET_ONCE_ERROR_MESSAGE =
             "Attempted to change the value of the field " +
                     "`${" + PARENT_TYPE + "}.${" + FIELD_PATH + "}` which has " +
                     "`(set_once) = true` and already has a non-default value.";
-    private static final Logger logger = LoggingFactory.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
     private Validate() {
@@ -98,9 +97,9 @@ public final class Validate {
             if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
                 msg = unpack(packed);
             } else {
-                logger.atWarning().log(() -> format(
-                    "Could not validate packed message of an unknown type `%s`.",
-                    packed.getTypeUrl()));
+                System.err.printf(
+                    "Could not validate packed message of an unknown type `%s`.%n",
+                    packed.getTypeUrl());
             }
         }
         if (msg instanceof ValidatableMessage validatable) {
@@ -262,10 +261,10 @@ public final class Validate {
 
     private static void onSetOnceMisuse(FieldDeclaration field) {
         var fieldName = field.name();
-        logger.atError().log(() -> format(
+        System.err.printf(
                 "Error found in `%s`. " +
-                        "Repeated and map fields cannot be marked as `(set_once) = true`.",
-                fieldName));
+                        "Repeated and map fields cannot be marked as `(set_once) = true`.%n",
+                fieldName);
     }
 
     private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {
