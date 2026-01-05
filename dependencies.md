@@ -1139,7 +1139,7 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:51 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -1731,7 +1731,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:16 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -2807,7 +2807,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:34 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -3901,7 +3901,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:34 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -3971,7 +3971,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:14 WET 2026** using 
+This report was generated on **Mon Jan 05 18:16:37 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -4811,7 +4811,7 @@ This report was generated on **Fri Jan 02 17:44:14 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:34 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -5747,7 +5747,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:59 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -6345,7 +6345,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:16:53 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -6863,7 +6863,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:16 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -7554,7 +7554,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:16 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -8183,7 +8183,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:18 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -8855,7 +8855,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:21 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -9613,7 +9613,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:15 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:20 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -9890,7 +9890,7 @@ This report was generated on **Fri Jan 02 17:44:15 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:14 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:17 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -10248,6 +10248,6 @@ This report was generated on **Fri Jan 02 17:44:14 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 02 17:44:14 WET 2026** using 
+This report was generated on **Mon Jan 05 18:17:17 GMT 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
