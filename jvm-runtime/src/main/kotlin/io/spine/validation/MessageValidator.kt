@@ -82,7 +82,7 @@ import io.spine.annotation.SPI
  * }
  * ```
  *
- * Please note that standalone instances of [M] and fields of [M] type that occur in
+ * Note that standalone instances of [M] and fields of [M] type that occur in
  * other external messages **will not be validated**.
  *
  * Consider the following example:

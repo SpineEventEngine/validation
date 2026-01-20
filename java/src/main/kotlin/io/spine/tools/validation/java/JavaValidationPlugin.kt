@@ -71,9 +71,9 @@ private val customOptions: List<ValidationOption> by lazy {
  * Dynamically discovered instances of custom
  * [MessageValidator][io.spine.validation.MessageValidator]s.
  *
- * Please note that the KSP module is responsible for the actual discovering
- * of the message validators. The discovered validators are written to a text file
- * in the KSP task output. This property loads the validators from that file.
+ * Note that the KSP module is responsible for the actual discovering of the message validators.
+ * The discovered validators are written to a text file in the KSP task output.
+ * This property loads the validators from that file.
  */
 private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
     val workingDir = System.getProperty("user.dir")

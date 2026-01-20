@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test
  * by [CurrencyOption] in the `:java-tests:extensions` module.
  *
  * The `extensions` module declares the `(currency)` message option, which is used by
- * money data types in this module. Please see `main/proto/test/money.proto` for details.
+ * money data types in this module. See `main/proto/test/money.proto` for details.
  *
  * This test verifies that custom validation code works as expected.
  */
