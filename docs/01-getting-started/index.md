@@ -1,6 +1,7 @@
 # Getting Started
 
-This section helps you set up Spine Validation, define your first validated Protobuf model, and see validation in action in Java and Kotlin.
+This section helps you set up Spine Validation, define your first validated Protobuf model,
+and see validation in action in Java and Kotlin.
 
 If you are new to the library, read the short overview first:
 - Introduction → [Overview](../00-intro/index.md)
@@ -22,7 +23,9 @@ If you are new to the library, read the short overview first:
 - Protobuf compiler (`protoc`)
 - Optional: Kotlin 2.2.20+ for the Kotlin Protobuf DSL
 
-If your project already generates Java/Kotlin sources from `.proto` files, you’re 90% there. Spine Validation integrates into the build to generate and inject validation logic into the code produced by `protoc`.
+If your project already generates Java/Kotlin sources from `.proto` files, you’re 90% there.
+Spine Validation integrates into the build to generate and inject validation logic into
+the code produced by `protoc`.
 
 ---
 
