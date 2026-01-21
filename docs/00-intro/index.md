@@ -12,7 +12,7 @@ in any Java/Kotlin backend that models data using Protocol Buffers.
 
 ## Key Capabilities
 
-### 🔹 Declarative constraints in `.proto`
+### Declarative constraints in `.proto`
 Validation rules are expressed as Protobuf options such as:
 
 - `required`
@@ -24,8 +24,8 @@ Validation rules are expressed as Protobuf options such as:
 This keeps validation close to the data model and ensures it evolves together
 with it.
 
-### 🔹 Generated validators
-The Spine compiler plugin processes your Protobuf model and generates:
+### Generated validators
+The Spine Compiler plugin processes your Protobuf model and generates:
 
 - validation code for messages and builders,
 - runtime checks,
@@ -33,7 +33,7 @@ The Spine compiler plugin processes your Protobuf model and generates:
 
 No manual validators, reflection, or annotations are required.
 
-### 🔹 Runtime validation API
+### Runtime validation API
 Every generated message can be validated at runtime via:
 
 - `validate()`,
@@ -43,7 +43,7 @@ Every generated message can be validated at runtime via:
 Errors are represented as structured diagnostics suitable for API responses,
 logs, or domain exception flows.
 
-### 🔹 Rich domain-oriented constraints
+### Rich domain-oriented constraints
 Beyond simple “required/min/max”, the library includes:
 
 - collection rules (`distinct`, `non_empty`),
@@ -51,7 +51,7 @@ Beyond simple “required/min/max”, the library includes:
 - advanced string formats (using regex),
 - temporal constraints (`PAST`, `FUTURE`).
 
-### 🔹 Extensible architecture
+### Extensible architecture
 Teams can define custom validation options by:
 
 - declaring new `.proto` options,
