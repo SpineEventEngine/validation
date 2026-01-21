@@ -38,9 +38,6 @@
 ### 3.3. String Constraints
 - [Overview](03-built-in-options/strings/index.md)
 - [Advanced Patterns](03-built-in-options/strings/pattern-advanced.md)
-- [email](03-built-in-options/strings/email.md)
-- [hostname](03-built-in-options/strings/hostname.md)
-- [uri](03-built-in-options/strings/uri.md)
 
 ### 3.4. Numeric Constraints
 - [Overview](03-built-in-options/numbers/index.md)
