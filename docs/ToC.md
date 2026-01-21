@@ -84,13 +84,8 @@
 - [Cross-field Logic](07-recipes/cross-field-logic.md)
 - [API Validation](07-recipes/api-validation.md)
 
-## 8. Migration Guide
-- [Overview](08-migration/index.md)
-- [Migrating from `spine.base` Validation](08-migration/from-spine-base.md)
-- [Version Changes](08-migration/version-changes.md)
-
-## 9. Reference
-- [Reference Overview](09-reference/index.md)
-- [List of Validation Options](09-reference/options.md)
-- [Java/Kotlin API Index](09-reference/api.md)
-- [Glossary](09-reference/glossary.md)
+## 8. Reference
+- [Reference Overview](08-reference/index.md)
+- [List of Validation Options](08-reference/options.md)
+- [Java/Kotlin API Index](08-reference/api.md)
+- [Glossary](08-reference/glossary.md)
