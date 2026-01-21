@@ -6,8 +6,6 @@ constraints on that data.
 
 The library serves several overlapping groups:
 
----
-
 ## 1. Application Developers
 
 Developers building backend services in **Java** or **Kotlin** who need
@@ -27,8 +25,6 @@ These developers benefit from:
 This group typically works directly with generated message builders and calls
 `validate()` at appropriate points in their workflow.
 
----
-
 ## 2. Teams Using the Spine Event Engine
 
 Spine Validation is the standard validation mechanism used inside the
@@ -45,8 +41,6 @@ For Spine users, this library provides:
 - consistent validation semantics across the entire model,
 - rich temporal and domain-focused constraints,
 - cross-field and message-level validations.
-
----
 
 ## 3. Framework and Platform Integrators
 
@@ -69,8 +63,7 @@ For these integrators, Spine Validation provides:
 
 ## 4. Library Authors and Tooling Developers
 
-Those who extend `protoc`, build code-gen pipelines, or maintain shared data
-models across a large organization can use Spine Validation to:
+Those who maintain shared data models across a large organization can use Spine Validation to:
 
 - standardize validation behavior for all services,
 - define custom domain-specific validation options,
