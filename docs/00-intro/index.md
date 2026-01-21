@@ -3,8 +3,7 @@
 Spine Validation is a Protobuf-centric validation framework that generates
 type-safe validation code directly from your `.proto` definitions.  
 It allows you to describe constraints on fields, messages, and collections using
-declarative options and then automatically enforces these constraints at
-runtime.
+declarative options and then automatically enforces these constraints at runtime.
 
 The library is part of the Spine toolchain but can also be used independently
 in any Java/Kotlin backend that models data using Protocol Buffers.
