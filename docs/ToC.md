@@ -61,19 +61,13 @@
 - [Kotlin usage](04-using-validation/kotlin-usage.md)
 - [Framework integration](04-using-validation/framework-integration.md)
 
-## 5. Configuration & tooling
-- [Overview](05-configuration/index.md)
-- [Compiler configuration](05-configuration/compiler.md)
-- [Library modules](05-configuration/modules.md)
-- [Debugging generated code](05-configuration/debugging.md)
-
-## 6. Extending validation
+## 5. Extending validation
 - [Overview](06-extending/index.md)
 - [Architecture](06-extending/architecture.md)
 - [Custom validation options](06-extending/custom-options.md)
 - [Custom runtime validators](06-extending/custom-runtime-validators.md)
 
-## 7. Recipes (cookbook)
+## 6. Recipes (cookbook)
 - [Overview](07-recipes/index.md)
 - [Domain IDs](07-recipes/domain-ids.md)
 - [Common cases](07-recipes/common-cases.md)
@@ -81,7 +75,7 @@
 - [Cross-field logic](07-recipes/cross-field-logic.md)
 - [API validation](07-recipes/api-validation.md)
 
-## 8. Reference
+## 7. Reference
 - [Reference overview](08-reference/index.md)
 - [List of validation options](08-reference/options.md)
 - [Java/Kotlin API index](08-reference/api.md)
