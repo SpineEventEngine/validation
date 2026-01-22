@@ -15,10 +15,10 @@ in any Java/Kotlin backend that models data using Protocol Buffers.
 
 Validation rules are expressed as Protobuf options such as:
 
-- `required`
-- `min` / `max`
-- `pattern`
-- `when.in = PAST | FUTURE`
+- `(required)`
+- `(min)` / `(max)`
+- `(pattern)`
+- `(when).in = PAST | FUTURE`
 - cross-field rules and message-level constraints
 
 This keeps validation close to the data model and ensures it evolves together
@@ -48,7 +48,7 @@ logs, or domain exception flows.
 
 Beyond simple “required/min/max”, the library includes:
 
-- collection rules (`distinct`, `required`),
+- collection rules (`(distinct)`, `(required)`),
 - nested and cross-field validation,
 - advanced string formats (using regex),
 - temporal constraints (`PAST`, `FUTURE`).
