@@ -8,6 +8,21 @@ declarative options and then automatically enforces these constraints at runtime
 The library is part of the Spine toolchain but can also be used independently
 in any Java/Kotlin backend that models data using Protocol Buffers.
 
+## Components
+
+Spine Validation consists of three main parts:
+
+1. **Validation plugin to Spine Compiler** – analyzes your Protobuf definitions and
+   generates validation code for messages and builders.
+
+2. **Gradle plugin** – integrates with your build, configuring Spine Compiler to run
+   the Validation code generation as part of the Protobuf compilation process.
+
+3. **Runtime library** – provides validation APIs and error reporting mechanisms
+   for JVM projects (Java and Kotlin).
+
+Together, these components enable declarative, type-safe validation that is enforced
+both at compile time and at runtime.
 
 ## Key capabilities
 
@@ -26,7 +41,7 @@ with it.
 
 ### Generated validation code
 
-The Validation Plugin for Spine Compiler processes your Protobuf model and generates:
+The validation plugin to Spine Compiler processes your Protobuf model and generates:
 
 - validation code for messages and builders,
 - runtime checks,
