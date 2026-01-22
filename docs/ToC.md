@@ -7,7 +7,7 @@
 
 ## 1. Getting started
 - [Getting started](01-getting-started/index.md)
-- [Adding Validation to your build](01-getting-started/installation.md)
+- [Adding Validation to a Gradle build](01-getting-started/adding-to-build.md)
 - [Your first validated model](01-getting-started/first-model.md)
 - [Validation workflow](01-getting-started/workflow.md)
 
