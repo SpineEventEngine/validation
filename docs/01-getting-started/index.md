@@ -29,9 +29,8 @@ the code produced by `protoc`.
 
 ## Quick path
 
-1) Install the library and compiler integration
-- Follow [Installation](installation.md) to add the necessary repositories and build configuration.
-- If you use a custom Protobuf setup, see [Compiler Configuration](../05-configuration/compiler.md).
+1) Add Spine Validation to your Gradle build
+- Follow the [instructions](adding-to-build.md).
 
 2) Define constraints in your `.proto` files
 - Import `spine/options.proto` (and `spine/time_options.proto` for temporal constraints).
@@ -47,6 +46,6 @@ the code produced by `protoc`.
 
 ## What’s next
 
-- [Installation](installation.md)
+- [Adding Validation to your build](adding-to-build.md)
 - [Your First Validated Model](first-model.md)
 - [Validation Workflow](workflow.md)
