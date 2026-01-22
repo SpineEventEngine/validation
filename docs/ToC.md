@@ -29,24 +29,24 @@
 - [length/size](03-built-in-options/fields/length-size.md)
 - [unique](03-built-in-options/fields/unique.md)
 
-### 3.2. Collection constraints
-- [Overview](03-built-in-options/collections/index.md)
-- [non_empty](03-built-in-options/collections/non-empty.md)
-- [distinct](03-built-in-options/collections/distinct.md)
-- [Collection size](03-built-in-options/collections/collection-size.md)
-
-### 3.3. String constraints
+### 3.2. String constraints
 - [Overview](03-built-in-options/strings/index.md)
 - [Advanced patterns](03-built-in-options/strings/pattern-advanced.md)
 
-### 3.4. Numeric constraints
+### 3.3. Numeric constraints
 - [Overview](03-built-in-options/numbers/index.md)
 - [Numeric bounds](03-built-in-options/numbers/numeric-bounds.md)
 
-### 3.5. Temporal constraints
+### 3.4. Temporal constraints
 - [Overview](03-built-in-options/temporal/index.md)
 - [`(when)`](03-built-in-options/temporal/when.md)
-- [`Timestamp` & `Duration`](03-built-in-options/temporal/timestamp-duration.md)
+- [Validating `Timestamp` & `Duration`](03-built-in-options/temporal/timestamp-duration.md)
+
+### 3.5. Collection constraints
+- [Overview](03-built-in-options/collections/index.md)
+- [`(required)`](03-built-in-options/collections/required.md)
+- [`(distinct)`](03-built-in-options/collections/distinct.md)
+- [Collection size](03-built-in-options/collections/collection-size.md)
 
 ### 3.6. Message-level constraints
 - [Overview](03-built-in-options/message/index.md)
