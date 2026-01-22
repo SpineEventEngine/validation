@@ -1,4 +1,4 @@
-# Target Audience
+# Target audience
 
 Spine Validation is designed for developers who model data and APIs using
 **Protocol Buffers** and need a structured, type-safe way to express and enforce
@@ -6,7 +6,7 @@ constraints on that data.
 
 The library serves several overlapping groups:
 
-## 1. Application Developers
+## 1. Application developers
 
 Developers building backend services in **Java** or **Kotlin** who need
 validation for:
@@ -25,7 +25,7 @@ These developers benefit from:
 This group typically works directly with generated message builders and calls
 `validate()` at appropriate points in their workflow.
 
-## 2. Teams Using the Spine Event Engine
+## 2. Teams using the Spine Event Engine
 
 Spine Validation is the standard validation mechanism used inside the
 **Spine Event Engine**.  
@@ -42,7 +42,7 @@ For Spine users, this library provides:
 - rich temporal and domain-focused constraints,
 - cross-field and message-level validations.
 
-## 3. Framework and Platform Integrators
+## 3. Framework and platform integrators
 
 Engineers who build frameworks, platforms, or infrastructure around Protobuf
 often need to enforce rules across:
@@ -59,9 +59,7 @@ For these integrators, Spine Validation provides:
 - hooks for custom validators,
 - extension points via custom validation options.
 
----
-
-## 4. Library Authors and Tooling Developers
+## 4. Library authors and tooling developers
 
 Those who maintain shared data models across a large organization can use Spine Validation to:
 
@@ -75,9 +73,8 @@ This group interacts with advanced parts of the library such as:
 - option policies,
 - custom code generation units.
 
----
 
-## 5. Not the Target Audience (Explicitly)
+## 5. Not the target audience (explicitly)
 
 The library is **not** designed for:
 
@@ -89,7 +86,6 @@ The library is **not** designed for:
 Spine Validation is intentionally focused on the **Protobuf → runtime code**
 pipeline and the domain layer of applications.
 
----
 
 ## Summary
 

@@ -1,26 +1,26 @@
-# Spine Validation — Table of Contents
+# Spine Validation — Table of contents
 
 ## 0. Introduction
 - [Overview](00-intro/index.md)
-- [Target Audience](00-intro/target-audience.md)
+- [Target audience](00-intro/target-audience.md)
 - [Philosophy](00-intro/philosophy.md)
 
-## 1. Getting Started
-- [Getting Started](01-getting-started/index.md)
+## 1. Getting started
+- [Getting started](01-getting-started/index.md)
 - [Installation](01-getting-started/installation.md)
-- [Your First Validated Model](01-getting-started/first-model.md)
-- [Validation Workflow](01-getting-started/workflow.md)
+- [Your first validated model](01-getting-started/first-model.md)
+- [Validation workflow](01-getting-started/workflow.md)
 
 ## 2. Concepts
-- [Concepts Overview](02-concepts/index.md)
-- [Validation Options Overview](02-concepts/options-overview.md)
-- [The Validation Engine](02-concepts/validation-engine.md)
-- [Integration with Protobuf & Compiler](02-concepts/protobuf-integration.md)
+- [Concepts overview](02-concepts/index.md)
+- [Validation options overview](02-concepts/options-overview.md)
+- [The validation engine](02-concepts/validation-engine.md)
+- [Integration with Protobuf & Spine Compiler](02-concepts/protobuf-integration.md)
 
-## 3. Built-in Validation Options
-- [Built-in Options Overview](03-built-in-options/index.md)
+## 3. Built-in validation options
+- [Built-in options overview](03-built-in-options/index.md)
 
-### 3.1. Field Constraints
+### 3.1. Field constraints
 - [Overview](03-built-in-options/fields/index.md)
 - [required](03-built-in-options/fields/required.md)
 - [pattern](03-built-in-options/fields/pattern.md)
@@ -29,60 +29,60 @@
 - [length/size](03-built-in-options/fields/length-size.md)
 - [unique](03-built-in-options/fields/unique.md)
 
-### 3.2. Collection Constraints
+### 3.2. Collection constraints
 - [Overview](03-built-in-options/collections/index.md)
 - [non_empty](03-built-in-options/collections/non-empty.md)
 - [distinct](03-built-in-options/collections/distinct.md)
-- [collection size](03-built-in-options/collections/collection-size.md)
+- [Collection size](03-built-in-options/collections/collection-size.md)
 
-### 3.3. String Constraints
+### 3.3. String constraints
 - [Overview](03-built-in-options/strings/index.md)
-- [Advanced Patterns](03-built-in-options/strings/pattern-advanced.md)
+- [Advanced patterns](03-built-in-options/strings/pattern-advanced.md)
 
-### 3.4. Numeric Constraints
+### 3.4. Numeric constraints
 - [Overview](03-built-in-options/numbers/index.md)
-- [Numeric Bounds](03-built-in-options/numbers/numeric-bounds.md)
+- [Numeric bounds](03-built-in-options/numbers/numeric-bounds.md)
 
-### 3.5. Temporal Constraints
+### 3.5. Temporal constraints
 - [Overview](03-built-in-options/temporal/index.md)
 - [when](03-built-in-options/temporal/when.md)
-- [Timestamp & Duration](03-built-in-options/temporal/timestamp-duration.md)
+- [Timestamp & duration](03-built-in-options/temporal/timestamp-duration.md)
 
-### 3.6. Message-level Constraints
+### 3.6. Message-level constraints
 - [Overview](03-built-in-options/message/index.md)
 - [required_for](03-built-in-options/message/required-for.md)
-- [Nested Validation](03-built-in-options/message/nested-validation.md)
-- [Cross-field Validation](03-built-in-options/message/cross-field.md)
+- [Nested validation](03-built-in-options/message/nested-validation.md)
+- [Cross-field validation](03-built-in-options/message/cross-field.md)
 
-## 4. Using Validation in Code
+## 4. Using validation in code
 - [Overview](04-using-validation/index.md)
-- [Validating Messages](04-using-validation/validating-messages.md)
-- [Handling Errors](04-using-validation/handling-errors.md)
-- [Kotlin Usage](04-using-validation/kotlin-usage.md)
-- [Framework Integration](04-using-validation/framework-integration.md)
+- [Validating messages](04-using-validation/validating-messages.md)
+- [Handling errors](04-using-validation/handling-errors.md)
+- [Kotlin usage](04-using-validation/kotlin-usage.md)
+- [Framework integration](04-using-validation/framework-integration.md)
 
-## 5. Configuration & Tooling
+## 5. Configuration & tooling
 - [Overview](05-configuration/index.md)
-- [Compiler Configuration](05-configuration/compiler.md)
-- [Library Modules](05-configuration/modules.md)
-- [Debugging Generated Code](05-configuration/debugging.md)
+- [Compiler configuration](05-configuration/compiler.md)
+- [Library modules](05-configuration/modules.md)
+- [Debugging generated code](05-configuration/debugging.md)
 
-## 6. Extending Validation
+## 6. Extending validation
 - [Overview](06-extending/index.md)
 - [Architecture](06-extending/architecture.md)
-- [Custom Validation Options](06-extending/custom-options.md)
-- [Custom Runtime Validators](06-extending/custom-runtime-validators.md)
+- [Custom validation options](06-extending/custom-options.md)
+- [Custom runtime validators](06-extending/custom-runtime-validators.md)
 
-## 7. Recipes (Cookbook)
+## 7. Recipes (cookbook)
 - [Overview](07-recipes/index.md)
 - [Domain IDs](07-recipes/domain-ids.md)
-- [Common Cases](07-recipes/common-cases.md)
-- [Temporal Logic](07-recipes/temporal-logic.md)
-- [Cross-field Logic](07-recipes/cross-field-logic.md)
-- [API Validation](07-recipes/api-validation.md)
+- [Common cases](07-recipes/common-cases.md)
+- [Temporal logic](07-recipes/temporal-logic.md)
+- [Cross-field logic](07-recipes/cross-field-logic.md)
+- [API validation](07-recipes/api-validation.md)
 
 ## 8. Reference
-- [Reference Overview](08-reference/index.md)
-- [List of Validation Options](08-reference/options.md)
-- [Java/Kotlin API Index](08-reference/api.md)
+- [Reference overview](08-reference/index.md)
+- [List of validation options](08-reference/options.md)
+- [Java/Kotlin API index](08-reference/api.md)
 - [Glossary](08-reference/glossary.md)

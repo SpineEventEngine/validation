@@ -8,9 +8,8 @@ declarative options and then automatically enforces these constraints at runtime
 The library is part of the Spine toolchain but can also be used independently
 in any Java/Kotlin backend that models data using Protocol Buffers.
 
----
 
-## Key Capabilities
+## Key capabilities
 
 ### Declarative constraints in `.proto`
 Validation rules are expressed as Protobuf options such as:
@@ -60,9 +59,8 @@ Teams can define custom validation options by:
 
 This allows entire organizations to standardize domain validation rules.
 
----
 
-## When to Use Spine Validation
+## When to use Spine Validation
 
 Use Spine Validation if:
 
@@ -79,7 +77,6 @@ It is especially useful in:
 - systems with rich domain models,
 - multi-service environments where shared `.proto` models are common.
 
----
 
 ## Relationship to the Spine Event Engine
 
@@ -96,9 +93,8 @@ framework’s error reporting mechanisms.
 However, the library is fully standalone and can be used without the rest of the
 Spine stack.
 
----
 
-## What’s Next
+## What's next
 
 - [Target Audience](target-audience.md)
 - [Philosophy](philosophy.md)
