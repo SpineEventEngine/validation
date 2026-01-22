@@ -34,7 +34,7 @@ validation logic.
 
 ## 2. Generated code over reflection
 
-Reflection-based frameworks (Bean Validation, etc.) are convenient but come with:
+Reflection-based frameworks (Jakarta Validation, etc.) are convenient but come with:
 
 - runtime penalties,
 - fragile metadata conventions (annotations, naming),
@@ -48,17 +48,18 @@ Benefits:
 - fast, predictable runtime without reflection,
 - validation logic is type-safe,
 - errors in validation configuration are caught early,
-- generated validators integrate naturally into the Protobuf builder model.
+- generated validation code integrates naturally into the Protobuf builder model.
 
 This approach scales better for complex domain models or high-throughput services.
-
 
 ## 3. Declarative, not imperative
 
 Validation is expressed declaratively through Protobuf options:
 
 ```proto
-string email = 1 [(pattern).email = true, (required) = true];
+message Name {
+    string value = 1 [(required) = true, (pattern).regex = "^[A-Za-z ]+$"];
+}
 ```
 Declarative rules:
  * are concise,
@@ -90,7 +91,7 @@ design contexts.
 
 ## 5. Domain-oriented constraints
 
-Instead of focusing only on primitive checks (min/max, required), the library
+Instead of focusing only on primitive checks (`min`/`max`, `required`), the library
 embraces **domain semantics**, such as:
 
  * temporal rules (past, future),
@@ -118,7 +119,7 @@ front-end models, or JSON schemas.
 Its focus is entirely on:
 
 ```
-Protobuf → generated Java/Kotlin → domain logic
+Protobuf → generated Java/Kotlin/TypeScript → domain logic
 ```
 
 Everything else (frontend validation, OpenAPI, view models) should build on top
