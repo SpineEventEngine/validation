@@ -1,6 +1,6 @@
 # Spine Validation — Table of contents
 
-## 0. Introduction
+## Introduction
 - [Overview](00-intro/index.md)
 - [Target audience](00-intro/target-audience.md)
 - [Philosophy](00-intro/philosophy.md)
