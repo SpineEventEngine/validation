@@ -45,8 +45,8 @@
 
 ### 3.5. Temporal constraints
 - [Overview](03-built-in-options/temporal/index.md)
-- [when](03-built-in-options/temporal/when.md)
-- [Timestamp & duration](03-built-in-options/temporal/timestamp-duration.md)
+- [`(when)`](03-built-in-options/temporal/when.md)
+- [`Timestamp` & `Duration`](03-built-in-options/temporal/timestamp-duration.md)
 
 ### 3.6. Message-level constraints
 - [Overview](03-built-in-options/message/index.md)
