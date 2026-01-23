@@ -33,7 +33,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
 @DisplayName("`BankCard` should")
-class BankCardTest {
+class BankCardTestKt {
 
     @Test
     @DisplayName("throw `ValidationException` if digits are invalid")
