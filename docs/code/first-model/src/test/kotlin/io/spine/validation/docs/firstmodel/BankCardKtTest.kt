@@ -32,17 +32,17 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
-@DisplayName("`BankCard` should")
-class BankCardTestKt {
+@DisplayName("`BankCard`in Kotlin should")
+class BankCardKtTest {
 
     @Test
     @DisplayName("throw `ValidationException` if digits are invalid")
     fun invalidDigits() {
         assertThrows<ValidationException> {
-            BankCard.newBuilder()
-                .setDigits("invalid")
-                .setOwner("ALEX SMITH")
-                .build()
+            bankCard {
+                digits = "invalid"
+                owner = "ALEX SMITH"
+            }
         }
     }
 
@@ -50,10 +50,10 @@ class BankCardTestKt {
     @DisplayName("throw `ValidationException` if owner is invalid")
     fun invalidOwner() {
         assertThrows<ValidationException> {
-            BankCard.newBuilder()
-                .setDigits("1234 5678 1234 5678")
-                .setOwner("Al")
-                .build()
+            bankCard {
+                digits = "1234 5678 1234 5678"
+                owner = "Al"
+            }
         }
     }
 
@@ -61,12 +61,12 @@ class BankCardTestKt {
     @DisplayName("throw `ValidationException` if tags are not distinct")
     fun duplicateTags() {
         assertThrows<ValidationException> {
-            BankCard.newBuilder()
-                .setDigits("1234 5678 1234 5678")
-                .setOwner("ALEX SMITH")
-                .addTags("personal")
-                .addTags("personal")
-                .build()
+            bankCard {
+                digits = "1234 5678 1234 5678"
+                owner = "ALEX SMITH"
+                tags.add("personal")
+                tags.add("personal")
+            }
         }
     }
 
@@ -74,12 +74,12 @@ class BankCardTestKt {
     @DisplayName("be built if all fields are valid")
     fun validCard() {
         assertDoesNotThrow {
-            BankCard.newBuilder()
-                .setDigits("1234 5678 1234 5678")
-                .setOwner("ALEX SMITH")
-                .addTags("personal")
-                .addTags("travel")
-                .build()
+            bankCard {
+                digits = "1234 5678 1234 5678"
+                owner = "ALEX SMITH"
+                tags.add("personal")
+                tags.add("travel")
+            }
         }
     }
 }
