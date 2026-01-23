@@ -33,9 +33,4 @@ pluginManagement {
     }
 }
 
-includeBuild("../../../") {
-//    dependencySubstitution {
-//        substitute(module("io.spine:spine-validation-jvm-runtime"))
-//            .using(project(":jvm-runtime"))
-//    }
-}
+includeBuild("../../../")
