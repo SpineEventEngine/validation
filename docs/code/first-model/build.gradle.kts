@@ -40,27 +40,18 @@ plugins {
     kotlin("jvm")
     id("com.google.protobuf")
     id("io.spine.compiler").version("2.0.0-SNAPSHOT.038")
-    id("io.spine.validation") //.version("2.0.0-SNAPSHOT.394")
+    id("io.spine.validation")
 }
 
-group = "io.spine.example"
-version = "0.1.0"
+group = "io.spine.docs"
+version = "2.0.0"
 
 repositories {
     mavenLocal()
     standardToSpineSdk()
 }
 
-//configurations.all {
-//    resolutionStrategy.dependencySubstitution {
-//        substitute(module("io.spine:spine-validation-jvm-runtime"))
-//            .using(project(":validation:jvm-runtime"))
-//    }
-//}
-
 dependencies {
-    implementation(Guava.lib)
-    implementation(Base.lib)
     testImplementation(kotlin("test"))
 }
 
