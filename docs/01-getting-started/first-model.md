@@ -14,9 +14,12 @@ Create a `.proto` file and import the validation options you need:
 ```protobuf
 syntax = "proto3";
 
-package example;
+package spine.validation.docs.first_model;
 
 import "spine/options.proto";
+
+option java_package = "io.spine.validation.docs.firstmodel";
+option java_multiple_files = true;
 
 // Provides bank card information with validation rules.
 //

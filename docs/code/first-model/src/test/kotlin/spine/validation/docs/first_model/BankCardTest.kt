@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.example
+package io.spine.validation.docs.firstmodel
 
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName

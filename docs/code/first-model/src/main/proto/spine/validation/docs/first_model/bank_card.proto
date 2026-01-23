@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package example;
+package spine.validation.docs.first_model;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.example";
+option java_package = "io.spine.validation.docs.firstmodel";
 option java_multiple_files = true;
 
 // Provides bank card information with validation rules.
