@@ -37,18 +37,13 @@
 - [Overview](03-built-in-options/numbers/index.md)
 - [Numeric bounds](03-built-in-options/numbers/numeric-bounds.md)
 
-### 3.4. Temporal constraints
-- [Overview](03-built-in-options/temporal/index.md)
-- [`(when)`](03-built-in-options/temporal/when.md)
-- [Validating `Timestamp` & `Duration`](03-built-in-options/temporal/timestamp-duration.md)
-
-### 3.5. Collection constraints
+### 3.4. Collection constraints
 - [Overview](03-built-in-options/collections/index.md)
 - [`(required)`](03-built-in-options/collections/required.md)
 - [`(distinct)`](03-built-in-options/collections/distinct.md)
 - [Collection size](03-built-in-options/collections/collection-size.md)
 
-### 3.6. Message-level constraints
+### 3.5. Message-level constraints
 - [Overview](03-built-in-options/message/index.md)
 - [required_for](03-built-in-options/message/required-for.md)
 - [Nested validation](03-built-in-options/message/nested-validation.md)
@@ -71,7 +66,6 @@
 - [Overview](07-recipes/index.md)
 - [Domain IDs](07-recipes/domain-ids.md)
 - [Common cases](07-recipes/common-cases.md)
-- [Temporal logic](07-recipes/temporal-logic.md)
 - [Cross-field logic](07-recipes/cross-field-logic.md)
 - [API validation](07-recipes/api-validation.md)
 

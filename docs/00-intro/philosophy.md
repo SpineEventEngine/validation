@@ -94,7 +94,6 @@ design contexts.
 Instead of focusing only on primitive checks (`min`/`max`, `required`), the library
 embraces **domain semantics**, such as:
 
- * temporal rules (past, future),
  * cross-field logic,
  * nested validation,
  * constraints on identity fields,

@@ -33,7 +33,6 @@ Validation rules are expressed as Protobuf options such as:
 - `(required)`
 - `(min)` / `(max)`
 - `(pattern)`
-- `(when).in = PAST | FUTURE`
 - cross-field rules and message-level constraints
 
 This keeps validation close to the data model and ensures it evolves together
@@ -65,8 +64,7 @@ Beyond simple “required/min/max”, the library includes:
 
 - collection rules (`(distinct)`, `(required)`),
 - nested and cross-field validation,
-- advanced string formats (using regex),
-- temporal constraints (`PAST`, `FUTURE`).
+- advanced string formats (using regex).
 
 ### Extensible architecture
 

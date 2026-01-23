@@ -33,8 +33,8 @@ the code produced by `protoc`.
 - Follow the [instructions](adding-to-build.md).
 
 2) Define constraints in your `.proto` files
-- Import `spine/options.proto` (and `spine/time_options.proto` for temporal constraints).
-- Add declarative options like `(required)`, `(min)`, `(pattern)`, `(when).in = PAST`.
+- Import `spine/options.proto`.
+- Add declarative options like `(required)`, `(min)`, `(pattern)`.
 
 3) Build your project
 - The Validation plugin to Spine Compiler scans your model and generates validation code.

@@ -39,7 +39,7 @@ validate:
 For Spine users, this library provides:
 
 - consistent validation semantics across the entire model,
-- rich temporal and domain-focused constraints,
+- rich domain-focused constraints,
 - cross-field and message-level validations.
 
 ## 3. Framework and platform integrators
