@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package example;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.example";
+option java_multiple_files = true;
+
+// Provides bank card information with validation rules.
+//
+// The digits of the card are simplified for the sake of the example.
+//
+message BankCard {
+
+    // Must be present and match a simple card pattern.
+    string digits = 1 [
+        (required) = true,
+        (pattern).regex = "^\\d{4}(?: \\d{4}){3}"
+    ];
+
+    // Must be present and contain at least 4 Latin letters or spaces.
+    string owner = 2 [
+        (required) = true,
+        (pattern).regex = "^[A-Z](?:[A-Za-z ]{2,}[A-Za-z])$"
+    ];
+
+    // All tags must be unique. Tags are optional.
+    repeated string tags = 3 [
+        (distinct) = true
+    ];
+}
