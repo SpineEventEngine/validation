@@ -72,7 +72,7 @@ message ConstraintViolation {
     // Example:
     //
     // ```
-    // message Student {
+    // message AddressBook {
     //     Contacts contacts = 1 [(validate) = true];
     // }
     //
@@ -85,8 +85,8 @@ message ConstraintViolation {
     // }
     // ```
     //
-    // When the `Student` message is validated and the `value` field in the nested `Email`
-    // message is invalid, this property will contain the `Student` type name, not `Email`.
+    // When the `AddressBook` message is validated and the `value` field in the nested `Email`
+    // message is invalid, this property will contain the `AddressBook` type name, not `Email`.
     // This is so because this type is an entry point to the nested validation.
     //
     string type_name = 7;

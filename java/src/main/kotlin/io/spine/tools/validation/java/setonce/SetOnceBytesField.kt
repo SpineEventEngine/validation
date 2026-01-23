@@ -38,8 +38,7 @@ import io.spine.tools.psi.java.method
 /**
  * Renders Java code to support `(set_once)` option for the given byte array [field].
  *
- * Please note, in the generated Java code, Protobuf uses [ByteString] to represent
- * an array of bytes.
+ * Note that Protobuf uses [ByteString] to represent an array of bytes in the generated code.
  *
  * @param field The byte array field that declared the option.
  * @param typeSystem The type system to resolve types.

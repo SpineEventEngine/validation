@@ -1,5 +1,9 @@
+import io.spine.dependency.lib.Guava
+import io.spine.dependency.local.Base
+import io.spine.gradle.repo.standardToSpineSdk
+
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,36 +28,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
-
-import io.spine.tools.validation.test.money.Mru
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-
-/**
- * This is the integration test that verifies the custom validation implemented
- * by [CurrencyOption] in the `:java-tests:extensions` module.
- *
- * The `extensions` module declares the `(currency)` message option, which is used by
- * money data types in this module. See `main/proto/test/money.proto` for details.
- *
- * This test verifies that custom validation code works as expected.
- */
-@DisplayName("`CurrencyOption` should generate the code which")
-internal class CurrencyOptionITest {
-
-    @Test
-    fun `throws 'ValidationException' if actual value is greater than the threshold`() {
-        assertValidationException(Mru.newBuilder().setKhoums(6))
+buildscript {
+    standardSpineSdkRepositories()
+    dependencies {
+        classpath(io.spine.dependency.local.Compiler.pluginLib)
     }
+}
 
-    @Test
-    fun `throws 'ValidationException' if actual value is equal to the threshold`() {
-        assertValidationException(Mru.newBuilder().setKhoums(5))
-    }
+plugins {
+    `java-library`
+    kotlin("jvm")
+    id("com.google.protobuf")
+    id("io.spine.compiler").version("2.0.0-SNAPSHOT.038")
+    id("io.spine.validation")
+}
 
-    @Test
-    fun `throws no exceptions if actual value is less than the threshold`() {
-        assertNoException(Mru.newBuilder().setKhoums(4))
-    }
+group = "io.spine.docs"
+version = "2.0.0"
+
+repositories {
+    mavenLocal()
+    standardToSpineSdk()
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

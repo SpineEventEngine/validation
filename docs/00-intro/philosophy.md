@@ -5,9 +5,8 @@ model, generate, and enforce constraints on their data.
 This section outlines those principles and explains why the library is designed
 the way it is.
 
----
 
-## 1. Validation Belongs to the Model
+## 1. Validation belongs to the model
 
 In many systems, validation rules drift between:
 
@@ -32,11 +31,10 @@ By placing constraints in `.proto` definitions, validation becomes:
 This prevents the typical “broken windows” of duplicated or inconsistent
 validation logic.
 
----
 
-## 2. Generated Code Over Reflection
+## 2. Generated code over reflection
 
-Reflection-based frameworks (Bean Validation, etc.) are convenient but come with:
+Reflection-based frameworks (Jakarta Validation, etc.) are convenient but come with:
 
 - runtime penalties,
 - fragile metadata conventions (annotations, naming),
@@ -50,18 +48,18 @@ Benefits:
 - fast, predictable runtime without reflection,
 - validation logic is type-safe,
 - errors in validation configuration are caught early,
-- generated validators integrate naturally into the Protobuf builder model.
+- generated validation code integrates naturally into the Protobuf builder model.
 
 This approach scales better for complex domain models or high-throughput services.
 
----
-
-## 3. Declarative, Not Imperative
+## 3. Declarative, not imperative
 
 Validation is expressed declaratively through Protobuf options:
 
 ```proto
-string email = 1 [(pattern).email = true, (required) = true];
+message Name {
+    string value = 1 [(required) = true, (pattern).regex = "^[A-Za-z ]+$"];
+}
 ```
 Declarative rules:
  * are concise,
@@ -72,7 +70,7 @@ Declarative rules:
 
 Developers describe intent, and the library handles implementation.
 
-## 4. Predictability and Consistency
+## 4. Predictability and consistency
 
 Validation should behave the same regardless of:
 
@@ -91,18 +89,17 @@ Given the same inputs, you always get the same:
 Consistency is especially important in distributed systems and domain-driven
 design contexts.
 
-## 5. Domain-Oriented Constraints
+## 5. Domain-oriented constraints
 
-Instead of focusing only on primitive checks (min/max, required), the library
+Instead of focusing only on primitive checks (`min`/`max`, `required`), the library
 embraces **domain semantics**, such as:
 
- * temporal rules (past, future),
  * cross-field logic,
  * nested validation,
  * constraints on identity fields,
  * collection semantics.
 
-## 6. Extensibility as a First-Class Feature
+## 6. Extensibility as a first-class feature
 
 Spine Validation is extensible via:
 
@@ -113,7 +110,7 @@ Spine Validation is extensible via:
 This makes the library a foundation for building consistent validation standards
 across teams and services.
 
-## 7. No UI or Presentation Layer Concerns
+## 7. No UI or presentation layer concerns
 
 Spine Validation intentionally does not attempt to validate UI forms,
 front-end models, or JSON schemas.
@@ -121,7 +118,7 @@ front-end models, or JSON schemas.
 Its focus is entirely on:
 
 ```
-Protobuf → generated Java/Kotlin → domain logic
+Protobuf → generated Java/Kotlin/TypeScript → domain logic
 ```
 
 Everything else (frontend validation, OpenAPI, view models) should build on top

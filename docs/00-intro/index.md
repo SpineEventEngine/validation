@@ -3,30 +3,44 @@
 Spine Validation is a Protobuf-centric validation framework that generates
 type-safe validation code directly from your `.proto` definitions.  
 It allows you to describe constraints on fields, messages, and collections using
-declarative options and then automatically enforces these constraints at
-runtime.
+declarative options and then automatically enforces these constraints at runtime.
 
 The library is part of the Spine toolchain but can also be used independently
 in any Java/Kotlin backend that models data using Protocol Buffers.
 
----
+## Components
 
-## Key Capabilities
+Spine Validation consists of three main parts:
 
-### 🔹 Declarative constraints in `.proto`
+1. **Validation plugin to Spine Compiler** – analyzes your Protobuf definitions and
+   generates validation code for messages and builders.
+
+2. **Gradle plugin** – integrates with your build, configuring Spine Compiler to run
+   the Validation code generation as part of the Protobuf compilation process.
+
+3. **Runtime library** – provides validation APIs and error reporting mechanisms
+   for JVM projects (Java and Kotlin).
+
+Together, these components enable declarative, type-safe validation that is enforced
+both at compile time and at runtime.
+
+## Key capabilities
+
+### Declarative constraints in `.proto`
+
 Validation rules are expressed as Protobuf options such as:
 
-- `required`
-- `min` / `max`
-- `pattern`
-- `when.in = PAST | FUTURE`
+- `(required)`
+- `(min)` / `(max)`
+- `(pattern)`
 - cross-field rules and message-level constraints
 
 This keeps validation close to the data model and ensures it evolves together
 with it.
 
-### 🔹 Generated validators
-The Spine compiler plugin processes your Protobuf model and generates:
+### Generated validation code
+
+The validation plugin to Spine Compiler processes your Protobuf model and generates:
 
 - validation code for messages and builders,
 - runtime checks,
@@ -34,7 +48,7 @@ The Spine compiler plugin processes your Protobuf model and generates:
 
 No manual validators, reflection, or annotations are required.
 
-### 🔹 Runtime validation API
+### Runtime validation API
 Every generated message can be validated at runtime via:
 
 - `validate()`,
@@ -44,15 +58,16 @@ Every generated message can be validated at runtime via:
 Errors are represented as structured diagnostics suitable for API responses,
 logs, or domain exception flows.
 
-### 🔹 Rich domain-oriented constraints
+### Rich domain-oriented constraints
+
 Beyond simple “required/min/max”, the library includes:
 
-- collection rules (`distinct`, `non_empty`),
+- collection rules (`(distinct)`, `(required)`),
 - nested and cross-field validation,
-- advanced string formats (using regex),
-- temporal constraints (`PAST`, `FUTURE`).
+- advanced string formats (using regex).
 
-### 🔹 Extensible architecture
+### Extensible architecture
+
 Teams can define custom validation options by:
 
 - declaring new `.proto` options,
@@ -61,9 +76,8 @@ Teams can define custom validation options by:
 
 This allows entire organizations to standardize domain validation rules.
 
----
 
-## When to Use Spine Validation
+## When to use Spine Validation
 
 Use Spine Validation if:
 
@@ -76,11 +90,10 @@ Use Spine Validation if:
 It is especially useful in:
 
 - backend services (Java/Kotlin),
-- event-driven and CQRS systems,
+- message-driven systems,
 - systems with rich domain models,
 - multi-service environments where shared `.proto` models are common.
 
----
 
 ## Relationship to the Spine Event Engine
 
@@ -97,9 +110,8 @@ framework’s error reporting mechanisms.
 However, the library is fully standalone and can be used without the rest of the
 Spine stack.
 
----
 
-## What’s Next
+## What's next
 
 - [Target Audience](target-audience.md)
 - [Philosophy](philosophy.md)
