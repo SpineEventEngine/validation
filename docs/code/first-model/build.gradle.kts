@@ -39,7 +39,7 @@ plugins {
     `java-library`
     kotlin("jvm")
     id("com.google.protobuf")
-    id("io.spine.compiler").version("2.0.0-SNAPSHOT.038")
+    `spine-compiler`
     id("io.spine.validation")
 }
 

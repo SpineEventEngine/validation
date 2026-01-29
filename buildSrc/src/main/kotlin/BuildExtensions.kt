@@ -152,6 +152,9 @@ val PluginDependenciesSpec.protobuf: PluginDependencySpec
 val PluginDependenciesSpec.prototap: PluginDependencySpec
     get() = id(ProtoTap.gradlePluginId).version(ProtoTap.version)
 
+val PluginDependenciesSpec.`spine-compiler`: PluginDependencySpec
+    get() = id(Compiler.pluginId).version(Compiler.version)
+
 val PluginDependenciesSpec.`gradle-doctor`: PluginDependencySpec
     get() = id(GradleDoctor.pluginId).version(GradleDoctor.version)
 
