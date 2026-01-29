@@ -781,16 +781,16 @@
      * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
      * **License:** [BSD-3-Clause](https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
 1.  **Group** : org.jboss.forge.roaster. **Name** : roaster-api. **Version** : 2.29.0.Final.
@@ -1139,7 +1139,7 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:12 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -1731,7 +1731,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:45 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:07 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -2433,16 +2433,16 @@ This report was generated on **Fri Jan 23 18:24:45 WET 2026** using
      * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
      * **License:** [BSD-3-Clause](https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
 1.  **Group** : org.jcommander. **Name** : jcommander. **Version** : 1.85.
@@ -2807,7 +2807,7 @@ This report was generated on **Fri Jan 23 18:24:45 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:11 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -3551,16 +3551,16 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
      * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
      * **License:** [BSD-3-Clause](https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
 1.  **Group** : org.jcommander. **Name** : jcommander. **Version** : 1.85.
@@ -3901,7 +3901,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:11 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -3971,7 +3971,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:45 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:07 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -4465,16 +4465,16 @@ This report was generated on **Fri Jan 23 18:24:45 WET 2026** using
      * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
      * **License:** [BSD-3-Clause](https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
 1.  **Group** : org.jcommander. **Name** : jcommander. **Version** : 1.85.
@@ -4811,7 +4811,7 @@ This report was generated on **Fri Jan 23 18:24:45 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:11 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -5368,16 +5368,16 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
      * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
      * **License:** [BSD-3-Clause](https://raw.githubusercontent.com/hamcrest/JavaHamcrest/master/LICENSE)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.ant. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
-1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.13.
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.14.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
 1.  **Group** : org.jcommander. **Name** : jcommander. **Version** : 1.85.
@@ -5747,7 +5747,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:11 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -6345,7 +6345,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:45 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:07 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -6863,7 +6863,7 @@ This report was generated on **Fri Jan 23 18:24:45 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:08 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -7554,7 +7554,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:08 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -8183,7 +8183,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:08 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -8855,7 +8855,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:08 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -9613,7 +9613,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:08 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -9890,7 +9890,7 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:46 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:07 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
@@ -10248,6 +10248,6 @@ This report was generated on **Fri Jan 23 18:24:46 WET 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Fri Jan 23 18:24:45 WET 2026** using 
+This report was generated on **Thu Jan 29 18:44:07 WET 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
