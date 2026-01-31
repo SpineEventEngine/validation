@@ -19,8 +19,9 @@ Module mount strategy** for building modular documentation where:
     -   Each repo exposes its documentation as a **Hugo Module**
     -   All doc-related files live under `docs/`
 
-Each `docs/` directory is: - a **Go module root** (`go.mod`) - a **Hugo
-project root** (`hugo.yaml`)
+Each `docs/` directory is:
+ - a **Go module root** (`go.mod`)
+ - a **Hugo project root** (`hugo.yaml`)
 
 ------------------------------------------------------------------------
 
