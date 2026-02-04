@@ -1,0 +1,12 @@
+# Hugo cache files
+_site/resources
+public
+
+# Node modules
+_site/node_modules
+
+# Used to control concurrency between multiple Hugo instances
+_site/.hugo_build.lock
+
+# Needed for navigation/intellisense help inside code editors
+jsconfig.json
