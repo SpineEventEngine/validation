@@ -27,7 +27,7 @@
 /**
  * Builds and runs the site locally.
  */
-task<Exec>("runSite") {
+val runSite by tasks.registering(Exec::class) {
     dependsOn("installDependencies")
     commandLine("./_script/hugo-serve")
 }
@@ -35,7 +35,7 @@ task<Exec>("runSite") {
 /**
  * Builds the site without starting the server.
  */
-task<Exec>("buildSite") {
+val buildSite by tasks.registering(Exec::class) {
     dependsOn("installDependencies")
     commandLine("./_script/hugo-build")
 }
@@ -43,21 +43,21 @@ task<Exec>("buildSite") {
 /**
  * Installs the Node.js dependencies required for building the site.
  */
-task<Exec>("installDependencies") {
+val installDependencies by tasks.registering(Exec::class) {
     commandLine("./_script/install-dependencies")
 }
 
 /**
  * Embeds the code samples into pages of the site.
  */
-task<Exec>("embedCode") {
+val embedCode by tasks.registering(Exec::class) {
     commandLine("./_script/embed-code")
 }
 
 /**
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
-task<Exec>("checkSamples") {
+val checkSamples by tasks.registering(Exec::class) {
     commandLine("./_script/check-samples")
 }
 

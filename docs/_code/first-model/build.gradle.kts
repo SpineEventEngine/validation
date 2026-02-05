@@ -62,3 +62,7 @@ kotlin {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.register("buildAll") {
+    dependsOn(tasks.build)
+}
