@@ -1,7 +1,3 @@
-import io.spine.dependency.lib.Guava
-import io.spine.dependency.local.Base
-import io.spine.gradle.repo.standardToSpineSdk
-
 /*
  * Copyright 2026, TeamDev. All rights reserved.
  *
@@ -27,6 +23,10 @@ import io.spine.gradle.repo.standardToSpineSdk
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+import io.spine.dependency.lib.Guava
+import io.spine.dependency.local.Base
+import io.spine.gradle.repo.standardToSpineSdk
 
 buildscript {
     standardSpineSdkRepositories()
