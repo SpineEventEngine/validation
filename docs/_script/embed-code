@@ -41,7 +41,7 @@ fi
 git submodule update --remote --merge --recursive
 
 # Navigate to the folder with embed-code binaries.
-cd docs/_bin
+cd _bin
 
 # Update code samples.
 ./embed-code-macos -config-path="../_settings/embed-code.yml" -mode="embed"

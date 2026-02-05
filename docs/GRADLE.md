@@ -32,6 +32,14 @@ The [Gradle build](build.gradle.kts) under the `docs/` provides the following ta
 6. **`installDependencies`** — installing the Node dependencies for the preview site. 
    Tasks related to Hugo depend on this task. It is not meant to be run manually.
 
+## Paths in the scripts
+
+The shell [scripts](./_script) used by the Gradle build assume that **this** `docs/`
+directory is the current working directory.
+
+So when you start working with the documentation, make sure to `cd` into
+it before running any of the scripts or Gradle tasks.
+
 ## Including example sources
 
 It is done in the [`settings.gradle.kts`](settings.gradle.kts) file via `includeBuild` directive.
