@@ -1,7 +1,3 @@
-import io.spine.dependency.lib.Guava
-import io.spine.dependency.local.Base
-import io.spine.gradle.repo.standardToSpineSdk
-
 /*
  * Copyright 2026, TeamDev. All rights reserved.
  *
@@ -28,40 +24,10 @@ import io.spine.gradle.repo.standardToSpineSdk
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-buildscript {
-    standardSpineSdkRepositories()
-    dependencies {
-        classpath(io.spine.dependency.local.Compiler.pluginLib)
-    }
-}
+group = "io.spine.validation.docs"
 
-plugins {
-    `java-library`
-    kotlin("jvm")
-    id("com.google.protobuf")
-    `spine-compiler`
-    id("io.spine.validation")
-}
-
-apply(from = "../code-common.gradle.kts")
-
-repositories {
-    mavenLocal()
-    standardToSpineSdk()
-}
-
-dependencies {
-    testImplementation(kotlin("test"))
-}
-
-kotlin {
-    jvmToolchain(17)
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-tasks.register("buildAll") {
-    dependsOn(tasks.build)
-}
+// Take the version from the main code project.
+// The path to the version script is relevant to a directory _under_ the `_code`,
+// not to this script because it is applied from the example projects.
+apply(from = "../../../version.gradle.kts")
+version = extra["validationVersion"]!!
