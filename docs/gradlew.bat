@@ -1,1 +1,1 @@
-/Users/sanders/Projects/Spine/validation/gradlew.bat
+../gradlew.bat
