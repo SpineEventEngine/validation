@@ -6,28 +6,19 @@ disableKinds = ['taxonomy', 'term']
 [module]
   # First theme has higher priority than later ones.
   [[module.imports]]
-    path = 'github.com/SpineEventEngine/site-commons'
-
+    path = '../..'
   [[module.imports]]
-    path = 'github.com/SpineEventEngine/validation/docs'
-    [[module.imports.mounts]]
-      source = 'content'
-      target = 'content'
-    [[module.imports.mounts]]
-      source = 'layouts'
-      target = 'layouts'
-    [[module.imports.mounts]]
-      source = 'assets'
-      target = 'assets'
-    [[module.imports.mounts]]
-      source = 'static'
-      target = 'static'
+    path = 'github.com/SpineEventEngine/site-commons'
 
 # Enables HTML rendering in markdown files.
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+        title = true
   [markup.highlight]
     noClasses = false
 
