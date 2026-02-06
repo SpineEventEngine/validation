@@ -4,7 +4,7 @@ title: Validation Documentation preview
 
 # Welcome to Validation Documentation
 
-Go to the [docs/](docs/00-intro) to preview the rendered documentation.
+Go to the [docs/validation/](docs/validation/00-intro/) to preview the rendered documentation.
 
 Read the [Authoring][authoring] guide on adding the content to the documentation.
 
