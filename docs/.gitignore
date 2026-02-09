@@ -10,3 +10,6 @@ _preview/.hugo_build.lock
 
 # Needed for navigation/intellisense help inside code editors
 jsconfig.json
+
+# `_out` directory in the example projects
+**/_out
