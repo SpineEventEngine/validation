@@ -78,6 +78,6 @@ tasks.test {
 }
 
 tasks.register("buildAll") {
-    dependsOn(task.clean)
+    dependsOn(tasks.clean)
     dependsOn(tasks.build)
 }
