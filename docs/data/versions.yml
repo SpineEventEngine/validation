@@ -1,0 +1,9 @@
+validation:
+  - short: "1"
+    full: 1.0.0
+    path: docs/validation
+    url: docs/validation
+    is_main: true
+    switcher:
+      visible: false
+      item_visible: false

@@ -1,0 +1,13 @@
+# The `file_path` should be relative to the `docs/validation`.
+# Thanks to this, links to the version will be generated automatically.
+# Also, the `file_path` must not end with a trailing slash.
+
+- page: Validation
+  key: validation
+  children:
+    - page: Adding custom validation
+      file_path: adding-custom-validation
+    - page: Overview
+      file_path: 00-intro
+    - page: Philosophy
+      file_path: 00-intro/philosophy
