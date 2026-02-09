@@ -14,16 +14,23 @@ option java_multiple_files = true;
 //
 message BankCard {
 
+    // The digits of the card number.
+    //
     // Must be present and match a simple card pattern.
+    //
     string digits = 1 [
         (required) = true,
         (pattern).regex = "^\\d{4}(?: \\d{4}){3}"
     ];
 
-    // Must be present and contain at least 4 Latin letters or spaces.
+    // The name of the card owner.
+    //
+    // Must be present, contain at least 4 characters, start with a Latin letter,
+    // and have exactly one space between two words.
+    //
     string owner = 2 [
         (required) = true,
-        (pattern).regex = "^[A-Z](?:[A-Za-z ]{2,}[A-Za-z])$"
+        (pattern).regex = "^(?=.{4,})[A-Z][A-Za-z]* [A-Za-z]+$"
     ];
 
     // All tags must be unique. Tags are optional.
