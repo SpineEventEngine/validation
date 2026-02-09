@@ -39,4 +39,5 @@ object BuildSettings {
     val javaVersionCompat = JavaVersion.toVersion(JVM_VERSION)
     val jvmTarget = JvmTarget.JVM_17
     const val REMOTE_DEBUG_PORT = 5566
+    const val TIMEOUT_MINUTES = 42L
 }
