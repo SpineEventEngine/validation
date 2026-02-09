@@ -25,5 +25,3 @@
  */
 
 rootProject.name = "validation-docs"
-
-includeBuild("./_code/first-model")
