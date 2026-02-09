@@ -28,9 +28,13 @@ rootProject.name = "first-model"
 
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         mavenLocal()
+        gradlePluginPortal()
+        maven {
+            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+        }
+        maven {
+            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
+        }
     }
 }
-
-includeBuild("../../../")
