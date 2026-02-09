@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.gradle.RunGradle
+
 /**
  * Builds and runs the site locally.
  */
@@ -61,15 +63,18 @@ val checkSamples by tasks.registering(Exec::class) {
     commandLine("./_script/check-samples")
 }
 
-/**
- * Builds all included projects via depending on the top-level "buildAll" tasks
- * declared in these projects.
- *
- * See also:
- *  * [Composite build to build subprojects](https://discuss.gradle.org/t/defining-a-composite-build-only-to-build-all-subprojects/25070/6)
- *  * [Gradlew composite build example](https://github.com/AlexMAS/gradle-composite-build-example)
- *  * [Composite builds](https://docs.gradle.org/current/userguide/composite_builds.html)
- */
+val localPublish by tasks.registering(RunGradle::class) {
+    directory = "../" // The root of the main project.
+    task("publishToMavenLocal")
+}
+
+val buildFirstModel by tasks.registering(RunGradle::class) {
+    directory = "./_code/first-model"
+    task("buildAll")
+    dependsOn(localPublish)
+}
+
 tasks.register("buildAll") {
-    dependsOn(gradle.includedBuilds.map { it.task(":buildAll") })
+    dependsOn(localPublish)
+    dependsOn(buildFirstModel)
 }
