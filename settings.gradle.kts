@@ -50,4 +50,5 @@ include(
     ":tests:validating",
     ":tests:validator",
     ":tests:validator-dependency",
+    "docs"
 )

@@ -43,7 +43,7 @@ it before running any of the scripts or Gradle tasks.
 ## Including example sources
 
 It is done in the [`settings.gradle.kts`](settings.gradle.kts) file via `includeBuild` directive.
-If you add another example proejct, please remember to update
+If you add another example project, please remember to update
 the [`settings.gradle.kts`](settings.gradle.kts) file.
 
 ## Linking to the main project build

@@ -32,7 +32,7 @@ import io.spine.gradle.docs.UpdatePluginVersion
  */
 val runSite by tasks.registering(Exec::class) {
     dependsOn("installDependencies")
-    commandLine("./_script/hugo-serve")
+    commandLine("$projectDir/_script/hugo-serve")
 }
 
 /**
@@ -40,44 +40,41 @@ val runSite by tasks.registering(Exec::class) {
  */
 val buildSite by tasks.registering(Exec::class) {
     dependsOn("installDependencies")
-    commandLine("./_script/hugo-build")
+    commandLine("$projectDir/_script/hugo-build")
 }
 
 /**
  * Installs the Node.js dependencies required for building the site.
  */
 val installDependencies by tasks.registering(Exec::class) {
-    commandLine("./_script/install-dependencies")
+    commandLine("$projectDir/_script/install-dependencies")
 }
 
 /**
  * Embeds the code samples into pages of the site.
  */
 val embedCode by tasks.registering(Exec::class) {
-    commandLine("./_script/embed-code")
+    commandLine("$projectDir/_script/embed-code")
 }
 
 /**
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
 val checkSamples by tasks.registering(Exec::class) {
-    commandLine("./_script/check-samples")
+    commandLine("$projectDir/_script/check-samples")
 }
 
-val localPublish by tasks.registering(RunGradle::class) {
-    directory = "../" // The root of the main project.
-    task("publishToMavenLocal")
-}
+val localPublish = rootProject.tasks.findByName("publishToMavenLocal")!!
 
 val buildFirstModel by tasks.registering(RunGradle::class) {
-    directory = "./_code/first-model"
+    directory = "$projectDir/_code/first-model"
     task("buildAll")
     dependsOn(localPublish)
 }
 
 val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
-    directory.set(file("_code/"))
-    versionScriptFile.set(file("../version.gradle.kts"))
+    directory.set(file("$projectDir/_code/"))
+    versionScriptFile.set(file("${rootProject.projectDir}/version.gradle.kts"))
     pluginId.set("io.spine.validation")
 }
 
