@@ -41,7 +41,7 @@ val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersi
 /**
  * Installs the Node.js dependencies required for building the site.
  */
-val installDependencies by tasks.registering(Exec::class) {
+val installDependencies by tasks.registering(Exec::class) {                    
     commandLine("$projectDir/_script/install-dependencies")
 }
 
@@ -77,7 +77,7 @@ val checkSamples by tasks.registering(Exec::class) {
     commandLine("$projectDir/_script/check-samples")
 }
 
-val publishAllToMavenLocal by rootProject.tasks.registering {
+val publishAllToMavenLocal by tasks.registering {
     dependsOn(
         rootProject.allprojects.flatMap { p ->
             p.tasks.withType(PublishToMavenLocal::class.java).toList()
