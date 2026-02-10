@@ -27,23 +27,15 @@
 import io.spine.gradle.RunGradle
 import io.spine.gradle.docs.UpdatePluginVersion
 import io.spine.gradle.report.license.LicenseReporter
+import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
 
 LicenseReporter.generateReportIn(project)
 
-/**
- * Builds and runs the site locally.
- */
-val runSite by tasks.registering(Exec::class) {
-    dependsOn("installDependencies")
-    commandLine("$projectDir/_script/hugo-serve")
-}
-
-/**
- * Builds the site without starting the server.
- */
-val buildSite by tasks.registering(Exec::class) {
-    dependsOn("installDependencies")
-    commandLine("$projectDir/_script/hugo-build")
+val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
+    directory.set(file("$projectDir/_code/"))
+    val validationVersion: String by rootProject.extra
+    version.set(validationVersion)
+    pluginId.set("io.spine.validation")
 }
 
 /**
@@ -54,9 +46,26 @@ val installDependencies by tasks.registering(Exec::class) {
 }
 
 /**
+ * Builds and runs the site locally.
+ */
+val runSite by tasks.registering(Exec::class) {
+    dependsOn(installDependencies)
+    commandLine("$projectDir/_script/hugo-serve")
+}
+
+/**
+ * Builds the site without starting the server.
+ */
+val buildSite by tasks.registering(Exec::class) {
+    dependsOn(installDependencies)
+    commandLine("$projectDir/_script/hugo-build")
+}
+
+/**
  * Embeds the code samples into pages of the site.
  */
 val embedCode by tasks.registering(Exec::class) {
+    dependsOn(updatePluginVersion)
     commandLine("$projectDir/_script/embed-code")
 }
 
@@ -64,26 +73,27 @@ val embedCode by tasks.registering(Exec::class) {
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
 val checkSamples by tasks.registering(Exec::class) {
+    dependsOn(updatePluginVersion)
     commandLine("$projectDir/_script/check-samples")
 }
 
-val localPublish = rootProject.tasks.findByName("publishToMavenLocal")!!
+val publishAllToMavenLocal by rootProject.tasks.registering {
+    dependsOn(
+        rootProject.allprojects.flatMap { p ->
+            p.tasks.withType(PublishToMavenLocal::class.java).toList()
+        }
+    )
+}
 
 val buildFirstModel by tasks.registering(RunGradle::class) {
     directory = "$projectDir/_code/first-model"
     task("buildAll")
-    dependsOn(localPublish)
-}
-
-val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
-    directory.set(file("$projectDir/_code/"))
-    val validationVersion: String by rootProject.extra
-    version.set(validationVersion)
-    pluginId.set("io.spine.validation")
+    dependsOn(publishAllToMavenLocal)
+    dependsOn(updatePluginVersion)
 }
 
 tasks.register("buildAll") {
-    dependsOn(localPublish)
+    dependsOn(publishAllToMavenLocal)
     dependsOn(updatePluginVersion)
     dependsOn(buildFirstModel)
 }
