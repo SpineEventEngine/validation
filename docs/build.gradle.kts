@@ -25,6 +25,7 @@
  */
 
 import io.spine.gradle.RunGradle
+import io.spine.gradle.docs.UpdatePluginVersion
 
 /**
  * Builds and runs the site locally.
@@ -74,7 +75,14 @@ val buildFirstModel by tasks.registering(RunGradle::class) {
     dependsOn(localPublish)
 }
 
+val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
+    directory.set(file("_code/"))
+    versionScriptFile.set(file("../version.gradle.kts"))
+    pluginId.set("io.spine.validation")
+}
+
 tasks.register("buildAll") {
     dependsOn(localPublish)
+    dependsOn(updatePluginVersion)
     dependsOn(buildFirstModel)
 }
