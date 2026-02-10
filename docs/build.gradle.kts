@@ -26,6 +26,9 @@
 
 import io.spine.gradle.RunGradle
 import io.spine.gradle.docs.UpdatePluginVersion
+import io.spine.gradle.report.license.LicenseReporter
+
+LicenseReporter.generateReportIn(project)
 
 /**
  * Builds and runs the site locally.
