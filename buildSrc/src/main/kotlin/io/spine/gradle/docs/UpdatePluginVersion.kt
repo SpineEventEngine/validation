@@ -81,7 +81,7 @@ abstract class UpdatePluginVersion : DefaultTask() {
         val regex = """id\("$id"\)\s+version\s+"([^"]+)"""".toRegex()
         
         if (regex.containsMatchIn(content)) {
-            val updatedContent = regex.replace(content) { match ->
+            val updatedContent = regex.replace(content) {
                 "id(\"$id\") version \"$version\""
             }
             if (content != updatedContent) {
