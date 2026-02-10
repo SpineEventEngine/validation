@@ -16,7 +16,7 @@ jobs:
           java-version: 17
           distribution: zulu
 
-      - run: cd docs && ./gradlew :buildAll
+      - run: ./gradlew :docs:buildAll
 
   check-embedded-samples:
     runs-on: ubuntu-latest
@@ -31,4 +31,4 @@ jobs:
           distribution: zulu
 
       - name: Check Embedding
-        run: cd docs && ./gradlew :checkSamples
+        run: ./gradlew :docs:checkSamples
