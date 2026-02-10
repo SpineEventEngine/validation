@@ -38,16 +38,10 @@ class UpdatePluginVersionTest {
     @TempDir
     lateinit var tempDir: File
 
-    private lateinit var versionScript: File
     private lateinit var buildFile: File
 
     @BeforeEach
     fun setUp() {
-        versionScript = File(tempDir, "version.gradle.kts")
-        versionScript.writeText("""
-            val versionToPublish by extra("2.0.0-TEST")
-        """.trimIndent())
-
         val subDir = File(tempDir, "subproject")
         subDir.mkdir()
         buildFile = File(subDir, "build.gradle.kts")
@@ -64,7 +58,7 @@ class UpdatePluginVersionTest {
         val project = ProjectBuilder.builder().build()
         val task = project.tasks.register("updatePluginVersion", UpdatePluginVersion::class.java) {
             directory.set(tempDir)
-            versionScriptFile.set(versionScript)
+            version.set("2.0.0-TEST")
             pluginId.set("io.spine.validation")
         }
         task.get().update()
@@ -85,7 +79,7 @@ class UpdatePluginVersionTest {
         val project = ProjectBuilder.builder().build()
         val task = project.tasks.register("updatePluginVersion", UpdatePluginVersion::class.java) {
             directory.set(tempDir)
-            versionScriptFile.set(versionScript)
+            version.set("2.0.0-TEST")
             pluginId.set("io.spine.validation")
         }
 

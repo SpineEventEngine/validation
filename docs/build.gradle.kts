@@ -74,7 +74,8 @@ val buildFirstModel by tasks.registering(RunGradle::class) {
 
 val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
     directory.set(file("$projectDir/_code/"))
-    versionScriptFile.set(file("${rootProject.projectDir}/version.gradle.kts"))
+    val validationVersion: String by rootProject.extra
+    version.set(validationVersion)
     pluginId.set("io.spine.validation")
 }
 

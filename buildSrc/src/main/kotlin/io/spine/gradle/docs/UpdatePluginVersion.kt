@@ -29,11 +29,9 @@ package io.spine.gradle.docs
 import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -45,8 +43,8 @@ import org.gradle.api.tasks.TaskAction
  *
  * @property directory
  *         The directory to scan recursively for `build.gradle.kts` files.
- * @property versionScriptFile
- *         The path to the `version.gradle.kts` file containing the plugin version.
+ * @property version
+ *         The version number to set for the plugin.
  * @property pluginId
  *         The ID of the plugin whose version should be updated.
  */
@@ -55,8 +53,8 @@ abstract class UpdatePluginVersion : DefaultTask() {
     @get:InputDirectory
     abstract val directory: DirectoryProperty
 
-    @get:InputFile
-    abstract val versionScriptFile: RegularFileProperty
+    @get:Input
+    abstract val version: Property<String>
 
     @get:Input
     abstract val pluginId: Property<String>
@@ -66,7 +64,7 @@ abstract class UpdatePluginVersion : DefaultTask() {
      */
     @TaskAction
     fun update() {
-        val version = extractVersion()
+        val version = version.get()
         val id = pluginId.get()
         val rootDir = directory.get().asFile
 
@@ -75,16 +73,6 @@ abstract class UpdatePluginVersion : DefaultTask() {
             .forEach { file ->
                 updateFile(file, id, version)
             }
-    }
-
-    private fun extractVersion(): String {
-        val scriptFile = versionScriptFile.get().asFile
-        val content = scriptFile.readText()
-        // Regex to match: val ... by extra("version")
-        val regex = """extra\("([^"]+)"\)""".toRegex()
-        val matchResult = regex.find(content)
-        return matchResult?.groupValues?.get(1)
-            ?: error("Could not find version in ${scriptFile.absolutePath}")
     }
 
     private fun updateFile(file: File, id: String, version: String) {
