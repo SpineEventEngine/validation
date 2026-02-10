@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 
-@DisplayName("`BankCard`in Kotlin should")
+@DisplayName("`BankCard` in Kotlin should")
 class BankCardKtTest {
 
     @Test
