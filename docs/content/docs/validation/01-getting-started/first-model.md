@@ -6,7 +6,20 @@ rules are enforced in the generated JVM code.
 The validation options come from `spine/options.proto` and include constraints like
 `(required)`, `(min)`, `(max)`, `(pattern)`, `(distinct)`, and `(validate)`.
 
-## 1) Define a validated message
+## 1) Configure the project
+
+To use the Validation library, add the `io.spine.validation` plugin to your `build.gradle.kts` file:
+
+<embed-code file="first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
+```kotlin
+plugins {
+    `java-library`
+    kotlin("jvm") version "2.2.21"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
+}
+```
+
+## 2) Define a validated message
 
 Create a `.proto` file and import the validation options you need:
 
@@ -62,13 +75,13 @@ Notes on the options used:
 - `(distinct)` enforces uniqueness in `repeated` and `map` fields.
 
 
-## 2) Build the project
+## 3) Build the project
 
 Run your Gradle build as usual. The Validation Gradle plugin integrates with Spine Compiler
 and injects validation checks into the generated Java code.
 
 
-## 3) Use the generated validation
+## 4) Use the generated validation
 
 Validation runs on `build()` and can be triggered manually with `validate()`.
 
