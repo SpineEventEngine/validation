@@ -69,6 +69,32 @@ class UpdatePluginVersionTest {
     }
 
     @Test
+    fun `update 'kotlin' plugin version when 'kotlinVersion' is set`() {
+        // Overwrite with a file that uses kotlin("jvm") syntax
+        buildFile.writeText(
+            """
+            plugins {
+                kotlin("jvm") version "1.9.10"
+                id("io.spine.validation") version "1.0.0"
+            }
+            """.trimIndent()
+        )
+
+        val project = ProjectBuilder.builder().build()
+        val task = project.tasks.register("updatePluginVersion", UpdatePluginVersion::class.java) {
+            directory.set(tempDir)
+            version.set("2.0.0-TEST")
+            pluginId.set("io.spine.validation")
+            kotlinVersion.set("2.2.21")
+        }
+        task.get().update()
+
+        val updatedContent = buildFile.readText()
+        assertTrue(updatedContent.contains("""kotlin("jvm") version "2.2.21"""))
+        assertTrue(updatedContent.contains("""id("io.spine.validation") version "2.0.0-TEST"""))
+    }
+
+    @Test
     fun `handle multiple spaces between id and version`() {
         buildFile.writeText("""
             plugins {
