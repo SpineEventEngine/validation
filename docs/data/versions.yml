@@ -1,6 +1,6 @@
 validation:
-  - short: "1"
-    full: 1.0.0
+  - short: "2"
+    full: 2.0.0-SNAPSHOT
     path: docs/validation
     url: docs/validation
     is_main: true
