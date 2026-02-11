@@ -6,11 +6,11 @@ rules are enforced in the generated JVM code.
 The validation options come from `spine/options.proto` and include constraints like
 `(required)`, `(min)`, `(max)`, `(pattern)`, `(distinct)`, and `(validate)`.
 
-
 ## 1) Define a validated message
 
 Create a `.proto` file and import the validation options you need:
 
+<embed-code file="first-model/src/main/proto/spine/validation/docs/first_model/bank_card.proto" start="syntax" end="^}"></embed-code>
 ```protobuf
 syntax = "proto3";
 
@@ -18,6 +18,7 @@ package spine.validation.docs.first_model;
 
 import "spine/options.proto";
 
+option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.docs.firstmodel";
 option java_multiple_files = true;
 
@@ -26,17 +27,25 @@ option java_multiple_files = true;
 // The digits of the card are simplified for the sake of the example.
 //
 message BankCard {
-    // Must be present and match a simple card pattern.
+
+    // The digits of the card number.
+    //
+    // Must be present and match a 16-digit card number formatted as four
+    // groups of four digits separated by spaces (for example, "1234 5678 1234 5678").
+    //
     string digits = 1 [
         (required) = true,
         (pattern).regex = "^\\d{4}(?: \\d{4}){3}"
     ];
 
-    // Must be present, contain at least 4 characters, start and end with a Latin letter,
-    // and may contain spaces between words.
+    // The name of the card owner.
+    //
+    // Must be present, contain at least 4 characters, start with a Latin letter,
+    // and have exactly one space between words.
+    //
     string owner = 2 [
         (required) = true,
-        (pattern).regex = "^[A-Z](?:[A-Za-z ]{2,}[A-Za-z])$"
+        (pattern).regex = "^(?=.{4,})[A-Z][A-Za-z]*(?: [A-Za-z]+)+$"
     ];
 
     // All tags must be unique. Tags are optional.
