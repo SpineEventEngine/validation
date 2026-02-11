@@ -38,17 +38,12 @@ buildscript {
             url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
         }
     }
-
-    dependencies {
-        classpath(io.spine.dependency.local.Compiler.pluginLib)
-    }
 }
 
 plugins {
     `java-library`
-    kotlin("jvm")
-    id("com.google.protobuf")
-    `spine-compiler`
+    kotlin("jvm") version "2.2.21"
+    id("com.google.protobuf") version "0.9.5"
     id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
 }
 

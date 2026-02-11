@@ -79,6 +79,7 @@ gradlePlugin {
 }
 
 dependencies {
+    compileOnly(gradleKotlinDsl())
     implementation(Compiler.pluginLib)
     implementation(Compiler.gradleApi)
     implementation(ToolBase.jvmTools)
