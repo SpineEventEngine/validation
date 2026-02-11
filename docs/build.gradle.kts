@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.lib.Kotlin
 import io.spine.gradle.RunGradle
 import io.spine.gradle.docs.UpdatePluginVersion
 import io.spine.gradle.report.license.LicenseReporter
@@ -36,6 +37,7 @@ val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersi
     val validationVersion: String by rootProject.extra
     version.set(validationVersion)
     pluginId.set("io.spine.validation")
+    kotlinVersion.set(Kotlin.version)
 }
 
 /**
