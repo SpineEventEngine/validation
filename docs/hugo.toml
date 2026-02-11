@@ -1,6 +1,0 @@
-[params]
-  defaultCodeTheme = 'dark'
-
-# The third-party libraries from the `site-commons`.
-[params.libs.js_cookie]
-  enabled = true
