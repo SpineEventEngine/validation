@@ -25,6 +25,7 @@
  */
 
 import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.gradle.RunGradle
 import io.spine.gradle.docs.UpdatePluginVersion
 import io.spine.gradle.report.license.LicenseReporter
@@ -32,12 +33,24 @@ import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
 
 LicenseReporter.generateReportIn(project)
 
-val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
+val updateValidationPluginVersion =
+        tasks.register<UpdatePluginVersion>("updateValidationPluginVersion") {
     directory.set(file("$projectDir/_code/"))
     val validationVersion: String by rootProject.extra
     version.set(validationVersion)
     pluginId.set("io.spine.validation")
     kotlinVersion.set(Kotlin.version)
+}
+
+val updateCoreJvmPluginVersion = tasks.register<UpdatePluginVersion>("updateCoreJvmPluginVersion") {
+    directory.set(file("$projectDir/_code/"))
+    version.set(CoreJvmCompiler.version)
+    pluginId.set("io.spine.core-jvm")
+    kotlinVersion.set(Kotlin.version)
+}
+
+val updatePluginVersions by tasks.registering {
+    dependsOn(updateValidationPluginVersion, updateCoreJvmPluginVersion)
 }
 
 /**
@@ -67,7 +80,7 @@ val buildSite by tasks.registering(Exec::class) {
  * Embeds the code samples into pages of the site.
  */
 val embedCode by tasks.registering(Exec::class) {
-    dependsOn(updatePluginVersion)
+    dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/embed-code")
 }
 
@@ -75,7 +88,7 @@ val embedCode by tasks.registering(Exec::class) {
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
 val checkSamples by tasks.registering(Exec::class) {
-    dependsOn(updatePluginVersion)
+    dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/check-samples")
 }
 
@@ -91,11 +104,22 @@ val buildFirstModel by tasks.registering(RunGradle::class) {
     directory = "$projectDir/_code/first-model"
     task("buildAll")
     dependsOn(publishAllToMavenLocal)
-    dependsOn(updatePluginVersion)
+    dependsOn(updateValidationPluginVersion)
+}
+
+val buildFirstModelWithFramework by tasks.registering(RunGradle::class) {
+    directory = "$projectDir/_code/first-model-with-framework"
+    task("buildAll")
+    dependsOn(publishAllToMavenLocal)
+    dependsOn(updateValidationPluginVersion)
+}
+
+val buildExamples by tasks.registering {
+    dependsOn(updatePluginVersions)
+    dependsOn(buildFirstModel, buildFirstModelWithFramework)
 }
 
 tasks.register("buildAll") {
     dependsOn(publishAllToMavenLocal)
-    dependsOn(updatePluginVersion)
-    dependsOn(buildFirstModel)
+    dependsOn(buildExamples)
 }
