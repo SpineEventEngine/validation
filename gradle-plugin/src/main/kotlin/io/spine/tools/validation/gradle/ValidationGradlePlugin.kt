@@ -26,6 +26,7 @@
 
 package io.spine.tools.validation.gradle
 
+import com.google.protobuf.gradle.ProtobufPlugin
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.plugin.Extension
@@ -46,8 +47,13 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
 ) {
     override fun apply(project: Project) {
         super.apply(project)
+        // Add the Protobuf Gradle Plugin so that the user doesn't need to add it manually.
+        // The version of the plugin is defined by our dependency but can be forced
+        // to a newer one in the user's project.
+        project.apply<ProtobufPlugin>()
+
         // Apply the Compiler Gradle Plugin so that we can manipulate the compiler settings.
-        // We do not want the user to add it manually.
+        // We do not want the user to add it manually either.
         project.apply<Plugin>()
         val javaBundle = ValidationSdk.javaCodegenBundle
         project.run {

@@ -43,7 +43,6 @@ buildscript {
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
-    id("com.google.protobuf") version "0.9.5"
     id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
 }
 
