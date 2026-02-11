@@ -16,7 +16,8 @@ message BankCard {
 
     // The digits of the card number.
     //
-    // Must be present and match a simple card pattern.
+    // Must be present and match a 16-digit card number formatted as four
+    // groups of four digits separated by spaces (for example, "1234 5678 1234 5678").
     //
     string digits = 1 [
         (required) = true,
@@ -26,11 +27,11 @@ message BankCard {
     // The name of the card owner.
     //
     // Must be present, contain at least 4 characters, start with a Latin letter,
-    // and have exactly one space between two words.
+    // and have exactly one space between words.
     //
     string owner = 2 [
         (required) = true,
-        (pattern).regex = "^(?=.{4,})[A-Z][A-Za-z]* [A-Za-z]+$"
+        (pattern).regex = "^(?=.{4,})[A-Z][A-Za-z]*(?: [A-Za-z]+)+$"
     ];
 
     // All tags must be unique. Tags are optional.

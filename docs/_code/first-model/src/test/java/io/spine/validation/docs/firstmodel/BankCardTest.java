@@ -83,4 +83,15 @@ class BankCardTest {
                 .build()
         );
     }
+
+    @Test
+    @DisplayName("allow multiple words in the owner name")
+    void multipleWordsOwner() {
+        assertDoesNotThrow(() ->
+            BankCard.newBuilder()
+                .setDigits("1234 5678 1234 5678")
+                .setOwner("John Jacob Jingleheimer Schmidt")
+                .build()
+        );
+    }
 }

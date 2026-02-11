@@ -82,4 +82,15 @@ class BankCardKtTest {
             }
         }
     }
+
+    @Test
+    @DisplayName("allow multiple words in the owner name")
+    fun multipleWordsOwner() {
+        assertDoesNotThrow {
+            bankCard {
+                digits = "1234 5678 1234 5678"
+                owner = "John Jacob Jingleheimer Schmidt"
+            }
+        }
+    }
 }
