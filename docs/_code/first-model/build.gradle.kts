@@ -26,20 +26,6 @@
 
 import java.net.URI
 
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        maven {
-            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
-        }
-        maven {
-            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
-        }
-    }
-}
-
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
