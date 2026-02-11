@@ -5,8 +5,6 @@
 - page: Validation
   key: validation
   children:
-    - page: Adding custom validation
-      file_path: adding-custom-validation
     - page: Overview
       file_path: 00-intro
     - page: Philosophy
