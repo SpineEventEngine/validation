@@ -12,5 +12,5 @@ elif [ -f ${BASH_RC} ]; then
   . ${BASH_RC}
 fi
 
-cd _preivew
+cd _preview
 hugo server
