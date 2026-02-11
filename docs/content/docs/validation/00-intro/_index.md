@@ -113,6 +113,6 @@ Spine stack.
 
 ## What's next
 
-- [Target Audience](target-audience.md)
+- [Target audience](target-audience.md)
 - [Philosophy](philosophy.md)
 - [Getting Started](../01-getting-started/index.md)

@@ -24,12 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.Guava
-import io.spine.dependency.local.Base
-import io.spine.gradle.repo.standardToSpineSdk
+import java.net.URI
 
 buildscript {
-    standardSpineSdkRepositories()
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+        }
+        maven {
+            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
+        }
+    }
+
     dependencies {
         classpath(io.spine.dependency.local.Compiler.pluginLib)
     }
@@ -40,14 +49,20 @@ plugins {
     kotlin("jvm")
     id("com.google.protobuf")
     `spine-compiler`
-    id("io.spine.validation")
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
 }
 
 apply(from = "../code-common.gradle.kts")
 
 repositories {
     mavenLocal()
-    standardToSpineSdk()
+    mavenCentral()
+    maven {
+        url = URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+    }
+    maven {
+        url = URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
+    }
 }
 
 dependencies {
@@ -63,5 +78,6 @@ tasks.test {
 }
 
 tasks.register("buildAll") {
+    dependsOn(tasks.clean)
     dependsOn(tasks.build)
 }

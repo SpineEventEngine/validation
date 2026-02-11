@@ -32,10 +32,11 @@ message BankCard {
         (pattern).regex = "^\\d{4}(?: \\d{4}){3}"
     ];
 
-    // Must be present and contain at least 4 Latin letters or spaces.
+    // Must be present, contain at least 4 characters, start and end with a Latin letter,
+    // and may contain spaces between words.
     string owner = 2 [
         (required) = true,
-        (pattern).regex = "^[A-Z](?:[A-Za-z ]{2,}[a-z])$"
+        (pattern).regex = "^[A-Z](?:[A-Za-z ]{2,}[A-Za-z])$"
     ];
 
     // All tags must be unique. Tags are optional.

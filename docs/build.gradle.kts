@@ -24,52 +24,76 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.gradle.RunGradle
+import io.spine.gradle.docs.UpdatePluginVersion
+import io.spine.gradle.report.license.LicenseReporter
+import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
+
+LicenseReporter.generateReportIn(project)
+
+val updatePluginVersion = tasks.register<UpdatePluginVersion>("updatePluginVersion") {
+    directory.set(file("$projectDir/_code/"))
+    val validationVersion: String by rootProject.extra
+    version.set(validationVersion)
+    pluginId.set("io.spine.validation")
+}
+
+/**
+ * Installs the Node.js dependencies required for building the site.
+ */
+val installDependencies by tasks.registering(Exec::class) {                    
+    commandLine("$projectDir/_script/install-dependencies")
+}
+
 /**
  * Builds and runs the site locally.
  */
 val runSite by tasks.registering(Exec::class) {
-    dependsOn("installDependencies")
-    commandLine("./_script/hugo-serve")
+    dependsOn(installDependencies)
+    commandLine("$projectDir/_script/hugo-serve")
 }
 
 /**
  * Builds the site without starting the server.
  */
 val buildSite by tasks.registering(Exec::class) {
-    dependsOn("installDependencies")
-    commandLine("./_script/hugo-build")
-}
-
-/**
- * Installs the Node.js dependencies required for building the site.
- */
-val installDependencies by tasks.registering(Exec::class) {
-    commandLine("./_script/install-dependencies")
+    dependsOn(installDependencies)
+    commandLine("$projectDir/_script/hugo-build")
 }
 
 /**
  * Embeds the code samples into pages of the site.
  */
 val embedCode by tasks.registering(Exec::class) {
-    commandLine("./_script/embed-code")
+    dependsOn(updatePluginVersion)
+    commandLine("$projectDir/_script/embed-code")
 }
 
 /**
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
 val checkSamples by tasks.registering(Exec::class) {
-    commandLine("./_script/check-samples")
+    dependsOn(updatePluginVersion)
+    commandLine("$projectDir/_script/check-samples")
 }
 
-/**
- * Builds all included projects via depending on the top-level "buildAll" tasks
- * declared in these projects.
- *
- * See also:
- *  * [Composite build to build subprojects](https://discuss.gradle.org/t/defining-a-composite-build-only-to-build-all-subprojects/25070/6)
- *  * [Gradlew composite build example](https://github.com/AlexMAS/gradle-composite-build-example)
- *  * [Composite builds](https://docs.gradle.org/current/userguide/composite_builds.html)
- */
+val publishAllToMavenLocal by tasks.registering {
+    dependsOn(
+        rootProject.allprojects.flatMap { p ->
+            p.tasks.withType(PublishToMavenLocal::class.java).toList()
+        }
+    )
+}
+
+val buildFirstModel by tasks.registering(RunGradle::class) {
+    directory = "$projectDir/_code/first-model"
+    task("buildAll")
+    dependsOn(publishAllToMavenLocal)
+    dependsOn(updatePluginVersion)
+}
+
 tasks.register("buildAll") {
-    dependsOn(gradle.includedBuilds.map { it.task(":buildAll") })
+    dependsOn(publishAllToMavenLocal)
+    dependsOn(updatePluginVersion)
+    dependsOn(buildFirstModel)
 }
