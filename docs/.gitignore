@@ -6,6 +6,7 @@ public
 _preview/node_modules
 
 # Used to control concurrency between multiple Hugo instances
+.hugo_build.lock
 _preview/.hugo_build.lock
 
 # Needed for navigation/intellisense help inside code editors
