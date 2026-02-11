@@ -77,9 +77,22 @@ Notes on the options used:
 
 ## 3) Build the project
 
-Run your Gradle build as usual. The Validation Gradle plugin integrates with Spine Compiler
+Run your Gradle build as usual.
+
+For macOS and Linux:
+```
+./gradlew clean build
+```
+
+For Windows:
+```
+gradlew.bat clean build
+```
+
+The Validation Gradle plugin integrates with Spine Compiler
 and injects validation checks into the generated Java code.
 
+The code will be generated under the `generated` directory of your project.
 
 ## 4) Use the generated validation
 
