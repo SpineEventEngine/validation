@@ -29,7 +29,7 @@ import java.net.URI
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
-    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.051"
+    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.052"
 }
 
 apply(from = "../code-common.gradle.kts")
@@ -46,6 +46,13 @@ repositories {
 }
 
 dependencies {
+    // Temporarily add the dependency on Validation JVM Runtime explicitly.
+    // We need this until CoreJvm Compiler migrates to newer Validation version.
+    // Validation, starting from version `2.0.0-SNAPSHOT.394`, exposes
+    // Spine Base as the `api` (rather than `implementation`) dependency of the runtime.
+    // Before this version, this dependency comes as the `implementation` and as such
+    // is not visible for the Java compiler.
+    implementation("io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.394")
     testImplementation(kotlin("test"))
 }
 
