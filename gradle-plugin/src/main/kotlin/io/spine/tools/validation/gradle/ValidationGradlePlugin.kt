@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import com.google.protobuf.gradle.ProtobufPlugin
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.plugin.Extension
-import io.spine.tools.compiler.gradle.plugin.Plugin
+import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
@@ -54,7 +54,7 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
 
         // Apply the Compiler Gradle Plugin so that we can manipulate the compiler settings.
         // We do not want the user to add it manually either.
-        project.apply<Plugin>()
+        project.apply<CompilerGradlePlugin>()
         val javaBundle = ValidationSdk.javaCodegenBundle
         project.run {
             addUserClasspathDependency(javaBundle)
