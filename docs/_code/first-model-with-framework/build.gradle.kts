@@ -68,3 +68,7 @@ tasks.register("buildAll") {
     dependsOn(tasks.clean)
     dependsOn(tasks.build)
 }
+
+tasks.named("build").configure {
+    mustRunAfter("clean")
+}
