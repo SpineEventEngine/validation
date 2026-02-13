@@ -50,7 +50,8 @@ import org.gradle.api.tasks.TaskAction
  *         The ID of the plugin whose version should be updated.
  * @property kotlinVersion
  *         Optional. If set, updates the version of the Kotlin plugin declared with
- *         `kotlin("…") version "…"` syntax in the `plugins` block instead of using [pluginId].
+ *         `kotlin("…") version "…"` syntax in the `plugins` block.
+ *         This option works in combination with the [version] and [pluginId] properties.
  */
 abstract class UpdatePluginVersion : DefaultTask() {
 
