@@ -9,7 +9,7 @@ Choose the setup that matches your project:
 Both modes integrate the Validation compiler into the build and add the runtime library.
 
 
-## Mode 1: standalone via Validation Gradle Plugin
+## Mode 1: standalone via Validation Gradle plugin
 
 Use this mode if you want to run Validation without the rest of Spine.
 
@@ -38,7 +38,7 @@ The plugin wires Validation into Spine Compiler, adds the Validation Java codege
 and brings in the JVM runtime dependency automatically.
 
 
-## Mode 2: Spine-based project via CoreJvm Gradle Plugin
+## Mode 2: Spine-based project via CoreJvm Gradle plugin
 
 If your project is base on the Spine CoreJvm library, apply the CoreJvm Gradle plugin instead of
 adding Validation directly. CoreJvm brings in the Validation Gradle plugin for you.
