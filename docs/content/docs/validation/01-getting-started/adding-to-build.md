@@ -9,7 +9,7 @@ Choose the setup that matches your project:
 Both modes integrate the Validation compiler into the build and add the runtime library.
 
 
-## Mode 1: Standalone via Validation Gradle Plugin
+## Mode 1: standalone via Validation Gradle Plugin
 
 Use this mode if you want to run Validation without the rest of Spine.
 
