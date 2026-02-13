@@ -1,0 +1,16 @@
+validation:
+  - version_id: "2-0-0-snapshot"
+    label: 2.0.0-SNAPSHOT
+    content_path: docs/validation
+    route_url: docs/validation
+    is_main: true
+    switcher:
+      visible: false
+      item_visible: false
+  - version_id: "2-0-x"
+    label: 2.0.x
+    content_path: docs/validation/2-0-x
+    route_url: docs/validation/2-0-x
+    switcher:
+      visible: false
+      item_visible: false

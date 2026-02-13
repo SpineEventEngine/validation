@@ -68,7 +68,7 @@ dependencies {
     annotationProcessor(AutoService.processor)
     compileOnly(AutoService.annotations)
 
-    implementation(Base.lib)
+    api(Base.lib)
 
     testImplementation(TestLib.lib)
 }

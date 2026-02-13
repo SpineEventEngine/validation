@@ -1,0 +1,106 @@
+/*
+ * Copyright 2025, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+// API Note on Packaging
+// ---------------------
+// We do not define the package for this file to allow shorter options for user-defined types.
+// This allows to write:
+//
+//      [(when).in = FUTURE];
+//
+// instead of:
+//
+//      [(spine.time.when).in = FUTURE];
+//
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.time.validation";
+option java_outer_classname = "TimeOptionsProto";
+option java_multiple_files = true;
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FieldOptions {
+
+    // See `TimeOption`.
+    TimeOption when = 73819;
+}
+
+// Specifies that the field value is a point in time lying either in the future or in the past.
+//
+// Applicable to `google.protobuf.Timestamp` and types introduced in the `spine.time` package
+// that describe time-related concepts.
+//
+// Repeated fields are supported.
+//
+// Example: Using the `(when)` option.
+//
+//     message ScheduleMeeting {
+//         spine.time.ZonedDateTime start = 1 [(when).in = FUTURE];
+//     }
+//
+message TimeOption {
+
+    // The default error message.
+    option (default_message) = "The field `${parent.type}.${field.path}`"
+        " of the type `${field.type}` must be in the `${when.in}`."
+        " The encountered value: `${field.value}`.";
+
+    // Defines a restriction for the timestamp.
+    Time in = 1;
+
+    // Deprecated: please use `error_msg` instead.
+    string msg_format = 2 [deprecated = true];
+
+    // A user-defined error message.
+    //
+    // The specified message may include the following placeholders:
+    //
+    // 1. `${field.path}` – the field path.
+    // 2. `${field.value}` - the field value.
+    // 3. `${field.type}` – the fully qualified name of the field type.
+    // 4. `${parent.type}` – the fully qualified name of the validated message.
+    // 5. `${when.in}` – the specified timestamp restriction. It is either "past" or "future".
+    //
+    string error_msg = 3;
+}
+
+// This enumeration defines restriction for date/time values.
+enum Time {
+
+    // The default value (if the time option is not set).
+    TIME_UNDEFINED = 0;
+
+    // The value must be in the past.
+    PAST = 1;
+
+    // The value must be in the future.
+    FUTURE = 2;
+}

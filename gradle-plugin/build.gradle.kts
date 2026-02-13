@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
@@ -79,6 +80,8 @@ gradlePlugin {
 }
 
 dependencies {
+    compileOnly(gradleKotlinDsl())
+    implementation(Protobuf.GradlePlugin.lib)
     implementation(Compiler.pluginLib)
     implementation(Compiler.gradleApi)
     implementation(ToolBase.jvmTools)

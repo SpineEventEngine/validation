@@ -171,13 +171,17 @@ open class RunGradle : DefaultTask() {
         return if (runsOnWindows) "gradlew.bat" else "gradlew"
     }
 
-    private fun startProcess(command: List<String>, errorOut: File, debugOut: File) =
-        ProcessBuilder()
+    private fun startProcess(command: List<String>, errorOut: File, debugOut: File): Process {
+        val workingDir = project.file(directory)
+        val builder = ProcessBuilder()
             .command(command)
-            .directory(project.file(directory))
+            .directory(workingDir)
             .redirectError(errorOut)
             .redirectOutput(debugOut)
-            .start()
+        System.err.println("[RunGradle] Running the command: '${command.joinToString(" ")}'." +
+                " Directory: '${workingDir.absolutePath}'.")
+        return builder.start()
+    }
 }
 
 private fun File.truncate() {

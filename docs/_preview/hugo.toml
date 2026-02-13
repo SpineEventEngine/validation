@@ -1,0 +1,23 @@
+baseURL = 'https://spine.io/'
+languageCode = 'en-us'
+title = 'Documentation preview'
+disableKinds = ['taxonomy', 'term']
+
+[module]
+  # First theme has higher priority than later ones.
+  [[module.imports]]
+    path = '../..'
+  [[module.imports]]
+    path = 'github.com/SpineEventEngine/site-commons'
+
+# Enables HTML rendering in markdown files.
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
+        title = true
+  [markup.highlight]
+    noClasses = false

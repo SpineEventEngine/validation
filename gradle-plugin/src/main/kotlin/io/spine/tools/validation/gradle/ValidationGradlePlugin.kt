@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,18 @@
 
 package io.spine.tools.validation.gradle
 
-import io.spine.tools.compiler.gradle.api.compilerSettings
+import com.google.protobuf.gradle.ProtobufPlugin
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
+import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.plugin.Extension
+import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
 import io.spine.tools.meta.MavenArtifact
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
+import org.gradle.kotlin.dsl.apply
 
 /**
  * Gradle plugin that configures the Spine Compiler to run the Validation Compiler.
@@ -44,6 +47,14 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
 ) {
     override fun apply(project: Project) {
         super.apply(project)
+        // Add the Protobuf Gradle Plugin so that the user doesn't need to add it manually.
+        // The version of the plugin is defined by our dependency but can be forced
+        // to a newer one in the user's project.
+        project.apply<ProtobufPlugin>()
+
+        // Apply the Compiler Gradle Plugin so that we can manipulate the compiler settings.
+        // We do not want the user to add it manually either.
+        project.apply<CompilerGradlePlugin>()
         val javaBundle = ValidationSdk.javaCodegenBundle
         project.run {
             addUserClasspathDependency(javaBundle)

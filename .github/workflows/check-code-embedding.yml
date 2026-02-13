@@ -1,0 +1,34 @@
+name: Check Code Embedding
+
+on:
+  pull_request:
+
+jobs:
+  build-embedded-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: zulu
+
+      - run: ./gradlew :docs:buildAll
+
+  check-embedded-samples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: 'recursive'
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: zulu
+
+      - name: Check Embedding
+        run: ./gradlew :docs:checkSamples
