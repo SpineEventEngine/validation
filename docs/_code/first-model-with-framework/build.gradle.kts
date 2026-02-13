@@ -47,9 +47,9 @@ repositories {
 
 dependencies {
     // Temporarily add the dependency on Validation JVM Runtime explicitly.
-    // We need this until CoreJvm Compiler migrates to newer Validation version.
-    // Validation, starting from version `2.0.0-SNAPSHOT.394`, exposes
-    // Spine Base as the `api` (rather than `implementation`) dependency of the runtime.
+    // We need this until CoreJvm Compiler migrates to the Validation version
+    // `2.0.0-SNAPSHOT.394` or later. This version exposes Spine Base as the `api`
+    // (rather than `implementation`) dependency of the runtime artifact.
     // Before this version, this dependency comes as the `implementation` and as such
     // is not visible for the Java compiler.
     implementation("io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.394")
