@@ -8,16 +8,8 @@ The validation options come from `spine/options.proto` and include constraints l
 
 ## 1) Configure the project
 
-To use the Validation library, add the `io.spine.validation` plugin to your `build.gradle.kts` file:
-
-<embed-code file="first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
-```kotlin
-plugins {
-    `java-library`
-    kotlin("jvm") version "2.2.21"
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.395"
-}
-```
+First, make sure your project is configured to use the Validation library.
+See [Adding Validation to a Gradle build](adding-to-build.md) for detailed instructions.
 
 ## 2) Define a validated message
 
