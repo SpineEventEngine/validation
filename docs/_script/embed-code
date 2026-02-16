@@ -37,7 +37,7 @@ elif [ -f ${BASH_RC} ]; then
   . ${BASH_RC}
 fi
 
-# Ensure `docs/_code` files are fetched.
+# Ensure `docs/_examples` files are fetched.
 git submodule update --remote --merge --recursive
 
 # Navigate to the folder with embed-code binaries.

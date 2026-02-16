@@ -29,7 +29,7 @@ import java.net.URI
 group = "io.spine.validation.docs"
 
 // Take the version from the main code project.
-// The path to the version script is relevant to a directory _under_ the `_code`,
+// The path to the version script is relevant to a directory _under_ the `_examples`,
 // not to this script because it is applied from the example projects.
 apply(from = "../../../version.gradle.kts")
 version = extra["validationVersion"]!!

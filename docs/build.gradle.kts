@@ -35,7 +35,7 @@ LicenseReporter.generateReportIn(project)
 
 val updateValidationPluginVersion =
         tasks.register<UpdatePluginVersion>("updateValidationPluginVersion") {
-    directory.set(file("$projectDir/_code/"))
+    directory.set(file("$projectDir/_examples/"))
     val validationVersion: String by rootProject.extra
     version.set(validationVersion)
     pluginId.set("io.spine.validation")
@@ -43,7 +43,7 @@ val updateValidationPluginVersion =
 }
 
 val updateCoreJvmPluginVersion = tasks.register<UpdatePluginVersion>("updateCoreJvmPluginVersion") {
-    directory.set(file("$projectDir/_code/"))
+    directory.set(file("$projectDir/_examples/"))
     version.set(CoreJvmCompiler.version)
     pluginId.set("io.spine.core-jvm")
     kotlinVersion.set(Kotlin.version)
@@ -101,14 +101,14 @@ val publishAllToMavenLocal by tasks.registering {
 }
 
 val buildFirstModel by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_code/first-model"
+    directory = "$projectDir/_examples/first-model"
     task("buildAll")
     dependsOn(publishAllToMavenLocal)
     dependsOn(updateValidationPluginVersion)
 }
 
 val buildFirstModelWithFramework by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_code/first-model-with-framework"
+    directory = "$projectDir/_examples/first-model-with-framework"
     task("buildAll")
     dependsOn(publishAllToMavenLocal)
     dependsOn(updateValidationPluginVersion)
