@@ -32,7 +32,7 @@ plugins {
     id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.053"
 }
 
-apply(from = "../code-common.gradle.kts")
+apply(from = "../common.gradle.kts")
 
 repositories {
     mavenLocal()
