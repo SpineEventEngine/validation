@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import java.net.URI
 
 group = "io.spine.validation.docs"
 
@@ -31,3 +32,14 @@ group = "io.spine.validation.docs"
 // not to this script because it is applied from the example projects.
 apply(from = "../../../version.gradle.kts")
 version = extra["validationVersion"]!!
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url = URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+    }
+    maven {
+        url = URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
+    }
+}

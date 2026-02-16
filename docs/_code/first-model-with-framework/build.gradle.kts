@@ -24,8 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.net.URI
-
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
@@ -33,17 +31,6 @@ plugins {
 }
 
 apply(from = "../common.gradle.kts")
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url = URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
-    }
-    maven {
-        url = URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
-    }
-}
 
 dependencies {
     testImplementation(kotlin("test"))
