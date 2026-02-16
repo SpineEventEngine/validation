@@ -29,7 +29,7 @@ import java.net.URI
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
-    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.052"
+    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.053"
 }
 
 apply(from = "../code-common.gradle.kts")
