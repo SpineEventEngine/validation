@@ -100,16 +100,23 @@ val publishAllToMavenLocal by tasks.registering {
     )
 }
 
+// The root directory for the example projects.
+val examplesDir = "$projectDir/_examples"
+
+// The conventional name for the tasks that build "everything" for the documentation.
+// E.g., the example projects these tasks do `clean build`.
+val buildAll = "buildAll"
+
 val buildFirstModel by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_examples/first-model"
-    task("buildAll")
+    directory = "$examplesDir/first-model"
+    task(buildAll)
     dependsOn(publishAllToMavenLocal)
     dependsOn(updateValidationPluginVersion)
 }
 
 val buildFirstModelWithFramework by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_examples/first-model-with-framework"
-    task("buildAll")
+    directory = "$examplesDir/first-model-with-framework"
+    task(buildAll)
     dependsOn(publishAllToMavenLocal)
     dependsOn(updateValidationPluginVersion)
 }
@@ -119,7 +126,7 @@ val buildExamples by tasks.registering {
     dependsOn(buildFirstModel, buildFirstModelWithFramework)
 }
 
-tasks.register("buildAll") {
+tasks.register(buildAll) {
     dependsOn(publishAllToMavenLocal)
     dependsOn(buildExamples)
 }
