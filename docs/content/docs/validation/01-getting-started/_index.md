@@ -47,5 +47,5 @@ the code produced by `protoc`.
 ## What’s next
 
 - [Adding Validation to your build](adding-to-build.md)
-- [Your First Validated Model](first-model.md)
-- [Validation Workflow](workflow.md)
+- [Your first validated model](first-model.md)
+
