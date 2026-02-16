@@ -39,12 +39,14 @@ class BankCardTest {
     @Test
     @DisplayName("throw `ValidationException` if digits are invalid")
     void invalidDigits() {
+        // #docfragment "invalid-digits"
         assertThrows(ValidationException.class, () ->
             BankCard.newBuilder()
                 .setDigits("invalid")
                 .setOwner("ALEX SMITH")
                 .build()
         );
+        // #enddocfragment "invalid-digits"
     }
 
     @Test

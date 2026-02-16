@@ -38,12 +38,14 @@ class BankCardKtTest {
     @Test
     @DisplayName("throw `ValidationException` if digits are invalid")
     fun invalidDigits() {
+        // #docfragment "invalid-digits"
         assertThrows<ValidationException> {
             bankCard {
                 digits = "invalid"
                 owner = "ALEX SMITH"
             }
         }
+        // #enddocfragment "invalid-digits"
     }
 
     @Test

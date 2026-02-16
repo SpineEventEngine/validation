@@ -90,18 +90,24 @@ The code will be generated under the `generated` directory of your project.
 
 Validation runs on `build()` and can be triggered manually with `validate()`.
 
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
 ```java
-var card = BankCard.newBuilder()
-    .setDigits("invalid")
-    .setOwner("Al")
-    .build(); // Throws `ValidationException`.
+assertThrows(ValidationException.class, () ->
+    BankCard.newBuilder()
+        .setDigits("invalid")
+        .setOwner("ALEX SMITH")
+        .build()
+);
 ```
 
+<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
 ```kotlin
-val card = bankCard {
-    digits = "invalid"
-    owner = "Al"
-} // Throws `ValidationException`.
+assertThrows<ValidationException> {
+    bankCard {
+        digits = "invalid"
+        owner = "ALEX SMITH"
+    }
+}
 ```
 
 To validate without throwing, use `validate()` on a built message:
