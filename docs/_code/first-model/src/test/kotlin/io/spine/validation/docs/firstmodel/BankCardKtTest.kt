@@ -28,19 +28,18 @@ package io.spine.validation.docs.firstmodel
 
 import io.spine.validation.ValidationException
 import io.spine.validation.format
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import com.google.common.truth.Truth.assertThat
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.string.shouldContain
 
-@DisplayName("`BankCard` in Kotlin should")
 class BankCardKtTest {
 
     @Test
-    fun `throw 'ValidationException' if digits are invalid`() {
+    fun `throw ValidationException if digits are invalid`() {
         // #docfragment "invalid-digits"
-        assertThrows<ValidationException> {
+        shouldThrow<ValidationException> {
             bankCard {
                 digits = "invalid"
                 owner = "ALEX SMITH"
@@ -50,8 +49,8 @@ class BankCardKtTest {
     }
 
     @Test
-    fun `throw 'ValidationException' if owner is invalid`() {
-        assertThrows<ValidationException> {
+    fun `throw ValidationException if owner is invalid`() {
+        shouldThrow<ValidationException> {
             bankCard {
                 digits = "1234 5678 1234 5678"
                 owner = "Al"
@@ -60,8 +59,8 @@ class BankCardKtTest {
     }
 
     @Test
-    fun `throw 'ValidationException' if tags are not distinct`() {
-        assertThrows<ValidationException> {
+    fun `throw ValidationException if tags are not distinct`() {
+        shouldThrow<ValidationException> {
             bankCard {
                 digits = "1234 5678 1234 5678"
                 owner = "ALEX SMITH"
@@ -73,7 +72,7 @@ class BankCardKtTest {
 
     @Test
     fun `be built if all fields are valid`() {
-        assertDoesNotThrow {
+        shouldNotThrowAny {
             bankCard {
                 digits = "1234 5678 1234 5678"
                 owner = "ALEX SMITH"
@@ -85,7 +84,7 @@ class BankCardKtTest {
 
     @Test
     fun `allow multiple words in the owner name`() {
-        assertDoesNotThrow {
+        shouldNotThrowAny {
             bankCard {
                 digits = "1234 5678 1234 5678"
                 owner = "John Jacob Jingleheimer Schmidt"
@@ -101,13 +100,13 @@ class BankCardKtTest {
             .setDigits("wrong number")
             .buildPartial() // There is no Kotlin DSL for this.
         val error = card.validate()
-        assertThat(error).isPresent()
+        error.shouldBePresent()
 
         val violation = error.get().constraintViolationList[0]
         val formatted = violation.message.format()
 
-        assertThat(formatted).contains("digits")
-        assertThat(formatted).contains("wrong number")
+        formatted shouldContain "digits"
+        formatted shouldContain "wrong number"
         // #enddocfragment "error-message"
     }
 }

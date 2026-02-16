@@ -102,7 +102,7 @@ assertThrows(ValidationException.class, () ->
 
 <embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
 ```kotlin
-assertThrows<ValidationException> {
+shouldThrow<ValidationException> {
     bankCard {
         digits = "invalid"
         owner = "ALEX SMITH"
@@ -135,13 +135,13 @@ val card = BankCard.newBuilder()
     .setDigits("wrong number")
     .buildPartial() // There is no Kotlin DSL for this.
 val error = card.validate()
-assertThat(error).isPresent()
+error.shouldBePresent()
 
 val violation = error.get().constraintViolationList[0]
 val formatted = violation.message.format()
 
-assertThat(formatted).contains("digits")
-assertThat(formatted).contains("wrong number")
+formatted shouldContain "digits"
+formatted shouldContain "wrong number"
 ```   
 
 ## What’s next
