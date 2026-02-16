@@ -15,7 +15,7 @@ To use the Validation library, add the `io.spine.validation` plugin to your `bui
 plugins {
     `java-library`
     kotlin("jvm") version "2.2.21"
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.395"
 }
 ```
 
