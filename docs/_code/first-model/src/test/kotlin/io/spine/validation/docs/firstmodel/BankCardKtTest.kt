@@ -27,17 +27,18 @@
 package io.spine.validation.docs.firstmodel
 
 import io.spine.validation.ValidationException
+import io.spine.validation.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import com.google.common.truth.Truth.assertThat
 
 @DisplayName("`BankCard` in Kotlin should")
 class BankCardKtTest {
 
     @Test
-    @DisplayName("throw `ValidationException` if digits are invalid")
-    fun invalidDigits() {
+    fun `throw 'ValidationException' if digits are invalid`() {
         // #docfragment "invalid-digits"
         assertThrows<ValidationException> {
             bankCard {
@@ -49,8 +50,7 @@ class BankCardKtTest {
     }
 
     @Test
-    @DisplayName("throw `ValidationException` if owner is invalid")
-    fun invalidOwner() {
+    fun `throw 'ValidationException' if owner is invalid`() {
         assertThrows<ValidationException> {
             bankCard {
                 digits = "1234 5678 1234 5678"
@@ -60,8 +60,7 @@ class BankCardKtTest {
     }
 
     @Test
-    @DisplayName("throw `ValidationException` if tags are not distinct")
-    fun duplicateTags() {
+    fun `throw 'ValidationException' if tags are not distinct`() {
         assertThrows<ValidationException> {
             bankCard {
                 digits = "1234 5678 1234 5678"
@@ -73,8 +72,7 @@ class BankCardKtTest {
     }
 
     @Test
-    @DisplayName("be built if all fields are valid")
-    fun validCard() {
+    fun `be built if all fields are valid`() {
         assertDoesNotThrow {
             bankCard {
                 digits = "1234 5678 1234 5678"
@@ -86,13 +84,30 @@ class BankCardKtTest {
     }
 
     @Test
-    @DisplayName("allow multiple words in the owner name")
-    fun multipleWordsOwner() {
+    fun `allow multiple words in the owner name`() {
         assertDoesNotThrow {
             bankCard {
                 digits = "1234 5678 1234 5678"
                 owner = "John Jacob Jingleheimer Schmidt"
             }
         }
+    }
+
+    @Test
+    fun `provide a formatted error message for an invalid card`() {
+        // #docfragment "error-message"
+        val card = BankCard.newBuilder()
+            .setOwner("ALEX SMITH")
+            .setDigits("wrong number")
+            .buildPartial() // There is no Kotlin DSL for this.
+        val error = card.validate()
+        assertThat(error).isPresent()
+
+        val violation = error.get().constraintViolationList[0]
+        val formatted = violation.message.format()
+
+        assertThat(formatted).contains("digits")
+        assertThat(formatted).contains("wrong number")
+        // #enddocfragment "error-message"
     }
 }

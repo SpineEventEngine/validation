@@ -47,6 +47,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("com.google.truth:truth:1.4.5")
 }
 
 kotlin {

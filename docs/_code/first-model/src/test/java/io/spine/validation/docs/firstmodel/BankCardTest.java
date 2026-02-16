@@ -27,9 +27,11 @@
 package io.spine.validation.docs.firstmodel;
 
 import io.spine.validation.ValidationException;
+import io.spine.validation.TemplateStrings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -95,5 +97,24 @@ class BankCardTest {
                 .setOwner("John Jacob Jingleheimer Schmidt")
                 .build()
         );
+    }
+
+    @Test
+    @DisplayName("provide a formatted error message for an invalid card")
+    void formattedErrorMessage() {
+        // #docfragment "error-message"
+        var card = BankCard.newBuilder()
+                .setOwner("ALEX SMITH")
+                .setDigits("wrong number")
+                .buildPartial();
+        var error = card.validate();
+        assertThat(error).isPresent();
+
+        var violation = error.get().getConstraintViolation(0);
+        var formatted = TemplateStrings.format(violation.getMessage());
+
+        assertThat(formatted).contains("digits");
+        assertThat(formatted).contains("wrong number");
+        // #enddocfragment "error-message"
     }
 }

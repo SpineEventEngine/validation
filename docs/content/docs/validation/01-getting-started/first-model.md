@@ -112,15 +112,37 @@ assertThrows<ValidationException> {
 
 To validate without throwing, use `validate()` on a built message:
 
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
 ```java
 var card = BankCard.newBuilder()
-    .setDigits("invalid")
-    .buildPartial();
-
+        .setOwner("ALEX SMITH")
+        .setDigits("wrong number")
+        .buildPartial();
 var error = card.validate();
-error.ifPresent(err -> System.out.println(err.getMessage()));
+assertThat(error).isPresent();
+
+var violation = error.get().getConstraintViolation(0);
+var formatted = TemplateStrings.format(violation.getMessage());
+
+assertThat(formatted).contains("digits");
+assertThat(formatted).contains("wrong number");
 ```
-   
+
+<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
+```kotlin
+val card = BankCard.newBuilder()
+    .setOwner("ALEX SMITH")
+    .setDigits("wrong number")
+    .buildPartial() // There is no Kotlin DSL for this.
+val error = card.validate()
+assertThat(error).isPresent()
+
+val violation = error.get().constraintViolationList[0]
+val formatted = violation.message.format()
+
+assertThat(formatted).contains("digits")
+assertThat(formatted).contains("wrong number")
+```   
 
 ## What’s next
 
