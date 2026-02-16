@@ -15,9 +15,12 @@ Use this mode if you want to run Validation without the rest of Spine.
 
 1) Add the Validation plugin to the build.
 
+<embed-code file="first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
 ```kotlin
 plugins {
-    id("io.spine.validation") version "<spine-version>"
+    `java-library`
+    kotlin("jvm") version "2.2.21"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.395"
 }
 ```
 
@@ -43,9 +46,12 @@ and brings in the JVM runtime dependency automatically.
 If your project is base on the Spine CoreJvm library, apply the CoreJvm Gradle plugin instead of
 adding Validation directly. CoreJvm brings in the Validation Gradle plugin for you.
 
+<embed-code file="first-model-with-framework/build.gradle.kts" start="plugins {" end="^}"></embed-code>
 ```kotlin
 plugins {
-    id("io.spine.core-jvm") version "<spine-version>"
+    `java-library`
+    kotlin("jvm") version "2.2.21"
+    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.053"
 }
 ```
 
