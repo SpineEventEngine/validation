@@ -107,23 +107,11 @@ val examplesDir = "$projectDir/_examples"
 // E.g., the example projects these tasks do `clean build`.
 val buildAll = "buildAll"
 
-val buildFirstModel by tasks.registering(RunGradle::class) {
-    directory = "$examplesDir/first-model"
+val buildExamples by tasks.registering(RunGradle::class) {
+    directory = examplesDir
     task(buildAll)
     dependsOn(publishAllToMavenLocal)
     dependsOn(updateValidationPluginVersion)
-}
-
-val buildFirstModelWithFramework by tasks.registering(RunGradle::class) {
-    directory = "$examplesDir/first-model-with-framework"
-    task(buildAll)
-    dependsOn(publishAllToMavenLocal)
-    dependsOn(updateValidationPluginVersion)
-}
-
-val buildExamples by tasks.registering {
-    dependsOn(updatePluginVersions)
-    dependsOn(buildFirstModel, buildFirstModelWithFramework)
 }
 
 tasks.register(buildAll) {
