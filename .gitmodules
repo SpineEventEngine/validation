@@ -1,3 +1,6 @@
 [submodule "config"]
 	path = config
 	url = https://github.com/SpineEventEngine/config
+[submodule "docs/_examples"]
+	path = docs/_examples
+	url = https://github.com/spine-examples/hello-validation
