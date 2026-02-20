@@ -8,12 +8,8 @@ pluginManagement {
     repositories {
         mavenLocal()
         gradlePluginPortal()
-        maven {
-            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
-        }
-        maven {
-            url = java.net.URI("https://europe-maven.pkg.dev/spine-event-engine/releases")
-        }
+        maven("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+        maven("https://europe-maven.pkg.dev/spine-event-engine/releases")
     }
 }
 ```
@@ -29,7 +25,6 @@ Choose the setup that matches your project:
 - As part of a Spine-based project that uses the CoreJvm toolchain.
 
 Both modes integrate the Validation compiler into the build and add the runtime library.
-
 
 ### Mode 1: standalone via Validation Gradle plugin
 
