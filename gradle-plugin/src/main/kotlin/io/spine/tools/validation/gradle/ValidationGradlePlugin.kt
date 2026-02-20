@@ -30,7 +30,6 @@ import com.google.protobuf.gradle.ProtobufPlugin
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.plugin.Extension
-import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
@@ -38,6 +37,9 @@ import io.spine.tools.meta.MavenArtifact
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.maven
+import org.gradle.kotlin.dsl.repositories
+import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 
 /**
  * Gradle plugin that configures the Spine Compiler to run the Validation Compiler.
@@ -55,31 +57,40 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
         // Apply the Compiler Gradle Plugin so that we can manipulate the compiler settings.
         // We do not want the user to add it manually either.
         project.apply<CompilerGradlePlugin>()
-        val javaBundle = ValidationSdk.javaCodegenBundle
-        project.run {
-            addUserClasspathDependency(javaBundle)
-            afterEvaluate {
-                // Add the Validation Java Compiler only if `spine/validation/enabled` is true.
-                if (validationExtension.enabled.get()) {
-                    (compilerSettings as Extension).run {
-                        // Put the Validation Java Compiler first in the list of the plugins.
-                        // Other plugins may rely on the validation code.
-                        val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
-                        plugins.set(ordered)
-                    }
-                }
+        project.configureValidation()
+    }
+}
+
+private fun Project.configureValidation() {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
+        maven("https://europe-maven.pkg.dev/spine-event-engine/releases")
+    }
+
+    val javaBundle = ValidationSdk.javaCodegenBundle
+    addUserClasspathDependency(javaBundle)
+    afterEvaluate {
+        // Add the Validation Java Compiler only if `spine/validation/enabled` is true.
+        if (validationExtension.enabled.get()) {
+            (compilerSettings as Extension).run {
+                // Put the Validation Java Compiler first in the list of the plugins.
+                // Other plugins may rely on the validation code.
+                val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
+                plugins.set(ordered)
             }
-            // We add the dependency on runtime anyway for the following reasons:
-            //  1. We do not want users to change their Gradle build files when they turn on or off
-            //     code generation for the validation code.
-            //
-            //  2. We have run-time validation rules that are going to be used in parallel with
-            //     the generated code. This includes current and new implementation for validation
-            //     rules for the already existing generated Protobuf code.
-            //
-            addDependency("implementation", ValidationSdk.jvmRuntime)
         }
     }
+    // We add the dependency on runtime anyway for the following reasons:
+    //  1. We do not want users to change their Gradle build files when they turn on or off
+    //     code generation for the validation code.
+    //
+    //  2. We have run-time validation rules that are going to be used in parallel with
+    //     the generated code. This includes current and new implementation for validation
+    //     rules for the already existing generated Protobuf code.
+    //
+    addDependency("implementation", ValidationSdk.jvmRuntime)
 }
 
 /**
