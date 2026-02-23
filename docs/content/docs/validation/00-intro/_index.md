@@ -115,4 +115,4 @@ Spine stack.
 
 - [Target audience](target-audience.md)
 - [Philosophy](philosophy.md)
-- [Getting Started](../01-getting-started/index.md)
+- [Getting started](../01-getting-started/)

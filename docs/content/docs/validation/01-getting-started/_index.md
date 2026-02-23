@@ -4,7 +4,7 @@ This section helps you set up Spine Validation, define your first validated Prot
 and see validation in action in Java and Kotlin.
 
 If you are new to the library, read the short overview first:
-- Introduction → [Overview](../00-intro/index.md)
+- Introduction → [Overview](../00-intro/)
 - Who this is for → [Target audience](../00-intro/target-audience.md)
 - Design principles → [Philosophy](../00-intro/philosophy.md)
 

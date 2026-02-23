@@ -15,7 +15,11 @@ Follow these steps to create a custom option:
 
 Below is a workflow diagram for a typical option:
 
-![Typical custom option](.github/readme/typical_custom_option.png)
+![Typical custom option](.github/readme/typical_custom_option.jpg)
+
+## What’s next
+
+- Learn where this plugs in: [Architecture](developers-guide/architecture.md).
 
 Take a look at the `:java-tests:extensions` module that contains a full example of
 implementation of the custom `(currency)` option.

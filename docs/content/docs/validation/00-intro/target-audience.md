@@ -96,3 +96,8 @@ If you:
 - and want to enforce clear, versionable, and strongly typed validation rules,
 
 then Spine Validation is designed for you.
+
+## What’s next
+
+- Learn the design principles: [Philosophy](philosophy.md).
+- Try it end-to-end: [Getting started](../01-getting-started/).

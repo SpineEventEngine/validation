@@ -1,4 +1,4 @@
-## Architecture
+# Architecture
 
 The library is a set of plugins for [Spine Compiler](https://github.com/SpineEventEngine/compiler).
 
@@ -14,3 +14,8 @@ The workflow is the following:
 - (3) – Protobuf compiler generates Java classes.
 - (4), (5) – policies and views build the validation model.
 - (6), (7) – Java plugin generates and injects validation code.
+
+## What’s next
+
+- See the project layout: [Key modules](key-modules.md).
+- If you need organization-specific rules: [Adding custom validation](../adding-custom-validation.md).
