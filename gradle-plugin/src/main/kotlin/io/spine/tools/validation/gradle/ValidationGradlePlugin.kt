@@ -62,13 +62,6 @@ public class ValidationGradlePlugin : LibraryPlugin<ValidationExtension>(
 }
 
 private fun Project.configureValidation() {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven("https://europe-maven.pkg.dev/spine-event-engine/snapshots")
-        maven("https://europe-maven.pkg.dev/spine-event-engine/releases")
-    }
-
     val javaBundle = ValidationSdk.javaCodegenBundle
     addUserClasspathDependency(javaBundle)
     afterEvaluate {
