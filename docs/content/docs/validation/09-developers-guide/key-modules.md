@@ -8,4 +8,4 @@
 
 ## What’s next
 
-- Build custom constraints: [Adding custom validation](../adding-custom-validation.md).
+- Build custom constraints: [Custom validation](../08-custom-validation/).

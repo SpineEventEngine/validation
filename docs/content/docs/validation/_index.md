@@ -11,4 +11,4 @@ options, and runs those checks automatically when you build messages.
 ## Deeper topics
 
 - How it works: [Architecture](09-developers-guide/architecture.md)
-- Extension points: [Adding custom validation](adding-custom-validation.md)
+- Extension points: [Custom validation](08-custom-validation/)

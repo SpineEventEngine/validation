@@ -149,4 +149,4 @@ formatted shouldContain "wrong number"
 - Learn how Validation works internally:
   [Architecture](../09-developers-guide/architecture.md).
 - If you need organization-specific rules:
-  [Adding custom validation](../adding-custom-validation.md).
+  [Custom validation](../08-custom-validation/).
