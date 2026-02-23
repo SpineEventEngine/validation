@@ -26,15 +26,15 @@ buildable documentation set, without expanding scope unnecessarily.
 - Status: DONE (2026-02-23).
 - Added/updated section landing pages:
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/_index.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/developers-guide/_index.md`
+  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/_index.md`
 - Replaced broken `.../index.md` links with directory links where appropriate:
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/_index.md`
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/01-getting-started/_index.md`
 - Added “What’s next” navigation to keep a clear reading path:
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/target-audience.md`
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/philosophy.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/developers-guide/architecture.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/developers-guide/key-modules.md`
+  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/architecture.md`
+  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/key-modules.md`
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/01-getting-started/first-model.md`
 - Fixed an obvious broken image reference:
   `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/adding-custom-validation.md`

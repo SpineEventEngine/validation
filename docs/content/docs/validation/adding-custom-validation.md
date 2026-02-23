@@ -19,7 +19,7 @@ Below is a workflow diagram for a typical option:
 
 ## What’s next
 
-- Learn where this plugs in: [Architecture](developers-guide/architecture.md).
+- Learn where this plugs in: [Architecture](09-developers-guide/architecture.md).
 
 Take a look at the `:java-tests:extensions` module that contains a full example of
 implementation of the custom `(currency)` option.
