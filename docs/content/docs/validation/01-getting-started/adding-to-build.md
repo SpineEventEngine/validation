@@ -13,18 +13,18 @@ pluginManagement {
     }
 }
 ```
-The repositories at https://europe-maven.pkg.dev are needed for obtaining the versions of
+The repositories at https://europe-maven.pkg.dev are needed to obtain versions of
 Spine tools and libraries that are not yet published to the Gradle Plugin Portal or Maven Central.
 
 ## Optional: adding Spine-specific Maven repositories
 
-Similarly to the plugin repositories, a project using Validation may need artifacts that
+Similar to the plugin repositories, a project using Validation may need artifacts that
 are not yet published to Maven Central. Our Gradle plugins take care of this by adding the 
-necessary repositories to the project when applied. So normally, you don't need to add
+necessary repositories to the project when applied. Normally, you don't need to add
 repositories manually when using the plugins.
 
 **But there is one exception to this rule:** if you use centralized repository management
-in your `settings.gradle.kts` file and the `repositoriesMode` mode is set to
+in your `settings.gradle.kts` file and the `repositoriesMode` is set to
 a value other than `PREFER_PROJECT`. For example:
 
 ```kotlin
@@ -37,7 +37,7 @@ dependencyResolutionManagement {
     }
 }
 ```
-In such a case, an attempt to add a repository at a project level would fail the build,
+In such a case, an attempt to add a repository at the project level would fail the build,
 so our plugins do not add the repositories to avoid the failure. Therefore,
 you need to add the repositories manually to the `repositories` block in `settings.gradle.kts`
 using the `maven()` calls as shown in the snippet below.
@@ -86,7 +86,7 @@ plugins {
 > the subprojects of the multi-module examples project.
 > For more details on this, clone the [Validation examples repository][validation-examples].
 
-The plugin wires Validation into Spine Compiler, adds the Validation Java codegen bundle,
+The plugin wires Validation into the Spine Compiler, adds the Validation Java codegen bundle,
 and brings in the JVM runtime dependency automatically.
 
 
