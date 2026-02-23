@@ -111,7 +111,7 @@ val buildExamples by tasks.registering(RunGradle::class) {
     directory = examplesDir
     task(buildAll)
     dependsOn(publishAllToMavenLocal)
-    dependsOn(updateValidationPluginVersion)
+    dependsOn(updatePluginVersions)
 }
 
 tasks.register(buildAll) {
