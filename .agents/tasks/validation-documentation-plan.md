@@ -37,7 +37,7 @@ buildable documentation set, without expanding scope unnecessarily.
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/key-modules.md`
   - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/01-getting-started/first-model.md`
 - Fixed an obvious broken image reference:
-  `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/adding-custom-validation.md`
+  `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/08-custom-validation/_index.md`
 
 2) Complete “Getting started” flow
 - Validate that “Adding to build” + “First model” cover:
