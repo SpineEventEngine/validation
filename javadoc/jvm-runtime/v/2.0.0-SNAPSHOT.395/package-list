@@ -1,0 +1,16 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.validation/ConstraintViolation.Builder///PointingToDeclaration/io/spine/validation/ConstraintViolation.Builder.html
+$dokka.location:io.spine.validation/ConstraintViolationKt.Dsl.ParamProxy///PointingToDeclaration/io/spine/validation/ConstraintViolationKt.Dsl.ParamProxy.html
+$dokka.location:io.spine.validation/ConstraintViolationKt.Dsl.ViolationProxy///PointingToDeclaration/io/spine/validation/ConstraintViolationKt.Dsl.ViolationProxy.html
+$dokka.location:io.spine.validation/ConstraintViolationKt.Dsl///PointingToDeclaration/io/spine/validation/ConstraintViolationKt.Dsl.html
+$dokka.location:io.spine.validation/TemplateString.Builder///PointingToDeclaration/io/spine/validation/TemplateString.Builder.html
+$dokka.location:io.spine.validation/TemplateStringKt.Dsl.PlaceholderValueProxy///PointingToDeclaration/io/spine/validation/TemplateStringKt.Dsl.PlaceholderValueProxy.html
+$dokka.location:io.spine.validation/TemplateStringKt.Dsl///PointingToDeclaration/io/spine/validation/TemplateStringKt.Dsl.html
+$dokka.location:io.spine.validation/ValidationError.Builder///PointingToDeclaration/io/spine/validation/ValidationError.Builder.html
+$dokka.location:io.spine.validation/ValidationErrorKt.Dsl.ConstraintViolationProxy///PointingToDeclaration/io/spine/validation/ValidationErrorKt.Dsl.ConstraintViolationProxy.html
+$dokka.location:io.spine.validation/ValidationErrorKt.Dsl///PointingToDeclaration/io/spine/validation/ValidationErrorKt.Dsl.html
+io.spine.validate
+io.spine.validation
+io.spine.validation.diags
+io.spine.validation.option
