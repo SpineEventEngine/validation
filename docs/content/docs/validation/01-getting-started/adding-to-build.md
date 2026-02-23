@@ -44,7 +44,7 @@ plugins {
 > The plugin `module` in the snippet above refers to the name of the script plugin
 > `buildSrc/src/kotlin/module.gradle.kts` which provides common configuration for
 > the subprojects of the multi-module examples project.
-> For more details on this, clone the [Validation examples repository][valildation-examples].
+> For more details on this, clone the [Validation examples repository][validation-examples].
 
 The plugin wires Validation into Spine Compiler, adds the Validation Java codegen bundle,
 and brings in the JVM runtime dependency automatically.
@@ -67,4 +67,4 @@ plugins {
 
 Continue with [Your first validated model](first-model.md).
 
-[valildation-examples]: https://github.com/spine-examples/hello-validation
+[validation-examples]: https://github.com/spine-examples/hello-validation
