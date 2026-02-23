@@ -35,7 +35,7 @@ LicenseReporter.generateReportIn(project)
 
 val updateValidationPluginVersion =
         tasks.register<UpdatePluginVersion>("updateValidationPluginVersion") {
-    directory.set(file("$projectDir/_code/"))
+    directory.set(file("$projectDir/_examples/"))
     val validationVersion: String by rootProject.extra
     version.set(validationVersion)
     pluginId.set("io.spine.validation")
@@ -43,7 +43,7 @@ val updateValidationPluginVersion =
 }
 
 val updateCoreJvmPluginVersion = tasks.register<UpdatePluginVersion>("updateCoreJvmPluginVersion") {
-    directory.set(file("$projectDir/_code/"))
+    directory.set(file("$projectDir/_examples/"))
     version.set(CoreJvmCompiler.version)
     pluginId.set("io.spine.core-jvm")
     kotlinVersion.set(Kotlin.version)
@@ -100,26 +100,21 @@ val publishAllToMavenLocal by tasks.registering {
     )
 }
 
-val buildFirstModel by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_code/first-model"
-    task("buildAll")
-    dependsOn(publishAllToMavenLocal)
-    dependsOn(updateValidationPluginVersion)
-}
+// The root directory for the example projects.
+val examplesDir = "$projectDir/_examples"
 
-val buildFirstModelWithFramework by tasks.registering(RunGradle::class) {
-    directory = "$projectDir/_code/first-model-with-framework"
-    task("buildAll")
-    dependsOn(publishAllToMavenLocal)
-    dependsOn(updateValidationPluginVersion)
-}
+// The conventional name for the tasks that build "everything" for the documentation.
+// E.g., the example projects these tasks do `clean build`.
+val buildAll = "buildAll"
 
-val buildExamples by tasks.registering {
+val buildExamples by tasks.registering(RunGradle::class) {
+    directory = examplesDir
+    task(buildAll)
+    dependsOn(publishAllToMavenLocal)
     dependsOn(updatePluginVersions)
-    dependsOn(buildFirstModel, buildFirstModelWithFramework)
 }
 
-tasks.register("buildAll") {
+tasks.register(buildAll) {
     dependsOn(publishAllToMavenLocal)
     dependsOn(buildExamples)
 }

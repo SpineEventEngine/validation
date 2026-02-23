@@ -8,16 +8,8 @@ The validation options come from `spine/options.proto` and include constraints l
 
 ## 1) Configure the project
 
-To use the Validation library, add the `io.spine.validation` plugin to your `build.gradle.kts` file:
-
-<embed-code file="first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
-```kotlin
-plugins {
-    `java-library`
-    kotlin("jvm") version "2.2.21"
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.394"
-}
-```
+First, make sure your project is configured to use the Validation library.
+See [Adding Validation to a Gradle build](adding-to-build.md) for detailed instructions.
 
 ## 2) Define a validated message
 
@@ -98,31 +90,59 @@ The code will be generated under the `generated` directory of your project.
 
 Validation runs on `build()` and can be triggered manually with `validate()`.
 
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
 ```java
-var card = BankCard.newBuilder()
-    .setDigits("invalid")
-    .setOwner("Al")
-    .build(); // Throws `ValidationException`.
+assertThrows(ValidationException.class, () ->
+    BankCard.newBuilder()
+        .setDigits("invalid")
+        .setOwner("ALEX SMITH")
+        .build()
+);
 ```
 
+<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
 ```kotlin
-val card = bankCard {
-    digits = "invalid"
-    owner = "Al"
-} // Throws `ValidationException`.
+shouldThrow<ValidationException> {
+    bankCard {
+        digits = "invalid"
+        owner = "ALEX SMITH"
+    }
+}
 ```
 
 To validate without throwing, use `validate()` on a built message:
 
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
 ```java
 var card = BankCard.newBuilder()
-    .setDigits("invalid")
-    .buildPartial();
-
+        .setOwner("ALEX SMITH")
+        .setDigits("wrong number")
+        .buildPartial();
 var error = card.validate();
-error.ifPresent(err -> System.out.println(err.getMessage()));
+assertThat(error).isPresent();
+
+var violation = error.get().getConstraintViolation(0);
+var formatted = TemplateStrings.format(violation.getMessage());
+
+assertThat(formatted).contains("digits");
+assertThat(formatted).contains("wrong number");
 ```
-   
+
+<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
+```kotlin
+val card = BankCard.newBuilder()
+    .setOwner("ALEX SMITH")
+    .setDigits("wrong number")
+    .buildPartial() // There is no Kotlin DSL for this.
+val error = card.validate()
+error.shouldBePresent()
+
+val violation = error.get().constraintViolationList[0]
+val formatted = violation.message.format()
+
+formatted shouldContain "digits"
+formatted shouldContain "wrong number"
+```   
 
 ## What’s next
 
