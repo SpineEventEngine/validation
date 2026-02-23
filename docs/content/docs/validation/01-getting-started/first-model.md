@@ -146,4 +146,7 @@ formatted shouldContain "wrong number"
 
 ## What’s next
 
-Continue with [Validation Workflow](workflow.md).
+- Learn how Validation works internally:
+  [Architecture](../developers-guide/architecture.md).
+- If you need organization-specific rules:
+  [Adding custom validation](../adding-custom-validation.md).
