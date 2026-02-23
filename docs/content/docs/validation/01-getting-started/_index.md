@@ -29,22 +29,11 @@ the code produced by `protoc`.
 
 ## Quick path
 
-1) Add Spine Validation to your Gradle build
-- Follow [Adding Validation to a Gradle build](adding-to-build.md).
-
-2) Define constraints in your `.proto` files
-- See [Define constraints in `.proto` files](first-model.md).
-
-3) Build your project
-- See [Build your project](build-project.md).
-
-4) Use the generated API
-- See [Using the generated validation API](generated-code.md).
-
+ 1) [Add Validation to your build](adding-to-build.md)
+ 2) [Define constraints in `.proto` files](first-model.md)
+ 3) [Build your project](build-project.md)
+ 4) [Use the generated validation API](generated-code.md)
 
 ## What’s next
 
 - [Adding Validation to your build](adding-to-build.md)
-- [Define constraints in `.proto` files](first-model.md)
-- [Build your project](build-project.md)
-- [Using the generated validation API](generated-code.md)
