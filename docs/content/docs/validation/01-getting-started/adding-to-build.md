@@ -105,6 +105,6 @@ plugins {
 
 ## Next step
 
-Continue with [Your first validated model](first-model.md).
+Continue with [Define constraints in `.proto` files](first-model.md).
 
 [validation-examples]: https://github.com/spine-examples/hello-validation
