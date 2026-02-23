@@ -37,8 +37,6 @@ import io.spine.tools.meta.MavenArtifact
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.maven
-import org.gradle.kotlin.dsl.repositories
 import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 
 /**
