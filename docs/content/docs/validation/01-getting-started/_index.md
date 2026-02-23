@@ -48,4 +48,3 @@ the code produced by `protoc`.
 
 - [Adding Validation to your build](adding-to-build.md)
 - [Your first validated model](first-model.md)
-
