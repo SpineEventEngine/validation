@@ -1,0 +1,1 @@
+var typeSearchIndex = [{"p":"io.spine.tools.validation.ksp","l":"ValidatorProcessorProvider","url":"io/spine/tools/validation/ksp/ValidatorProcessorProvider.html"}, {"l":"All classes","url":"allclasses.html"}]
