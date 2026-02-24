@@ -86,11 +86,14 @@ plugins {
 }
 ```
 
-> ##### What is the `module` plugin?
-> The plugin `module` in the snippet above refers to the name of the script plugin
-> `buildSrc/src/kotlin/module.gradle.kts` which provides common configuration for
-> the subprojects of the multi-module examples project.
-> For more details on this, clone the [Validation examples repository][validation-examples].
+{{% note-block class="note" %}}
+#### What is the `module` plugin?
+
+The plugin `module` in the snippet above refers to the name of the script plugin
+`buildSrc/src/kotlin/module.gradle.kts` which provides common configuration for
+the subprojects of the multi-module examples project.
+For more details on this, clone the [Validation examples repository][validation-examples].
+{{% /note-block %}}
 
 The plugin wires Validation into the Spine Compiler, adds the Validation Java codegen bundle,
 and brings in the JVM runtime dependency automatically.
