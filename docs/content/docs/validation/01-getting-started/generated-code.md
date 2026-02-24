@@ -21,6 +21,7 @@ When a message violates declared constraints, `build()` throws `ValidationExcept
 <embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
 ```kotlin
 shouldThrow<ValidationException> {
+    // Kotlin proto DSL delegates to a Java builder.
     bankCard {
         digits = "invalid"
         owner = "ALEX SMITH"
@@ -44,14 +45,16 @@ assertThrows(ValidationException.class, () ->
 
 ## Validate without throwing
 
-To get a `ValidationError` instead of an exception, build the message partially and call
-`validate()`:
+To get a `ValidationError` instead of an exception, build the message using the `buildPartial()`
+and call `validate()`:
 
 {{< code-tabs langs="Kotlin, Java">}}
 
 {{< code-tab lang="Kotlin" >}}
 <embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
 ```kotlin
+// There is no Kotlin DSL which allows building a non-valid message.
+// So we use a builder from Java.
 val card = BankCard.newBuilder()
     .setOwner("ALEX SMITH")
     .setDigits("wrong number")
