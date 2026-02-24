@@ -95,8 +95,8 @@ the subprojects of the multi-module examples project.
 For more details on this, clone the [Validation examples repository][validation-examples].
 {{% /note-block %}}
 
-The plugin wires Validation into the Spine Compiler, adds the Validation Java codegen bundle,
-and brings in the JVM runtime dependency automatically.
+The plugin wires Validation into the Spine Compiler and brings in
+the JVM runtime dependency automatically.
 
 
 ### Mode 2: Spine-based project via CoreJvm Gradle plugin
