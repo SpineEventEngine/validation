@@ -25,13 +25,14 @@ If you are new to the library, read the short overview first:
 
 - Java 17+
 - Gradle (Kotlin DSL or Groovy)
-- Protobuf compiler (`protoc`)
 - Optional: Kotlin 2.2.21+ for the Kotlin Protobuf DSL
 
 If your project already generates Java/Kotlin sources from `.proto` files, you’re 90% there.
 Spine Validation integrates into the build to generate and inject validation logic into
 the code produced by `protoc`.
 
+Code samples in this tutorial use [Google Truth](https://truth.dev/) and
+[Kotest Assertions](https://kotest.io/docs/assertions/assertions.html).
 
 ## Quick path
 
