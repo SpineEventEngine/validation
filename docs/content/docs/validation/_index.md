@@ -1,3 +1,9 @@
+---
+title: Spine Validation
+description: Overview of the Spine Validation library.
+headline: Documentation
+---
+
 # Spine Validation
 
 Spine Validation generates type-safe validation code from constraints declared in Protobuf

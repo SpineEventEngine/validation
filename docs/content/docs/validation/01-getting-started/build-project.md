@@ -1,3 +1,9 @@
+---
+title: Building Project
+description: Running the build to generate validation code.
+headline: Documentation
+---
+
 # Build your project
 
 After you added Validation to the build and declared constraints in your Protobuf model,

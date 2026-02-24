@@ -1,3 +1,9 @@
+---
+title: Introduction
+description: Learn about Spine Validation components and key capabilities.
+headline: Documentation
+---
+
 # Overview
 
 Spine Validation is a Protobuf-centric validation framework that generates

@@ -1,3 +1,9 @@
+---
+title: Defining Constraints
+description: How to declare validation rules in Protobuf files.
+headline: Documentation
+---
+
 # Define constraints in `.proto` files
 
 This guide shows how to import Spine Validation options and declare constraints

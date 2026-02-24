@@ -1,3 +1,9 @@
+---
+title: Getting Started
+description: Step-by-step guide to setting up Spine Validation in your project.
+headline: Documentation
+---
+
 # Getting started
 
 This section helps you set up Spine Validation, define your first validated Protobuf model,

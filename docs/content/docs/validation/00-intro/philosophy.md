@@ -1,3 +1,9 @@
+---
+title: Philosophy
+description: Core principles behind Spine Validation design.
+headline: Documentation
+---
+
 # Philosophy
 
 Spine Validation is built on a small set of principles that shape how developers

@@ -1,3 +1,9 @@
+---
+title: Key Modules
+description: Overview of the main modules in the Spine Validation project.
+headline: Documentation
+---
+
 # Key modules
 
 | Module    | Description                                                          |

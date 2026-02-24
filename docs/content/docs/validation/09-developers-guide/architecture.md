@@ -1,3 +1,9 @@
+---
+title: Architecture
+description: Internal design of the Spine Validation framework.
+headline: Documentation
+---
+
 # Architecture
 
 The library is a set of plugins for [Spine Compiler](https://github.com/SpineEventEngine/compiler).

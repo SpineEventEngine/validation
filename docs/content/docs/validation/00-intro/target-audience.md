@@ -1,3 +1,9 @@
+---
+title: Target Audience
+description: Who should use Spine Validation and for what purposes.
+headline: Documentation
+---
+
 # Target audience
 
 Spine Validation is designed for developers who model data and APIs using

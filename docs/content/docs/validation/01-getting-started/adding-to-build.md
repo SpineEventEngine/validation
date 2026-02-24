@@ -1,3 +1,9 @@
+---
+title: Adding to Build
+description: How to add Spine Validation to your Gradle project.
+headline: Documentation
+---
+
 # Adding Validation to a Gradle build
 
 ## Adding Spine-specific Gradle plugin repositories
@@ -76,7 +82,7 @@ Add the Validation plugin to the build.
 ```kotlin
 plugins {
     module
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.396"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.398"
 }
 ```
 

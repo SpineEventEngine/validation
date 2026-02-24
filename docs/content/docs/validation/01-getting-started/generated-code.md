@@ -1,3 +1,9 @@
+---
+title: Using Generated Code
+description: How to use the generated validation API in Java and Kotlin.
+headline: Documentation
+---
+
 # Using the generated validation API
 
 This guide shows how the generated JVM API enforces constraints at runtime.
@@ -9,16 +15,9 @@ Validation runs automatically on builder `build()`. To validate without throwing
 
 When a message violates declared constraints, `build()` throws `ValidationException`.
 
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
-```java
-assertThrows(ValidationException.class, () ->
-    BankCard.newBuilder()
-        .setDigits("invalid")
-        .setOwner("ALEX SMITH")
-        .build()
-);
-```
+{{< code-tabs langs="Kotlin, Java">}}
 
+{{< code-tab lang="Kotlin" >}}
 <embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
 ```kotlin
 shouldThrow<ValidationException> {
@@ -28,28 +27,29 @@ shouldThrow<ValidationException> {
     }
 }
 ```
+{{< /code-tab >}}
+
+{{< code-tab lang="Java" >}}
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
+```java
+assertThrows(ValidationException.class, () ->
+    BankCard.newBuilder()
+        .setDigits("invalid")
+        .setOwner("ALEX SMITH")
+        .build()
+);
+```
+{{< /code-tab >}}
+{{< /code-tabs >}}
 
 ## Validate without throwing
 
 To get a `ValidationError` instead of an exception, build the message partially and call
 `validate()`:
 
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
-```java
-var card = BankCard.newBuilder()
-        .setOwner("ALEX SMITH")
-        .setDigits("wrong number")
-        .buildPartial();
-var error = card.validate();
-assertThat(error).isPresent();
+{{< code-tabs langs="Kotlin, Java">}}
 
-var violation = error.get().getConstraintViolation(0);
-var formatted = TemplateStrings.format(violation.getMessage());
-
-assertThat(formatted).contains("digits");
-assertThat(formatted).contains("wrong number");
-```
-
+{{< code-tab lang="Kotlin" >}}
 <embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
 ```kotlin
 val card = BankCard.newBuilder()
@@ -65,18 +65,26 @@ val formatted = violation.message.format()
 formatted shouldContain "digits"
 formatted shouldContain "wrong number"
 ```
+{{< /code-tab >}}
 
-## Generated code
+{{< code-tab lang="Java" >}}
+<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
+```java
+var card = BankCard.newBuilder()
+        .setOwner("ALEX SMITH")
+        .setDigits("wrong number")
+        .buildPartial();
+var error = card.validate();
+assertThat(error).isPresent();
 
-The generated Java builder calls `validate()` on `build()` and throws `ValidationException`
-if any constraint is violated:
+var violation = error.get().getConstraintViolation(0);
+var formatted = TemplateStrings.format(violation.getMessage());
 
-<embed-code file="first-model/generated/main/java/io/spine/validation/docs/firstmodel/BankCard.java" start="public io.spine.validation.docs.firstmodel.@io.spine.validation.Validated BankCard build()" end="return result;"></embed-code>
-
-A constraint like `(required) = true` generates a field check inside the `validate(...)`
-method:
-
-<embed-code file="first-model/generated/main/java/io/spine/validation/docs/firstmodel/BankCard.java" start="if \\(getDigits\\(\\)\\.equals\\(\"\"\\)\\) \\{" end="violations.add\\(violation\\);"></embed-code>
+assertThat(formatted).contains("digits");
+assertThat(formatted).contains("wrong number");
+```
+{{< /code-tab >}}
+{{< /code-tabs >}}
 
 ## What’s next
 
