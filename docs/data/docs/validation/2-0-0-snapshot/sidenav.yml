@@ -12,7 +12,7 @@
     - page: Philosophy
       file_path: 00-intro/philosophy
     - page: Getting started
-      key: getting-started
+      key: 01-getting-started
       children:
         - page: Getting started
           file_path: 01-getting-started
