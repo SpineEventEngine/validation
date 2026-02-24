@@ -89,6 +89,10 @@ assertThat(formatted).contains("wrong number");
 {{< /code-tab >}}
 {{< /code-tabs >}}
 
+You are not likely to use `buildPartial()` for building invalid messages in production code.
+But you may want to use `validate()` for checking messages received from external sources,
+such as API requests or deserialized data.
+
 ## What’s next
 
 - Learn how Validation works internally:
