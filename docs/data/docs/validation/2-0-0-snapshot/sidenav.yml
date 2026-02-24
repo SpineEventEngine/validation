@@ -7,5 +7,31 @@
   children:
     - page: Overview
       file_path: 00-intro
+    - page: Target audience
+      file_path: 00-intro/target-audience
     - page: Philosophy
       file_path: 00-intro/philosophy
+    - page: Getting started
+      key: getting-started
+      children:
+        - page: Getting started
+          file_path: 01-getting-started
+        - page: Adding Validation to your build
+          file_path: 01-getting-started/adding-to-build
+        - page: 'Define constraints in `.proto` files'
+          file_path: 01-getting-started/first-model
+        - page: Build your project
+          file_path: 01-getting-started/build-project
+        - page: Using the generated validation API
+          file_path: 01-getting-started/generated-code
+    - page: Custom validation
+      file_path: 08-custom-validation
+    - page: Developer’s guide
+      key: developers-guide
+      children:
+        - page: Developer’s guide
+          file_path: 09-developers-guide
+        - page: Architecture
+          file_path: 09-developers-guide/architecture
+        - page: Key modules
+          file_path: 09-developers-guide/key-modules
