@@ -17,9 +17,9 @@ If you are new to the library, read the short overview first:
 
 ## What you’ll learn
 
-- How to add Spine Validation to a JVM project using Protobuf models.
+- How to add Spine Validation to a JVM project using Gradle plugins.
 - How to declare validation rules in `.proto` files.
-- How validation is enforced at build time and at runtime.
+- How validation is enforced at runtime.
 
 ## Prerequisites
 
