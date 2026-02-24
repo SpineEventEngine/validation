@@ -40,7 +40,8 @@ buildable documentation set, without expanding scope unnecessarily.
   `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/08-custom-validation/_index.md`
 
 2) Complete “Getting started” flow
-- Validate that “Adding to build” + “First model” cover:
+- Status: DONE (2026-02-24). 
+- Validate that the "Getting started" section covers:
   importing options, build-time validation, `build()` vs `buildPartial()`, and `validate()`.
 
 3) Concepts: explain how Validation works (one layer deeper than “getting started”)
