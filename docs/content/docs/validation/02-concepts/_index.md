@@ -100,7 +100,9 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
   [Define constraints in `.proto` files](../01-getting-started/first-model.md).
 - Learn how runtime validation behaves:
   [Using the generated code](../01-getting-started/generated-code.md).
-- Extend the library:
+- See how options influence generated code:
+  [Options overview](options-overview.md).
+- Add custom validation options:
   [Custom validation](../08-custom-validation/).
 - Explore the implementation:
   [Architecture](../09-developers-guide/architecture.md).
