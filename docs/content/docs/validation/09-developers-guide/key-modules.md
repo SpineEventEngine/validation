@@ -38,4 +38,4 @@ project paths (e.g. `:java`, `:tests:vanilla`).
 
 ## What’s next
 
-- Build custom constraints: [Custom validation](../08-custom-validation/).
+- Build custom validation rules: [Custom validation](../08-custom-validation/).
