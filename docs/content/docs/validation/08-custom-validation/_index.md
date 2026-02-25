@@ -35,23 +35,23 @@ This allows building more complex models, using more entities and events.
 
 Let's take a closer look at each entity.
 
-### Policy
+### Reaction
 
 Usually, this is an entry point to the option handling.
 
-The policy subscribes to one of `*OptionDiscovered` events:
+The reaction subscribes to one of `*OptionDiscovered` events:
 
 - `FileOptionDiscovered`.
 - `MessageOptionDiscovered`.
 - `FieldOptionDiscovered`.
 - `OneofOptionDiscovered`.
 
-It filters incoming events, taking only those who contain the option of the interest. The policy
+It filters incoming events, taking only those who contain the option of the interest. The reaction
 may validate the option application, query `TypeSystem`, extract and transform data arrived with
 the option, if any. Once ready, it emits an event signaling that the discovered option is valid
 and ready for the code generation.
 
-The policy may report a compilation warning or an error, failing the whole compilation if it
+The reaction may report a compilation warning or an error, failing the whole compilation if it
 finds an illegal application of the option.
 
 For example:
@@ -59,7 +59,7 @@ For example:
 1. An unsupported field type.
 2. Illegal option content (invalid regex, parameter, signature).
 
-The policy may just ignore the discovered option and emit `NoReaction`. A typical example
+The reaction may just ignore the discovered option and emit `NoReaction`. A typical example
 of this is a boolean option, such as `(required)`, which does nothing when it is set to `false`.
 
 The desired behavior depends on the option itself.
