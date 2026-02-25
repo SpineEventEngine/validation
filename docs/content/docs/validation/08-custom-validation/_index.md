@@ -14,7 +14,7 @@ Follow these steps to create a custom option:
    in your `.proto` file.
 2. Register it via `io.spine.option.OptionsProvider`.
 3. Implement the following entities:
-    - Policy (`MyOptionPolicy`) – discovers and validates the option.
+    - Reaction (`MyOptionReaction`) – discovers and validates the option.
     - View (`MyOptionView`) – accumulates valid option applications.
     - Generator (`MyOptionGenerator`) – generates Java code for the option.
 4. Register them via `io.spine.tools.validation.java.ValidationOption`.
