@@ -11,7 +11,7 @@ project paths (e.g. `:java`, `:tests:vanilla`).
 
 ## Core modules
 
-| Module           | Description                                                                                                                                                    |
+| **Module**       | **Description**                                                                                                                                                |
 |------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `:context`       | Language-agnostic validation model and built-in option handling (views/reactions) shared by language plugins.                                                  |
 | `:java`          | Spine Compiler plugin for Java: generates/injects validation code; loads custom options via `ValidationOption` SPI and custom validators discovered by `:ksp`. |
@@ -23,7 +23,7 @@ project paths (e.g. `:java`, `:tests:vanilla`).
 
 ## Test modules
 
-| Module                        | Description                                                                                                                |
+| **Module**                    | **Description**                                                                                                            |
 |-------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | `:context-tests`              | Compilation tests for `:context` (Prototap-based), focusing on invalid option usage and error reporting.                   |
 | `:tests`                      | Parent project for integration tests that run the compiler plugins and exercise generated code.                            |
