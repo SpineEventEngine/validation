@@ -2,6 +2,7 @@
 # Thanks to this, links to the version will be generated automatically.
 # The `file_path` must not end with a trailing slash.
 # The `key` should match the current docs section.
+# See: https://github.com/SpineEventEngine/site-commons/blob/master/COMPONENTS.md#sidenav
 
 - page: Validation
   key: validation
