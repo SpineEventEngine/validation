@@ -8,10 +8,10 @@ headline: Documentation
 
 This guide shows how the generated JVM API enforces constraints at runtime.
 
-Validation runs automatically on builder `build()`. To validate without throwing, call
-`validate()` explicitly.
+Validation runs automatically when a message is created.
+It is also possible to validate an existing instance.
 
-## Validation on `build()`
+## Validation on creation
 
 When a message violates declared constraints, `build()` throws `ValidationException`.
 
@@ -43,7 +43,7 @@ assertThrows(ValidationException.class, () ->
 {{< /code-tab >}}
 {{< /code-tabs >}}
 
-## Validate without throwing
+## Validating existing messages
 
 To get a `ValidationError` instead of an exception, build the message using the `buildPartial()`
 and call `validate()`:
