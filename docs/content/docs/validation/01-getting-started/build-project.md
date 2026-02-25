@@ -1,5 +1,5 @@
 ---
-title: Building Project
+title: Building project
 description: Running the build to generate validation code.
 headline: Documentation
 ---

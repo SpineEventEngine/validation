@@ -1,5 +1,5 @@
 ---
-title: Target Audience
+title: Target audience
 description: Who should use Spine Validation and for what purposes.
 headline: Documentation
 ---

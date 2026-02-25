@@ -1,5 +1,5 @@
 ---
-title: Adding to Build
+title: Adding to build
 description: How to add Spine Validation to your Gradle project.
 headline: Documentation
 ---

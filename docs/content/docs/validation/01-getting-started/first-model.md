@@ -1,5 +1,5 @@
 ---
-title: Defining Constraints
+title: Defining constraints
 description: How to declare validation rules in Protobuf files.
 headline: Documentation
 ---

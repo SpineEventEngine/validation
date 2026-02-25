@@ -1,5 +1,5 @@
 ---
-title: Getting Started
+title: Getting started
 description: Step-by-step guide to setting up Spine Validation in your project.
 headline: Documentation
 ---

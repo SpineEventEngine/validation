@@ -1,10 +1,10 @@
 ---
-title: Using Generated Code
-description: How to use the generated validation API in Java and Kotlin.
+title: Using the generated code
+description: How to use the generated validation code in Java and Kotlin.
 headline: Documentation
 ---
 
-# Using the generated validation API
+# Using the generated code
 
 This guide shows how the generated JVM API enforces constraints at runtime.
 
