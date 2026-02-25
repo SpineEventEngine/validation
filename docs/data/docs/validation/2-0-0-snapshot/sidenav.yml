@@ -1,6 +1,7 @@
 # The `file_path` should be relative to the `docs/validation`.
 # Thanks to this, links to the version will be generated automatically.
-# Also, the `file_path` must not end with a trailing slash.
+# The `file_path` must not end with a trailing slash.
+# The `key` should match the current docs section.
 
 - page: Validation
   key: validation
@@ -27,7 +28,7 @@
     - page: Custom validation
       file_path: 08-custom-validation
     - page: Developer’s guide
-      key: developers-guide
+      key: 09-developers-guide
       children:
         - page: Developer’s guide
           file_path: 09-developers-guide
