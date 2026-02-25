@@ -12,7 +12,7 @@ Each target language is a separate Compiler plugin.
 
 Take a look at the following diagram to grasp a high-level library structure:
 
-![High-level library structure overview](.github/readme/high_level_overview.png)
+![High-level library structure overview](high_level_overview.png)
 
 The workflow is the following:
 

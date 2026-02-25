@@ -21,13 +21,13 @@ Follow these steps to create a custom option:
 
 Below is a workflow diagram for a typical option:
 
-![Typical custom option](../.github/readme/typical_custom_option.jpg)
+![Typical custom option](typical_custom_option.jpg)
 
 ## What’s next
 
 - Learn where this plugs in: [Architecture](../09-developers-guide/architecture.md).
 
-Take a look at the `:java-tests:extensions` module that contains a full example of
+Take a look at the `:tests:extensions` module that contains a full example of
 implementation of the custom `(currency)` option.
 
 Note that a custom option can provide several policies and views, but only one generator.
