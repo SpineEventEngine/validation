@@ -1,11 +1,44 @@
 # The `file_path` should be relative to the `docs/validation`.
 # Thanks to this, links to the version will be generated automatically.
-# Also, the `file_path` must not end with a trailing slash.
+# The `file_path` must not end with a trailing slash.
+# The `key` should match the current docs section.
+# See: https://github.com/SpineEventEngine/site-commons/blob/master/COMPONENTS.md#sidenav
 
 - page: Validation
   key: validation
   children:
     - page: Overview
       file_path: 00-intro
+    - page: Target audience
+      file_path: 00-intro/target-audience
     - page: Philosophy
       file_path: 00-intro/philosophy
+    - page: Getting started
+      key: 01-getting-started
+      children:
+        - page: Getting started
+          file_path: 01-getting-started
+        - page: Adding Validation to your build
+          file_path: 01-getting-started/adding-to-build
+        - page: 'Define constraints in `.proto` files'
+          file_path: 01-getting-started/first-model
+        - page: Build your project
+          file_path: 01-getting-started/build-project
+        - page: Using the generated validation API
+          file_path: 01-getting-started/generated-code
+    - page: Concepts
+      key: 02-concepts
+      children:
+        - page: Concepts
+          file_path: 02-concepts
+    - page: Custom validation
+      file_path: 08-custom-validation
+    - page: Developer’s guide
+      key: 09-developers-guide
+      children:
+        - page: Developer’s guide
+          file_path: 09-developers-guide
+        - page: Architecture
+          file_path: 09-developers-guide/architecture
+        - page: Key modules
+          file_path: 09-developers-guide/key-modules

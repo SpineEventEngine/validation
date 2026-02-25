@@ -1,3 +1,9 @@
+---
+title: Philosophy
+description: Core principles behind Spine Validation design.
+headline: Documentation
+---
+
 # Philosophy
 
 Spine Validation is built on a small set of principles that shape how developers
@@ -136,3 +142,8 @@ Spine Validation is principled around:
 
 This makes it suitable for teams that need reliable, maintainable,
 and evolvable validation for complex systems built on top of Protobuf.
+
+## What’s next
+
+- Who this is for: [Target audience](target-audience.md).
+- Try it end-to-end: [Getting started](../01-getting-started/).

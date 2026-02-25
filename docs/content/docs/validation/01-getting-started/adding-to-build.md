@@ -1,3 +1,9 @@
+---
+title: Adding to build
+description: How to add Spine Validation to your Gradle project.
+headline: Documentation
+---
+
 # Adding Validation to a Gradle build
 
 ## Adding Spine-specific Gradle plugin repositories
@@ -76,18 +82,21 @@ Add the Validation plugin to the build.
 ```kotlin
 plugins {
     module
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.396"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.398"
 }
 ```
 
-> ##### What is the `module` plugin?
-> The plugin `module` in the snippet above refers to the name of the script plugin
-> `buildSrc/src/kotlin/module.gradle.kts` which provides common configuration for
-> the subprojects of the multi-module examples project.
-> For more details on this, clone the [Validation examples repository][validation-examples].
+{{% note-block class="note" %}}
+#### What is the `module` plugin?
 
-The plugin wires Validation into the Spine Compiler, adds the Validation Java codegen bundle,
-and brings in the JVM runtime dependency automatically.
+The plugin `module` in the snippet above refers to the name of the script plugin
+`buildSrc/src/kotlin/module.gradle.kts` which provides common configuration for
+the subprojects of the multi-module examples project.
+For more details on this, clone the [Validation examples repository][validation-examples].
+{{% /note-block %}}
+
+The plugin wires Validation into the Spine Compiler and brings in
+the JVM runtime dependency automatically.
 
 
 ### Mode 2: Spine-based project via CoreJvm Gradle plugin
@@ -105,6 +114,6 @@ plugins {
 
 ## Next step
 
-Continue with [Your first validated model](first-model.md).
+Continue with [Define constraints in `.proto` files](first-model.md).
 
 [validation-examples]: https://github.com/spine-examples/hello-validation

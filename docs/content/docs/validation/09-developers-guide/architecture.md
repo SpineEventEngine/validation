@@ -1,4 +1,10 @@
-## Architecture
+---
+title: Architecture
+description: Internal design of the Spine Validation framework.
+headline: Documentation
+---
+
+# Architecture
 
 The library is a set of plugins for [Spine Compiler](https://github.com/SpineEventEngine/compiler).
 
@@ -6,7 +12,7 @@ Each target language is a separate Compiler plugin.
 
 Take a look at the following diagram to grasp a high-level library structure:
 
-![High-level library structure overview](.github/readme/high_level_overview.png)
+![High-level library structure overview](high_level_overview.png)
 
 The workflow is the following:
 
@@ -14,3 +20,8 @@ The workflow is the following:
 - (3) – Protobuf compiler generates Java classes.
 - (4), (5) – policies and views build the validation model.
 - (6), (7) – Java plugin generates and injects validation code.
+
+## What’s next
+
+- See the project layout: [Key modules](key-modules.md).
+- If you need organization-specific rules: [Custom validation](../08-custom-validation/).

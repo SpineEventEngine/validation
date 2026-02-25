@@ -1,19 +1,20 @@
-# Your first validated model
+---
+title: Defining constraints
+description: How to declare validation rules in Protobuf files.
+headline: Documentation
+---
 
-This guide shows how to define a Protobuf model with validation rules and how those
-rules are enforced in the generated JVM code.
+# Define constraints in `.proto` files
+
+This guide shows how to import Spine Validation options and declare constraints
+in your Protobuf model.
 
 The validation options come from `spine/options.proto` and include constraints like
 `(required)`, `(min)`, `(max)`, `(pattern)`, `(distinct)`, and `(validate)`.
 
-## 1) Configure the project
+## Import options and declare constraints
 
-First, make sure your project is configured to use the Validation library.
-See [Adding Validation to a Gradle build](adding-to-build.md) for detailed instructions.
-
-## 2) Define a validated message
-
-Create a `.proto` file and import the validation options you need:
+Create a `.proto` file and import `spine/options.proto`:
 
 <embed-code file="first-model/src/main/proto/spine/validation/docs/first_model/bank_card.proto" start="syntax" end="^}"></embed-code>
 ```protobuf
@@ -66,84 +67,6 @@ Notes on the options used:
 - `(pattern).regex` validates string contents with a regular expression.
 - `(distinct)` enforces uniqueness in `repeated` and `map` fields.
 
+## Next step
 
-## 3) Build the project
-
-Run your Gradle build as usual.
-
-For macOS and Linux:
-```
-./gradlew clean build
-```
-
-For Windows:
-```
-gradlew.bat clean build
-```
-
-The Validation Gradle plugin integrates with Spine Compiler
-and injects validation checks into the generated Java code.
-
-The code will be generated under the `generated` directory of your project.
-
-## 4) Use the generated validation
-
-Validation runs on `build()` and can be triggered manually with `validate()`.
-
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
-```java
-assertThrows(ValidationException.class, () ->
-    BankCard.newBuilder()
-        .setDigits("invalid")
-        .setOwner("ALEX SMITH")
-        .build()
-);
-```
-
-<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
-```kotlin
-shouldThrow<ValidationException> {
-    bankCard {
-        digits = "invalid"
-        owner = "ALEX SMITH"
-    }
-}
-```
-
-To validate without throwing, use `validate()` on a built message:
-
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
-```java
-var card = BankCard.newBuilder()
-        .setOwner("ALEX SMITH")
-        .setDigits("wrong number")
-        .buildPartial();
-var error = card.validate();
-assertThat(error).isPresent();
-
-var violation = error.get().getConstraintViolation(0);
-var formatted = TemplateStrings.format(violation.getMessage());
-
-assertThat(formatted).contains("digits");
-assertThat(formatted).contains("wrong number");
-```
-
-<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
-```kotlin
-val card = BankCard.newBuilder()
-    .setOwner("ALEX SMITH")
-    .setDigits("wrong number")
-    .buildPartial() // There is no Kotlin DSL for this.
-val error = card.validate()
-error.shouldBePresent()
-
-val violation = error.get().constraintViolationList[0]
-val formatted = violation.message.format()
-
-formatted shouldContain "digits"
-formatted shouldContain "wrong number"
-```   
-
-## What’s next
-
-Continue with [Validation Workflow](workflow.md).
+Continue with [Build your project](build-project.md).
