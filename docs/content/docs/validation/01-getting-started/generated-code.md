@@ -95,7 +95,7 @@ such as API requests or deserialized data, for example, when building an anticor
 
 ## What’s next
 
-- Learn how Validation works internally:
-  [Architecture](../09-developers-guide/architecture.md).
+- Learn the core concepts:
+  [Concepts](../02-concepts/).
 - If you need organization-specific rules:
   [Custom validation](../08-custom-validation/).
