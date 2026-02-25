@@ -74,9 +74,3 @@ buildable documentation set, without expanding scope unnecessarily.
   - `./gradlew checkSamples`
   - `./gradlew buildSite`
 - If something fails, fix the docs, embedded snippet markers, or example sources until green.
-
-## Suggested “multi-agent” split (still one owner)
-
-If you want to use multiple agents, treat them as focused roles that each pick up one task
-above and produce a concrete artifact (a page draft, an option table, or a green build).
-You remain the single integrator/releaser.
