@@ -16,16 +16,12 @@ and what API you get at runtime.
 
 ## Where options come from
 
-The built-in validation options are defined in Spine option protos:
-
-- `spine/options.proto` — general validation options.
-- `spine/time_options.proto` — time-related options.
+The built-in validation options are defined in `spine/options.proto`.
 
 To use an option, import the proto that defines it and annotate your fields and messages.
 
 ```protobuf
 import "spine/options.proto";
-import "spine/time_options.proto";
 ```
 
 If you need a refresher on how custom options work in Protobuf, see
@@ -63,7 +59,7 @@ At runtime, Spine Validation does **not** parse descriptor option data to decide
 All checks are already compiled into the generated message/builder code.
 
 
-## Tiny examples: options → generated checks
+## Tiny examples
 
 These examples are intentionally minimal.
 They are only meant to illustrate the “annotate with options → get runtime checks” flow.
@@ -94,9 +90,9 @@ message OrderId {
 import "spine/options.proto";
 
 message Temperature {
-  int32 celsius = 1 [
+  int32 kelvin = 1 [
     (min).value = "0",
-    (max).value = "100"
+    (max).value = "10000"
   ];
 }
 ```
