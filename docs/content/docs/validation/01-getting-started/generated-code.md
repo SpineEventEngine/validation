@@ -91,7 +91,7 @@ assertThat(formatted).contains("wrong number");
 
 You are not likely to use `buildPartial()` for building invalid messages in production code.
 But you may want to use `validate()` for checking messages received from external sources,
-such as API requests or deserialized data.
+such as API requests or deserialized data, for example, when building an anticorruption layer.
 
 ## What’s next
 
