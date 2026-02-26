@@ -12,8 +12,8 @@ It answers two questions:
 - **How do I express validation rules?**
 - **How does the runtime report violations?**
 
-If you are new to the library, start with declaring constraints in `.proto` files and
-then come back here for the details.
+If you are new to the library, start with [declaring constraints](../01-getting-started/first-model)
+in `.proto` files and then come back here for the details.
 
 
 ## Vocabulary
