@@ -64,16 +64,17 @@ To format a `TemplateString`, use:
 `format()` validates that all placeholders have values and throws `IllegalArgumentException` otherwise.
 `formatUnsafe()` does not validate and leaves missing placeholders unsubstituted.
 
-Example (Kotlin):
+{{< code-tabs langs="Kotlin, Java">}}
 
+{{< code-tab lang="Kotlin" >}}
 ```kotlin
 val error = message.validate().orElse(null) ?: return
 val violation = error.constraintViolationList.first()
 val text = violation.message.format()
 ```
+{{< /code-tab >}}
 
-Example (Java):
-
+{{< code-tab lang="Java" >}}
 ```java
 var error = message.validate();
 if (error.isEmpty()) {
@@ -82,7 +83,9 @@ if (error.isEmpty()) {
 var violation = error.get().getConstraintViolation(0);
 var text = TemplateStrings.format(violation.getMessage());
 ```
+{{< /code-tab >}}
 
+{{< /code-tabs >}}
 
 ## Choosing what to show vs what to log
 
