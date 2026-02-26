@@ -46,23 +46,7 @@ buildable documentation set, without expanding scope unnecessarily.
 3) [Concepts](archive/concepts-plan.md)
 - Status: DONE (2026-02-26).
 
-4) Working with error messages
-- Describe how `TemplateString` works (placeholders + values) and how to convert it to a
-  human-readable message (formatting).
-- Clarify the recommended ways to work with Validation errors in:
-  - Kotlin: `TemplateString.format()` / `TemplateString.formatUnsafe()`.
-  - Java: `io.spine.validation.TemplateStrings.format(TemplateString)`.
-- Explain the structure of `ValidationError` / `ConstraintViolation`, and what fields developers
-  should use when:
-  - displaying messages to end users;
-  - logging diagnostics (e.g. include `type_name`, `field_path`, and the unformatted template).
-- Add troubleshooting notes for common runtime formatting problems (e.g. missing placeholder
-  values; choosing `formatUnsafe()` when partial substitution is acceptable).
-- Source references to anchor the docs:
-  - `jvm-runtime/src/main/proto/spine/validation/error_message.proto`
-  - `jvm-runtime/src/main/proto/spine/validation/validation_error.proto`
-  - `jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt`
-  - `jvm-runtime/src/main/kotlin/io/spine/validation/RuntimeErrorPlaceholder.kt`
+4) [Working with error messages](working-with-error-messages.md)
 
 5) Built-in options: publish a minimal reference set
 - From `docs/_options/options.proto`,
