@@ -7,8 +7,8 @@
   Validation Compiler into the build to augment `protoc` output.
 - Terminology: use “Validation Compiler” consistently (it is a plugin to the Spine Compiler).
 - Pages to create/update:
-    - Concepts landing: `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/02-concepts/_index.md`
-    - Options overview: `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/02-concepts/options-overview.md`
+    - Concepts landing: `docs/content/docs/validation/02-concepts/_index.md`
+    - Options overview: `docs/content/docs/validation/02-concepts/options-overview.md`
 - Concepts landing page: planned content (conceptual, 1 screen deeper than “Getting started”)
     - Open with a 2–3 sentence “mental model”:
         - Constraints are declared in `.proto` files using built-in options imported from `spine/options.proto`.
@@ -27,7 +27,7 @@
           `validate()` returning an error object (as introduced in “Getting started”).
     - Mention extensibility without diving in:
         - Note that custom validation options + codegen are possible; link forward to
-          `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/08-custom-validation/_index.md`.
+          `docs/content/docs/validation/08-custom-validation/_index.md`.
     - Close with “What’s next” links:
         - Options overview page.
         - Custom validation (for organization-specific rules).

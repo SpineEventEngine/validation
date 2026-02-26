@@ -6,12 +6,11 @@ buildable documentation set, without expanding scope unnecessarily.
 
 ## Key locations (source of truth)
 
-- Docs content (Hugo): `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/`
+- Docs content (Hugo): `docs/content/docs/validation/`
 - Protobuf options reference (for built-ins):
-  - `/Users/sanders/Projects/Spine/validation/docs/_options/options.proto`
-  - `/Users/sanders/Projects/Spine/validation/docs/_options/time_options.proto`
-- Example projects for embedded snippets: `/Users/sanders/Projects/Spine/validation/docs/_examples/`
-- Docs build notes: `/Users/sanders/Projects/Spine/validation/docs/GRADLE.md`
+  - `docs/_options/options.proto`
+- Example projects for embedded snippets: `docs/_examples/`
+- Docs build notes: `docs/GRADLE.md`
 
 ## Definition of done (for a “first complete docs cut”)
 
@@ -25,19 +24,19 @@ buildable documentation set, without expanding scope unnecessarily.
 1) Information architecture (IA): make Hugo navigation coherent
 - Status: DONE (2026-02-23).
 - Added/updated section landing pages:
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/_index.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/_index.md`
+  - `docs/content/docs/validation/_index.md`
+  - `docs/content/docs/validation/09-developers-guide/_index.md`
 - Replaced broken `.../index.md` links with directory links where appropriate:
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/_index.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/01-getting-started/_index.md`
+  - `docs/content/docs/validation/00-intro/_index.md`
+  - `docs/content/docs/validation/01-getting-started/_index.md`
 - Added “What’s next” navigation to keep a clear reading path:
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/target-audience.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/00-intro/philosophy.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/architecture.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/09-developers-guide/key-modules.md`
-  - `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/01-getting-started/first-model.md`
+  - `docs/content/docs/validation/00-intro/target-audience.md`
+  - `docs/content/docs/validation/00-intro/philosophy.md`
+  - `docs/content/docs/validation/09-developers-guide/architecture.md`
+  - `docs/content/docs/validation/09-developers-guide/key-modules.md`
+  - `docs/content/docs/validation/01-getting-started/first-model.md`
 - Fixed an obvious broken image reference:
-  `/Users/sanders/Projects/Spine/validation/docs/content/docs/validation/08-custom-validation/_index.md`
+  `docs/content/docs/validation/08-custom-validation/_index.md`
 
 2) Complete “Getting started” flow
 - Status: DONE (2026-02-24). 
@@ -60,13 +59,13 @@ buildable documentation set, without expanding scope unnecessarily.
 - Add troubleshooting notes for common runtime formatting problems (e.g. missing placeholder
   values; choosing `formatUnsafe()` when partial substitution is acceptable).
 - Source references to anchor the docs:
-  - `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/proto/spine/validation/error_message.proto`
-  - `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/proto/spine/validation/validation_error.proto`
-  - `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt`
-  - `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/kotlin/io/spine/validation/RuntimeErrorPlaceholder.kt`
+  - `jvm-runtime/src/main/proto/spine/validation/error_message.proto`
+  - `jvm-runtime/src/main/proto/spine/validation/validation_error.proto`
+  - `jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt`
+  - `jvm-runtime/src/main/kotlin/io/spine/validation/RuntimeErrorPlaceholder.kt`
 
 5) Built-in options: publish a minimal reference set
-- From `/Users/sanders/Projects/Spine/validation/docs/_options/options.proto`,
+- From `docs/_options/options.proto`,
   enumerate the built-in options and group them (fields, strings, numbers, collections, message-level).
 - For each documented option: purpose, supported field types, common pitfalls, and a short `.proto` example.
 - Start with the options already used in docs/examples: `(required)`, `(pattern)`, `(min)/(max)`,
@@ -77,14 +76,14 @@ buildable documentation set, without expanding scope unnecessarily.
   - fail-fast on `build()` (throws `ValidationException`);
   - non-throwing `validate()` (returns `Optional<ValidationError>`).
 - Link to the runtime entry points used by generated code:
-  `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/java/io/spine/validation/ValidatableMessage.java`,
-  `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/java/io/spine/validation/ValidatingBuilder.java`,
-  `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/java/io/spine/validation/Validate.java`,
-  `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/java/io/spine/validation/ValidationException.java`,
-  `/Users/sanders/Projects/Spine/validation/jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt`.
+  `jvm-runtime/src/main/java/io/spine/validation/ValidatableMessage.java`,
+  `jvm-runtime/src/main/java/io/spine/validation/ValidatingBuilder.java`,
+  `jvm-runtime/src/main/java/io/spine/validation/Validate.java`,
+  `jvm-runtime/src/main/java/io/spine/validation/ValidationException.java`,
+  `jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt`.
 
 7) Verification pass (keep it tight; fix only doc-related issues)
-- From `/Users/sanders/Projects/Spine/validation/docs/`, run:
+- From `docs/`, run:
   - `./gradlew embedCode`
   - `./gradlew checkSamples`
   - `./gradlew buildSite`
