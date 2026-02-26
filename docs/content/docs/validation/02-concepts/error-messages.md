@@ -19,7 +19,21 @@ Each violation contains a machine-friendly error message (`TemplateString`) whic
 ## Where error messages come from
 
 Every built-in validation option defines a **default** error message.
-For example, the `(pattern)` option declares its default message in `spine/options.proto`.
+These messages come as the value of the `default_message` option declared for each option type.
+
+For example, the `pattern` option defines the following default message:
+
+```protobuf
+message PatternOption {
+
+    // The default error message.
+    option (default_message) = "The `${parent.type}.${field.path}` field"
+        " must match the regular expression `${regex.pattern}` (modifiers: `${regex.modifiers}`)."
+        " The passed value: `${field.value}`.";
+    
+    // ...
+}
+```
 
 When you apply an option in a `.proto` file, you can **override** the default message by
 setting the option’s `error_msg` field.
@@ -30,16 +44,19 @@ Example: custom message for a regex pattern.
 import "spine/options.proto";
 
 message CreateAccount {
-  string id = 1 [
-    (pattern).regex = "^[A-Za-z0-9+]+$",
-    (pattern).error_msg = "ID must be alphanumerical in `${parent.type}`. Provided: `${field.value}`."
-  ];
+    string id = 1 [
+        (pattern).regex = "^[A-Za-z0-9+]+$",
+        (pattern).error_msg = "ID must be alphanumerical in `${parent.type}`. Provided: `${field.value}`."
+    ];
 }
 ```
 
 The placeholders (like `${field.value}`) are substituted at runtime when the violation is created.
-Each option documents the placeholders it supports next to its `error_msg` field in `spine/options.proto`.
 
+{{% note-block class="note" %}}
+Each option documents the placeholders it supports next to its `error_msg` field
+in `spine/options.proto`.
+{{% /note-block %}}
 
 ## Placeholders and `TemplateString`
 
@@ -50,9 +67,11 @@ Each option documents the placeholders it supports next to its `error_msg` field
 
 The placeholder keys in the map do **not** include `${}` — for example, `field.path`.
 
+{{% note-block class="warning" %}}
 The map may include extra keys that are not referenced by the template, but every placeholder
-used in `with_placeholders` must have a corresponding value (otherwise, the template is invalid).
-
+used in `with_placeholders` **must** have a corresponding value.
+Otherwise, the template is invalid.
+{{% /note-block %}}
 
 ## Formatting messages in code
 
