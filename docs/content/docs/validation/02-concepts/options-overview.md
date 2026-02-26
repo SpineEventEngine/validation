@@ -45,6 +45,13 @@ At build time:
 
 The result is a Java API that enforces the rules you declared in the model.
 
+```mermaid
+flowchart LR
+    A["<code>.proto  <br/>  +  <br/> spine/options.proto</code>"] --> B["<b>protoc</b> <br/> (Java)"]
+    B --> C["<b>Validation Compiler</b><br/>via Gradle plugin"]
+    C --> D["Generated Java API
+    <code>build(), validate()</code>"]
+```
 
 ## What code you get (runtime)
 
