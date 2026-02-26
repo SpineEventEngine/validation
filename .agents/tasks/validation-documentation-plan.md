@@ -64,7 +64,7 @@ buildable documentation set, without expanding scope unnecessarily.
     - Runtime: there is no descriptor parsing; validation runs as regular code in `build()` / `validate()`.
   - Add a small pipeline diagram (Mermaid) showing:
     `.proto` + `spine/options.proto` import → `protoc` (Java) → Validation Compiler (via Gradle plugin)
-    → generated JVM API (`build()`, `validate()`).
+    → generated Java API (`build()`, `validate()`).
   - Define (briefly) what Protobuf custom options are with a one-sentence refresher,
     then link to Protobuf docs for details.
   - Clarify “what you write” vs “what you get”:

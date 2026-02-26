@@ -43,7 +43,7 @@ At build time:
 3. The Validation Compiler reads the compiled descriptors (including your option values) and
    augments `protoc` output with validation logic.
 
-The result is a JVM API that enforces the rules you declared in the model.
+The result is a Java API that enforces the rules you declared in the model.
 
 
 ## What code you get (runtime)
