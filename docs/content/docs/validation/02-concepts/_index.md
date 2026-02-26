@@ -68,8 +68,8 @@ Each `ConstraintViolation` points to the invalid value and explains what went wr
 - `field_value` — the invalid value packed as `google.protobuf.Any`.
 
 When you need a human-readable message, format the `TemplateString` from the violation.
-See [Using the generated code](../01-getting-started/generated-code.md) for Kotlin and Java
-formatting examples.
+See [Working with error messages](working-with-error-messages.md) for message formatting,
+placeholders, and customization.
 
 
 ## Nested validation and `(validate)`
@@ -102,6 +102,8 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
   [Using the generated code](../01-getting-started/generated-code.md).
 - See how options influence generated code:
   [Options overview](options-overview.md).
+- Customize and format messages:
+  [Working with error messages](working-with-error-messages.md).
 - Add custom validation options:
   [Custom validation](../08-custom-validation/).
 - Explore the implementation:

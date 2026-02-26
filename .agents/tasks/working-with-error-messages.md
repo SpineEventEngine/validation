@@ -5,11 +5,11 @@
 - how to define custom messages, and how to format them for end users or diagnostics.
 - Terminology: `TemplateString`, `ValidationError`, `ConstraintViolation`, `format()`, `formatUnsafe()`
 - Describe that validation options have default error messages and user-defined error messages
-  (via `(error_msg)` property of an option).
+  (via the `error_msg` field of a validation option, such as `(pattern).error_msg`).
 - Give an example of a custom validation error message with placeholders
   defined in a proto field option. Use `spine/options.proto` as a reference for
   the option definition and the `error_msg` field.
-- Explain the noption of placeholders in error messages and how they correspond to
+- Explain the notion of placeholders in error messages and how they correspond to
   values provided at runtime when a violation occurs.
 - Describe how `TemplateString` works (placeholders + values) and how to convert it to a
   human-readable message (formatting).
@@ -28,3 +28,7 @@
     - `jvm-runtime/src/main/proto/spine/validation/validation_error.proto`
     - `jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt`
     - `jvm-runtime/src/main/kotlin/io/spine/validation/RuntimeErrorPlaceholder.kt`
+
+## Output
+
+Implemented as `docs/content/docs/validation/02-concepts/working-with-error-messages.md`.
