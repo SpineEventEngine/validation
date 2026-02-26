@@ -31,6 +31,8 @@
       children:
         - page: Concepts
           file_path: 02-concepts
+        - page: Options overview
+          file_path: 02-concepts/options-overview
     - page: Custom validation
       file_path: 08-custom-validation
     - page: Developer’s guide
