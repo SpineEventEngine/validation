@@ -31,4 +31,4 @@
 
 ## Output
 
-Implemented as `docs/content/docs/validation/02-concepts/working-with-error-messages.md`.
+Implemented as `docs/content/docs/validation/02-concepts/error-messages.md`.
