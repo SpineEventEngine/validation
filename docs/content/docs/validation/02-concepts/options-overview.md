@@ -8,7 +8,7 @@ headline: Documentation
 
 Spine Validation rules are expressed as **Protobuf options**.
 You annotate your `.proto` model with built-in options, and the **Validation Compiler**
-turns those option values into runtime checks in the generated JVM code.
+turns those option values into runtime checks in the generated Java code.
 
 This page explains where the built-in options come from, how they are applied at build time,
 and what API you get at runtime.
@@ -17,6 +17,10 @@ and what API you get at runtime.
 ## Where options come from
 
 The built-in validation options are defined in `spine/options.proto`.
+
+The file comes in the `spine-base.jar` artifact, which is an API dependency
+of the Validation runtime library (`spine-validation-java-runtime.jar`) added
+to your project by the Validation Gradle plugin.
 
 To use an option, import the proto that defines it and annotate your fields and messages.
 
