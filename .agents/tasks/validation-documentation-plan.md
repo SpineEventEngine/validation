@@ -50,6 +50,7 @@ buildable documentation set, without expanding scope unnecessarily.
 - Status: DONE (2026-02-27).
 
 5) [Built-in options](built-in-options-plan.md): publish a minimal reference set
+- Status: DONE (2026-02-27).
 
 6) [Validating third-party messages](third-party-messages-plan.md)
 
