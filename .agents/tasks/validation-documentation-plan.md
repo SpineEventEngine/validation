@@ -46,28 +46,21 @@ buildable documentation set, without expanding scope unnecessarily.
 3) [Concepts](archive/concepts-plan.md)
 - Status: DONE (2026-02-26).
 
-4) [Working with error messages](working-with-error-messages.md)
+4) [Working with error messages](archive/working-with-error-messages.md)
 - Status: DONE (2026-02-27).
 
-5) Built-in options: publish a minimal reference set
-- From `docs/_options/options.proto`,
-  enumerate the built-in options and group them (fields, strings, numbers, collections, message-level).
-- For each documented option: purpose, supported field types, common pitfalls, and a short `.proto` example.
-- Start with the options already used in docs/examples: `(required)`, `(pattern)`, `(min)/(max)`,
-  `(distinct)`, `(validate)`.
+5) [Built-in options](built-in-options-plan.md): publish a minimal reference set
 
-6) Runtime API usage (Java + Kotlin)
-- Document the two primary usage patterns:
-  - fail-fast on `build()` (throws `ValidationException`);
-  - non-throwing `validate()` (returns `Optional<ValidationError>`).
-- Link to the runtime entry points used by generated code:
-  `jvm-runtime/src/main/java/io/spine/validation/ValidatableMessage.java`,
-  `jvm-runtime/src/main/java/io/spine/validation/ValidatingBuilder.java`,
-  `jvm-runtime/src/main/java/io/spine/validation/Validate.java`,
-  `jvm-runtime/src/main/java/io/spine/validation/ValidationException.java`,
-  `jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt`.
+6) [Validating third-party messages](third-party-messages-plan.md)
 
-7) Verification pass (keep it tight; fix only doc-related issues)
+7) [Custom validation: defining your own options and codegen](custom-validation-plan.md)
+
+8) [Developer's guide: architecture and key modules](developers-guide-plan.md)
+
+## Verification pass
+
+Keep it tight; fix only doc-related issues.
+
 - From `docs/`, run:
   - `./gradlew embedCode`
   - `./gradlew checkSamples`
