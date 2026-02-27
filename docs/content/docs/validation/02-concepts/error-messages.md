@@ -129,3 +129,14 @@ Recommended actions:
 
 - treat this as a bug in the option/message definition, and fix the custom `error_msg` in your `.proto`;
 - if you can tolerate partial substitution (for example, in logs), use `formatUnsafe()`.
+
+## What’s next
+
+- See how constraints are expressed as options and compiled into runtime checks:
+  [Options overview](options-overview.md).
+- Explore the built-in options:
+  [Built-in options](../03-built-in-options/).
+- Learn how to validate message types from third-party libraries:
+  [Validating third-party messages](../04-third-party-messages/).
+- If built-in options are not enough, define your own constraints and messages:
+  [Custom validation](../08-custom-validation/).
