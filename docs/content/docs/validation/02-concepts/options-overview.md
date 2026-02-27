@@ -66,7 +66,7 @@ See [Using the generated code](../01-getting-started/generated-code.md) for Java
 ## What does not happen
 
 At runtime, Spine Validation does **not** parse descriptor option data to decide what to validate.
-All checks are already compiled into the generated message/builder code.
+All checks are already translated into the generated message/builder code.
 
 
 ## Tiny examples
