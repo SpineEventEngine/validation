@@ -68,7 +68,7 @@ Each `ConstraintViolation` points to the invalid value and explains what went wr
 - `field_value` — the invalid value packed as `google.protobuf.Any`.
 
 When you need a human-readable message, format the `TemplateString` from the violation.
-See [Working with error messages](working-with-error-messages.md) for message formatting,
+See [Working with error messages](error-messages.md) for message formatting,
 placeholders, and customization.
 
 
@@ -102,11 +102,9 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
   [Using the generated code](../01-getting-started/generated-code.md).
 - See how options influence generated code:
   [Options overview](options-overview.md).
- - Customize and format messages:
-   [Working with error messages](working-with-error-messages.md).
+- Customize and format messages:
+  [Working with error messages](error-messages.md).
 - [Built-in options](../03-built-in-options/)
 - [Validating third-party messages](../04-third-party-messages/)
- - Add custom validation options:
-   [Custom validation](../08-custom-validation/).
- - Explore the implementation:
-   [Architecture](../09-developers-guide/architecture.md).
+- Add custom validation options:
+  [Custom validation](../08-custom-validation/).
