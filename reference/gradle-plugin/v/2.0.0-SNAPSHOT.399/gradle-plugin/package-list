@@ -1,0 +1,13 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.tools.validation.gradle////PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/index.html
+$dokka.location:io.spine.tools.validation.gradle/Meta///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-meta/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Companion///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-companion/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Companion/NAME/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-companion/-n-a-m-e.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/ValidationExtension/#org.gradle.api.Project/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-validation-extension.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/enabled/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/enabled.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/ValidationGradlePlugin/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/-validation-gradle-plugin.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/apply/#org.gradle.api.Project/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/apply.html
+io.spine.tools.validation.gradle
