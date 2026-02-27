@@ -125,10 +125,8 @@ Its focus is entirely on:
 
 ```mermaid
 graph LR
-  A(Protobuf) --> B(Generated code)
+  A(Protobuf) --> B(Generated Java/Kotlin/TypeScript)
   B --> C(Domain logic)
-  subgraph B [Generated Java/Kotlin/TypeScript]
-  end
 ```
 
 Everything else (frontend validation, OpenAPI, view models) should build on top
