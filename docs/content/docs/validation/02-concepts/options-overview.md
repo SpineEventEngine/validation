@@ -49,8 +49,7 @@ The result is a Java API that enforces the rules you declared in the model.
 flowchart LR
     A["<code>.proto</code><br/>&nbsp;&nbsp;+<br/><code>spine/options.proto</code>"] --> B["<b>protoc</b> <br/> (Java)"]
     B --> C["<b>Validation Compiler</b><br/>via Gradle plugin"]
-    C --> D["Generated Java API
-    <code>build()</code>, <code>validate()</code>"]
+    C --> D["Generated Java API<br/><code>build()</code>, <code>validate()</code>"]
 ```
 
 ## What code you get (runtime)
