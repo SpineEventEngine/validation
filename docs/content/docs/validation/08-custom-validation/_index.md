@@ -25,6 +25,7 @@ Below is a workflow diagram for a typical option:
 
 ## What’s next
 
+- [Validating third-party messages](../04-third-party-messages/)
 - Learn where this plugs in: [Architecture](../09-developers-guide/architecture.md).
 
 Take a look at the `:tests:extensions` module that contains a full example of

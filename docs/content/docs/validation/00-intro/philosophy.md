@@ -123,8 +123,10 @@ front-end models, or JSON schemas.
 
 Its focus is entirely on:
 
-```
-Protobuf → generated Java/Kotlin/TypeScript → domain logic
+```mermaid
+graph LR
+  A(Protobuf) --> B(Generated Java/Kotlin/TypeScript)
+  B --> C(Domain logic)
 ```
 
 Everything else (frontend validation, OpenAPI, view models) should build on top

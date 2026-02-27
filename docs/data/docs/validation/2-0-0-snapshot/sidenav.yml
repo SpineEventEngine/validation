@@ -31,6 +31,14 @@
       children:
         - page: Concepts
           file_path: 02-concepts
+        - page: Options overview
+          file_path: 02-concepts/options-overview
+        - page: Working with error messages
+          file_path: 02-concepts/error-messages
+    - page: Built-in options
+      file_path: 03-built-in-options
+    - page: Validating third-party messages
+      file_path: 04-third-party-messages
     - page: Custom validation
       file_path: 08-custom-validation
     - page: Developer’s guide
