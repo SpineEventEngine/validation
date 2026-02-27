@@ -47,6 +47,7 @@ buildable documentation set, without expanding scope unnecessarily.
 - Status: DONE (2026-02-26).
 
 4) [Working with error messages](working-with-error-messages.md)
+- Status: DONE (2026-02-27).
 
 5) Built-in options: publish a minimal reference set
 - From `docs/_options/options.proto`,
