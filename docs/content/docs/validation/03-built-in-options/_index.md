@@ -10,4 +10,3 @@ headline: Documentation
 
 - [Validating third-party messages](../04-third-party-messages/)
 - [Custom validation](../08-custom-validation/)
-

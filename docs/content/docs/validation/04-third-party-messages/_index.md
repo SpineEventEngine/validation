@@ -10,4 +10,3 @@ headline: Documentation
 
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
-
