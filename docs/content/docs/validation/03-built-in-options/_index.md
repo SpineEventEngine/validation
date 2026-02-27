@@ -24,7 +24,7 @@ Use this section when you want to:
 
 ## Choose a page
 
-- **Most field constraints** (presence, bounds, patterns, nested validation, dependencies):  
+- **Most field constraints** — presence, bounds, patterns, nested validation, dependencies:  
   [Field-level options](field-level-options.md)
 - **Enforce “one of these fields must be set” in a `oneof`:**  
   [Options for `oneof` fields](oneof-fields.md)
