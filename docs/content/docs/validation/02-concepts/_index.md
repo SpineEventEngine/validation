@@ -102,9 +102,11 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
   [Using the generated code](../01-getting-started/generated-code.md).
 - See how options influence generated code:
   [Options overview](options-overview.md).
-- Customize and format messages:
-  [Working with error messages](working-with-error-messages.md).
-- Add custom validation options:
-  [Custom validation](../08-custom-validation/).
-- Explore the implementation:
-  [Architecture](../09-developers-guide/architecture.md).
+ - Customize and format messages:
+   [Working with error messages](working-with-error-messages.md).
+- [Built-in options](../03-built-in-options/)
+- [Validating third-party messages](../04-third-party-messages/)
+ - Add custom validation options:
+   [Custom validation](../08-custom-validation/).
+ - Explore the implementation:
+   [Architecture](../09-developers-guide/architecture.md).

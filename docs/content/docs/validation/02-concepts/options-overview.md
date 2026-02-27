@@ -111,7 +111,5 @@ message Temperature {
 
 ## What’s next
 
-- Built-in options reference (planned).
-- Learn how to define organization-specific rules:
-  [Custom validation](../08-custom-validation/).
-
+- [Built-in options](../03-built-in-options/)
+- [Custom validation](../08-custom-validation/)
