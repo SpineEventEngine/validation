@@ -36,7 +36,18 @@
         - page: Working with error messages
           file_path: 02-concepts/error-messages
     - page: Built-in options
-      file_path: 03-built-in-options
+      key: 03-built-in-options
+      children:
+        - page: Built-in options
+          file_path: 03-built-in-options
+        - page: Field-level options
+          file_path: 03-built-in-options/field-level-options
+        - page: "Options for `oneof` fields"
+          file_path: 03-built-in-options/oneof-fields
+        - page: Message-level options
+          file_path: 03-built-in-options/message-level-options
+        - page: "Options for `repeated` and `map` fields"
+          file_path: 03-built-in-options/repeated-and-map-fields
     - page: Validating third-party messages
       file_path: 04-third-party-messages
     - page: Custom validation
