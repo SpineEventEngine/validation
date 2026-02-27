@@ -46,7 +46,7 @@ buildable documentation set, without expanding scope unnecessarily.
 3) [Concepts](archive/concepts-plan.md)
 - Status: DONE (2026-02-26).
 
-4) [Working with error messages](archive/working-with-error-messages.md)
+4) [Working with error messages](archive/error-messages-plan.md)
 - Status: DONE (2026-02-27).
 
 5) [Built-in options](built-in-options-plan.md): publish a minimal reference set
