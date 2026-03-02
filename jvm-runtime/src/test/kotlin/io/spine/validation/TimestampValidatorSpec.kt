@@ -48,26 +48,74 @@ internal class TimestampValidatorSpec {
     }
 
     @Test
-    fun `detect an invalid timestamp`() {
+    fun `detect an invalid timestamp with seconds out of range`() {
         val secondsValue = -62135596801L // One second before the minimum.
         val timestamp = timestamp {
             seconds = secondsValue
         }
         val violations = validator.validate(timestamp)
         violations shouldHaveSize 1
-        violations[0].message.withPlaceholders shouldBe 
-                "The timestamp is invalid: seconds: $secondsValue, nanos: 0."
+        val violation = violations[0] as FieldViolation
+        violation.message.withPlaceholders shouldBe
+                "The field.path value is out of range (range.value): $secondsValue."
+        violation.message.placeholderValueMap shouldBe mapOf(
+            "field.path" to "seconds",
+            "range.value" to "-62135596800..253402300799"
+        )
+        violation.fieldPath!!.fieldNameList shouldBe listOf("seconds")
+        violation.fieldValue shouldBe secondsValue
     }
 
     @Test
-    fun `detect an invalid timestamp with invalid nanos`() {
-        val nanosValue = 1000000000
+    fun `detect an invalid timestamp with nanos out of range`() {
+        val nanosValue = 1_000_000_000
         val timestamp = timestamp {
             nanos = nanosValue
         }
         val violations = validator.validate(timestamp)
         violations shouldHaveSize 1
-        violations[0].message.withPlaceholders shouldBe 
-                "The timestamp is invalid: seconds: 0, nanos: $nanosValue."
+        val violation = violations[0] as FieldViolation
+        violation.message.withPlaceholders shouldBe
+                "The field.path value is out of range:  (range.value)$nanosValue."
+        violation.message.placeholderValueMap shouldBe mapOf(
+            "field.path" to "nanos",
+            "range.value" to "0..999999999"
+        )
+        violation.fieldPath!!.fieldNameList shouldBe listOf("nanos")
+        violation.fieldValue shouldBe nanosValue
+    }
+
+    @Test
+    fun `detect both seconds and nanos out of range`() {
+        val secondsValue = -62135596801L
+        val nanosValue = 1_000_000_000
+        val timestamp = timestamp {
+            seconds = secondsValue
+            nanos = nanosValue
+        }
+        val violations = validator.validate(timestamp)
+        violations shouldHaveSize 2
+        
+        val secondsViolation = violations.find { 
+            it.fieldPath?.fieldNameList == listOf("seconds")
+        } as FieldViolation
+        secondsViolation.message.withPlaceholders shouldBe
+                "The field.path value is out of range (range.value): $secondsValue."
+        secondsViolation.message.placeholderValueMap shouldBe mapOf(
+            "field.path" to "seconds",
+            "range.value" to "-62135596800..253402300799"
+        )
+        secondsViolation.fieldValue shouldBe secondsValue
+
+        val nanosViolation = violations.find {
+            it.fieldPath?.fieldNameList == listOf("nanos")
+        } as FieldViolation
+        nanosViolation.message.withPlaceholders shouldBe
+                "The field.path value is out of range:  (range.value)$nanosValue."
+        nanosViolation.message.placeholderValueMap shouldBe mapOf(
+            "field.path" to "nanos",
+            "range.value" to "0..999999999"
+        )
+        nanosViolation.fieldValue shouldBe nanosValue
     }
 }
