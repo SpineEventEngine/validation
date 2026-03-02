@@ -26,7 +26,6 @@
 
 package io.spine.validation
 
-import com.google.protobuf.Timestamp
 import com.google.protobuf.timestamp
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
