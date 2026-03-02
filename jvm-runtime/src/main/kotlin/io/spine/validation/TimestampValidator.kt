@@ -40,6 +40,7 @@ import io.spine.validation.RuntimeErrorPlaceholder.RANGE_VALUE
  * Uses [Timestamps.MIN_VALUE] and [Timestamps.MAX_VALUE] to ensure
  * the fields of the timestamp are valid.
  */
+// #docfragment "core"
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
@@ -57,12 +58,13 @@ public class TimestampValidator : MessageValidator<Timestamp> {
         }
         return violations
     }
-
+// #enddocfragment "core"
     private companion object {
 
         /**
          * Creates a violation for invalid seconds.
          */
+        // #docfragment "invalid-seconds"
         fun invalidSeconds(seconds: Long): FieldViolation {
             return FieldViolation(
                 message = templateString {
@@ -80,7 +82,7 @@ public class TimestampValidator : MessageValidator<Timestamp> {
                 fieldValue = seconds
             )
         }
-
+        // #enddocfragment "invalid-seconds"
         /**
          * Creates a violation for invalid nanos.
          */

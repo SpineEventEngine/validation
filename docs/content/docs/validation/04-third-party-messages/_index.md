@@ -64,33 +64,46 @@ To validate an external message type `M`:
 2. Annotate the implementation with `@io.spine.validation.Validator(M::class)`.
 3. Ensure the class has a `public`, no-args constructor.
 
-For Kotlin:
+For Kotlin, you can implement a validator using the `Timestamps.MIN_VALUE` and
+`Timestamps.MAX_VALUE` static fields from the Protobuf Util library:
 
+<embed-code file="../../../../jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt" fragment="core"></embed-code>
 ```kotlin
-import com.google.protobuf.Timestamp
-import com.google.protobuf.util.Timestamps
-import io.spine.validation.DetectedViolation
-import io.spine.validation.MessageValidator
-import io.spine.validation.MessageViolation
-import io.spine.validation.Validator
-import io.spine.validation.templateString
-
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
-    override fun validate(message: Timestamp): List<DetectedViolation> =
-        if (Timestamps.isValid(message)) {
-            emptyList()
-        } else {
-            listOf(
-                MessageViolation(
-                    templateString {
+    override fun validate(message: Timestamp): List<DetectedViolation> {
+        val violations = mutableListOf<DetectedViolation>()
+        val minSeconds = Timestamps.MIN_VALUE.seconds
+        val maxSeconds = Timestamps.MAX_VALUE.seconds
+        if (message.seconds !in minSeconds..maxSeconds) {
+            violations.add(
+                FieldViolation(
+                    message = templateString {
                         withPlaceholders =
-                            "Invalid timestamp: seconds: ${message.seconds}, nanos: ${message.nanos}."
-                    }
+                            "The `seconds` value is out of range ($minSeconds..$maxSeconds):" +
+                                " ${message.seconds}."
+                    },
+                    fieldPath = fieldPath { fieldName.add("seconds") },
+                    fieldValue = message.seconds
                 )
             )
         }
+        val maxNanos = Timestamps.MAX_VALUE.nanos
+        if (message.nanos !in 0..maxNanos) {
+            violations.add(
+                FieldViolation(
+                    message = templateString {
+                        withPlaceholders =
+                            "The `nanos` value is out of range (0..$maxNanos): ${message.nanos}."
+                    },
+                    fieldPath = fieldPath { fieldName.add("nanos") },
+                    fieldValue = message.nanos
+                )
+            )
+        }
+        return violations
+    }
 }
 ```
 

@@ -82,7 +82,7 @@ Add the Validation plugin to the build.
 ```kotlin
 plugins {
     module
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.400"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.401"
 }
 ```
 
