@@ -8,8 +8,7 @@ weight: 10
 # Field-level options
 
 {{% note-block class="lead" %}}
-Use this page when you want to validate a **single field** by declaring options next to it in a
-`.proto` file.
+Use this page when you want to validate a field by declaring options next to it in a`.proto` file.
 {{% /note-block %}}
 
 ## Choose an option
