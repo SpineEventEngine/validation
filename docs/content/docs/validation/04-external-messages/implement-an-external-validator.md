@@ -17,7 +17,7 @@ cheap to construct.
 
 ## Reference implementation: `TimestampValidator`
 
-If you want to review a production-grade `MessageValidator` implementation, see
+Let's review the `MessageValidator` implementation on the example of
 `io.spine.validation.TimestampValidator` from the Validation JVM runtime.
 
 It validates `com.google.protobuf.Timestamp` and reports violations for invalid
