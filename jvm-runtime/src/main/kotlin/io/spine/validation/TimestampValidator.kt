@@ -40,7 +40,6 @@ import io.spine.validation.RuntimeErrorPlaceholder.RANGE_VALUE
  * Uses [Timestamps.MIN_VALUE] and [Timestamps.MAX_VALUE] to ensure
  * the fields of the timestamp are valid.
  */
-// #docfragment "core"
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
@@ -58,47 +57,39 @@ public class TimestampValidator : MessageValidator<Timestamp> {
         }
         return violations
     }
-// #enddocfragment "core"
-    private companion object {
-
-        /**
-         * Creates a violation for invalid seconds.
-         */
-        // #docfragment "invalid-seconds"
-        fun invalidSeconds(seconds: Long): FieldViolation {
-            return FieldViolation(
-                message = templateString {
-                    withPlaceholders =
-                        "The ${FIELD_PATH.value} value is out of range" +
-                                " (${RANGE_VALUE.value}): $seconds."
-                    placeholderValue.put(FIELD_PATH.value, "seconds")
-                    placeholderValue.put(RANGE_VALUE.value,
-                        "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
-
-                },
-                fieldPath = fieldPath {
-                    fieldName.add("seconds")
-                },
-                fieldValue = seconds
-            )
-        }
-        // #enddocfragment "invalid-seconds"
-        /**
-         * Creates a violation for invalid nanos.
-         */
-        fun invalidNanos(nanos: Int): FieldViolation {
-            return FieldViolation(
-                message = templateString {
-                    withPlaceholders = "The ${FIELD_PATH.value} value is out of range" +
-                            ":  (${RANGE_VALUE.value})$nanos."
-                    placeholderValue.put(FIELD_PATH.value, "nanos")
-                    placeholderValue.put(RANGE_VALUE.value, "0..${MAX_VALUE.nanos}")
-                },
-                fieldPath = fieldPath {
-                    fieldName.add("nanos")
-                },
-                fieldValue = nanos
-            )
-        }
-    }
 }
+
+/**
+ * Creates a violation for invalid seconds.
+ */
+private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
+    message = templateString {
+        withPlaceholders =
+            "The ${FIELD_PATH.value} value is out of range" +
+                    " (${RANGE_VALUE.value}): $seconds."
+        placeholderValue.put(FIELD_PATH.value, "seconds")
+        placeholderValue.put(RANGE_VALUE.value,
+            "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
+
+    },
+    fieldPath = fieldPath {
+        fieldName.add("seconds")
+    },
+    fieldValue = seconds
+)
+
+/**
+ * Creates a violation for invalid nanos.
+ */
+private fun invalidNanos(nanos: Int): FieldViolation = FieldViolation(
+    message = templateString {
+        withPlaceholders = "The ${FIELD_PATH.value} value is out of range" +
+                ":  (${RANGE_VALUE.value})$nanos."
+        placeholderValue.put(FIELD_PATH.value, "nanos")
+        placeholderValue.put(RANGE_VALUE.value, "0..${MAX_VALUE.nanos}")
+    },
+    fieldPath = fieldPath {
+        fieldName.add("nanos")
+    },
+    fieldValue = nanos
+)
