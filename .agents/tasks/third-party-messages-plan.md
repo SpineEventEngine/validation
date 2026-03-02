@@ -43,8 +43,8 @@ validating local messages.
   - Exactly one validator per external message type (duplicate is an error).
   - Validators for local messages are prohibited (use options/codegen instead).
 - Example walkthrough (short, copy-pastable):
-  - Implement `EarphonesValidator` (from `:tests:validator`) and show how it affects a local message
-    that contains an `Earphones` field.
+  - Implement `TimestampValidator` (from `:jvm-runtime`) and show how it affects a local message
+    that contains an `Timestamp` field.
 
 ## Source references to anchor the docs
 
