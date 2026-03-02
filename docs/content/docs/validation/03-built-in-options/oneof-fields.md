@@ -11,16 +11,10 @@ weight: 20
 Use this page when you have a `oneof` group and want to enforce that **one of its cases is set**.
 {{% /note-block %}}
 
-## Choose an option
-
-- Require a `oneof` group to have a value: `(choice).required = true`
-
 For canonical definitions, see
 [spine/options.proto](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto).
 
-## Required selection
-
-### `(choice)`
+## Required selection: `(choice)`
 
 Use `(choice).required = true` on a `oneof` group to require selecting one of its fields.
 
