@@ -26,7 +26,8 @@ Use `option (require).fields` on a message to declare **alternative groups** of 
 
 - Use `|` to separate alternative groups.
 - Use `&` inside a group to require multiple fields together.
-- You can use `oneof` group names as operands (useful together with `(choice)`).
+- You can use `oneof` group names as operands in combination with
+  the [`(choice)`](oneof-fields.md) option.
 
 **Applies to**
 
