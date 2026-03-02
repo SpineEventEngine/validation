@@ -58,57 +58,9 @@ Use this rule of thumb:
 
 ## Implement an external validator
 
-To validate an external message type `M`:
-
-1. Implement `io.spine.validation.MessageValidator<M>`.
-2. Annotate the implementation with `@io.spine.validation.Validator(M::class)`.
-3. Ensure the class has a `public`, no-args constructor.
-
-For Kotlin, you can implement a validator using the `Timestamps.MIN_VALUE` and
-`Timestamps.MAX_VALUE` static fields from the Protobuf Util library:
-
-```kotlin
-@Validator(Timestamp::class)
-public class TimestampValidator : MessageValidator<Timestamp> {
-
-    override fun validate(message: Timestamp): List<DetectedViolation> {
-        val violations = mutableListOf<DetectedViolation>()
-        val minSeconds = Timestamps.MIN_VALUE.seconds
-        val maxSeconds = Timestamps.MAX_VALUE.seconds
-        if (message.seconds !in minSeconds..maxSeconds) {
-            violations.add(
-                FieldViolation(
-                    message = templateString {
-                        withPlaceholders =
-                            "The `seconds` value is out of range ($minSeconds..$maxSeconds):" +
-                                " ${message.seconds}."
-                    },
-                    fieldPath = fieldPath { fieldName.add("seconds") },
-                    fieldValue = message.seconds
-                )
-            )
-        }
-        val maxNanos = Timestamps.MAX_VALUE.nanos
-        if (message.nanos !in 0..maxNanos) {
-            violations.add(
-                FieldViolation(
-                    message = templateString {
-                        withPlaceholders =
-                            "The `nanos` value is out of range (0..$maxNanos): ${message.nanos}."
-                    },
-                    fieldPath = fieldPath { fieldName.add("nanos") },
-                    fieldValue = message.nanos
-                )
-            )
-        }
-        return violations
-    }
-}
-```
-
-Spine Validation creates a new validator instance per invocation, so keep validators stateless and
-cheap to construct.
-
+This topic is detailed on a separate page:
+[Implement an external validator](implement-an-external-validator.md)
+which reviews the details of the `TimestampValidator` implementation.
 
 ## When external validators are invoked
 
@@ -138,7 +90,6 @@ field name in the local message.
 This lets you report a nested path like `meeting.starts_at.seconds`, even though the validator sees
 only `Timestamp`.
 
-
 ## Guardrails and common errors
 
 - **Exactly one validator per message type.**  
@@ -151,27 +102,7 @@ only `Timestamp`.
 - **Types must match.**  
   The message type in `@Validator(...)` must match the type argument of `MessageValidator<M>`.
 
-
-## Walkthrough: validate `google.protobuf.Timestamp` inside a local message
-
-Suppose your local model uses `Timestamp`:
-
-```proto
-import "google/protobuf/timestamp.proto";
-
-message Meeting {
-    google.protobuf.Timestamp starts_at = 1;
-}
-```
-
-If you add `TimestampValidator` (as shown above) in the same module and then create an invalid
-timestamp, validation of `Meeting` reports a violation for the `starts_at` field.
-
-If you need the violation to point deeper (for example, to `starts_at.seconds`), return
-`FieldViolation` with a `fieldPath` inside `Timestamp` instead of `MessageViolation`.
-
-
 ## What’s next
-
+- [Implement an external validator](implement-an-external-validator.md)
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
