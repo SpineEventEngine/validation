@@ -12,7 +12,7 @@ validating local messages.
 ## Placement
 
 - Placement of the page: after “Built-in options”, before “Custom validation”.
-- Hugo section (minimal change): add the page under `docs/content/docs/validation/02-concepts/`.
+- Hugo section (minimal change): add the page under `docs/content/docs/validation/03-built-in-options/`.
   If the site navigation later gains an “Advanced topics” section, the page can move there.
 
 ## Planned content
