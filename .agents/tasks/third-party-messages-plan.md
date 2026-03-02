@@ -52,7 +52,7 @@ validating local messages.
   - `jvm-runtime/src/main/kotlin/io/spine/validation/MessageValidator.kt`
   - `jvm-runtime/src/main/kotlin/io/spine/validation/Validator.kt`
 - Example implementation:
-  - `main/validator/src/main/kotlin/io/spine/validation/TimestampValidator.kt`
+  - `jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt`
 
 ## Output
 
