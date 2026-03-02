@@ -1,10 +1,10 @@
 ---
-title: Validating third-party messages
+title: Validating external messages
 description: How to validate message types generated outside your build.
 headline: Documentation
 ---
 
-# Validating third-party messages
+# Validating external messages
 
 Sometimes your model includes Protobuf messages that are **not generated in your build**.
 For example, `google.protobuf.Timestamp` or a message type that comes as a part 
@@ -22,7 +22,7 @@ Spine Validation deals with two kinds of message types:
 
 - **Local messages** — `.proto` sources are compiled in the current build, so Validation can inject
   checks into the generated code.
-- **External (third-party) messages** — message classes are already compiled (come from
+- **External messages** — message classes are already compiled (come from
   dependencies), so Validation cannot apply code generation to them.
 
 
@@ -67,7 +67,6 @@ To validate an external message type `M`:
 For Kotlin, you can implement a validator using the `Timestamps.MIN_VALUE` and
 `Timestamps.MAX_VALUE` static fields from the Protobuf Util library:
 
-<embed-code file="../../../../jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt" fragment="core"></embed-code>
 ```kotlin
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {

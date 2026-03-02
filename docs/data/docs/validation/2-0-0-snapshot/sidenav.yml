@@ -48,8 +48,8 @@
           file_path: 03-built-in-options/message-level-options
         - page: "Options for `repeated` and `map` fields"
           file_path: 03-built-in-options/repeated-and-map-fields
-    - page: Validating third-party messages
-      file_path: 04-third-party-messages
+    - page: Validating external messages
+      file_path: 04-external-messages
     - page: Custom validation
       file_path: 08-custom-validation
     - page: Developer’s guide

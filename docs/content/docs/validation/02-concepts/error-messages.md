@@ -136,7 +136,7 @@ Recommended actions:
   [Options overview](options-overview.md).
 - Explore the built-in options:
   [Built-in options](../03-built-in-options/).
-- Learn how to validate message types from third-party libraries:
-  [Validating third-party messages](../04-third-party-messages/).
+- Learn how to validate message types from external libraries:
+  [Validating external messages](../04-external-messages/).
 - If built-in options are not enough, define your own constraints and messages:
   [Custom validation](../08-custom-validation/).
