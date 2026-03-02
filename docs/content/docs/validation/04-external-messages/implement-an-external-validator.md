@@ -23,6 +23,72 @@ Let's review the `MessageValidator` implementation on the example of
 It validates `com.google.protobuf.Timestamp` and reports violations for invalid
 `seconds` and `nanos` values.
 
+### Core implementation
+
+The validator is a regular `MessageValidator<Timestamp>` implementation, but it must also be
+annotated with `@Validator(Timestamp::class)`:
+
+- The `@Validator` annotation marks the class as an external message validator.
+- Spine Validation uses this annotation at build time to discover your validators and wire them
+  into generated validation code.
+
+The core logic is intentionally small: it first delegates to `Timestamps.isValid(message)` and,
+if invalid, adds a field-specific violation for each invalid field (`seconds` and/or `nanos`).
+For range checks, it relies on `Timestamps.MIN_VALUE` and `Timestamps.MAX_VALUE`.
+
+```kotlin
+@Validator(Timestamp::class)
+public class TimestampValidator : MessageValidator<Timestamp> {
+
+    override fun validate(message: Timestamp): List<DetectedViolation> {
+        if (Timestamps.isValid(message)) {
+            return emptyList()
+        }
+        val violations = mutableListOf<DetectedViolation>()
+        if (message.seconds < MIN_VALUE.seconds ||
+            message.seconds > MAX_VALUE.seconds) {
+            violations.add(invalidSeconds(message.seconds))
+        }
+        if (message.nanos !in 0..MAX_VALUE.nanos) {
+            violations.add(invalidNanos(message.nanos))
+        }
+        return violations
+    }
+}
+```
+
+### Reporting violations with placeholders
+
+`TimestampValidator` reports errors via `FieldViolation`, providing:
+
+- `fieldPath` — which field is invalid (for example, `"seconds"`),
+- `fieldValue` — the actual invalid value, and
+- `message` — a `TemplateString` with placeholders and a placeholder-to-value map.
+
+The message is defined as a template (via `withPlaceholders`) and populated by specifying
+values in `placeholderValue`. This keeps error messages machine-friendly and allows consistent
+formatting, logging, and customization.
+
+Below is the helper that creates a violation for invalid `seconds`
+(the `invalidNanos()` function is similar):
+
+```kotlin
+private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
+    message = templateString {
+        withPlaceholders =
+            "The ${FIELD_PATH.value} value is out of range" +
+                    " (${RANGE_VALUE.value}): $seconds."
+        placeholderValue.put(FIELD_PATH.value, "seconds")
+        placeholderValue.put(RANGE_VALUE.value,
+            "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
+
+    },
+    fieldPath = fieldPath {
+        fieldName.add("seconds")
+    },
+    fieldValue = seconds
+)
+```
 
 ## Walkthrough: validate `google.protobuf.Timestamp` inside a local message
 
@@ -36,7 +102,7 @@ message Meeting {
 }
 ```
 
-Once you add a validator for `Timestamp` , validation of `Meeting`
+Once you add a validator for `Timestamp`, validation of `Meeting`
 reports a violation for the `starts_at` field if the timestamp is invalid pointing
 to the nested field in error (for example, to `starts_at.seconds`).
 
