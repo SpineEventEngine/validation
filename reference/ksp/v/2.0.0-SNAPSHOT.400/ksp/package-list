@@ -1,0 +1,7 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.tools.validation.ksp////PointingToDeclaration/ksp/io.spine.tools.validation.ksp/index.html
+$dokka.location:io.spine.tools.validation.ksp/ValidatorProcessorProvider///PointingToDeclaration/ksp/io.spine.tools.validation.ksp/-validator-processor-provider/index.html
+$dokka.location:io.spine.tools.validation.ksp/ValidatorProcessorProvider/ValidatorProcessorProvider/#/PointingToDeclaration/ksp/io.spine.tools.validation.ksp/-validator-processor-provider/-validator-processor-provider.html
+$dokka.location:io.spine.tools.validation.ksp/ValidatorProcessorProvider/create/#com.google.devtools.ksp.processing.SymbolProcessorEnvironment/PointingToDeclaration/ksp/io.spine.tools.validation.ksp/-validator-processor-provider/create.html
+io.spine.tools.validation.ksp
