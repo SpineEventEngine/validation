@@ -15,7 +15,6 @@ Validation options to such messages unless you rebuild their `.proto` sources.
 
 This page explains how to validate those message types using **external message validators**.
 
-
 ## Local vs external messages
 
 Spine Validation deals with two kinds of message types:
@@ -24,7 +23,6 @@ Spine Validation deals with two kinds of message types:
   checks into the generated code.
 - **External messages** — message classes are already compiled (come from
   dependencies), so Validation cannot apply code generation to them.
-
 
 ## What works (and what does not)
 
@@ -47,20 +45,12 @@ Spine Validation deals with two kinds of message types:
 - A standalone external message instance (validated “by itself”) is not validated via
   `MessageValidator`.
 
-
 ## Choose a strategy
 
 Use this rule of thumb:
 
 - You can rebuild/own the `.proto` → use Validation options and codegen.
 - You cannot rebuild/own the `.proto` → use `MessageValidator` + `@Validator`.
-
-
-## Implement an external validator
-
-This topic is detailed on a separate page:
-[Implement an external validator](implement-an-external-validator.md)
-which reviews the details of the `TimestampValidator` implementation.
 
 ## When external validators are invoked
 
@@ -101,6 +91,12 @@ only `Timestamp`.
   The validator class cannot be `inner` (nested classes are OK).
 - **Types must match.**  
   The message type in `@Validator(...)` must match the type argument of `MessageValidator<M>`.
+
+## Implement an external validator
+
+Let's review the implementation of `TimestampValidator` 
+from the Validation JVM runtime as an example of
+an [external message validator](implement-an-external-validator.md).
 
 ## What’s next
 - [Implement an external validator](implement-an-external-validator.md)

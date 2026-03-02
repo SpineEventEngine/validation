@@ -42,8 +42,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("`TimestampValidator` should")
-class TimestampValidatorSpec {
+@DisplayName("`TheOnlyTimeValid` should")
+class TheOnlyTimeValidSpec {
 
     @Nested inner class
     `prohibit invalid instances` {
