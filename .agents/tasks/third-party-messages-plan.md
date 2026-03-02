@@ -44,7 +44,7 @@ validating local messages.
   - Validators for local messages are prohibited (use options/codegen instead).
 - Example walkthrough (short, copy-pastable):
   - Implement `TimestampValidator` (from `:jvm-runtime`) and show how it affects a local message
-    that contains an `Timestamp` field.
+    that contains a `Timestamp` field.
 
 ## Source references to anchor the docs
 
