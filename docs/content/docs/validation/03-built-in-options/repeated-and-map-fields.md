@@ -112,4 +112,3 @@ message Tags {
   repeated string value = 1 [(pattern).regex = "^[a-z0-9-]{1,32}$"];
 }
 ```
-

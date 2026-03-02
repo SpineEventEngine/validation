@@ -50,4 +50,3 @@ message Contact {
 - If the requirement is “at least one of these fields OR one of these other fields”, use
   [Message-level options](message-level-options.md) with `(require).fields` and include `oneof`
   group names.
-

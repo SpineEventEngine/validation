@@ -51,4 +51,3 @@ message PersonName {
 - This option works only with field types where “set” is well-defined: messages/enums
   (non-default), `string`/`bytes` (non-empty), and collections (non-empty). If you need a similar
   rule for scalars, wrap the scalar into a message or use a `oneof`.
-

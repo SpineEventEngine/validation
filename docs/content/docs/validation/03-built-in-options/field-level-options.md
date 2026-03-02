@@ -186,4 +186,3 @@ message User {
   UserId id = 1 [(set_once) = true];
 }
 ```
-
