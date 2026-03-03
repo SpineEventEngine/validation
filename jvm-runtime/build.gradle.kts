@@ -29,7 +29,6 @@
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
 import io.spine.gradle.publish.SpinePublishing
 import io.spine.gradle.publish.StandardJavaPublicationHandler
