@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
 import com.google.devtools.ksp.symbol.Modifier
@@ -52,7 +53,7 @@ private typealias ValidatorDeclaration = KSClassDeclaration
  *
  * The processor verifies that the annotation is applied correctly.
  * Then, the discovered validators are written to
- * the [DiscoveredValidators.RESOURCES_LOCATION] file.
+ * the [DiscoveredValidators.RELATIVE_PATH] file.
  */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
@@ -77,7 +78,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
      */
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
-        path = DiscoveredValidators.RESOURCES_LOCATION,
+        path = DiscoveredValidators.RELATIVE_PATH,
         extensionName = ""
     ).writer()
 
@@ -118,8 +119,8 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
 
         output.use { writer ->
             newlyDiscovered.forEach { (message, validator) ->
-                val validatorFQN = validator.qualifiedName?.asString()!!
-                val messageFQN = message.qualifiedName?.asString()!!
+                val validatorFQN = validator.qualified!!
+                val messageFQN = message.qualified!!
                 writer.appendLine("$messageFQN:$validatorFQN")
             }
         }
@@ -200,10 +201,10 @@ private fun ValidatorDeclaration.validatedMessage(messageValidator: KSType): KSC
     val interfaceMessage = interfaceMessage(messageValidator.declaration as KSClassDeclaration)!!
     check(annotationMessage == interfaceMessage) {
         """
-        The `@${annotation.shortName.asString()}` annotation is applied to incompatible `${qualifiedName?.asString()}` validator.
+        The `@${annotation.shortName.asString()}` annotation is applied to incompatible `$qualified` validator.
         The validated message type of the annotation and the validator must match.
-        The message type specified for the annotation: `${annotationMessage.declaration.qualifiedName?.asString()}`.
-        The message type specified for the validator: `${interfaceMessage.declaration.qualifiedName?.asString()}`.
+        The message type specified for the annotation: `${annotationMessage.declaration.qualified}`.
+        The message type specified for the validator: `${interfaceMessage.declaration.qualified}`.
         """.trimIndent()
     }
 
@@ -229,7 +230,7 @@ private fun ValidatorDeclaration.interfaceMessage(
         val superType = superRef.resolve()
         val superDecl = superType.declaration as? KSClassDeclaration ?: continue
 
-        if (superDecl.qualifiedName?.asString() == messageValidator.qualifiedName?.asString()) {
+        if (superDecl.isSame(messageValidator)) {
             return superType.arguments.first().type?.resolve()
         }
 
@@ -244,8 +245,8 @@ private fun MessageDeclaration.reportDuplicateValidator(
     newValidator: KSClassDeclaration,
     oldValidator: KSClassDeclaration
 ): Nothing = error("""
-    Cannot register the `${newValidator.qualifiedName?.asString()}` validator.
-    The message type `${qualifiedName?.asString()}` is already validated by the `${oldValidator.qualifiedName?.asString()}` validator.
+    Cannot register the `${newValidator.qualified}` validator.
+    The message type `$qualified` is already validated by the `${oldValidator.qualified}` validator.
     Only one validator is allowed per message type.
 """.trimIndent())
 
@@ -258,3 +259,13 @@ private const val VALIDATOR_ARGUMENT_NAME = "value"
  * The class of the [Validator] annotation.
  */
 private val ValidatorAnnotation = Validator::class
+
+private fun KSClassDeclaration.isSame(other: KSClassDeclaration): Boolean =
+    qualifiedName?.asString() == other.qualifiedName?.asString()
+
+/**
+ * Obtains the [qualifiedName] of the declaration as a string.
+ */
+private val KSDeclaration.qualified: String?
+    get() = qualifiedName?.asString()
+

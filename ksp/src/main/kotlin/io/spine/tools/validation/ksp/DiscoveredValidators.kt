@@ -43,7 +43,7 @@ public object DiscoveredValidators {
      *
      * The path is relative to the output directory of the KSP processor.
      */
-   public const val RESOURCES_LOCATION: String = "spine/validation/message-validators"
+   public const val RELATIVE_PATH: String = "spine/validation/message-validators"
 
     /**
      * Resolves the path to the file containing discovered message validators.
@@ -52,5 +52,5 @@ public object DiscoveredValidators {
      */
     public fun resolve(kspOutputDirectory: File): File = kspOutputDirectory
         .resolve("resources")
-        .resolve(RESOURCES_LOCATION)
+        .resolve(RELATIVE_PATH)
 }
