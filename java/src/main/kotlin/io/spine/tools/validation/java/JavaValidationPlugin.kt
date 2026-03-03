@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import io.spine.tools.validation.java.setonce.SetOnceRenderer
 import io.spine.tools.validation.ksp.DiscoveredValidators
 import io.spine.validation.MessageValidatorFile
 import java.io.File
-import java.util.*
+import java.util.ServiceLoader
 
 /**
  * An implementation of [ValidationPlugin] for Java language.
@@ -70,12 +70,25 @@ private val customOptions: List<ValidationOption> by lazy {
 
 /**
  * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validation.MessageValidator]s.
+ * [MessageValidator][io.spine.validation.MessageValidator]s combined
+ * with the validators loaded from resources in the classpath.
  *
+ * @see MessageValidatorFile
  */
 private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
-    return@lazy newMessageValidators()
+    val fromClasspath = loadFromClasspath()
+    fromClasspath + discoveredValidators()
 }
+
+/**
+ * Loads validators from resources in the classpath.
+ *
+ * @see MessageValidatorFile
+ */
+private fun loadFromClasspath(): Map<ClassName, ClassName> =
+    MessageValidatorFile.loadAll().map { (message, validator) ->
+        ClassName.guess(message) to ClassName.guess(validator)
+    }.toMap()
 
 /**
  * The default location to which the KSP task puts the generated output.
@@ -89,14 +102,13 @@ private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"
  * The discovered validators are written to a text file in the KSP task output.
  * This function loads the validators from that file.
  */
-private fun newMessageValidators(): Map<MessageClass, ValidatorClass> {
+private fun discoveredValidators(): Map<MessageClass, ValidatorClass> {
     val workingDir = System.getProperty("user.dir")
-    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
-    val messageValidators = DiscoveredValidators.resolve(kspOutput)
+    val kspOutputDir = File("$workingDir/$KSP_GENERATED_RESOURCES")
+    val messageValidators = DiscoveredValidators.resolve(kspOutputDir)
     if (!messageValidators.exists()) {
         return emptyMap()
     }
-
     return messageValidators.readValidators()
 }
 

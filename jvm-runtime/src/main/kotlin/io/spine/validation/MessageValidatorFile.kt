@@ -27,6 +27,12 @@
 package io.spine.validation
 
 import io.spine.annotation.Internal
+import io.spine.io.Resource
+import io.spine.util.Exceptions.illegalStateWithCauseOf
+import io.spine.validation.MessageValidatorFile.parse
+import java.io.IOException
+import java.net.URL
+import java.nio.charset.StandardCharsets
 import org.checkerframework.checker.signature.qual.FullyQualifiedName
 
 /**
@@ -69,4 +75,45 @@ public object MessageValidatorFile {
         line.split(SEPARATOR, limit = 2).let {
             Pair(it[0], it[1])
         }
+
+    /**
+     * The class loader used to load resources.
+     */
+    private val classLoader: ClassLoader by lazy {
+        Thread.currentThread().contextClassLoader
+    }
+
+    private val resourceFile: Resource by lazy {
+        Resource.file(RELATIVE_PATH, classLoader)
+    }
+
+    /**
+     * Loads all message-validator mappings from resources in the classpath.
+     */
+    public fun loadAll(): Map<@FullyQualifiedName String, @FullyQualifiedName String> {
+        val result = mutableMapOf<@FullyQualifiedName String, @FullyQualifiedName String>()
+        val allFiles = try {
+            resourceFile.locateAll()
+        } catch (_: IllegalStateException) {
+            // There could be no validators in the classpath.
+            emptyList()
+        }
+        allFiles.forEach { url ->
+            val content = readFile(url)
+            content.lines()
+                .filter { it.isNotEmpty() }
+                .forEach { line ->
+                    val (message, validator) = parse(line)
+                    result[message] = validator
+                }
+        }
+        return result
+    }
 }
+
+private fun readFile(resource: URL): String = try {
+    String(resource.readBytes(), StandardCharsets.UTF_8)
+} catch (e: IOException) {
+    throw illegalStateWithCauseOf(e)
+}
+
