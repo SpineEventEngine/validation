@@ -71,25 +71,36 @@ private val customOptions: List<ValidationOption> by lazy {
  * Dynamically discovered instances of custom
  * [MessageValidator][io.spine.validation.MessageValidator]s.
  *
- * Note that the KSP module is responsible for the actual discovering of the message validators.
- * The discovered validators are written to a text file in the KSP task output.
- * This property loads the validators from that file.
  */
 private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
-    val workingDir = System.getProperty("user.dir")
-    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
-    val messageValidators =  DiscoveredValidators.resolve(kspOutput)
-    if (!messageValidators.exists()) {
-        return@lazy emptyMap()
-    }
-
-    messageValidators.readLines().associate {
-        val (message, validator) = it.split(":")
-        ClassName.guess(message) to ClassName.guess(validator)
-    }
+    return@lazy newMessageValidators()
 }
 
 /**
  * The default location to which the KSP task puts the generated output.
  */
 private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"
+
+/**
+ * Obtains validators created by the Validation KSP module.
+ *
+ * The KSP module is responsible for the actual discovering of the message validators.
+ * The discovered validators are written to a text file in the KSP task output.
+ * This function loads the validators from that file.
+ */
+private fun newMessageValidators(): Map<MessageClass, ValidatorClass> {
+    val workingDir = System.getProperty("user.dir")
+    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
+    val messageValidators = DiscoveredValidators.resolve(kspOutput)
+    if (!messageValidators.exists()) {
+        return emptyMap()
+    }
+
+    return messageValidators.readValidators()
+}
+
+private fun File.readValidators(): Map<MessageClass, ValidatorClass> =
+    readLines().associate {
+        val (message, validator) = it.split(":")
+        ClassName.guess(message) to ClassName.guess(validator)
+    }
