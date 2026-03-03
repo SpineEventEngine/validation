@@ -32,6 +32,7 @@ import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.setonce.SetOnceRenderer
 import io.spine.tools.validation.ValidationPlugin
 import io.spine.tools.validation.ksp.DiscoveredValidators
+import io.spine.validation.MessageValidator
 import java.io.File
 import java.util.*
 
@@ -101,6 +102,6 @@ private fun newMessageValidators(): Map<MessageClass, ValidatorClass> {
 
 private fun File.readValidators(): Map<MessageClass, ValidatorClass> =
     readLines().associate {
-        val (message, validator) = it.split(":")
+        val (message, validator) = it.split(MessageValidator.SEPARATOR)
         ClassName.guess(message) to ClassName.guess(validator)
     }

@@ -53,7 +53,7 @@ private typealias ValidatorDeclaration = KSClassDeclaration
  *
  * The processor verifies that the annotation is applied correctly.
  * Then, the discovered validators are written to
- * the [DiscoveredValidators.RELATIVE_PATH] file.
+ * the [MessageValidator.RELATIVE_FILE_PATH] file.
  */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
@@ -78,7 +78,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
      */
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
-        path = DiscoveredValidators.RELATIVE_PATH,
+        path = MessageValidator.RELATIVE_FILE_PATH,
         extensionName = ""
     ).writer()
 
@@ -121,7 +121,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
             newlyDiscovered.forEach { (message, validator) ->
                 val validatorFQN = validator.qualified!!
                 val messageFQN = message.qualified!!
-                writer.appendLine("$messageFQN:$validatorFQN")
+                writer.appendLine("$messageFQN${MessageValidator.SEPARATOR}$validatorFQN")
             }
         }
 
@@ -264,7 +264,7 @@ private fun KSClassDeclaration.isSame(other: KSClassDeclaration): Boolean =
     qualifiedName?.asString() == other.qualifiedName?.asString()
 
 /**
- * Obtains the [qualifiedName] of the declaration as a string.
+ * Obtains the [qualifiedName][KSClassDeclaration.qualifiedName] of this declaration as a string.
  */
 private val KSDeclaration.qualified: String?
     get() = qualifiedName?.asString()
