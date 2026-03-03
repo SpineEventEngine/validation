@@ -43,6 +43,7 @@ import io.spine.string.qualified
 import io.spine.string.qualifiedClassName
 import io.spine.string.simply
 import io.spine.validation.MessageValidator
+import io.spine.validation.MessageValidatorFile
 import io.spine.validation.Validator
 
 private typealias MessageDeclaration = KSClassDeclaration
@@ -53,7 +54,7 @@ private typealias ValidatorDeclaration = KSClassDeclaration
  *
  * The processor verifies that the annotation is applied correctly.
  * Then, the discovered validators are written to
- * the [MessageValidator.RELATIVE_FILE_PATH] file.
+ * the [MessageValidatorFile.RELATIVE_PATH] file.
  */
 internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcessor {
 
@@ -78,7 +79,7 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
      */
     private val output = codeGenerator.createNewFileByPath(
         dependencies = Dependencies(aggregating = true),
-        path = MessageValidator.RELATIVE_FILE_PATH,
+        path = MessageValidatorFile.RELATIVE_PATH,
         extensionName = ""
     ).writer()
 
@@ -119,9 +120,8 @@ internal class ValidatorProcessor(codeGenerator: CodeGenerator) : SymbolProcesso
 
         output.use { writer ->
             newlyDiscovered.forEach { (message, validator) ->
-                val validatorFQN = validator.qualified!!
-                val messageFQN = message.qualified!!
-                writer.appendLine("$messageFQN${MessageValidator.SEPARATOR}$validatorFQN")
+                val l = MessageValidatorFile.line(message.qualified!!, validator.qualified!!)
+                writer.appendLine(l)
             }
         }
 

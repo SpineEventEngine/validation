@@ -27,7 +27,7 @@
 package io.spine.tools.validation.ksp
 
 import io.spine.annotation.Internal
-import io.spine.validation.MessageValidator
+import io.spine.validation.MessageValidatorFile
 import java.io.File
 
 /**
@@ -46,5 +46,5 @@ public object DiscoveredValidators {
      */
     public fun resolve(kspOutputDirectory: File): File = kspOutputDirectory
         .resolve("resources")
-        .resolve(MessageValidator.RELATIVE_FILE_PATH)
+        .resolve(MessageValidatorFile.RELATIVE_PATH)
 }

@@ -28,6 +28,7 @@ package io.spine.validation
 
 import com.google.protobuf.Message
 import io.spine.annotation.SPI
+import org.checkerframework.checker.signature.qual.FullyQualifiedName
 
 /**
  * A validator for an external Protobuf message of type [M].
@@ -138,20 +139,4 @@ public interface MessageValidator<M : Message> {
      * @return the detected violations or empty list.
      */
     public fun validate(message: M): List<DetectedViolation>
-
-    public companion object {
-
-        /**
-         * The separator used to separate the name of an external message type and
-         * its validator in the resources.
-         */
-        public const val SEPARATOR: Char = ':'
-
-        /**
-         * The path to the file with the discovered message validators.
-         *
-         * The file path is relative to the output directory of the KSP processor.
-         */
-        public const val RELATIVE_FILE_PATH: String = "spine/validation/message-validators"
-    }
 }

@@ -27,12 +27,12 @@
 package io.spine.tools.validation.java
 
 import io.spine.tools.compiler.jvm.ClassName
+import io.spine.tools.validation.ValidationPlugin
 import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.setonce.SetOnceRenderer
-import io.spine.tools.validation.ValidationPlugin
 import io.spine.tools.validation.ksp.DiscoveredValidators
-import io.spine.validation.MessageValidator
+import io.spine.validation.MessageValidatorFile
 import java.io.File
 import java.util.*
 
@@ -101,7 +101,7 @@ private fun newMessageValidators(): Map<MessageClass, ValidatorClass> {
 }
 
 private fun File.readValidators(): Map<MessageClass, ValidatorClass> =
-    readLines().associate {
-        val (message, validator) = it.split(MessageValidator.SEPARATOR)
+    readLines().associate { line ->
+        val (message, validator) = MessageValidatorFile.parse(line)
         ClassName.guess(message) to ClassName.guess(validator)
     }
