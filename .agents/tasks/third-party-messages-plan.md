@@ -39,9 +39,6 @@ validating local messages.
   - Return `List<DetectedViolation>`.
   - Use `FieldViolation` (and other available violation types) to point at a field path and value.
   - Mention that the runtime converts `DetectedViolation` into `ConstraintViolation`/`ValidationError`.
-- Constraints and guardrails:
-  - Exactly one validator per external message type (duplicate is an error).
-  - Validators for local messages are prohibited (use options/codegen instead).
 - Example walkthrough (short, copy-pastable):
   - Implement `TimestampValidator` (from `:jvm-runtime`) and show how it affects a local message
     that contains a `Timestamp` field.

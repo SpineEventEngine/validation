@@ -82,11 +82,6 @@ only `Timestamp`.
 
 ## Guardrails and common errors
 
-- **Exactly one validator per message type.**  
-  Declaring multiple `@Validator`s for the same message type is an error.
-- **Validators are for external messages only.**  
-  Declaring a validator for a local message type is prohibited — use built-in options or custom
-  options instead.
 - **No `inner` classes.**  
   The validator class cannot be `inner` (nested classes are OK).
 - **Types must match.**  
