@@ -79,8 +79,8 @@ public object ValidatorRegistry {
     /**
      * Adds a custom validator for the specific Protobuf message type.
      *
-     * @param cls the class of the message to validate.
-     * @param validator the validator to add.
+     * @param cls The class of the message to validate.
+     * @param validator The validator to add.
      */
     public fun <M : Message> add(cls: KClass<out M>, validator: MessageValidator<M>) {
         val list = validators.computeIfAbsent(cls.qualifiedName!!) { mutableListOf() }
@@ -92,7 +92,7 @@ public object ValidatorRegistry {
     /**
      * Removes all validators for the given message type.
      *
-     * @param cls the class of the message for which to remove validators.
+     * @param cls The class of the message for which to remove validators.
      */
     public fun remove(cls: KClass<out Message>) {
         validators.remove(cls.qualifiedName)
@@ -109,8 +109,8 @@ public object ValidatorRegistry {
      * Validates the given [message] by looking up its type in the registry
      * and applying all associated validators.
      *
-     * @param message the message to validate.
-     * @return the list of detected violations, or an empty list if no violations were found.
+     * @param message The message to validate.
+     * @return The list of detected violations, or an empty list if no violations were found.
      */
     public fun validate(message: Message): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!

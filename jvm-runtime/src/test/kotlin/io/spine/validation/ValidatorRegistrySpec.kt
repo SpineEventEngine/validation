@@ -31,6 +31,7 @@ import com.google.protobuf.timestamp
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import java.util.ServiceLoader
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -94,25 +95,25 @@ internal class ValidatorRegistrySpec {
     }
 
     @Test
-    fun `load validators from the classpath using ServiceLoader`() {
+    fun `load validators from the classpath using 'ServiceLoader'`() {
         // We need to trigger the init block of the object if it hasn't been triggered yet.
         // But since it's an object, it's lazy.
         // In our case, we cleared it in `setUp`.
         
         // Re-adding what ServiceLoader should find
-        val loader = java.util.ServiceLoader.load(MessageValidator::class.java)
+        val loader = ServiceLoader.load(MessageValidator::class.java)
         val hasTimestampValidator = loader.any { it is TimestampValidator }
         
         if (hasTimestampValidator) {
-            // If AutoService worked during this test run (it might not if it's not a full build)
+            // If AutoService worked during this test run (it might not if it's not a full build),
             // we can re-load or just check if it's there after manual trigger.
             ValidatorRegistry.clear()
-            // Manually trigger the loading logic (simulating what happens in init)
+            // Manually trigger the loading logic (simulating what happens in `init`.)
             val method = ValidatorRegistry::class.java.getDeclaredMethod("loadFromServiceLoader")
             method.isAccessible = true
             method.invoke(ValidatorRegistry)
 
-            val invalidTimestamp = timestamp { seconds = -100000000000L }
+            val invalidTimestamp = timestamp { nanos = -1 }
             ValidatorRegistry.validate(invalidTimestamp) shouldHaveSize 1
         }
     }
