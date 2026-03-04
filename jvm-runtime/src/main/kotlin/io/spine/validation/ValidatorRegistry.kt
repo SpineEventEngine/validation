@@ -33,6 +33,7 @@ import java.lang.reflect.ParameterizedType
 import java.util.ServiceLoader
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
+import org.checkerframework.checker.signature.qual.FullyQualifiedName
 
 /**
  * A registry for custom validators of Protobuf messages.
@@ -44,11 +45,14 @@ import kotlin.reflect.KClass
  * messages by applying all associated validators.
  *
  * The registry also automatically loads validators from the classpath using
- * Java's [ServiceLoader] mechanism.
+ * the [ServiceLoader] mechanism.
  */
 public object ValidatorRegistry {
 
-    private val validators: MutableMap<KClass<out Message>, MutableList<MessageValidator<*>>> =
+    /**
+     * Maps a fully qualified Kotlin class name of a message to a list of validators.
+     */
+    private val validators: MutableMap<@FullyQualifiedName String, MutableList<MessageValidator<*>>> =
         ConcurrentHashMap()
 
     init {
@@ -71,11 +75,11 @@ public object ValidatorRegistry {
     /**
      * Adds a custom validator for the specific Protobuf message type.
      *
-     * @param type the class of the message to validate.
+     * @param cls the class of the message to validate.
      * @param validator the validator to add.
      */
-    public fun <M : Message> add(type: KClass<out M>, validator: MessageValidator<M>) {
-        val list = validators.computeIfAbsent(type) { mutableListOf() }
+    public fun <M : Message> add(cls: KClass<out M>, validator: MessageValidator<M>) {
+        val list = validators.computeIfAbsent(cls.qualifiedName!!) { mutableListOf() }
         if (!list.contains(validator)) {
             list.add(validator)
         }
@@ -84,10 +88,10 @@ public object ValidatorRegistry {
     /**
      * Removes all validators for the given message type.
      *
-     * @param type the class of the message for which to remove validators.
+     * @param cls the class of the message for which to remove validators.
      */
-    public fun remove(type: KClass<out Message>) {
-        validators.remove(type)
+    public fun remove(cls: KClass<out Message>) {
+        validators.remove(cls.qualifiedName)
     }
 
     /**
@@ -101,12 +105,12 @@ public object ValidatorRegistry {
      * Validates the given [message] by looking up its type in the registry
      * and applying all associated validators.
      *
-     * @param message The message to validate.
+     * @param message the message to validate.
      * @return the list of detected violations, or an empty list if no violations were found.
      */
     public fun validate(message: Message): List<DetectedViolation> {
-        val type = message::class
-        val associatedValidators = validators[type] ?: return emptyList()
+        val cls = message::class.qualifiedName!!
+        val associatedValidators = validators[cls] ?: return emptyList()
         return associatedValidators.flatMap { validator ->
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
