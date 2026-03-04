@@ -29,11 +29,15 @@ package io.spine.validation
 import com.google.common.reflect.TypeToken
 import com.google.protobuf.Message
 import io.spine.annotation.VisibleForTesting
+import io.spine.base.FieldPath
+import io.spine.protobuf.TypeConverter
+import io.spine.type.TypeName
 import java.lang.reflect.ParameterizedType
 import java.util.ServiceLoader
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import org.checkerframework.checker.signature.qual.FullyQualifiedName
+import com.google.protobuf.Any as ProtoAny
 
 /**
  * A registry for custom validators of Protobuf messages.
@@ -52,8 +56,8 @@ public object ValidatorRegistry {
     /**
      * Maps a fully qualified Kotlin class name of a message to a list of validators.
      */
-    private val validators: MutableMap<@FullyQualifiedName String, MutableList<MessageValidator<*>>> =
-        ConcurrentHashMap()
+    private val validators: MutableMap<@FullyQualifiedName String,
+            MutableList<MessageValidator<*>>> = ConcurrentHashMap()
 
     init {
         loadFromServiceLoader()
@@ -108,14 +112,24 @@ public object ValidatorRegistry {
      * @param message the message to validate.
      * @return the list of detected violations, or an empty list if no violations were found.
      */
-    public fun validate(message: Message): List<DetectedViolation> {
+    public fun validate(message: Message): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!
         val associatedValidators = validators[cls] ?: return emptyList()
-        return associatedValidators.flatMap { validator ->
+        val violations = associatedValidators.flatMap { validator ->
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
             casted.validate(message)
         }
+        val result = violations.map { v ->
+            constraintViolation {
+                this.message = v.message
+                typeName = TypeName.of(message).value
+                fieldPath = v.fieldPath ?: FieldPath.getDefaultInstance()
+                fieldValue = v.fieldValue?.let { TypeConverter.toAny(it) }
+                    ?: ProtoAny.getDefaultInstance()
+            }
+        }
+        return result
     }
 }
 

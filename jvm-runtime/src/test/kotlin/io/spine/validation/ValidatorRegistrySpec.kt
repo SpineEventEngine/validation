@@ -71,6 +71,20 @@ internal class ValidatorRegistrySpec {
     }
 
     @Test
+    fun `return 'ConstraintViolation' objects`() {
+        val validator = AlwaysInvalidTimestampValidator()
+        ValidatorRegistry.add(Timestamp::class, validator)
+        
+        val timestamp = timestamp { seconds = 100 }
+        val violations = ValidatorRegistry.validate(timestamp)
+        
+        violations shouldHaveSize 1
+        val violation = violations[0]
+        violation.message.withPlaceholders shouldBe "Always invalid"
+        violation.typeName shouldBe "google.protobuf.Timestamp"
+    }
+
+    @Test
     fun `clear the whole registry`() {
         ValidatorRegistry.add(Timestamp::class, TimestampValidator())
         ValidatorRegistry.clear()
