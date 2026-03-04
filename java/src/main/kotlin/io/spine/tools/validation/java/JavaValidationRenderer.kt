@@ -28,7 +28,6 @@ package io.spine.tools.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
-import io.spine.string.ti
 import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.MessageType
 import io.spine.tools.compiler.jvm.JavaValueConverter
@@ -87,7 +86,6 @@ internal class JavaValidationRenderer(
 
         findMessageTypes()
             .forEach { message ->
-                checkDoesNotHaveValidator(message)
                 val code = generateCode(message)
                 val file = sources.javaFileOf(message)
                 file.render(code)
@@ -138,22 +136,5 @@ internal class JavaValidationRenderer(
         val messageClass = psiFile.findClass(code.message)
         codeInjector.inject(code, messageClass)
         overwrite(psiFile.text)
-    }
-
-    /**
-     * Ensures that the given compilation [message] does not have an assigned validator.
-     *
-     * Local messages are prohibited from having validators.
-     */
-    private fun checkDoesNotHaveValidator(message: MessageType) {
-        val javaClass = message.javaClassName(typeSystem)
-        val validator = validators[javaClass]
-        check(validator == null) {
-            """
-            The validator `$validator` cannot be used to validate the `$javaClass` messages.
-            Validators can be used only for external message types, which are not generated locally.
-            Use built-in or custom validation options to declare constraints for the local messages.
-            """.ti()
-        }
     }
 }
