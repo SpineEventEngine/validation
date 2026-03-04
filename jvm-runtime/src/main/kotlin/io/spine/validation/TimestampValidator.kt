@@ -42,7 +42,6 @@ import io.spine.validation.RuntimeErrorPlaceholder.RANGE_VALUE
  * the fields of the timestamp are valid.
  */
 @AutoService(MessageValidator::class)
-@Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
     override fun validate(message: Timestamp): List<DetectedViolation> {

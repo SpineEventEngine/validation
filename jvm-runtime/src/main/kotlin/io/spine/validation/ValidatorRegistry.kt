@@ -26,9 +26,11 @@
 
 package io.spine.validation
 
+import com.google.common.reflect.TypeToken
 import com.google.protobuf.Message
-import io.spine.annotation.Internal
-import java.util.*
+import io.spine.annotation.VisibleForTesting
+import java.lang.reflect.ParameterizedType
+import java.util.ServiceLoader
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
@@ -61,7 +63,7 @@ public object ValidatorRegistry {
         loader.forEach { validator ->
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
-            val messageType = casted.messageType()
+            val messageType = casted.messageClass()
             add(messageType, casted)
         }
     }
@@ -115,21 +117,15 @@ public object ValidatorRegistry {
 
 /**
  * Obtains the type of the message validated by this [MessageValidator].
- *
- * This internal extension function attempts to find the [Validator] annotation
- * on the class to determine the message type it validates.
  */
-private fun MessageValidator<*>.messageType(): KClass<out Message> {
-    val annotation = this::class.annotations.find { it is Validator } as? Validator
-    if (annotation != null) {
-        return annotation.value
+@VisibleForTesting
+internal fun <M : Message> MessageValidator<M>.messageClass(): KClass<M> {
+    val typeToken = TypeToken.of(this::class.java)
+    val supertype = typeToken.getSupertype(MessageValidator::class.java)
+    val messageType = supertype.type.let {
+        val parameterized = it as? ParameterizedType
+        parameterized?.actualTypeArguments?.get(0)
     }
-    // Fallback or error if @Validator is missing.
-    // Since we are using ServiceLoader, the implementations should be annotated
-    // or we need another way to know the type.
-    // The `MessageValidator` interface itself doesn't have `messageType()` method.
-    throw IllegalStateException(
-        "The validator class `${this::class.qualifiedName}` is not annotated " +
-                "with `@io.spine.validation.Validator`."
-    )
+    @Suppress("UNCHECKED_CAST")
+    return (messageType as Class<M>).kotlin
 }

@@ -102,9 +102,14 @@ internal class ValidatorRegistrySpec {
             ValidatorRegistry.validate(invalidTimestamp) shouldHaveSize 1
         }
     }
+
+    @Test
+    fun `obtain the message type for a validator as a generic argument`() {
+        val type = TimestampValidator().messageClass()
+        type shouldBe Timestamp::class
+    }
 }
 
-@Validator(Timestamp::class)
 private class AlwaysInvalidTimestampValidator : MessageValidator<Timestamp> {
     override fun validate(message: Timestamp): List<DetectedViolation> {
         return listOf(MessageViolation(templateString { withPlaceholders = "Always invalid" }))
