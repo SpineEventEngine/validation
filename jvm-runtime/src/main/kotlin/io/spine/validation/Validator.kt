@@ -43,7 +43,7 @@ import kotlin.reflect.KClass
  * 4. The message type of [Validator.value] and [MessageValidator] must match.
  */
 @Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 public annotation class Validator(
 
     /**

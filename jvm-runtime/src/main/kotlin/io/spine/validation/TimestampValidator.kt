@@ -26,6 +26,7 @@
 
 package io.spine.validation
 
+import com.google.auto.service.AutoService
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
 import com.google.protobuf.util.Timestamps.MAX_VALUE
@@ -40,6 +41,7 @@ import io.spine.validation.RuntimeErrorPlaceholder.RANGE_VALUE
  * Uses [Timestamps.MIN_VALUE] and [Timestamps.MAX_VALUE] to ensure
  * the fields of the timestamp are valid.
  */
+@AutoService(MessageValidator::class)
 @Validator(Timestamp::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
