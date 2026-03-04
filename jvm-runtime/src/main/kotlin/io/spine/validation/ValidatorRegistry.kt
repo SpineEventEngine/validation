@@ -111,25 +111,25 @@ public object ValidatorRegistry {
             casted.validate(message)
         }
     }
+}
 
-    /**
-     * Obtains the type of the message validated by this [MessageValidator].
-     *
-     * This internal extension function attempts to find the [Validator] annotation
-     * on the class to determine the message type it validates.
-     */
-    private fun MessageValidator<*>.messageType(): KClass<out Message> {
-        val annotation = this::class.annotations.find { it is Validator } as? Validator
-        if (annotation != null) {
-            return annotation.value
-        }
-        // Fallback or error if @Validator is missing.
-        // Since we are using ServiceLoader, the implementations should be annotated
-        // or we need another way to know the type.
-        // The `MessageValidator` interface itself doesn't have `messageType()` method.
-        throw IllegalStateException(
-            "The validator class `${this::class.qualifiedName}` is not annotated " +
-                    "with `@io.spine.validation.Validator`."
-        )
+/**
+ * Obtains the type of the message validated by this [MessageValidator].
+ *
+ * This internal extension function attempts to find the [Validator] annotation
+ * on the class to determine the message type it validates.
+ */
+private fun MessageValidator<*>.messageType(): KClass<out Message> {
+    val annotation = this::class.annotations.find { it is Validator } as? Validator
+    if (annotation != null) {
+        return annotation.value
     }
+    // Fallback or error if @Validator is missing.
+    // Since we are using ServiceLoader, the implementations should be annotated
+    // or we need another way to know the type.
+    // The `MessageValidator` interface itself doesn't have `messageType()` method.
+    throw IllegalStateException(
+        "The validator class `${this::class.qualifiedName}` is not annotated " +
+                "with `@io.spine.validation.Validator`."
+    )
 }
