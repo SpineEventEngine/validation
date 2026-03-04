@@ -28,7 +28,6 @@ package io.spine.validation
 
 import com.google.protobuf.Message
 import io.spine.annotation.SPI
-import org.checkerframework.checker.signature.qual.FullyQualifiedName
 
 /**
  * A validator for an external Protobuf message of type [M].
