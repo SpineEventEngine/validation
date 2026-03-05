@@ -49,12 +49,6 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
-    <artifactId>spine-annotations</artifactId>
-    <version>2.0.0-SNAPSHOT.384</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
-    <groupId>io.spine</groupId>
     <artifactId>spine-base</artifactId>
     <version>2.0.0-SNAPSHOT.384</version>
     <scope>compile</scope>
@@ -147,18 +141,6 @@ all modules and does not describe the project structure per-subproject.
     <groupId>com.google.truth.extensions</groupId>
     <artifactId>truth-proto-extension</artifactId>
     <version>1.4.4</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>com.jetbrains.intellij.platform</groupId>
-    <artifactId>util</artifactId>
-    <version>213.7172.53</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>dev.zacsweers.kctfork</groupId>
-    <artifactId>ksp</artifactId>
-    <version>0.7.1</version>
     <scope>test</scope>
   </dependency>
   <dependency>
