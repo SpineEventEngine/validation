@@ -33,10 +33,9 @@ import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter
 import io.spine.type.TypeName
 import java.lang.reflect.ParameterizedType
-import java.util.ServiceLoader
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
-import org.checkerframework.checker.nullness.qual.Nullable
 import org.checkerframework.checker.signature.qual.FullyQualifiedName
 import com.google.protobuf.Any as ProtoAny
 
@@ -114,6 +113,10 @@ public object ValidatorRegistry {
      * and applying all associated validators.
      *
      * @param message The message to validate.
+     * @param parentPath The path to the field where the validation occurred.
+     *   If empty, it means that the validation occurred at the top-level.
+     * @param parentName The name of the message type where the validation occurred.
+     *   If null, it means that the validation occurred at the top-level.
      * @return The list of detected violations, or an empty list if no violations were found.
      */
     @JvmStatic
@@ -150,6 +153,9 @@ public object ValidatorRegistry {
         return result
     }
 
+    /**
+     * Validates the given [message] by applying all associated validators.
+     */
     @JvmStatic
     public fun validate(message: Message): List<ConstraintViolation> =
         validate(message, parentPath = FieldPath.getDefaultInstance(), parentName = null)
