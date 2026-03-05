@@ -7,7 +7,7 @@ headline: Documentation
 # Validating external messages
 
 Sometimes your model includes Protobuf messages that are **not generated in your build**.
-For example, `google.protobuf.Timestamp` or a message type that comes as a part 
+For example, `google.protobuf.Timestamp` or a message type that comes as part 
 of the Protobuf library.
 
 Because Spine Validation enforces most constraints through **code generation**, you cannot attach
