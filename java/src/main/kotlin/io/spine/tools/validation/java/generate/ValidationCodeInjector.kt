@@ -162,7 +162,9 @@ private fun validateMethodBody(constraints: List<CodeBlock>): String {
         }
 
     val addingViolations =
-        if (constraints.isEmpty()) ""
+        if (constraints.isEmpty())
+            // We validated the message already under `violationsDecl` above.
+            ""
         else {
             """
             
