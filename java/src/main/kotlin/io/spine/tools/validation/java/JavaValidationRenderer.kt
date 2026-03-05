@@ -38,12 +38,9 @@ import io.spine.tools.compiler.jvm.render.findClass
 import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.render.SourceFileSet
-import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.MessageValidationCode
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.ValidationCodeInjector
-import io.spine.tools.validation.java.generate.ValidatorClass
-import io.spine.tools.validation.java.generate.ValidatorGenerator
 import io.spine.tools.validation.java.generate.option.ChoiceGenerator
 import io.spine.tools.validation.java.generate.option.DistinctGenerator
 import io.spine.tools.validation.java.generate.option.GoesGenerator
@@ -63,15 +60,11 @@ import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
  * even if the message does not have any declared constraints.
  */
 internal class JavaValidationRenderer(
-    customGenerators: List<OptionGenerator>,
-    private val validators: Map<MessageClass, ValidatorClass>
+    customGenerators: List<OptionGenerator>
 ) : JavaRenderer() {
 
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
-    private val validatorGenerator by lazy {
-        ValidatorGenerator(validators, typeSystem)
-    }
     private val optionGenerators by lazy {
         (buildInGenerators() + customGenerators)
             .onEach { it.inject(querying) }
@@ -121,10 +114,9 @@ internal class JavaValidationRenderer(
 
     private fun generateCode(message: MessageType): MessageValidationCode {
         val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }
-        val validatorFields = validatorGenerator.codeFor(message)
         val messageCode = MessageValidationCode(
             message = message.javaClassName(typeSystem),
-            constraints = fieldOptions.map { it.constraint } + validatorFields,
+            constraints = fieldOptions.map { it.constraint },
             fields = fieldOptions.flatMap { it.fields },
             methods = fieldOptions.flatMap { it.methods }
         )

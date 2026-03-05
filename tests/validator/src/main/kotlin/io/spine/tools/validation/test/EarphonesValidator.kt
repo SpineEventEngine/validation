@@ -26,6 +26,7 @@
 
 package io.spine.tools.validation.test
 
+import com.google.auto.service.AutoService
 import com.google.common.annotations.VisibleForTesting
 import io.spine.base.FieldPath
 import io.spine.base.fieldPath
@@ -34,14 +35,13 @@ import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
 import io.spine.validation.TemplateString
-import io.spine.validation.Validator
 import io.spine.validation.templateString
 
 /**
  * Validates [Earphones] messages, treating all instances as invalid
  * except for [ValidEarphones].
  */
-@Validator(Earphones::class)
+@AutoService(MessageValidator::class)
 public class EarphonesValidator : MessageValidator<Earphones> {
 
     public override fun validate(message: Earphones): List<DetectedViolation> {

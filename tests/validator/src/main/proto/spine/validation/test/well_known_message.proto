@@ -39,17 +39,17 @@ import "google/protobuf/timestamp.proto";
 // Tests a singular field of well-known message type.
 message SingularWellKnownMessage {
 
-    google.protobuf.Timestamp value = 1;
+    google.protobuf.Timestamp value = 1 [(validate) = true];
 }
 
 // Tests a repeated field of well-known message type.
 message RepeatedWellKnownMessage {
 
-    repeated google.protobuf.Timestamp value = 1;
+    repeated google.protobuf.Timestamp value = 1 [(validate) = true];
 }
 
 // Tests a map field of well-known message type.
 message MappedWellKnownMessage {
 
-    map<string, google.protobuf.Timestamp> value = 1;
+    map<string, google.protobuf.Timestamp> value = 1 [(validate) = true];
 }

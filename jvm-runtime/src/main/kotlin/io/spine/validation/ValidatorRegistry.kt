@@ -36,6 +36,7 @@ import java.lang.reflect.ParameterizedType
 import java.util.ServiceLoader
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
+import org.checkerframework.checker.nullness.qual.Nullable
 import org.checkerframework.checker.signature.qual.FullyQualifiedName
 import com.google.protobuf.Any as ProtoAny
 
@@ -82,6 +83,7 @@ public object ValidatorRegistry {
      * @param cls The class of the message to validate.
      * @param validator The validator to add.
      */
+    @JvmStatic
     public fun <M : Message> add(cls: KClass<out M>, validator: MessageValidator<M>) {
         val list = validators.computeIfAbsent(cls.qualifiedName!!) { mutableListOf() }
         if (!list.contains(validator)) {
@@ -94,6 +96,7 @@ public object ValidatorRegistry {
      *
      * @param cls The class of the message for which to remove validators.
      */
+    @JvmStatic
     public fun remove(cls: KClass<out Message>) {
         validators.remove(cls.qualifiedName)
     }
@@ -101,6 +104,7 @@ public object ValidatorRegistry {
     /**
      * Clears all registered validators.
      */
+    @JvmStatic
     public fun clear() {
         validators.clear()
     }
@@ -112,7 +116,12 @@ public object ValidatorRegistry {
      * @param message The message to validate.
      * @return The list of detected violations, or an empty list if no violations were found.
      */
-    public fun validate(message: Message): List<ConstraintViolation> {
+    @JvmStatic
+    public fun validate(
+        message: Message,
+        parentPath: FieldPath,
+        parentName: TypeName?
+    ): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!
         val associatedValidators = validators[cls] ?: return emptyList()
         val violations = associatedValidators.flatMap { validator ->
@@ -123,14 +132,27 @@ public object ValidatorRegistry {
         val result = violations.map { v ->
             constraintViolation {
                 this.message = v.message
-                typeName = TypeName.of(message).value
-                fieldPath = v.fieldPath ?: FieldPath.getDefaultInstance()
+                typeName = if (parentName != null)
+                    parentName.value
+                else
+                    TypeName.of(message).value
+                fieldPath = if (v.fieldPath != null) {
+                    parentPath.toBuilder()
+                        .addAllFieldName(v.fieldPath.fieldNameList)
+                        .build()
+                } else {
+                    parentPath
+                }
                 fieldValue = v.fieldValue?.let { TypeConverter.toAny(it) }
                     ?: ProtoAny.getDefaultInstance()
             }
         }
         return result
     }
+
+    @JvmStatic
+    public fun validate(message: Message): List<ConstraintViolation> =
+        validate(message, parentPath = FieldPath.getDefaultInstance(), parentName = null)
 }
 
 /**
@@ -144,6 +166,6 @@ internal fun <M : Message> MessageValidator<M>.messageClass(): KClass<M> {
         val parameterized = it as? ParameterizedType
         parameterized?.actualTypeArguments?.get(0)
     }
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST") // The cast is ensured by the type parameter `M`.
     return (messageType as Class<M>).kotlin
 }

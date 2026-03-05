@@ -26,14 +26,8 @@
 
 package io.spine.tools.validation.java
 
-import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.validation.ValidationPlugin
-import io.spine.tools.validation.java.generate.MessageClass
-import io.spine.tools.validation.java.generate.ValidatorClass
 import io.spine.tools.validation.java.setonce.SetOnceRenderer
-import io.spine.tools.validation.ksp.DiscoveredValidators
-import io.spine.validation.MessageValidatorFile
-import java.io.File
 import java.util.ServiceLoader
 
 /**
@@ -53,7 +47,7 @@ import java.util.ServiceLoader
 @Suppress("unused") // Accessed via reflection.
 public open class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }, customValidators),
+        JavaValidationRenderer(customOptions.map { it.generator }),
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),
@@ -67,53 +61,3 @@ private val customOptions: List<ValidationOption> by lazy {
     ServiceLoader.load(ValidationOption::class.java)
         .filterNotNull()
 }
-
-/**
- * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validation.MessageValidator]s combined
- * with the validators loaded from resources in the classpath.
- *
- * @see MessageValidatorFile
- */
-private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
-    val fromClasspath = loadFromClasspath()
-    fromClasspath + discoveredValidators()
-}
-
-/**
- * Loads validators from resources in the classpath.
- *
- * @see MessageValidatorFile
- */
-private fun loadFromClasspath(): Map<ClassName, ClassName> =
-    MessageValidatorFile.loadAll().map { (message, validator) ->
-        ClassName.guess(message) to ClassName.guess(validator)
-    }.toMap()
-
-/**
- * The default location to which the KSP task puts the generated output.
- */
-private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"
-
-/**
- * Obtains validators created by the Validation KSP module.
- *
- * The KSP module is responsible for the actual discovering of the message validators.
- * The discovered validators are written to a text file in the KSP task output.
- * This function loads the validators from that file.
- */
-private fun discoveredValidators(): Map<MessageClass, ValidatorClass> {
-    val workingDir = System.getProperty("user.dir")
-    val kspOutputDir = File("$workingDir/$KSP_GENERATED_RESOURCES")
-    val messageValidators = DiscoveredValidators.resolve(kspOutputDir)
-    if (!messageValidators.exists()) {
-        return emptyMap()
-    }
-    return messageValidators.readValidators()
-}
-
-private fun File.readValidators(): Map<MessageClass, ValidatorClass> =
-    readLines().associate { line ->
-        val (message, validator) = MessageValidatorFile.parse(line)
-        ClassName.guess(message) to ClassName.guess(validator)
-    }

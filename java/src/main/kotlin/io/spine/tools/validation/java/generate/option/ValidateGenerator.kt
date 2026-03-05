@@ -39,6 +39,7 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.getDefaultInstance
+import io.spine.tools.validation.ValidateField
 import io.spine.tools.validation.java.expression.AnyClass
 import io.spine.tools.validation.java.expression.AnyPackerClass
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
@@ -55,7 +56,6 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.tools.validation.ValidateField
 
 /**
  * The generator for `(validate)` option.
@@ -155,22 +155,32 @@ private class GenerateValidate(
      */
     @Suppress("MaxLineLength") // For better readability of the rendered conditions.
     private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
+        val isNotDefault =
+            if (isAny)
+                "$message != ${AnyClass.getDefaultInstance()}"
+            else
+                "!${field.hasDefaultValue()}"
+
         val isValidatable =
             if (isAny)
-                "$message != ${AnyClass.getDefaultInstance()} &&" +
-                        " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
+                " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
                         " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
             else
-                "!${field.hasDefaultValue()} &&" +
-                        " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+                " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
         return CodeBlock(
             """
-            if ($isValidatable) {
+            if ($isNotDefault) {
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
-                validatable.validate(fieldPath, typeName)
-                    .map($ValidationErrorClass::getConstraintViolationList)
-                    .ifPresent($violations::addAll);
+                if ($isValidatable) {                
+                    validatable.validate(fieldPath, typeName)
+                        .map($ValidationErrorClass::getConstraintViolationList)
+                        .ifPresent($violations::addAll);
+                }
+                var byRegistry = io.spine.validation.ValidatorRegistry.validate($message, fieldPath, typeName);
+                if (!byRegistry.isEmpty()) {  
+                    $violations.addAll(byRegistry);
+                }    
             }
             """.trimIndent()
         )
