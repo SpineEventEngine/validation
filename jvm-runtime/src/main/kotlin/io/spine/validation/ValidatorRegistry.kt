@@ -26,7 +26,6 @@
 
 package io.spine.validation
 
-import com.google.common.collect.Sets
 import com.google.common.collect.Sets.newConcurrentHashSet
 import com.google.common.reflect.TypeToken
 import com.google.protobuf.Message
@@ -57,6 +56,11 @@ public object ValidatorRegistry {
 
     /**
      * The name of a kep in the placeholder entry for a class name of a validator.
+     *
+     * The placeholder value is automatically populated with the fully qualified class name
+     * of the validator during [validation][validate].
+     *
+     * @see TemplateString
      */
     public const val VALIDATOR_PLACEHOLDER: String = "validator"
 
