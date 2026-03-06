@@ -26,6 +26,8 @@
 
 package io.spine.validation
 
+import com.google.common.collect.Sets
+import com.google.common.collect.Sets.newConcurrentHashSet
 import com.google.common.reflect.TypeToken
 import com.google.protobuf.Message
 import io.spine.annotation.VisibleForTesting
@@ -54,10 +56,15 @@ import com.google.protobuf.Any as ProtoAny
 public object ValidatorRegistry {
 
     /**
+     * The name of a kep in the placeholder entry for a class name of a validator.
+     */
+    public const val VALIDATOR_PLACEHOLDER: String = "validator"
+
+    /**
      * Maps a fully qualified Kotlin class name of a message to a list of validators.
      */
     private val validators: MutableMap<@FullyQualifiedName String,
-            MutableList<MessageValidator<*>>> = ConcurrentHashMap()
+            MutableSet<MessageValidator<*>>> = ConcurrentHashMap()
 
     init {
         loadFromServiceLoader()
@@ -84,7 +91,9 @@ public object ValidatorRegistry {
      */
     @JvmStatic
     public fun <M : Message> add(cls: KClass<out M>, validator: MessageValidator<M>) {
-        val list = validators.computeIfAbsent(cls.qualifiedName!!) { mutableListOf() }
+        val list = validators.computeIfAbsent(cls.qualifiedName!!) {
+            newConcurrentHashSet()
+        }
         if (!list.contains(validator)) {
             list.add(validator)
         }
@@ -127,14 +136,23 @@ public object ValidatorRegistry {
     ): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!
         val associatedValidators = validators[cls] ?: return emptyList()
-        val violations = associatedValidators.flatMap { validator ->
+        val violations = mutableMapOf<@FullyQualifiedName String, DetectedViolation>()
+
+        associatedValidators.forEach { validator ->
+            val validatorClass = validator::class.qualifiedName!!
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
-            casted.validate(message)
+            for(violation in casted.validate(message)) {
+                violations[validatorClass] = violation
+            }
         }
-        val result = violations.map { v ->
+
+        val result = violations.map { (k, v) ->
             constraintViolation {
                 this.message = v.message
+                    .toBuilder()
+                    .putPlaceholderValue(VALIDATOR_PLACEHOLDER, k)
+                    .build()
                 typeName = if (parentName != null)
                     parentName.value
                 else
