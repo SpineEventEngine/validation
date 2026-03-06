@@ -167,20 +167,24 @@ private class GenerateValidate(
                         " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
             else
                 " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+        val validationBlock =
+            """
+            var fieldPath = ${parentPath.resolve(field.name)};
+            var typeName =  ${parentName.orElse(declaringType)};
+            if ($isValidatable) {                
+                validatable.validate(fieldPath, typeName)
+                    .map($ValidationErrorClass::getConstraintViolationList)
+                    .ifPresent($violations::addAll);
+            }
+            var byRegistry = io.spine.validation.ValidatorRegistry.validate($message, fieldPath, typeName);
+            if (!byRegistry.isEmpty()) {  
+                $violations.addAll(byRegistry);
+            }    
+            """.trimIndent()
         return CodeBlock(
             """
             if ($isNotDefault) {
-                var fieldPath = ${parentPath.resolve(field.name)};
-                var typeName =  ${parentName.orElse(declaringType)};
-                if ($isValidatable) {                
-                    validatable.validate(fieldPath, typeName)
-                        .map($ValidationErrorClass::getConstraintViolationList)
-                        .ifPresent($violations::addAll);
-                }
-                var byRegistry = io.spine.validation.ValidatorRegistry.validate($message, fieldPath, typeName);
-                if (!byRegistry.isEmpty()) {  
-                    $violations.addAll(byRegistry);
-                }    
+                $validationBlock
             }
             """.trimIndent()
         )
