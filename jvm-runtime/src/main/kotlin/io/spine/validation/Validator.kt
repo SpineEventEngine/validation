@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
  * Marks the class as a message validator.
  *
  * Applying this annotation to an implementation of [MessageValidator]
- * makes the class visible to the Validation library.
+ * makes the class visible to the validation library.
  *
  * @deprecated Use [MessageValidator] directly. The message type will be
  *             obtained via reflection.
