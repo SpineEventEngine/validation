@@ -187,14 +187,14 @@ public object ValidatorRegistry {
     ): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!
         val associatedValidators = validators[cls] ?: return emptyList()
-        val violations = mutableMapOf<@FullyQualifiedName String, DetectedViolation>()
+        val violations = mutableListOf<Pair<@FullyQualifiedName String, DetectedViolation>>()
 
         associatedValidators.forEach { validator ->
             val validatorClass = validator::class.qualifiedName!!
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
-            for(violation in casted.validate(message)) {
-                violations[validatorClass] = violation
+            for (violation in casted.validate(message)) {
+                violations.add(validatorClass to violation)
             }
         }
 
