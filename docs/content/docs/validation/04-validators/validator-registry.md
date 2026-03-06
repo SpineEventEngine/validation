@@ -94,9 +94,8 @@ ValidatorRegistry.add(Timestamp::class, TimestampValidator())
 import com.google.protobuf.Timestamp;
 import io.spine.validation.TimestampValidator;
 import io.spine.validation.ValidatorRegistry;
-import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
-ValidatorRegistry.add(getKotlinClass(Timestamp.class), new TimestampValidator());
+ValidatorRegistry.add(Timestamp.class, new TimestampValidator());
 ```
 {{< /code-tab >}}
 
@@ -121,9 +120,8 @@ val validators = ValidatorRegistry.get(Timestamp::class)
 ```java
 import com.google.protobuf.Timestamp;
 import io.spine.validation.ValidatorRegistry;
-import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
-var validators = ValidatorRegistry.get(getKotlinClass(Timestamp.class));
+var validators = ValidatorRegistry.get(Timestamp.class);
 ```
 {{< /code-tab >}}
 
@@ -152,11 +150,9 @@ ValidatorRegistry.add(Timestamp::class, MyTimestampValidator())
 ```java
 import com.google.protobuf.Timestamp;
 import io.spine.validation.ValidatorRegistry;
-import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
-var type = getKotlinClass(Timestamp.class);
-ValidatorRegistry.remove(type);
-ValidatorRegistry.add(type, new MyTimestampValidator());
+ValidatorRegistry.remove(Timestamp.class);
+ValidatorRegistry.add(Timestamp.class, new MyTimestampValidator());
 ```
 {{< /code-tab >}}
 
@@ -214,7 +210,6 @@ import io.spine.validation.MessageViolation;
 import io.spine.validation.TemplateString;
 import io.spine.validation.TemplateStrings;
 import io.spine.validation.ValidatorRegistry;
-import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 import java.util.List;
 
 final class MyTimestampValidator implements MessageValidator<Timestamp> {
@@ -230,7 +225,7 @@ final class MyTimestampValidator implements MessageValidator<Timestamp> {
     }
 }
 
-ValidatorRegistry.add(getKotlinClass(Timestamp.class), new MyTimestampValidator());
+ValidatorRegistry.add(Timestamp.class, new MyTimestampValidator());
 
 var timestamp = Timestamp.newBuilder().setNanos(-1).build();
 var violation = ValidatorRegistry.validate(timestamp).get(0);

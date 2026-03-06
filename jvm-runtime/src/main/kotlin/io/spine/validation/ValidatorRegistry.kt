@@ -104,6 +104,17 @@ public object ValidatorRegistry {
     }
 
     /**
+     * Adds a custom validator for the specific Protobuf message type.
+     *
+     * @param cls The class of the message to validate.
+     * @param validator The validator to add.
+     */
+    @JvmStatic
+    public fun <M : Message> add(cls: Class<out M>, validator: MessageValidator<M>) {
+        add(cls.kotlin, validator)
+    }
+
+    /**
      * Removes all validators for the given message type.
      *
      * @param cls The class of the message for which to remove validators.
@@ -111,6 +122,16 @@ public object ValidatorRegistry {
     @JvmStatic
     public fun remove(cls: KClass<out Message>) {
         validators.remove(cls.qualifiedName)
+    }
+
+    /**
+     * Removes all validators for the given message type.
+     *
+     * @param cls The class of the message for which to remove validators.
+     */
+    @JvmStatic
+    public fun remove(cls: Class<out Message>) {
+        remove(cls.kotlin)
     }
 
     /**
@@ -125,6 +146,18 @@ public object ValidatorRegistry {
         val registered = validators[cls.qualifiedName!!] ?: return emptySet()
         @Suppress("UNCHECKED_CAST")
         return Collections.unmodifiableSet(registered as Set<MessageValidator<M>>)
+    }
+
+    /**
+     * Obtains the validators for the given message type.
+     *
+     * @param cls The class of the message for which to get validators.
+     * @return The set of validators for the given message type,
+     *   or an empty set if no validators are registered.
+     */
+    @JvmStatic
+    public fun <M : Message> get(cls: Class<out M>): Set<MessageValidator<M>> {
+        return get(cls.kotlin)
     }
 
     /**

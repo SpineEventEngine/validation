@@ -73,6 +73,47 @@ internal class ValidatorRegistrySpec {
     }
 
     @Test
+    fun `allow adding and removing validators using Java classes`() {
+        val validator = TimestampValidator()
+        ValidatorRegistry.add(Timestamp::class.java, validator)
+
+        val invalidTimestamp = timestamp { seconds = -100000000000L }
+        ValidatorRegistry.validate(invalidTimestamp) shouldHaveSize 1
+
+        ValidatorRegistry.remove(Timestamp::class.java)
+        ValidatorRegistry.validate(invalidTimestamp).shouldBeEmpty()
+    }
+
+    @Test
+    fun `query registered validators using Java classes`() {
+        val validator1 = TimestampValidator()
+        val validator2 = AlwaysInvalidTimestampValidator()
+
+        ValidatorRegistry.add(Timestamp::class.java, validator1)
+        ValidatorRegistry.add(Timestamp::class.java, validator2)
+
+        val validators = ValidatorRegistry.get(Timestamp::class.java)
+        validators shouldContainExactly setOf(validator1, validator2)
+
+        ValidatorRegistry.remove(Timestamp::class.java)
+        ValidatorRegistry.get(Timestamp::class.java).shouldBeEmpty()
+    }
+
+    @Test
+    fun `query registered validators using both Kotlin and Java classes`() {
+        val validator = TimestampValidator()
+
+        ValidatorRegistry.add(Timestamp::class, validator)
+        ValidatorRegistry.get(Timestamp::class.java) shouldContainExactly setOf(validator)
+
+        ValidatorRegistry.remove(Timestamp::class.java)
+        ValidatorRegistry.get(Timestamp::class).shouldBeEmpty()
+
+        ValidatorRegistry.add(Timestamp::class.java, validator)
+        ValidatorRegistry.get(Timestamp::class) shouldContainExactly setOf(validator)
+    }
+
+    @Test
     fun `support multiple validators per type`() {
         val validator1 = TimestampValidator()
         val validator2 = AlwaysInvalidTimestampValidator()
