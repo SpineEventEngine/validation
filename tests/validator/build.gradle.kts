@@ -1,3 +1,4 @@
+import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.gradle.report.license.LicenseReporter
 
 /*
@@ -40,7 +41,7 @@ plugins {
 LicenseReporter.generateReportIn(project)
 
 dependencies {
-    ksp(project(":ksp"))
+    ksp(AutoServiceKsp.processor)
     spineCompiler(project(":java"))
     implementation(project(":java"))
     implementation(project(":tests:validator-dependency"))

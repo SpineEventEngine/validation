@@ -144,19 +144,43 @@ private fun MessagePsiClass.declareValidateMethod(constraints: List<CodeBlock>) 
     addLast(psiMethod)
 }
 
-private fun validateMethodBody(constraints: List<CodeBlock>): String =
-    if (constraints.isEmpty()) {
-        """
-            // This message does not have any validation constraints.
-            return java.util.Optional.empty();
+private fun validateMethodBody(constraints: List<CodeBlock>): String {
+    val constraintViolation = ConstraintViolation::class.java.canonicalName
+
+    val violationsDecl =
+        if (constraints.isEmpty()) {
+            """
+            // No constraints declared in the message. There could be validators, though.    
+            var $violations = io.spine.validation.ValidatorRegistry.validate(this);
+            
             """.trimIndent()
-    } else {
-        val constraintViolation = ConstraintViolation::class.java.canonicalName
+        } else {
+            """
+            var $violations = new java.util.ArrayList<$constraintViolation>();
+            
+            """.trimIndent()
+        }
+
+    val addingViolations =
+        if (constraints.isEmpty())
+            // We validated the message already under `violationsDecl` above.
+            ""
+        else {
+            """
+            
+            ${constraints.joinByLines()}
+                
+            var thisByRegistry = io.spine.validation.ValidatorRegistry.validate(this);
+            if (!thisByRegistry.isEmpty()) {
+                $violations.addAll(thisByRegistry);
+            }
+
+
+            """.trimIndent()
+        }
+
+    val returnBlock =
         """
-        var $violations = new java.util.ArrayList<$constraintViolation>();
-        
-        ${constraints.joinByLines()}
-        
         if (!$violations.isEmpty()) {
             var error = $validationError.newBuilder()
                 .addAllConstraintViolation($violations)
@@ -166,7 +190,9 @@ private fun validateMethodBody(constraints: List<CodeBlock>): String =
             return java.util.Optional.empty();
         }
         """.trimIndent()
-    }
+
+    return "$violationsDecl$addingViolations$returnBlock"
+}
 
 /**
  * Adds declarations of the given [fields] to this [MessagePsiClass].

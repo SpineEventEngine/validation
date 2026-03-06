@@ -39,6 +39,7 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.getDefaultInstance
+import io.spine.tools.validation.ValidateField
 import io.spine.tools.validation.java.expression.AnyClass
 import io.spine.tools.validation.java.expression.AnyPackerClass
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
@@ -55,7 +56,7 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.tools.validation.ValidateField
+import org.intellij.lang.annotations.Language
 
 /**
  * The generator for `(validate)` option.
@@ -153,26 +154,78 @@ private class GenerateValidate(
      * @param isAny Must be `true` if the provided [message] is [com.google.protobuf.Any].
      *  In this case, the method will do the unpacking in the first place.
      */
-    @Suppress("MaxLineLength") // For better readability of the rendered conditions.
+    @Suppress(
+        "MaxLineLength", "NewClassNamingConvention", "PackageVisibleField", "EmptyClass",
+        "LongMethod"
+    ) // To support highlighting and layout of the generated code blocks.
     private fun validate(message: Expression<Message>, isAny: Boolean): CodeBlock {
+        @Language("java")
+        val isNotDefault =
+            if ((field.isMap || field.isList) && !isAny)
+                // Avoid having unnecessary comparison with an empty list or map.
+                // The validation goes over an element inside a `for()` loop.
+                //
+                // The `null` value avoids the need for the `if()` clause with the comparison.
+                //
+                // Do the comparison for `Any` `element` with `Any.getDefaultInstance()`
+                // so that we can unpack a real message of interest.
+                //
+                null
+            else
+                if (isAny)
+                    "$message != ${AnyClass.getDefaultInstance()}"
+                else
+                    "!${field.hasDefaultValue()}"
+
+        @Language("java")
         val isValidatable =
             if (isAny)
-                "$message != ${AnyClass.getDefaultInstance()} &&" +
-                        " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
-                        " $AnyPackerClass.unpack($message) instanceof $ValidatableMessageClass validatable"
+                " $KnownTypesClass.instance().contains($TypeUrlClass.ofEnclosed($message)) &&" +
+                        " unpacked instanceof $ValidatableMessageClass validatable"
             else
-                "!${field.hasDefaultValue()} &&" +
-                        " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
-        return CodeBlock(
-            """
-            if ($isValidatable) {
+                " (($MessageClass) $message) instanceof $ValidatableMessageClass validatable"
+
+        @Language("java")
+        val validationBlock =
+            if (isAny)
+                """
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
-                validatable.validate(fieldPath, typeName)
-                    .map($ValidationErrorClass::getConstraintViolationList)
-                    .ifPresent($violations::addAll);
-            }
-            """.trimIndent()
-        )
+                var unpacked = $AnyPackerClass.unpack($message);
+                if ($isValidatable) {                
+                    validatable.validate(fieldPath, typeName)
+                        .map($ValidationErrorClass::getConstraintViolationList)
+                        .ifPresent($violations::addAll);
+                }
+                var byRegistry = io.spine.validation.ValidatorRegistry.validate(unpacked, fieldPath, typeName);
+                if (!byRegistry.isEmpty()) {  
+                    $violations.addAll(byRegistry);
+                }    
+                """.trimIndent()
+            else
+                """
+                var fieldPath = ${parentPath.resolve(field.name)};
+                var typeName =  ${parentName.orElse(declaringType)};
+                if ($isValidatable) {                
+                    validatable.validate(fieldPath, typeName)
+                        .map($ValidationErrorClass::getConstraintViolationList)
+                        .ifPresent($violations::addAll);
+                }
+                var byRegistry = io.spine.validation.ValidatorRegistry.validate($message, fieldPath, typeName);
+                if (!byRegistry.isEmpty()) {  
+                    $violations.addAll(byRegistry);
+                }    
+                """.trimIndent()
+        return if (isNotDefault == null) {
+            CodeBlock(validationBlock)
+        } else {
+            CodeBlock(
+                """
+                if ($isNotDefault) {
+                    $validationBlock
+                }
+                """.trimIndent()
+            )
+        }
     }
 }

@@ -12,7 +12,7 @@ validating local messages.
 ## Placement
 
 - Placement of the page: after “Built-in options”, before “Custom validation”.
-- Hugo section (minimal change): add the page under `docs/content/docs/validation/02-concepts/`.
+- Hugo section (minimal change): add the page under `docs/content/docs/validation/03-built-in-options/`.
   If the site navigation later gains an “Advanced topics” section, the page can move there.
 
 ## Planned content
@@ -39,12 +39,9 @@ validating local messages.
   - Return `List<DetectedViolation>`.
   - Use `FieldViolation` (and other available violation types) to point at a field path and value.
   - Mention that the runtime converts `DetectedViolation` into `ConstraintViolation`/`ValidationError`.
-- Constraints and guardrails:
-  - Exactly one validator per external message type (duplicate is an error).
-  - Validators for local messages are prohibited (use options/codegen instead).
 - Example walkthrough (short, copy-pastable):
-  - Implement `EarphonesValidator` (from `:tests:validator`) and show how it affects a local message
-    that contains an `Earphones` field.
+  - Implement `TimestampValidator` (from `:jvm-runtime`) and show how it affects a local message
+    that contains a `Timestamp` field.
 
 ## Source references to anchor the docs
 
@@ -52,7 +49,7 @@ validating local messages.
   - `jvm-runtime/src/main/kotlin/io/spine/validation/MessageValidator.kt`
   - `jvm-runtime/src/main/kotlin/io/spine/validation/Validator.kt`
 - Example implementation:
-  - `tests/validator/src/main/kotlin/io/spine/tools/validation/test/EarphonesValidator.kt`
+  - `jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt`
 
 ## Output
 

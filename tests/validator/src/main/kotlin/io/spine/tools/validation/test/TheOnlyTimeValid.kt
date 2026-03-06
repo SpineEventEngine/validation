@@ -26,6 +26,7 @@
 
 package io.spine.tools.validation.test
 
+import com.google.auto.service.AutoService
 import com.google.common.annotations.VisibleForTesting
 import com.google.protobuf.Timestamp
 import com.google.protobuf.util.Timestamps
@@ -35,18 +36,18 @@ import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
 import io.spine.validation.TemplateString
-import io.spine.validation.Validator
+import io.spine.validation.ValidatorRegistry
 import io.spine.validation.templateString
 
 /**
  * Validates [com.google.protobuf.Timestamp] messages, treating all instances as invalid
  * except for [ValidTimestamp].
  */
-@Validator(Timestamp::class)
+@AutoService(MessageValidator::class)
 public class TheOnlyTimeValid : MessageValidator<Timestamp> {
 
     public override fun validate(message: Timestamp): List<DetectedViolation> {
-        if (message === ValidTimestamp) {
+        if (message == ValidTimestamp) {
             return emptyList()
         }
 
@@ -76,6 +77,10 @@ public class TheOnlyTimeValid : MessageValidator<Timestamp> {
          */
         public val message: TemplateString = templateString {
             withPlaceholders = "Invalid timestamp."
+            placeholderValue.put(
+                ValidatorRegistry.VALIDATOR_PLACEHOLDER,
+                TheOnlyTimeValid::class.qualifiedName!!
+            )
         }
 
         /**

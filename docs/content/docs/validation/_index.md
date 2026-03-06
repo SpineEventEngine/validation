@@ -17,6 +17,6 @@ options, and runs those checks automatically when you build messages.
 ## Deeper topics
 
 - [Built-in options](03-built-in-options/)
-- [Validating third-party messages](04-third-party-messages/)
+- [Using Validators](04-validators/)
 - How it works: [Architecture](09-developers-guide/architecture.md)
 - Extension points: [Custom validation](08-custom-validation/)

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -23,22 +23,27 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-package io.spine.tools.validation.ksp
+package spine.validation.test;
 
-import com.google.auto.service.AutoService
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
-import com.google.devtools.ksp.processing.SymbolProcessorProvider
+import "spine/options.proto";
 
-/**
- * Provides [ValidatorProcessor] that discovers classes annotated with
- * the [@Validator][io.spine.validation.Validator] annotation.
- */
-@AutoService(SymbolProcessorProvider::class)
-public class ValidatorProcessorProvider : SymbolProcessorProvider {
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.tools.validation.test";
+option java_outer_classname = "PackedFieldsProto";
+option java_multiple_files = true;
 
-    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return ValidatorProcessor(environment.codeGenerator)
-    }
+import "google/protobuf/any.proto";
+
+message PackedFields {
+
+    // Tests a singular field of well-known message type packed into `Any`.
+    google.protobuf.Any singular = 1 [(validate) = true];
+
+    // Tests a repeated field of well-known message type packed into `Any`.
+    repeated google.protobuf.Any repeated = 2 [(validate) = true];
+
+    // Tests a map field of well-known message type packed into `Any`.
+    map<string, google.protobuf.Any> mapped = 3 [(validate) = true];
 }
