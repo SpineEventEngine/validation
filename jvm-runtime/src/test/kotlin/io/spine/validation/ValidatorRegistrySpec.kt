@@ -29,6 +29,7 @@ package io.spine.validation
 import com.google.protobuf.Timestamp
 import com.google.protobuf.timestamp
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import java.util.ServiceLoader
@@ -54,6 +55,21 @@ internal class ValidatorRegistrySpec {
         
         ValidatorRegistry.remove(Timestamp::class)
         ValidatorRegistry.validate(invalidTimestamp).shouldBeEmpty()
+    }
+
+    @Test
+    fun `query registered validators`() {
+        val validator1 = TimestampValidator()
+        val validator2 = AlwaysInvalidTimestampValidator()
+        
+        ValidatorRegistry.add(Timestamp::class, validator1)
+        ValidatorRegistry.add(Timestamp::class, validator2)
+        
+        val validators = ValidatorRegistry.get(Timestamp::class)
+        validators shouldContainExactly setOf(validator1, validator2)
+        
+        ValidatorRegistry.remove(Timestamp::class)
+        ValidatorRegistry.get(Timestamp::class).shouldBeEmpty()
     }
 
     @Test

@@ -114,6 +114,20 @@ public object ValidatorRegistry {
     }
 
     /**
+     * Obtains the validators for the given message type.
+     *
+     * @param cls The class of the message for which to get validators.
+     * @return The set of validators for the given message type,
+     *   or an empty set if no validators are registered.
+     */
+    @JvmStatic
+    public fun <M : Message> get(cls: KClass<out M>): Set<MessageValidator<M>> {
+        val registered = validators[cls.qualifiedName!!] ?: return emptySet()
+        @Suppress("UNCHECKED_CAST")
+        return Collections.unmodifiableSet(registered as Set<MessageValidator<M>>)
+    }
+
+    /**
      * Clears all registered validators.
      */
     @JvmStatic
