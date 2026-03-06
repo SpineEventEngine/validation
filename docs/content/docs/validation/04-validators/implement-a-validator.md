@@ -1,19 +1,19 @@
 ---
-title: Implement an external validator
-description: How to validate message types generated outside your build using `MessageValidator`.
+title: Implement a validator
+description: How to validate messages with custom logic using `MessageValidator`.
 headline: Documentation
 ---
 
-# Implement an external validator
+# Implement a validator
 
-To validate an external message type `M` (a Protobuf message generated outside your build):
+To validate a Protobuf message type `M` with custom logic:
 
 1. Implement `io.spine.validation.MessageValidator<M>`.
-2. Annotate the implementation with `@io.spine.validation.Validator(M::class)`.
-3. Ensure the class has a `public`, no-args constructor.
+2. Make the implementation discoverable via Java `ServiceLoader` (recommended), or register it in
+   `ValidatorRegistry` explicitly.
+3. Ensure the class has a public no-args constructor.
 
-Spine Validation creates a new validator instance per invocation, so keep validators stateless and
-cheap to construct.
+Keep validators stateless and cheap to construct.
 
 ## Reference implementation: `TimestampValidator`
 
@@ -23,21 +23,39 @@ Let's review the `MessageValidator` implementation on the example of
 It validates `com.google.protobuf.Timestamp` and reports violations for invalid
 `seconds` and `nanos` values.
 
-### Core implementation
+### Service discovery
 
-The validator is a regular `MessageValidator<Timestamp>` implementation, but it must also be
-annotated with `@Validator(Timestamp::class)`:
+The validator is a regular `MessageValidator<Timestamp>` implementation and is discoverable via
+`ServiceLoader`.
+To generate the required service provider configuration automatically, annotate it with
+`@AutoService(MessageValidator::class)`:
 
-- The `@Validator` annotation marks the class as an external message validator.
-- Spine Validation uses this annotation at build time to discover your validators and wire them
-  into generated validation code.
+```kotlin
+import com.google.auto.service.AutoService
+import io.spine.validation.MessageValidator
+
+@AutoService(MessageValidator::class)
+public class TimestampValidator : MessageValidator<Timestamp> {
+    // ...
+}
+```
+
+### Validation logic
 
 The core logic is intentionally small: it first delegates to `Timestamps.isValid(message)` and,
 if invalid, adds a field-specific violation for each invalid field (`seconds` and/or `nanos`).
 For range checks, it relies on `Timestamps.MIN_VALUE` and `Timestamps.MAX_VALUE`.
 
 ```kotlin
-@Validator(Timestamp::class)
+import com.google.auto.service.AutoService
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
+import com.google.protobuf.util.Timestamps.MAX_VALUE
+import com.google.protobuf.util.Timestamps.MIN_VALUE
+import io.spine.validation.DetectedViolation
+import io.spine.validation.MessageValidator
+
+@AutoService(MessageValidator::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
     override fun validate(message: Timestamp): List<DetectedViolation> {
@@ -69,6 +87,9 @@ The message is defined as a template (via `withPlaceholders`) and populated by s
 values in `placeholderValue`. This keeps error messages machine-friendly and allows consistent
 formatting, logging, and customization.
 
+When violations are converted to regular `ConstraintViolation`s, Spine Validation also populates
+the `validator` placeholder with the fully qualified class name of the validator.
+
 Below is the helper that creates a violation for invalid `seconds`
 (the `invalidNanos()` function is similar):
 
@@ -90,15 +111,19 @@ private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
 )
 ```
 
-## Walkthrough: validate `google.protobuf.Timestamp` inside a local message
+## Walkthrough: validate a nested message field
+
+To validate a message nested inside another message, mark the field with `(validate) = true`.
+This applies both generated constraints (if any) and validators registered for the nested type.
 
 Suppose your local model uses `Timestamp`:
 
 ```proto
 import "google/protobuf/timestamp.proto";
+import "spine/options.proto";
 
 message Meeting {
-    google.protobuf.Timestamp starts_at = 1;
+    google.protobuf.Timestamp starts_at = 1 [(validate) = true];
 }
 ```
 

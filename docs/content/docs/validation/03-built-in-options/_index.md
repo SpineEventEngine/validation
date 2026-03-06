@@ -46,5 +46,5 @@ on GitHub: [spine/options.proto](https://github.com/SpineEventEngine/base-librar
 - [Options for `oneof` fields](oneof-fields.md)
 - [Message-level options](message-level-options.md)
 - [Options for `repeated` and `map` fields](repeated-and-map-fields.md)
-- [Validating external messages](../04-external-messages/)
+- [Using Validators](../04-validators/)
 - [Custom validation](../08-custom-validation/)
