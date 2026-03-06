@@ -93,5 +93,6 @@ their violations together.
 
 ## What’s next
 - [Implement a validator](implement-a-validator.md)
+- [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
