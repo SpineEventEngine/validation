@@ -55,7 +55,7 @@ import com.google.protobuf.Any as ProtoAny
 public object ValidatorRegistry {
 
     /**
-     * The name of a kep in the placeholder entry for a class name of a validator.
+     * The name of a key in the placeholder entry for a class name of a validator.
      *
      * The placeholder value is automatically populated with the fully qualified class name
      * of the validator during [validation][validate].
