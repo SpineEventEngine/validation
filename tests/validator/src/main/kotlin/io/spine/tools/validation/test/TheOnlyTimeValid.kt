@@ -36,6 +36,7 @@ import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
 import io.spine.validation.TemplateString
+import io.spine.validation.ValidatorRegistry
 import io.spine.validation.templateString
 
 /**
@@ -46,7 +47,7 @@ import io.spine.validation.templateString
 public class TheOnlyTimeValid : MessageValidator<Timestamp> {
 
     public override fun validate(message: Timestamp): List<DetectedViolation> {
-        if (message === ValidTimestamp) {
+        if (message == ValidTimestamp) {
             return emptyList()
         }
 
@@ -76,6 +77,10 @@ public class TheOnlyTimeValid : MessageValidator<Timestamp> {
          */
         public val message: TemplateString = templateString {
             withPlaceholders = "Invalid timestamp."
+            placeholderValue.put(
+                ValidatorRegistry.VALIDATOR_PLACEHOLDER,
+                TheOnlyTimeValid::class.qualifiedName!!
+            )
         }
 
         /**

@@ -35,6 +35,7 @@ import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
 import io.spine.validation.TemplateString
+import io.spine.validation.ValidatorRegistry
 import io.spine.validation.templateString
 
 /**
@@ -79,6 +80,10 @@ public class EarphonesValidator : MessageValidator<Earphones> {
          */
         public val message: TemplateString = templateString {
             withPlaceholders = "Price is too high."
+            placeholderValue.put(
+                ValidatorRegistry.VALIDATOR_PLACEHOLDER,
+                EarphonesValidator::class.qualifiedName!!
+            )
         }
 
         /**

@@ -47,7 +47,7 @@ import org.junit.jupiter.api.assertThrows
  * works when validating messages containing [Timestamp] fields.
  */
 @DisplayName("A validator for an external message should")
-class ExternalMessageValidatorTest {
+internal class ExternalMessageValidatorTest {
 
     @Nested inner class
     `prohibit invalid instances` {
