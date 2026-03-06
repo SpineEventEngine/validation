@@ -41,8 +41,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("`EarphonesValidator` should")
-class EarphonesValidatorSpec {
+/**
+ * This test suite verifies that a custom message validator [EarphonesValidator]
+ * works when validating messages containing [Earphones] fields.
+ */
+@DisplayName("A message validator should")
+class ValidatorTest {
 
     @Nested inner class
     `prohibit invalid instances` {
@@ -142,7 +146,7 @@ class EarphonesValidatorSpec {
  */
 private inline fun <reified T : Message> ConstraintViolation.assert(earphones: Earphones) {
     message shouldBe EarphonesValidator.Violation.message
-//    fieldPath shouldBe expectedFieldPath
+    fieldPath shouldBe expectedFieldPath
     typeName shouldBe T::class.descriptor.fullName
     fieldValue shouldBe toAny(earphones.price)
 }
