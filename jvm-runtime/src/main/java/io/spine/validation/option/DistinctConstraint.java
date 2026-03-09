@@ -29,7 +29,6 @@ package io.spine.validation.option;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.validation.ConstraintTranslator;
 
 import static java.lang.String.format;
 
@@ -48,8 +47,4 @@ public final class DistinctConstraint extends FieldConstraint<Boolean> {
         return format("`%s` must not contain duplicates.", field.targetDeclaration());
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitDistinct(this);
-    }
 }

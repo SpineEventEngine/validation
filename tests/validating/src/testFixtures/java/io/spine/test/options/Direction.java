@@ -28,7 +28,6 @@ package io.spine.test.options;
 
 import io.spine.code.proto.FieldContext;
 import io.spine.validation.Constraint;
-import io.spine.validation.ConstraintTranslator;
 import io.spine.validation.option.FieldConstraint;
 import io.spine.validation.option.FieldValidatingOption;
 
@@ -54,10 +53,6 @@ public final class Direction extends FieldValidatingOption<BytesDirection> {
                 return "";
             }
 
-            @Override
-            public void accept(ConstraintTranslator<?> visitor) {
-                // NoOp.
-            }
         };
     }
 }

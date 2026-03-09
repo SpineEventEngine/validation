@@ -32,7 +32,6 @@ import io.spine.code.proto.FieldName;
 import io.spine.code.proto.OneofDeclaration;
 import io.spine.type.MessageType;
 import io.spine.validation.Constraint;
-import io.spine.validation.ConstraintTranslator;
 
 import static java.lang.String.format;
 
@@ -56,11 +55,6 @@ public final class IsRequiredConstraint implements Constraint {
     @Override
     public String formattedErrorMessage(FieldContext field) {
         return format("One of fields in group `%s` must be set.", declaration.name());
-    }
-
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitRequiredOneof(this);
     }
 
     /**

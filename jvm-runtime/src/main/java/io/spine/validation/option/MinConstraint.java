@@ -31,7 +31,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.MinOption;
 import io.spine.validation.ComparableNumber;
-import io.spine.validation.ConstraintTranslator;
 import io.spine.validation.NumberText;
 import io.spine.validation.diags.ViolationText;
 
@@ -64,8 +63,4 @@ public final class MinConstraint extends RangedConstraint<MinOption> {
         return format(template, orEqualTo(range.lowerBoundType()), range.lowerEndpoint());
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitRange(this);
-    }
 }

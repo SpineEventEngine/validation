@@ -42,8 +42,4 @@ public interface CustomConstraint extends Constraint {
 
     ImmutableList<ConstraintViolation> validate(MessageValue containingMessage);
 
-    @Override
-    default void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitCustom(this);
-    }
 }

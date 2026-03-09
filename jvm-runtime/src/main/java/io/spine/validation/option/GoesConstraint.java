@@ -30,7 +30,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.GoesOption;
-import io.spine.validation.ConstraintTranslator;
 import io.spine.validation.diags.ViolationText;
 
 /**
@@ -53,8 +52,4 @@ public final class GoesConstraint extends FieldConstraint<GoesOption> {
         return ViolationText.errorMessage(option, option.getMsgFormat());
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitGoesWith(this);
-    }
 }

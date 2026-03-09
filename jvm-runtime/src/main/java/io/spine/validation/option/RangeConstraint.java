@@ -32,7 +32,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.RangeOption;
 import io.spine.validation.ComparableNumber;
-import io.spine.validation.ConstraintTranslator;
 
 import static java.lang.String.format;
 
@@ -72,8 +71,4 @@ public final class RangeConstraint extends RangedConstraint<RangeOption> {
         return format("less than %s", orEqualTo(range.upperBoundType()));
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitRange(this);
-    }
 }

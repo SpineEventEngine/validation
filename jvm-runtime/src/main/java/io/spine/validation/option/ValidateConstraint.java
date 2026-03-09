@@ -28,7 +28,6 @@ package io.spine.validation.option;
 
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.validation.ConstraintTranslator;
 
 /**
  * A constraint that, when applied to a message field, signifies that the message should have valid
@@ -46,8 +45,4 @@ public final class ValidateConstraint extends FieldConstraint<Boolean> {
         return "";
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitValidate(this);
-    }
 }

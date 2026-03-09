@@ -30,7 +30,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.option.PatternOption;
-import io.spine.validation.ConstraintTranslator;
 import io.spine.validation.diags.ViolationText;
 
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
@@ -54,11 +53,6 @@ public final class PatternConstraint extends FieldConstraint<PatternOption> {
     public String formattedErrorMessage(FieldContext field) {
         var option = optionValue();
         return ViolationText.errorMessage(option, option.getMsgFormat());
-    }
-
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitPattern(this);
     }
 
     /**

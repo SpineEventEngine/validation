@@ -32,7 +32,6 @@ import io.spine.code.proto.FieldContext;
 import io.spine.type.MessageType;
 import io.spine.validation.Alternative;
 import io.spine.validation.Constraint;
-import io.spine.validation.ConstraintTranslator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
@@ -63,11 +62,6 @@ public final class RequiredFieldConstraint implements Constraint {
     @Override
     public String formattedErrorMessage(FieldContext field) {
         return format("Field named `%s` is not found.", field.targetDeclaration());
-    }
-
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitRequiredField(this);
     }
 
     /**

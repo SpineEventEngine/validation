@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.validation.ConstraintTranslator;
 import io.spine.validation.ConstraintViolation;
 import io.spine.validation.CustomConstraint;
 import io.spine.validation.MessageValue;
@@ -71,8 +70,4 @@ public final class AllRequiredConstraint
                : ImmutableList.of();
     }
 
-    @Override
-    public void accept(ConstraintTranslator<?> visitor) {
-        visitor.visitCustom(this);
-    }
 }
