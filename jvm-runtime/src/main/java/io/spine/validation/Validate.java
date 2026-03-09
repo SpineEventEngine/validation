@@ -76,6 +76,7 @@ public final class Validate {
      */
     @SuppressWarnings("ChainOfInstanceofChecks") // A necessity for covering more cases.
     public static List<ConstraintViolation> violationsOf(Message message) {
+        checkNotNull(message);
         var msg = message;
         if (message instanceof Any packed) {
             if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
