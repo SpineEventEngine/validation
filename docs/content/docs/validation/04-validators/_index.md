@@ -56,6 +56,12 @@ public class MeetingValidator : MessageValidator<Meeting> {
 }
 ```
 
+{{% note-block class="warning" %}}
+For AutoService to work, you'll also need to update your build.
+Please see the [documentation of the library][auto-service] for details.
+{{% /note-block %}}
+
+
 ### Explicit registration (alternative)
 
 If you prefer not to rely on classpath discovery, add validators during application startup:
@@ -96,3 +102,5 @@ their violations together.
 - [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
+
+[auto-service]: https://github.com/google/auto/tree/main/service
