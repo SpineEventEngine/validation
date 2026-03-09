@@ -28,6 +28,7 @@ package io.spine.validation
 
 import com.google.common.collect.Sets.newConcurrentHashSet
 import com.google.common.reflect.TypeToken
+import com.google.errorprone.annotations.ThreadSafe
 import com.google.protobuf.Message
 import io.spine.annotation.VisibleForTesting
 import io.spine.base.FieldPath
@@ -52,6 +53,7 @@ import com.google.protobuf.Any as ProtoAny
  * The registry also automatically loads validators from the classpath using
  * the [ServiceLoader] mechanism.
  */
+@ThreadSafe
 public object ValidatorRegistry {
 
     /**
@@ -95,11 +97,12 @@ public object ValidatorRegistry {
      */
     @JvmStatic
     public fun <M : Message> add(cls: KClass<out M>, validator: MessageValidator<M>) {
-        val list = validators.computeIfAbsent(cls.qualifiedName!!) {
-            newConcurrentHashSet()
-        }
-        if (!list.contains(validator)) {
-            list.add(validator)
+        synchronized(this) {
+            validators.compute(cls.qualifiedName!!) { _, currentSet ->
+                val set = currentSet ?: newConcurrentHashSet()
+                set.add(validator)
+                set
+            }
         }
     }
 
@@ -121,7 +124,9 @@ public object ValidatorRegistry {
      */
     @JvmStatic
     public fun remove(cls: KClass<out Message>) {
-        validators.remove(cls.qualifiedName)
+        synchronized(this) {
+            validators.remove(cls.qualifiedName)
+        }
     }
 
     /**
@@ -165,7 +170,9 @@ public object ValidatorRegistry {
      */
     @JvmStatic
     public fun clear() {
-        validators.clear()
+        synchronized(this) {
+            validators.clear()
+        }
     }
 
     /**
@@ -186,11 +193,11 @@ public object ValidatorRegistry {
         parentName: TypeName?
     ): List<ConstraintViolation> {
         val cls = message::class.qualifiedName!!
-        val associatedValidators = validators[cls] ?: return emptyList()
+        val associatedValidators = validators[cls]?.toSet() ?: return emptyList()
         val violations = mutableListOf<Pair<@FullyQualifiedName String, DetectedViolation>>()
 
         associatedValidators.forEach { validator ->
-            val validatorClass = validator::class.qualifiedName!!
+            val validatorClass = validator::class.qualifiedName ?: "UnknownValidator"
             @Suppress("UNCHECKED_CAST")
             val casted = validator as MessageValidator<Message>
             for (violation in casted.validate(message)) {

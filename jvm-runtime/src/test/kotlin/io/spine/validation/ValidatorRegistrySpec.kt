@@ -33,9 +33,12 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import java.util.ServiceLoader
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("`ValidatorRegistry` should")
 internal class ValidatorRegistrySpec {
@@ -179,6 +182,29 @@ internal class ValidatorRegistrySpec {
     fun `obtain the message type for a validator as a generic argument`() {
         val type = TimestampValidator().messageClass()
         type shouldBe Timestamp::class
+    }
+
+    @Test
+    fun `be thread-safe`() {
+        val threadCount = 10
+        val iterations = 1000
+        val executor = Executors.newFixedThreadPool(threadCount)
+
+        assertDoesNotThrow {
+            for (i in 1..iterations) {
+                executor.execute {
+                    ValidatorRegistry.add(Timestamp::class, object : MessageValidator<Timestamp> {
+                        override fun validate(message: Timestamp): List<DetectedViolation> =
+                            emptyList()
+                    })
+                    ValidatorRegistry.get(Timestamp::class)
+                    ValidatorRegistry.validate(Timestamp.getDefaultInstance())
+                }
+            }
+
+            executor.shutdown()
+            executor.awaitTermination(1, TimeUnit.MINUTES)
+        }
     }
 }
 
