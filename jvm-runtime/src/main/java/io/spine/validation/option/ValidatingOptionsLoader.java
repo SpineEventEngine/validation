@@ -34,8 +34,6 @@ import io.spine.code.proto.AbstractOption;
 
 import java.util.ServiceLoader;
 
-import static java.util.ServiceLoader.load;
-
 /**
  * Loads the implementations of {@link ValidatingOptionFactory} using a {@link ServiceLoader}.
  *
@@ -49,7 +47,7 @@ public enum ValidatingOptionsLoader {
     private final ImmutableSet<ValidatingOptionFactory> implementations;
 
     ValidatingOptionsLoader() {
-        var loader = load(ValidatingOptionFactory.class);
+        var loader = ServiceLoader.load(ValidatingOptionFactory.class);
         this.implementations = ImmutableSet.copyOf(loader);
     }
 
