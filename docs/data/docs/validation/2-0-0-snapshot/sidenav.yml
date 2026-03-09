@@ -48,10 +48,10 @@
           file_path: 03-built-in-options/message-level-options
         - page: "Options for `repeated` and `map` fields"
           file_path: 03-built-in-options/repeated-and-map-fields
-    - page: Using Validators
+    - page: Using validators
       key: 04-validators
       children:
-        - page: Using Validators
+        - page: Overview of `MessageValidator`
           file_path: 04-validators
         - page: Implement a validator
           file_path: 04-validators/implement-a-validator

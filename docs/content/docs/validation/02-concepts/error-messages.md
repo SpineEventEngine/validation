@@ -137,6 +137,6 @@ Recommended actions:
 - Explore the built-in options:
   [Built-in options](../03-built-in-options/).
 - Learn how to validate messages with custom code:
-  [Using Validators](../04-validators/).
+  [Using validators](../04-validators/).
 - If built-in options are not enough, define your own constraints and messages:
   [Custom validation](../08-custom-validation/).

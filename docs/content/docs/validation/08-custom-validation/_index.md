@@ -25,7 +25,7 @@ Below is a workflow diagram for a typical option:
 
 ## What’s next
 
-- [Using Validators](../04-validators/)
+- [Using validators](../04-validators/)
 - Learn where this plugs in: [Architecture](../09-developers-guide/architecture.md).
 
 Take a look at the `:tests:extensions` module that contains a full example of

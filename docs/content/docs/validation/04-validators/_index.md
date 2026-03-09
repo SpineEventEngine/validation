@@ -1,13 +1,15 @@
 ---
-title: Using Validators
+title: MessageValidator overview
 description: How to validate messages with custom code using `MessageValidator`.
 headline: Documentation
 ---
 
-# Using Validators
+# Overview of `MessageValidator`
 
+{{% note-block class="lead" %}}
 Spine Validation enforces most constraints via **code generation** from `.proto` options.
 Sometimes this is not enough, or not possible.
+{{% /note-block %}}
 
 Use validators when you need **custom logic in code**:
 
