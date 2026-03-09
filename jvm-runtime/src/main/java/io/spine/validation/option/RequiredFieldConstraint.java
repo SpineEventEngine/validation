@@ -55,11 +55,6 @@ public final class RequiredFieldConstraint implements Constraint {
     }
 
     @Override
-    public MessageType targetType() {
-        return messageType;
-    }
-
-    @Override
     public String formattedErrorMessage(FieldContext field) {
         return format("Field named `%s` is not found.", field.targetDeclaration());
     }

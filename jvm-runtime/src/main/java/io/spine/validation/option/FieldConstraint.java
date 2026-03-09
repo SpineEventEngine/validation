@@ -29,7 +29,6 @@ package io.spine.validation.option;
 import com.google.errorprone.annotations.Immutable;
 import com.google.errorprone.annotations.ImmutableTypeParameter;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.type.MessageType;
 import io.spine.validation.Constraint;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -68,8 +67,4 @@ public abstract class FieldConstraint<@ImmutableTypeParameter V> implements Cons
         return field;
     }
 
-    @Override
-    public MessageType targetType() {
-        return field.declaringType();
-    }
 }

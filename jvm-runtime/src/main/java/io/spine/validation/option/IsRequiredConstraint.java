@@ -30,7 +30,6 @@ import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldName;
 import io.spine.code.proto.OneofDeclaration;
-import io.spine.type.MessageType;
 import io.spine.validation.Constraint;
 
 import static java.lang.String.format;
@@ -45,11 +44,6 @@ public final class IsRequiredConstraint implements Constraint {
 
     IsRequiredConstraint(OneofDeclaration declaration) {
         this.declaration = declaration;
-    }
-
-    @Override
-    public MessageType targetType() {
-        return declaration.declaringType();
     }
 
     @Override

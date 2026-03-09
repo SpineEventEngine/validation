@@ -28,7 +28,6 @@ package io.spine.validation;
 
 import com.google.errorprone.annotations.Immutable;
 import io.spine.code.proto.FieldContext;
-import io.spine.type.MessageType;
 
 /**
  * A validation rule attributed to a message type.
@@ -37,11 +36,6 @@ import io.spine.type.MessageType;
  */
 @Immutable
 public interface Constraint {
-
-    /**
-     * The associated message type.
-     */
-    MessageType targetType();
 
     /**
      * Produces an error message template for the given field validation context.
