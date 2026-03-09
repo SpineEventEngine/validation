@@ -1,0 +1,1 @@
+com.google.protobuf.Timestamp:io.spine.validation.TimestampValidator

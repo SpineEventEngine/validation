@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,9 @@
 
 package io.spine.tools.validation.java
 
-import io.spine.tools.compiler.jvm.ClassName
-import io.spine.tools.validation.java.generate.MessageClass
-import io.spine.tools.validation.java.generate.ValidatorClass
-import io.spine.tools.validation.java.setonce.SetOnceRenderer
 import io.spine.tools.validation.ValidationPlugin
-import io.spine.tools.validation.ksp.DiscoveredValidators
-import java.io.File
-import java.util.*
+import io.spine.tools.validation.java.setonce.SetOnceRenderer
+import java.util.ServiceLoader
 
 /**
  * An implementation of [ValidationPlugin] for Java language.
@@ -52,7 +47,7 @@ import java.util.*
 @Suppress("unused") // Accessed via reflection.
 public open class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }, customValidators),
+        JavaValidationRenderer(customOptions.map { it.generator }),
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),
@@ -66,30 +61,3 @@ private val customOptions: List<ValidationOption> by lazy {
     ServiceLoader.load(ValidationOption::class.java)
         .filterNotNull()
 }
-
-/**
- * Dynamically discovered instances of custom
- * [MessageValidator][io.spine.validation.MessageValidator]s.
- *
- * Note that the KSP module is responsible for the actual discovering of the message validators.
- * The discovered validators are written to a text file in the KSP task output.
- * This property loads the validators from that file.
- */
-private val customValidators: Map<MessageClass, ValidatorClass> by lazy {
-    val workingDir = System.getProperty("user.dir")
-    val kspOutput = File("$workingDir/$KSP_GENERATED_RESOURCES")
-    val messageValidators =  DiscoveredValidators.resolve(kspOutput)
-    if (!messageValidators.exists()) {
-        return@lazy emptyMap()
-    }
-
-    messageValidators.readLines().associate {
-        val (message, validator) = it.split(":")
-        ClassName.guess(message) to ClassName.guess(validator)
-    }
-}
-
-/**
- * The default location to which the KSP task puts the generated output.
- */
-private const val KSP_GENERATED_RESOURCES = "build/generated/ksp/main"

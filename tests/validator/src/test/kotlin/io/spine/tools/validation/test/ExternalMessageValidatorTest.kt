@@ -42,8 +42,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
-@DisplayName("`TimestampValidator` should")
-class TimestampValidatorSpec {
+/**
+ * This test suite verifies that a custom message validator [TheOnlyTimeValid]
+ * works when validating messages containing [Timestamp] fields.
+ */
+@DisplayName("A validator for an external message should")
+internal class ExternalMessageValidatorTest {
 
     @Nested inner class
     `prohibit invalid instances` {

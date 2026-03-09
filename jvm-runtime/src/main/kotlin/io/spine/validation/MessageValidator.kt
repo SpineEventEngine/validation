@@ -59,8 +59,8 @@ import io.spine.annotation.SPI
  *
  * The Validation library provides a mechanism that allows validating of
  * the external messages, **which are used for fields within local messages**.
- * Implement this interface and annotate the implementing class with
- * the [@Validator][Validator] annotation, specifying the message type to validate.
+ * Implement this interface and ensure the implementation is discoverable
+ * by [ServiceLoader][java.util.ServiceLoader].
  *
  * For each field of type [M] within any local message, the library will invoke
  * the [MessageValidator.validate] method when validating the local message.
@@ -74,7 +74,6 @@ import io.spine.annotation.SPI
  * An example of the validator declaration for the `Earphones` message:
  *
  * ```kotlin
- * @Validator(Earphones::class)
  * public class EarphonesValidator : MessageValidator<Earphones> {
  *     public override fun validate(message: Earphones): List<DetectedViolation> {
  *         return emptyList() // Always valid.

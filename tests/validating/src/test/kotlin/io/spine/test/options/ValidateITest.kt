@@ -35,6 +35,7 @@ import io.spine.test.tools.validate.inDepthValidatedMaps
 import io.spine.test.tools.validate.inDepthValidatedMessage
 import io.spine.test.tools.validate.inDepthValidatedRepeated
 import io.spine.test.tools.validate.personName
+import io.spine.type.UnknownTypeException
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -134,8 +135,8 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept any unknown enclosed message`() {
-            assertDoesNotThrow {
+        fun `reject any unknown enclosed message`() {
+            assertThrows<UnknownTypeException> {
                 inDepthValidatedMessage {
                     any = unknownAny
                 }
@@ -250,8 +251,8 @@ internal class ValidateITest {
         }
 
         @Test
-        fun `accept unknown enclosed messages`() {
-            assertDoesNotThrow {
+        fun `reject unknown enclosed messages`() {
+            assertThrows<UnknownTypeException> {
                 inDepthValidatedRepeated {
                     any.addAll(
                         listOf(unknownAny, unknownAny, unknownAny)
@@ -405,7 +406,7 @@ internal class ValidateITest {
 
         @Test
         fun `accept unknown enclosed message values`() {
-            assertDoesNotThrow {
+            assertThrows<UnknownTypeException> {
                 inDepthValidatedMaps {
                     any.putAll(
                         mapOf(

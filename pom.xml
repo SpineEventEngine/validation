@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.400</version>
+<version>2.0.0-SNAPSHOT.401</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -49,12 +49,6 @@ all modules and does not describe the project structure per-subproject.
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
-    <artifactId>spine-annotations</artifactId>
-    <version>2.0.0-SNAPSHOT.384</version>
-    <scope>compile</scope>
-  </dependency>
-  <dependency>
-    <groupId>io.spine</groupId>
     <artifactId>spine-base</artifactId>
     <version>2.0.0-SNAPSHOT.384</version>
     <scope>compile</scope>
@@ -68,7 +62,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-validation-jvm-runtime</artifactId>
-    <version>2.0.0-SNAPSHOT.395</version>
+    <version>2.0.0-SNAPSHOT.400</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -150,18 +144,6 @@ all modules and does not describe the project structure per-subproject.
     <scope>test</scope>
   </dependency>
   <dependency>
-    <groupId>com.jetbrains.intellij.platform</groupId>
-    <artifactId>util</artifactId>
-    <version>213.7172.53</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
-    <groupId>dev.zacsweers.kctfork</groupId>
-    <artifactId>ksp</artifactId>
-    <version>0.7.1</version>
-    <scope>test</scope>
-  </dependency>
-  <dependency>
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
     <version>6.0.4</version>
@@ -200,7 +182,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.junit</groupId>
     <artifactId>junit-bom</artifactId>
-    <version>6.0.0</version>
+    <version>6.0.3</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -212,19 +194,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-api</artifactId>
-    <version>6.0.0</version>
+    <version>6.0.3</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-engine</artifactId>
-    <version>6.0.0</version>
+    <version>6.0.3</version>
     <scope>test</scope>
   </dependency>
   <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter-params</artifactId>
-    <version>6.0.0</version>
+    <version>6.0.3</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -307,7 +289,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>validation-java-bundle</artifactId>
-    <version>2.0.0-SNAPSHOT.395</version>
+    <version>2.0.0-SNAPSHOT.400</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>

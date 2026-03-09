@@ -40,7 +40,6 @@ include(
     "java",
     "jvm-runtime",
     "java-bundle",
-    ":ksp",
     ":tests",
     ":tests:extensions",
     ":tests:consumer",

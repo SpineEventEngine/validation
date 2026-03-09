@@ -92,8 +92,8 @@ tasks.shadowJar {
         "resources/com/pty4j/**",
 
         // Protobuf files.
-        "google/**",
-        "spine/**",
+        "google/**/*.proto",
+        "spine/**/*.proto",
         "src/**",
 
         // Java source code files of the package `org.osgi`.

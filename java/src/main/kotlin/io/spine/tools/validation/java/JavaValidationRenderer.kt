@@ -28,7 +28,6 @@ package io.spine.tools.validation.java
 
 import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
-import io.spine.string.ti
 import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.MessageType
 import io.spine.tools.compiler.jvm.JavaValueConverter
@@ -39,12 +38,9 @@ import io.spine.tools.compiler.jvm.render.findClass
 import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.render.SourceFileSet
-import io.spine.tools.validation.java.generate.MessageClass
 import io.spine.tools.validation.java.generate.MessageValidationCode
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.ValidationCodeInjector
-import io.spine.tools.validation.java.generate.ValidatorClass
-import io.spine.tools.validation.java.generate.ValidatorGenerator
 import io.spine.tools.validation.java.generate.option.ChoiceGenerator
 import io.spine.tools.validation.java.generate.option.DistinctGenerator
 import io.spine.tools.validation.java.generate.option.GoesGenerator
@@ -64,15 +60,11 @@ import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
  * even if the message does not have any declared constraints.
  */
 internal class JavaValidationRenderer(
-    customGenerators: List<OptionGenerator>,
-    private val validators: Map<MessageClass, ValidatorClass>
+    customGenerators: List<OptionGenerator>
 ) : JavaRenderer() {
 
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
-    private val validatorGenerator by lazy {
-        ValidatorGenerator(validators, typeSystem)
-    }
     private val optionGenerators by lazy {
         (buildInGenerators() + customGenerators)
             .onEach { it.inject(querying) }
@@ -87,7 +79,6 @@ internal class JavaValidationRenderer(
 
         findMessageTypes()
             .forEach { message ->
-                checkDoesNotHaveValidator(message)
                 val code = generateCode(message)
                 val file = sources.javaFileOf(message)
                 file.render(code)
@@ -123,10 +114,9 @@ internal class JavaValidationRenderer(
 
     private fun generateCode(message: MessageType): MessageValidationCode {
         val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }
-        val validatorFields = validatorGenerator.codeFor(message)
         val messageCode = MessageValidationCode(
             message = message.javaClassName(typeSystem),
-            constraints = fieldOptions.map { it.constraint } + validatorFields,
+            constraints = fieldOptions.map { it.constraint },
             fields = fieldOptions.flatMap { it.fields },
             methods = fieldOptions.flatMap { it.methods }
         )
@@ -138,22 +128,5 @@ internal class JavaValidationRenderer(
         val messageClass = psiFile.findClass(code.message)
         codeInjector.inject(code, messageClass)
         overwrite(psiFile.text)
-    }
-
-    /**
-     * Ensures that the given compilation [message] does not have an assigned validator.
-     *
-     * Local messages are prohibited from having validators.
-     */
-    private fun checkDoesNotHaveValidator(message: MessageType) {
-        val javaClass = message.javaClassName(typeSystem)
-        val validator = validators[javaClass]
-        check(validator == null) {
-            """
-            The validator `$validator` cannot be used to validate the `$javaClass` messages.
-            Validators can be used only for external message types, which are not generated locally.
-            Use built-in or custom validation options to declare constraints for the local messages.
-            """.ti()
-        }
     }
 }

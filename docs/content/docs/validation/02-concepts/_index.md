@@ -105,6 +105,6 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
 - Customize and format messages:
   [Working with error messages](error-messages.md).
 - [Built-in options](../03-built-in-options/)
-- [Validating third-party messages](../04-third-party-messages/)
+- [Using validators](../04-validators/)
 - Add custom validation options:
   [Custom validation](../08-custom-validation/).

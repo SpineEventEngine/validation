@@ -39,17 +39,17 @@ import "spine/validation/test/earphones.proto";
 // Tests a singular field of an external message type from dependencies.
 message SingularDependencyMessage {
 
-    Earphones value = 1;
+    Earphones value = 1 [(validate) = true];
 }
 
 // Tests a repeated field of an external message type from dependencies.
 message RepeatedDependencyMessage {
 
-    repeated Earphones value = 1;
+    repeated Earphones value = 1 [(validate) = true];
 }
 
 // Tests a map field of an external message type from dependencies.
 message MappedDependencyMessage {
 
-    map<string, Earphones> value = 1;
+    map<string, Earphones> value = 1 [(validate) = true];
 }
