@@ -85,7 +85,7 @@ In practice, this happens in three common ways:
    Please note that this approach does not apply any checks generated from `.proto` options,
    only registered validators.
 
-2. **Build a message of the corresponding type**.  
+2. **Build a local message of the corresponding type**.  
    When you call `M.Builder.build()`, the generated validation runs for `M`: it applies checks
    produced from `.proto` options (if any) and executes all validators registered for `M` via
    `ValidatorRegistry`.
