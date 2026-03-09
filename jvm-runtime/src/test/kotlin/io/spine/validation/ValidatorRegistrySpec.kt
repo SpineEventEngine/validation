@@ -160,7 +160,7 @@ internal class ValidatorRegistrySpec {
         // But since it's an object, it's lazy.
         // In our case, we cleared it in `setUp`.
         
-        // Re-adding what ServiceLoader should find
+        // Re-adding what `ServiceLoader` should find.
         val loader = ServiceLoader.load(MessageValidator::class.java)
         val hasTimestampValidator = loader.any { it is TimestampValidator }
         
