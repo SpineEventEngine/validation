@@ -29,6 +29,8 @@ package io.spine.validation;
 import com.google.common.base.Objects;
 import com.google.errorprone.annotations.Immutable;
 
+import java.io.Serial;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -42,7 +44,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @SuppressWarnings("ComparableType") // Can be compared to any number.
 public final class ComparableNumber extends Number implements Comparable<Number> {
 
+    @Serial
     private static final long serialVersionUID = 0L;
+
     @SuppressWarnings("Immutable") // effectively
     private final Number value;
 
