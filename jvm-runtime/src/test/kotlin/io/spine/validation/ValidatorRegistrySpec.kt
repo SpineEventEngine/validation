@@ -188,7 +188,7 @@ internal class ValidatorRegistrySpec {
         val executor = Executors.newFixedThreadPool(threadCount)
 
         assertDoesNotThrow {
-            for (i in 1..iterations) {
+            repeat(iterations) {
                 executor.execute {
                     ValidatorRegistry.add(Timestamp::class, object : MessageValidator<Timestamp> {
                         override fun validate(message: Timestamp): List<DetectedViolation> =
