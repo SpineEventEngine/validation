@@ -72,7 +72,8 @@ ValidatorRegistry.add(Meeting::class, MeetingValidator())
 
 ## Apply a validator
 
-You can apply validators in three common ways:
+Validators are executed when the generated validation code is invoked.
+In practice, this happens in three common ways:
 
 1. **Validate a message directly via the registry**:
 
@@ -82,14 +83,16 @@ You can apply validators in three common ways:
    Please note that this approach does not apply any checks generated from `.proto` options,
    only registered validators.
 
-2. **Validate a message as part of the generated message validation**.  
-   Spine Validation-generated `validate()` methods include registry-based validation, so a
-   validator registered for the message type is applied alongside checks produced from `.proto`
-   options.
+2. **Build a message of the corresponding type**.  
+   When you call `M.Builder.build()`, the generated validation runs for `M`: it applies checks
+   produced from `.proto` options (if any) and executes all validators registered for `M` via
+   `ValidatorRegistry`.
 
 3. **Validate nested message fields** by marking them with `(validate) = true`.  
-   Nested validation runs both the nested message’s generated constraints (if any) and any
-   validators registered for the nested message type — including external message types.
+   When the enclosing message is validated (for example, during the enclosing builder’s
+   `build()`), Spine Validation also validates the nested values of those fields. This nested
+   validation runs both the nested message’s generated constraints (if any) and any validators
+   registered for the nested message type — including external message types.
 
 ## Multiple validators per message type
 
