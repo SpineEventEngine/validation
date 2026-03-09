@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -27,19 +27,17 @@
 package io.spine.test.options;
 
 import com.google.auto.service.AutoService;
-import com.google.common.collect.ImmutableSet;
-import com.google.errorprone.annotations.Immutable;
-import io.spine.validation.option.FieldValidatingOption;
-import io.spine.validation.option.ValidatingOptionFactory;
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProvider;
 
-import java.util.Set;
-
-@AutoService(ValidatingOptionFactory.class)
-@Immutable
-public final class BytesOptions implements ValidatingOptionFactory {
+/**
+ * Registers extensions for {@link BytesDirectionOptionProto}.
+ */
+@AutoService(OptionsProvider.class)
+public class BytesOptionsProvider implements OptionsProvider {
 
     @Override
-    public Set<FieldValidatingOption<?>> forByteString() {
-        return ImmutableSet.of(new Direction());
+    public void registerIn(ExtensionRegistry registry) {
+        BytesDirectionOptionProto.registerAllExtensions(registry);
     }
 }

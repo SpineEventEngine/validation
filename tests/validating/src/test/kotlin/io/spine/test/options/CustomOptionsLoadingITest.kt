@@ -34,20 +34,20 @@ import io.spine.option.OptionsProvider
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`ValidatingOptionFactory` should")
-internal class ValidatingOptionFactoryITest {
+@DisplayName("Options should be registered with `ExtensionRegistry` so that it")
+internal class CustomOptionsLoadingITest {
 
     private val registry by lazy {
         OptionsProvider.registryWithAllOptions()
     }
 
     @Test
-    fun `contain standard options`() {
+    fun `contains standard options`() {
         assertContains(OptionsProto.required)
     }
 
     @Test
-    fun `contain custom options`() {
+    fun `contains custom options`() {
         assertContains(BytesDirectionOptionProto.direction)
     }
 
