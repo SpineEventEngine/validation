@@ -79,7 +79,8 @@ public object ValidatorRegistry {
     /**
      * Loads validators from the classpath using [ServiceLoader].
      */
-    private fun loadFromServiceLoader() {
+    @VisibleForTesting
+    internal fun loadFromServiceLoader() {
         val loader = ServiceLoader.load(MessageValidator::class.java)
         loader.forEach { validator ->
             @Suppress("UNCHECKED_CAST")

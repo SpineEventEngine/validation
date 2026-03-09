@@ -168,10 +168,7 @@ internal class ValidatorRegistrySpec {
             // If AutoService worked during this test run (it might not if it's not a full build),
             // we can re-load or just check if it's there after manual trigger.
             ValidatorRegistry.clear()
-            // Manually trigger the loading logic (simulating what happens in `init`.)
-            val method = ValidatorRegistry::class.java.getDeclaredMethod("loadFromServiceLoader")
-            method.isAccessible = true
-            method.invoke(ValidatorRegistry)
+            ValidatorRegistry.loadFromServiceLoader()
 
             val invalidTimestamp = timestamp { nanos = -1 }
             ValidatorRegistry.validate(invalidTimestamp) shouldHaveSize 1
