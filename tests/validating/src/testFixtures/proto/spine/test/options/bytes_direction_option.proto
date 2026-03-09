@@ -46,5 +46,5 @@ enum BytesDirection {
 
 extend google.protobuf.FieldOptions {
 
-    BytesDirection direction = 73827;
+    BytesDirection direction = 78888;
 }
