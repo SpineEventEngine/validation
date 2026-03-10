@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,38 +26,18 @@
 
 package io.spine.test.options;
 
-import io.spine.code.proto.FieldContext;
-import io.spine.validation.Constraint;
-import io.spine.validation.ConstraintTranslator;
-import io.spine.validation.option.FieldConstraint;
-import io.spine.validation.option.FieldValidatingOption;
+import com.google.auto.service.AutoService;
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProvider;
 
 /**
- * A custom validation option for {@code bytes}.
- *
- * <p>This option is used for testing the custom options loading. The constraint produced by this
- * option cannot be violated.
+ * Registers extensions for {@link BytesDirectionOptionProto}.
  */
-public final class Direction extends FieldValidatingOption<BytesDirection> {
-
-    Direction() {
-        super(BytesDirectionOptionProto.direction);
-    }
+@AutoService(OptionsProvider.class)
+public class BytesOptionsProvider implements OptionsProvider {
 
     @Override
-    public Constraint constraintFor(FieldContext field) {
-        var declaration = field.targetDeclaration();
-        var optionValue = optionValue(field);
-        return new FieldConstraint<>(optionValue, declaration) {
-            @Override
-            public String formattedErrorMessage(FieldContext field) {
-                return "";
-            }
-
-            @Override
-            public void accept(ConstraintTranslator<?> visitor) {
-                // NoOp.
-            }
-        };
+    public void registerIn(ExtensionRegistry registry) {
+        BytesDirectionOptionProto.registerAllExtensions(registry);
     }
 }

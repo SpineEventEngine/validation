@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,30 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.option;
+package io.spine.test.options
 
-import com.google.errorprone.annotations.Immutable;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.spine.code.proto.FieldOption;
-import io.spine.option.OptionsProto;
+import com.google.protobuf.Extension
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.spine.option.OptionsProto
+import io.spine.option.OptionsProvider
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import java.util.Optional;
+@DisplayName("Options should be registered with `ExtensionRegistry` so that it")
+internal class CustomOptionsLoadingITest {
 
-/**
- * An option that indicates that a field value cannot be changed.
- */
-@Immutable
-public final class SetOnce extends FieldOption<Boolean> {
-
-    /**
-     * Specifies the extension that corresponds to this option.
-     */
-    private SetOnce() {
-        super(OptionsProto.setOnce);
+    private val registry by lazy {
+        OptionsProvider.registryWithAllOptions()
     }
 
-    /** Obtains a value of the {@code set_once} option from the given field. */
-    public static Optional<Boolean> from(FieldDescriptor field){
-        return new SetOnce().valueFrom(field);
+    @Test
+    fun `contains standard options`() {
+        assertContains(OptionsProto.required)
+    }
+
+    @Test
+    fun `contains custom options`() {
+        assertContains(BytesDirectionOptionProto.direction)
+    }
+
+    private fun assertContains(option: Extension<*, *>) {
+        val descriptor = option.descriptor
+        val name = descriptor.fullName
+        val registeredExtension = registry.findImmutableExtensionByName(name)
+
+        registeredExtension shouldNotBe null
+        registeredExtension.descriptor shouldBe descriptor
     }
 }

@@ -28,15 +28,10 @@ package io.spine.validation
 
 import com.google.common.testing.NullPointerTester
 import com.google.protobuf.Message
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.spine.base.Time
 import io.spine.code.proto.FieldContext
-import io.spine.test.validate.RequiredStringValue
 import io.spine.testing.UtilityClassTest
-import io.spine.validation.Validate.violationsOf
-import io.spine.validation.Validate.violationsOfCustomConstraints
 import io.spine.validation.diags.ViolationText
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -48,16 +43,6 @@ internal class ValidateUtilitySpec : UtilityClassTest<Validate>(Validate::class.
         super.configure(tester)
         tester.setDefault(Message::class.java, Time.currentTime())
             .setDefault(FieldContext::class.java, FieldContext.empty())
-    }
-
-    @Test
-    fun `run custom validation and obtain no violations if there are no custom constraints`() {
-        val message = RequiredStringValue.getDefaultInstance()
-        val violations = violationsOf(message)
-        val customViolations = violationsOfCustomConstraints(message)
-
-        violations shouldHaveSize 1
-        customViolations.shouldBeEmpty()
     }
 
     @Test

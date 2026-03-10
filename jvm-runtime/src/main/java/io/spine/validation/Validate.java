@@ -27,27 +27,16 @@
 package io.spine.validation;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Any;
 import com.google.protobuf.Message;
-import io.spine.annotation.Internal;
-import io.spine.code.proto.FieldContext;
-import io.spine.code.proto.FieldDeclaration;
-import io.spine.protobuf.Diff;
 import io.spine.type.KnownTypes;
-import io.spine.type.MessageType;
 import io.spine.type.TypeUrl;
-import io.spine.validation.option.SetOnce;
-import io.spine.validation.option.ValidatingOptionFactory;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static io.spine.protobuf.AnyPacker.unpack;
-import static io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH;
-import static io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE;
 
 /**
  * This class provides general validation routines.
@@ -57,11 +46,6 @@ import static io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE;
     So we use `System.err` for warnings and errors. */
 )
 public final class Validate {
-
-    private static final String SET_ONCE_ERROR_MESSAGE =
-            "Attempted to change the value of the field " +
-                    "`${" + PARENT_TYPE + "}.${" + FIELD_PATH + "}` which has " +
-                    "`(set_once) = true` and already has a non-default value.";
 
     /** Prevents instantiation of this utility class. */
     private Validate() {
@@ -85,13 +69,17 @@ public final class Validate {
     }
 
     /**
-     * Validates the given message according to its definition and returns
-     * the constraint violations, if any.
+     * Validates the given message according to its definition and configured validators.
+     *
+     * <p>If the message is {@link Any}, it is unpacked before validation.
      *
      * @return violations of the validation rules or an empty list if the message is valid
+     * @see ValidatableMessage
+     * @see MessageValidator
      */
     @SuppressWarnings("ChainOfInstanceofChecks") // A necessity for covering more cases.
     public static List<ConstraintViolation> violationsOf(Message message) {
+        checkNotNull(message);
         var msg = message;
         if (message instanceof Any packed) {
             if (KnownTypes.instance().contains(TypeUrl.ofEnclosed(packed))) {
@@ -106,180 +94,8 @@ public final class Validate {
             var error = validatable.validate();
             return error.map(ValidationError::getConstraintViolationList)
                         .orElse(ImmutableList.of());
-        }
-        return validateAtRuntime(message);
-    }
-
-    private static List<ConstraintViolation> validateAtRuntime(Message message) {
-        return validateAtRuntime(message, FieldContext.empty());
-    }
-
-    /**
-     * Validates the given message ignoring the generated validation code.
-     *
-     * <p>Use {@link #violationsOf(Message)} over this method. It is declared {@code public} only
-     * to be accessible in the generated code.
-     *
-     * @param message
-     *         the message to validate
-     * @param context
-     *         the validation field context
-     * @return violations of the validation rules or an empty list if the message is valid
-     * @apiNote This method is used by the generated code, and as such needs to
-     *         be {@code public}.
-     */
-    @Internal
-    @SuppressWarnings("WeakerAccess") // see apiNote.
-    public static List<ConstraintViolation>
-    validateAtRuntime(Message message, FieldContext context) {
-        var error = Constraints.of(MessageType.of(message), context)
-                               .runThrough(new RuntimeMessageValidator(message, context));
-        var violations = error.map(ValidationError::getConstraintViolationList)
-                              .orElse(ImmutableList.of());
-        return violations;
-    }
-
-    /**
-     * Validates the given message according to custom validation constraints.
-     *
-     * <p>If there are user-defined {@link ValidatingOptionFactory} in
-     * the classpath, they are used to create validating options and assemble constraints. If there
-     * are no such factories, this method always returns an empty list.
-     *
-     * @param message
-     *         the message to validate
-     * @return a list of violations; an empty list if the message is valid
-     */
-    public static List<ConstraintViolation> violationsOfCustomConstraints(Message message) {
-        checkNotNull(message);
-        var error = Constraints.onlyCustom(MessageType.of(message), FieldContext.empty())
-                               .runThrough(new RuntimeMessageValidator(message));
-        var violations = error.map(ValidationError::getConstraintViolationList)
-                              .orElse(ImmutableList.of());
-        return violations;
-    }
-
-    /**
-     * Checks that when transitioning a message state from {@code previous} to {@code current},
-     * the {@code set_once} constrains are met and throws a {@link ValidationException} if
-     * the value transition is not valid.
-     *
-     * @param previous
-     *         the previous state of the message
-     * @param current
-     *         the new state of the message
-     * @param <M>
-     *         the type of the message
-     * @throws ValidationException
-     *          if the value transition is not valid
-     * @deprecated the {@code set_once} constraint is enforced by the {@link Message} builder now.
-     *              Just remove usages of this method without providing any replacement.
-     */
-    @Deprecated
-    public static <M extends Message> void checkValidChange(M previous, M current) {
-        checkNotNull(previous);
-        checkNotNull(current);
-        var setOnceViolations = validateChange(previous, current);
-        if (!setOnceViolations.isEmpty()) {
-            throw new ValidationException(setOnceViolations);
-        }
-    }
-
-    /**
-     * Checks that when transitioning a message state from {@code previous} to {@code current},
-     * the {@code set_once} constrains are met.
-     *
-     * @param previous
-     *         the previous state of the message
-     * @param current
-     *         the new state of the message
-     * @param <M>
-     *         the type of the message
-     * @return a set of constraint violations, if the transaction is invalid,
-     *         an empty set otherwise
-     * @deprecated the {@code set_once} constraint is enforced by the {@link Message} builder now.
-     *              Just remove usages of this method without providing any replacement.
-     */
-    @Deprecated
-    @SuppressWarnings("WeakerAccess") // part of public API.
-    public static <M extends Message>
-    ImmutableSet<ConstraintViolation> validateChange(M previous, M current) {
-        checkNotNull(previous);
-        checkNotNull(current);
-
-        var diff = Diff.between(previous, current);
-        var violations = current.getDescriptorForType().getFields()
-                .stream()
-                .map(FieldDeclaration::new)
-                .filter(Validate::isNonOverridable)
-                .filter(diff::contains)
-                .filter(field -> {
-                    var fieldValue = previous.getField(field.descriptor());
-                    return !field.isDefault(fieldValue);
-                })
-                .map(Validate::violatedSetOnce)
-                .collect(toImmutableSet());
-        return violations;
-    }
-
-    /**
-     * Checks if the given field, once set, may not be changed.
-     *
-     * <p>This property is defined by the {@code (set_once)} option. If the option is set to
-     * {@code true} on a non-{@code repeated} and non-{@code map} field, this field is
-     * <strong>non-overridable</strong>.
-     *
-     * <p>Logs if the option is set but the field is {@code repeated} or a {@code map}.
-     *
-     * @param field
-     *         the field to check
-     * @return {@code true} if the field is neither {@code repeated} nor {@code map} and is
-     *         {@code (set_once)}
-     */
-    private static boolean isNonOverridable(FieldDeclaration field) {
-        checkNotNull(field);
-
-        var marked = markedSetOnce(field);
-        if (marked) {
-            var setOnceInapplicable = field.isCollection();
-            if (setOnceInapplicable) {
-                onSetOnceMisuse(field);
-                return false;
-            } else {
-                return true;
-            }
         } else {
-            return false;
+            return ValidatorRegistry.validate(msg);
         }
-    }
-
-    private static boolean markedSetOnce(FieldDeclaration declaration) {
-        var setOnceDeclaration = SetOnce.from(declaration.descriptor());
-        boolean setOnceValue = setOnceDeclaration.orElse(false);
-        return setOnceValue;
-    }
-
-    private static void onSetOnceMisuse(FieldDeclaration field) {
-        var fieldName = field.name();
-        System.err.printf(
-                "Error found in `%s`. " +
-                        "Repeated and map fields cannot be marked as `(set_once) = true`.%n",
-                fieldName);
-    }
-
-    private static ConstraintViolation violatedSetOnce(FieldDeclaration declaration) {
-        var declaringTypeName = declaration.declaringType().name().value();
-        var fieldName = declaration.name().value();
-        var message = TemplateString.newBuilder()
-                .setWithPlaceholders(SET_ONCE_ERROR_MESSAGE)
-                .putPlaceholderValue(PARENT_TYPE.toString(), declaringTypeName)
-                .putPlaceholderValue(FIELD_PATH.toString(), fieldName)
-                .build();
-        var violation = ConstraintViolation.newBuilder()
-                .setMessage(message)
-                .setFieldPath(declaration.name().asPath())
-                .setTypeName(declaration.declaringType().name().value())
-                .build();
-        return violation;
     }
 }
