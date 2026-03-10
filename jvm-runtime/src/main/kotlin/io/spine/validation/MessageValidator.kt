@@ -127,6 +127,8 @@ import io.spine.annotation.SPI
  * Every implementation of [MessageValidator] must have a public, no-args constructor.
  *
  * @param M the type of Protobuf [Message][Message] being validated.
+ *
+ * @see ValidatorRegistry
  */
 @SPI
 public interface MessageValidator<M : Message> {

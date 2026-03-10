@@ -52,6 +52,8 @@ import com.google.protobuf.Any as ProtoAny
  *
  * The registry also automatically loads validators from the classpath using
  * the [ServiceLoader] mechanism.
+ *
+ * @see MessageValidator
  */
 @ThreadSafe
 public object ValidatorRegistry {

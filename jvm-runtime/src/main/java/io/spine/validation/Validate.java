@@ -69,10 +69,13 @@ public final class Validate {
     }
 
     /**
-     * Validates the given message according to its definition and returns
-     * the constraint violations, if any.
+     * Validates the given message according to its definition and configured validators.
+     *
+     * <p>If the message is {@link Any}, it is unpacked before validation.
      *
      * @return violations of the validation rules or an empty list if the message is valid
+     * @see ValidatableMessage
+     * @see MessageValidator
      */
     @SuppressWarnings("ChainOfInstanceofChecks") // A necessity for covering more cases.
     public static List<ConstraintViolation> violationsOf(Message message) {
