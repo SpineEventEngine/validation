@@ -24,9 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.option;
+
+import com.google.errorprone.annotations.Immutable;
+import com.google.errorprone.annotations.ImmutableTypeParameter;
+import com.google.protobuf.Descriptors.GenericDescriptor;
+import io.spine.code.proto.Option;
+
 /**
- * The version of the Validation SDK to publish.
+ * The interface common to all standard validation options.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * @param <T>
+ *         data type that this option holds, e.g.,
+ *         {@linkplain io.spine.option.OptionsProto#required required option} would
+ *         hold a {@code Boolean}
+ * @param <C>
+ *         reflective container which describes the entity this option is applied to
+ * @param <K>
+ *         kind of entity that this option is applied to
+ * @deprecated Please use generated validation code.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.403")
+@Immutable
+@Deprecated(forRemoval = true)
+interface ValidatingOption<@ImmutableTypeParameter T,
+        @ImmutableTypeParameter C,
+        @ImmutableTypeParameter K extends GenericDescriptor>
+        extends Option<T, K> {
+}

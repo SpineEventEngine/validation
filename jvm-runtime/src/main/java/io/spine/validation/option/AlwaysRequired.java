@@ -24,9 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.validation.option;
+
+import com.google.errorprone.annotations.Immutable;
+import io.spine.code.proto.FieldContext;
+
 /**
- * The version of the Validation SDK to publish.
+ * A special case of {@code Required} option that assumes that the option is present regardless
+ * of the actual field declaration.
  *
- * For Spine-based dependencies please see [io.spine.dependency.local.Spine].
+ * @deprecated Please use generated validation code.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.403")
+@Immutable
+@Deprecated(forRemoval = true)
+final class AlwaysRequired extends Required {
+
+    /**
+     * Creates a new instance of this option.
+     */
+    AlwaysRequired() {
+        super();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For {@code AlwaysRequired}, validation happens every time.
+     */
+    @Override
+    public boolean shouldValidate(FieldContext context) {
+        checkUsage(context.targetDeclaration());
+        return true;
+    }
+}
