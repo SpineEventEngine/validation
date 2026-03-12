@@ -13,3 +13,4 @@ $dokka.location:io.spine.validation/ValidationErrorKt.Dsl///PointingToDeclaratio
 io.spine.validate
 io.spine.validation
 io.spine.validation.diags
+io.spine.validation.option
