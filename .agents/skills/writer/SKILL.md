@@ -1,6 +1,11 @@
 ---
 name: writer
-description: Write, edit, and restructure user-facing and developer-facing documentation for the Spine `validation` repository. Use when asked to create/update docs such as `README.md`, `docs/**`, `CONTRIBUTING.md`, and other Markdown documentation; when drafting tutorials, guides, troubleshooting pages, or migration notes; and when improving inline API documentation (KDoc) and examples.
+description: >
+  Write, edit, and restructure user-facing and developer-facing documentation.
+  Use when asked to create/update docs such as `README.md`, `docs/**`, and
+  other Markdown documentation; 
+  when drafting tutorials, guides, troubleshooting pages, or migration notes; and
+  when improving inline API documentation (KDoc) and examples.
 ---
 
 # Write documentation (repo-specific)
@@ -17,7 +22,6 @@ description: Write, edit, and restructure user-facing and developer-facing docum
 - Place content in the most discoverable location:
   - `README.md`: project entry point and “what is this?”.
   - `docs/`: longer-form docs (follow existing conventions in that tree).
-  - `CONTRIBUTING.md`: contributor workflows.
   - Source KDoc: API usage, examples, and semantics that belong with the code.
 
 ## Follow local documentation conventions
