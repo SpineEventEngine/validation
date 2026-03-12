@@ -68,13 +68,12 @@ public abstract class FieldValidatingOption<@ImmutableTypeParameter T>
     protected T optionValue(FieldContext field) throws IllegalStateException {
         var option = valueFrom(field);
         return option.orElseThrow(() -> {
-            var descriptor = extension().getDescriptor();
-
             var fieldName = field.targetDeclaration()
                                  .name()
                                  .value();
-            var containingTypeName = descriptor.getContainingType()
-                                               .getName();
+            var containingTypeName = field.target()
+                                          .getContainingType()
+                                          .getName();
             return couldNotGetOptionValueFrom(fieldName, containingTypeName);
         });
     }
