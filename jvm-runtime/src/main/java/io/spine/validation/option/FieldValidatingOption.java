@@ -73,8 +73,9 @@ public abstract class FieldValidatingOption<@ImmutableTypeParameter T>
             var fieldName = field.targetDeclaration()
                                  .name()
                                  .value();
-            var containingTypeName = descriptor.getContainingType()
-                                               .getName();
+            var containingTypeName = field.target()
+                                          .getContainingType()
+                                          .getName();
             return couldNotGetOptionValueFrom(fieldName, containingTypeName);
         });
     }
