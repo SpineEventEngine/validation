@@ -63,10 +63,10 @@ public interface ValidatableMessage extends Message {
      * does not make sense. Both must either be provided or omitted together.
      *
      * @param parentPath
-     *         the path to the parent field that initiated in-depth validation.
+     *         The path to the parent field that initiated in-depth validation.
      *         Can be the default instance, which means no parent path.
      * @param parentName
-     *         the name of the parent type that initiated in-depth validation
+     *         The name of the parent type that initiated in-depth validation
      *         Can be {@code null}, which means no parent name.
      *
      * @return an error or {@link Optional#empty()} if no violations found
