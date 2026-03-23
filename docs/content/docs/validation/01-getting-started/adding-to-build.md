@@ -8,7 +8,11 @@ headline: Documentation
 
 ## Adding Spine-specific Gradle plugin repositories
 
-<embed-code file="$examples/settings.gradle.kts" start="pluginManagement {" end="^}"></embed-code>
+<embed-code 
+    file="$examples/settings.gradle.kts" 
+    start="pluginManagement {" 
+    end="^}">
+</embed-code>
 ```kotlin
 pluginManagement {
     repositories {

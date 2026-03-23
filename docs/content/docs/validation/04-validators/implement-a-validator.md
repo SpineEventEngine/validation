@@ -46,15 +46,12 @@ The core logic is intentionally small: it first delegates to `Timestamps.isValid
 if invalid, adds a field-specific violation for each invalid field (`seconds` and/or `nanos`).
 For range checks, it relies on `Timestamps.MIN_VALUE` and `Timestamps.MAX_VALUE`.
 
+<embed-code 
+   file="$runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt" 
+   start="@AutoService(MessageValidator::class)" 
+   end="^}">
+</embed-code>
 ```kotlin
-import com.google.auto.service.AutoService
-import com.google.protobuf.Timestamp
-import com.google.protobuf.util.Timestamps
-import com.google.protobuf.util.Timestamps.MAX_VALUE
-import com.google.protobuf.util.Timestamps.MIN_VALUE
-import io.spine.validation.DetectedViolation
-import io.spine.validation.MessageValidator
-
 @AutoService(MessageValidator::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
@@ -74,6 +71,11 @@ public class TimestampValidator : MessageValidator<Timestamp> {
     }
 }
 ```
+
+{{% note-block class="note" %}}
+The code snippet above omits import statements and helper functions for brevity.
+You can find the full implementation [via GitHub][TimestampValidator].
+{{% /note-block %}}
 
 ### Reporting violations with placeholders
 
@@ -136,3 +138,6 @@ to the nested field in error (for example, to `starts_at.seconds`).
 - [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
+
+
+[TimestampValidator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt

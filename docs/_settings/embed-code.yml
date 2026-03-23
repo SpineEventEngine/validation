@@ -1,6 +1,6 @@
 code-path:
   - name: "examples"
     path: "../_examples"
-  - name: "production"
-    path: "../.."
+  - name: "runtime"
+    path: "../../jvm-runtime"
 docs-path: "../content/docs/"
