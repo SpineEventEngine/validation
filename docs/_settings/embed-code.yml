@@ -4,8 +4,3 @@ code-path:
   - name: "production"
     path: "../.."
 docs-path: "../content/docs/"
-embed-mappings:
-  - code-path: "../_examples"
-    docs-path: "../content/docs/"
-  - code-path: "../.."
-    docs-path: "../content/docs/"
