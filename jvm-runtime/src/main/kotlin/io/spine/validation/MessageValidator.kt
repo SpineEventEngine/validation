@@ -122,7 +122,7 @@ import io.spine.annotation.SPI
  * To make the validator is used from the generated code, ensure the implementation is
  * discoverable by [ServiceLoader][java.util.ServiceLoader].
  *
- * @param M the type of Protobuf [Message][Message] being validated.
+ * @param M the type of Protobuf [Message] being validated.
  *
  * @see ValidatorRegistry
  */
