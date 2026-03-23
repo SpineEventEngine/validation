@@ -13,8 +13,10 @@ Sometimes this is not enough, or not possible.
 
 Use validators when you need **custom logic in code**:
 
-- validate **external** message types whose `.proto` files you cannot change (e.g. `google.protobuf.Timestamp`);
-- validate **local** messages when the rule requires computation and cannot be expressed as proto options.
+- validate **external** message types whose `.proto` files you cannot change
+  (e.g. `google.protobuf.Timestamp`);
+- validate **local** messages when the rule requires computation and cannot be
+  expressed as proto options.
 
 Validators are implemented via `io.spine.validation.MessageValidator<M>` and executed by
 `io.spine.validation.ValidatorRegistry`.

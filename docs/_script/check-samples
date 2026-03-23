@@ -17,10 +17,10 @@ fi
 # Navigate to the folder with embed-code binaries.
 cd _bin
 
-# Use the Ubuntu binary for GitHub Actions and macOS binary in other cases.
+# Use the Linux binary for GitHub Actions and macOS binary in other cases.
 if [ "$GITHUB_ACTIONS" = "true" ]; then
   echo "Running in GitHub Action."
-  TOOL="./embed-code-ubuntu"
+  TOOL="./embed-code-linux"
 else
   echo "Running locally on macOS."
   TOOL="./embed-code-macos"

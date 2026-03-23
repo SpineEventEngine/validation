@@ -46,15 +46,12 @@ The core logic is intentionally small: it first delegates to `Timestamps.isValid
 if invalid, adds a field-specific violation for each invalid field (`seconds` and/or `nanos`).
 For range checks, it relies on `Timestamps.MIN_VALUE` and `Timestamps.MAX_VALUE`.
 
+<embed-code 
+   file="$runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt" 
+   start="@AutoService(MessageValidator::class)" 
+   end="^}">
+</embed-code>
 ```kotlin
-import com.google.auto.service.AutoService
-import com.google.protobuf.Timestamp
-import com.google.protobuf.util.Timestamps
-import com.google.protobuf.util.Timestamps.MAX_VALUE
-import com.google.protobuf.util.Timestamps.MIN_VALUE
-import io.spine.validation.DetectedViolation
-import io.spine.validation.MessageValidator
-
 @AutoService(MessageValidator::class)
 public class TimestampValidator : MessageValidator<Timestamp> {
 
@@ -75,11 +72,16 @@ public class TimestampValidator : MessageValidator<Timestamp> {
 }
 ```
 
+{{% note-block class="note" %}}
+The code snippet above omits import statements and helper functions for brevity.
+You can find the full implementation [via GitHub][TimestampValidator].
+{{% /note-block %}}
+
 ### Reporting violations with placeholders
 
 `TimestampValidator` reports errors via `FieldViolation`, providing:
 
-- `fieldPath` — which field is invalid (for example, `"seconds"`),
+- `fieldPath` — which field is invalid, for example, `"seconds"`,
 - `fieldValue` — the actual invalid value, and
 - `message` — a `TemplateString` with placeholders and a placeholder-to-value map.
 
@@ -90,8 +92,7 @@ formatting, logging, and customization.
 When violations are converted to regular `ConstraintViolation`s, Spine Validation also populates
 the `validator` placeholder with the fully qualified class name of the validator.
 
-Below is the helper that creates a violation for invalid `seconds`
-(the `invalidNanos()` function is similar):
+Below is the helper that creates a violation for invalid `seconds`.
 
 ```kotlin
 private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
@@ -110,6 +111,7 @@ private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     fieldValue = seconds
 )
 ```
+The `invalidNanos()` function is similar.
 
 ## Walkthrough: validate a nested message field
 
@@ -136,3 +138,6 @@ to the nested field in error (for example, to `starts_at.seconds`).
 - [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../08-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
+
+
+[TimestampValidator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt

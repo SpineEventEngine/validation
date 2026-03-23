@@ -1,5 +1,6 @@
-code-path: "../_examples"
+code-path:
+  - name: "examples"
+    path: "../_examples"
+  - name: "runtime"
+    path: "../../jvm-runtime"
 docs-path: "../content/docs/"
-embed-mappings:
-  - code-path: "../_examples"
-    docs-path: "../content/docs/"
