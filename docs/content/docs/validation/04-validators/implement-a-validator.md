@@ -81,7 +81,7 @@ You can find the full implementation [via GitHub][TimestampValidator].
 
 `TimestampValidator` reports errors via `FieldViolation`, providing:
 
-- `fieldPath` — which field is invalid (for example, `"seconds"`),
+- `fieldPath` — which field is invalid, for example, `"seconds"`,
 - `fieldValue` — the actual invalid value, and
 - `message` — a `TemplateString` with placeholders and a placeholder-to-value map.
 
@@ -92,8 +92,7 @@ formatting, logging, and customization.
 When violations are converted to regular `ConstraintViolation`s, Spine Validation also populates
 the `validator` placeholder with the fully qualified class name of the validator.
 
-Below is the helper that creates a violation for invalid `seconds`
-(the `invalidNanos()` function is similar):
+Below is the helper that creates a violation for invalid `seconds`.
 
 ```kotlin
 private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
@@ -112,6 +111,7 @@ private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     fieldValue = seconds
 )
 ```
+The `invalidNanos()` function is similar.
 
 ## Walkthrough: validate a nested message field
 
