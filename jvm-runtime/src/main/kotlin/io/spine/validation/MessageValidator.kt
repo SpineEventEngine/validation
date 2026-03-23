@@ -97,7 +97,7 @@ import io.spine.annotation.SPI
  *
  * Supposing that the Validation library applied to the module where both `WorkingSetup`
  * and `EarphonesValidator` classes are declared, then the generated code of `WorkingSetup`
- * will apple the validator to each instance passed to the `WorkingSetup.earphones` field.
+ * will apply the validator to each instance passed to the `WorkingSetup.earphones` field.
  *
  * ## Multiple validators for the same message type
  *
