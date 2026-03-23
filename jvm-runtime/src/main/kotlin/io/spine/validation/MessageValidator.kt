@@ -119,7 +119,7 @@ import io.spine.annotation.SPI
  *
  * Every implementation of [MessageValidator] must have a public, no-args constructor.
  *
- * To make the validator is used from the generated code, ensure the implementation is
+ * To make the validator used from the generated code, ensure the implementation is
  * discoverable by [ServiceLoader][java.util.ServiceLoader].
  *
  * @param M the type of Protobuf [Message] being validated.
