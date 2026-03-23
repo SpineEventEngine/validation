@@ -1,5 +1,11 @@
-code-path: "../_examples"
+code-path:
+  - name: "examples"
+    path: "../_examples"
+  - name: "production"
+    path: "../.."
 docs-path: "../content/docs/"
 embed-mappings:
   - code-path: "../_examples"
+    docs-path: "../content/docs/"
+  - code-path: "../.."
     docs-path: "../content/docs/"

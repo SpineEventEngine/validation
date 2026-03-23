@@ -16,7 +16,11 @@ The validation options come from `spine/options.proto` and include constraints l
 
 Create a `.proto` file and import `spine/options.proto`:
 
-<embed-code file="first-model/src/main/proto/spine/validation/docs/first_model/bank_card.proto" start="syntax" end="^}"></embed-code>
+<embed-code 
+    file="$examples/first-model/src/main/proto/spine/validation/docs/first_model/bank_card.proto" 
+    start="syntax" 
+    end="^}">
+</embed-code>
 ```protobuf
 syntax = "proto3";
 

@@ -18,7 +18,10 @@ When a message violates declared constraints, `build()` throws `ValidationExcept
 {{< code-tabs langs="Kotlin, Java">}}
 
 {{< code-tab lang="Kotlin" >}}
-<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="invalid-digits"></embed-code>
+<embed-code 
+  file="$examples/first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" 
+  fragment="invalid-digits">
+</embed-code>
 ```kotlin
 shouldThrow<ValidationException> {
     // Kotlin proto DSL delegates to a Java builder.
@@ -31,7 +34,10 @@ shouldThrow<ValidationException> {
 {{< /code-tab >}}
 
 {{< code-tab lang="Java" >}}
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="invalid-digits"></embed-code>
+<embed-code 
+  file="$examples/first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" 
+  fragment="invalid-digits">
+</embed-code>
 ```java
 assertThrows(ValidationException.class, () ->
     BankCard.newBuilder()
@@ -51,7 +57,10 @@ and call `validate()`:
 {{< code-tabs langs="Kotlin, Java">}}
 
 {{< code-tab lang="Kotlin" >}}
-<embed-code file="first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" fragment="error-message"></embed-code>
+<embed-code 
+  file="$examples/first-model/src/test/kotlin/io/spine/validation/docs/firstmodel/BankCardKtTest.kt" 
+  fragment="error-message">
+</embed-code>
 ```kotlin
 // There is no Kotlin DSL which allows building a non-valid message.
 // So we use a builder from Java.
@@ -71,7 +80,10 @@ formatted shouldContain "wrong number"
 {{< /code-tab >}}
 
 {{< code-tab lang="Java" >}}
-<embed-code file="first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" fragment="error-message"></embed-code>
+<embed-code 
+  file="$examples/first-model/src/test/java/io/spine/validation/docs/firstmodel/BankCardTest.java" 
+  fragment="error-message">
+</embed-code>
 ```java
 var card = BankCard.newBuilder()
         .setOwner("ALEX SMITH")

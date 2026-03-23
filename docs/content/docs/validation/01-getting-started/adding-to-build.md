@@ -8,7 +8,7 @@ headline: Documentation
 
 ## Adding Spine-specific Gradle plugin repositories
 
-<embed-code file="settings.gradle.kts" start="pluginManagement {" end="^}"></embed-code>
+<embed-code file="$examples/settings.gradle.kts" start="pluginManagement {" end="^}"></embed-code>
 ```kotlin
 pluginManagement {
     repositories {
@@ -78,7 +78,7 @@ Use this mode if you want to run Validation without the rest of Spine.
 
 Add the Validation plugin to the build.
 
-<embed-code file="first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
+<embed-code file="$examples/first-model/build.gradle.kts" start="plugins {" end="^}"></embed-code>
 ```kotlin
 plugins {
     module
@@ -104,7 +104,7 @@ the JVM runtime dependency automatically.
 If your project is based on the Spine CoreJvm library, apply the CoreJvm Gradle plugin instead of
 adding Validation directly. CoreJvm brings in the Validation Gradle plugin for you.
 
-<embed-code file="first-model-with-framework/build.gradle.kts" start="plugins {" end="^}"></embed-code>
+<embed-code file="$examples/first-model-with-framework/build.gradle.kts" start="plugins {" end="^}"></embed-code>
 ```kotlin
 plugins {
     module
