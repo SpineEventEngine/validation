@@ -53,8 +53,6 @@ import static java.lang.String.format;
  *         type of error code to use for error reporting; must be a Protobuf enum value
  */
 @Internal
-@SuppressWarnings({"unused", /* Part of the public API. Exposed for `server`. */
-        "AbstractClassNeverImplemented"})
 public abstract class ExceptionFactory<E extends Exception,
                                        M extends Message,
                                        C extends MessageClass<?>,
