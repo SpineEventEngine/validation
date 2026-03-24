@@ -46,7 +46,8 @@ import static java.lang.String.format;
  * @param <E>
  *         the type of {@code Exception} to build
  * @param <M>
- *         the type of the {@code Message}
+ *         the type of the {@code Message}, typically it would be a grouping interface such as
+ *         {@link io.spine.base.EventMessage} or {@link io.spine.base.CommandMessage}
  * @param <C>
  *         the type of the {@linkplain io.spine.type.MessageClass} of {@code |M|}
  * @param <R>
@@ -95,7 +96,7 @@ public abstract class ExceptionFactory<E extends Exception,
     /**
      * Obtains the {@code Message}-specific type attributes for error reporting.
      */
-    protected abstract Map<String, Value> getMessageTypeAttribute(Message message);
+    protected abstract Map<String, Value> getMessageTypeAttribute(M message);
 
     /**
      * Defines the way to create an instance of exception basing on the source {@code Message},

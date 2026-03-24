@@ -65,7 +65,7 @@ internal class StubExceptionFactory(
 
     override fun getErrorText(): String = ERROR_TEXT
 
-    override fun getMessageTypeAttribute(message: Message): Map<String, Value> = emptyMap()
+    override fun getMessageTypeAttribute(message: Timestamp): Map<String, Value> = emptyMap()
 
     override fun createException(
         exceptionMsg: String,
