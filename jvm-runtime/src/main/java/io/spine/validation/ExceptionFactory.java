@@ -44,13 +44,13 @@ import static java.lang.String.format;
  * which have fields that violate validation constraint(s).
  *
  * @param <E>
- *         type of {@code Exception} to build
+ *         the type of {@code Exception} to build
  * @param <M>
- *         type of the {@code Message}
+ *         the type of the {@code Message}
  * @param <C>
- *         type of the {@linkplain io.spine.type.MessageClass} of {@code |M|}.
+ *         the type of the {@linkplain io.spine.type.MessageClass} of {@code |M|}
  * @param <R>
- *         type of error code to use for error reporting; must be a Protobuf enum value
+ *         the type of error code to use for error reporting; must be a Protobuf enum value
  */
 @Internal
 public abstract class ExceptionFactory<E extends Exception,
