@@ -34,7 +34,6 @@ import io.spine.annotation.Internal;
 import io.spine.base.Error;
 import io.spine.protobuf.AnyPacker;
 import io.spine.type.MessageClass;
-import io.spine.validation.diags.ViolationText;
 
 import java.util.Map;
 

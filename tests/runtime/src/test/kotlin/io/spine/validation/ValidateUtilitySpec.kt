@@ -32,7 +32,6 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.Time
 import io.spine.code.proto.FieldContext
 import io.spine.testing.UtilityClassTest
-import io.spine.validation.diags.ViolationText
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

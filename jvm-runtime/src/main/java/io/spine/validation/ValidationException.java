@@ -29,8 +29,8 @@ package io.spine.validation;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.InlineMe;
 import io.spine.base.ErrorWithMessage;
-import io.spine.validation.diags.ViolationText;
 
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -39,6 +39,7 @@ import java.util.List;
 public class ValidationException
         extends RuntimeException implements ErrorWithMessage<ValidationError> {
 
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**
