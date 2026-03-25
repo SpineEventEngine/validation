@@ -26,7 +26,6 @@
 
 package io.spine.validation.given
 
-import com.google.protobuf.Message
 import com.google.protobuf.NullValue
 import com.google.protobuf.Timestamp
 import com.google.protobuf.Value
