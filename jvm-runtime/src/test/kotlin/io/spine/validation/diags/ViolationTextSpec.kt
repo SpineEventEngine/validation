@@ -31,6 +31,7 @@ import com.google.protobuf.Timestamp
 import io.kotest.matchers.string.shouldContain
 import io.spine.base.Field
 import io.spine.type.TypeName
+import io.spine.validation.ViolationText
 import io.spine.validation.constraintViolation
 import io.spine.validation.given.plainString
 import org.junit.jupiter.api.DisplayName
