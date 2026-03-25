@@ -12,4 +12,3 @@ $dokka.location:io.spine.validation/ValidationErrorKt.Dsl.ConstraintViolationPro
 $dokka.location:io.spine.validation/ValidationErrorKt.Dsl///PointingToDeclaration/io/spine/validation/ValidationErrorKt.Dsl.html
 io.spine.validate
 io.spine.validation
-io.spine.validation.option
