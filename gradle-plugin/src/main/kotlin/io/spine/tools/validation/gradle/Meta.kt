@@ -30,7 +30,7 @@ import io.spine.tools.meta.LazyMeta
 import io.spine.tools.meta.Module
 
 /**
- * The meta information about the Validation Gradle Plugin.
+ * The meta-information about the Validation Gradle Plugin.
  */
 public object Meta : LazyMeta(Module("io.spine.tools", "validation-gradle-plugin")) {
 
