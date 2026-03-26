@@ -75,7 +75,7 @@ val grGitVersion = "4.1.1"
  * This version may change from the [version of Kotlin][io.spine.dependency.lib.Kotlin.version]
  * used by the project.
  */
-val kotlinEmbeddedVersion = "2.2.21"
+val kotlinEmbeddedVersion = "2.3.20"
 
 /**
  * The version of Guava used in `buildSrc`.
@@ -192,14 +192,6 @@ dependencies {
     ).forEach {
         implementation(it)
     }
-
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 dependOnBuildSrcJar()
