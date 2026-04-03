@@ -73,18 +73,3 @@ dependencies {
 }
 
 forceSpineBase()
-
-// Change the `artifactId` to have the `spine-validation-` prefix
-// instead of just `validation-` as for the rest of the tool modules.
-afterEvaluate {
-    publishing {
-        publications {
-            named<MavenPublication>(StandardJavaPublicationHandler.PUBLICATION_NAME) {
-                val rootExtension = rootProject.the<SpinePublishing>()
-                val defaultPrefix = SpinePublishing.DEFAULT_PREFIX
-                val projectPrefix = rootExtension.artifactPrefix
-                artifactId = "$defaultPrefix$projectPrefix${project.name}"
-            }
-        }
-    }
-}
