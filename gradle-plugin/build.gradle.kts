@@ -29,7 +29,6 @@ import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
 import io.spine.gradle.artifactId
-import io.spine.gradle.publish.SpinePublishing
 import io.spine.gradle.publish.addSourceAndDocJars
 
 plugins {
