@@ -126,19 +126,23 @@ sealed class PublicationHandler(
     }
 
     /**
-     * Copies the attributes of Gradle [Project] to this [MavenPublication].
+     * Copies the attributes of the [project] to this [MavenPublication].
      *
      * The following project attributes are copied:
      *  * [group][Project.getGroup];
      *  * [version][Project.getVersion];
      *  * [description][Project.getDescription].
      *
-     * Also, this function adds the [artifactPrefix][SpinePublishing.artifactPrefix] to
-     * the [artifactId][MavenPublication.setArtifactId] of this publication,
-     * if the prefix is not added yet.
+     * The [artifactId] of the publication is copied from the project
+     * [extension property][io.spine.gradle.artifactId] of the same name.
      *
-     * Finally, the Apache Software License 2.0 is set as the only license
-     * under which the published artifact is distributed.
+     * The Apache Software License 2.0 is set as the only license
+     * under which the published artifact is distributed via [LicenseSettings]
+     *
+     * The source control management attributes are obtained from [DocumentationSettings].
+     *
+     * @see LicenseSettings
+     * @see DocumentationSettings
      */
     protected fun MavenPublication.copyProjectAttributes() {
         groupId = project.group.toString()
