@@ -28,6 +28,7 @@ import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
+import io.spine.gradle.artifactId
 import io.spine.gradle.publish.SpinePublishing
 import io.spine.gradle.publish.addSourceAndDocJars
 
@@ -93,10 +94,7 @@ afterEvaluate {
     publishing {
         publications {
             named<MavenPublication>("pluginMaven") {
-                val rootExtension = rootProject.the<SpinePublishing>()
-                val projectPrefix = rootExtension.artifactPrefix
-                artifactId = "$projectPrefix${project.name}"
-
+                artifactId = project.artifactId
                 addSourceAndDocJars(project)
             }
         }

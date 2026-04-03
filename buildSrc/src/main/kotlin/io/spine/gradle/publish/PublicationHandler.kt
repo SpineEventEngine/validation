@@ -27,6 +27,7 @@
 package io.spine.gradle.publish
 
 import LicenseSettings
+import io.spine.gradle.artifactId
 import io.spine.gradle.isSnapshot
 import io.spine.gradle.repo.Repository
 import io.spine.gradle.report.pom.InceptionYear
@@ -141,10 +142,7 @@ sealed class PublicationHandler(
      */
     protected fun MavenPublication.copyProjectAttributes() {
         groupId = project.group.toString()
-        val prefix = project.spinePublishing.artifactPrefix
-        if (!artifactId.startsWith(prefix)) {
-            artifactId = prefix + artifactId
-        }
+        artifactId = project.artifactId
         version = project.version.toString()
         pom.description.set(project.description)
         pom.inceptionYear.set(InceptionYear.value)
