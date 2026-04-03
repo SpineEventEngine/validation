@@ -80,6 +80,8 @@ plugins {
 }
 
 spinePublishing {
+    artifactPrefix = "spine-validation-"
+    toolArtifactPrefix = "validation-"
     modules = setOf(
         "context",
         "java",
@@ -96,7 +98,6 @@ spinePublishing {
             cloudArtifactRegistry
         )
     }
-    artifactPrefix = "validation-"
 }
 
 allprojects {

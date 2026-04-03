@@ -83,7 +83,7 @@ dependencies {
             Change.group to Change.artifact,
             Logging.group to Logging.loggingArtifact,
             Reflect.group to Reflect.artifact,
-            Time.group to Time.artifact,
+            Time.group to Time.libArtifact,
 
             CoreJvm.group to CoreJvm.serverArtifact,
         ).forEach { (group, artifact) ->
