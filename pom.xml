@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.409</version>
+<version>2.0.0-SNAPSHOT.410</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -50,19 +50,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-base</artifactId>
-    <version>2.0.0-SNAPSHOT.386</version>
+    <version>2.0.0-SNAPSHOT.387</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-time</artifactId>
-    <version>2.0.0-SNAPSHOT.232</version>
+    <version>2.0.0-SNAPSHOT.235</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-validation-jvm-runtime</artifactId>
-    <version>2.0.0-SNAPSHOT.408</version>
+    <version>2.0.0-SNAPSHOT.409</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -92,7 +92,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>jvm-tools</artifactId>
-    <version>2.0.0-SNAPSHOT.375</version>
+    <version>2.0.0-SNAPSHOT.376</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -146,7 +146,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.kotest</groupId>
     <artifactId>kotest-assertions-core</artifactId>
-    <version>6.0.4</version>
+    <version>6.1.10</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -289,7 +289,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>validation-java-bundle</artifactId>
-    <version>2.0.0-SNAPSHOT.408</version>
+    <version>2.0.0-SNAPSHOT.409</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
