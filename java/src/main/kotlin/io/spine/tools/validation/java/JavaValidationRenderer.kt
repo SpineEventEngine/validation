@@ -87,12 +87,11 @@ internal class JavaValidationRenderer(
     /**
      * Returns code generators for the built-in options.
      *
-     * Note that the generators cannot be created outside of [JavaRenderer] because
-     * they need [JavaValueConverter], which in turn needs [JavaRenderer.typeSystem].
-     *
      * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
      * is addressed, all generators must be created outside of [JavaValidationRenderer],
      * and just passed to the renderer.
+     *
+     * @see io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
      */
     private fun buildInGenerators(): List<OptionGenerator> = listOf(
         RequiredGenerator(),
