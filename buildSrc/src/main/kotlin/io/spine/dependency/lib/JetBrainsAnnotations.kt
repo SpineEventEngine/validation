@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,43 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.local.Base
-import io.spine.dependency.local.Compiler
+package io.spine.dependency.lib
 
-buildscript {
-    standardSpineSdkRepositories()
-    configurations {
-        all {
-            resolutionStrategy {
-                force(
-                    io.spine.dependency.local.Logging.grpcContext,
-                    io.spine.dependency.lib.JetBrainsAnnotations.lib,
-                    )
-            }
-        }
-    }
-    dependencies {
-        spineCompiler.run {
-            classpath(pluginLib(dogfoodingVersion))
-        }
-        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
-    }
-}
-
-plugins {
-    module
-}
-
-apply(plugin = "io.spine.core-jvm")
-
-dependencies {
-    api(Compiler.backend)
-    api(Compiler.jvm)
-    implementation(Base.lib)
-}
-
-afterEvaluate {
-    val kspKotlin by tasks.getting
-    val launchSpineCompiler by tasks.getting
-    kspKotlin.dependsOn(launchSpineCompiler)
+/**
+ * Annotations library from JetBrains.
+ *
+ * https://github.com/JetBrains/java-annotations
+ */
+object JetBrainsAnnotations {
+    /**
+     * The version of the library transitively used.
+     */
+    const val version = "23.0.0"
+    const val groupId = "org.jetbrains"
+    const val artifactId = "annotations"
+    const val lib = "$groupId:$artifactId:$version"
 }
