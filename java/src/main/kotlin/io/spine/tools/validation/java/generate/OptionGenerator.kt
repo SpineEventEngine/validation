@@ -64,9 +64,14 @@ public abstract class OptionGenerator {
 
     /**
      * Injects [Querying] and [JavaValueConverter] into this instance of [OptionGenerator].
+     *
+     * Must be called exactly once before the first invocation of [codeFor].
      */
     @Internal
     public fun inject(querying: Querying, converter: JavaValueConverter) {
+        check(!::querying.isInitialized) {
+            "`inject()` must be called exactly once on `${this::class.simpleName}`."
+        }
         this.querying = querying
         this.converter = converter
     }
