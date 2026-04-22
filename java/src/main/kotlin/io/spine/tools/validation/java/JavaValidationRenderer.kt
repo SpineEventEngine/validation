@@ -30,7 +30,6 @@ import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
 import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.MessageType
-import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.file.hasJavaRoot
 import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.compiler.jvm.render.JavaRenderer
@@ -66,9 +65,8 @@ internal class JavaValidationRenderer(
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val optionGenerators by lazy {
-        val valueConverter = JavaValueConverter(typeSystem)
         (buildInGenerators() + customGenerators)
-            .onEach { it.inject(querying, valueConverter) }
+            .onEach { it.inject(querying, typeSystem) }
     }
 
     override fun render(sources: SourceFileSet) {

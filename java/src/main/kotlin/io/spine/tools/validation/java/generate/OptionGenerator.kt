@@ -30,6 +30,7 @@ import io.spine.annotation.Internal
 import io.spine.server.query.Querying
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.JavaValueConverter
+import io.spine.tools.compiler.type.TypeSystem
 
 /**
  * Generates Java code for a specific option.
@@ -40,7 +41,7 @@ public abstract class OptionGenerator {
      * A component capable of querying states of views.
      *
      * Note that the class inheritors are not responsible for providing [Querying].
-     * The instance is [injected][inject] by the Java validation plugin before
+     * The instance is [injected][inject] by the Java Validation Plugin before
      * the first invocation of the [codeFor] method.
      */
     protected lateinit var querying: Querying
@@ -49,7 +50,7 @@ public abstract class OptionGenerator {
      * Converts Protobuf values to their Java representations.
      *
      * Note that the class inheritors are not responsible for providing [JavaValueConverter].
-     * The instance is [injected][inject] by the Java validation plugin before
+     * The instance is created during [inject] by the Java Validation Plugin before
      * the first invocation of the [codeFor] method.
      */
     protected lateinit var converter: JavaValueConverter
@@ -63,16 +64,16 @@ public abstract class OptionGenerator {
     public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
 
     /**
-     * Injects [Querying] and [JavaValueConverter] into this instance of [OptionGenerator].
+     * Injects [Querying] and [TypeSystem] into this instance of [OptionGenerator].
      *
      * Must be called exactly once before the first invocation of [codeFor].
      */
     @Internal
-    public fun inject(querying: Querying, converter: JavaValueConverter) {
+    public fun inject(querying: Querying, typeSystem: TypeSystem) {
         check(!::querying.isInitialized) {
             "`inject()` must be called exactly once on `${this::class.simpleName}`."
         }
         this.querying = querying
-        this.converter = converter
+        this.converter = JavaValueConverter(typeSystem)
     }
 }
