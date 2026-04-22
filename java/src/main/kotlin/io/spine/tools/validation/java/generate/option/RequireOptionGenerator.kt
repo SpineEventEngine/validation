@@ -67,14 +67,10 @@ internal class RequireOptionGenerator : OptionGenerator() {
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<SingleOptionCode> {
-        val requireMessage = allRequireMessages.find { it.id == type }
-        if  (requireMessage == null) {
-            return emptyList()
-        }
-        val code = GenerateRequire(requireMessage, converter).code()
-        return listOf(code)
-    }
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
+        allRequireMessages.find { it.id == type }
+            ?.let { listOf(GenerateRequire(it, converter).code()) }
+            ?: emptyList()
 }
 
 /**
