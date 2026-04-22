@@ -50,7 +50,8 @@ public interface EmptyFieldCheck {
     public val converter: JavaValueConverter
 
     /**
-     * Returns an expression that checks if this [io.spine.tools.compiler.ast.Field] has the default (unset) value.
+     * Returns an expression that checks if this [io.spine.tools.compiler.ast.Field]
+     * has the default (unset) value.
      */
     public fun Field.hasDefaultValue(): Expression<Boolean> {
         val getter = MessageScope.message.field(this).getter<Any>()
