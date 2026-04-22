@@ -70,9 +70,7 @@ import io.spine.tools.validation.option.isRepeatedMessage
 /**
  * The generator for the `(when)` option.
  */
-internal class WhenGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class WhenGenerator : OptionGenerator() {
 
     /**
      * All `(when)` fields in the current compilation process.

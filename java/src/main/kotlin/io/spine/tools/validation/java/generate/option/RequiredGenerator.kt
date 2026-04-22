@@ -58,9 +58,7 @@ import io.spine.tools.validation.RequiredField
 /**
  * The generator for `(required)` option.
  */
-internal class RequiredGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class RequiredGenerator : OptionGenerator() {
 
     /**
      * All `(required)` fields in the current compilation process.

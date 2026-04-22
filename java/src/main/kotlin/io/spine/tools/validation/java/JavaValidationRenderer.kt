@@ -66,8 +66,9 @@ internal class JavaValidationRenderer(
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val optionGenerators by lazy {
+        val valueConverter = JavaValueConverter(typeSystem)
         (buildInGenerators() + customGenerators)
-            .onEach { it.inject(querying) }
+            .onEach { it.inject(querying, valueConverter) }
     }
 
     override fun render(sources: SourceFileSet) {
@@ -88,29 +89,26 @@ internal class JavaValidationRenderer(
     /**
      * Returns code generators for the built-in options.
      *
-     * Note that some generators cannot be created outside of [JavaRenderer] because
+     * Note that the generators cannot be created outside of [JavaRenderer] because
      * they need [JavaValueConverter], which in turn needs [JavaRenderer.typeSystem].
      *
      * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
      * is addressed, all generators must be created outside of [JavaValidationRenderer],
      * and just passed to the renderer.
      */
-    private fun buildInGenerators(): List<OptionGenerator> {
-        val valueConverter = JavaValueConverter(typeSystem)
-        return listOf(
-            RequiredGenerator(valueConverter),
-            PatternGenerator(),
-            GoesGenerator(valueConverter),
-            DistinctGenerator(),
-            ValidateGenerator(valueConverter),
-            RangeGenerator(),
-            MaxGenerator(),
-            MinGenerator(),
-            ChoiceGenerator(),
-            WhenGenerator(valueConverter),
-            RequireOptionGenerator(valueConverter),
-        )
-    }
+    private fun buildInGenerators(): List<OptionGenerator> = listOf(
+        RequiredGenerator(),
+        PatternGenerator(),
+        GoesGenerator(),
+        DistinctGenerator(),
+        ValidateGenerator(),
+        RangeGenerator(),
+        MaxGenerator(),
+        MinGenerator(),
+        ChoiceGenerator(),
+        WhenGenerator(),
+        RequireOptionGenerator(),
+    )
 
     private fun generateCode(message: MessageType): MessageValidationCode {
         val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }

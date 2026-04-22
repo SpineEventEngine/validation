@@ -57,9 +57,7 @@ import io.spine.tools.validation.RequireMessage
 /**
  * The generator for the `(require)` option.
  */
-internal class RequireOptionGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class RequireOptionGenerator : OptionGenerator() {
 
     /**
      * All `(require)`-marked messages in the current compilation process.

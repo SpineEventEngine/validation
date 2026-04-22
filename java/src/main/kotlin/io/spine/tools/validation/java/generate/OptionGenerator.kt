@@ -29,6 +29,7 @@ package io.spine.tools.validation.java.generate
 import io.spine.annotation.Internal
 import io.spine.server.query.Querying
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.jvm.JavaValueConverter
 
 /**
  * Generates Java code for a specific option.
@@ -45,6 +46,15 @@ public abstract class OptionGenerator {
     protected lateinit var querying: Querying
 
     /**
+     * Converts Protobuf values to their Java representations.
+     *
+     * Note that the class inheritors are not responsible for providing [JavaValueConverter].
+     * The instance is [injected][inject] by the Java validation plugin before
+     * the first invocation of the [codeFor] method.
+     */
+    protected lateinit var converter: JavaValueConverter
+
+    /**
      * Generates validation code for all option applications within the provided
      * message [type].
      *
@@ -53,10 +63,11 @@ public abstract class OptionGenerator {
     public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
 
     /**
-     * Injects [Querying] into this instance of [OptionGenerator].
+     * Injects [Querying] and [JavaValueConverter] into this instance of [OptionGenerator].
      */
     @Internal
-    public fun inject(querying: Querying) {
+    public fun inject(querying: Querying, converter: JavaValueConverter) {
         this.querying = querying
+        this.converter = converter
     }
 }

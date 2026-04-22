@@ -63,9 +63,7 @@ import io.spine.tools.validation.GoesField
 /**
  * The generator for the `(goes)` option.
  */
-internal class GoesGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class GoesGenerator : OptionGenerator() {
 
     /**
      * All `(goes)` fields in the current compilation process.

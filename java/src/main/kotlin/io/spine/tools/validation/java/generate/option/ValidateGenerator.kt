@@ -61,9 +61,7 @@ import org.intellij.lang.annotations.Language
 /**
  * The generator for `(validate)` option.
  */
-internal class ValidateGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class ValidateGenerator : OptionGenerator() {
 
     /**
      * All `(validate)` fields in the current compilation process.
