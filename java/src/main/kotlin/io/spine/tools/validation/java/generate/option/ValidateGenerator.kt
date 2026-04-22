@@ -51,7 +51,7 @@ import io.spine.tools.validation.java.expression.ValidationErrorClass
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
@@ -61,7 +61,7 @@ import org.intellij.lang.annotations.Language
 /**
  * The generator for `(validate)` option.
  */
-internal class ValidateGenerator : OptionGenerator() {
+internal class ValidateGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(validate)` fields in the current compilation process.

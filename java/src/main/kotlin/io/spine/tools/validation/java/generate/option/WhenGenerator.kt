@@ -55,7 +55,7 @@ import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
@@ -70,7 +70,7 @@ import io.spine.tools.validation.option.isRepeatedMessage
 /**
  * The generator for the `(when)` option.
  */
-internal class WhenGenerator : OptionGenerator() {
+internal class WhenGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(when)` fields in the current compilation process.

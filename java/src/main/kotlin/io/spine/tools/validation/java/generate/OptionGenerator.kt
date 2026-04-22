@@ -26,10 +26,8 @@
 
 package io.spine.tools.validation.java.generate
 
-import io.spine.annotation.Internal
 import io.spine.server.query.Querying
 import io.spine.tools.compiler.ast.TypeName
-import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.type.TypeSystem
 
 /**
@@ -47,13 +45,13 @@ public abstract class OptionGenerator {
     protected lateinit var querying: Querying
 
     /**
-     * Converts Protobuf values to their Java representations.
+     * A type system with the Protobuf types defined in the current code generation pipeline.
      *
-     * Note that the class inheritors are not responsible for providing [JavaValueConverter].
-     * The instance is created during [inject] by the Java Validation Plugin before
+     * Note that the class inheritors are not responsible for providing [Querying].
+     * The instance is [injected][inject] by the Java Validation Plugin before
      * the first invocation of the [codeFor] method.
      */
-    protected lateinit var converter: JavaValueConverter
+    protected lateinit var typeSystem: TypeSystem
 
     /**
      * Generates validation code for all option applications within the provided
@@ -68,12 +66,11 @@ public abstract class OptionGenerator {
      *
      * Must be called exactly once before the first invocation of [codeFor].
      */
-    @Internal
     public fun inject(querying: Querying, typeSystem: TypeSystem) {
         check(!::querying.isInitialized) {
             "`inject()` must be called exactly once on `${this::class.simpleName}`."
         }
         this.querying = querying
-        this.converter = JavaValueConverter(typeSystem)
+        this.typeSystem = typeSystem
     }
 }

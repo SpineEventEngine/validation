@@ -44,7 +44,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
@@ -57,7 +57,7 @@ import io.spine.tools.validation.RequireMessage
 /**
  * The generator for the `(require)` option.
  */
-internal class RequireOptionGenerator : OptionGenerator() {
+internal class RequireOptionGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(require)`-marked messages in the current compilation process.
