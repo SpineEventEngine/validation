@@ -24,44 +24,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.AutoService
-import io.spine.dependency.lib.AutoServiceKsp
-import io.spine.dependency.local.Compiler
+syntax = "proto3";
 
-buildscript {
-    standardSpineSdkRepositories()
-    configurations {
-        all {
-            resolutionStrategy {
-                force(
-                    io.spine.dependency.local.Logging.grpcContext,
-                    io.spine.dependency.lib.JetBrainsAnnotations.lib,
-                )
-            }
-        }
-    }
-    dependencies {
-        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
-    }
-}
+package spine.time.validation;
 
-plugins {
-    module
-    id("com.google.devtools.ksp")
-}
+import "spine/options.proto";
 
-apply(plugin = "io.spine.core-jvm")
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.time.validation";
+option java_outer_classname = "ViewsProto";
+option java_multiple_files = true;
 
-dependencies {
-    api(Compiler.jvm)
-    api(project(":context"))
-    api(project(":jvm-runtime"))
-    ksp(AutoServiceKsp.processor)
-    compileOnly(AutoService.annotations)
-}
+import "spine/compiler/ast.proto";
+import "spine/time_options.proto";
+import "spine/time/validation/time_field_type.proto";
 
-afterEvaluate {
-    val kspKotlin by tasks.getting
-    val launchSpineCompiler by tasks.getting
-    kspKotlin.dependsOn(launchSpineCompiler)
+// A view of a field that is marked with `(when)` option.
+message WhenField {
+    option (entity).kind = PROJECTION;
+
+    compiler.FieldRef id = 1;
+
+    // The field in which the option was discovered.
+    compiler.Field subject = 2;
+
+    // The error message template.
+    string error_message = 3;
+
+    // Defines a restriction for the timestamp.
+    Time bound = 4;
+
+    // The type of the field.
+    spine.time.validation.TimeFieldType type = 5;
 }

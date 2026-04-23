@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation.option
+package io.spine.tools.time.validation
 
+import com.google.auto.service.AutoService
 import com.google.protobuf.Timestamp
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -39,6 +40,13 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.time.Temporal
 import io.spine.time.validation.Time
 import io.spine.time.validation.TimeOption
+import io.spine.time.validation.TimeFieldType
+import io.spine.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.time.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.time.validation.WhenField
+import io.spine.time.validation.event.WhenFieldDiscovered
+import io.spine.time.validation.event.whenFieldDiscovered
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
@@ -62,15 +70,25 @@ import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.tools.validation.OPTION_NAME
-import io.spine.tools.validation.TimeFieldType
-import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.tools.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.tools.validation.WhenField
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.tools.validation.event.WhenFieldDiscovered
-import io.spine.tools.validation.event.whenFieldDiscovered
+import io.spine.tools.validation.java.ValidationOption
+import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.option.WHEN
+import io.spine.tools.time.validation.java.WhenGenerator
+
+/**
+ * Extends the Java validation with code generation for the `(when)` option.
+ */
+@AutoService(ValidationOption::class)
+public class WhenOption : ValidationOption {
+
+    override val reactions: Set<Reaction<*>> = setOf(WhenReaction())
+
+    override val view: Set<Class<out View<*, *, *>>> = setOf(WhenFieldView::class.java)
+
+    override val generator: OptionGenerator = WhenGenerator()
+}
 
 /**
  * Controls whether a field should be validated with the `(when)` option.

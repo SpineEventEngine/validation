@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation.java.generate.option
+package io.spine.tools.time.validation.java
 
 import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
+import io.spine.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.time.validation.WhenField
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
@@ -45,9 +48,6 @@ import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
-import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.tools.validation.WhenField
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.JsonExtensionsClass
 import io.spine.tools.validation.java.expression.SpineTime

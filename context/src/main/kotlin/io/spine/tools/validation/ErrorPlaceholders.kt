@@ -89,12 +89,12 @@ internal fun String.checkPlaceholders(
  * @param file The file that contains the [field] declaration.
  * @param option The name of the option with which the message template was specified.
  */
-internal fun String.checkPlaceholders(
+public fun String.checkPlaceholders(
     supported: Set<ErrorPlaceholder>,
     field: Field,
     file: File,
     option: String
-) = checkPlaceholders(
+): Unit = checkPlaceholders(
     supported,
     "`${field.qualifiedName}` field",
     field.span,

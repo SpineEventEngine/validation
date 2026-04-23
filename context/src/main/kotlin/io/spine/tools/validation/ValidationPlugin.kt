@@ -55,8 +55,6 @@ import io.spine.tools.validation.option.SetOnceFieldView
 import io.spine.tools.validation.option.SetOnceReaction
 import io.spine.tools.validation.option.ValidateReaction
 import io.spine.tools.validation.option.ValidatedFieldView
-import io.spine.tools.validation.option.WhenFieldView
-import io.spine.tools.validation.option.WhenReaction
 import io.spine.tools.validation.option.required.IfMissingReaction
 import io.spine.tools.validation.option.required.RequiredFieldView
 import io.spine.tools.validation.option.required.RequiredReaction
@@ -86,7 +84,6 @@ public abstract class ValidationPlugin(
         MinFieldView::class.java,
         SetOnceFieldView::class.java,
         ChoiceGroupView::class.java,
-        WhenFieldView::class.java,
         RequireMessageView::class.java,
     ),
     viewRepositories = viewRepositories,
@@ -103,7 +100,6 @@ public abstract class ValidationPlugin(
         PatternReaction(),
         ChoiceReaction(),
         IsRequiredReaction(),
-        WhenReaction(),
         GoesReaction(),
         SetOnceReaction(),
         IfSetAgainReaction(),
