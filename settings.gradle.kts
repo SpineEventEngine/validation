@@ -36,6 +36,7 @@ rootProject.name = "validation"
 include(
     "context",
     "context-tests",
+    "time-validation-tests",
     "gradle-plugin",
     "java",
     "jvm-runtime",

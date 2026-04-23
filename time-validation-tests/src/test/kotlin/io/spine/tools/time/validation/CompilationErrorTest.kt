@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2025, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,36 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.artifact
-import io.spine.dependency.lib.Protobuf
-import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.Logging
-import io.spine.dependency.test.JUnit.Jupiter
-import io.spine.gradle.report.license.LicenseReporter
+package io.spine.tools.time.validation
 
-plugins {
-    kotlin("jvm")
-    id("module-testing")
-    protobuf
-    `java-test-fixtures`
-    prototap
-}
-LicenseReporter.generateReportIn(project)
+import io.spine.testing.compiler.AbstractCompilationErrorTest
+import io.spine.tools.compiler.plugin.Plugin
+import io.spine.tools.validation.java.JavaValidationPlugin
 
-dependencies {
-    val contextProject = project(":context")
-    implementation(contextProject)
-    implementation(project(":jvm-runtime"))
+/**
+ * An abstract base for compilation error tests of [JavaValidationPlugin].
+ */
+internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
 
-    testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
-    testImplementation(Compiler.testlib)
-
-    testFixturesImplementation(Compiler.api)
-    testFixturesImplementation(Compiler.testlib)
-    testFixturesImplementation(Jupiter.artifact { params })
-    testFixturesImplementation(contextProject)
-}
-
-protobuf {
-    protoc { artifact = Protobuf.compiler }
+    override fun plugins(): List<Plugin> = listOf(
+        object : JavaValidationPlugin() {}
+    )
 }

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.tools.time.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
@@ -51,7 +51,8 @@ internal class WhenReactionSpec : CompilationErrorTest() {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
-        }    }
+        }
+    }
 
     @Test
     fun `option on an integer field`() {
@@ -62,7 +63,8 @@ internal class WhenReactionSpec : CompilationErrorTest() {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
-        }    }
+        }
+    }
 
     @Test
     fun `option on a string field`() {
