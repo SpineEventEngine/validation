@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.build.Ksp
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.gradle.report.license.LicenseReporter
