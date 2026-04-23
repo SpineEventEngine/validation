@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,15 @@ import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.java.generate.OptionGenerator
 
 /**
- * Extends the Java validation library with the custom validation option.
+ * Extends the Validation library with code generation for
+ * the custom validation option in Java.
+ *
+ * Implementations of this interface are discovered via the Java Service Loader
+ * mechanism by [JavaValidationPlugin]. Correspondingly, the implementations must be registered in
+ * `META-INF/services/io.spine.tools.validation.java.ValidationOption` file.
+ * The easy way to create such a file is to use
+ * the [AutoService](https://github.com/google/auto/blob/main/service/README.md)
+ * annotation processor.
  */
 @SPI
 public interface ValidationOption {
