@@ -46,7 +46,7 @@ import io.spine.tools.compiler.ast.FieldType
 import io.spine.tools.compiler.ast.File
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
 import io.spine.tools.compiler.ast.extractMessageType
-import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
@@ -62,13 +62,13 @@ import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.tools.validation.OPTION_NAME
-import io.spine.tools.validation.checkPlaceholders
-import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.TimeFieldType
 import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
 import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.tools.validation.TimeFieldType.TFT_UNKNOWN
 import io.spine.tools.validation.WhenField
+import io.spine.tools.validation.checkPlaceholders
+import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.event.WhenFieldDiscovered
 import io.spine.tools.validation.event.whenFieldDiscovered
 
@@ -149,14 +149,6 @@ private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
         else -> TFT_UNKNOWN
     }
 }
-
-/**
- * Tells if this [FieldType] represents a `repeated` of messages.
- *
- * The property is `public` because the option generator also uses it.
- */
-public val FieldType.isRepeatedMessage: Boolean
-    get() = isList && list.isMessage
 
 /**
  * A view of a field that is marked with the `(when)` option.

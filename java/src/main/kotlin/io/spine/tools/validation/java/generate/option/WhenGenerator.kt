@@ -30,6 +30,7 @@ import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
@@ -44,6 +45,9 @@ import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
 import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
+import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.validation.WhenField
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.JsonExtensionsClass
 import io.spine.tools.validation.java.expression.SpineTime
@@ -60,12 +64,8 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validation.ConstraintViolation
-import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
 import io.spine.tools.validation.option.WHEN
-import io.spine.tools.validation.WhenField
-import io.spine.tools.validation.option.isRepeatedMessage
+import io.spine.validation.ConstraintViolation
 
 /**
  * The generator for the `(when)` option.
