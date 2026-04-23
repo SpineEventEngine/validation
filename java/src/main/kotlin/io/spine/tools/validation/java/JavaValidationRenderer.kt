@@ -65,7 +65,7 @@ internal class JavaValidationRenderer(
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val optionGenerators by lazy {
-        (buildInGenerators() + customGenerators)
+        (builtInGenerators() + customGenerators)
             .onEach { it.inject(querying, typeSystem) }
     }
 
@@ -93,7 +93,7 @@ internal class JavaValidationRenderer(
      *
      * @see io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
      */
-    private fun buildInGenerators(): List<OptionGenerator> = listOf(
+    private fun builtInGenerators(): List<OptionGenerator> = listOf(
         RequiredGenerator(),
         PatternGenerator(),
         GoesGenerator(),
