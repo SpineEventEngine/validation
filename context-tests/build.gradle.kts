@@ -32,7 +32,8 @@ import io.spine.dependency.test.JUnit.Jupiter
 import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
-    java
+    kotlin("jvm")
+    id("module-testing")
     protobuf
     `java-test-fixtures`
     prototap
