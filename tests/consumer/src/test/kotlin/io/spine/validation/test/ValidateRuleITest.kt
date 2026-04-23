@@ -76,15 +76,6 @@ internal class ValidateRuleITest {
                 .setLastEvent(invalidCloud().pack())
             checkInvalid(builder, BAD_CLOUD)
         }
-
-        @Test
-        @MuteLogging
-        fun `ignore unknown packed type`() {
-            val builder = meteoStatsInEurope()
-                .setAverageDrop(validRainDrop())
-                .setLastEvent(packedUnknown())
-            assertNoException(builder)
-        }
     }
 
     @Nested
@@ -129,18 +120,6 @@ internal class ValidateRuleITest {
                 .addPredictedEvent(packedValid)
                 .addPredictedEvent(packedInvalid)
             checkInvalid(builder, BAD_CLOUD)
-        }
-
-        @Test
-        @MuteLogging
-        fun `ignore unknown packed type`() {
-            val packedValid = validCloud().pack()
-            val packedInvalid = packedUnknown()
-            val builder = meteoStatsInEurope()
-                .setAverageDrop(validRainDrop())
-                .addPredictedEvent(packedValid)
-                .addPredictedEvent(packedInvalid)
-            assertNoException(builder)
         }
     }
 }
