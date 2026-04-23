@@ -47,7 +47,7 @@ public abstract class OptionGenerator {
     /**
      * A type system with the Protobuf types defined in the current code generation pipeline.
      *
-     * Note that the class inheritors are not responsible for providing [Querying].
+     * Note that the class inheritors are not responsible for providing [TypeSystem].
      * The instance is [injected][inject] by the Java Validation Plugin before
      * the first invocation of the [codeFor] method.
      */
