@@ -26,6 +26,7 @@
 
 import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.SpinePublishing
+import io.spine.gradle.publish.setup
 
 plugins {
     java
@@ -119,8 +120,7 @@ tasks.shadowJar {
 
     isZip64 = true  /* The archive has way too many items. So using the Zip64 mode. */
     archiveClassifier.set("")    /** To prevent Gradle setting something like `osx-x86_64`. */
-    append("desc.ref")
-    mergeServiceFiles("META-INF/services/io.spine.option.OptionsProvider")
+    setup()
 }
 
 /**
