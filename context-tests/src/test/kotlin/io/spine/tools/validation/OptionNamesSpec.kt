@@ -28,7 +28,6 @@ package io.spine.tools.validation
 
 import io.kotest.matchers.shouldBe
 import io.spine.option.OptionsProto
-import io.spine.time.validation.TimeOptionsProto
 import io.spine.tools.validation.option.DISTINCT
 import io.spine.tools.validation.option.IS_REQUIRED
 import io.spine.tools.validation.option.MAX
@@ -38,7 +37,6 @@ import io.spine.tools.validation.option.RANGE
 import io.spine.tools.validation.option.REQUIRED
 import io.spine.tools.validation.option.SET_ONCE
 import io.spine.tools.validation.option.VALIDATE
-import io.spine.tools.validation.option.WHEN
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -90,8 +88,4 @@ internal class OptionNamesSpec {
         VALIDATE shouldBe OptionsProto.validate.descriptor.name
     }
 
-    @Test
-    fun `when`() {
-        WHEN shouldBe TimeOptionsProto.`when`.descriptor.name
-    }
 }

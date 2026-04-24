@@ -26,22 +26,22 @@
 
 syntax = "proto3";
 
-package spine.time.validation;
+package spine.tools.time.validation;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.tools.time.validation.event";
-option java_outer_classname = "EventsProto";
+option java_package = "io.spine.tools.time.validation";
+option java_outer_classname = "ViewsProto";
 option java_multiple_files = true;
 
 import "spine/compiler/ast.proto";
 import "spine/time_options.proto";
 import "spine/tools/time/validation/time_field_type.proto";
 
-// The event emitted whenever a field with `(when)` option is discovered
-// and has passed the necessary checks to confirm the option is applied correctly.
-message WhenFieldDiscovered {
+// A view of a field that is marked with `(when)` option.
+message WhenField {
+    option (entity).kind = PROJECTION;
 
     compiler.FieldRef id = 1;
 

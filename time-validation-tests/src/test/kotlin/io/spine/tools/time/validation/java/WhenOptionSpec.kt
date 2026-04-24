@@ -1,11 +1,11 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,26 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.tools.time.validation.java
 
-package spine.time.validation;
+import io.kotest.matchers.shouldBe
+import io.spine.time.validation.TimeOptionsProto
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-import "spine/options.proto";
+@DisplayName("`WhenOption` should")
+internal class WhenOptionSpec {
 
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.time.validation";
-option java_outer_classname = "TimeFieldTypeProto";
-option java_multiple_files = true;
-
-// Time-related field type supported by the `(when)` option.
-enum TimeFieldType {
-
-    TFT_UNKNOWN = 0;
-
-    // Denotes `com.google.protobuf.Timestamp`.
-    TFT_TIMESTAMP = 1;
-
-    // Denotes an interface `io.spine.time.Temporal`, which the field type should
-    // implement to be handled by the option.
-    TFT_TEMPORAL = 2;
+    @Test
+    fun `have the name matching the descriptor name`() {
+        WhenOption.NAME shouldBe TimeOptionsProto.`when`.descriptor.name
+    }
 }

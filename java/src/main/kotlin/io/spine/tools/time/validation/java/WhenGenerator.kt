@@ -29,9 +29,6 @@ package io.spine.tools.time.validation.java
 import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
-import io.spine.time.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.time.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.time.validation.WhenField
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
@@ -42,6 +39,9 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.time.validation.WhenField
 import io.spine.tools.validation.ErrorPlaceholder
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
@@ -64,7 +64,6 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.tools.validation.option.WHEN
 import io.spine.validation.ConstraintViolation
 
 /**
@@ -161,7 +160,7 @@ private class GenerateWhen(
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, WHEN)
+        val errorMessage = templateString(view.errorMessage, placeholders, WhenOption.NAME)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

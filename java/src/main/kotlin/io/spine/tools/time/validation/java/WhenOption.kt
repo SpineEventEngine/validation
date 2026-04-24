@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.time.validation
+package io.spine.tools.time.validation.java
 
 import com.google.auto.service.AutoService
 import com.google.protobuf.Timestamp
@@ -40,13 +40,6 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.time.Temporal
 import io.spine.time.validation.Time
 import io.spine.time.validation.TimeOption
-import io.spine.time.validation.TimeFieldType
-import io.spine.time.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.time.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.time.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.time.validation.WhenField
-import io.spine.time.validation.event.WhenFieldDiscovered
-import io.spine.time.validation.event.whenFieldDiscovered
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
@@ -64,6 +57,13 @@ import io.spine.tools.compiler.jvm.javaClass
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.TypeSystem
+import io.spine.tools.time.validation.TimeFieldType
+import io.spine.tools.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.time.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.tools.time.validation.WhenField
+import io.spine.tools.time.validation.event.WhenFieldDiscovered
+import io.spine.tools.time.validation.event.whenFieldDiscovered
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
@@ -74,14 +74,20 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.java.ValidationOption
 import io.spine.tools.validation.java.generate.OptionGenerator
-import io.spine.tools.validation.option.WHEN
-import io.spine.tools.time.validation.java.WhenGenerator
 
 /**
  * Extends the Java validation with code generation for the `(when)` option.
  */
 @AutoService(ValidationOption::class)
 public class WhenOption : ValidationOption {
+
+    public companion object {
+
+        /**
+         * The name of the option as it appears in the Protobuf definition.
+         */
+        public const val NAME: String = "when"
+    }
 
     override val reactions: Set<Reaction<*>> = setOf(WhenReaction())
 
@@ -111,7 +117,7 @@ internal class WhenReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = WHEN)
+        @External @Where(field = OPTION_NAME, equals = WhenOption.NAME)
         event: FieldOptionDiscovered
     ): EitherOf2<WhenFieldDiscovered, NoReaction> {
         val field = event.subject
@@ -125,7 +131,7 @@ internal class WhenReaction : Reaction<FieldOptionDiscovered>() {
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, WHEN)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, WhenOption.NAME)
 
         return whenFieldDiscovered {
             id = field.ref
@@ -141,7 +147,7 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
     val timeType = typeSystem.determineTimeType(field.type)
     Compilation.check(timeType != TFT_UNKNOWN, file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `(${WHEN})` option. Supported field types:" +
+                " is not supported by the `(${WhenOption.NAME})` option. Supported field types:" +
                 " `google.protobuf.Timestamp` and types introduced in the `spine.time` package" +
                 " that describe time-related concepts."
     }
