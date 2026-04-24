@@ -48,17 +48,6 @@ spine {
     }
 }
 
-val copySettings by tasks.registering(Copy::class) {
-    from(project.layout.projectDirectory.file(
-        "io.spine.validation.java.JavaValidationPlugin.pb.json")
-    )
-    into(project.layout.buildDirectory.dir("protodata/settings"))
-}
-
-tasks.withType<LaunchSpineCompiler>().configureEach {
-    dependsOn(copySettings)
-}
-
 dependencies {
     spineCompiler(project(":java"))
     spineCompiler(project(":tests:extensions"))
