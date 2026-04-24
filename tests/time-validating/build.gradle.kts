@@ -52,7 +52,3 @@ afterEvaluate {
         mustRunAfter("launchTestFixturesSpineCompiler")
     }
 }
-
-val testFixturesJar by tasks.getting(Jar::class) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
