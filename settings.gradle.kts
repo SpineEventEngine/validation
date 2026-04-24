@@ -47,6 +47,7 @@ include(
     ":tests:consumer-dependency",
     ":tests:runtime",
     ":tests:vanilla",
+    ":tests:time-validating",
     ":tests:validating",
     ":tests:validator",
     ":tests:validator-dependency",

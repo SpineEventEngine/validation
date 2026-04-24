@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
-import io.spine.dependency.test.JUnit
-import io.spine.dependency.test.Kotest
-import io.spine.dependency.test.Truth
 import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
@@ -43,33 +38,15 @@ plugins {
 LicenseReporter.generateReportIn(project)
 
 dependencies {
-    testFixturesAnnotationProcessor(AutoService.processor)
-    testFixturesCompileOnly(AutoService.annotations)
+    testFixturesImplementation(Base.lib)
+    testFixturesImplementation(Time.lib)
+    testFixturesImplementation(Logging.lib)
+    testFixturesImplementation(Validation.runtime)
 
-    val testFixtureDependencies = listOf(
-        Base.lib,
-        Time.lib,
-        Logging.lib,
-        Validation.runtime,
-        Kotest.assertions
-    ) + JUnit.artifacts.values + Truth.libs
-
-    testFixtureDependencies.forEach {
-        testFixturesImplementation(it)
-    }
-
+    testImplementation(testFixtures(project(":tests:validating")))
     testImplementation(Time.lib)
-    testImplementation(Compiler.api)
 }
 
-// testSpineCompilerRemoteDebug(enabled = false)
-
-/**
- * Sets a dependency for the KSP task to avoid the Gradle warning on a missing dependency.
- *
- * Note that this block uses [Task.mustRunAfter] because it does not require the task
- * existence to declare a dependency.
- */
 afterEvaluate {
     tasks.named("kspTestFixturesKotlin") {
         mustRunAfter("launchTestFixturesSpineCompiler")
