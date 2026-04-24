@@ -24,33 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+import io.spine.dependency.boms.BomsPlugin
+import io.spine.dependency.local.Time
+import io.spine.gradle.report.license.LicenseReporter
+import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
+
+plugins {
+    kotlin("jvm")
+    id("module-testing")
+}
+
+apply<BomsPlugin>()
+LicenseReporter.generateReportIn(project)
+
+spine {
+    compiler {
+        plugins(
+            "io.spine.tools.compiler.jvm.annotation.SuppressWarningsAnnotation\$Plugin",
+            "io.spine.validation.java.JavaValidationPlugin",
+        )
     }
 }
 
-rootProject.name = "validation"
+dependencies {
+    spineCompiler(project(":java"))
+    implementation(Time.lib)
+}
 
-include(
-    "context",
-    "context-tests",
-    "time-validation-tests",
-    "gradle-plugin",
-    "java",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:vanilla",
-    ":tests:time-consumer",
-    ":tests:time-validating",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)
+spineCompilerRemoteDebug(enabled = false)

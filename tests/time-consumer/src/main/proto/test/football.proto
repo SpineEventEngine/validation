@@ -24,33 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+syntax = "proto3";
+
+package spine.validation.test;
+
+import "spine/options.proto";
+import "spine/time_options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.validation.test";
+option java_outer_classname = "FootballProto";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+message Player {
+
+    google.protobuf.Timestamp started_career_in = 1 [(when).in = PAST];
 }
-
-rootProject.name = "validation"
-
-include(
-    "context",
-    "context-tests",
-    "time-validation-tests",
-    "gradle-plugin",
-    "java",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:vanilla",
-    ":tests:time-consumer",
-    ":tests:time-validating",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)

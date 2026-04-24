@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2024, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,33 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+package io.spine.validation.test
+
+import com.google.errorprone.annotations.CanIgnoreReturnValue
+import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldNotBe
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ValidationException
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+
+@CanIgnoreReturnValue
+internal fun assertValidationException(builder: Message.Builder): ConstraintViolation {
+    val exception = assertThrows<ValidationException> {
+        builder.build()
     }
+    val error = exception.asMessage()
+    error.constraintViolationList shouldHaveSize 1
+    return error.constraintViolationList[0]
 }
 
-rootProject.name = "validation"
-
-include(
-    "context",
-    "context-tests",
-    "time-validation-tests",
-    "gradle-plugin",
-    "java",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:vanilla",
-    ":tests:time-consumer",
-    ":tests:time-validating",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)
+internal fun assertNoException(builder: Message.Builder) {
+    try {
+        assertDoesNotThrow {
+            val result = builder.build()
+            result shouldNotBe null
+        }
+    } catch (e: ValidationException) {
+        fail<Any>("Unexpected constraint violation: " + e.constraintViolations, e)
+    }
+}
