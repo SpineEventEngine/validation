@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation.test
+import io.spine.dependency.local.Base
+import io.spine.dependency.local.Logging
+import io.spine.dependency.local.Time
+import io.spine.dependency.local.Validation
+import io.spine.gradle.report.license.LicenseReporter
 
-import com.google.protobuf.util.Timestamps
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+plugins {
+    `java-test-fixtures`
+    kotlin("jvm")
+    id("module-testing")
+}
+LicenseReporter.generateReportIn(project)
 
-@DisplayName("`(when)` rule should")
-internal class WhenRuleITest {
+dependencies {
+    testFixturesImplementation(Base.lib)
+    testFixturesImplementation(Time.lib)
+    testFixturesImplementation(Logging.lib)
+    testFixturesImplementation(Validation.runtime)
 
-    @Test
-    fun `prohibit invalid timestamp`() {
-        val startWhen = Timestamps.fromSeconds(4792687200L) // 15 Nov 2121
-        val player = Player.newBuilder()
-            .setStartedCareerIn(startWhen)
-        assertValidationException(player)
-    }
+    testImplementation(testFixtures(project(":tests:validating")))
+    testImplementation(Time.lib)
+}
 
-    @Test
-    fun `allow valid timestamp`() {
-        val timestamp = Timestamps.fromSeconds(59086800L) // 15 Nov 1971
-        val player = Player.newBuilder()
-            .setStartedCareerIn(timestamp)
-        assertNoException(player)
+afterEvaluate {
+    tasks.named("kspTestFixturesKotlin") {
+        mustRunAfter("launchTestFixturesSpineCompiler")
     }
 }

@@ -28,7 +28,11 @@ import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.local.TestLib
 import io.spine.dependency.local.Time
 import io.spine.gradle.report.license.LicenseReporter
-import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
+
+plugins {
+    kotlin("jvm")
+    id("module-testing")
+}
 
 apply<BomsPlugin>()
 LicenseReporter.generateReportIn(project)
@@ -41,17 +45,6 @@ spine {
             "io.spine.validation.java.JavaValidationPlugin",
         )
     }
-}
-
-val copySettings by tasks.registering(Copy::class) {
-    from(project.layout.projectDirectory.file(
-        "io.spine.validation.java.JavaValidationPlugin.pb.json")
-    )
-    into(project.layout.buildDirectory.dir("protodata/settings"))
-}
-
-tasks.withType<LaunchSpineCompiler>().configureEach {
-    dependsOn(copySettings)
 }
 
 dependencies {

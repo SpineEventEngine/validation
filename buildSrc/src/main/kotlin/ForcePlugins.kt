@@ -43,7 +43,7 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
 
     dependencies {
         CoreJvmCompiler.run {
-            classpath(pluginLibNew(version))
+            classpath(pluginLib(version))
         }
         spineCompiler.run {
             classpath(pluginLib(version))

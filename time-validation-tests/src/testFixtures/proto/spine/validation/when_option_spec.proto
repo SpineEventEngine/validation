@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -26,24 +26,38 @@
 
 syntax = "proto3";
 
-package spine.validation;
+package spine.validation.stubs;
 
 import "spine/options.proto";
+import "spine/time_options.proto";
+
+import "google/protobuf/timestamp.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.tools.validation";
-option java_outer_classname = "TimeFieldTypeProto";
+option java_package = "io.spine.tools.validation.given";
+option java_outer_classname = "WhenOptionSpecProto";
 option java_multiple_files = true;
 
-// Time-related field type supported by the `(when)` option.
-enum TimeFieldType {
+// Provides a boolean field with the inapplicable `(when)` option.
+message WhenBoolField {
+    bool value = 1 [(when).in = FUTURE];
+}
 
-    TFT_UNKNOWN = 0;
+// Provides an int32 field with the inapplicable `(when)` option.
+message WhenInt32Field {
+    int32 value = 1 [(when).in = FUTURE];
+}
 
-    // Denotes `com.google.protobuf.Timestamp`.
-    TFT_TIMESTAMP = 1;
+// Provides a string field with the inapplicable `(when)` option.
+message WhenStringField {
+    string value = 1 [(when).in = PAST];
+}
 
-    // Denotes an interface `io.spine.time.Temporal`, which the field type should
-    // implement to be handled by the option.
-    TFT_TEMPORAL = 2;
+// Provides a `(when)` field that specifies a custom error message using
+// the placeholders not supported by the option.
+message WhenWithInvalidPlaceholders {
+    google.protobuf.Timestamp value = 1 [(when) = {
+        in: PAST,
+        error_msg: "The field value `${field.value}` must be in `${when}`."
+    }];
 }

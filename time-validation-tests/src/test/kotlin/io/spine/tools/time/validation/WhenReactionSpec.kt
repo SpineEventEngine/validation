@@ -24,18 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.tools.time.validation
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldInclude
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
+import io.spine.tools.time.validation.java.WhenOption
 import io.spine.tools.validation.given.WhenBoolField
 import io.spine.tools.validation.given.WhenInt32Field
 import io.spine.tools.validation.given.WhenStringField
 import io.spine.tools.validation.given.WhenWithInvalidPlaceholders
-import io.spine.tools.validation.option.WHEN
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -51,7 +51,8 @@ internal class WhenReactionSpec : CompilationErrorTest() {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
-        }    }
+        }
+    }
 
     @Test
     fun `option on an integer field`() {
@@ -62,7 +63,8 @@ internal class WhenReactionSpec : CompilationErrorTest() {
             shouldContain(field.type.name)
             shouldContain(field.qualifiedName)
             shouldContain("is not supported")
-        }    }
+        }
+    }
 
     @Test
     fun `option on a string field`() {
@@ -83,7 +85,7 @@ internal class WhenReactionSpec : CompilationErrorTest() {
         val field = message.field("value")
         error.message.run {
             shouldContain(field.qualifiedName)
-            shouldContain(WHEN)
+            shouldContain(WhenOption.NAME)
             shouldContain("unsupported placeholders")
             shouldInclude("[when]")
         }

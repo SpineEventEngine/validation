@@ -26,9 +26,9 @@
 
 package io.spine.tools.validation.java.generate
 
-import io.spine.annotation.Internal
 import io.spine.server.query.Querying
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.type.TypeSystem
 
 /**
  * Generates Java code for a specific option.
@@ -39,10 +39,19 @@ public abstract class OptionGenerator {
      * A component capable of querying states of views.
      *
      * Note that the class inheritors are not responsible for providing [Querying].
-     * The instance is [injected][inject] by the Java validation plugin before
+     * The instance is [injected][inject] by the Java Validation Plugin before
      * the first invocation of the [codeFor] method.
      */
     protected lateinit var querying: Querying
+
+    /**
+     * A type system with the Protobuf types defined in the current code generation pipeline.
+     *
+     * Note that the class inheritors are not responsible for providing [TypeSystem].
+     * The instance is [injected][inject] by the Java Validation Plugin before
+     * the first invocation of the [codeFor] method.
+     */
+    protected lateinit var typeSystem: TypeSystem
 
     /**
      * Generates validation code for all option applications within the provided
@@ -53,10 +62,15 @@ public abstract class OptionGenerator {
     public abstract fun codeFor(type: TypeName): List<SingleOptionCode>
 
     /**
-     * Injects [Querying] into this instance of [OptionGenerator].
+     * Injects [Querying] and [TypeSystem] into this instance of [OptionGenerator].
+     *
+     * Must be called exactly once before the first invocation of [codeFor].
      */
-    @Internal
-    public fun inject(querying: Querying) {
+    public fun inject(querying: Querying, typeSystem: TypeSystem) {
+        check(!::querying.isInitialized) {
+            "`inject()` must be called exactly once on `${this::class.simpleName}`."
+        }
         this.querying = querying
+        this.typeSystem = typeSystem
     }
 }

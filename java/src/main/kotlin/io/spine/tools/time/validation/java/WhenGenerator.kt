@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation.java.generate.option
+package io.spine.tools.time.validation.java
 
 import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.time.validation.Time.FUTURE
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
@@ -38,6 +39,9 @@ import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
+import io.spine.tools.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.time.validation.WhenField
 import io.spine.tools.validation.ErrorPlaceholder
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
@@ -55,24 +59,17 @@ import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validation.ConstraintViolation
-import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.tools.validation.option.WHEN
-import io.spine.tools.validation.WhenField
-import io.spine.tools.validation.option.isRepeatedMessage
 
 /**
  * The generator for the `(when)` option.
  */
-internal class WhenGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class WhenGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(when)` fields in the current compilation process.
@@ -163,7 +160,7 @@ private class GenerateWhen(
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(fieldPath, typeNameStr, fieldValue)
-        val errorMessage = templateString(view.errorMessage, placeholders, WHEN)
+        val errorMessage = templateString(view.errorMessage, placeholders, WhenOption.NAME)
         return constraintViolation(errorMessage, typeNameStr, fieldPath, fieldValue)
     }
 

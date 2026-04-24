@@ -55,7 +55,7 @@ internal class ChoiceITest {
 
         violations.size shouldBe 1
         violations[0] shouldNotBe null
-        violations[0]!!.message.format() shouldContain "choice"
+        violations[0].message.format() shouldContain "choice"
     }
 
     @Test

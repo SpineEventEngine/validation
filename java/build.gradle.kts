@@ -24,15 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.dependency.lib.AutoService
+import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Compiler
+
+buildscript {
+    standardSpineSdkRepositories()
+    configurations {
+        all {
+            resolutionStrategy {
+                force(
+                    io.spine.dependency.local.Logging.grpcContext,
+                    io.spine.dependency.lib.JetBrainsAnnotations.lib,
+                )
+            }
+        }
+    }
+    dependencies {
+        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
+    }
+}
 
 plugins {
     module
-    `build-proto-model`
+    id("com.google.devtools.ksp")
 }
+
+apply(plugin = "io.spine.core-jvm")
 
 dependencies {
     api(Compiler.jvm)
     api(project(":context"))
     api(project(":jvm-runtime"))
+    ksp(AutoServiceKsp.processor)
+    compileOnly(AutoService.annotations)
+}
+
+afterEvaluate {
+    val kspKotlin by tasks.getting
+    val launchSpineCompiler by tasks.getting
+    kspKotlin.dependsOn(launchSpineCompiler)
 }

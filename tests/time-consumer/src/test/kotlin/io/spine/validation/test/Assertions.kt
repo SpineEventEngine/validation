@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,40 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.validation.test
 
-package spine.validation.stubs;
+import com.google.errorprone.annotations.CanIgnoreReturnValue
+import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldNotBe
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ValidationException
+import org.junit.jupiter.api.Assertions.fail
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
-import "spine/options.proto";
-import "spine/time_options.proto";
-
-option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.tools.validation.given";
-option java_outer_classname = "WhenOptionSpecProto";
-option java_multiple_files = true;
-
-import "google/protobuf/timestamp.proto";
-
-// Provides a boolean field with the inapplicable `(when)` option.
-message WhenBoolField {
-    bool value = 1 [(when).in = FUTURE];
+@CanIgnoreReturnValue
+internal fun assertValidationException(builder: Message.Builder): ConstraintViolation {
+    val exception = assertThrows<ValidationException> {
+        builder.build()
+    }
+    val error = exception.asMessage()
+    error.constraintViolationList shouldHaveSize 1
+    return error.constraintViolationList[0]
 }
 
-// Provides an int32 field with the inapplicable `(when)` option.
-message WhenInt32Field {
-    int32 value = 1 [(when).in = FUTURE];
-}
-
-// Provides a string field with the inapplicable `(when)` option.
-message WhenStringField {
-    string value = 1 [(when).in = PAST];
-}
-
-// Provides a `(when)` field that specifies a custom error message using
-// the placeholders not supported by the option.
-message WhenWithInvalidPlaceholders {
-    google.protobuf.Timestamp value = 1 [(when) = {
-        in: PAST,
-        error_msg: "The field value `${field.value}` must be in `${when}`."
-    }];
+internal fun assertNoException(builder: Message.Builder) {
+    try {
+        assertDoesNotThrow {
+            val result = builder.build()
+            result shouldNotBe null
+        }
+    } catch (e: ValidationException) {
+        fail<Any>("Unexpected constraint violation: " + e.constraintViolations, e)
+    }
 }

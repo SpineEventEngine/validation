@@ -30,7 +30,6 @@ import com.google.protobuf.Message
 import com.intellij.psi.PsiJavaFile
 import io.spine.tools.code.Java
 import io.spine.tools.compiler.ast.MessageType
-import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.file.hasJavaRoot
 import io.spine.tools.compiler.jvm.javaClassName
 import io.spine.tools.compiler.jvm.render.JavaRenderer
@@ -48,7 +47,6 @@ import io.spine.tools.validation.java.generate.option.PatternGenerator
 import io.spine.tools.validation.java.generate.option.RequireOptionGenerator
 import io.spine.tools.validation.java.generate.option.RequiredGenerator
 import io.spine.tools.validation.java.generate.option.ValidateGenerator
-import io.spine.tools.validation.java.generate.option.WhenGenerator
 import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
@@ -66,8 +64,8 @@ internal class JavaValidationRenderer(
     private val codeInjector = ValidationCodeInjector()
     private val querying = this@JavaValidationRenderer
     private val optionGenerators by lazy {
-        (buildInGenerators() + customGenerators)
-            .onEach { it.inject(querying) }
+        (builtInGenerators() + customGenerators)
+            .onEach { it.inject(querying, typeSystem) }
     }
 
     override fun render(sources: SourceFileSet) {
@@ -88,29 +86,24 @@ internal class JavaValidationRenderer(
     /**
      * Returns code generators for the built-in options.
      *
-     * Note that some generators cannot be created outside of [JavaRenderer] because
-     * they need [JavaValueConverter], which in turn needs [JavaRenderer.typeSystem].
-     *
      * When [validation #199](https://github.com/SpineEventEngine/validation/issues/199)
      * is addressed, all generators must be created outside of [JavaValidationRenderer],
      * and just passed to the renderer.
+     *
+     * @see io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
      */
-    private fun buildInGenerators(): List<OptionGenerator> {
-        val valueConverter = JavaValueConverter(typeSystem)
-        return listOf(
-            RequiredGenerator(valueConverter),
-            PatternGenerator(),
-            GoesGenerator(valueConverter),
-            DistinctGenerator(),
-            ValidateGenerator(valueConverter),
-            RangeGenerator(),
-            MaxGenerator(),
-            MinGenerator(),
-            ChoiceGenerator(),
-            WhenGenerator(valueConverter),
-            RequireOptionGenerator(valueConverter),
-        )
-    }
+    private fun builtInGenerators(): List<OptionGenerator> = listOf(
+        RequiredGenerator(),
+        PatternGenerator(),
+        GoesGenerator(),
+        DistinctGenerator(),
+        ValidateGenerator(),
+        RangeGenerator(),
+        MaxGenerator(),
+        MinGenerator(),
+        ChoiceGenerator(),
+        RequireOptionGenerator(),
+    )
 
     private fun generateCode(message: MessageType): MessageValidationCode {
         val fieldOptions = optionGenerators.flatMap { it.codeFor(message.name) }

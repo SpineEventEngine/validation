@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.dependency.build
+package io.spine.tools.time.validation
 
-// https://github.com/jk1/Gradle-License-Report
-@Suppress("unused")
-object LicenseReport {
-    private const val version = "3.0.1"
-    const val lib = "com.github.jk1:gradle-license-report:$version"
+import io.spine.testing.compiler.AbstractCompilationErrorTest
+import io.spine.tools.compiler.plugin.Plugin
+import io.spine.tools.validation.java.JavaValidationPlugin
 
-    object GradlePlugin {
-        const val version = LicenseReport.version
-        const val id = "com.github.jk1.dependency-license-report"
-        const val lib = LicenseReport.lib
-    }
+/**
+ * An abstract base for compilation error tests of [JavaValidationPlugin].
+ */
+internal abstract class CompilationErrorTest : AbstractCompilationErrorTest() {
+
+    override fun plugins(): List<Plugin> = listOf(
+        object : JavaValidationPlugin() {}
+    )
 }

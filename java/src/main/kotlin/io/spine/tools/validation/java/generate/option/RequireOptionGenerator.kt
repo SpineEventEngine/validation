@@ -44,7 +44,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
@@ -57,9 +57,7 @@ import io.spine.tools.validation.RequireMessage
 /**
  * The generator for the `(require)` option.
  */
-internal class RequireOptionGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class RequireOptionGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(require)`-marked messages in the current compilation process.
@@ -69,14 +67,10 @@ internal class RequireOptionGenerator(
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<SingleOptionCode> {
-        val requireMessage = allRequireMessages.find { it.id == type }
-        if  (requireMessage == null) {
-            return emptyList()
-        }
-        val code = GenerateRequire(requireMessage, converter).code()
-        return listOf(code)
-    }
+    override fun codeFor(type: TypeName): List<SingleOptionCode> =
+        allRequireMessages.find { it.id == type }
+            ?.let { listOf(GenerateRequire(it, converter).code()) }
+            ?: emptyList()
 }
 
 /**

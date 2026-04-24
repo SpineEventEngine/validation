@@ -32,7 +32,8 @@ import io.spine.dependency.test.JUnit.Jupiter
 import io.spine.gradle.report.license.LicenseReporter
 
 plugins {
-    java
+    kotlin("jvm")
+    id("module-testing")
     protobuf
     `java-test-fixtures`
     prototap
@@ -40,7 +41,8 @@ plugins {
 LicenseReporter.generateReportIn(project)
 
 dependencies {
-    implementation(project(":context"))
+    val contextProject = project(":context")
+    implementation(contextProject)
     implementation(project(":jvm-runtime"))
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
@@ -49,6 +51,7 @@ dependencies {
     testFixturesImplementation(Compiler.api)
     testFixturesImplementation(Compiler.testlib)
     testFixturesImplementation(Jupiter.artifact { params })
+    testFixturesImplementation(contextProject)
 }
 
 protobuf {

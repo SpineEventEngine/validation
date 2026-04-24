@@ -94,11 +94,6 @@ public const val VALIDATE: String = "validate"
 public const val IF_INVALID: String = "if_invalid"
 
 /**
- * The name of the `(when)` option.
- */
-public const val WHEN: String = "when"
-
-/**
  * The name of the `(goes)` option.
  */
 public const val GOES: String = "goes"

@@ -46,7 +46,7 @@ import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
@@ -58,9 +58,7 @@ import io.spine.tools.validation.RequiredField
 /**
  * The generator for `(required)` option.
  */
-internal class RequiredGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class RequiredGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(required)` fields in the current compilation process.

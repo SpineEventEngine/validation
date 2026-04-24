@@ -37,7 +37,7 @@ import io.spine.tools.compiler.protobuf.descriptor
  * The descriptor should be marked with the `(default_message)` option.
  * If the option is absent, an empty message is returned.
  */
-internal val Descriptor.defaultMessage: String
+public val Descriptor.defaultMessage: String
     get() = options.getExtension(OptionsProto.defaultMessage)
 
 /**

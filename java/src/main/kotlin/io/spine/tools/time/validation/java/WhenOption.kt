@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation.option
+package io.spine.tools.time.validation.java
 
+import com.google.auto.service.AutoService
 import com.google.protobuf.Timestamp
 import io.spine.core.External
 import io.spine.core.Subscribe
@@ -46,7 +47,7 @@ import io.spine.tools.compiler.ast.FieldType
 import io.spine.tools.compiler.ast.File
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
 import io.spine.tools.compiler.ast.extractMessageType
-import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isRepeatedMessage
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
@@ -56,6 +57,13 @@ import io.spine.tools.compiler.jvm.javaClass
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.TypeSystem
+import io.spine.tools.time.validation.TimeFieldType
+import io.spine.tools.time.validation.TimeFieldType.TFT_TEMPORAL
+import io.spine.tools.time.validation.TimeFieldType.TFT_TIMESTAMP
+import io.spine.tools.time.validation.TimeFieldType.TFT_UNKNOWN
+import io.spine.tools.time.validation.WhenField
+import io.spine.tools.time.validation.event.WhenFieldDiscovered
+import io.spine.tools.time.validation.event.whenFieldDiscovered
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
 import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
@@ -64,13 +72,29 @@ import io.spine.tools.validation.ErrorPlaceholder.WHEN_IN
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.tools.validation.TimeFieldType
-import io.spine.tools.validation.TimeFieldType.TFT_TEMPORAL
-import io.spine.tools.validation.TimeFieldType.TFT_TIMESTAMP
-import io.spine.tools.validation.TimeFieldType.TFT_UNKNOWN
-import io.spine.tools.validation.WhenField
-import io.spine.tools.validation.event.WhenFieldDiscovered
-import io.spine.tools.validation.event.whenFieldDiscovered
+import io.spine.tools.validation.java.ValidationOption
+import io.spine.tools.validation.java.generate.OptionGenerator
+
+/**
+ * Extends the Java validation with code generation for the `(when)` option.
+ */
+@AutoService(ValidationOption::class)
+public class WhenOption : ValidationOption {
+
+    public companion object {
+
+        /**
+         * The name of the option as it appears in the Protobuf definition.
+         */
+        public const val NAME: String = "when"
+    }
+
+    override val reactions: Set<Reaction<*>> = setOf(WhenReaction())
+
+    override val view: Set<Class<out View<*, *, *>>> = setOf(WhenFieldView::class.java)
+
+    override val generator: OptionGenerator = WhenGenerator()
+}
 
 /**
  * Controls whether a field should be validated with the `(when)` option.
@@ -93,7 +117,7 @@ internal class WhenReaction : Reaction<FieldOptionDiscovered>() {
 
     @React
     override fun whenever(
-        @External @Where(field = OPTION_NAME, equals = WHEN)
+        @External @Where(field = OPTION_NAME, equals = WhenOption.NAME)
         event: FieldOptionDiscovered
     ): EitherOf2<WhenFieldDiscovered, NoReaction> {
         val field = event.subject
@@ -107,7 +131,7 @@ internal class WhenReaction : Reaction<FieldOptionDiscovered>() {
         }
 
         val message = option.errorMsg.ifEmpty { option.descriptorForType.defaultMessage }
-        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, WHEN)
+        message.checkPlaceholders(SUPPORTED_PLACEHOLDERS, field, file, WhenOption.NAME)
 
         return whenFieldDiscovered {
             id = field.ref
@@ -123,7 +147,7 @@ private fun checkFieldType(field: Field, typeSystem: TypeSystem, file: File): Ti
     val timeType = typeSystem.determineTimeType(field.type)
     Compilation.check(timeType != TFT_UNKNOWN, file, field.span) {
         "The field type `${field.type.name}` of the `${field.qualifiedName}` field" +
-                " is not supported by the `(${WHEN})` option. Supported field types:" +
+                " is not supported by the `(${WhenOption.NAME})` option. Supported field types:" +
                 " `google.protobuf.Timestamp` and types introduced in the `spine.time` package" +
                 " that describe time-related concepts."
     }
@@ -149,14 +173,6 @@ private fun TypeSystem.determineTimeType(fieldType: FieldType): TimeFieldType {
         else -> TFT_UNKNOWN
     }
 }
-
-/**
- * Tells if this [FieldType] represents a `repeated` of messages.
- *
- * The property is `public` because the option generator also uses it.
- */
-public val FieldType.isRepeatedMessage: Boolean
-    get() = isList && list.isMessage
 
 /**
  * A view of a field that is marked with the `(when)` option.

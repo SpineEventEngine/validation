@@ -51,7 +51,7 @@ import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.MessageScope.message
-import io.spine.tools.validation.java.generate.OptionGenerator
+import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
@@ -63,9 +63,7 @@ import io.spine.tools.validation.GoesField
 /**
  * The generator for the `(goes)` option.
  */
-internal class GoesGenerator(
-    private val converter: JavaValueConverter
-) : OptionGenerator() {
+internal class GoesGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(goes)` fields in the current compilation process.

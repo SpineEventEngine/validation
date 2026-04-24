@@ -80,6 +80,7 @@ val applyCoreJvmCompiler = setOf(
     "extensions",
     "consumer-dependency",
     "runtime",
+    "time-validating",
     "validating"
 )
 

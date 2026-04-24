@@ -24,16 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.dependency.artifact
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.local.Base
-import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.TestLib
+import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.Validation
 import io.spine.dependency.test.JUnit
-import io.spine.dependency.test.JUnit.Jupiter
 import io.spine.dependency.test.Kotest
 import io.spine.dependency.test.Truth
 import io.spine.gradle.report.license.LicenseReporter
@@ -61,8 +58,6 @@ dependencies {
         testFixturesImplementation(it)
     }
 
-    testImplementation(Jupiter.artifact { params })
-    testImplementation(TestLib.lib)
     testImplementation(Time.lib)
     testImplementation(Compiler.api)
 }

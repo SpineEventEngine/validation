@@ -38,6 +38,7 @@ import java.util.ServiceLoader
  * 1. [JavaValidationRenderer][io.spine.tools.validation.java.JavaValidationRenderer]
  *   is the main renderer for Java. It renders the validation
  *   code for all options that perform an assertion upon a message field value.
+ *
  * 2. [SetOnceRenderer][io.spine.tools.validation.java.setonce.SetOnceRenderer]
  *   is responsible for the validation code of `(set_once)` option.
  *   It is a standalone renderer because it significantly differs from the rest of constraints.
@@ -47,7 +48,7 @@ import java.util.ServiceLoader
 @Suppress("unused") // Accessed via reflection.
 public open class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
-        JavaValidationRenderer(customOptions.map { it.generator }),
+        JavaValidationRenderer(customGenerators = customOptions.map { it.generator }),
         SetOnceRenderer()
     ),
     views = customOptions.flatMap { it.view }.toSet(),

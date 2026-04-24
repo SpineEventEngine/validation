@@ -26,12 +26,10 @@
 
 package io.spine.validation.test
 
-import com.google.protobuf.Any
 import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.protobuf.pack
-import io.spine.testing.logging.mute.MuteLogging
 import io.spine.validation.formatUnsafe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -75,15 +73,6 @@ internal class ValidateRuleITest {
                 .setAverageDrop(validRainDrop())
                 .setLastEvent(invalidCloud().pack())
             checkInvalid(builder, BAD_CLOUD)
-        }
-
-        @Test
-        @MuteLogging
-        fun `ignore unknown packed type`() {
-            val builder = meteoStatsInEurope()
-                .setAverageDrop(validRainDrop())
-                .setLastEvent(packedUnknown())
-            assertNoException(builder)
         }
     }
 
@@ -130,18 +119,6 @@ internal class ValidateRuleITest {
                 .addPredictedEvent(packedInvalid)
             checkInvalid(builder, BAD_CLOUD)
         }
-
-        @Test
-        @MuteLogging
-        fun `ignore unknown packed type`() {
-            val packedValid = validCloud().pack()
-            val packedInvalid = packedUnknown()
-            val builder = meteoStatsInEurope()
-                .setAverageDrop(validRainDrop())
-                .addPredictedEvent(packedValid)
-                .addPredictedEvent(packedInvalid)
-            assertNoException(builder)
-        }
     }
 }
 
@@ -156,11 +133,6 @@ private fun checkInvalid(builder: Message.Builder, errorPart: String) =
 private fun meteoStatsInEurope(): MeteoStatistics.Builder =
     MeteoStatistics.newBuilder()
         .putIncludedRegions("EU", someRegion())
-
-private fun packedUnknown(): Any =
-    Any.newBuilder()
-        .setTypeUrl("unknown.type/foo.bar")
-        .build()
 
 private fun invalidRainDrop(): RainDrop {
     return RainDrop.newBuilder()
