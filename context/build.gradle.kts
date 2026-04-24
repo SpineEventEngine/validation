@@ -35,7 +35,7 @@ buildscript {
                 force(
                     io.spine.dependency.local.Logging.grpcContext,
                     io.spine.dependency.lib.JetBrainsAnnotations.lib,
-                    )
+                )
             }
         }
     }
