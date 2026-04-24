@@ -27,7 +27,6 @@
 import io.spine.dependency.boms.BomsPlugin
 import io.spine.dependency.local.Time
 import io.spine.gradle.report.license.LicenseReporter
-import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
 
 plugins {
     kotlin("jvm")
