@@ -36,7 +36,6 @@ rootProject.name = "validation"
 include(
     "context",
     "context-tests",
-    "time-validation-tests",
     "gradle-plugin",
     "java",
     "jvm-runtime",
@@ -47,8 +46,6 @@ include(
     ":tests:consumer-dependency",
     ":tests:runtime",
     ":tests:vanilla",
-    ":tests:time-consumer",
-    ":tests:time-validating",
     ":tests:validating",
     ":tests:validator",
     ":tests:validator-dependency",

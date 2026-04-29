@@ -3,7 +3,6 @@ syntax = "proto3";
 package spine.validation.test;
 
 import "spine/options.proto";
-import "spine/time_options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.validation.test";
@@ -18,8 +17,6 @@ message Player {
         regex: "[\\w\\-.\\s]{2,}"
         error_msg: "Invalid T-Shirt name."
     }];
-
-    google.protobuf.Timestamp started_career_in = 2 [(when).in = PAST];
 }
 
 message Team {
