@@ -31,17 +31,17 @@ This allows building more complex models using more entities and events.
 ### `Reaction`
 
 Subscribes to `*OptionDiscovered` events and filters them by option name.
-See [Implement the `Reaction`](implement-the-reaction.md) for details.
+See “[Implement the `Reaction`](implement-the-reaction.md)” for details.
 
 ### `View`
 
 Accumulates events emitted by the `Reaction` so the `Generator` can query them.
-See [Implement the `View`](implement-the-view.md) for details.
+See “[Implement the `View`](implement-the-view.md)” for details.
 
 ### `Generator`
 
 Produces Java code for every application of the option within a message type.
-See [Implement the `Generator`](implement-the-generator.md) for details.
+See “[Implement the `Generator`](implement-the-generator.md)” for details.
 
 ## Running example
 

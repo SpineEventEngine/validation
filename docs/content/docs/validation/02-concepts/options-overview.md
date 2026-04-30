@@ -60,7 +60,7 @@ Generated messages and builders provide a small validation-focused API surface:
 - `buildPartial()` builds without validation.
 - `validate()` checks an existing instance and returns `Optional<ValidationError>`.
 
-See [Using the generated code](../01-getting-started/generated-code.md) for Java and Kotlin examples.
+See “[Using the generated code](../01-getting-started/generated-code.md)” for Java and Kotlin examples.
 
 
 ## What does not happen
