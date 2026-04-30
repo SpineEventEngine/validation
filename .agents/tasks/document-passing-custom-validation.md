@@ -6,8 +6,8 @@ This should be a new section which comes after the "Implement the `Generator`" s
 
 ## Current implementation details
 
-A `ValidationOption` descendants are discovered using the `ServiceLoader` mechanism
-by `JavaValidationPlugin` class. This class is a plugin to the Spine Compiler.
+`ValidationOption` implementations are discovered using the `ServiceLoader` mechanism
+by the `JavaValidationPlugin` class. This class is a plugin to the Spine Compiler.
 Such plugins are passed to the Compiler using the user's classpath in a Gradle build file.
 The Validation Gradle plugin arranges this when it is added to a Gradle project.
 In order to be discovered, a `ValidationOption` must be present in the user's classpath too.
