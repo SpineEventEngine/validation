@@ -50,9 +50,7 @@ filtered view is passed to a helper that composes the actual `CodeBlock`.
 Each `SingleOptionCode` wraps a `CodeBlock` that is inlined directly into the generated
 `validate()` method, so the code must be a valid Java statement or block.
 
-For complete context, see
-[`WhenGenerator.kt`](https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt)
-in the Spine Time repository.
+For complete context, see [`WhenGenerator.kt`][when-generator-kt] in the Spine Time repository.
 
 ## Generated code paths
 
@@ -62,17 +60,20 @@ the `(when)` option:
 - For a single message field, it generates one validation block for the field value.
 - For a repeated message field, it generates a `for` loop and validates each element inside
   that loop.
+- For a map field, it generates a `for` loop over the map's `.values()` and validates each
+  value inside that loop.
 
-Both branches delegate to the same `validateTime(...)` helper, so the time comparison,
+All three branches delegate to the same `validateTime(...)` helper, so the time comparison,
 violation construction, and placeholder handling stay in one place. The difference is only
-where the checked value comes from: the field getter for a single message, or the loop variable
-for each repeated element.
+where the checked value comes from: the field getter for a single message, the loop variable
+for each repeated element, or the map value variable for each map entry.
 
-See the full source around
-[`GenerateWhen.code()`](https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt#L105-L117)
-for the exact generated Java shape.
+See the full source around [`GenerateWhen.code()`][when-generator-kt] for the exact generated
+Java shape.
 
 ## What's next
 
 - [Pass the option to the Compiler](pass-to-compiler.md)
 - [Back to Custom Validation](../)
+
+[when-generator-kt]: https://github.com/SpineEventEngine/time/blob/5268c2386f2dd4f400a7fb6885474c2945475b3a/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt
