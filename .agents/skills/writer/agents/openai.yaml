@@ -1,5 +1,4 @@
 interface:
   display_name: "Writer"
   short_description: "Write and update user/developer docs"
-  default_prompt: "Write or revise documentation in this repository (for example: README.md, docs/**, CONTRIBUTING.md, and API documentation/KDoc). Follow local documentation guidelines in .agents/*.md, keep changes concise and actionable, and include concrete examples and commands where appropriate."
-
+  default_prompt: "Write or revise documentation in this repository (for example: README.md, docs/**, CONTRIBUTING.md, and API documentation/KDoc). Follow local documentation guidelines in .agents/*.md, keep the current docs sidenav.yml in sync with content changes, do not update historical version docs unless explicitly asked, keep changes concise and actionable, and include concrete examples and commands where appropriate."
