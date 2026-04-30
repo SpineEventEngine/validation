@@ -1,21 +1,18 @@
 ---
 title: Declare the option in Protobuf
-description: How to define the option message, domain event, and view state in Protobuf.
+description: How to define the option message in Protobuf.
 headline: Documentation
 ---
 
 # Declare the option in Protobuf
 
-A custom validation option requires three distinct Protobuf definitions:
-
-1. The option message itself (extends a standard descriptor option type).
-2. A domain event emitted by the Reaction when a valid option application is found.
-3. A view state that persists the event data for the Generator to query.
+An option is declared as a Protobuf `extend` block targeting one of the standard
+descriptor option types.
 
 ## Declare the option message
 
 An option is declared as a Protobuf `extend` block targeting one of the standard
-descriptor option types: `google.protobuf.FieldOptions`, `MessageOptions`, and so on.
+descriptor option types — `google.protobuf.FieldOptions`, `MessageOptions`, and so on.
 
 ```protobuf
 extend google.protobuf.FieldOptions {
@@ -53,54 +50,6 @@ If you omit the `package` declaration from the `.proto` file that defines the ex
 can write `[(when).in = FUTURE]` instead of `[(spine.time.when).in = FUTURE]`. This is a
 deliberate trade-off: shorter option syntax at the cost of no package-level namespacing. The
 `time_options.proto` file explains this choice in its header comment.
-
-## Declare the event
-
-The Reaction emits a domain event carrying all data that the View and Generator need. The event
-travels through the compilation bounded context, so it must be a proper Protobuf message.
-
-```protobuf
-message WhenFieldDiscovered {
-
-    compiler.FieldRef id = 1;
-
-    compiler.Field subject = 2;
-
-    string error_message = 3;
-
-    Time bound = 4;
-
-    spine.tools.time.validation.TimeFieldType type = 5;
-}
-```
-
-The `id` field must be the **first** field and must be the same type that the View uses as its
-entity identity (`compiler.FieldRef` in this case). The framework uses the identity field to
-route the event to the correct View instance.
-
-## Declare the view state
-
-The view state is the persistent accumulator queried by the Generator. It mirrors the event
-fields and is marked as a Spine projection:
-
-```protobuf
-message WhenField {
-    option (entity).kind = PROJECTION;
-
-    compiler.FieldRef id = 1;
-
-    compiler.Field subject = 2;
-
-    string error_message = 3;
-
-    Time bound = 4;
-
-    spine.tools.time.validation.TimeFieldType type = 5;
-}
-```
-
-The `id` field type must match the event `id` type exactly. Without this match, the framework
-cannot route `WhenFieldDiscovered` events to the correct `WhenField` view instance.
 
 ## What's next
 

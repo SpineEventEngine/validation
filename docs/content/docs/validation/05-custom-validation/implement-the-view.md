@@ -1,13 +1,13 @@
 ---
-title: Implement the View
-description: How to implement a View that accumulates option data for code generation.
+title: 'Implement the `View`'
+description: 'How to implement a `View` that accumulates option data for code generation.'
 headline: Documentation
 ---
 
-# Implement the View
+# Implement the `View`
 
-The View is a Spine projection that persists the data emitted by the Reaction. The Generator
-queries the View to obtain the information it needs to produce Java code.
+The `View` is a Spine projection that persists the data emitted by the `Reaction`. The `Generator`
+queries the `View` to obtain the information it needs to produce Java code.
 
 ## Class declaration
 
@@ -37,13 +37,13 @@ fun on(e: WhenFieldDiscovered) = alter {
 
 The `@Subscribe` annotation registers `on` as the event handler. The `alter { }` DSL block
 provides access to the state builder; any assignments inside the block are applied atomically
-when the block exits. One `@Subscribe` method is required for each event type the View handles.
+when the block exits. One `@Subscribe` method is required for each event type the `View` handles.
 
-Views only accumulate data. Validation and business logic belong in the Reaction; by the time
-an event reaches the View, the Reaction has already confirmed that the option application is
+`View`s only accumulate data. Validation and business logic belong in the `Reaction`; by the time
+an event reaches the `View`, the `Reaction` has already confirmed that the option application is
 correct.
 
 ## What's next
 
-- [Implement the Generator](implement-the-generator.md)
+- [Implement the `Generator`](implement-the-generator.md)
 - [Back to Custom Validation](../)

@@ -1,12 +1,12 @@
 ---
-title: Implement the Generator
+title: 'Implement the `Generator`'
 description: How to implement an OptionGenerator that produces Java validation code.
 headline: Documentation
 ---
 
-# Implement the Generator
+# Implement the `Generator`
 
-The Generator produces Java code for every application of the option within a compiled message
+The `Generator` produces Java code for every application of the option within a compiled message
 type. The framework calls `codeFor` once per message type and inlines each returned
 `SingleOptionCode` into the generated `validate()` method.
 
@@ -21,7 +21,7 @@ value to a Java expression — for example, to format a field value as a JSON st
 message. This base class injects a `JavaValueConverter` that handles the conversion. Use the
 plain `OptionGenerator` base class when no value conversion is needed.
 
-## Querying the View
+## Querying the `View`
 
 ```kotlin
 private val allWhenFields by lazy {
@@ -29,7 +29,7 @@ private val allWhenFields by lazy {
 }
 ```
 
-`querying` is injected by the framework and provides read access to all accumulated View
+`querying` is injected by the framework and provides read access to all accumulated `View`
 instances. The `by lazy` delegate is required because `querying` is not available until the
 framework initialises the generator; accessing it during construction causes an error. The
 query result is cached after the first call.

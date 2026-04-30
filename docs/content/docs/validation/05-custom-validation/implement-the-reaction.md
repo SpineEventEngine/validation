@@ -1,12 +1,12 @@
 ---
-title: Implement the Reaction
-description: How to implement a Reaction that discovers and validates a custom option.
+title: 'Implement the `Reaction`'
+description: 'How to implement a `Reaction` that discovers and validates a custom option.'
 headline: Documentation
 ---
 
-# Implement the Reaction
+# Implement the `Reaction`
 
-The Reaction is the entry point for option handling. It subscribes to
+The `Reaction` is the entry point for option handling. It subscribes to
 `FieldOptionDiscovered` events (or one of the other `*OptionDiscovered` variants),
 filters them by option name, validates the option application, and emits a domain event
 when the option is applied correctly.
@@ -17,11 +17,11 @@ when the option is applied correctly.
 internal class WhenReaction : Reaction<FieldOptionDiscovered>()
 ```
 
-The type parameter is the event the Reaction listens to. For a field-level option, use
+The type parameter is the event the `Reaction` listens to. For a field-level option, use
 `FieldOptionDiscovered`. Other variants include `FileOptionDiscovered`,
 `MessageOptionDiscovered`, and `OneofOptionDiscovered`.
 
-## Reaction method
+## `Reaction` method
 
 ```kotlin
 @React
@@ -61,7 +61,7 @@ override fun whenever(
 - `@Where(field = OPTION_NAME, equals = WhenOption.NAME)` narrows the subscription so that
   `whenever` receives only events where the option name equals `"when"`. `OPTION_NAME` is a
   constant from `io.spine.tools.validation` that names the filter field. Without this filter,
-  the Reaction would be called for every field option discovered during compilation.
+  the `Reaction` would be called for every field option discovered during compilation.
 
 ### Return type
 
@@ -118,5 +118,5 @@ the option does not support. `.asA()` wraps the event in the `EitherOf2` left sl
 
 ## What's next
 
-- [Implement the View](implement-the-view.md)
+- [Implement the `View`](implement-the-view.md)
 - [Back to Custom Validation](../)

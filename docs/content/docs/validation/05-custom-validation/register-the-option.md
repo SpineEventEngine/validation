@@ -9,7 +9,7 @@ headline: Documentation
 Two registrations are required before the build plugin can use a custom option:
 
 1. Register the Protobuf extension so the descriptor machinery can resolve it at runtime.
-2. Wire up the Reaction, View, and Generator via `ValidationOption`.
+2. Wire up the `Reaction`, `View`, and `Generator` via `ValidationOption`.
 
 ## Register the proto extension
 
@@ -65,7 +65,7 @@ public class WhenOption : ValidationOption {
 Key points:
 
 - `NAME` is a `const val` in the companion object. Its value must exactly match the field name
-  used in the `extend` block (for example, `when`). The Reaction uses this constant in its
+  used in the `extend` block (for example, `when`). The `Reaction` uses this constant in its
   `@Where` filter to subscribe only to events for this option.
 - `reactions` can contain multiple `Reaction` instances; `view` can list multiple `View` classes.
 - `generator` accepts exactly **one** `OptionGenerator`. Only one generator per
@@ -77,5 +77,5 @@ compilation.
 
 ## What's next
 
-- [Implement the Reaction](implement-the-reaction.md)
+- [Declare the event and view state](declare-event-and-view.md)
 - [Back to Custom Validation](../)

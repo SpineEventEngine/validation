@@ -66,11 +66,13 @@
           file_path: 05-custom-validation/declare-the-option
         - page: Register the option
           file_path: 05-custom-validation/register-the-option
-        - page: Implement the Reaction
+        - page: Declare the event and view state
+          file_path: 05-custom-validation/declare-event-and-view
+        - page: 'Implement the `Reaction`'
           file_path: 05-custom-validation/implement-the-reaction
-        - page: Implement the View
+        - page: 'Implement the `View`'
           file_path: 05-custom-validation/implement-the-view
-        - page: Implement the Generator
+        - page: 'Implement the `Generator`'
           file_path: 05-custom-validation/implement-the-generator
     - page: Developer’s guide
       key: 09-developers-guide
