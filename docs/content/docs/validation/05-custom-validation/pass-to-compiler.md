@@ -73,5 +73,5 @@ in the Spine Time repository.
 
 ## What's next
 
-- [Back to Custom Validation](../)
+- [Summary](summary.md)
 - [Architecture](../../09-developers-guide/architecture.md)

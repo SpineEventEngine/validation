@@ -76,6 +76,8 @@
           file_path: 05-custom-validation/implement-the-generator
         - page: Pass the option to the Compiler
           file_path: 05-custom-validation/pass-to-compiler
+        - page: Summary
+          file_path: 05-custom-validation/summary
     - page: Developer’s guide
       key: 09-developers-guide
       children:
