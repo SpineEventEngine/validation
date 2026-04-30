@@ -75,7 +75,26 @@ Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLo
 `@AutoService` annotation must be present and the annotation processor must run during
 compilation.
 
+For Kotlin implementations, configure AutoService's KSP processor in the module that contains the
+`@AutoService` classes:
+
+```kotlin
+plugins {
+    id("com.google.devtools.ksp")
+}
+
+dependencies {
+    compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+    ksp("dev.zacsweers.autoservice:auto-service-ksp:1.2.0")
+}
+```
+
+If the provider is written in Java, use AutoService's `annotationProcessor` dependency instead of
+KSP. See the [AutoService documentation][auto-service] for Gradle examples.
+
 ## What's next
 
 - [Declare the event and view state](declare-event-and-view.md)
 - [Back to Custom Validation](../)
+
+[auto-service]: https://github.com/google/auto/tree/main/service
