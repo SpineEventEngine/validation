@@ -60,6 +60,4 @@ future value.
 - [Declare the event and view state](declare-event-and-view.md)
 - [Implement the `Reaction`](implement-the-reaction.md)
 - [Implement the `View`](implement-the-view.md)
-- [Implement the `Generator`](implement-the-generator.md)
-- [Using validators](../04-validators/)
-- Learn where this plugs in: [Architecture](../09-developers-guide/architecture.md).
+- [Implement the `Generator`](implement-the-generator.md).
