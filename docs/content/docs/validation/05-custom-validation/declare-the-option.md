@@ -44,12 +44,13 @@ The `(default_message)` option on `TimeOption` sets the error template used when
 does not supply a custom `error_msg`. Field number `73819` is the globally registered extension
 number for this option; every extension must have a unique number in the allowed range.
 
+{{% note-block class="note" %}}
 ### Packaging trade-off
 
 If you omit the `package` declaration from the `.proto` file that defines the extension, callers
 can write `[(when).in = FUTURE]` instead of `[(spine.time.when).in = FUTURE]`. This is a
-deliberate trade-off: shorter option syntax at the cost of no package-level namespacing. The
-`time_options.proto` file explains this choice in its header comment.
+deliberate trade-off: shorter option syntax at the cost of no package-level namespacing.
+{{% /note-block %}}
 
 ## What's next
 
