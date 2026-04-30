@@ -72,8 +72,10 @@
           file_path: 05-custom-validation/implement-the-reaction
         - page: 'Implement the `View`'
           file_path: 05-custom-validation/implement-the-view
-        - page: 'Implement the `Generator`'
+        - page: ‘Implement the `Generator`’
           file_path: 05-custom-validation/implement-the-generator
+        - page: Pass the option to the Compiler
+          file_path: 05-custom-validation/pass-to-compiler
     - page: Developer’s guide
       key: 09-developers-guide
       children:

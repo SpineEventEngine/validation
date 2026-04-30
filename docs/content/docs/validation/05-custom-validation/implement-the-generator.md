@@ -74,5 +74,5 @@ for the exact generated Java shape.
 
 ## What's next
 
+- [Pass the option to the Compiler](pass-to-compiler.md)
 - [Back to Custom Validation](../)
-- [Architecture](../09-developers-guide/architecture.md)
