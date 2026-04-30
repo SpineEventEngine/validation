@@ -50,15 +50,27 @@ filtered view is passed to a helper that composes the actual `CodeBlock`.
 Each `SingleOptionCode` wraps a `CodeBlock` that is inlined directly into the generated
 `validate()` method, so the code must be a valid Java statement or block.
 
-## Inner-class pattern
+For complete context, see
+[`WhenGenerator.kt`](https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt)
+in the Spine Time repository.
 
-`GenerateWhen` is a private nested class that separates two concerns:
+## Generated code paths
 
-- The generator (`WhenGenerator`) decides *which* view entries to process.
-- The nested class (`GenerateWhen`) decides *how* to turn one view entry into a code string.
+The `GenerateWhen.code()` method chooses the Java code shape for a single application of
+the `(when)` option:
 
-This pattern keeps `codeFor` readable when the code generation logic is non-trivial. For simple
-options, the nested class can be replaced by a local function or lambda.
+- For a single message field, it generates one validation block for the field value.
+- For a repeated message field, it generates a `for` loop and validates each element inside
+  that loop.
+
+Both branches delegate to the same `validateTime(...)` helper, so the time comparison,
+violation construction, and placeholder handling stay in one place. The difference is only
+where the checked value comes from: the field getter for a single message, or the loop variable
+for each repeated element.
+
+See the full source around
+[`GenerateWhen.code()`](https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt#L105-L117)
+for the exact generated Java shape.
 
 ## What's next
 
