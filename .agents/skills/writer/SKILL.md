@@ -49,6 +49,11 @@ description: >
 
 - Follow `.agents/documentation-guidelines.md` and `.agents/documentation-tasks.md`.
 - Use fenced code blocks for commands and examples; format file/dir names as code.
+- In Markdown files, prefer footnote-style reference links for external `https://`
+  targets instead of inline links. Write readable body text like
+  `[label][short-id]`, then place the URL definition near the end of the file,
+  such as `[short-id]: https://example.com/long/path`. Keep reference IDs short
+  and descriptive. Inline links are still fine for local relative paths.
 - Avoid widows, runts, orphans, and rivers by reflowing paragraphs when needed.
 
 ## Make docs actionable
