@@ -58,7 +58,20 @@
         - page: Using `ValidatorRegistry`
           file_path: 04-validators/validator-registry
     - page: Custom validation
-      file_path: 05-custom-validation
+      key: 05-custom-validation
+      children:
+        - page: Custom validation
+          file_path: 05-custom-validation
+        - page: Declare the option in Protobuf
+          file_path: 05-custom-validation/declare-the-option
+        - page: Register the option
+          file_path: 05-custom-validation/register-the-option
+        - page: Implement the Reaction
+          file_path: 05-custom-validation/implement-the-reaction
+        - page: Implement the View
+          file_path: 05-custom-validation/implement-the-view
+        - page: Implement the Generator
+          file_path: 05-custom-validation/implement-the-generator
     - page: Developer’s guide
       key: 09-developers-guide
       children:
