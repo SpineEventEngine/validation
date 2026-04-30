@@ -6,7 +6,7 @@ headline: Documentation
 
 # Custom validation
 
-Users can extend the library by providing custom Protobuf options and code generation logic.
+Users can extend the Validation library by providing custom Protobuf options and code generation logic.
 
 Follow these steps to create a custom option:
 
@@ -42,6 +42,16 @@ See [Implement the View](implement-the-view.md) for details.
 Produces Java code for every application of the option within a message type.
 See [Implement the Generator](implement-the-generator.md) for details.
 
+## Running example
+
+Throughout this section, the `(when)` option from the
+[Spine Time](https://github.com/SpineEventEngine/time) library serves as the running example.
+Spine Time is a library of Protobuf-based date and time types for business models. It defines
+its own Protobuf message types — such as `LocalDate`, `LocalTime`, and `ZonedDateTime` — and
+provides converters to and from the standard Java Time API. Among other features, it ships a
+`(when)` validation option that constrains a time-typed field to hold either a past or a
+future value.
+
 ## What’s next
 
 - [Declare the option in Protobuf](declare-the-option.md)
@@ -51,5 +61,3 @@ See [Implement the Generator](implement-the-generator.md) for details.
 - [Implement the Generator](implement-the-generator.md)
 - [Using validators](../04-validators/)
 - Learn where this plugs in: [Architecture](../09-developers-guide/architecture.md).
-
-The `:tests:extensions` module contains a full example of the custom `(currency)` option.

@@ -12,8 +12,6 @@ A custom validation option requires three distinct Protobuf definitions:
 2. A domain event emitted by the Reaction when a valid option application is found.
 3. A view state that persists the event data for the Generator to query.
 
-The examples below are taken from the `(when)` option in `docs/_time/`.
-
 ## Declare the option message
 
 An option is declared as a Protobuf `extend` block targeting one of the standard
