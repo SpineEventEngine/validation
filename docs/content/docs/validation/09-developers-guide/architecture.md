@@ -24,4 +24,4 @@ The workflow is the following:
 ## What’s next
 
 - See the project layout: [Key modules](key-modules.md).
-- If you need organization-specific rules: [Custom validation](../08-custom-validation/).
+- If you need organization-specific rules: [Custom validation](../05-custom-validation/).

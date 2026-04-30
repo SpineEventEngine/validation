@@ -91,7 +91,7 @@ which message was validated at the top level.
 If built-in options are not enough, you can add organization-specific options and generate
 code for them.
 
-See [Custom validation](../08-custom-validation/) for the workflow and a reference example.
+See [Custom validation](../05-custom-validation/) for the workflow and a reference example.
 
 
 ## What’s next
@@ -107,4 +107,4 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
 - [Built-in options](../03-built-in-options/)
 - [Using validators](../04-validators/)
 - Add custom validation options:
-  [Custom validation](../08-custom-validation/).
+  [Custom validation](../05-custom-validation/).

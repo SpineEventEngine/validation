@@ -26,7 +26,7 @@ Validators are implemented via `io.spine.validation.MessageValidator<M>` and exe
 Prefer `.proto` options when you can:
 
 1. Use [built-in options](../03-built-in-options/).
-2. If built-ins are not enough, implement [custom validation options](../08-custom-validation/).
+2. If built-ins are not enough, implement [custom validation options](../05-custom-validation/).
 
 Use `MessageValidator` when:
 
@@ -107,7 +107,7 @@ their violations together.
 ## What’s next
 - [Implement a validator](implement-a-validator.md)
 - [Using `ValidatorRegistry`](validator-registry.md)
-- [Custom validation](../08-custom-validation/)
+- [Custom validation](../05-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
 
 [auto-service]: https://github.com/google/auto/tree/main/service

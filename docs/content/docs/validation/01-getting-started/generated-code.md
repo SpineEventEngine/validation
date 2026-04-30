@@ -110,4 +110,4 @@ such as API requests or deserialized data, for example, when building an anticor
 - Learn the core concepts:
   [Concepts](../02-concepts/).
 - If you need organization-specific rules:
-  [Custom validation](../08-custom-validation/).
+  [Custom validation](../05-custom-validation/).

@@ -136,7 +136,7 @@ to the nested field in error (for example, to `starts_at.seconds`).
 ## What’s next
 
 - [Using `ValidatorRegistry`](validator-registry.md)
-- [Custom validation](../08-custom-validation/)
+- [Custom validation](../05-custom-validation/)
 - [Architecture](../09-developers-guide/architecture.md)
 
 

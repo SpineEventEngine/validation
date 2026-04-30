@@ -111,4 +111,4 @@ message Temperature {
 ## What’s next
 
 - [Built-in options](../03-built-in-options/)
-- [Custom validation](../08-custom-validation/)
+- [Custom validation](../05-custom-validation/)
