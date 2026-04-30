@@ -1,10 +1,10 @@
 ---
-title: Custom Validation
+title: Overview
 description: Extending the library with custom options and code generation.
 headline: Documentation
 ---
 
-# Custom validation
+# Overview
 
 Users can extend the Validation library by providing custom Protobuf options and code generation logic.
 

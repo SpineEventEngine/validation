@@ -60,7 +60,7 @@
     - page: Custom validation
       key: 05-custom-validation
       children:
-        - page: Custom validation
+        - page: Overview
           file_path: 05-custom-validation
         - page: Declare the option in Protobuf
           file_path: 05-custom-validation/declare-the-option
