@@ -3,7 +3,7 @@ name: writer
 description: >
   Write, edit, and restructure user-facing and developer-facing documentation.
   Use when asked to create/update docs such as `README.md`, `docs/**`, and
-  other Markdown documentation; 
+  other Markdown documentation, including keeping docs navigation data in sync;
   when drafting tutorials, guides, troubleshooting pages, or migration notes; and
   when improving inline API documentation (KDoc) and examples.
 ---
@@ -23,6 +23,27 @@ description: >
   - `README.md`: project entry point and “what is this?”.
   - `docs/`: longer-form docs (follow existing conventions in that tree).
   - Source KDoc: API usage, examples, and semantics that belong with the code.
+
+## Keep docs navigation in sync
+
+- When adding, removing, moving, or renaming a page under
+  `docs/content/docs/<section>/`, keep the current version's matching
+  `sidenav.yml` in sync.
+- Use `docs/data/versions.yml` to identify the current documentation version for
+  that section. The current version is the entry with `is_main: true`; its
+  `version_id` maps to `docs/data/docs/<section>/<version_id>/sidenav.yml`.
+- Do not update historical version entries or their navigation files unless the
+  user explicitly asks to edit that historical version.
+- Map page files to `file_path` values relative to the current version's
+  `content_path`, without `.md`; `_index.md` maps to its directory path, such as
+  `01-getting-started/_index.md` -> `01-getting-started`.
+- Keep each `page` label aligned with the page frontmatter `title` unless the
+  existing navigation intentionally uses a shorter reader-facing label.
+- Preserve the existing ordering, nesting, keys, comments, and YAML quoting
+  style. Remove nav entries for deleted pages and update `file_path` values for
+  moved pages.
+- If a docs content change should not appear in navigation, say so explicitly in
+  the final response.
 
 ## Follow local documentation conventions
 
@@ -48,4 +69,3 @@ description: >
 
 - For code changes, follow `.agents/running-builds.md`.
 - For documentation-only changes in Kotlin/Java sources, prefer `./gradlew dokka`.
-
