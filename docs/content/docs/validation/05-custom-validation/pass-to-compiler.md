@@ -74,4 +74,4 @@ in the Spine Time repository.
 ## What's next
 
 - [Summary](summary.md)
-- [Architecture](../../09-developers-guide/architecture.md)
+- [Architecture](../09-developers-guide/architecture.md)
