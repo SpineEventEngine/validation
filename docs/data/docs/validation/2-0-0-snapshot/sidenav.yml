@@ -64,8 +64,6 @@
           file_path: 05-custom-validation
         - page: Declare the option in Protobuf
           file_path: 05-custom-validation/declare-the-option
-        - page: Register the option
-          file_path: 05-custom-validation/register-the-option
         - page: Declare the event and view state
           file_path: 05-custom-validation/declare-event-and-view
         - page: 'Implement the `Reaction`'
@@ -74,6 +72,8 @@
           file_path: 05-custom-validation/implement-the-view
         - page: 'Implement the `Generator`'
           file_path: 05-custom-validation/implement-the-generator
+        - page: Register the option
+          file_path: 05-custom-validation/register-the-option
         - page: Pass the option to the Compiler
           file_path: 05-custom-validation/pass-to-compiler
         - page: Summary
