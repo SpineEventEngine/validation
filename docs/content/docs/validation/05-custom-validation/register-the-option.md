@@ -8,7 +8,7 @@ headline: Documentation
 
 Two registrations are required before the build plugin can use a custom option:
 
-1. Register the Protobuf extension so the descriptor machinery can resolve it at runtime.
+1. Register the Protobuf extension, so the descriptor machinery can resolve it at runtime.
 2. Wire up the `Reaction`, `View`, and `Generator` via `ValidationOption`.
 
 ## Register the proto extension
@@ -71,9 +71,9 @@ Key points:
 - `generator` accepts exactly **one** `OptionGenerator`. Only one generator per
   `ValidationOption` is allowed.
 
-Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLoader`, so the
-`@AutoService` annotation must be present and the annotation processor must run during
-compilation.
+Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLoader`. 
+We use `@AutoService` annotation for creating a service file under `META-INF/services`.
+Correspondingly, an annotation processor must run during compilation.
 
 For Kotlin implementations, configure AutoService's KSP processor in the module that contains the
 `@AutoService` classes:
