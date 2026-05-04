@@ -6,19 +6,17 @@ headline: Documentation
 
 # Declare the option in Protobuf
 
-An option is declared as a Protobuf `extend` block targeting one of the standard
-descriptor option types.
+Declaring a custom validation option requires two Protobuf declarations:
+a message that carries the option's data, and an `extend` block that
+registers it as a descriptor option.
 
 ## Declare the option message
 
-An option is declared as a Protobuf `extend` block targeting one of the standard
-descriptor option types — `google.protobuf.FieldOptions`, `MessageOptions`, and so on.
+Define a Protobuf message to hold the option's parameters.
+Use the `(default_message)` option to set the error template rendered when the
+caller does not supply a custom `error_msg`:
 
 ```protobuf
-extend google.protobuf.FieldOptions {
-    TimeOption when = 73819;
-}
-
 message TimeOption {
 
     option (default_message) = "The field `${parent.type}.${field.path}`"
@@ -40,12 +38,23 @@ enum Time {
 }
 ```
 
-The `(default_message)` option on `TimeOption` sets the error template used when the caller
-does not supply a custom `error_msg`. Field number `73819` is the globally registered extension
-number for this option; every extension must have a unique number in the allowed range.
+## Extend an option descriptor type
+
+Register the message as a Protobuf option by declaring an `extend` block
+targeting one of the standard descriptor option types —
+`google.protobuf.FieldOptions`, `MessageOptions`, and so on:
+
+```protobuf
+extend google.protobuf.FieldOptions {
+    TimeOption when = 73819;
+}
+```
+
+Field number `73819` is the globally registered extension number for this
+option; every extension must have a unique number in the allowed range.
 
 {{% note-block class="note" %}}
-### Packaging trade-off
+#### Packaging trade-off
 
 If you omit the `package` declaration from the `.proto` file that defines the extension, callers
 can write `[(when).in = FUTURE]` instead of `[(spine.time.when).in = FUTURE]`. This is a
@@ -54,5 +63,5 @@ deliberate trade-off: shorter option syntax at the cost of no package-level name
 
 ## What's next
 
-- [Register the option](register-the-option.md)
+- [Declare the event and view state](declare-event-and-view.md)
 - [Back to Custom Validation](_index.md)
