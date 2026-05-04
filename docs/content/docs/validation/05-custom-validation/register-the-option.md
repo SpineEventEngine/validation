@@ -73,7 +73,7 @@ Key points:
 
 ## Configure service discovery
 
-Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLoader`. 
+Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLoader`.
 We use `@AutoService` annotation for creating a service file under `META-INF/services`.
 Correspondingly, an annotation processor must run during compilation.
 

@@ -8,8 +8,8 @@ headline: Documentation
 
 After defining the option, declare the Protobuf types that track its discovery during
 compilation. This takes two parts:
- 1. a domain event emitted by the `Reaction` when a valid option application is found,
- 2. a `View` state that persists the event data for the `Generator` to query.
+1. a domain event emitted by the `Reaction` when a valid option application is found,
+2. a `View` state that persists the event data for the `Generator` to query.
 
 ## Declare the event
 

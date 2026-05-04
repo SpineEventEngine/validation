@@ -11,13 +11,14 @@ Users can extend the Validation library by providing custom Protobuf options and
 Follow these steps to create a custom option:
 
 1. [Declare the option](declare-the-option.md) as a Protobuf extension in your `.proto` files.
-2. [Register the option](register-the-option.md) via `io.spine.option.OptionsProvider`
-   and wire up the entities via `io.spine.tools.validation.java.ValidationOption`.
-3. [Declare the event and view state](declare-event-and-view.md) — the Protobuf types that
+2. [Declare the event and view state](declare-event-and-view.md) — the Protobuf types that
    track the option's discovery during compilation.
-4. [Implement the `Reaction`](implement-the-reaction.md) — discovers and validates the option.
-5. [Implement the `View`](implement-the-view.md) — accumulates valid option applications.
-6. [Implement the `Generator`](implement-the-generator.md) — generates Java code for the option.
+3. [Implement the `Reaction`](implement-the-reaction.md) — discovers and validates the option.
+4. [Implement the `View`](implement-the-view.md) — accumulates valid option applications.
+5. [Implement the `Generator`](implement-the-generator.md) — generates Java code for the option.
+6. [Register the option](register-the-option.md) via `io.spine.option.OptionsProvider`
+   and wire up the entities via `io.spine.tools.validation.java.ValidationOption`.
+7. [Pass the option to the Compiler](pass-to-compiler.md) so the build plugin can discover it.
 
 Below is a workflow diagram for a typical option:
 
@@ -60,7 +61,10 @@ hold either a past or a future value. The complete source for the running exampl
 - [Declare the event and view state](declare-event-and-view.md)
 - [Implement the `Reaction`](implement-the-reaction.md)
 - [Implement the `View`](implement-the-view.md)
-- [Implement the `Generator`](implement-the-generator.md).
+- [Implement the `Generator`](implement-the-generator.md)
+- [Register the option](register-the-option.md)
+- [Pass the option to the Compiler](pass-to-compiler.md)
+- [Summary](summary.md)
 
 [spine-time]: https://github.com/SpineEventEngine/time
 [time-validation-src]: https://github.com/SpineEventEngine/time/tree/master/validation

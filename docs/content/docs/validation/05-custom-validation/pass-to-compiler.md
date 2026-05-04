@@ -65,13 +65,14 @@ For users of the `io.spine.time` Gradle plugin, no extra configuration is needed
 plugin to a project that has `io.spine.validation` automatically places the `time-validation`
 module on the Compiler's classpath.
 
-See the full source in
-[`TimeGradlePlugin.kt`](https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeGradlePlugin.kt)
-and the artifact definition in
-[`TimeValidation.kt`](https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeValidation.kt)
+See the full source in [`TimeGradlePlugin.kt`][time-gradle-plugin-kt]
+and the artifact definition in [`TimeValidation.kt`][time-validation-kt]
 in the Spine Time repository.
 
 ## What's next
 
 - [Summary](summary.md)
 - [Architecture](../09-developers-guide/architecture.md)
+
+[time-gradle-plugin-kt]: https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeGradlePlugin.kt
+[time-validation-kt]: https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeValidation.kt
