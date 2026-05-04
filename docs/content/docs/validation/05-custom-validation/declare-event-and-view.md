@@ -18,21 +18,21 @@ travels through the compilation bounded context, so it must be a proper Protobuf
 ```protobuf
 message WhenFieldDiscovered {
 
-    compiler.FieldRef id = 1;
+    spine.compiler.FieldRef id = 1;
 
-    compiler.Field subject = 2;
+    spine.compiler.Field subject = 2;
 
     string error_message = 3;
 
     Time bound = 4;
 
-    spine.tools.time.validation.TimeFieldType type = 5;
+    TimeFieldType type = 5;
 }
 ```
 
-The `id` field must be the **first** field and must be the same type that the `View` uses as its
-entity identity (`compiler.FieldRef` in this case). The framework uses the identity field to
-route the event to the correct `View` instance.
+The `id` field must be the **first** field in the declaration order, and must be the same
+type that the `View` uses as its entity identity (`compiler.FieldRef` in this case).
+The framework uses the identity field to route the event to the correct `View` instance.
 
 ## Declare the view state
 
@@ -43,15 +43,15 @@ fields and is marked as a Spine projection:
 message WhenField {
     option (entity).kind = PROJECTION;
 
-    compiler.FieldRef id = 1;
+    spine.compiler.FieldRef id = 1;
 
-    compiler.Field subject = 2;
+    spine.compiler.Field subject = 2;
 
     string error_message = 3;
 
     Time bound = 4;
 
-    spine.tools.time.validation.TimeFieldType type = 5;
+    TimeFieldType type = 5;
 }
 ```
 
