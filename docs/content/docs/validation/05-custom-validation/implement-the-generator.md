@@ -63,13 +63,65 @@ the `(when)` option:
 - For a map field, it generates a `for` loop over the map's `.values()` and validates each
   value inside that loop.
 
+```kotlin
+fun code(): SingleOptionCode = when {
+    fieldType.isMessage -> validateTime(fieldValue)
+    fieldType.isRepeatedMessage ->
+        CodeBlock(
+            """
+            for (var element : $fieldValue) {
+                ${validateTime(ReadVar("element"))}
+            }
+            """.trimIndent()
+        )
+
+    fieldType.isMap ->
+        CodeBlock(
+            """
+            for (var element : $fieldValue.values()) {
+                ${validateTime(ReadVar("element"))}
+            }
+            """.trimIndent()
+        )
+
+    else -> unsupportedFieldType()
+}.run { SingleOptionCode(this) }
+```
 All three branches delegate to the same `validateTime(...)` helper, so the time comparison,
 violation construction, and placeholder handling stay in one place. The difference is only
 where the checked value comes from: the field getter for a single message, the loop variable
 for each repeated element, or the map value variable for each map entry.
 
-See the full source around [`GenerateWhen.code()`][when-generator-kt] for the exact generated
-Java shape.
+```kotlin
+private fun validateTime(fieldValue: Expression<Any>): CodeBlock {
+    val isTimeOutOfBound = when (view.type) {
+        TFT_TIMESTAMP -> {
+            val operator = if (view.bound == FUTURE) "<" else ">"
+            "$TimestampsClass.compare($fieldValue, $SpineTime.currentTime()) $operator 0"
+        }
+
+        TFT_TEMPORAL -> {
+            val checkBound = if (view.bound == FUTURE) "isInPast" else "isInFuture"
+            "$fieldValue.$checkBound()"
+        }
+
+        else -> unsupportedFieldType()
+    }
+    return CodeBlock(
+        """
+        if (!${field.hasDefaultValue()} && $isTimeOutOfBound) {
+            var fieldPath = ${parentPath.resolve(field.name)};
+            var typeName =  ${parentName.orElse(declaringType)};
+            var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), fieldValue)};
+            $violations.add(violation);
+        }
+        """.trimIndent()
+    )
+}
+```
+
+See the full source around [`GenerateWhen.code()`][when-generator-kt] for more details 
+on the implementation.
 
 ## What's next
 
