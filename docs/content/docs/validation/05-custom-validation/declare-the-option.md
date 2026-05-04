@@ -55,4 +55,4 @@ deliberate trade-off: shorter option syntax at the cost of no package-level name
 ## What's next
 
 - [Register the option](register-the-option.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)

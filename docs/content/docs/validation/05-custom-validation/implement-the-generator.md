@@ -74,6 +74,6 @@ Java shape.
 ## What's next
 
 - [Pass the option to the Compiler](pass-to-compiler.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)
 
 [when-generator-kt]: https://github.com/SpineEventEngine/time/blob/5268c2386f2dd4f400a7fb6885474c2945475b3a/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenGenerator.kt

@@ -61,4 +61,4 @@ cannot route `WhenFieldDiscovered` events to the correct `WhenField` view instan
 ## What's next
 
 - [Implement the `Reaction`](implement-the-reaction.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)

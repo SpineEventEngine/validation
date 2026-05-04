@@ -95,6 +95,6 @@ KSP. See the [AutoService documentation][auto-service] for Gradle examples.
 ## What's next
 
 - [Declare the event and view state](declare-event-and-view.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)
 
 [auto-service]: https://github.com/google/auto/tree/main/service

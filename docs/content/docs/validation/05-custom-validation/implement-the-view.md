@@ -46,4 +46,4 @@ correct.
 ## What's next
 
 - [Implement the `Generator`](implement-the-generator.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)

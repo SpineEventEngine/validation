@@ -119,4 +119,4 @@ the option does not support. `.asA()` wraps the event in the `EitherOf2` left sl
 ## What's next
 
 - [Implement the `View`](implement-the-view.md)
-- [Back to Custom Validation](../)
+- [Back to Custom Validation](_index.md)
