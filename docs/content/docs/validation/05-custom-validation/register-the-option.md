@@ -37,7 +37,7 @@ the `extend` block. The `java_outer_classname` option in the proto file controls
 the Protobuf runtime cannot deserialize the extension field and the option will be silently
 ignored.
 
-## Wire up ValidationOption
+## Wire up `ValidationOption`
 
 Create a class that implements `ValidationOption` and annotate it with
 `@AutoService(ValidationOption::class)`:
@@ -70,6 +70,8 @@ Key points:
 - `reactions` can contain multiple `Reaction` instances; `view` can list multiple `View` classes.
 - `generator` accepts exactly **one** `OptionGenerator`. Only one generator per
   `ValidationOption` is allowed.
+
+## Configure service discovery
 
 Both `OptionsProvider` and `ValidationOption` are discovered via Java `ServiceLoader`. 
 We use `@AutoService` annotation for creating a service file under `META-INF/services`.
