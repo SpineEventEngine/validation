@@ -6,8 +6,8 @@ headline: Documentation
 
 # Implement the `View`
 
-The `View` is a Spine projection that persists the data emitted by the `Reaction`. The `Generator`
-queries the `View` to obtain the information it needs to produce Java code.
+The `View` is a Spine projection that persists the data emitted by the `Reaction`.
+The `Generator` queries the `View` to obtain the information it needs to produce Java code.
 
 ## Class declaration
 
@@ -17,11 +17,11 @@ internal class WhenFieldView : View<FieldRef, WhenField, WhenField.Builder>()
 
 The three type parameters are:
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| ID | `FieldRef` | Entity identity; must match the `id` field type in the Protobuf view state. |
-| State | `WhenField` | The generated Protobuf message that holds the accumulated data. |
-| Builder | `WhenField.Builder` | The corresponding Protobuf builder, used by the `alter { }` DSL. |
+| Parameter | Type                | Description                                                                 |
+|-----------|---------------------|-----------------------------------------------------------------------------|
+| ID        | `FieldRef`          | Entity identity; must match the `id` field type in the Protobuf view state. |
+| `State`   | `WhenField`         | The generated Protobuf message that holds the accumulated data.             |
+| `Builder` | `WhenField.Builder` | The corresponding Protobuf builder, used by the `alter { }` DSL.            |
 
 ## Subscriber method
 
