@@ -59,7 +59,13 @@ message WhenField {
 The `id` field type must match the event `id` type exactly. Without this match, the framework
 cannot route `WhenFieldDiscovered` events to the correct `WhenField` view instance.
 
+For the full source, see [`events.proto`][events-proto] and [`views.proto`][views-proto]
+in the Spine Time repository.
+
 ## What's next
 
 - [Implement the `Reaction`](implement-the-reaction.md)
 - [Back to Custom Validation](_index.md)
+
+[events-proto]: https://github.com/SpineEventEngine/time/blob/master/validation/src/main/proto/spine/tools/time/validation/events.proto
+[views-proto]: https://github.com/SpineEventEngine/time/blob/master/validation/src/main/proto/spine/tools/time/validation/views.proto

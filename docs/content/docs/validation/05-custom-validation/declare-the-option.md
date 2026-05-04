@@ -61,7 +61,11 @@ can write `[(when).in = FUTURE]` instead of `[(spine.time.when).in = FUTURE]`. T
 deliberate trade-off: shorter option syntax at the cost of no package-level namespacing.
 {{% /note-block %}}
 
+For the full source, see [`time_options.proto`][time-options-proto] in the Spine Time repository.
+
 ## What's next
 
 - [Declare the event and view state](declare-event-and-view.md)
 - [Back to Custom Validation](_index.md)
+
+[time-options-proto]: https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto

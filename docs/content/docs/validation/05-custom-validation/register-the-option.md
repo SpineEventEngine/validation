@@ -94,9 +94,14 @@ dependencies {
 If the provider is written in Java, use AutoService's `annotationProcessor` dependency instead of
 KSP. See the [AutoService documentation][auto-service] for Gradle examples.
 
+For the full source, see [`TimeOptionsProvider.java`][time-options-provider] and
+[`WhenOption.kt`][when-option-kt] in the Spine Time repository.
+
 ## What's next
 
 - [Declare the event and view state](declare-event-and-view.md)
 - [Back to Custom Validation](_index.md)
 
 [auto-service]: https://github.com/google/auto/tree/main/service
+[time-options-provider]: https://github.com/SpineEventEngine/time/blob/master/time/src/main/java/io/spine/time/validation/TimeOptionsProvider.java
+[when-option-kt]: https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenOption.kt

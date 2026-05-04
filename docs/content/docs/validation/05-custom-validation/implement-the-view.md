@@ -43,7 +43,11 @@ when the block exits. One `@Subscribe` method is required for each event type th
 an event reaches the `View`, the `Reaction` has already confirmed that the option application is
 correct.
 
+For the full source, see [`WhenOption.kt`][when-option-kt] in the Spine Time repository.
+
 ## What's next
 
 - [Implement the `Generator`](implement-the-generator.md)
 - [Back to Custom Validation](_index.md)
+
+[when-option-kt]: https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenOption.kt

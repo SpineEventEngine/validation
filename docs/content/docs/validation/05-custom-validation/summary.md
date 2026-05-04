@@ -44,3 +44,8 @@ Spine Compiler.
 - Explore library internals: [Architecture](../09-developers-guide/architecture.md)
 - See the modules that back this pipeline:
   [Key modules](../09-developers-guide/key-modules.md)
+
+The complete source for all running examples is in the
+[`validation` module][time-validation-src] of the Spine Time repository.
+
+[time-validation-src]: https://github.com/SpineEventEngine/time/tree/master/validation

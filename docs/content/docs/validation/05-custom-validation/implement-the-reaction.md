@@ -116,7 +116,11 @@ return whenFieldDiscovered {
 `checkPlaceholders` reports a compilation error if the template contains placeholder names that
 the option does not support. `.asA()` wraps the event in the `EitherOf2` left slot.
 
+For the full source, see [`WhenOption.kt`][when-option-kt] in the Spine Time repository.
+
 ## What's next
 
 - [Implement the `View`](implement-the-view.md)
 - [Back to Custom Validation](_index.md)
+
+[when-option-kt]: https://github.com/SpineEventEngine/time/blob/master/validation/src/main/kotlin/io/spine/tools/time/validation/java/WhenOption.kt

@@ -45,13 +45,13 @@ See “[Implement the `Generator`](implement-the-generator.md)” for details.
 
 ## Running example
 
-Throughout this section, the `(when)` option from the
-[Spine Time](https://github.com/SpineEventEngine/time) library serves as the running example.
-Spine Time is a library of Protobuf-based date and time types for business models. It defines
-its own Protobuf message types — such as `LocalDate`, `LocalTime`, and `ZonedDateTime` — and
-provides converters to and from the standard Java Time API. Among other features, it ships a
-`(when)` validation option that constrains a time-typed field to hold either a past or a
-future value.
+Throughout this section, the `(when)` option from the [Spine Time][spine-time] library serves
+as the running example. Spine Time is a library of Protobuf-based date and time types for
+business models. It defines its own Protobuf message types — such as `LocalDate`, `LocalTime`,
+and `ZonedDateTime` — and provides converters to and from the standard Java Time API. Among
+other features, it ships a `(when)` validation option that constrains a time-typed field to
+hold either a past or a future value. The complete source for the running example lives in the
+[`validation` module][time-validation-src] of the Spine Time repository.
 
 ## What’s next
 
@@ -61,3 +61,6 @@ future value.
 - [Implement the `Reaction`](implement-the-reaction.md)
 - [Implement the `View`](implement-the-view.md)
 - [Implement the `Generator`](implement-the-generator.md).
+
+[spine-time]: https://github.com/SpineEventEngine/time
+[time-validation-src]: https://github.com/SpineEventEngine/time/tree/master/validation
