@@ -6,9 +6,10 @@ headline: Documentation
 
 # Declare the event and view state
 
-After registering the option, declare the Protobuf types that track its discovery during
-compilation: a domain event emitted by the `Reaction` when a valid option application is found,
-and a view state that persists the event data for the `Generator` to query.
+After defining the option, declare the Protobuf types that track its discovery during
+compilation. This takes two parts:
+ 1. a domain event emitted by the `Reaction` when a valid option application is found,
+ 2. a `View` state that persists the event data for the `Generator` to query.
 
 ## Declare the event
 
@@ -34,14 +35,14 @@ The `id` field must be the **first** field in the declaration order, and must be
 type that the `View` uses as its entity identity (`compiler.FieldRef` in this case).
 The framework uses the identity field to route the event to the correct `View` instance.
 
-## Declare the view state
+## Declare the `View` state
 
-The view state is the persistent accumulator queried by the `Generator`. It mirrors the event
-fields and is marked as a Spine projection:
+The view state is the persistent accumulator queried by the `Generator`.
+It mirrors the event fields:
 
 ```protobuf
 message WhenField {
-    option (entity).kind = PROJECTION;
+    option (entity).kind = VIEW;
 
     spine.compiler.FieldRef id = 1;
 
