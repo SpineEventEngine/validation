@@ -35,9 +35,45 @@ Replaces the previously deleted `architecture.md` with an up-to-date description
 ### 3. Key modules
 
 Already drafted in `key-modules.md`. Keep current; add cross-links from sections 2
-and 4–7 as those sections are written.
+and 4–8 as those sections are written.
 
-### 4. Adding a new built-in validation option
+### 4. The validation model in `:context`
+
+Deep dive into the language-agnostic model:
+
+- Views, events, and reactions; how built-in options are translated into model
+  state.
+- How custom options plug in via the `ValidationOption` SPI from the model side.
+- Error reporting conventions inside the model.
+
+### 5. Java code generation in `:java`
+
+How the Spine Compiler plugin in `:java` produces validation code:
+
+- Plugin entry points and lifecycle.
+- How the model from `:context` drives generation.
+- `ValidationOption` SPI from the codegen side: how a custom option contributes
+  generated code.
+- Conventions for the shape of generated validators.
+
+### 6. Runtime library `:jvm-runtime`
+
+What ships in `:jvm-runtime` and how generated code uses it:
+
+- `MessageValidator`, validation/constraint APIs, `ValidationException`.
+- Error Protobuf types and how violations are surfaced.
+- Extension hooks available at runtime, including `@Validator`.
+
+### 7. Extension points (deep dive)
+
+Internals behind the public extension surface, complementing the User's Guide
+`04-validators/` and `05-custom-validation/`:
+
+- `@Validator` and the validator registry: discovery, ordering, lifecycle.
+- `ValidationOption` SPI end-to-end (cross-references sections 4 and 5).
+- Constraints on what extensions can and cannot do, and why.
+
+### 8. Adding a new built-in validation option
 
 Contributor-side counterpart to the User's Guide `05-custom-validation/` section.
 Where the User's Guide explains how a *consumer* adds a custom option to their
@@ -54,42 +90,6 @@ option to the Validation library. Outline:
 - Writing tests across `:context-tests`, `:tests:vanilla`, and any specialized
   `:tests:*` modules.
 - Documenting the new option in the User's Guide `03-built-in-options/`.
-
-### 5. The validation model in `:context`
-
-Deep dive into the language-agnostic model:
-
-- Views, events, and reactions; how built-in options are translated into model
-  state.
-- How custom options plug in via the `ValidationOption` SPI from the model side.
-- Error reporting conventions inside the model.
-
-### 6. Java code generation in `:java`
-
-How the Spine Compiler plugin in `:java` produces validation code:
-
-- Plugin entry points and lifecycle.
-- How the model from `:context` drives generation.
-- `ValidationOption` SPI from the codegen side: how a custom option contributes
-  generated code.
-- Conventions for the shape of generated validators.
-
-### 7. Runtime library `:jvm-runtime`
-
-What ships in `:jvm-runtime` and how generated code uses it:
-
-- `MessageValidator`, validation/constraint APIs, `ValidationException`.
-- Error Protobuf types and how violations are surfaced.
-- Extension hooks available at runtime, including `@Validator`.
-
-### 8. Extension points (deep dive)
-
-Internals behind the public extension surface, complementing the User's Guide
-`04-validators/` and `05-custom-validation/`:
-
-- `@Validator` and the validator registry: discovery, ordering, lifecycle.
-- `ValidationOption` SPI end-to-end (cross-references sections 5 and 6).
-- Constraints on what extensions can and cannot do, and why.
 
 ### 9. Testing strategy
 
@@ -133,10 +133,10 @@ How the multi-project build is wired and how artifacts are produced:
 
 1. Section 2 (Architecture) — anchors everything else.
 2. Section 1 (Overview) — short, written after section 2 so framing is accurate.
-3. Sections 5, 6, 7 — internals, in dependency order.
-4. Section 8 — builds on 5–7.
-5. Section 4 — the "adding a new built-in option" walkthrough, which exercises
-   sections 2 and 5–7.
+3. Sections 4, 5, 6 — internals, in dependency order.
+4. Section 7 — builds on 4–6.
+5. Section 8 — the "adding a new built-in option" walkthrough, which exercises
+   sections 2 and 4–7.
 6. Sections 9 and 10 — testing and build/release.
 7. Update `_index.md` and `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml`
    as each section lands.
