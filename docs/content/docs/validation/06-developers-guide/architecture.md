@@ -165,9 +165,10 @@ The diagram below shows what happens from the moment a developer writes a `.prot
 with validation options through to the runtime check that fires when a message is built.
 
 ```mermaid
+%%{init: {"flowchart": {"subGraphTitleMargin": {"top": 10, "bottom": 15}}}}%%
 flowchart TD
     proto[".proto with validation options"]
-    subgraph build["Consumer build (Gradle)"]
+    subgraph build["<b>Consumer build (Gradle)</b>"]
         gradle["<b><code>:gradle-plugin</code></b><br/>io.spine.validation"]
         compiler["Spine Compiler"]
         bundle["<b><code>:java-bundle</code></b><br/>(<code>JavaValidationPlugin</code>)"]
@@ -175,7 +176,7 @@ flowchart TD
         renderers["<code>JavaValidationRenderer</code><br/><code>SetOnceRenderer</code>"]
         gen["Generated Java<br/>message + builder classes"]
     end
-    subgraph rt["Runtime"]
+    subgraph rt["<b>Runtime</b>"]
         runtime["<b><code>:jvm-runtime</code></b><br/><code>MessageValidator</code>,<br/><code>ValidationException</code>,<br/><code>ConstraintViolation</code>"]
         app["Application code<br/><code>builder.build()</code>"]
     end
