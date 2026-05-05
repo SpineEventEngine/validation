@@ -81,9 +81,23 @@
     - page: Developer’s guide
       key: 06-developers-guide
       children:
-        - page: Developer’s guide
+        - page: Overview and audience
           file_path: 06-developers-guide
         - page: Architecture
           file_path: 06-developers-guide/architecture
         - page: Key modules
           file_path: 06-developers-guide/key-modules
+        - page: 'The validation model in `:context`'
+          file_path: 06-developers-guide/validation-model
+        - page: 'Java code generation in `:java`'
+          file_path: 06-developers-guide/java-code-generation
+        - page: 'Runtime library `:jvm-runtime`'
+          file_path: 06-developers-guide/runtime-library
+        - page: Extension points (deep dive)
+          file_path: 06-developers-guide/extension-points
+        - page: Adding a new built-in validation option
+          file_path: 06-developers-guide/adding-a-built-in-option
+        - page: Testing strategy
+          file_path: 06-developers-guide/testing-strategy
+        - page: Build, packaging, and release
+          file_path: 06-developers-guide/build-and-release
