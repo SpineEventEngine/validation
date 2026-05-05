@@ -4,7 +4,7 @@
 # The `key` should match the current docs section.
 # See: https://github.com/SpineEventEngine/site-commons/blob/master/COMPONENTS.md#sidenav
 
-- page: Validation User Guide
+- page: Validation user guide
   key: validation
   children:
     - page: Overview
