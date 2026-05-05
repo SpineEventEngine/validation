@@ -139,4 +139,4 @@ Recommended actions:
 - Learn how to validate messages with custom code:
   [Using validators](../04-validators/).
 - If built-in options are not enough, define your own constraints and messages:
-  [Custom validation](../08-custom-validation/).
+  [Custom validation](../05-custom-validation/).

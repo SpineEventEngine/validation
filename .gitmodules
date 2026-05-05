@@ -4,3 +4,6 @@
 [submodule "docs/_examples"]
 	path = docs/_examples
 	url = https://github.com/spine-examples/hello-validation
+[submodule "docs/_time"]
+	path = docs/_time
+	url = https://github.com/SpineEventEngine/time

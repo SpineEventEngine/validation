@@ -47,4 +47,4 @@ on GitHub: [spine/options.proto](https://github.com/SpineEventEngine/base-librar
 - [Message-level options](message-level-options.md)
 - [Options for `repeated` and `map` fields](repeated-and-map-fields.md)
 - [Using validators](../04-validators/)
-- [Custom validation](../08-custom-validation/)
+- [Custom validation](../05-custom-validation/)

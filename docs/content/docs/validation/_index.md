@@ -19,4 +19,4 @@ options, and runs those checks automatically when you build messages.
 - [Built-in options](03-built-in-options/)
 - [Using validators](04-validators/)
 - How it works: [Architecture](09-developers-guide/architecture.md)
-- Extension points: [Custom validation](08-custom-validation/)
+- Extension points: [Custom validation](05-custom-validation/)

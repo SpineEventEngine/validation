@@ -1,10 +1,11 @@
-name: Check Code Embedding
+name: Code Embedding
 
 on:
   pull_request:
 
 jobs:
   build-embedded-code:
+    name: Build embedded code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -19,6 +20,7 @@ jobs:
       - run: ./gradlew :docs:buildAll
 
   check-embedded-samples:
+    name: Match embedded and original code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

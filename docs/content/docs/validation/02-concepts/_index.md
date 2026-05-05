@@ -55,7 +55,7 @@ The generated API exposes two main ways to validate data:
    Generated messages implement `ValidatableMessage` and provide `validate()`, which returns
    `Optional<ValidationError>`.
 
-See [Using the generated code](../01-getting-started/generated-code.md) for end-to-end examples.
+See “[Using the generated code](../01-getting-started/generated-code.md)” for end-to-end examples.
 
 
 ## What a violation contains
@@ -68,7 +68,7 @@ Each `ConstraintViolation` points to the invalid value and explains what went wr
 - `field_value` — the invalid value packed as `google.protobuf.Any`.
 
 When you need a human-readable message, format the `TemplateString` from the violation.
-See [Working with error messages](error-messages.md) for message formatting,
+See “[Working with error messages](error-messages.md)” for message formatting,
 placeholders, and customization.
 
 
@@ -91,7 +91,7 @@ which message was validated at the top level.
 If built-in options are not enough, you can add organization-specific options and generate
 code for them.
 
-See [Custom validation](../08-custom-validation/) for the workflow and a reference example.
+See “[Custom validation](../05-custom-validation/)” for the workflow and a reference example.
 
 
 ## What’s next
@@ -107,4 +107,4 @@ See [Custom validation](../08-custom-validation/) for the workflow and a referen
 - [Built-in options](../03-built-in-options/)
 - [Using validators](../04-validators/)
 - Add custom validation options:
-  [Custom validation](../08-custom-validation/).
+  [Custom validation](../05-custom-validation/).
