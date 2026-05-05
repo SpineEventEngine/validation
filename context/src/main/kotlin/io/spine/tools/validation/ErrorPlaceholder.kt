@@ -38,7 +38,7 @@ package io.spine.tools.validation
  * We have the same items in this enum as in `io.spine.validation.RuntimeErrorPlaceholder`
  * in the runtime library, which is exactly as this one. Please keep them in sync.
  * This duplication is done intentionally to prevent clash between the runtime library,
- * which is added to the classpath of the Compiler and the runtime library, which is part
+ * which is added to the classpath of the Compiler, and the runtime library, which is part
  * of the Compiler itself because it is a part of Spine. As we complete our migration
  * of validation to codegen, the runtime library will either be significantly simplified,
  * or even its content may be moved to `base`. Then, the duplicate enum should be removed.
