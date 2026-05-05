@@ -79,11 +79,9 @@
         - page: Summary
           file_path: 05-custom-validation/summary
     - page: Developer’s guide
-      key: 09-developers-guide
+      key: 06-developers-guide
       children:
         - page: Developer’s guide
-          file_path: 09-developers-guide
-        - page: Architecture
-          file_path: 09-developers-guide/architecture
+          file_path: 06-developers-guide
         - page: Key modules
-          file_path: 09-developers-guide/key-modules
+          file_path: 06-developers-guide/key-modules

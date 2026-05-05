@@ -18,5 +18,5 @@ options, and runs those checks automatically when you build messages.
 
 - [Built-in options](03-built-in-options/)
 - [Using validators](04-validators/)
-- How it works: [Architecture](09-developers-guide/architecture.md)
+- Internals: [Developer's guide](06-developers-guide/)
 - Extension points: [Custom validation](05-custom-validation/)

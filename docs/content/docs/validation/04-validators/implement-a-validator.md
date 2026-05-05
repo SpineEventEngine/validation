@@ -137,7 +137,7 @@ to the nested field in error (for example, to `starts_at.seconds`).
 
 - [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../05-custom-validation/)
-- [Architecture](../09-developers-guide/architecture.md)
+- [Developer's guide](../06-developers-guide/)
 
 
 [TimestampValidator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt
