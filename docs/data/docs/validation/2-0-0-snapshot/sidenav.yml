@@ -83,5 +83,7 @@
       children:
         - page: Developer’s guide
           file_path: 06-developers-guide
+        - page: Architecture
+          file_path: 06-developers-guide/architecture
         - page: Key modules
           file_path: 06-developers-guide/key-modules
