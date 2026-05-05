@@ -50,11 +50,12 @@ The flow for a single field-level option looks like this:
 ```mermaid
 sequenceDiagram
     participant Compiler as Spine Compiler
-    participant Reaction
     participant Bus as EventBus
+    participant Reaction
     participant View as Projection
 
-    Compiler->>Reaction: FieldOptionDiscovered
+    Compiler->>Bus: FieldOptionDiscovered
+    Bus->>Reaction: deliver
     Note over Reaction: Filter by option.name<br>Check applicability<br>Validate placeholders
     Reaction->>Bus: SomethingDiscovered
     Bus->>View: deliver
