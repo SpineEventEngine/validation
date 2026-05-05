@@ -1,10 +1,10 @@
 ---
-title: Extension points (deep dive)
+title: Extension points
 description: Internals behind the public extension surface of Spine Validation.
 headline: Documentation
 ---
 
-# Extension points (deep dive)
+# Extension points
 
 > This page is a placeholder. Content is in progress.
 

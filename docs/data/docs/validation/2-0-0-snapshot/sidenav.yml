@@ -93,7 +93,7 @@
           file_path: 06-developers-guide/java-code-generation
         - page: 'Runtime library `:jvm-runtime`'
           file_path: 06-developers-guide/runtime-library
-        - page: Extension points (deep dive)
+        - page: Extension points
           file_path: 06-developers-guide/extension-points
         - page: Adding a new built-in validation option
           file_path: 06-developers-guide/adding-a-built-in-option
