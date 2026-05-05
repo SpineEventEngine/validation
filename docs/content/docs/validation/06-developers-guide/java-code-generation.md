@@ -1,10 +1,10 @@
 ---
-title: Java code generation in `:java`
+title: Java code generation
 description: How the Spine Compiler plugin in `:java` produces validation code from the model.
 headline: Documentation
 ---
 
-# Java code generation in `:java`
+# Java code generation
 
 > This page is a placeholder. Content is in progress.
 

@@ -1,10 +1,10 @@
 ---
-title: Runtime library `:jvm-runtime`
+title: Runtime library
 description: What ships in `:jvm-runtime` and how generated code uses it at execution time.
 headline: Documentation
 ---
 
-# Runtime library `:jvm-runtime`
+# Runtime library
 
 > This page is a placeholder. Content is in progress.
 

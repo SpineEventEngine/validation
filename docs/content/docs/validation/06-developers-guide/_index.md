@@ -68,12 +68,12 @@ need.
    that implement it.
 2. [Key modules](key-modules.md) — one-line descriptions of every module in the
    repository, including the test modules. Use it as a reference.
-3. [The validation model in `:context`](validation-model.md) — the language-agnostic
-   model: views, events, reactions, and the `ValidationOption` SPI from the model side.
-4. [Java code generation in `:java`](java-code-generation.md) — how the Spine Compiler
-   plugin turns the model into Java validators.
-5. [Runtime library `:jvm-runtime`](runtime-library.md) — `MessageValidator`,
-   `ValidationException`, the violation Protobuf types, and runtime hooks.
+3. [The validation model](validation-model.md) — the language-agnostic model in
+   `:context`: views, events, reactions, and the `ValidationOption` SPI from the model side.
+4. [Java code generation](java-code-generation.md) — how the Spine Compiler plugin in
+   `:java` turns the model into Java validators.
+5. [Runtime library](runtime-library.md) — `MessageValidator`, `ValidationException`,
+   the violation Protobuf types, and runtime hooks in `:jvm-runtime`.
 6. [Extension points](extension-points.md) — `@Validator`, the validator
    registry, and the `ValidationOption` SPI end-to-end.
 7. [Adding a new built-in validation option](adding-a-built-in-option.md) — the

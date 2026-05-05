@@ -87,11 +87,11 @@
           file_path: 06-developers-guide/architecture
         - page: Key modules
           file_path: 06-developers-guide/key-modules
-        - page: 'The validation model in `:context`'
+        - page: The validation model
           file_path: 06-developers-guide/validation-model
-        - page: 'Java code generation in `:java`'
+        - page: Java code generation
           file_path: 06-developers-guide/java-code-generation
-        - page: 'Runtime library `:jvm-runtime`'
+        - page: Runtime library
           file_path: 06-developers-guide/runtime-library
         - page: Extension points
           file_path: 06-developers-guide/extension-points

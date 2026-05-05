@@ -1,20 +1,19 @@
 ---
-title: The validation model in `:context`
+title: The validation model
 description: Deep dive into the language-agnostic validation model implemented as a Spine Bounded Context.
 headline: Documentation
 ---
 
-# The validation model in `:context`
+# The validation model
 
 The `:context` module is the language-agnostic half of the Compiler plugin. It does not
 emit code. It builds a description of the constraints declared in a set of `.proto` files
 and exposes that description as a Bounded Context: an event-sourced model whose state can
 be queried by language-specific renderers.
 
-A code-generating renderer in `:java` (see
-“[Java code generation in `:java`](java-code-generation.md)”) consumes that state to
-produce validation logic. A renderer for another target language could consume the same
-state without changes to `:context`.
+A code-generating renderer in `:java` (see “[Java code generation](java-code-generation.md)”)
+consumes that state to produce validation logic. A renderer for another target language
+could consume the same state without changes to `:context`.
 
 ## The Bounded Context shape
 
@@ -360,7 +359,7 @@ the built-ins. They subscribe to the same upstream `FieldOptionDiscovered` /
 `OneofOptionDiscovered` / `MessageOptionDiscovered` events, filter by `OPTION_NAME`,
 emit their own `*Discovered` events, and project them into their own views. The third
 SPI member, `generator`, is the *Java-side* contribution; it is covered in
-“[Java code generation in `:java`](java-code-generation.md)”.
+“[Java code generation](java-code-generation.md)”.
 
 The end-to-end walkthrough — declaring a new option, adding the reaction and view,
 hooking the generator, and writing tests — lives in
@@ -370,10 +369,10 @@ consumer-facing version of the same SPI is covered by
 
 ## What's next
 
-- [Java code generation in `:java`](java-code-generation.md) — how the populated
-  projections become validation code.
-- [Runtime library `:jvm-runtime`](runtime-library.md) — what the generated code calls
-  into at execution time.
+- [Java code generation](java-code-generation.md) — how the populated projections become
+  validation code in `:java`.
+- [Runtime library](runtime-library.md) — what the generated code calls into at execution
+  time in `:jvm-runtime`.
 - [Adding a new built-in validation option](adding-a-built-in-option.md) — the
   contributor walkthrough that ties this page to the rest of the guide.
 
