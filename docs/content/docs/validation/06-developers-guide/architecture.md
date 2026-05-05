@@ -50,19 +50,63 @@ The base plugin class lives in
 [`ValidationPlugin.kt`](https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/ValidationPlugin.kt)
 and registers the built-in views and reactions:
 
+<embed-code
+  file="$context/src/main/kotlin/io/spine/tools/validation/ValidationPlugin.kt"
+  start="public abstract class ValidationPlugin"
+  end="^\) // Plugin">
+</embed-code>
 ```kotlin
 public abstract class ValidationPlugin(
     renderers: List<Renderer<*>> = emptyList(),
     views: Set<Class<out View<*, *, *>>> = setOf(),
     viewRepositories: Set<ViewRepository<*, *, *>> = setOf(),
     reactions: Set<Reaction<*>> = setOf(),
-) : Plugin(...)
+) : Plugin(
+    renderers = renderers,
+    views = views + setOf(
+        RequiredFieldView::class.java,
+        PatternFieldView::class.java,
+        GoesFieldView::class.java,
+        DistinctFieldView::class.java,
+        ValidatedFieldView::class.java,
+        RangeFieldView::class.java,
+        MaxFieldView::class.java,
+        MinFieldView::class.java,
+        SetOnceFieldView::class.java,
+        ChoiceGroupView::class.java,
+        RequireMessageView::class.java,
+    ),
+    viewRepositories = viewRepositories,
+    reactions = reactions + setOf<Reaction<*>>(
+        RequiredReaction(),
+        IfMissingReaction(),
+        RangeReaction(),
+        MinReaction(),
+        MaxReaction(),
+        DistinctReaction(),
+        IfHasDuplicatesReaction(),
+        ValidateReaction(),
+        IfInvalidReaction(),
+        PatternReaction(),
+        ChoiceReaction(),
+        IsRequiredReaction(),
+        GoesReaction(),
+        SetOnceReaction(),
+        IfSetAgainReaction(),
+        RequireReaction()
+    )
+) // Plugin
 ```
 
 The Java implementation in
 [`JavaValidationPlugin.kt`](https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/JavaValidationPlugin.kt)
 adds the Java renderers and folds in any custom options discovered through the SPI:
 
+<embed-code
+  file="$java/src/main/kotlin/io/spine/tools/validation/java/JavaValidationPlugin.kt"
+  start="public open class JavaValidationPlugin"
+  end="^\)">
+</embed-code>
 ```kotlin
 public open class JavaValidationPlugin : ValidationPlugin(
     renderers = listOf(
