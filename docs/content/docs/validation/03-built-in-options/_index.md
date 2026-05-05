@@ -35,11 +35,8 @@ Use this section when you want to:
 
 ## Source of truth
 
-This catalog is based on the non-deprecated, validation-related options defined in
-[spine/options.proto](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto).
-
-For the canonical option definitions, see `spine/options.proto` in the Spine base libraries
-on GitHub: [spine/options.proto](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto).
+For the canonical option definitions, see [`spine/options.proto`][options.proto] in
+the Spine base libraries on GitHub.
 
 ## What’s next
 - [Field-level options](field-level-options.md)
@@ -48,3 +45,5 @@ on GitHub: [spine/options.proto](https://github.com/SpineEventEngine/base-librar
 - [Options for `repeated` and `map` fields](repeated-and-map-fields.md)
 - [Using validators](../04-validators/)
 - [Custom validation](../05-custom-validation/)
+                                                       
+[options.proto]: https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto
