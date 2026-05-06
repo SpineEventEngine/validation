@@ -385,8 +385,8 @@ in `:context` and `:java`: anything that *can* be decided at build time *should*
 - [Adding a new built-in validation option](adding-a-built-in-option.md) — the
   contributor walkthrough that touches the runtime when an option needs new helpers or
   error placeholders.
-- User's Guide — [`MessageValidator` overview](../04-validators/) and
-  [Using `ValidatorRegistry`](../04-validators/validator-registry.md) for the
+- User's Guide — [`MessageValidator` overview](../user/04-validators/) and
+  [Using `ValidatorRegistry`](../user/04-validators/validator-registry.md) for the
   consumer-facing view of the same APIs.
 
 [message-validator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/MessageValidator.kt

@@ -327,7 +327,7 @@ The end-to-end walkthrough — declaring the option, modeling it in `:context`, 
 generator, and wiring it through `META-INF/services` — lives in
 “[Adding a new built-in validation option](adding-a-built-in-option.md)”. The
 consumer-facing variant of the same SPI is covered by
-“[Custom validation](../05-custom-validation/)” in the User's Guide.
+“[Custom validation](../user/05-custom-validation/)” in the User's Guide.
 
 ## What's next
 

@@ -21,7 +21,7 @@ Read this guide if you are:
 - or simply curious about how the pieces fit together.
 
 If you only want to apply validation rules to your own `.proto` files, the
-“[User guide](../00-intro/)” is the right starting point. The two guides are designed to
+“[User guide](../user/00-intro/)” is the right starting point. The two guides are designed to
 be read independently: this one assumes you have already met Validation as a *user*.
 
 ## The mental model

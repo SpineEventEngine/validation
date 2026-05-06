@@ -5,99 +5,100 @@
 # See: https://github.com/SpineEventEngine/site-commons/blob/master/COMPONENTS.md#sidenav
 
 - page: Validation user guide
-  key: validation
+  key: user
   children:
     - page: Overview
-      file_path: 00-intro
+      file_path: user/00-intro
     - page: Target audience
-      file_path: 00-intro/target-audience
+      file_path: user/00-intro/target-audience
     - page: Philosophy
-      file_path: 00-intro/philosophy
+      file_path: user/00-intro/philosophy
     - page: Getting started
       key: 01-getting-started
       children:
         - page: Getting started
-          file_path: 01-getting-started
+          file_path: user/01-getting-started
         - page: Adding Validation to your build
-          file_path: 01-getting-started/adding-to-build
+          file_path: user/01-getting-started/adding-to-build
         - page: 'Define constraints in `.proto` files'
-          file_path: 01-getting-started/first-model
+          file_path: user/01-getting-started/first-model
         - page: Build your project
-          file_path: 01-getting-started/build-project
+          file_path: user/01-getting-started/build-project
         - page: Using the generated validation API
-          file_path: 01-getting-started/generated-code
+          file_path: user/01-getting-started/generated-code
     - page: Concepts
       key: 02-concepts
       children:
         - page: Concepts
-          file_path: 02-concepts
+          file_path: user/02-concepts
         - page: Options overview
-          file_path: 02-concepts/options-overview
+          file_path: user/02-concepts/options-overview
         - page: Working with error messages
-          file_path: 02-concepts/error-messages
+          file_path: user/02-concepts/error-messages
     - page: Built-in options
       key: 03-built-in-options
       children:
         - page: Built-in options
-          file_path: 03-built-in-options
+          file_path: user/03-built-in-options
         - page: Field-level options
-          file_path: 03-built-in-options/field-level-options
+          file_path: user/03-built-in-options/field-level-options
         - page: "Options for `oneof` fields"
-          file_path: 03-built-in-options/oneof-fields
+          file_path: user/03-built-in-options/oneof-fields
         - page: Message-level options
-          file_path: 03-built-in-options/message-level-options
+          file_path: user/03-built-in-options/message-level-options
         - page: "Options for `repeated` and `map` fields"
-          file_path: 03-built-in-options/repeated-and-map-fields
+          file_path: user/03-built-in-options/repeated-and-map-fields
     - page: Using validators
       key: 04-validators
       children:
         - page: Overview of `MessageValidator`
-          file_path: 04-validators
+          file_path: user/04-validators
         - page: Implement a validator
-          file_path: 04-validators/implement-a-validator
+          file_path: user/04-validators/implement-a-validator
         - page: Using `ValidatorRegistry`
-          file_path: 04-validators/validator-registry
+          file_path: user/04-validators/validator-registry
     - page: Custom validation
       key: 05-custom-validation
       children:
         - page: Overview
-          file_path: 05-custom-validation
+          file_path: user/05-custom-validation
         - page: Declare the option in Protobuf
-          file_path: 05-custom-validation/declare-the-option
-        - page: 'Declare the event and view state'
-          file_path: 05-custom-validation/declare-event-and-view
+          file_path: user/05-custom-validation/declare-the-option
+        - page: 'Declare the event and view state'
+          file_path: user/05-custom-validation/declare-event-and-view
         - page: 'Implement the `Reaction`'
-          file_path: 05-custom-validation/implement-the-reaction
+          file_path: user/05-custom-validation/implement-the-reaction
         - page: 'Implement the `View`'
-          file_path: 05-custom-validation/implement-the-view
+          file_path: user/05-custom-validation/implement-the-view
         - page: 'Implement the `Generator`'
-          file_path: 05-custom-validation/implement-the-generator
+          file_path: user/05-custom-validation/implement-the-generator
         - page: Register the option
-          file_path: 05-custom-validation/register-the-option
-        - page: 'Pass the option to the Compiler'
-          file_path: 05-custom-validation/pass-to-compiler
+          file_path: user/05-custom-validation/register-the-option
+        - page: 'Pass the option to the Compiler'
+          file_path: user/05-custom-validation/pass-to-compiler
         - page: Summary
-          file_path: 05-custom-validation/summary
-    - page: Developer’s guide
-      key: 06-developers-guide
-      children:
-        - page: Overview and audience
-          file_path: 06-developers-guide
-        - page: Architecture
-          file_path: 06-developers-guide/architecture
-        - page: Key modules
-          file_path: 06-developers-guide/key-modules
-        - page: The validation model
-          file_path: 06-developers-guide/validation-model
-        - page: Java code generation
-          file_path: 06-developers-guide/java-code-generation
-        - page: Runtime library
-          file_path: 06-developers-guide/runtime-library
-        - page: Extension points
-          file_path: 06-developers-guide/extension-points
-        - page: Adding a new built-in validation option
-          file_path: 06-developers-guide/adding-a-built-in-option
-        - page: Testing strategy
-          file_path: 06-developers-guide/testing-strategy
-        - page: Build, packaging, and release
-          file_path: 06-developers-guide/build-and-release
+          file_path: user/05-custom-validation/summary
+
+- page: Validation developer guide
+  key: developer
+  children:
+    - page: Overview and audience
+      file_path: developer/overview-and-audience
+    - page: Architecture
+      file_path: developer/architecture
+    - page: Key modules
+      file_path: developer/key-modules
+    - page: The validation model
+      file_path: developer/validation-model
+    - page: Java code generation
+      file_path: developer/java-code-generation
+    - page: Runtime library
+      file_path: developer/runtime-library
+    - page: Extension points
+      file_path: developer/extension-points
+    - page: Adding a new built-in validation option
+      file_path: developer/adding-a-built-in-option
+    - page: Testing strategy
+      file_path: developer/testing-strategy
+    - page: Build, packaging, and release
+      file_path: developer/build-and-release

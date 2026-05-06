@@ -121,7 +121,7 @@ public open class JavaValidationPlugin : ValidationPlugin(
 `customOptions` is loaded via `ServiceLoader<ValidationOption>`, which is what makes the
 plugin extensible without recompiling the Validation library. See
 [`ValidationOption.kt`](https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt)
-for the SPI itself, and the “[Custom validation](../05-custom-validation/)” section of
+for the SPI itself, and the “[Custom validation](../user/05-custom-validation/)” section of
 the User's Guide for the consumer-facing walkthrough.
 
 ## The runtime library
@@ -131,7 +131,7 @@ are:
 
 - [`MessageValidator`](https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/MessageValidator.kt)
   — SPI for attaching custom validators to message types, including types declared in
-  third-party `.proto` files. See the User's Guide “[Using validators](../04-validators/)”
+  third-party `.proto` files. See the User's Guide “[Using validators](../user/04-validators/)”
   section.
 - [`ValidatorRegistry`](https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ValidatorRegistry.kt)
   — discovers and applies `MessageValidator` implementations.

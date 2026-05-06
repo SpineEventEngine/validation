@@ -7,7 +7,7 @@ headline: Documentation
 # Adding a new built-in validation option
 
 This page is the contributor-side counterpart to the User's Guide
-“[Custom validation](../05-custom-validation/)” section. Where that section explains how a
+“[Custom validation](../user/05-custom-validation/)” section. Where that section explains how a
 *consumer* wires a custom option into their own project, this page explains how a
 *contributor* adds a new **standard** option to the Validation library — one that ships in
 [`spine/options.proto`][options-proto] and is recognised by every consumer of the library
@@ -39,7 +39,7 @@ implementation, decide:
   options are part of the Spine vocabulary every consumer inherits. An option that is
   meaningful only inside one domain belongs in that domain's library as a custom option,
   exactly the way Spine Time ships `(when)` (see
-  “[Custom validation](../05-custom-validation/)”).
+  “[Custom validation](../user/05-custom-validation/)”).
   The “[Extension points](extension-points.md#the-two-surfaces-at-a-glance)” page
   describes when to choose `ValidationOption` over `MessageValidator`; the same discipline
   applies to built-ins.
@@ -454,16 +454,16 @@ exception formatting — independent of any specific option.
 
 A built-in option is part of the public Validation vocabulary, so its consumer-facing
 documentation lives in the User's Guide
-“[Built-in options](../03-built-in-options/)” section, not in the Developer's Guide.
+“[Built-in options](../user/03-built-in-options/)” section, not in the Developer's Guide.
 Pick the page that matches the option's declaration site and add an entry consistent with
 the surrounding conventions:
 
-- Field-level options — [`field-level-options.md`](../03-built-in-options/field-level-options.md).
-- `oneof` options — [`oneof-fields.md`](../03-built-in-options/oneof-fields.md).
-- Message-level options — [`message-level-options.md`](../03-built-in-options/message-level-options.md).
+- Field-level options — [`field-level-options.md`](../user/03-built-in-options/field-level-options.md).
+- `oneof` options — [`oneof-fields.md`](../user/03-built-in-options/oneof-fields.md).
+- Message-level options — [`message-level-options.md`](../user/03-built-in-options/message-level-options.md).
 
 The option's primary entry goes on exactly one of the three pages above, keyed to the
-declaration site. [`repeated-and-map-fields.md`](../03-built-in-options/repeated-and-map-fields.md)
+declaration site. [`repeated-and-map-fields.md`](../user/03-built-in-options/repeated-and-map-fields.md)
 is a cross-cutting reference, not a fourth declaration-site target: if your option has
 notable behaviour on `repeated` or `map` fields (non-empty checks, per-element
 validation, distinctness, …), additionally cross-reference the new entry from that page.
@@ -479,7 +479,7 @@ a pair on the same page; do not give a companion its own section.
 ## How this differs from a custom option
 
 The contributor-facing flow above and the consumer-facing flow in
-“[Custom validation](../05-custom-validation/)” share most of their substance: declare an
+“[Custom validation](../user/05-custom-validation/)” share most of their substance: declare an
 option, model it as a reaction plus a view, generate Java, register the pieces. The
 differences are concentrated at the boundaries:
 
@@ -496,13 +496,13 @@ differences are concentrated at the boundaries:
   the Compiler's classpath by `:gradle-plugin` together with the rest of the library
   (see “[Build, packaging, and release](build-and-release.md)”). A custom option's module
   must explicitly register itself with the Compiler — see
-  “[Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)”.
+  “[Pass the option to the Compiler](../user/05-custom-validation/pass-to-compiler.md)”.
 - **The option declaration crosses repositories.** The `.proto` change lives in
   [Base Libraries][base-libraries] and ships in that library's release; the model and codegen changes
   live here. The two changes must be coordinated.
 
 The User's Guide
-“[Custom validation](../05-custom-validation/)” section is still worth reading end-to-end
+“[Custom validation](../user/05-custom-validation/)” section is still worth reading end-to-end
 before contributing a built-in: it describes the same architectural ideas from the
 consumer's perspective, and the running `(when)` example illustrates patterns — disabled
 sentinel values, message-typed options, repeated and map handling — that built-ins use

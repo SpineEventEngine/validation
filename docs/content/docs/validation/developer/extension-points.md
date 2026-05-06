@@ -15,8 +15,8 @@ the compile-time / runtime split:
   specific message type*, executed alongside the compiled constraints.
 
 Each surface has a corresponding User's Guide section that explains how to *use* it:
-“[Custom validation](../05-custom-validation/)” for `ValidationOption`, and
-“[Using validators](../04-validators/)” for `MessageValidator`. This page is the
+“[Custom validation](../user/05-custom-validation/)” for `ValidationOption`, and
+“[Using validators](../user/04-validators/)” for `MessageValidator`. This page is the
 contributor-side view: what each surface guarantees, how discovery works, what an
 implementation may and may not do, and why.
 
@@ -89,7 +89,7 @@ A `ValidationOption` implementation is discovered through the standard Java
 - The implementing class must be on the **Spine Compiler user classpath**, not merely
   on the application runtime classpath. In a Gradle build that consumes Validation, this
   means the module declaring the option is added to the Spine Compiler user classpath (see
-  “[Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)”).
+  “[Pass the option to the Compiler](../user/05-custom-validation/pass-to-compiler.md)”).
 - A `META-INF/services/io.spine.tools.validation.java.ValidationOption` entry must list
   the implementing class. The conventional way to generate it is the
   `@AutoService(ValidationOption::class)` annotation processor; any other mechanism that
@@ -141,7 +141,7 @@ checks that cannot be expressed in `.proto` options at all — because the rule 
 multiple fields, on external state, or on a message type whose source the consumer cannot
 modify. The registry API, the `${validator}` placeholder, and the `DetectedViolation`
 shape are covered in “[Runtime library](runtime-library.md#the-validator-extension-hook)”
-and “[Using `ValidatorRegistry`](../04-validators/validator-registry.md)”; this section
+and “[Using `ValidatorRegistry`](../user/04-validators/validator-registry.md)”; this section
 keeps to the extension contract.
 
 ### Discovery
@@ -257,8 +257,8 @@ the same split before they are added.
 - [Java code generation](java-code-generation.md) — what a custom `OptionGenerator`
   hands back to the renderer.
 - [Runtime library](runtime-library.md) — what a `MessageValidator` is plugged into.
-- User's Guide — [Custom validation](../05-custom-validation/) and
-  [Using validators](../04-validators/) for the consumer-facing view of the same SPIs.
+- User's Guide — [Custom validation](../user/05-custom-validation/) and
+  [Using validators](../user/04-validators/) for the consumer-facing view of the same SPIs.
 
 [validation-option-spi]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt
 [option-generator]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/generate/OptionGenerator.kt
