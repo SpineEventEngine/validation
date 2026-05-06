@@ -20,7 +20,7 @@ project paths like `:java` and `:tests:vanilla`.
 
 ## Test modules
 
-- **`:context-tests`**: ProtoTap-based compilation tests for `:context`, focusing on invalid option usage and error reporting.
+- **`:context-tests`**: [ProtoTap][prototap]-based compilation tests for `:context`, focusing on invalid option usage and error reporting.
 - **`:tests`**: Parent project for integration tests that run the compiler plugins and exercise generated code.
 - **`:tests:vanilla`**: “Vanilla” integration tests: validation without any custom extensions.
 - **`:tests:extensions`**: Example implementation of the `(currency)` custom option used by test suites to verify custom reactions, views, and generators.
@@ -30,3 +30,5 @@ project paths like `:java` and `:tests:vanilla`.
 - **`:tests:validator-dependency`**: A dependency module used by `:tests:validator` for validator-related dependency scenarios.
 - **`:tests:runtime`**: Tests focused on runtime behavior of validation APIs and error messages.
 - **`:tests:validating`**: Shared fixtures and tests for validation behavior across multiple scenarios, including `testFixtures`.
+
+[prototap]: https://github.com/SpineEventEngine/ProtoTap
