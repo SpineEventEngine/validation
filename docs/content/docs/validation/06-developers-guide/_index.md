@@ -74,7 +74,7 @@ need.
    `:java` turns the model into Java validators.
 5. [Runtime library](runtime-library.md) — `MessageValidator`, `ValidationException`,
    the violation Protobuf types, and runtime hooks in `:jvm-runtime`.
-6. [Extension points](extension-points.md) — `@Validator`, the validator
+6. [Extension points](extension-points.md) — `MessageValidator`, the validator
    registry, and the `ValidationOption` SPI end-to-end.
 7. [Adding a new built-in validation option](adding-a-built-in-option.md) — the
    contributor walkthrough that exercises the model, codegen, and runtime sections.

@@ -26,7 +26,7 @@ project paths like `:java` and `:tests:vanilla`.
 - **`:tests:extensions`**: Example implementation of the `(currency)` custom option used by test suites to verify custom reactions, views, and generators.
 - **`:tests:consumer`**: Integration tests for a consuming project that uses validation plus custom extensions.
 - **`:tests:consumer-dependency`**: A dependency module with `.proto` sources used by `:tests:consumer` to verify “protos in dependencies” scenarios.
-- **`:tests:validator`**: Integration tests for custom `MessageValidator`s annotated with `@Validator`.
+- **`:tests:validator`**: Integration tests for custom `MessageValidator`s discovered through `ServiceLoader`.
 - **`:tests:validator-dependency`**: A dependency module used by `:tests:validator` for validator-related dependency scenarios.
 - **`:tests:runtime`**: Tests focused on runtime behavior of validation APIs and error messages.
 - **`:tests:validating`**: Shared fixtures and tests for validation behavior across multiple scenarios, including `testFixtures`.

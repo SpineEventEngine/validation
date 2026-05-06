@@ -13,5 +13,5 @@ This section will map the test modules and explain when to add to which:
 `:tests:vanilla` for baseline integration without custom extensions;
 `:tests:extensions`, `:tests:consumer`, and `:tests:consumer-dependency` for custom
 options and consumer-side scenarios; `:tests:validator` and
-`:tests:validator-dependency` for `@Validator` scenarios; and `:tests:runtime` and
+`:tests:validator-dependency` for `MessageValidator` scenarios; and `:tests:runtime` and
 `:tests:validating` for runtime behavior and shared fixtures.

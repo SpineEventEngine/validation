@@ -332,8 +332,8 @@ consumer-facing variant of the same SPI is covered by
 
 - [Runtime library](runtime-library.md) — the types in `:jvm-runtime` that the
   generated code calls into at execution time.
-- [Extension points](extension-points.md) — the public extension surface that
-  `OptionGenerator`, `ValidationOption`, and `@Validator` collectively expose.
+- [Extension points](extension-points.md) — the public extension surface built around
+  `ValidationOption` and `MessageValidator`.
 - [Adding a new built-in validation option](adding-a-built-in-option.md) — the
   contributor walkthrough that ties this page to the rest of the guide.
 
