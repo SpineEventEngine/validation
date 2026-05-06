@@ -21,7 +21,7 @@ project paths like `:java` and `:tests:vanilla`.
 ## Test modules
 
 - **`:context-tests`**: [ProtoTap][prototap]-based compilation tests for `:context`, focusing on invalid option usage and error reporting.
-- **`:tests`**: Parent project for integration tests that run the compiler plugins and exercise generated code.
+- **`:tests`**: Parent project for integration tests that run the Compiler plugins and exercise generated code.
 - **`:tests:vanilla`**: “Vanilla” integration tests: validation without any custom extensions.
 - **`:tests:extensions`**: Example implementation of the `(currency)` custom option used by test suites to verify custom reactions, views, and generators.
 - **`:tests:consumer`**: Integration tests for a consuming project that uses validation plus custom extensions.
