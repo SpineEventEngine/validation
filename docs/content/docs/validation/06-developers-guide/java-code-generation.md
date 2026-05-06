@@ -96,8 +96,8 @@ Three properties of this loop are worth highlighting:
 ## The `OptionGenerator` SPI
 
 `OptionGenerator` is the abstraction that decouples the renderer from the specifics of
-any single option. Every built-in option (and every custom one) is implemented as a
-subclass:
+any single option. Every built-in option handled by `JavaValidationRenderer`, and every
+custom Java validation option, is implemented as a subclass:
 
 <embed-code
   file="$java/src/main/kotlin/io/spine/tools/validation/java/generate/OptionGenerator.kt"
@@ -146,14 +146,15 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
 }
 ```
 
-Two subclasses of `OptionGenerator` exist for convenience:
+One convenience subclass of `OptionGenerator` exists today:
 
 - [`OptionGeneratorWithConverter`][option-generator-with-converter] — adds a lazily
   constructed `JavaValueConverter` for translating Protobuf default values into Java
   literals. Generators that need to compare a field against its type-specific default
   (`(required)`, `(distinct)`, the bound options) extend this class.
-- The generator may also keep its own per-run state, as long as nothing that depends on
-  `Querying` or `TypeSystem` is touched before `inject()` returns.
+
+Generators may also keep their own per-run state, as long as nothing that depends on
+`Querying` or `TypeSystem` is touched before `inject()` returns.
 
 ## What the generator produces
 
@@ -225,8 +226,8 @@ state at generation time or carried by class-level fields the generator declares
 
 After `JavaValidationRenderer` has assembled a `MessageValidationCode` for a message, it
 hands the bundle to [`ValidationCodeInjector`][validation-code-injector]. The injector
-operates on the IntelliJ PSI representation of the already-generated Java file and is the
-only place in `:java` that mutates source files:
+operates on the IntelliJ PSI representation of the already-generated Java file. In the
+main validation renderer, it is the component that mutates the message and builder PSI:
 
 ```kotlin
 fun inject(code: MessageValidationCode, messageClass: PsiClass) {
@@ -258,8 +259,9 @@ The injector encodes the conventions for the shape of every generated validator:
   re-validated without paying for an exception.
 - The builder is made to implement `ValidatingBuilder`. Its `build()` method is wrapped:
   the existing return is preceded by a call to `validate()`, and any violation is thrown
-  as `ValidationException`. This is the only place a violation becomes an exception;
-  everywhere else, violations are passed around as values.
+  as `ValidationException`. For constraints produced by `OptionGenerator`s, this is where
+  validation errors become exceptions; `(set_once)` is handled separately and throws from
+  builder mutators.
 - The `build()` return type is annotated `@Validated` and `buildPartial()` is annotated
   `@NonValidated`. These markers are how downstream code (and IDE tooling) tell the two
   results apart at a glance.
