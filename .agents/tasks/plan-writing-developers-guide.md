@@ -110,7 +110,8 @@ How the multi-project build is wired and how artifacts are produced:
 - Gradle multi-project layout; relationship between `:java`, `:java-bundle`, and
   `:gradle-plugin`.
 - Why `:java-bundle` exists (fat JAR for compiler plugin distribution).
-- Version flow and how the Gradle plugin is consumed by downstream projects.
+- Version flow and how the Gradle plugin is consumed by downstream projects and
+  CoreJvm Compiler (https://github.com/SpineEventEngine/core-jvm-compiler) in particular.
 
 ## Conventions
 
