@@ -486,7 +486,7 @@ differences are concentrated at the boundaries:
   library, which is registered with the global `ExtensionRegistry` by the base library
   itself. A custom option registers its own provider; a built-in does not.
 - **No `ValidationOption` SPI implementation.** Built-ins are listed directly in
-  `ValidationPlugin` and `JavaValidationRenderer.builtInGenerators()`. The
+  `ValidationPlugin` and `JavaValidationRenderer.builtInGenerators()`. The 
   `ValidationOption` SPI is the discovery mechanism for custom options only.
 - **No `META-INF/services` entry, no `@AutoService`.** The plugin loads built-ins
   through ordinary class references; `ServiceLoader` is involved only for custom
