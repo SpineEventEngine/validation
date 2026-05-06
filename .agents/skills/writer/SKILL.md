@@ -49,6 +49,10 @@ description: >
 
 - Follow `.agents/documentation-guidelines.md` and `.agents/documentation-tasks.md`.
 - Use fenced code blocks for commands and examples; format file/dir names as code.
+- When referencing documentation page titles or section names in prose, use
+  typographic double quotation marks, such as the “Getting started” page or the
+  “Troubleshooting” section. Keep file paths, identifiers, frontmatter values,
+  navigation labels, and Markdown link labels in their expected syntax.
 - In Markdown files, prefer footnote-style reference links for external `https://`
   targets instead of inline links. Write readable body text like
   `[label][short-id]`, then place the URL definition near the end of the file,
