@@ -15,13 +15,13 @@ without further configuration.
 
 The mechanics are similar but the locations differ:
 
-| Aspect             | Custom option                                 | Built-in option                                                          |
-|--------------------|-----------------------------------------------|--------------------------------------------------------------------------|
-| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the Base Libraries repo. |
-| Reaction and view  | Modules in the consumer's repository.         | [`:context`][context-pkg] in this repository.                            |
-| Generator          | Module in the consumer's repository.          | [`:java`][java-pkg] in this repository.                                  |
-| Discovery          | `ValidationOption` SPI via `ServiceLoader`.   | Direct registration in `ValidationPlugin` and `JavaValidationRenderer`.  |
-| Distribution       | Consumer project, optionally a Gradle plugin. | Ships with the Validation library and `:java-bundle`.                    |
+| Aspect             | Custom option                                 | Built-in option                                                         |
+|--------------------|-----------------------------------------------|-------------------------------------------------------------------------|
+| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the Base Libraries repo.      |
+| Reaction and view  | Modules in the consumer's repository.         | [`:context`][context-pkg] in this repository.                           |
+| Generator          | Module in the consumer's repository.          | [`:java`][java-pkg] in this repository.                                 |
+| Discovery          | `ValidationOption` SPI via `ServiceLoader`.   | Direct registration in `ValidationPlugin` and `JavaValidationRenderer`. |
+| Distribution       | Consumer project, optionally a Gradle plugin. | Ships with the Validation library and `:java-bundle`.                   |
 
 The walkthrough below uses `(required)` as the recurring concrete reference. It is the
 built-in whose model and codegen are most thoroughly described elsewhere in the guide
@@ -342,7 +342,8 @@ The pattern is uniform across the built-ins:
 - Filter views by the message type currently being processed.
 - Delegate per-application code construction to a small helper class
   (`GenerateRequired` here). The helper produces a `CodeBlock` that runs inside the
-  “[validate scope](java-code-generation.md#the-validate-scope)” — `violations`,
+  validate scope described in “[The validate scope](java-code-generation.md#the-validate-scope)” —
+  `violations`,
   `parentPath`, `parentName` are in scope and the helper appends a
   `ConstraintViolation` to `violations` when the constraint fails.
 
@@ -424,7 +425,7 @@ the work belongs at build time instead.
 The repository ships several test modules, each with a different scope. New built-ins
 typically touch three of them. The test modules are catalogued in
 “[Key modules](key-modules.md#test-modules)”; choosing the right one is covered in
-[Testing strategy](testing-strategy.md).
+“[Testing strategy](testing-strategy.md)”.
 
 - **`:context-tests`** — Prototap-based compilation tests for `:context`. Add a spec
   here for every diagnostic the reaction can raise (unsupported field type, unsupported
@@ -478,7 +479,7 @@ a pair on the same page; do not give a companion its own section.
 ## How this differs from a custom option
 
 The contributor-facing flow above and the consumer-facing flow in
-[Custom validation](../05-custom-validation/) share most of their substance: declare an
+“[Custom validation](../05-custom-validation/)” share most of their substance: declare an
 option, model it as a reaction plus a view, generate Java, register the pieces. The
 differences are concentrated at the boundaries:
 
@@ -495,7 +496,7 @@ differences are concentrated at the boundaries:
   the Compiler's classpath by `:gradle-plugin` together with the rest of the library
   (see “[Build, packaging, and release](build-and-release.md)”). A custom option's module
   must explicitly register itself with the Compiler — see
-  [Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md).
+  “[Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)”.
 - **The option declaration crosses repositories.** The `.proto` change lives in
   [Base Libraries][base-libraries] and ships in that library's release; the model and codegen changes
   live here. The two changes must be coordinated.
