@@ -226,7 +226,8 @@ state at generation time or carried by class-level fields the generator declares
 
 After `JavaValidationRenderer` has assembled a `MessageValidationCode` for a message, it
 hands the bundle to [`ValidationCodeInjector`][validation-code-injector]. The injector
-operates on the IntelliJ PSI representation of the already-generated Java file. In the
+operates on the [IntelliJ PSI][intellij-psi] representation of the already-generated Java
+file. In the
 main validation renderer, it is the component that mutates the message and builder PSI:
 
 ```kotlin
@@ -348,3 +349,4 @@ consumer-facing variant of the same SPI is covered by
 [message-scope]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/generate/MessageScope.kt
 [set-once-constraints]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/setonce/SetOnceJavaConstraints.kt
 [expression-pkg]: https://github.com/SpineEventEngine/validation/tree/master/java/src/main/kotlin/io/spine/tools/validation/java/expression
+[intellij-psi]: https://plugins.jetbrains.com/docs/intellij/psi.html
