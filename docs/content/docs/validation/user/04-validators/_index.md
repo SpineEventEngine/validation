@@ -92,7 +92,7 @@ In practice, this happens in three common ways:
    produced from `.proto` options (if any) and executes all validators registered for `M` via
    `ValidatorRegistry`.
 
-3. **Validate nested message fields** by marking them with `(validate) = true`.  
+3. **Validate nested message fields** by marking them with<br>`(validate) = true`.  
    When the enclosing message is validated (for example, during the enclosing builder’s
    `build()`), Spine Validation also validates the nested values of those fields. This nested
    validation runs both the nested message’s generated constraints (if any) and any validators
