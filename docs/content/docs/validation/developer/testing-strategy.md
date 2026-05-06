@@ -42,7 +42,7 @@ realistic case where `.proto` types or validators come from a different module.
 
 `:context-tests` is the home for tests that assert the Compiler *fails* on a
 malformed use of a built-in option, with a specific diagnostic. The module is
-built around [Prototap][prototap], a Spine test harness that runs `protoc` plus
+built around [ProtoTap][prototap], a Spine test harness that runs `protoc` plus
 the Spine Compiler against intentionally-broken `.proto` fixtures and exposes the
 captured diagnostics back to the test code.
 
@@ -50,7 +50,7 @@ The shape of a typical spec — see
 [`RangeReactionSpec.kt`][range-reaction-spec] for a full example:
 
 - A spec class extends [`CompilationErrorTest`][compilation-error-test], which
-  invokes `tapConsole` from `Logging.testLib` and the Prototap entry points.
+  invokes `tapConsole` from `Logging.testLib` and the ProtoTap entry points.
 - The spec asserts both that compilation failed and that the diagnostic carries
   the expected message — for example, that pointing `(range)` at an unsupported
   field type names the field and the rejected type.
