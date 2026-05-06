@@ -62,8 +62,8 @@ sequenceDiagram
     Note over View: alter — state ready for renderer
 ```
 
-`OneofOptionDiscovered` and `MessageOptionDiscovered` follow the same shape, with the
-appropriate AST node as the projection's ID.
+`OneofOptionDiscovered` and `MessageOptionDiscovered` follow the same shape, identifying
+the projection by the corresponding declaration in the parsed Protobuf file.
 
 ### Event filtering by option name
 
