@@ -3,4 +3,8 @@ code-path:
     path: "../_examples"
   - name: "runtime"
     path: "../../jvm-runtime"
+  - name: "java"
+    path: "../../java"
+  - name: "context"
+    path: "../../context"
 docs-path: "../content/docs/"

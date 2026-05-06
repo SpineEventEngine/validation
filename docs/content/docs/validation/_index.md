@@ -11,12 +11,12 @@ options, and runs those checks automatically when you build messages.
 
 ## Start here
 
-- New to the library: [Overview](00-intro/)
-- Ready to try it: [Getting started](01-getting-started/)
+- New to the library: [Overview](user/00-intro/)
+- Ready to try it: [Getting started](user/01-getting-started/)
 
 ## Deeper topics
 
-- [Built-in options](03-built-in-options/)
-- [Using validators](04-validators/)
-- How it works: [Architecture](09-developers-guide/architecture.md)
-- Extension points: [Custom validation](05-custom-validation/)
+- [Built-in options](user/03-built-in-options/)
+- [Using validators](user/04-validators/)
+- Internals: [Developer's guide](developer/overview-and-audience/)
+- Extension points: [Custom validation](user/05-custom-validation/)
