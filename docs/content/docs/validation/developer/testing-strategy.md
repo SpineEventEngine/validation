@@ -119,8 +119,8 @@ What sits where:
   (`ChoiceITest.kt`, `ExternalConstraintITest.kt`,
   `CustomOptionsLoadingITest.kt`).
 
-The framework stack is JUnit 5 plus Kotest assertions plus Truth for the
-classes that already used it. Specs typically build a message, catch
+The framework stack is JUnit 5 plus Kotest assertions plus [Google Truth][truth]
+for the classes that already used it. Specs typically build a message, catch
 `ValidationException`, and assert on the shape of the resulting `ValidationError`
 — including placeholder resolution and the `field_path` of each violation.
 
@@ -263,3 +263,4 @@ A handful of conventions keep specs across the suites consistent:
 [prototap]: https://github.com/SpineEventEngine/ProtoTap
 [range-reaction-spec]: https://github.com/SpineEventEngine/validation/blob/master/context-tests/src/test/kotlin/io/spine/tools/validation/RangeReactionSpec.kt
 [compilation-error-test]: https://github.com/SpineEventEngine/validation/blob/master/context-tests/src/test/kotlin/io/spine/tools/validation/CompilationErrorTest.kt
+[truth]: https://truth.dev/
