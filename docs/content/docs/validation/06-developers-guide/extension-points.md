@@ -27,14 +27,14 @@ This page consolidates the two into a single picture.
 
 ## The two surfaces at a glance
 
-| Aspect            | `ValidationOption`                                                    | `MessageValidator`                                                      |
-|-------------------|-----------------------------------------------------------------------|-------------------------------------------------------------------------|
-| Granularity       | A new `.proto` option, applicable to many messages.                   | A custom check on one specific message type.                            |
-| When it runs      | Build time (codegen) plus optional runtime helpers it ships itself.   | Runtime: after compiled checks for local messages; via `ValidatorRegistry` for external/direct validation. |
-| Inputs            | Reads the model in `:context`, emits Java via `:java`.                | Receives a built `Message`, returns `List<DetectedViolation>`.          |
-| Discovery         | `ServiceLoader<ValidationOption>` in the plugin's classpath.          | `ServiceLoader<MessageValidator>` in the consumer's classpath.          |
-| Required by       | Adding a new constraint vocabulary (`(when)`, `(currency)`, …).       | Constraints that cannot be expressed declaratively, or external types.  |
-| Lives in          | Defined in `:java`; implementations live in their own modules.        | Defined in `:jvm-runtime`; implementations live in any consumer module. |
+| Aspect       | `ValidationOption`                                                  | `MessageValidator`                                                                                         |
+|--------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| Granularity  | A new `.proto` option, applicable to many messages.                 | A custom check on one specific message type.                                                               |
+| When it runs | Build time (codegen) plus optional runtime helpers it ships itself. | Runtime: after compiled checks for local messages; via `ValidatorRegistry` for external/direct validation. |
+| Inputs       | Reads the model in `:context`, emits Java via `:java`.              | Receives a built `Message`, returns `List<DetectedViolation>`.                                             |
+| Discovery    | `ServiceLoader<ValidationOption>` on the Compiler user classpath.   | `ServiceLoader<MessageValidator>` in the consumer's classpath.                                             |
+| Required by  | Adding a new constraint vocabulary (`(when)`, `(currency)`, …).     | Constraints that cannot be expressed declaratively, or external types.                                     |
+| Lives in     | Defined in `:java`; implementations live in their own modules.      | Defined in `:jvm-runtime`; implementations live in any consumer module.                                    |
 
 The two are deliberately not interchangeable. A `ValidationOption` is the right choice
 when the same constraint vocabulary applies across many messages and benefits from
@@ -86,9 +86,9 @@ same `Querying` and `TypeSystem` as the built-ins and contributes to the same
 A `ValidationOption` implementation is discovered through the standard Java
 `ServiceLoader` SPI:
 
-- The implementing class must be on the **plugin's classpath**, not the application's.
-  In a Gradle build that consumes Validation, this means the module declaring the option
-  is added to the Spine Compiler classpath (see
+- The implementing class must be on the **Spine Compiler user classpath**, not merely
+  on the application runtime classpath. In a Gradle build that consumes Validation, this
+  means the module declaring the option is added to the Spine Compiler user classpath (see
   [Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)).
 - A `META-INF/services/io.spine.tools.validation.java.ValidationOption` entry must list
   the implementing class. The conventional way to generate it is the
@@ -100,14 +100,15 @@ In addition to the SPI implementation itself, two more pieces of build-time wiri
 required for the option to work: the option's Protobuf descriptor must be discoverable
 through `OptionsProvider` (so the Compiler recognises the option when parsing
 `.proto` files), and the consumer's build must place the option's module on the
-Compiler's classpath. Both are covered in the User's Guide; the SPI itself does not
+Compiler user classpath. Both are covered in the User's Guide; the SPI itself does not
 attempt to encode them.
 
 ### Lifecycle
 
-Implementations are constructed eagerly when `JavaValidationPlugin` is loaded — the
-`customOptions` lazy is dereferenced in the constructor of the plugin. From that point
-on, the same instance is used for the entire build:
+Discovered implementations are constructed when a `JavaValidationPlugin` instance is
+created — its constructor dereferences the top-level `customOptions` lazy while collecting
+generators, views, and reactions. From that point on, the same instance is used for the
+entire build:
 
 - Each `Reaction` instance returned by `reactions` is registered with the Bounded
   Context exactly once. Reactions are stateless by contract.
@@ -138,44 +139,31 @@ and `IfMissingOptionDiscovered` in either order (see
 The runtime extension surface is [`MessageValidator<M>`][message-validator]. Use it for
 checks that cannot be expressed in `.proto` options at all — because the rule depends on
 multiple fields, on external state, or on a message type whose source the consumer cannot
-modify. The full mechanics — the registry, the local-versus-external distinction, the
-`${validator}` placeholder, the `DetectedViolation` shape — are described in
-[Runtime library](runtime-library.md#the-validator-extension-hook). The summary below
-covers only what is specific to *being* an extension point.
+modify. The registry API, the `${validator}` placeholder, and the `DetectedViolation`
+shape are covered in [Runtime library](runtime-library.md#the-validator-extension-hook)
+and [Using `ValidatorRegistry`](../04-validators/validator-registry.md); this section
+keeps to the extension contract.
 
 ### Discovery
 
-`ValidatorRegistry` loads `MessageValidator` implementations through `ServiceLoader` on
-first access:
+For automatic discovery, the implementation must be on the consumer application's runtime
+classpath and listed in
+`META-INF/services/io.spine.validation.MessageValidator`. `@AutoService` is only a
+convenient way to produce that descriptor; there is no Validation-specific discovery
+annotation.
 
-- The implementing class must be on the consumer application's runtime classpath.
-- A `META-INF/services/io.spine.validation.MessageValidator` entry must list the
-  implementing class. `@AutoService(MessageValidator::class)` is the conventional way to
-  produce it; any equivalent mechanism works.
-- The class must have a public no-arg constructor.
-- The concrete `M` type parameter must be recoverable from the validator class.
-  Direct implementations such as `MessageValidator<MyType>` are the clearest shape;
-  base classes are fine as long as Guava's `TypeToken` can still resolve `M` to a
-  concrete `Message` class.
-
-There is **no** `@Validator` annotation in this library. The discovery contract is the
-`ServiceLoader` SPI plus the `MessageValidator` interface. `@AutoService` is one
-convenient way to satisfy it on the JVM, not a Validation-specific annotation.
-
-Validators may also be registered explicitly via `ValidatorRegistry.add(...)`, removed
-via `remove(...)`, or cleared via `clear()`. Several validators per message type are
-allowed; the order in which they run is unspecified and their reports are concatenated.
-This is documented in the User's Guide
-([Using `ValidatorRegistry`](../04-validators/validator-registry.md)).
+The class must have a public no-arg constructor, and its concrete `M` type parameter must
+be recoverable from the validator class. Direct implementations such as
+`MessageValidator<MyType>` are the clearest shape; base classes are fine as long as
+Guava's `TypeToken` can still resolve `M` to a concrete `Message` class.
 
 ### Lifecycle
 
-`MessageValidator` instances are constructed by `ServiceLoader` on first access to
-`ValidatorRegistry`, or explicitly by application code before it calls `add(...)`.
-Once registered, an instance is retained until `remove(...)` or `clear()` removes it and
-is invoked on every matching `validate(...)` call. The registry itself is annotated
-`@ThreadSafe` and dispatches concurrently: implementations must therefore be safe to
-invoke from multiple threads at once.
+`MessageValidator` instances are constructed by `ServiceLoader` when `ValidatorRegistry`
+is initialized, or explicitly by application code before registration. Once registered,
+an instance is retained and invoked on every matching validation. The registry itself is
+annotated `@ThreadSafe` and dispatches concurrently: implementations must therefore be
+safe to invoke from multiple threads at once.
 
 ### Ordering and composition
 
@@ -192,9 +180,8 @@ message of type `M` is validated:
   validated unless the caller invokes `Validate.check` or `ValidatorRegistry.validate`
   directly.
 
-The order in which validators of the same message type run is unspecified. As with
-custom generators, every validator simply appends to the accumulated list of violations,
-which is what keeps the ordering question moot.
+The order in which validators of the same message type run is unspecified. Validators
+must report independently of their peers because the registry concatenates all reports.
 
 ## Constraints on what extensions can do
 
@@ -209,10 +196,11 @@ out of the compile-time / runtime split that the rest of the architecture is bui
   or scanning the file system from inside `codeFor()` defeats the model's reason to
   exist — the renderer is supposed to be replaceable with a renderer for another target
   language without touching `:context`.
-- **No mutation of the message PSI directly.** A generator returns `SingleOptionCode`;
-  placement is the [`ValidationCodeInjector`][validation-code-injector]'s job. Adding
-  methods, fields, or interface implementations from inside a generator bypasses the
-  conventions for the shape of generated validators (see
+- **No mutation of the message PSI directly.** Return constraints, supporting fields, and
+  supporting methods through `SingleOptionCode`; placement is the
+  [`ValidationCodeInjector`][validation-code-injector]'s job. Directly adding methods,
+  fields, or interface implementations from inside a generator bypasses the conventions
+  for the shape of generated validators (see
   [Java code generation](java-code-generation.md#injecting-the-code-into-the-psi)).
 - **No silent failure.** A misapplied option must fail compilation through
   `Compilation.check` / `Compilation.error`, not be quietly skipped. Reactions that
