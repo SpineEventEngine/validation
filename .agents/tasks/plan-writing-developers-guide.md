@@ -64,7 +64,7 @@ What ships in `:jvm-runtime` and how generated code uses it:
 - Error Protobuf types and how violations are surfaced.
 - Extension hooks available at runtime, including `@Validator`.
 
-### 7. Extension points (deep dive)
+### 7. Extension points
 
 Internals behind the public extension surface, complementing the User's Guide
 `04-validators/` and `05-custom-validation/`:
