@@ -207,51 +207,15 @@ exception uses to produce a human-readable string from a list of `ConstraintViol
 
 ## `ValidationException`
 
-`ValidationException` is what falls out of a failing `Builder.build()`:
+`ValidationException` is what falls out of a failing `Builder.build()`. It is a
+`RuntimeException`, so the `throws` declaration on generated `build()` methods is
+documentation, not a checked contract.
 
-```java
-public class ValidationException
-        extends RuntimeException implements ErrorWithMessage<ValidationError> {
-
-    @Serial
-    private static final long serialVersionUID = 0L;
-
-    private final ImmutableList<ConstraintViolation> constraintViolations;
-
-    public ValidationException(Iterable<ConstraintViolation> violations) {
-        super();
-        this.constraintViolations = ImmutableList.copyOf(violations);
-    }
-
-    public ValidationException(ConstraintViolation violation) {
-        this(ImmutableList.of(violation));
-    }
-
-    public final List<ConstraintViolation> getConstraintViolations() {
-        return constraintViolations;
-    }
-
-    @Override
-    public String getMessage() {
-        return getClass().getSimpleName() + ": " + ViolationText.ofAll(constraintViolations);
-    }
-
-    @Override
-    public ValidationError asMessage() {
-        return ValidationError.newBuilder()
-                .addAllConstraintViolation(constraintViolations)
-                .build();
-    }
-}
-```
-
-Two design choices are worth pointing out. First, the exception is a `RuntimeException`,
-not a checked exception. The generated `build()` declares it in `throws` only as
-documentation; callers do not have to catch it. Second, the exception implements
-`ErrorWithMessage<ValidationError>`, so it can be converted to a serialisable Protobuf via
-`asMessage()` and shipped across a wire — a server can therefore raise a
-`ValidationException` and let the framework deliver the error to a client without the
-client linking against `:jvm-runtime`.
+The exception stores an immutable copy of the reported `ConstraintViolation`s, exposes
+them through `getConstraintViolations()`, formats diagnostics with `ViolationText`, and
+implements `ErrorWithMessage<ValidationError>`. Framework code can therefore obtain the
+serialisable Protobuf form via `asMessage()` and ship the report across a wire without
+forcing clients to link against `:jvm-runtime`.
 
 For richer error envelopes — for example, attaching an error code or a typed
 `MessageClass` to the report — `:jvm-runtime` provides
@@ -322,10 +286,11 @@ internal fun loadFromServiceLoader() {
 
 An internal extension function, `MessageValidator<M>.messageClass()` (declared in
 [`ValidatorRegistry.kt`][validator-registry]), recovers the `M` type parameter via Guava's
-`TypeToken`. It is not part of the SPI surface that implementers see, but it is the reason
-every implementation must directly extend `MessageValidator<SomeConcreteType>` rather than
-parameterise it from a base class — the registry needs the concrete type argument to be
-visible on the implementing class.
+`TypeToken`. It is not part of the SPI surface that implementers see. For `ServiceLoader`
+discovery, the concrete message type must be recoverable from the validator class: direct
+implementations such as `MessageValidator<SomeConcreteType>` are the clearest shape, and
+base classes are fine as long as `TypeToken` still resolves `M` to a concrete message
+class.
 
 The registry exposes `add`, `remove`, `get`, `clear`, and two `validate` overloads —
 `validate(message)` for top-level use and `validate(message, parentPath, parentName)` for
@@ -351,19 +316,19 @@ canonical reference for behavior questions; the short version is:
   a custom check on top of the generated one.
 - **External messages** — types whose generated classes are out of the consumer's reach
   (third-party Protobufs, well-known types). They never go through the Java renderer, so
-  there is no compiled `validate()` to invoke. Instead, the renderer arranges for every
-  *field* of an external type inside a local message to call
-  `ValidatorRegistry.validate(...)` during the local message's validation. Singular
-  fields, repeated fields, and map-valued fields with values of the external type are all
-  covered. A standalone instance of an external type passed to a non-local API is **not**
-  validated automatically — the runtime sees no entry point.
+  there is no compiled `validate()` to invoke. A local message reaches their validators
+  only through fields marked with `(validate) = true`; the generated `(validate)` code
+  calls `ValidatorRegistry.validate(...)` for singular fields, repeated fields, and map
+  values of that external type. A standalone instance of an external type passed to a
+  non-local API is **not** validated automatically; callers must invoke `Validate.check`
+  or `ValidatorRegistry.validate(...)` themselves.
 
 The bundled `TimestampValidator` ([`TimestampValidator.kt`][timestamp-validator]) is a
 small, real example that ships with `:jvm-runtime`: it is `@AutoService`-registered for
 `com.google.protobuf.Timestamp`, returns `FieldViolation`s when seconds or nanos fall
 outside `Timestamps.MIN_VALUE`/`MAX_VALUE`, and otherwise stays out of the way. A consumer
-that has a `Timestamp` field inside a local message gets the check for free as soon as
-`:jvm-runtime` is on the classpath.
+that marks a `Timestamp` field in a local message with `(validate) = true` gets the check
+for free as soon as `:jvm-runtime` is on the classpath.
 
 ### Discovery and registration
 
@@ -381,9 +346,10 @@ that has a `Timestamp` field inside a local message gets the check for free as s
    `clear()` resets the registry. Several validators per message type are allowed; their
    ordering is unspecified, and their reports are concatenated.
 
-Implementations must have a public no-arg constructor (a `ServiceLoader` requirement) and
-must be safe to invoke concurrently — `ValidatorRegistry` is annotated `@ThreadSafe` and
-makes no per-call locking guarantees beyond the registry's own bookkeeping.
+Validators discovered through `ServiceLoader` must have a public no-arg constructor.
+Whether discovered or registered explicitly, validator instances must be safe to invoke
+concurrently: `ValidatorRegistry` is annotated `@ThreadSafe` and makes no per-call
+locking guarantees beyond the registry's own bookkeeping.
 
 There is no `@Validator` annotation in the library itself; the discovery contract is the
 `ServiceLoader` SPI plus the `MessageValidator` interface. `@AutoService(MessageValidator::class)`
