@@ -244,22 +244,22 @@ The table below maps each built-in option to its primary model elements. Every r
 the same wiring described above; the differences are in which AST node owns the
 constraint and which payload the event carries.
 
-| **Option**            | **Subject / Reaction / Event / Projection** |
-|-----------------------|---------------------------------------------|
-| `(required)`          | field<br>`RequiredReaction`<br>`RequiredFieldDiscovered`<br>`RequiredField` |
-| `(if_missing)`        | field<br>`IfMissingReaction`<br>`IfMissingOptionDiscovered`<br>`RequiredField` |
-| `(pattern)`           | field<br>`PatternReaction`<br>`PatternFieldDiscovered`<br>`PatternField` |
-| `(goes)`              | field<br>`GoesReaction`<br>`GoesFieldDiscovered`<br>`GoesField` |
-| `(distinct)`          | field<br>`DistinctReaction`<br>`DistinctFieldDiscovered`<br>`DistinctField` |
-| `(if_has_duplicates)` | field<br>`IfHasDuplicatesReaction`<br>`IfHasDuplicatesOptionDiscovered`<br>`DistinctField` |
-| `(validate)`          | field<br>`ValidateReaction`<br>`ValidateFieldDiscovered`<br>`ValidateField` |
-| `(if_invalid)`        | field<br>`IfInvalidReaction`<br>(folded into `ValidateField`)<br>`ValidateField` |
-| `(set_once)`          | field<br>`SetOnceReaction`<br>`SetOnceFieldDiscovered`<br>`SetOnceField` |
-| `(if_set_again)`      | field<br>`IfSetAgainReaction`<br>`IfSetAgainOptionDiscovered`<br>`SetOnceField` |
+| **Option**            | **Subject / Reaction / Event / Projection**                                                            |
+|-----------------------|--------------------------------------------------------------------------------------------------------|
+| `(required)`          | field<br>`RequiredReaction`<br>`RequiredFieldDiscovered`<br>`RequiredField`                            |
+| `(if_missing)`        | field<br>`IfMissingReaction`<br>`IfMissingOptionDiscovered`<br>`RequiredField`                         |
+| `(pattern)`           | field<br>`PatternReaction`<br>`PatternFieldDiscovered`<br>`PatternField`                               |
+| `(goes)`              | field<br>`GoesReaction`<br>`GoesFieldDiscovered`<br>`GoesField`                                        |
+| `(distinct)`          | field<br>`DistinctReaction`<br>`DistinctFieldDiscovered`<br>`DistinctField`                            |
+| `(if_has_duplicates)` | field<br>`IfHasDuplicatesReaction`<br>`IfHasDuplicatesOptionDiscovered`<br>`DistinctField`             |
+| `(validate)`          | field<br>`ValidateReaction`<br>`ValidateFieldDiscovered`<br>`ValidateField`                            |
+| `(if_invalid)`        | field<br>`IfInvalidReaction`<br>(folded into `ValidateField`)<br>`ValidateField`                       |
+| `(set_once)`          | field<br>`SetOnceReaction`<br>`SetOnceFieldDiscovered`<br>`SetOnceField`                               |
+| `(if_set_again)`      | field<br>`IfSetAgainReaction`<br>`IfSetAgainOptionDiscovered`<br>`SetOnceField`                        |
 | `(min)` / `(max)`     | numeric field<br>`MinReaction` / `MaxReaction`<br>(in `bound/events.proto`)<br>`MinField` / `MaxField` |
-| `(range)`             | numeric field<br>`RangeReaction`<br>`RangeFieldDiscovered`<br>`RangeField` |
-| `(choice)`            | oneof group<br>`ChoiceReaction`<br>`ChoiceOneofDiscovered`<br>`ChoiceOneof` |
-| `(require)`           | message<br>`RequireReaction`<br>`RequireMessageDiscovered`<br>`RequireMessage` |
+| `(range)`             | numeric field<br>`RangeReaction`<br>`RangeFieldDiscovered`<br>`RangeField`                             |
+| `(choice)`            | oneof group<br>`ChoiceReaction`<br>`ChoiceOneofDiscovered`<br>`ChoiceOneof`                            |
+| `(require)`           | message<br>`RequireReaction`<br>`RequireMessageDiscovered`<br>`RequireMessage`                         |
 
 The numeric bound options live under [`bound/`][bound-pkg] because they share parsing
 infrastructure (`NumericBoundParser`, `KNumericBound`, the field-vs-number bound
