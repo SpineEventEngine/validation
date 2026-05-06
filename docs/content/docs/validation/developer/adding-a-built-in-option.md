@@ -4,7 +4,7 @@ description: How contributors add a new standard validation option to the Spine 
 headline: Documentation
 ---
 
-# Adding a new built-in validation option
+# Adding a new built-in validation option
 
 This page is the contributor-side counterpart to the User's Guide
 “[Custom validation](../user/05-custom-validation/)” section. Where that section explains how a
