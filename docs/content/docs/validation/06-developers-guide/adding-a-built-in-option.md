@@ -7,7 +7,7 @@ headline: Documentation
 # Adding a new built-in validation option
 
 This page is the contributor-side counterpart to the User's Guide
-[Custom validation](../05-custom-validation/) section. Where that section explains how a
+“[Custom validation](../05-custom-validation/)” section. Where that section explains how a
 *consumer* wires a custom option into their own project, this page explains how a
 *contributor* adds a new **standard** option to the Validation library — one that ships in
 [`spine/options.proto`][options-proto] and is recognised by every consumer of the library
@@ -17,7 +17,7 @@ The mechanics are similar but the locations differ:
 
 | Aspect             | Custom option                                 | Built-in option                                                          |
 |--------------------|-----------------------------------------------|--------------------------------------------------------------------------|
-| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the **`base-libraries`** repo. |
+| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the **[Base Libraries][base-libraries]** repo. |
 | Reaction and view  | Modules in the consumer's repository.         | [`:context`][context-pkg] in this repository.                            |
 | Generator          | Module in the consumer's repository.          | [`:java`][java-pkg] in this repository.                                  |
 | Discovery          | `ValidationOption` SPI via `ServiceLoader`.   | Direct registration in `ValidationPlugin` and `JavaValidationRenderer`.  |
@@ -25,50 +25,50 @@ The mechanics are similar but the locations differ:
 
 The walkthrough below uses `(required)` as the recurring concrete reference. It is the
 built-in whose model and codegen are most thoroughly described elsewhere in the guide
-(see [The validation model](validation-model.md) and
-[Java code generation](java-code-generation.md)), so each step links to the section that
+(see “[The validation model](validation-model.md)” and
+“[Java code generation](java-code-generation.md)”), so each step links to the section that
 explains that step in depth.
 
 ## Before you start
 
 Adding a built-in option is a coordinated change across two repositories — Validation and
-[base-libraries] — and across at least three modules in this repository. Before the
+[Base Libraries][base-libraries] — and across at least three modules in this repository. Before the
 implementation, decide:
 
 - **Whether the option is general enough to belong in the base library.** Built-in
   options are part of the Spine vocabulary every consumer inherits. An option that is
   meaningful only inside one domain belongs in that domain's library as a custom option,
   exactly the way Spine Time ships `(when)` (see
-  [Custom validation](../05-custom-validation/)).
-  The [Extension points](extension-points.md#the-two-surfaces-at-a-glance) page describes
-  when to choose `ValidationOption` over `MessageValidator`; the same discipline applies
-  to built-ins.
+  “[Custom validation](../05-custom-validation/)”).
+  The “[Extension points](extension-points.md#the-two-surfaces-at-a-glance)” page
+  describes when to choose `ValidationOption` over `MessageValidator`; the same discipline
+  applies to built-ins.
 - **The option's declaration site.** A field-level option becomes a `FieldOptions`
   extension; an option on a `oneof` group becomes a `OneofOptions` extension; a
   message-level option becomes a `MessageOptions` extension. The reaction's input event
   and the projection's identity follow from this choice — see
-  [The validation model](validation-model.md#the-bounded-context-shape).
+  “[The validation model](validation-model.md#the-bounded-context-shape)”.
 - **Whether the option is primary or companion.** A companion option overrides one aspect
   of a primary — `(if_missing)` overrides `(required)`'s error message, `(if_invalid)`
-  overrides `(validate)`'s. A companion has its own reaction and event but contributes to
+  overrides `(validate)`'s. A&nbsp;companion has its own reaction and event but contributes to
   the *primary's* projection. See
-  [Companion options](validation-model.md#companion-options).
+  “[Companion options](validation-model.md#companion-options)”.
 - **Whether the option needs runtime helpers.** Most options compile down to inline Java
   that uses only types already in `:jvm-runtime`. A few — for example, `(pattern)` —
   introduce new placeholders or share a runtime helper class. Plan this up front; it
   affects which modules you change.
 
-## 1. Declare the option in `base-libraries`
+## 1. Declare the option in Base Libraries
 
 The Protobuf extension that defines the option's name, target descriptor type, and
 extension number lives in [`spine/options.proto`][options-proto] in the
-[base-libraries] repository, not in this repository. Every built-in extension number is
+[Base Libraries][base-libraries] repository, not in this repository. Every built-in extension number is
 allocated from the same range as the options that already ship there, and the file is the
 single point at which `protoc` learns about the option.
 
 A field-level option declaration follows the same shape as the existing built-ins —
 illustrated below with an `EXT_NUMBER` placeholder for the field number that the
-base-libraries maintainers allocate:
+Base Libraries maintainers allocate:
 
 ```protobuf
 extend google.protobuf.FieldOptions {
@@ -80,19 +80,19 @@ extend google.protobuf.FieldOptions {
 Three points worth highlighting:
 
 - The **extension number** must be unique within `FieldOptions`/`MessageOptions`/
-  `OneofOptions`. Allocate it in coordination with the maintainers of `base-libraries`
+  `OneofOptions`. Allocate it in coordination with the maintainers of Base Libraries
   rather than picking a number locally.
 - The **`(default_message)` annotation** is the fallback error template. It is read by
   [`defaultErrorMessage`][default-message] in `:context` and recorded on the discovery
   event, so the projection picks it up only when no companion has overridden it. See
-  [Error message templates and placeholders](validation-model.md#error-message-templates-and-placeholders).
+  “[Error message templates and placeholders](validation-model.md#error-message-templates-and-placeholders)”.
 - For options that carry structured data (rather than a bare `bool` or `string`), declare
   a separate Protobuf message type in `options.proto` and use it as the extension's type —
   the way `IfMissingOption`, `PatternOption`, and `RequireOption` are declared.
 
-The change to `options.proto` ships in the next base-libraries release. Until that
+The change to `options.proto` ships in the next Base Libraries release. Until that
 release is available, the matching changes in this repository will not compile against
-the published artefact: coordinate the version bump with the base-libraries maintainers
+the published artefact: coordinate the version bump with the Base Libraries maintainers
 and merge the two changes in lock-step.
 
 ## 2. Add the option name constant
@@ -117,7 +117,7 @@ diagnostics.
 
 This step is the heart of the work. The first four substeps mirror the artefacts a
 Bounded Context combines (see
-[The Bounded Context shape](validation-model.md#the-bounded-context-shape)); the fifth
+“[The Bounded Context shape](validation-model.md#the-bounded-context-shape)”); the fifth
 wires those artefacts into the plugin:
 
 ### 3.1. Declare the discovery event
@@ -148,7 +148,7 @@ The `id` field must be the first declared field and must match the projection's 
 type — `compiler.FieldRef` for field-level options, the corresponding declaration type
 for `oneof` and message options. Companion events typically carry only the override they
 contribute (for example, `IfMissingOptionDiscovered` carries just the custom message);
-see [The discovered event](validation-model.md#the-discovered-event).
+see “[The discovered event](validation-model.md#the-discovered-event)”.
 
 ### 3.2. Declare the projection
 
@@ -177,7 +177,7 @@ message RequiredField {
 
 A primary option owns its projection. A companion folds into the *primary's*
 projection: `IfMissingOption` does not declare its own view, it only contributes to
-`RequiredField`. See [The projection](validation-model.md#the-projection).
+`RequiredField`. See “[The projection](validation-model.md#the-projection)”.
 
 ### 3.3. Implement the reaction
 
@@ -227,10 +227,10 @@ A few conventions all built-in reactions follow:
 - **Report misapplication through `Compilation.check` / `Compilation.error`**, never
   through exceptions. The lambda is evaluated only on failure, so detailed diagnostics
   are cheap. See
-  [Error reporting conventions](validation-model.md#error-reporting-conventions).
+  “[Error reporting conventions](validation-model.md#error-reporting-conventions)”.
 - **For companion options, call `checkPrimaryApplied` first.** It fails compilation if
   the companion is used without the primary it modifies (see
-  [Companion options](validation-model.md#companion-options)).
+  “[Companion options](validation-model.md#companion-options)”).
 - **Validate the error template's placeholders against a fixed set.** This applies to
   reactions whose option carries a custom message template — typically a companion such
   as `(if_missing)` — not to a primary like `(required)` whose template is fixed by
@@ -239,7 +239,7 @@ A few conventions all built-in reactions follow:
   every placeholder it later reads is known. See `IfMissingReaction` for the running
   reference.
 
-### 3.4. Implement the projection (`View`)
+### 3.4. Implement the projection
 
 The projection is a Kotlin `View` parameterised by its identity, state, and builder
 types. It subscribes to the discovery event and folds it into state:
@@ -301,7 +301,7 @@ public abstract class ValidationPlugin(
 For a primary plus its companion, both reactions go in the `reactions` set; only the
 primary's view goes in `views`.
 
-## 4. Implement code generation in `:java`
+## 4. Implement code generation
 
 The Java side reads from the populated projection and emits inline Java. Typically this
 is one generator class (often supported by a small helper that builds the per-application
@@ -338,18 +338,18 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
 The pattern is uniform across the built-ins:
 
 - Query the projection lazily — `querying` is not available until `inject()` returns,
-  see [The render lifecycle](java-code-generation.md#the-render-lifecycle).
+  see “[The render lifecycle](java-code-generation.md#the-render-lifecycle)”.
 - Filter views by the message type currently being processed.
 - Delegate per-application code construction to a small helper class
   (`GenerateRequired` here). The helper produces a `CodeBlock` that runs inside the
-  [validate scope](java-code-generation.md#the-validate-scope) — `violations`,
+  “[validate scope](java-code-generation.md#the-validate-scope)” — `violations`,
   `parentPath`, `parentName` are in scope and the helper appends a
   `ConstraintViolation` to `violations` when the constraint fails.
 
 The constraint block follows the same shape every built-in uses: derive the field path
 from `parentPath`, derive the type name from `parentName.orElse(declaringType)`, build a
 `ConstraintViolation` through the `constraintViolation` expression helper, and add it to
-`violations`. See [What the generator produces](java-code-generation.md#what-the-generator-produces)
+`violations`. See “[What the generator produces](java-code-generation.md#what-the-generator-produces)”
 for the full anatomy of a `SingleOptionCode`.
 
 ### 4.2. Register the generator
@@ -375,7 +375,7 @@ private fun builtInGenerators(): List<OptionGenerator> = listOf(
 
 Because the option ships as a built-in, no `ValidationOption` SPI implementation is
 involved: the generator is registered directly. The
-[Extension points](extension-points.md#the-validationoption-spi-end-to-end) page
+“[Extension points](extension-points.md#the-validationoption-spi-end-to-end)” page
 describes how a custom option reaches the same `JavaValidationRenderer` through
 `ServiceLoader` instead.
 
@@ -387,9 +387,9 @@ adding a check to `validate()`. It is rendered by a separate
 A new built-in with similar semantics — for example, an option that should reject a
 setter call rather than report a violation at `build()` time — needs its own renderer
 following the `SetOnceRenderer` pattern, not a generator slot. See
-[The `(set_once)` renderer](java-code-generation.md#the-set_once-renderer).
+“[The `(set_once)` renderer](java-code-generation.md#the-set_once-renderer)”.
 
-## 5. Add runtime support in `:jvm-runtime` if needed
+## 5. Add runtime support if needed
 
 Most options compile to inline Java that uses only types already exported by
 `:jvm-runtime`: `ConstraintViolation`, `TemplateString`, `FieldPath`, the
@@ -411,7 +411,7 @@ A new option needs runtime work in three cases:
   the generated `if (…) { violations.add(…) }` blocks are deliberately self-contained.
 - **It changes the violation schema.** New fields on `ConstraintViolation` or
   `ValidationError` are wire-visible — these Protobuf types cross process boundaries,
-  see [Constraints on the runtime surface](runtime-library.md#constraints-on-the-runtime-surface).
+  see “[Constraints on the runtime surface](runtime-library.md#constraints-on-the-runtime-surface)”.
   Coordinate any change to the schema with the maintainers and respect Protobuf
   field-number stability.
 
@@ -423,7 +423,7 @@ the work belongs at build time instead.
 
 The repository ships several test modules, each with a different scope. New built-ins
 typically touch three of them. The test modules are catalogued in
-[Key modules](key-modules.md#test-modules); choosing the right one is covered in
+“[Key modules](key-modules.md#test-modules)”; choosing the right one is covered in
 [Testing strategy](testing-strategy.md).
 
 - **`:context-tests`** — Prototap-based compilation tests for `:context`. Add a spec
@@ -453,7 +453,7 @@ exception formatting — independent of any specific option.
 
 A built-in option is part of the public Validation vocabulary, so its consumer-facing
 documentation lives in the User's Guide
-[Built-in options](../03-built-in-options/) section, not in the Developer's Guide.
+“[Built-in options](../03-built-in-options/)” section, not in the Developer's Guide.
 Pick the page that matches the option's declaration site and add an entry consistent with
 the surrounding conventions:
 
@@ -493,15 +493,15 @@ differences are concentrated at the boundaries:
   contributions.
 - **No separate Gradle-plugin step.** Built-ins ship in `:java-bundle` and are placed on
   the Compiler's classpath by `:gradle-plugin` together with the rest of the library
-  (see [Build, packaging, and release](build-and-release.md)). A custom option's module
+  (see “[Build, packaging, and release](build-and-release.md)”). A custom option's module
   must explicitly register itself with the Compiler — see
   [Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md).
 - **The option declaration crosses repositories.** The `.proto` change lives in
-  [base-libraries] and ships in that library's release; the model and codegen changes
+  [Base Libraries][base-libraries] and ships in that library's release; the model and codegen changes
   live here. The two changes must be coordinated.
 
 The User's Guide
-[Custom validation](../05-custom-validation/) section is still worth reading end-to-end
+“[Custom validation](../05-custom-validation/)” section is still worth reading end-to-end
 before contributing a built-in: it describes the same architectural ideas from the
 consumer's perspective, and the running `(when)` example illustrates patterns — disabled
 sentinel values, message-typed options, repeated and map handling — that built-ins use
