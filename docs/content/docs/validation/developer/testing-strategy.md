@@ -31,12 +31,13 @@ a question of which band a new test belongs to.
 | End-to-end on built-ins | A `.proto` with built-in options compiles and the generated `validate()` produces the expected report. | `:tests:vanilla`, `:tests:validating`, `:tests:runtime` |
 | Custom extensions | The `ValidationOption` and `MessageValidator` SPIs work end-to-end against a realistic consumer setup. | `:tests:extensions`, `:tests:consumer`, `:tests:consumer-dependency`, `:tests:validator`, `:tests:validator-dependency` |
 
-The two extension-test pairs (`:tests:consumer` + `:tests:consumer-dependency`,
-`:tests:validator` + `:tests:validator-dependency`) each consist of a *consumer*
-project that runs the assertions and a *dependency* project that contributes
-`.proto` types or service implementations the consumer pulls in. The dependency
-half is not a test suite; it exists so that the consumer half can exercise the
-realistic case where `.proto` types or validators come from a different module.
+The extension tests use consumer modules for assertions and dependency modules
+for realistic cross-module inputs. `:tests:consumer` also depends on
+`:tests:extensions`, which contributes the custom `(currency)` `ValidationOption`;
+`:tests:consumer-dependency` contributes imported `.proto` types. In the
+validator pair, `:tests:validator` owns both the assertions and the
+`MessageValidator` implementations; `:tests:validator-dependency` contributes the
+dependency-owned `.proto` types used by the suite.
 
 ## Compile-time diagnostics: `:context-tests`
 
@@ -74,9 +75,9 @@ or `:tests:runtime`.
 `:jvm-runtime` ships with its own `src/test/` source set covering the runtime
 types in isolation: `ValidatorRegistry`, `ExceptionFactory`,
 `ValidationException`, `TemplateString` rendering, `TimestampValidator`, and the
-violation diagnostics under `io.spine.validation.diags`. No Compiler or codegen
-is involved — these are unit tests on the public runtime surface described in
-“[Runtime library](runtime-library.md)”.
+violation diagnostics under `io.spine.validation.diags`. No Spine Compiler or
+validation code generation is involved — these are unit tests on the public
+runtime surface described in “[Runtime library](runtime-library.md)”.
 
 Add a test here when you change a type that is part of the runtime API and the
 behaviour can be exercised by constructing a `Message`, a `ConstraintViolation`,
@@ -84,11 +85,12 @@ or a `ValidationException` directly. If your test needs a generated `validate()`
 method to fire, you are in the wrong module — go to `:tests:runtime` or
 `:tests:validating` instead.
 
-`:context`, `:java`, and `:gradle-plugin` do not have unit-test source sets:
-their behaviour is a function of the model and the renderer, both of which are
-covered by the integration modules below. A unit test that needed to instantiate
-a renderer or a reaction in isolation would have to rebuild most of the Spine
-Compiler harness around it; the integration modules already do that.
+`:context`, `:java`, and `:gradle-plugin` do not currently have dedicated
+unit-test suites: their behaviour is a function of the model and the renderer,
+both of which are covered by the integration modules below. A unit test that
+needed to instantiate a renderer or a reaction in isolation would have to rebuild
+most of the Spine Compiler harness around it; the integration modules already do
+that.
 
 ## End-to-end on built-ins
 
@@ -193,12 +195,12 @@ authoritative test for the built-in still lives in `:tests:validating`.
 
 ### `:tests:validator` and `:tests:validator-dependency` — `MessageValidator`
 
-The validator pair mirrors the consumer pair, for the runtime SPI. The
-dependency module declares `.proto` types and `MessageValidator` implementations
-discovered through `ServiceLoader`; the consumer module asserts that the
-registry picks them up, that they run alongside compiled checks for local
-messages, and that they are the only entry point for external messages — the
-contract documented in
+The validator pair covers the runtime SPI. `:tests:validator` declares
+`MessageValidator` implementations discovered through `ServiceLoader` and hosts
+the assertions. `:tests:validator-dependency` contributes dependency-owned
+`.proto` types used by these tests. The suite asserts that the registry picks up
+custom validators, that they run alongside compiled checks for local messages,
+and that they are the only entry point for external messages — the contract documented in
 “[Extension points: ordering and composition](extension-points.md#ordering-and-composition)”.
 
 Add to these modules when you change `ValidatorRegistry`, `MessageValidator`
