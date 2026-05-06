@@ -148,7 +148,7 @@ The `id` field must be the first declared field and must match the projection's 
 type — `compiler.FieldRef` for field-level options, the corresponding declaration type
 for `oneof` and message options. Companion events typically carry only the override they
 contribute (for example, `IfMissingOptionDiscovered` carries just the custom message);
-see “[The discovered event](validation-model.md#the-discovered-event)”.
+see “[The discovered event](validation-model.md#the-discovered-event)”.
 
 ### 3.2. Declare the projection
 
@@ -231,7 +231,7 @@ A few conventions all built-in reactions follow:
 - **For companion options, call `checkPrimaryApplied` first.** It fails compilation if
   the companion is used without the primary it modifies (see
   “[Companion options](validation-model.md#companion-options)”).
-- **Validate the error template's placeholders against a fixed set.** This applies to
+- **Validate the error template's placeholders against a fixed set.** This applies to
   reactions whose option carries a custom message template — typically a companion such
   as `(if_missing)` — not to a primary like `(required)` whose template is fixed by
   `(default_message)`. Such a reaction declares a `SUPPORTED_PLACEHOLDERS` set and calls
