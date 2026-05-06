@@ -17,7 +17,7 @@ The mechanics are similar but the locations differ:
 
 | Aspect             | Custom option                                 | Built-in option                                                          |
 |--------------------|-----------------------------------------------|--------------------------------------------------------------------------|
-| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the **[Base Libraries][base-libraries]** repo. |
+| Option declaration | A `.proto` file in the consumer's repository. | [`spine/options.proto`][options-proto] in the Base Libraries repo. |
 | Reaction and view  | Modules in the consumer's repository.         | [`:context`][context-pkg] in this repository.                            |
 | Generator          | Module in the consumer's repository.          | [`:java`][java-pkg] in this repository.                                  |
 | Discovery          | `ValidationOption` SPI via `ServiceLoader`.   | Direct registration in `ValidationPlugin` and `JavaValidationRenderer`.  |
