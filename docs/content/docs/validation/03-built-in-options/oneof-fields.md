@@ -42,5 +42,5 @@ message Contact {
 - Use `(choice)` for the group, and apply field-level constraints (like `(pattern)` or
   `(required)`) to individual cases when needed.
 - If the requirement is “at least one of these fields OR one of these other fields”, use
-  [Message-level options](message-level-options.md) with `(require).fields` and include `oneof`
+  [message-level options](message-level-options.md) with `(require).fields` and include `oneof`
   group names.

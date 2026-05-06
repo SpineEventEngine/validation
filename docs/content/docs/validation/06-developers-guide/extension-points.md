@@ -15,14 +15,14 @@ the compile-time / runtime split:
   specific message type*, executed alongside the compiled constraints.
 
 Each surface has a corresponding User's Guide section that explains how to *use* it:
-[Custom validation](../05-custom-validation/) for `ValidationOption`, and
-[Using validators](../04-validators/) for `MessageValidator`. This page is the
+“[Custom validation](../05-custom-validation/)” for `ValidationOption`, and
+“[Using validators](../04-validators/)” for `MessageValidator`. This page is the
 contributor-side view: what each surface guarantees, how discovery works, what an
 implementation may and may not do, and why.
 
 The earlier sections of the Developer's Guide cover each surface in detail —
-[The validation model](validation-model.md) and [Java code generation](java-code-generation.md)
-for the build-time half, and [Runtime library](runtime-library.md) for the runtime half.
+“[The validation model](validation-model.md)” and “[Java code generation](java-code-generation.md)”
+for the build-time half, and “[Runtime library](runtime-library.md)” for the runtime half.
 This page consolidates the two into a single picture.
 
 ## The two surfaces at a glance
@@ -89,7 +89,7 @@ A `ValidationOption` implementation is discovered through the standard Java
 - The implementing class must be on the **Spine Compiler user classpath**, not merely
   on the application runtime classpath. In a Gradle build that consumes Validation, this
   means the module declaring the option is added to the Spine Compiler user classpath (see
-  [Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)).
+  “[Pass the option to the Compiler](../05-custom-validation/pass-to-compiler.md)”).
 - A `META-INF/services/io.spine.tools.validation.java.ValidationOption` entry must list
   the implementing class. The conventional way to generate it is the
   `@AutoService(ValidationOption::class)` annotation processor; any other mechanism that
@@ -118,7 +118,7 @@ entire build:
   renderer calls `inject(querying, typeSystem)` on it before the first `codeFor()`
   invocation, and `codeFor(type)` is called once per message type in the
   `SourceFileSet`. The instance must therefore be safe to reuse across messages within a
-  single build — see [Java code generation](java-code-generation.md#the-render-lifecycle).
+  single build — see “[Java code generation](java-code-generation.md#the-render-lifecycle)”.
 
 ### Ordering
 
@@ -132,7 +132,7 @@ The same is true on the model side. Reactions and views run in event-delivery or
 custom view that needs to fold both its primary event and a companion event must accept
 either ordering, exactly the way `RequiredFieldView` accepts `RequiredFieldDiscovered`
 and `IfMissingOptionDiscovered` in either order (see
-[Companion options](validation-model.md#companion-options)).
+“[Companion options](validation-model.md#companion-options)”).
 
 ## The `MessageValidator` SPI
 
@@ -140,8 +140,8 @@ The runtime extension surface is [`MessageValidator<M>`][message-validator]. Use
 checks that cannot be expressed in `.proto` options at all — because the rule depends on
 multiple fields, on external state, or on a message type whose source the consumer cannot
 modify. The registry API, the `${validator}` placeholder, and the `DetectedViolation`
-shape are covered in [Runtime library](runtime-library.md#the-validator-extension-hook)
-and [Using `ValidatorRegistry`](../04-validators/validator-registry.md); this section
+shape are covered in “[Runtime library](runtime-library.md#the-validator-extension-hook)”
+and “[Using `ValidatorRegistry`](../04-validators/validator-registry.md)”; this section
 keeps to the extension contract.
 
 ### Discovery
@@ -187,7 +187,7 @@ must report independently of their peers because the registry concatenates all r
 
 Both SPIs are deliberately narrow. The constraints below are not arbitrary; they fall
 out of the compile-time / runtime split that the rest of the architecture is built on
-(see [Architecture](architecture.md)).
+(see “[Architecture](architecture.md)”).
 
 ### `ValidationOption`
 
@@ -201,7 +201,7 @@ out of the compile-time / runtime split that the rest of the architecture is bui
   [`ValidationCodeInjector`][validation-code-injector]'s job. Directly adding methods,
   fields, or interface implementations from inside a generator bypasses the conventions
   for the shape of generated validators (see
-  [Java code generation](java-code-generation.md#injecting-the-code-into-the-psi)).
+  “[Java code generation](java-code-generation.md#injecting-the-code-into-the-psi)”).
 - **No silent failure.** A misapplied option must fail compilation through
   `Compilation.check` / `Compilation.error`, not be quietly skipped. Reactions that
   decide an option does not apply must return `NoReaction`, not throw.
@@ -233,9 +233,9 @@ out of the compile-time / runtime split that the rest of the architecture is bui
 ### Why these constraints exist
 
 The compile-time / runtime split is what lets the runtime stay small (see
-[Runtime library](runtime-library.md#constraints-on-the-runtime-surface)) and the
+“[Runtime library](runtime-library.md#constraints-on-the-runtime-surface)”) and the
 language-agnostic model stay portable (see
-[The validation model](validation-model.md)). Both extension points are designed so
+“[The validation model](validation-model.md)”). Both extension points are designed so
 that a well-behaved implementation reinforces that split:
 
 - A `ValidationOption` adds a new constraint vocabulary without forcing a runtime rule

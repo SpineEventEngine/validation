@@ -450,7 +450,7 @@ scenarios; a new built-in should not need additions there. `:tests:validator*` c
 behaviour that is purely about runtime types — `Validate.check`, `ValidatorRegistry`,
 exception formatting — independent of any specific option.
 
-## 7. Document the option in the User's Guide
+## 7. Document the option in the User guide
 
 A built-in option is part of the public Validation vocabulary, so its consumer-facing
 documentation lives in the User's Guide
