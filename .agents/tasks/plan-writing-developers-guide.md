@@ -95,7 +95,7 @@ option to the Validation library. Outline:
 
 Map of the test modules and when to add to which:
 
-- `:context-tests` — Prototap-based compilation tests for the model.
+- `:context-tests` — ProtoTap-based compilation tests for the model.
 - `:tests:vanilla` — baseline integration without custom extensions.
 - `:tests:extensions`, `:tests:consumer`, `:tests:consumer-dependency` — custom
   options and consumer-side scenarios.
