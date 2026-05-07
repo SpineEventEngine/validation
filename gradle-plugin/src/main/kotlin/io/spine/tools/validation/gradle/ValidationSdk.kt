@@ -37,7 +37,7 @@ import io.spine.tools.validation.gradle.ValidationSdk.javaCodegenBundle
 internal object ValidationSdk {
 
     private const val toolsGroup = "io.spine.tools"
-    private const val prefix = "validation"
+    private const val infix = "validation"
 
     /**
      * The Maven artifact containing the `io.spine:spine-validation-jvm-runtime` module.
@@ -45,14 +45,14 @@ internal object ValidationSdk {
      * @see javaCodegenBundle
      */
     val jvmRuntime: MavenArtifact = Meta.dependency(
-        Module("io.spine", "spine-$prefix-jvm-runtime")
+        Module("io.spine", "spine-$infix-jvm-runtime")
     )
 
     /**
      * The Maven artifact containing the `io.spine.tools:validation-java-bundle` module.
      */
     val javaCodegenBundle: MavenArtifact = Meta.dependency(
-        Module(toolsGroup, "$prefix-java-bundle")
+        Module(toolsGroup, "$infix-java-bundle")
     )
 
     /**

@@ -57,7 +57,7 @@ spine {
 
 }
 
-// ProtoData codegen uses output from the KSP task.
+// The Spine Compiler uses output from the KSP task.
 project.afterEvaluate {
     val kspKotlin by tasks.getting
     @Suppress("unused")
