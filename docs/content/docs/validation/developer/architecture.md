@@ -53,7 +53,7 @@ and registers the built-in views and reactions:
 <embed-code
   file="$context/src/main/kotlin/io/spine/tools/validation/ValidationPlugin.kt"
   start="public abstract class ValidationPlugin"
-  end="^\) // Plugin">
+  end="^\)">
 </embed-code>
 ```kotlin
 public abstract class ValidationPlugin(
