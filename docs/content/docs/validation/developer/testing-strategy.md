@@ -39,7 +39,7 @@ validator pair, `:tests:validator` owns both the assertions and the
 `MessageValidator` implementations; `:tests:validator-dependency` contributes the
 dependency-owned `.proto` types used by the suite.
 
-## Compile-time diagnostics: `:context-tests`
+## Compile-time diagnostics
 
 `:context-tests` is the home for tests that assert the Compiler *fails* on a
 malformed use of a built-in option, with a specific diagnostic. The module is
@@ -70,7 +70,7 @@ overflow, and so forth.
 inspect generated code or runtime behaviour. Those belong in `:tests:validating`
 or `:tests:runtime`.
 
-## Runtime library: `:jvm-runtime` in-module tests
+## Runtime library in-module tests
 
 `:jvm-runtime` ships with its own `src/test/` source set covering the runtime
 types in isolation: `ValidatorRegistry`, `ExceptionFactory`,
@@ -99,7 +99,7 @@ file is compiled by the Spine Compiler, generated Java is produced, and the test
 exercises the generated `validate()`. They differ in scope and in what they make
 easy.
 
-### `:tests:validating` — the primary integration suite
+### The primary integration suite
 
 `:tests:validating` is the module to reach for first. It uses
 `java-test-fixtures` to keep `.proto` fixtures and Kotlin helpers in one place,
@@ -128,7 +128,7 @@ This is the module used by the “[Adding a new built-in validation option](addi
 walkthrough, and it should be your default for any test that asks “does this
 option do what its consumer-facing documentation says it does?”
 
-### `:tests:runtime` — runtime behaviour and constraint matrices
+### Runtime behaviour and constraint matrices
 
 `:tests:runtime` covers runtime *behaviour* that is independent of any specific
 option — `ValidationOfConstraintTest`, `OneofSpec`, `EnclosedMessageValidationSpec`,
@@ -150,7 +150,7 @@ Use this module when:
 `:tests:runtime` does not use `testFixtures` — `.proto` fixtures live alongside
 the specs.
 
-### `:tests:vanilla` — baseline integration without extensions
+### Baseline integration without extensions
 
 `:tests:vanilla` is the smallest end-to-end suite: a stock build with no custom
 extensions, exercising a handful of constraints (`JavaValidationSpec`,
@@ -170,7 +170,7 @@ Two pairs of modules cover the extension SPIs end-to-end. Both use the
 dependency module supplies the `.proto` types or service registrations that the
 consumer needs to pull in from somewhere other than its own source tree.
 
-### `:tests:extensions` and `:tests:consumer*` — `ValidationOption`
+### `ValidationOption` SPI end-to-end
 
 `:tests:extensions` is a tiny Kotlin module (no `src/test`) that implements the
 running `(currency)` example referenced throughout the documentation. It
@@ -193,7 +193,7 @@ generic option-behaviour tests here; if a built-in change happens to break custo
 options, the diagnostic will show up in the `:tests:consumer*` suite, but the
 authoritative test for the built-in still lives in `:tests:validating`.
 
-### `:tests:validator` and `:tests:validator-dependency` — `MessageValidator`
+### `MessageValidator` SPI end-to-end
 
 The validator pair covers the runtime SPI. `:tests:validator` declares
 `MessageValidator` implementations discovered through `ServiceLoader` and hosts
