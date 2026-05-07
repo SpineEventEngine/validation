@@ -10,3 +10,11 @@ code-path:
   - name: "context"
     path: "../../context"
 docs-path: "../content/docs/"
+code-includes:
+  - ".gitignore"
+  - "**/*.kts"
+  - "**/*.md"
+  - "**/*.proto"
+  - "**/*.java"
+  - "**/*.kt"
+  - "**/*.yml"
