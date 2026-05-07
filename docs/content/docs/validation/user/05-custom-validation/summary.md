@@ -41,9 +41,9 @@ Spine Compiler.
 
 ## What's next
 
-- Explore library internals: [Developer's guide](../06-developers-guide/)
+- Explore library internals: [Developer's guide](../../developer/)
 - See the modules that back this pipeline:
-  [Key modules](../06-developers-guide/key-modules.md)
+  [Key modules](../../developer/key-modules.md)
 
 The complete source for all running examples is in the
 [`validation` module][time-validation-src] of the Spine Time repository.
