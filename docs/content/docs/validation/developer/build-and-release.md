@@ -126,7 +126,7 @@ worth a closer look.
 The Spine Compiler loads each compiler plugin from a single classpath entry on
 its *user classpath*. If `:java` was published as a normal Maven artifact, every
 consumer would have to resolve its full transitive dependency graph onto the
-compiler classloader, where Gradle's resolution rules no longer apply and
+Compiler user classpath, where Gradle's resolution rules no longer apply and
 version mismatches are not easy to diagnose. `:java-bundle` solves this by
 shipping `:java` and its non-shared dependencies as one shadow JAR.
 
@@ -249,7 +249,7 @@ push to `master` after PR checks have already verified the build:
 ```
 
 `-x test` relies on the per-PR build to keep publication fast. Every merge to
-`master` emits a new `2.0.0-SNAPSHOT.<n>` artifact for downstream consumers to
+`master` emits a new version of the artifacts for downstream consumers to
 refresh against.
 
 ## Downstream consumers
