@@ -89,7 +89,7 @@ import "spine/time_options.proto"; // Brings time-related options.
 
 Users can extend the library by providing custom Protobuf options and code generation logic.
 
-See the [Custom validation](docs/content/docs/validation/05-custom-validation/) section 
+See the [Custom validation][custom-validation] section 
 of the User Guide for details.
 
 [codecov]: https://codecov.io/gh/SpineEventEngine/validation
@@ -101,3 +101,4 @@ of the User Guide for details.
 
 [options-proto]: https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/options.proto
 [time-options-proto]: https://github.com/SpineEventEngine/time/blob/master/time/src/main/proto/spine/time_options.proto
+[custom-validation]: docs/content/docs/validation/user/05-custom-validation/_index.md
