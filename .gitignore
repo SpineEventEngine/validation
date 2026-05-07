@@ -135,3 +135,4 @@ pubspec.lock
 # Python cache
 __pycache__/
 *.pyc
+/.claude/worktrees/
