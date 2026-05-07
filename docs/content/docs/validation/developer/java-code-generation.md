@@ -99,11 +99,6 @@ Three properties of this loop are worth highlighting:
 any single option. Every built-in option handled by `JavaValidationRenderer`, and every
 custom Java validation option, is implemented as a subclass:
 
-<embed-code
-  file="$java/src/main/kotlin/io/spine/tools/validation/java/generate/OptionGenerator.kt"
-  start="public abstract class OptionGenerator"
-  end="^\}">
-</embed-code>
 ```kotlin
 public abstract class OptionGenerator {
 
@@ -134,6 +129,9 @@ is representative:
 ```kotlin
 internal class RequiredGenerator : OptionGeneratorWithConverter() {
 
+    /**
+     * All `(required)` fields in the current compilation process.
+     */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
@@ -230,6 +228,11 @@ operates on the [IntelliJ PSI][intellij-psi] representation of the already-gener
 file. In the
 main validation renderer, it is the component that mutates the message and builder PSI:
 
+<embed-code
+  file="$java/src/main/kotlin/io/spine/tools/validation/java/generate/ValidationCodeInjector.kt"
+  start="fun inject"
+  end="^    \}">
+</embed-code>
 ```kotlin
 fun inject(code: MessageValidationCode, messageClass: PsiClass) {
     val builderClass = messageClass.nested("Builder")
@@ -300,11 +303,6 @@ own renderer and its own per-type logic, not a generator slot.
 Custom options participate in code generation through the third member of the
 `ValidationOption` SPI:
 
-<embed-code
-  file="$java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt"
-  start="public interface ValidationOption"
-  end="^\}">
-</embed-code>
 ```kotlin
 public interface ValidationOption {
 

@@ -323,6 +323,9 @@ emitted code needs `JavaValueConverter` for default-value comparison:
 ```kotlin
 internal class RequiredGenerator : OptionGeneratorWithConverter() {
 
+    /**
+     * All `(required)` fields in the current compilation process.
+     */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
