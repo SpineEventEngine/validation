@@ -130,25 +130,12 @@ compiler classloader, where Gradle's resolution rules no longer apply and
 version mismatches are not easy to diagnose. `:java-bundle` solves this by
 shipping `:java` and its non-shared dependencies as one shadow JAR.
 
-The `:java-bundle` build script applies the [`fat-jar`][fat-jar-convention]
-convention, which is built on
-[`com.gradleup.shadow`][shadow]:
-
-<embed-code
-  file="$root/java-bundle/build.gradle.kts"
-  start="^plugins \{"
-  end="^}">
-</embed-code>
-```kotlin
-plugins {
-    `fat-jar`
-}
-```
-
-The `fat-jar` convention plugin configures `tasks.shadowJar` to exclude
-everything that the Spine Compiler's own classloader already provides — Gradle
-internals, Kotlin stdlib, IntelliJ Platform annotations, third-party plugin
-declarations — and then publishes the resulting JAR as a `MavenPublication` named `fatJar`:
+The `:java-bundle` build applies the [`fat-jar`][fat-jar-convention]
+convention, a [Shadow][shadow]-based wrapper that configures `tasks.shadowJar`
+to exclude everything that the Spine Compiler's own classloader already
+provides — Gradle internals, Kotlin stdlib, IntelliJ Platform annotations,
+third-party plugin declarations — and publishes the resulting JAR as a
+`MavenPublication` named `fatJar`:
 
 <embed-code
   file="$root/buildSrc/src/main/kotlin/fat-jar.gradle.kts"
@@ -172,10 +159,6 @@ Roaster, Compiler modules, JavaPoet, and the Spine `Base`, `Logging`, `Time`,
 `Reflect`, and `CoreJvm` libraries. These exclusions are not optional: pulling
 two copies of these libraries into the compiler classloader produces hard-to-
 diagnose `LinkageError`s during code generation.
-
-The bundle uses the same `validationVersion` as everything else, with one
-practical consequence — bumping the version produces a new bundle that downstream
-projects pick up the next time they refresh their Compiler user classpath.
 
 ## Why `:gradle-plugin` is separate from `:java-bundle`
 
@@ -230,14 +213,9 @@ flowchart LR
     maven --> consumer
 ```
 
-In words:
-
-- `:context` and `:java` compile as ordinary Kotlin libraries.
-- `:java-bundle` shadows `:java` into a single JAR.
-- `:jvm-runtime` compiles separately; it is the only artifact a consumer's
-  *application* code links against.
-- `:gradle-plugin` records the coordinates of the bundle and the runtime so
-  applying the plugin is enough to configure both halves of the consumer build.
+For consumers, the important release contract is this: they apply the plugin
+from the Gradle Plugin Portal, and that plugin version selects the recorded
+bundle and runtime coordinates resolved from Maven repositories.
 
 ## Publication destinations
 
@@ -270,11 +248,9 @@ push to `master` after PR checks have already verified the build:
   run: ./gradlew publish -x test --stacktrace
 ```
 
-`-x test` is intentional — the same commit has just been validated by the
-per-PR build, and re-running the test suite during publication doubles the
-release time without adding signal. This makes `master` the single mainline:
-every merge produces a new `2.0.0-SNAPSHOT.<n>` build with a higher patch
-counter, and downstream consumers refresh against it.
+`-x test` relies on the per-PR build to keep publication fast. Every merge to
+`master` emits a new `2.0.0-SNAPSHOT.<n>` artifact for downstream consumers to
+refresh against.
 
 ## Downstream consumers
 
