@@ -39,25 +39,32 @@ and registers the test tasks without bringing in the publishing machinery.
 
 The single source of truth for the project version is
 [`version.gradle.kts`][version-gradle], which exposes `validationVersion`
-through Gradle's `extra` properties. The root build script applies this file to
-every subproject:
+through Gradle's `extra` properties:
 
+<embed-code
+  file="$root/version.gradle.kts"
+  start="val validationVersion"
+  end="val validationVersion">
+</embed-code>
 ```kotlin
-allprojects {
-    apply(from = "$rootDir/version.gradle.kts")
-    group = "io.spine.tools"
-    version = extra["validationVersion"]!!
-}
+val validationVersion by extra("2.0.0-SNAPSHOT.416")
 ```
 
-A single bump in `version.gradle.kts` therefore moves every artifact this
-repository publishes — there is no per-module version state to keep in sync.
+The root build script applies this file under `allprojects { … }` and assigns
+`validationVersion` to `project.version` for every subproject, so a single bump
+in `version.gradle.kts` moves every artifact this repository publishes — there
+is no per-module version state to keep in sync.
 
 ## Publishable modules
 
 The core library and the distribution layer publish; the test modules and
 `:docs` do not. The publishing setup lives in [`build.gradle.kts`][root-build]:
 
+<embed-code
+  file="$root/build.gradle.kts"
+  start="spinePublishing \{"
+  end="^}">
+</embed-code>
 ```kotlin
 spinePublishing {
     artifactPrefix = "spine-validation-"
@@ -88,13 +95,25 @@ prefix. The `MavenArtifact` declarations in
 [`ValidationSdk.kt`][validation-sdk] inside `:gradle-plugin` reflect both
 conventions:
 
+<embed-code
+  file="$root/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/ValidationSdk.kt"
+  start="val jvmRuntime: MavenArtifact"
+  end="^    \)">
+</embed-code>
 ```kotlin
 val jvmRuntime: MavenArtifact = Meta.dependency(
-    Module("io.spine", "spine-validation-jvm-runtime")
+    Module("io.spine", "spine-$infix-jvm-runtime")
 )
+```
 
+<embed-code
+  file="$root/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/ValidationSdk.kt"
+  start="val javaCodegenBundle: MavenArtifact"
+  end="^    \)">
+</embed-code>
+```kotlin
 val javaCodegenBundle: MavenArtifact = Meta.dependency(
-    Module("io.spine.tools", "validation-java-bundle")
+    Module(toolsGroup, "$infix-java-bundle")
 )
 ```
 
@@ -115,6 +134,11 @@ The `:java-bundle` build script applies the [`fat-jar`][fat-jar-convention]
 convention, which is built on
 [`com.gradleup.shadow`][shadow]:
 
+<embed-code
+  file="$root/java-bundle/build.gradle.kts"
+  start="^plugins \{"
+  end="^}">
+</embed-code>
 ```kotlin
 plugins {
     `fat-jar`
@@ -126,6 +150,11 @@ everything that the Spine Compiler's own classloader already provides — Gradle
 internals, Kotlin stdlib, IntelliJ Platform annotations, third-party plugin
 declarations — and then publishes the resulting JAR as a `MavenPublication` named `fatJar`:
 
+<embed-code
+  file="$root/buildSrc/src/main/kotlin/fat-jar.gradle.kts"
+  start="^publishing \{"
+  end="^}">
+</embed-code>
 ```kotlin
 publishing {
     publications {
@@ -229,8 +258,15 @@ Publication is automated by the
 [`publish.yml`][publish-workflow] GitHub Actions workflow, which runs on every
 push to `master` after PR checks have already verified the build:
 
+<embed-code
+  file="$root/.github/workflows/publish.yml"
+  start="- name: Publish artifacts to Maven"
+  end="run: ./gradlew publish">
+</embed-code>
 ```yaml
 - name: Publish artifacts to Maven
+  # Since we're in the `master` branch already, this means that tests of a PR passed.
+  # So, no need to run the tests again when publishing.
   run: ./gradlew publish -x test --stacktrace
 ```
 
