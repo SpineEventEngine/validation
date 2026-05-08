@@ -108,6 +108,6 @@ their violations together.
 - [Implement a validator](implement-a-validator.md)
 - [Using `ValidatorRegistry`](validator-registry.md)
 - [Custom validation](../05-custom-validation/)
-- [Developer's guide](../06-developers-guide/)
+- [Developer's guide](../../developer/)
 
 [auto-service]: https://github.com/google/auto/tree/main/service
