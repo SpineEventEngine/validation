@@ -1,11 +1,11 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2023, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * https://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -55,6 +55,14 @@ tasks.publish {
 
 tasks.shadowJar {
     exclude(
+        /*
+         * Excluding this type to avoid it being located in the fat JAR.
+         *
+         * Locating this type in its own `io:spine:protodata` artifact is crucial
+         * for obtaining proper version values from the manifest file.
+         * This file is only present in the `io:spine:protodata` artifact.
+         */
+        "io/spine/protodata/gradle/plugin/Plugin.class",
         "META-INF/gradle-plugins/io.spine.tools.compiler.properties",
 
         /*
