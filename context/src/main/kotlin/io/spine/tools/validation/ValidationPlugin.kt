@@ -105,4 +105,4 @@ public abstract class ValidationPlugin(
         IfSetAgainReaction(),
         RequireReaction()
     )
-)
+) // Plugin

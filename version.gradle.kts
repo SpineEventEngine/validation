@@ -25,6 +25,6 @@
  */
 
 /**
- * The version of the Validation SDK to publish.
+ * The version of the Validation library to publish.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.417")
+val validationVersion by extra("2.0.0-SNAPSHOT.418")
