@@ -6,8 +6,8 @@ headline: Documentation
 
 # Extension points
 
-Spine Validation exposes two extension points and only two. They sit on opposite sides of
-the compile-time / runtime split:
+Spine Validation exposes two extension points. 
+They sit on opposite sides of the compile-time / runtime split:
 
 - The [`ValidationOption`][validation-option-spi] SPI (build time) — adds a *new
   validation option* with its own model, codegen, and runtime helpers.
