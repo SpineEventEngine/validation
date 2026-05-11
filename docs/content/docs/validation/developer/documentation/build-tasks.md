@@ -54,7 +54,7 @@ documentation locally" recipe in "[Procedures](procedures.md)".
 
 Runs `_script/hugo-build` → `hugo` from `_preview/`. The Hugo build emits the
 static site under `docs/_preview/public/`. The output is intended for local
-inspection only — it is *not* the artifact published to `spine.io`. See the
+inspection only — it is *not* the artifact published to spine.io. See the
 "Building the documentation locally" recipe in
 "[Procedures](procedures.md)".
 
