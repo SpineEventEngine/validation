@@ -122,6 +122,11 @@ manages. The tool replaces the *fenced code block* immediately following
 the element with the content extracted from the referenced source file
 between the `start` and `end` patterns.
 
+This page describes the syntax used in the Validation documentation. 
+For the complete `embed-code-go` syntax — including named fragments,
+multi-piece fragments, omitted boundaries, and the exact line-pattern
+rules — see the upstream [embedding guide][embed-code-go-embedding].
+
 ````markdown
 <embed—code
   file="$root/version.gradle.kts"
@@ -137,14 +142,18 @@ The four relevant attributes are:
 
 - `file` — `$source-root/relative/path/to/file.ext` where `source-root`
   is a name from `code-path`.
-- `start` — a regular expression matched against a single line. The
-  matching line is the *first* line included.
-- `end` — a regular expression matched against a single line. The
-  matching line is the *last* line included. To include a single line,
+- `start` — an extended glob-style pattern matched against a single line. 
+  The matching line is the *first* line included.
+- `end` — an extended glob-style pattern matched against a single line. 
+  The matching line is the *last* line included. To include a single line,
   use the same pattern for both.
 - The language tag on the fenced block (`kotlin`, `java`, `proto`, …)
   controls syntax highlighting; the tool does not derive it from the
   source extension.
+
+Patterns match anywhere in a line by default. Use `^` at the beginning
+or `$` at the end when the match must be anchored to the start or end of
+the line.
 
 Other working examples in the repository to copy from:
 
@@ -182,6 +191,7 @@ binaries are kept up to date.
 [hello-validation]: https://github.com/spine-examples/hello-validation
 [spine-time]: https://github.com/SpineEventEngine/time
 [embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
+[embed-code-go-embedding]: https://github.com/SpineEventEngine/embed-code-go/blob/master/EMBEDDING.md
 [runtime-library]: https://github.com/SpineEventEngine/validation/blob/master/docs/content/docs/validation/developer/runtime-library.md
 [build-and-release]: https://github.com/SpineEventEngine/validation/blob/master/docs/content/docs/validation/developer/build-and-release.md
 [check-code-embedding]: https://github.com/SpineEventEngine/validation/blob/master/.github/workflows/check-code-embedding.yml
