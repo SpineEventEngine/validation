@@ -6,86 +6,296 @@ headline: Documentation
 
 # Procedures
 
-<!-- TODO: One-line preamble: each section below is an executable recipe with
-the exact commands, files touched, and expected outcome. -->
+Each section below is an executable recipe. Unless stated otherwise, run
+commands from the repository root and prefix Gradle tasks with `./gradlew`.
+The conceptual background for each procedure lives on the sibling pages:
+"[Build tasks](build-tasks.md)", "[Embedded examples](embedded-examples.md)",
+and "[External tooling](tooling.md)".
 
 ## Incrementing the version of Validation
 
-<!-- TODO: Steps from the brief:
-1. Update `version.gradle.kts`.
-2. Run `./gradlew :docs:updatePluginVersions`.
-3. Commit `version.gradle.kts` with message `Bump version -> \`<new_version>\``.
-4. Commit the remaining touched files with `Bump Validation -> \`<new_version>\``.
-5. Run `./gradlew clean build` and commit `pom.xml` and `dependencies.md`
-   with `Update dependency reports`.
--->
+1. Update the version literal in [`version.gradle.kts`][version-gradle]:
+
+   ```kotlin
+   val validationVersion by extra("<new-version>")
+   ```
+
+2. Propagate the new version into the example projects' plugin coordinates:
+
+   ```bash
+   ./gradlew :docs:updatePluginVersions
+   ```
+
+   This rewrites the `io.spine.validation` plugin version (and the
+   `io.spine.core-jvm` plugin version) in every `build.gradle.kts` under
+   `docs/_examples/`.
+
+3. Commit `version.gradle.kts` on its own with:
+
+   ```text
+   Bump version -> `<new-version>`
+   ```
+
+4. Commit the remaining files touched by step 2 with:
+
+   ```text
+   Bump Validation -> `<new-version>`
+   ```
+
+5. Run a clean build and refresh the dependency reports:
+
+   ```bash
+   ./gradlew clean build
+   ```
+
+   Then commit the regenerated `pom.xml` and `dependencies.md` with:
+
+   ```text
+   Update dependency reports
+   ```
+
+   This step follows the same convention used elsewhere in the Spine SDK
+   projects.
 
 ## Updating the version of the CoreJvm Compiler
 
-<!-- TODO:
-1. Update the version in `CoreJvmCompiler` under `buildSrc`.
-2. Run `./gradlew :docs:updatePluginVersions`.
--->
+1. Update the version in the `CoreJvmCompiler` dependency object under
+   [`buildSrc`][core-jvm-compiler-dep].
+
+2. Propagate the new version into the example projects' plugin coordinates:
+
+   ```bash
+   ./gradlew :docs:updatePluginVersions
+   ```
+
+   This rewrites the `io.spine.core-jvm` plugin version (and the
+   `io.spine.validation` plugin version) in every `build.gradle.kts` under
+   `docs/_examples/`.
 
 ## Refreshing embedded example sources from Spine Time
 
-<!-- TODO: Initial `git submodule init && git submodule update` for `_time`;
-switching to a specific commit; note that `_script/embed-code` runs
-`git submodule update --remote --merge --recursive` automatically. -->
+The Spine Time library at `docs/_time/` is a Git submodule. Use these
+steps when first cloning the repository or when intentionally moving the
+submodule to a different commit.
+
+1. Initialize and fetch the submodule on a fresh clone:
+
+   ```bash
+   git submodule update --init --recursive docs/_time
+   ```
+
+2. To move `_time/` to a specific commit, fetch and check it out inside
+   the submodule:
+
+   ```bash
+   cd docs/_time
+   git fetch origin
+   git checkout <commit-or-ref>
+   cd -
+   ```
+
+3. Re-embed snippets that pull from the submodule and verify:
+
+   ```bash
+   ./gradlew :docs:embedCode
+   ./gradlew :docs:checkSamples
+   ```
+
+4. Commit the updated submodule pointer:
+
+   ```bash
+   git add docs/_time
+   git commit -m "Update Spine Time submodule -> <commit-or-ref>"
+   ```
+
+Note that `:docs:embedCode` itself runs
+`git submodule update --remote --merge --recursive` as part of its
+script. The manual checkout in step 2 is what *pins* the submodule to a
+specific revision; the automatic update tracks the submodule's default
+remote branch.
 
 ## Adding a new embedded code example
 
-<!-- TODO:
-1. Declare or extend a source root in `docs/_settings/embed-code.yml`.
-2. Reference the snippet from a Markdown page using the embed syntax.
-3. Run `./gradlew :docs:embedCode` to embed.
-4. Run `./gradlew :docs:checkSamples` to verify consistency.
-5. Preview locally with `./gradlew :docs:runSite`.
--->
+1. If the source file lives outside the existing source roots in
+   [`_settings/embed-code.yml`][embed-code-yml], add a new entry under
+   `code-path` (a `name` plus a path relative to `docs/_bin/`). If the
+   file extension is not yet listed, add a glob under `code-includes`.
+
+2. In the target Markdown page, write an `<embed-code>` element followed
+   by an empty fenced code block. For example:
+
+   ```markdown
+   <embed-code
+     file="$root/version.gradle.kts"
+     start="val validationVersion"
+     end="val validationVersion">
+   </embed-code>
+   ```
+
+   The `start` and `end` attributes are regular expressions matched
+   against single lines; the matching lines are included.
+
+3. Embed and verify:
+
+   ```bash
+   ./gradlew :docs:embedCode
+   ./gradlew :docs:checkSamples
+   ```
+
+   The fenced block under the element is now populated with the snippet.
+
+4. Preview the page locally (see "Previewing the documentation locally"
+   below) and confirm the snippet renders with the right syntax
+   highlighting.
+
+5. Commit the page, the snippet contents, and any changes to
+   `_settings/embed-code.yml`.
+
+For the underlying mechanics, see "[Embedded examples](embedded-examples.md)".
 
 ## Adding or updating a documentation page
 
-<!-- TODO:
-1. Create or edit the Markdown file under `docs/content/docs/validation/...`.
-2. Update `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml` to match.
-3. Preview locally with `./gradlew :docs:runSite`.
-4. Validate internal links.
-Reference the documentation guidelines in `.agents/documentation-guidelines.md`.
--->
+1. Create or edit the Markdown file under
+   `docs/content/docs/validation/<section>/`. Match the frontmatter
+   convention used by the surrounding pages (`title`, `description`,
+   `headline: Documentation`).
+
+2. Keep the navigation in sync. Update
+   `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml`:
+
+   - For a new page, add a `page`/`file_path` entry under the
+     appropriate parent. The `file_path` is relative to
+     `docs/content/docs/validation/` and omits the `.md` extension; an
+     `_index.md` maps to its directory path (for example,
+     `developer/documentation`).
+   - For a renamed or moved page, update the existing `file_path`.
+   - For a deleted page, remove the entry.
+
+   Do not edit `sidenav.yml` files under other version directories
+   unless you are intentionally amending a historical version.
+
+3. Preview locally (see "Previewing the documentation locally") and
+   click through every internal link.
+
+4. Follow the project documentation guidelines in
+   [`documentation-guidelines.md`][doc-guidelines] — formatting of file
+   and directory names as code, reference-style external links, no
+   widows/runts/orphans/rivers.
 
 ## Updating `site-commons`
 
-<!-- TODO:
-1. From `docs/_preview/`, run `go get github.com/SpineEventEngine/site-commons@<commit-or-tag>`.
-2. Run `go mod tidy`.
-3. Preview with `./gradlew :docs:runSite` and verify rendering.
-4. Commit `docs/_preview/go.mod` and `docs/_preview/go.sum`.
--->
+This is the procedure documented under "[Theme updates][theme-updates]"
+in the `site-commons` README, wrapped with the verification steps used
+in this repository.
+
+1. From `docs/_preview/`, pull the latest theme version:
+
+   ```bash
+   cd docs/_preview
+   hugo mod get -u github.com/SpineEventEngine/site-commons
+   cd -
+   ```
+
+2. Preview the site and click through the navigation, code blocks, and
+   embedded snippets:
+
+   ```bash
+   ./gradlew :docs:runSite
+   ```
+
+3. Commit and push the resulting changes to
+   `docs/_preview/go.mod` and `docs/_preview/go.sum`:
+
+   ```bash
+   git add docs/_preview/go.mod docs/_preview/go.sum
+   git commit -m "Update site-commons"
+   ```
 
 ## Updating `embed-code-go`
 
-<!-- TODO:
-1. Build the binaries from the `SpineEventEngine/embed-code-go` repository
-   for Linux, macOS, and Windows.
-2. Replace `docs/_bin/embed-code-linux`, `embed-code-macos`, and
-   `embed-code-windows.exe`.
-3. Run `./gradlew :docs:checkSamples` to verify the new binary still passes.
-4. Commit the updated binaries.
--->
+The tool is consumed as prebuilt binaries under `docs/_bin/`. Updating
+means rebuilding the binaries from the [embed-code-go][embed-code-go]
+source repository and replacing the artifacts.
+
+1. Clone [embed-code-go][embed-code-go] (or update an existing clone) and
+   check out the release or commit to ship.
+
+2. Build the three binaries that this repository ships. From the
+   `embed-code-go` clone, with the Go toolchain on the `PATH`:
+
+   ```bash
+   GOOS=linux   GOARCH=amd64 go build -o embed-code-linux         ./cmd/...
+   GOOS=darwin  GOARCH=amd64 go build -o embed-code-macos         ./cmd/...
+   GOOS=windows GOARCH=amd64 go build -o embed-code-windows.exe   ./cmd/...
+   ```
+
+   Replace the build target paths with whatever the upstream `README`
+   prescribes if it differs from `./cmd/...`.
+
+3. Copy the produced binaries into `docs/_bin/`, replacing the existing
+   files of the same names.
+
+4. Make sure the macOS and Linux binaries are executable
+   (`chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-linux`).
+
+5. Verify that the new binaries still produce the same embedded output
+   the repository expects:
+
+   ```bash
+   ./gradlew :docs:checkSamples
+   ```
+
+   If `checkSamples` reports drift caused by the tool itself (formatting,
+   whitespace, …), run `./gradlew :docs:embedCode` and inspect the diff
+   before committing.
+
+6. Commit the updated binaries under `docs/_bin/` with a message that
+   names the upstream version or commit.
 
 ## Building the documentation locally
 
-<!-- TODO:
-1. `./gradlew :docs:buildSite`.
-2. Output appears under `docs/_preview/public/`.
-3. Note that this output is for inspection only; publication happens via
-   merging content into `SpineEventEngine/documentation`.
--->
+1. Build the site:
+
+   ```bash
+   ./gradlew :docs:buildSite
+   ```
+
+2. The generated static site appears under `docs/_preview/public/`. Open
+   `docs/_preview/public/index.html` in a browser to inspect the output,
+   or serve the directory through any static file server.
+
+3. Treat this output as a *staging artifact only*. Publication to
+   spine.io happens through the main documentation project, not from
+   this repository — see "[Documentation process](_index.md)" for the
+   relationship.
 
 ## Previewing the documentation locally
 
-<!-- TODO:
-1. `./gradlew :docs:runSite`.
-2. Open the URL printed by `hugo server` (typically `http://localhost:1313`).
-3. Edits to Markdown under `docs/content/` hot-reload automatically.
--->
+1. Start the Hugo dev server:
+
+   ```bash
+   ./gradlew :docs:runSite
+   ```
+
+2. Open the URL printed by `hugo server`, typically
+   `http://localhost:1313/`.
+
+3. Edits to Markdown files under `docs/content/` hot-reload
+   automatically. Edits to `docs/data/` files (including `sidenav.yml`)
+   and to Hugo layouts require a restart of the task.
+
+4. To stop the server, press `Ctrl+C` in the terminal running the task.
+
+## What's next
+
+- "[Documentation process](_index.md)" — overview and how this section
+  fits into the wider documentation pipeline.
+- "[Build tasks](build-tasks.md)" — reference for every Gradle task
+  these recipes invoke.
+
+[version-gradle]: https://github.com/SpineEventEngine/validation/blob/master/version.gradle.kts
+[core-jvm-compiler-dep]: https://github.com/SpineEventEngine/validation/blob/master/buildSrc/src/main/kotlin/io/spine/dependency/local/CoreJvmCompiler.kt
+[embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
+[doc-guidelines]: https://github.com/SpineEventEngine/validation/blob/master/.agents/documentation-guidelines.md
+[theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
+[embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
