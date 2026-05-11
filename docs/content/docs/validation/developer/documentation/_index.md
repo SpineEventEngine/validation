@@ -14,7 +14,7 @@ build depends on, and the recurring procedures contributors need to perform.
 The `docs/` module is a *staging area*, not a published site. The pages and
 data under it are merged into the main documentation project
 ([SpineEventEngine/documentation][main-documentation]) and published from
-there to the [`spine.io`][spine-io] website. The build wiring on this page
+there to the [spine.io][spine-io] website. The build wiring on this page
 exists to let contributors preview, validate, and iterate on the content of
 this repository before that merge happens.
 
