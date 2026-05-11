@@ -179,7 +179,139 @@ Ordered for incremental review:
    - Re-read each page for adherence to the documentation guidelines
      (quotation rules, reference-style external links, no widows/runts).
 
-## 7. Out of scope
+## 7. Discovery findings
+
+Captured 2026-05-11 from the current `master`-tracking working tree. Use as
+the factual basis for drafting; re-verify if the repo state changes.
+
+### 7.1 Gradle tasks defined in `docs/build.gradle.kts`
+
+All tasks are registered on the `:docs` project. Inter-task dependencies in
+parentheses.
+
+| Task                          | Type   | Purpose                                                                                        |
+|-------------------------------|--------|------------------------------------------------------------------------------------------------|
+| `updateValidationPluginVersion` | `UpdatePluginVersion` | Rewrites `id("io.spine.validation") version "…"` in every `build.gradle.kts` under `_examples/` to `validationVersion` from `version.gradle.kts`. Also updates `kotlin("…") version "…"` to `Kotlin.version`. |
+| `updateCoreJvmPluginVersion`  | `UpdatePluginVersion` | Same mechanism for `io.spine.core-jvm`, using `CoreJvmCompiler.version` from `buildSrc`.        |
+| `updatePluginVersions`        | aggregate | Depends on the two tasks above.                                                              |
+| `installDependencies`         | `Exec` | Runs `_script/install-dependencies` → `npm install` inside `_preview/`. Not meant to be run manually. |
+| `runSite`                     | `Exec` | Runs `_script/hugo-serve` → `hugo server` inside `_preview/`. Local preview. Depends on `installDependencies`. |
+| `buildSite`                   | `Exec` | Runs `_script/hugo-build` → `hugo` inside `_preview/`. Builds the static site. Depends on `installDependencies`. |
+| `embedCode`                   | `Exec` | Runs `_script/embed-code` (does `git submodule update --remote --merge --recursive`, then `_bin/embed-code-macos -config-path="../_settings/embed-code.yml" -mode="embed"`). Depends on `updatePluginVersions`. Manual use. |
+| `checkSamples`                | `Exec` | Runs `_script/check-samples` (uses `embed-code-linux` under GitHub Actions, `embed-code-macos` locally; `-mode="check"`). Depends on `updatePluginVersions`. Executed by `.github/workflows/check-code-embedding.yml`. |
+| `publishAllToMavenLocal`      | aggregate | Depends on every `PublishToMavenLocal` task across the root project's allprojects. |
+| `buildExamples`               | `RunGradle` | Runs `buildAll` inside `_examples/`. Depends on `publishAllToMavenLocal` and `updatePluginVersions`. |
+| `buildAll`                    | aggregate | Depends on `publishAllToMavenLocal` and `buildExamples`. Used by `.github/workflows/check-code-embedding.yml`. |
+
+The `UpdatePluginVersion` task type is defined at
+`buildSrc/src/main/kotlin/io/spine/gradle/docs/UpdatePluginVersion.kt`.
+
+### 7.2 Build output and `spine.io` handoff
+
+- `buildSite` writes Hugo output to `docs/_preview/public/` (Hugo's default
+  for the `_preview` working directory).
+- `docs/GRADLE.md` states that the preview site is **not** meant to be
+  published as-is. The content of the `docs` module is merged into the main
+  documentation project at https://github.com/SpineEventEngine/documentation
+  for publication on `spine.io`.
+- There is no workflow in `.github/workflows/` that deploys the preview
+  output. CI only exercises `:docs:buildAll` and `:docs:checkSamples`
+  (see `.github/workflows/check-code-embedding.yml`).
+
+### 7.3 `_preview` directory role
+
+- `_preview` is the Hugo project root for local preview.
+- `_preview/hugo.toml` imports two Hugo modules:
+  - `../..` — the `docs/` module itself (provides `content/`, `data/`,
+    `layouts/`).
+  - `github.com/SpineEventEngine/site-commons` — the shared site theme/layout.
+- `_preview/go.mod` pins both `site-commons` (currently
+  `v0.0.0-20260507130158-84db050dfe11`) and
+  `github.com/gohugoio/hugo-mod-bootstrap-scss/v5`.
+- `_preview/package.json` declares Node devDependencies (`postcss`,
+  `autoprefixer`, `@fullhuman/postcss-purgecss`, etc.) installed by
+  `npm install` via `installDependencies`.
+- `_preview/public/` holds the generated static site (`docs/`, `index.html`,
+  `css`/`js`/`img` assets, sitemap, etc.). Re-created on every `buildSite`
+  or `runSite`.
+
+### 7.4 Git submodules
+
+`.gitmodules` (repo root):
+
+- `config` → `https://github.com/SpineEventEngine/config`
+- `docs/_examples` → `https://github.com/spine-examples/hello-validation`
+- `docs/_time` → `https://github.com/SpineEventEngine/time`
+
+Notes:
+
+- `_examples` contains the Hello Validation example projects
+  (`first-model`, `first-model-with-framework`, `external`). The settings
+  file there is the canonical list; the `includeBuild` referenced by
+  `docs/GRADLE.md` lives in `_examples/settings.gradle.kts`, not in
+  `docs/`.
+- `_time` is the Spine Time library, used as the *implementation example*
+  for custom validation. The `_script/embed-code` runs
+  `git submodule update --remote --merge --recursive`, so the submodules
+  track their default remote branches when running the embed pipeline.
+
+### 7.5 `embed-code-go` pinning
+
+- The tool is consumed as **checked-in prebuilt binaries** under
+  `docs/_bin/`:
+  - `embed-code-linux`, `embed-code-macos`, `embed-code-windows.exe`.
+- There is no version pin in source form in this repo. The
+  `_script/check-samples` selects the Linux binary on GitHub Actions
+  (`GITHUB_ACTIONS=true`) and the macOS binary locally. The Windows binary
+  is present but currently not selected by either script.
+- `_script/embed-code` hard-codes the `embed-code-macos` binary path.
+- "Updating `embed-code-go`" therefore means rebuilding the binaries from
+  https://github.com/SpineEventEngine/embed-code-go and replacing the
+  artifacts under `docs/_bin/`.
+
+### 7.6 `settings/embed-code.yml`
+
+Current contents declare five `code-path` source roots:
+
+| Name      | Path                | What it exposes                                                |
+|-----------|---------------------|----------------------------------------------------------------|
+| `root`    | `../..`             | The Validation repo root (top-level files, all modules).       |
+| `examples`| `../_examples`      | The Hello Validation example projects (Git submodule).         |
+| `runtime` | `../../jvm-runtime` | The `jvm-runtime` module.                                      |
+| `java`    | `../../java`        | The Java code-generation module.                               |
+| `context` | `../../context`     | The custom-validation context module.                          |
+
+Plus:
+
+- `docs-path: "../content/docs/"` — root of pages that can host embedded
+  snippets.
+- `code-includes` — file globs the tool considers as embeddable sources:
+  `.gitignore`, `**/*.kts`, `**/*.md`, `**/*.proto`, `**/*.java`,
+  `**/*.kt`, `**/*.yml`.
+
+### 7.7 Documentation versions and sidenav target
+
+- `docs/data/versions.yml` declares two `validation` entries:
+  `2-0-0-snapshot` (`is_main: true`) and `2-0-x` (not main, both
+  `switcher` flags false).
+- `docs/data/docs/validation/` contains a `sidenav.yml` only for
+  `2-0-0-snapshot/`. There is no `2-0-x/` sub-directory. The new sub-tree
+  must be added to
+  `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml` only.
+
+### 7.8 Other observations relevant to the docs
+
+- `docs/_options/options.proto` is a copy of the Protobuf options surface
+  used by the documentation embeds. Not strictly part of the new doc's
+  scope but worth a brief mention in `_index.md` or `embedded-examples.md`.
+- The version bump procedure in the draft references "the version in
+  `version.gradle.kts`" — confirmed at the repo root
+  (`val validationVersion by extra("2.0.0-SNAPSHOT.419")`).
+- The custom Gradle task plumbing (`UpdatePluginVersion`,
+  `io.spine.gradle.RunGradle`) is shared across the SDK; this repo
+  consumes them from the local `buildSrc`.
+
+## 8. Out of scope
 
 - Changes to historical doc versions (`2-0-x` and earlier) or their
   `sidenav.yml` files.
