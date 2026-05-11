@@ -102,3 +102,16 @@
       file_path: developer/testing-strategy
     - page: Build, packaging, and release
       file_path: developer/build-and-release
+    - page: Documentation process
+      key: documentation
+      children:
+        - page: Overview
+          file_path: developer/documentation
+        - page: Build tasks
+          file_path: developer/documentation/build-tasks
+        - page: Embedded examples
+          file_path: developer/documentation/embedded-examples
+        - page: External tooling
+          file_path: developer/documentation/tooling
+        - page: Procedures
+          file_path: developer/documentation/procedures
