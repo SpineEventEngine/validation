@@ -1,3 +1,0 @@
-- [Do not use backticks around "spine.io"](feedback_spine_io_no_backticks.md) — render spine.io as plain prose or a link, never as code.
-- [Do not replicate upstream tool documentation](feedback_do_not_replicate_upstream_tool_docs.md) — link to upstream READMEs for external tools; don't restate build/release recipes in this repo.
-- [Backtick repo/tool names when used as link text to their repo](feedback_repo_name_links_backticked.md) — render `site-commons`, `embed-code-go`, etc. as inline code when they are the visible text of a link to the project's repository.
