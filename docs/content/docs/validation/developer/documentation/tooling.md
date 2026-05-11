@@ -7,7 +7,7 @@ headline: Documentation
 # External tooling
 
 The documentation build leans on three external pieces of tooling: the
-[site-commons][site-commons] Hugo theme, the [embed-code-go][embed-code-go]
+[`site-commons`][site-commons] Hugo theme, the [`embed-code-go`][embed-code-go]
 tool, and the Hugo + Node toolchain that drives the static-site build. This
 page documents what each is, how it is wired into the build, and where it is
 pinned. The step-by-step recipes for updating each live in
@@ -15,7 +15,7 @@ pinned. The step-by-step recipes for updating each live in
 
 ## `site-commons`
 
-[site-commons][site-commons] is the shared Hugo theme and layout library
+[`site-commons`][site-commons] is the shared Hugo theme and layout library
 used by the documentation sites of Spine projects. It provides the
 navigation chrome, the sidenav rendering that consumes the
 [`sidenav.yml`][sidenav-yml] files, code-highlighting partials, and other
@@ -72,7 +72,7 @@ verification steps (preview, sanity check).
 
 ## `embed-code-go`
 
-[embed-code-go][embed-code-go] is the command-line tool that powers
+[`embed-code-go`][embed-code-go] is the command-line tool that powers
 `:docs:embedCode` and `:docs:checkSamples`. It reads the
 `<embed-code>` elements described in "[Embedded examples](embedded-examples.md)",
 resolves each `file` reference against the source roots in
