@@ -9,6 +9,8 @@ code-path:
     path: "../../java"
   - name: "context"
     path: "../../context"
+  - name: "time"
+    path: "../_time"
   - name: "docs"
     path: ".."
 docs-path: "../content/docs/"

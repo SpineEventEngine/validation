@@ -18,8 +18,8 @@ a stale page). There are four source pools the documentation pulls from:
    `java`, and `context` source roots.
 2. The Validation examples — the `docs/_examples/` Git submodule, exposed
    through the `examples` source root.
-3. The Spine Time library — the `docs/_time/` Git submodule, reached
-   through the `root` source root.
+3. The Spine Time library — the `docs/_time/` Git submodule, exposed
+   through the `time` source root.
 4. The documentation tree — the `docs/` directory, exposed through the
    `docs` source root.
 
@@ -53,8 +53,8 @@ extension points the documentation describes.
 To embed snippets from Spine Time's actual source — not a copy that would
 inevitably drift — the library is included as the `docs/_time/` Git
 submodule pointing at [`SpineEventEngine/time`][spine-time]. The
-code-embedding tool then reads snippets straight from the submodule
-working tree.
+code-embedding tool then reads snippets from that working tree through
+the `$time` source root.
 
 ## The `_settings/embed-code.yml` file
 
@@ -69,8 +69,6 @@ documentation pages live, and which files are considered embeddable.
 code-path:
   - name: "root"
     path: "../.."
-  - name: "docs"
-    path: ".."
   - name: "examples"
     path: "../_examples"
   - name: "runtime"
@@ -79,6 +77,10 @@ code-path:
     path: "../../java"
   - name: "context"
     path: "../../context"
+  - name: "time"
+    path: "../_time"
+  - name: "docs"
+    path: ".."
 docs-path: "../content/docs/"
 code-includes:
   - ".gitignore"
@@ -99,16 +101,15 @@ binary). A page references a source root by its name, prefixed with `$`.
 | Name       | Path                | What it exposes                                                          |
 |------------|---------------------|--------------------------------------------------------------------------|
 | `root`     | `../..`             | The Validation repository root — top-level files (`version.gradle.kts`, `build.gradle.kts`, …) and any module not separately mapped. |
-| `docs`     | `..`                | The `docs/` directory — documentation settings, scripts, and other documentation-local files. |
 | `examples` | `../_examples`      | The Hello Validation example projects (the submodule above).             |
 | `runtime`  | `../../jvm-runtime` | The `:jvm-runtime` module — runtime library sources used in "[Runtime library](../runtime-library.md)". |
 | `java`     | `../../java`        | The `:java` module — Java code-generation sources used in "[Java code generation](../java-code-generation.md)". |
 | `context`  | `../../context`     | The `:context` module — the custom-validation context sources.           |
+| `time`     | `../_time`          | The Spine Time submodule used as the implementation example for custom validation. |
+| `docs`     | `..`                | The `docs/` directory — documentation settings, scripts, and other documentation-local files. |
 
-To embed from Spine Time, use the `$root` source root with a
-`docs/_time/...` path. There is no dedicated source root for `_time/`
-because everything in that submodule is reachable through the repository
-root.
+To embed from Spine Time, use the `$time` source root with a path relative
+to `docs/_time/`.
 
 ### Pages directory (`docs-path`)
 
