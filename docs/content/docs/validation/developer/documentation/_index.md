@@ -41,7 +41,7 @@ The underscore prefix marks directories that are *not* part of the Hugo site
 tree — Hugo ignores top-level paths starting with `_`. Everything Hugo
 actually renders lives under `content/`, `data/`, and `layouts/`.
 
-## Relationship to the `spine.io` website
+## Relationship to the spine.io website
 
 There is no automated deployment from this repository. The CI workflows
 under `.github/workflows/` only build the example sources
