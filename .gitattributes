@@ -24,6 +24,10 @@ LICENSE text
 # Java sources
 *.java text
 
+# Kotlin sources
+*.kt text
+*.kts text
+
 # Python sources
 *.py text
 
