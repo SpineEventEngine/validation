@@ -11,9 +11,15 @@ them as plain Markdown. This keeps the snippets in lock-step with the code
 they document: when a method signature, a Protobuf option, or an example
 project file changes, the documentation either updates automatically (when
 `:docs:embedCode` runs) or fails CI (when `:docs:checkSamples` runs against
-a stale page). The two source pools the documentation pulls from are the
-Validation modules under the repository root and two Git submodules under
-`docs/`.
+a stale page). There are three source pools the documentation pulls from:
+
+1. The Validation library code itself — the repository root and the
+   production modules under it, exposed through the `root`, `runtime`,
+   `java`, and `context` source roots.
+2. The Validation examples — the `docs/_examples/` Git submodule, exposed
+   through the `examples` source root.
+3. The Spine Time library — the `docs/_time/` Git submodule, reached
+   through the `root` source root.
 
 ## Example sources
 
