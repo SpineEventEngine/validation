@@ -218,25 +218,39 @@ means rebuilding the binaries from the [embed-code-go][embed-code-go]
 source repository and replacing the artifacts.
 
 1. Clone [embed-code-go][embed-code-go] (or update an existing clone) and
-   check out the release or commit to ship.
+   check out the release or commit to ship. The Go version required by
+   the project is declared in its `go.mod`; the upstream README documents
+   Go 1.22.1 as the minimum.
 
-2. Build the three binaries that this repository ships. From the
-   `embed-code-go` clone, with the Go toolchain on the `PATH`:
+2. From the project root of the `embed-code-go` clone, cross-compile the
+   three binaries that this repository ships. The command sequence is
+   the one documented under [Building from sources][embed-code-build] in
+   the upstream README:
 
    ```bash
-   GOOS=linux   GOARCH=amd64 go build -o embed-code-linux         ./cmd/...
-   GOOS=darwin  GOARCH=amd64 go build -o embed-code-macos         ./cmd/...
-   GOOS=windows GOARCH=amd64 go build -o embed-code-windows.exe   ./cmd/...
+   mkdir -p bin && \
+   GOOS=darwin  GOARCH=amd64 go build -trimpath -o bin/embed-code-macos       main.go && \
+   GOOS=windows GOARCH=amd64 go build -trimpath -o bin/embed-code-windows.exe main.go && \
+   GOOS=linux   GOARCH=amd64 go build -trimpath -o bin/embed-code-linux       main.go
    ```
 
-   Replace the build target paths with whatever the upstream `README`
-   prescribes if it differs from `./cmd/...`.
+   The `-trimpath` flag strips absolute file paths from stack traces in
+   the binaries.
 
 3. Copy the produced binaries into `docs/_bin/`, replacing the existing
-   files of the same names.
+   files of the same names:
 
-4. Make sure the macOS and Linux binaries are executable
-   (`chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-linux`).
+   ```bash
+   cp bin/embed-code-linux       <validation-repo>/docs/_bin/
+   cp bin/embed-code-macos       <validation-repo>/docs/_bin/
+   cp bin/embed-code-windows.exe <validation-repo>/docs/_bin/
+   ```
+
+4. Make sure the macOS and Linux binaries are executable:
+
+   ```bash
+   chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-linux
+   ```
 
 5. Verify that the new binaries still produce the same embedded output
    the repository expects:
@@ -299,3 +313,4 @@ source repository and replacing the artifacts.
 [doc-guidelines]: https://github.com/SpineEventEngine/validation/blob/master/.agents/documentation-guidelines.md
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
+[embed-code-build]: https://github.com/SpineEventEngine/embed-code-go#building-from-sources

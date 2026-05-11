@@ -18,9 +18,8 @@ pinned. The step-by-step recipes for updating each live in
 [site-commons][site-commons] is the shared Hugo theme and layout library
 used by the documentation sites of Spine projects. It provides the
 navigation chrome, the sidenav rendering that consumes the
-[`sidenav.yml`](../../../../data/docs/validation/2-0-0-snapshot/sidenav.yml)
-files, code-highlighting partials, and other Hugo components that are
-common across Spine sites.
+[`sidenav.yml`][sidenav-yml] files, code-highlighting partials, and other
+Hugo components that are common across Spine sites.
 
 It is consumed as a Hugo module. Two files wire it in:
 
@@ -77,9 +76,9 @@ verification steps (preview, sanity check).
 `:docs:embedCode` and `:docs:checkSamples`. It reads the
 `<embed-code>` elements described in "[Embedded examples](embedded-examples.md)",
 resolves each `file` reference against the source roots in
-[`_settings/embed-code.yml`](../../../../_settings/embed-code.yml), and
-either rewrites the fenced code block beneath the element (`-mode="embed"`)
-or fails non-zero on drift (`-mode="check"`).
+[`_settings/embed-code.yml`][embed-code-yml], and either rewrites the
+fenced code block beneath the element (`-mode="embed"`) or fails non-zero
+on drift (`-mode="check"`).
 
 The tool is consumed as **prebuilt binaries checked into the repository**,
 not as a Go module or downloaded artifact. The binaries live under
@@ -132,5 +131,7 @@ expects.
 
 [site-commons]: https://github.com/SpineEventEngine/site-commons
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
+[sidenav-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/data/docs/validation/2-0-0-snapshot/sidenav.yml
+[embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
 [hugo-install]: https://gohugo.io/installation/
