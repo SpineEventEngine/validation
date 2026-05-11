@@ -41,18 +41,24 @@ and "[External tooling](tooling.md)".
    ```text
    Bump Validation -> `<new-version>`
    ```
+5. Push the changes to the `hello-validation` repository, 
+   which the `docs/_examples/` submodule points to:
 
-5. Run a clean build and refresh the dependency reports:
+   ```bash
+   cd docs/_examples
+   git push
+   cd -
+   ```
+
+6. Run a clean build and refresh the dependency reports:
 
    ```bash
    ./gradlew clean build
    ```
 
    Then commit the regenerated `pom.xml` and `dependencies.md` with:
-
-   ```text
-   Update dependency reports
-   ```
+   `Update dependency reports` message.
+   
 
    This step follows the same convention used elsewhere in the Spine SDK
    projects.
