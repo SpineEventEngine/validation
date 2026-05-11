@@ -11,7 +11,7 @@ them as plain Markdown. This keeps the snippets in lock-step with the code
 they document: when a method signature, a Protobuf option, or an example
 project file changes, the documentation either updates automatically (when
 `:docs:embedCode` runs) or fails CI (when `:docs:checkSamples` runs against
-a stale page). There are three source pools the documentation pulls from:
+a stale page). There are four source pools the documentation pulls from:
 
 1. The Validation library code itself — the repository root and the
    production modules under it, exposed through the `root`, `runtime`,
@@ -20,6 +20,8 @@ a stale page). There are three source pools the documentation pulls from:
    through the `examples` source root.
 3. The Spine Time library — the `docs/_time/` Git submodule, reached
    through the `root` source root.
+4. The documentation tree — the `docs/` directory, exposed through the
+   `docs` source root.
 
 ## Example sources
 
@@ -60,10 +62,15 @@ The configuration file [`docs/_settings/embed-code.yml`][embed-code-yml]
 declares the source roots the embedding tool understands, where the
 documentation pages live, and which files are considered embeddable.
 
+<embed-code
+  file="$docs/_settings/embed-code.yml">
+</embed-code>
 ```yaml
 code-path:
   - name: "root"
     path: "../.."
+  - name: "docs"
+    path: ".."
   - name: "examples"
     path: "../_examples"
   - name: "runtime"
@@ -92,6 +99,7 @@ binary). A page references a source root by its name, prefixed with `$`.
 | Name       | Path                | What it exposes                                                          |
 |------------|---------------------|--------------------------------------------------------------------------|
 | `root`     | `../..`             | The Validation repository root — top-level files (`version.gradle.kts`, `build.gradle.kts`, …) and any module not separately mapped. |
+| `docs`     | `..`                | The `docs/` directory — documentation settings, scripts, and other documentation-local files. |
 | `examples` | `../_examples`      | The Hello Validation example projects (the submodule above).             |
 | `runtime`  | `../../jvm-runtime` | The `:jvm-runtime` module — runtime library sources used in "[Runtime library](../runtime-library.md)". |
 | `java`     | `../../java`        | The `:java` module — Java code-generation sources used in "[Java code generation](../java-code-generation.md)". |
@@ -119,10 +127,12 @@ to this list.
 
 An `<embed-code>` element marks a region in a Markdown page that the tool
 manages. The tool replaces the *fenced code block* immediately following
-the element with the content extracted from the referenced source file
-between the `start` and `end` patterns.
+the element with the content extracted from the referenced source file.
+When the element has `start` and `end` attributes, the tool embeds only
+the lines between the matching patterns. When it has only `file`, the
+tool embeds the whole file.
 
-This page describes the syntax used in the Validation documentation. 
+This page describes the syntax used in the Validation documentation.
 For the complete `embed-code-go` syntax — including named fragments,
 multi-piece fragments, omitted boundaries, and the exact line-pattern
 rules — see the upstream [embedding guide][embed-code-go-embedding].
@@ -138,13 +148,13 @@ val validationVersion by extra("2.0.0-SNAPSHOT.419")
 ```
 ````
 
-The four relevant attributes are:
+The attributes used most often in Validation pages are:
 
 - `file` — `$source-root/relative/path/to/file.ext` where `source-root`
   is a name from `code-path`.
-- `start` — an extended glob-style pattern matched against a single line. 
+- `start` — an extended glob-style pattern matched against a single line.
   The matching line is the *first* line included.
-- `end` — an extended glob-style pattern matched against a single line. 
+- `end` — an extended glob-style pattern matched against a single line.
   The matching line is the *last* line included. To include a single line,
   use the same pattern for both.
 - The language tag on the fenced block (`kotlin`, `java`, `proto`, …)
