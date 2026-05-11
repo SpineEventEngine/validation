@@ -213,46 +213,25 @@ in this repository.
 
 ## Updating `embed-code-go`
 
-The tool is consumed as prebuilt binaries under `docs/_bin/`. Updating
-means rebuilding the binaries from the [embed-code-go][embed-code-go]
-source repository and replacing the artifacts.
+The tool is consumed as prebuilt binaries under `docs/_bin/`. The
+authoritative copies are published by the upstream project under
+[`embed-code-go/bin`][embed-code-bin]. We do *not* build the tool as
+part of the Validation documentation build — see the upstream repository
+for any build, test, or release questions.
 
-1. Clone [embed-code-go][embed-code-go] (or update an existing clone) and
-   check out the release or commit to ship. The Go version required by
-   the project is declared in its `go.mod`; the upstream README documents
-   Go 1.22.1 as the minimum.
+1. From [`embed-code-go/bin`][embed-code-bin], download the three
+   binaries on the branch or tag you want to ship:
+   `embed-code-linux`, `embed-code-macos`, `embed-code-windows.exe`.
 
-2. From the project root of the `embed-code-go` clone, cross-compile the
-   three binaries that this repository ships. The command sequence is
-   the one documented under [Building from sources][embed-code-build] in
-   the upstream README:
+2. Replace the files of the same names under `docs/_bin/`.
 
-   ```bash
-   mkdir -p bin && \
-   GOOS=darwin  GOARCH=amd64 go build -trimpath -o bin/embed-code-macos       main.go && \
-   GOOS=windows GOARCH=amd64 go build -trimpath -o bin/embed-code-windows.exe main.go && \
-   GOOS=linux   GOARCH=amd64 go build -trimpath -o bin/embed-code-linux       main.go
-   ```
-
-   The `-trimpath` flag strips absolute file paths from stack traces in
-   the binaries.
-
-3. Copy the produced binaries into `docs/_bin/`, replacing the existing
-   files of the same names:
-
-   ```bash
-   cp bin/embed-code-linux       <validation-repo>/docs/_bin/
-   cp bin/embed-code-macos       <validation-repo>/docs/_bin/
-   cp bin/embed-code-windows.exe <validation-repo>/docs/_bin/
-   ```
-
-4. Make sure the macOS and Linux binaries are executable:
+3. Make sure the macOS and Linux binaries are executable:
 
    ```bash
    chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-linux
    ```
 
-5. Verify that the new binaries still produce the same embedded output
+4. Verify that the new binaries still produce the same embedded output
    the repository expects:
 
    ```bash
@@ -263,8 +242,8 @@ source repository and replacing the artifacts.
    whitespace, …), run `./gradlew :docs:embedCode` and inspect the diff
    before committing.
 
-6. Commit the updated binaries under `docs/_bin/` with a message that
-   names the upstream version or commit.
+5. Commit the updated binaries under `docs/_bin/` with a message that
+   names the upstream commit they were pulled from.
 
 ## Building the documentation locally
 
@@ -313,4 +292,4 @@ source repository and replacing the artifacts.
 [doc-guidelines]: https://github.com/SpineEventEngine/validation/blob/master/.agents/documentation-guidelines.md
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
-[embed-code-build]: https://github.com/SpineEventEngine/embed-code-go#building-from-sources
+[embed-code-bin]: https://github.com/SpineEventEngine/embed-code-go/tree/master/bin

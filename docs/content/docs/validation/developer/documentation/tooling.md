@@ -90,11 +90,12 @@ not as a Go module or downloaded artifact. The binaries live under
 | `embed-code-macos`         | `_script/check-samples` locally; `_script/embed-code` always. |
 | `embed-code-windows.exe`   | Currently not selected by either script.                     |
 
-There is no version string recorded in this repository. Updating to a new
-release of `embed-code-go` means rebuilding the binaries from its source
-repository for each target platform and replacing the artifacts under
-`docs/_bin/`. The step-by-step recipe is "Updating `embed-code-go`" in
-"[Procedures](procedures.md)".
+There is no version string recorded in this repository, and the
+documentation build does *not* compile the tool. Updating to a new
+release means downloading the corresponding binaries from
+[`embed-code-go/bin`][embed-code-bin] in the upstream repository and
+replacing the files under `docs/_bin/`. The step-by-step recipe is
+"Updating `embed-code-go`" in "[Procedures](procedures.md)".
 
 ## Hugo and the Node toolchain
 
@@ -134,4 +135,5 @@ expects.
 [sidenav-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/data/docs/validation/2-0-0-snapshot/sidenav.yml
 [embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
+[embed-code-bin]: https://github.com/SpineEventEngine/embed-code-go/tree/master/bin
 [hugo-install]: https://gohugo.io/installation/
