@@ -34,7 +34,6 @@ Go-based code-embedding tool. The top-level layout is:
 | `_settings/`     | Configuration for the code-embedding tool — see "[Embedded examples](embedded-examples.md)". |
 | `_script/`       | Shell scripts that the Gradle tasks shell out to.                          |
 | `_bin/`          | Prebuilt `embed-code-go` binaries for Linux, macOS, and Windows.           |
-| `_options/`      | A copy of the Validation Protobuf options surface kept alongside the docs. |
 
 The underscore prefix marks directories that are *not* part of the Hugo site
 tree — Hugo ignores top-level paths starting with `_`. Everything Hugo

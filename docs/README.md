@@ -4,7 +4,7 @@ This directory hosts the source of the Spine Validation documentation.
 It is a Hugo project supplemented by Gradle wiring and a Go-based
 code-embedding tool. The content under `content/` and `data/` is the
 contributor-editable source; the rest of the directories — `_preview/`,
-`_examples/`, `_time/`, `_settings/`, `_script/`, `_bin/`, `_options/` —
+`_examples/`, `_time/`, `_settings/`, `_script/`, `_bin/` —
 support local rendering, code embedding, and the example projects the
 documentation references.
 
