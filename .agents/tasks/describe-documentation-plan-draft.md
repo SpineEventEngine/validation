@@ -1,5 +1,9 @@
 # Task: Describe the technical details of the documentation process
 
+## Goal
+- Create a comprehensive documentation that describes the technical details of the documentation
+  process for the Spine Validation library.
+
 ## Content that we know needs to be there
 - Description of the `docs` module and its purpose.
 - Brief explanation that we use Hugo, the `_preview` directory and how the `docs` module
@@ -11,8 +15,10 @@
 - Explanation of using Spine Time as an implementaiton example and that the library is added as GitModule because of this.
 - Documentation of `settings/embed-code.yml` file and source roots under it.
 
-
 ## Procedures to be documented
+
+The sections below describe what procedures should be documented.
+This is not an exhaustive list, but it includes the most important ones that are known at the moment.
 
 ### Incrementing the version of Validation
 1. Update the version in `version.gradle.kts` file.
@@ -39,3 +45,8 @@
 - [ ] Add `docs/README.md` file with the brief description, and the link to 
   the page under the `content` directory that explains the documentation process in more detail.
   Remove `GRADLE.md` file as no longer needed after that.
+       
+## Placement of the documentation in the navigation
+- The documentation about the documentation process should be placed in the `content`
+  directory under `docs/validation/developer/documentation.md` file.
+- It should be the last item in the `Developer` section of the documentation.
