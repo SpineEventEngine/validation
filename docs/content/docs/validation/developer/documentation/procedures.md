@@ -75,8 +75,9 @@ and "[External tooling](tooling.md)".
 ## Refreshing embedded example sources from Spine Time
 
 The Spine Time library at `docs/_time/` is a Git submodule. Use these
-steps when first cloning the repository or when intentionally moving the
-submodule to a different commit.
+steps when first cloning the repository, when refreshing the submodule to
+its default remote branch, or when intentionally pinning it to a specific
+commit.
 
 1. Initialize and fetch the submodule on a fresh clone:
 
@@ -84,8 +85,21 @@ submodule to a different commit.
    git submodule update --init --recursive docs/_time
    ```
 
-2. To move `_time/` to a specific commit, fetch and check it out inside
-   the submodule:
+2. To refresh `_time/` to its default remote branch and re-embed snippets
+   from that revision, run:
+
+   ```bash
+   ./gradlew :docs:embedCode
+   ./gradlew :docs:checkSamples
+   ```
+
+   The `:docs:embedCode` task runs
+   `git submodule update --remote --merge --recursive` before invoking the
+   embedding tool, so this path intentionally accepts the latest remote
+   revision selected by the submodule configuration.
+
+3. To pin `_time/` to a specific commit instead, fetch and check it out
+   inside the submodule:
 
    ```bash
    cd docs/_time
@@ -94,25 +108,25 @@ submodule to a different commit.
    cd -
    ```
 
-3. Re-embed snippets that pull from the submodule and verify:
+4. Re-embed snippets without running `:docs:embedCode`, because that task
+   would move the submodule back to the default remote branch before
+   embedding:
 
    ```bash
-   ./gradlew :docs:embedCode
+   ./gradlew :docs:updatePluginVersions
+   cd docs/_bin
+   ./embed-code-macos -config-path="../_settings/embed-code.yml" -mode="embed"
+   cd -
    ./gradlew :docs:checkSamples
    ```
 
-4. Commit the updated submodule pointer:
+5. Commit the updated submodule pointer and any snippets changed by the
+   embedding step:
 
    ```bash
-   git add docs/_time
+   git add docs/_time docs/content/docs
    git commit -m "Update Spine Time submodule -> <commit-or-ref>"
    ```
-
-Note that `:docs:embedCode` itself runs
-`git submodule update --remote --merge --recursive` as part of its
-script. The manual checkout in step 2 is what *pins* the submodule to a
-specific revision; the automatic update tracks the submodule's default
-remote branch.
 
 ## Adding a new embedded code example
 
@@ -125,11 +139,11 @@ remote branch.
    by an empty fenced code block. For example:
 
    ```markdown
-   <embed-code
+   <embed—code
      file="$root/version.gradle.kts"
      start="val validationVersion"
      end="val validationVersion">
-   </embed-code>
+   </embed—code>
    ```
 
    The `start` and `end` attributes are regular expressions matched

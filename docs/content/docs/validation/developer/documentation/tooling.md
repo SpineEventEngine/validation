@@ -127,8 +127,8 @@ expects.
 ## What's next
 
 - "[Procedures](procedures.md)" — the recipes for updating `site-commons`
-  and `embed-code-go`, and for installing or upgrading the local Hugo and
-  Node toolchain.
+  and `embed-code-go`, plus the local build and preview commands that use
+  the Hugo and Node toolchain described above.
 
 [site-commons]: https://github.com/SpineEventEngine/site-commons
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates

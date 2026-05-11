@@ -122,19 +122,18 @@ manages. The tool replaces the *fenced code block* immediately following
 the element with the content extracted from the referenced source file
 between the `start` and `end` patterns.
 
-```markdown
-<embed-code
+````markdown
+<embed—code
   file="$root/version.gradle.kts"
   start="val validationVersion"
   end="val validationVersion">
-</embed-code>
-` ` `kotlin
+</embed—code>
+```kotlin
 val validationVersion by extra("2.0.0-SNAPSHOT.419")
-` ` `
 ```
+````
 
-(The fence is shown with spaces to keep this page renderable.) The four
-relevant attributes are:
+The four relevant attributes are:
 
 - `file` — `$source-root/relative/path/to/file.ext` where `source-root`
   is a name from `code-path`.
