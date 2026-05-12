@@ -47,8 +47,8 @@ this task, so it is rarely invoked manually.
 
 Runs `_script/hugo-serve` → `hugo server` from `_preview/`. The Hugo dev
 server hot-reloads pages on edits to `docs/content/`. This is the standard
-way to preview documentation changes locally; see the "Previewing the
-documentation locally" recipe in "[Procedures](procedures.md)".
+way to preview documentation changes locally; see the “Previewing the
+documentation locally” recipe in "[Procedures](procedures.md)".
 
 ### `buildSite`
 
