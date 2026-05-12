@@ -19,6 +19,8 @@ and "[External tooling](tooling.md)".
    ```kotlin
    val validationVersion by extra("<new-version>")
    ```
+   For the detailed instructions on selecting an increment, 
+   see the [Versioning policy][versioning-policy] of the Spine SDK.
 
 2. Propagate the new version into the example projects' plugin coordinates:
 
@@ -313,3 +315,4 @@ for any build, test, or release questions.
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
 [embed-code-bin]: https://github.com/SpineEventEngine/embed-code-go/tree/master/bin
+[versioning-policy]: https://github.com/SpineEventEngine/documentation/wiki/Versioning
