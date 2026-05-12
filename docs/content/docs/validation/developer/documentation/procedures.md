@@ -297,7 +297,7 @@ for any build, test, or release questions.
 
 3. Edits to Markdown files under `docs/content/` hot-reload
    automatically. Edits to `docs/data/` files (including `sidenav.yml`)
-   and to Hugo layouts require a restart of the task.
+   and to Hugo layouts require a restart of the server.
 
 4. To stop the server, press `Ctrl+C` in the terminal running the task.
 
