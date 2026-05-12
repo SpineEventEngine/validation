@@ -6,8 +6,8 @@ headline: Documentation
 
 # Embedded examples
 
-The documentation embeds snippets from real source files instead of inlining
-them as plain Markdown. This keeps the snippets in lock-step with the code
+The documentation embeds snippets from real source files instead of copying their 
+content into Markdown files. This keeps the snippets in lock-step with the code
 they document: when a method signature, a Protobuf option, or an example
 project file changes, the documentation either updates automatically (when
 `:docs:embedCode` runs) or fails CI (when `:docs:checkSamples` runs against
