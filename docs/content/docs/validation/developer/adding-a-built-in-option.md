@@ -397,18 +397,15 @@ following the `SetOnceRenderer` pattern, not a generator slot. See
 
 Most options compile to inline Java that uses only types already exported by
 `:jvm-runtime`: `ConstraintViolation`, `TemplateString`, `FieldPath`, the
-`Validate` entry points, and the placeholders enumerated in
-[`RuntimeErrorPlaceholder`][runtime-error-placeholder]. No runtime change is required for
-the average new option.
+`Validate` entry points, and string placeholder keys validated by the compiler model. No
+runtime change is required for the average new option.
 
 A new option needs runtime work in three cases:
 
-- **It introduces a new error placeholder.** Both
-  [`ErrorPlaceholder`][error-placeholder] in `:context` and
-  [`RuntimeErrorPlaceholder`][runtime-error-placeholder] in `:jvm-runtime` enumerate the
-  placeholder names; the two enums must stay in sync. The duplication is documented in
-  KDoc on `ErrorPlaceholder` and is expected to disappear once the Compiler and the
-  runtime share a base.
+- **It introduces a new error placeholder.** Add the placeholder to
+  [`ErrorPlaceholder`][error-placeholder] in `:context`, then use it from the reaction
+  and generator. The runtime stores placeholder keys as strings in `TemplateString`, so
+  no runtime enum update is required.
 - **It needs a shared runtime helper.** If the option's generated code would otherwise
   inline a non-trivial routine into every `validate()` body, factor it out as a `static`
   helper in `:jvm-runtime` and call it from the generated code instead. This is rare;
@@ -537,6 +534,5 @@ too.
 [option-generator-pkg]: https://github.com/SpineEventEngine/validation/tree/master/java/src/main/kotlin/io/spine/tools/validation/java/generate/option
 [java-validation-renderer]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/JavaValidationRenderer.kt
 [set-once-renderer]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/setonce/SetOnceRenderer.kt
-[runtime-error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/RuntimeErrorPlaceholder.kt
 [if-missing-reaction-spec]: https://github.com/SpineEventEngine/validation/blob/master/context-tests/src/test/kotlin/io/spine/tools/validation/IfMissingReactionSpec.kt
 [required-itest-pkg]: https://github.com/SpineEventEngine/validation/tree/master/tests/validating/src/test/kotlin/io/spine/test/options/required

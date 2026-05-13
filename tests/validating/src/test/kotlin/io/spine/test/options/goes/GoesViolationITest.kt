@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.GoesCustomMessage
 import io.spine.test.tools.validate.GoesDefaultMessage
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.RuntimeErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows

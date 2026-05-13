@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,6 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.StudentCustomMessage
 import io.spine.test.tools.validate.StudentDefaultMessage
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
@@ -105,7 +100,7 @@ private fun <T : Any> Builder.assertConstraintViolation(
             FIELD_VALUE to fieldValue1.asPlaceholderValue(),
             FIELD_PROPOSED_VALUE to fieldValue2.asPlaceholderValue(),
             PARENT_TYPE to parentType
-        ).mapKeys { it.key.toString() }
+        )
 
         typeName shouldBe parentType
         fieldPath shouldBe FieldPath(fieldName)
@@ -121,3 +116,9 @@ private fun defaultTemplate(fieldNumber: Int) =
 private fun customTemplate(fieldNumber: Int) =
     "Field_$fieldNumber:" +
             " `\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."
+
+private const val FIELD_PATH = "field.path"
+private const val FIELD_PROPOSED_VALUE = "field.proposed_value"
+private const val FIELD_TYPE = "field.type"
+private const val FIELD_VALUE = "field.value"
+private const val PARENT_TYPE = "parent.type"

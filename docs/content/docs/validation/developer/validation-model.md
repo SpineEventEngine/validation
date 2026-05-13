@@ -322,11 +322,9 @@ private fun String.checkPlaceholders(
 
 Catching unknown placeholders here, in the model, is what allows the renderer to assume
 that every placeholder it sees in the projection state has a known meaning. The full
-list of placeholders is enumerated in
-[`ErrorPlaceholder.kt`][error-placeholder]. The runtime library has a deliberately
-duplicated `RuntimeErrorPlaceholder` enum; the duplication is documented in the
-KDoc on `ErrorPlaceholder` and is expected to disappear once the Compiler and the
-runtime share a common base.
+list of placeholders for generated validation code is enumerated in
+[`ErrorPlaceholder.kt`][error-placeholder]. At runtime, `TemplateString` carries
+placeholder keys as strings; the runtime library does not keep a second placeholder enum.
 
 When no custom message is provided, the reaction falls back to the option's
 `(default_message)` annotation read by [`defaultErrorMessage`][default-message]. That
