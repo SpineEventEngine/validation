@@ -235,6 +235,9 @@ private object Docs {
         "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
 }
 
+/**
+ * Reports unsigned-integer warnings once per source location.
+ */
 internal object UnsignedIntegerWarnings {
 
     private val reported = ConcurrentHashMap.newKeySet<String>()
