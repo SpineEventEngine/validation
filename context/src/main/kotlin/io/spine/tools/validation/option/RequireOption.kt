@@ -39,15 +39,15 @@ import io.spine.tools.compiler.ast.event.MessageOptionDiscovered
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.tools.validation.ErrorPlaceholder.MESSAGE_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.REQUIRE_FIELDS
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.RequireMessage
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.tools.validation.option.required.ParseFieldGroups
-import io.spine.tools.validation.RequireMessage
 import io.spine.tools.validation.event.RequireMessageDiscovered
 import io.spine.tools.validation.event.requireMessageDiscovered
+import io.spine.tools.validation.option.required.ParseFieldGroups
+import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
+import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
 
 /**
  * Controls whether a message should be validated with the `(require)` option.

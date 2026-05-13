@@ -40,20 +40,20 @@ import io.spine.tools.compiler.ast.ref
 import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.MIN_OPERATOR
-import io.spine.tools.validation.ErrorPlaceholder.MIN_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.bound.BoundFieldSupport.checkFieldType
+import io.spine.tools.validation.bound.event.MinFieldDiscovered
+import io.spine.tools.validation.bound.event.minFieldDiscovered
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MIN
 import io.spine.tools.validation.option.RANGE
-import io.spine.tools.validation.bound.event.MinFieldDiscovered
-import io.spine.tools.validation.bound.event.minFieldDiscovered
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
+import io.spine.validation.ErrorPlaceholder.MIN_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * A reaction to add a validation rule to a type whenever the `(min)` field option

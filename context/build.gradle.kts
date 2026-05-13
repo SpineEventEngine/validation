@@ -57,6 +57,7 @@ dependencies {
     api(Compiler.backend)
     api(Compiler.jvm)
     implementation(Base.lib)
+    implementation(project(":jvm-runtime"))
 }
 
 afterEvaluate {

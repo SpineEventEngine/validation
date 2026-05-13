@@ -53,17 +53,17 @@ import io.spine.tools.compiler.jvm.findField
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.compiler.type.message
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.GOES_COMPANION
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.GoesField
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.tools.validation.GoesField
 import io.spine.tools.validation.event.GoesFieldDiscovered
 import io.spine.tools.validation.event.goesFieldDiscovered
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated with the `(goes)` option.
