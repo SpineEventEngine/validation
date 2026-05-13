@@ -41,6 +41,11 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * Tests [ConstraintViolation][io.spine.validation.ConstraintViolation]s created by `(set_once)`.
@@ -100,7 +105,7 @@ private fun <T : Any> Builder.assertConstraintViolation(
             FIELD_VALUE to fieldValue1.asPlaceholderValue(),
             FIELD_PROPOSED_VALUE to fieldValue2.asPlaceholderValue(),
             PARENT_TYPE to parentType
-        )
+        ).mapKeys { it.key.toString() }
 
         typeName shouldBe parentType
         fieldPath shouldBe FieldPath(fieldName)
@@ -116,9 +121,3 @@ private fun defaultTemplate(fieldNumber: Int) =
 private fun customTemplate(fieldNumber: Int) =
     "Field_$fieldNumber:" +
             " `\${field.value}`, `\${field.path}`, `\${field.proposed_value}`, `\${field.type}`."
-
-private const val FIELD_PATH = "field.path"
-private const val FIELD_PROPOSED_VALUE = "field.proposed_value"
-private const val FIELD_TYPE = "field.type"
-private const val FIELD_VALUE = "field.value"
-private const val PARENT_TYPE = "parent.type"
