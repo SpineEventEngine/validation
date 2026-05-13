@@ -34,6 +34,7 @@ import io.spine.tools.compiler.ast.OneofGroup
 import io.spine.tools.compiler.ast.Span
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
+import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.extractPlaceholders
 
 /**

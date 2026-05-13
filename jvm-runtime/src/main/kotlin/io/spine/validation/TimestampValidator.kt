@@ -32,8 +32,8 @@ import com.google.protobuf.util.Timestamps
 import com.google.protobuf.util.Timestamps.MAX_VALUE
 import com.google.protobuf.util.Timestamps.MIN_VALUE
 import io.spine.base.fieldPath
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validation.RuntimeErrorPlaceholder.RANGE_VALUE
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 
 /**
  * Validates [Timestamp] messages.

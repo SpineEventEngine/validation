@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@
 package io.spine.validation
 
 import io.spine.code.proto.FieldDeclaration
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.RuntimeErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.RuntimeErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
 import kotlin.collections.iterator
 
 /**

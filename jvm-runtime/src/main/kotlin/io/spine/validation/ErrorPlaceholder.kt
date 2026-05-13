@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.validation
 
 /**
  * A template placeholder that can be used in error messages.
@@ -33,15 +33,8 @@ package io.spine.tools.validation
  * Each validation option declares the supported placeholders. Take a look at
  * `options.proto` for examples.
  *
- * ### Important Note
- *
- * We have the same items in this enum as in `io.spine.validation.RuntimeErrorPlaceholder`
- * in the runtime library, which is exactly as this one. Please keep them in sync.
- * This duplication is done intentionally to prevent clash between the runtime library,
- * which is added to the classpath of the Compiler, and the runtime library, which is part
- * of the Compiler itself because it is a part of Spine. As we complete our migration
- * of validation to codegen, the runtime library will either be significantly simplified,
- * or even its content may be moved to `base`. Then, the duplicate enum should be removed.
+ * The enum is used by the compiler model and Java renderer when validating and rendering
+ * built-in option error messages.
  */
 public enum class ErrorPlaceholder(public val value: String) {
 
@@ -73,3 +66,9 @@ public enum class ErrorPlaceholder(public val value: String) {
 
     override fun toString(): String = value
 }
+
+@Deprecated(
+    message = "Please use `ErrorPlaceholder` instead.",
+    replaceWith = ReplaceWith("ErrorPlaceholder")
+)
+public typealias RuntimeErrorPlaceholder = ErrorPlaceholder

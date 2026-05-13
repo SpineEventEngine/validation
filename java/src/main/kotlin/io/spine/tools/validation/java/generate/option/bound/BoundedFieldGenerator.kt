@@ -43,7 +43,6 @@ import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.field
 import io.spine.tools.compiler.jvm.plus
-import io.spine.tools.validation.ErrorPlaceholder
 import io.spine.tools.validation.bound.BoundedFieldView
 import io.spine.tools.validation.bound.NumericBound
 import io.spine.tools.validation.bound.NumericBound.ValueCase.DOUBLE_VALUE
@@ -70,6 +69,7 @@ import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
+import io.spine.validation.ErrorPlaceholder
 import java.util.concurrent.ConcurrentHashMap
 
 /**
