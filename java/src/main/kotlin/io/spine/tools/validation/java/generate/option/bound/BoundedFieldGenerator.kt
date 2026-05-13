@@ -26,8 +26,8 @@
 
 package io.spine.tools.validation.java.generate.option.bound
 
-import io.spine.base.FieldPath
 import io.spine.annotation.VisibleForTesting
+import io.spine.base.FieldPath
 import io.spine.string.camelCase
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.FieldType
