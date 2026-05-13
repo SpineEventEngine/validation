@@ -404,8 +404,8 @@ A new option needs runtime work in three cases:
 
 - **It introduces a new error placeholder.** Add the placeholder to
   [`ErrorPlaceholder`][error-placeholder] in `:jvm-runtime`, then use it from the reaction
-  and generator. The runtime stores placeholder keys as strings in `TemplateString`, so
-  no runtime enum update is required.
+  and generator. This shared enum update is required, but no additional runtime logic or
+  `TemplateString` schema change is needed because the runtime stores placeholder keys as strings.
 - **It needs a shared runtime helper.** If the option's generated code would otherwise
   inline a non-trivial routine into every `validate()` body, factor it out as a `static`
   helper in `:jvm-runtime` and call it from the generated code instead. This is rare;
