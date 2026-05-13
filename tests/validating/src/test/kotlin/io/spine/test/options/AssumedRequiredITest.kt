@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import io.spine.base.Identifier
 import io.spine.test.tools.validate.TaskId
 import io.spine.test.tools.validate.command.AssignTask
 import io.spine.test.tools.validate.command.CreateProject
+import io.spine.test.tools.validate.entity.NumberStats
 import io.spine.test.tools.validate.entity.Project
 import io.spine.test.tools.validate.entity.Task
 import io.spine.tools.validation.assertions.assertInvalid
@@ -83,6 +84,12 @@ internal class AssumedRequiredITest {
         @Test
         fun `allowing to omit, if set as not 'required' explicitly`() {
             val msg = Task.newBuilder()
+            assertValid(msg)
+        }
+
+        @Test
+        fun `not requiring a primitive ID`() {
+            val msg = NumberStats.newBuilder()
             assertValid(msg)
         }
     }
