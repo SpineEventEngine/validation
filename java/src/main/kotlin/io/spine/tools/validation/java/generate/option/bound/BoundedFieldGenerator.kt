@@ -27,6 +27,7 @@
 package io.spine.tools.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
+import io.spine.annotation.VisibleForTesting
 import io.spine.string.camelCase
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.FieldType
@@ -246,13 +247,15 @@ internal object UnsignedIntegerWarnings {
         report(key(file, span), warning)
     }
 
-    internal fun report(key: String, warning: () -> Unit) {
+    @VisibleForTesting
+    fun report(key: String, warning: () -> Unit) {
         if (reported.add(key)) {
             warning()
         }
     }
 
-    internal fun clear() {
+    @VisibleForTesting
+    fun clear() {
         reported.clear()
     }
 
