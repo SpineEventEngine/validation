@@ -98,10 +98,10 @@ Below is the helper that creates a violation for invalid `seconds`.
 private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     message = templateString {
         withPlaceholders =
-           "The ${FIELD_PATH.value} value is out of range" +
-                   " (${RANGE_VALUE.value}): $seconds."
-       placeholderValue.put(FIELD_PATH.value, "seconds")
-       placeholderValue.put(RANGE_VALUE.value,
+            "The ${FIELD_PATH.value} value is out of range" +
+                    " (${RANGE_VALUE.value}): $seconds."
+        placeholderValue.put(FIELD_PATH.value, "seconds")
+        placeholderValue.put(RANGE_VALUE.value,
             "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
 
     },
