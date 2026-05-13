@@ -21,13 +21,13 @@ code calls into.
 
 Five groups of types live in the runtime library:
 
-| Group                  | Types                                                                                | Role                                                                                          |
-|------------------------|--------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Generated-class mixins | `ValidatableMessage`, `ValidatingBuilder`                                            | Interfaces the generated message and its builder implement.                                   |
-| Violation Protobuf     | `ValidationError`, `ConstraintViolation`, `TemplateString`                           | The structured shape of a violation report.                                                   |
-| Exception              | `ValidationException`                                                                | Thrown by `Builder.build()` when validation fails.                                            |
-| Markers                | `@Validated`, `@NonValidated`                                                        | Documentary annotations placed on `build()` and `buildPartial()` return types; not retained at runtime. |
-| Validator extension    | `MessageValidator`, `ValidatorRegistry`, `DetectedViolation`                            | Runtime SPI for attaching custom checks to a message type, including third-party messages. |
+| Group                  | Types                                                                            | Role                                                                                                    |
+|------------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| Generated-class mixins | `ValidatableMessage`, `ValidatingBuilder`                                        | Interfaces the generated message and its builder implement.                                             |
+| Violation Protobuf     | `ValidationError`, `ConstraintViolation`, `TemplateString`                       | The structured shape of a violation report.                                                             |
+| Exception              | `ValidationException`                                                            | Thrown by `Builder.build()` when validation fails.                                                      |
+| Markers                | `@Validated`, `@NonValidated`                                                    | Documentary annotations placed on `build()` and `buildPartial()` return types; not retained at runtime. |
+| Validator extension    | `MessageValidator`, `ValidatorRegistry`, `DetectedViolation`, `ErrorPlaceholder` | Runtime SPI for attaching custom checks to a message type, including third-party messages.              |
 
 Two utility entry points round the surface out: the static method `Validate.check(message)`
 and the Kotlin extensions `M.checkValid()` and `M.copy { … }` in
@@ -188,12 +188,10 @@ every problem in one pass.
 `TemplateString` (in [`error_message.proto`][error-message-proto]) is the format every
 generator emits and every reader resolves. Substitution happens via
 `TemplateString.format()` (in Kotlin, [`TemplateStringExts.kt`][template-string-exts]) or
-the static `TemplateStrings.format(...)` (in Java). Generated code writes placeholder
-keys as strings after the compiler model validates them against
-`io.spine.tools.validation.ErrorPlaceholder` in `:context`. Runtime validators do the
-same directly when they create `TemplateString` instances. The only placeholder the
-runtime reserves and fills by itself is `ValidatorRegistry.VALIDATOR_PLACEHOLDER`
-(`"validator"`), added for violations reported by `MessageValidator`s.
+the static `TemplateStrings.format(...)` (in Java). The placeholder names the runtime
+itself fills in are enumerated by [`ErrorPlaceholder`][error-placeholder]
+— `field.path`, `field.value`, `field.type`, `message.type`, `parent.type`, plus
+option-specific entries such as `regex.pattern` and `range.value`.
 
 `ViolationText` ([`ViolationText.java`][violation-text]) is the diagnostic formatter the
 exception uses to produce a human-readable string from a list of `ConstraintViolation`s.
@@ -387,4 +385,5 @@ in `:context` and `:java`: anything that *can* be decided at build time *should*
 [exception-factory]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/java/io/spine/validation/ExceptionFactory.java
 [message-extensions]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt
 [template-string-exts]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt
+[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ErrorPlaceholder.kt
 [timestamp-validator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt

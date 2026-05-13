@@ -98,10 +98,10 @@ Below is the helper that creates a violation for invalid `seconds`.
 private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     message = templateString {
         withPlaceholders =
-            "The $FIELD_PATH_PLACEHOLDER value is out of range" +
-                    " ($RANGE_VALUE_PLACEHOLDER): $seconds."
-        placeholderValue.put(FIELD_PATH_PLACEHOLDER, "seconds")
-        placeholderValue.put(RANGE_VALUE_PLACEHOLDER,
+           "The ${FIELD_PATH.value} value is out of range" +
+                   " (${RANGE_VALUE.value}): $seconds."
+       placeholderValue.put(FIELD_PATH.value, "seconds")
+       placeholderValue.put(RANGE_VALUE.value,
             "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
 
     },
@@ -110,9 +110,6 @@ private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     },
     fieldValue = seconds
 )
-
-private const val FIELD_PATH_PLACEHOLDER = "field.path"
-private const val RANGE_VALUE_PLACEHOLDER = "range.value"
 ```
 The `invalidNanos()` function is similar.
 

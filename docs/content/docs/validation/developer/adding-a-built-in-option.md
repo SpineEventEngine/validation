@@ -403,7 +403,7 @@ runtime change is required for the average new option.
 A new option needs runtime work in three cases:
 
 - **It introduces a new error placeholder.** Add the placeholder to
-  [`ErrorPlaceholder`][error-placeholder] in `:context`, then use it from the reaction
+  [`ErrorPlaceholder`][error-placeholder] in `:jvm-runtime`, then use it from the reaction
   and generator. The runtime stores placeholder keys as strings in `TemplateString`, so
   no runtime enum update is required.
 - **It needs a shared runtime helper.** If the option's generated code would otherwise

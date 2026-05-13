@@ -378,6 +378,6 @@ consumer-facing version of the same SPI is covered by
 [option-name]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/OptionName.kt
 [option-names]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/option/OptionNames.kt
 [bound-pkg]: https://github.com/SpineEventEngine/validation/tree/master/context/src/main/kotlin/io/spine/tools/validation/bound
-[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/ErrorPlaceholder.kt
+[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ErrorPlaceholder.kt
 [default-message]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/DefaultErrorMessage.kt
 [validation-option-spi]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt
