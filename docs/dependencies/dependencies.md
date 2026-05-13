@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -1097,7 +1097,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -1798,7 +1798,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 ## Compile, tests, and tooling
@@ -1812,7 +1812,7 @@ This report was generated on **Wed May 13 20:09:04 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -2871,7 +2871,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -3968,7 +3968,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
@@ -4022,7 +4022,7 @@ This report was generated on **Wed May 13 20:44:35 WEST 2026** using
 
 
 
-# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -4829,7 +4829,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -5518,7 +5518,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -5983,7 +5983,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -6609,7 +6609,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -7177,7 +7177,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -7788,7 +7788,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.20.0.
@@ -8533,7 +8533,7 @@ This report was generated on **Wed May 13 20:44:36 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8773,7 +8773,7 @@ This report was generated on **Wed May 13 20:44:35 WEST 2026** using
 
 
 
-# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.420`
+# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.421`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
