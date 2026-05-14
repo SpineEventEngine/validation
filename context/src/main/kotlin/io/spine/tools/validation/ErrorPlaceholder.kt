@@ -36,7 +36,10 @@ package io.spine.tools.validation
  * The enum is used by the compiler model and Java renderer when validating and rendering
  * built-in option error messages.
  */
-@Deprecated(message = "Please use `io.spine.tools.ErrorPlaceholder` instead.")
+@Deprecated(
+    message = "Please use `io.spine.validation.ErrorPlaceholder` instead.",
+    replaceWith = ReplaceWith("ErrorPlaceholder", "io.spine.validation.ErrorPlaceholder")
+)
 public enum class ErrorPlaceholder(public val value: String) {
 
     // Common placeholders.
@@ -64,6 +67,12 @@ public enum class ErrorPlaceholder(public val value: String) {
 
     // Placeholder for the message options.
     REQUIRE_FIELDS("require.fields");
+
+    /**
+     * Converts this placeholder to its runtime counterpart.
+     */
+    public fun toRuntime(): io.spine.validation.ErrorPlaceholder =
+        io.spine.validation.ErrorPlaceholder.valueOf(name)
 
     override fun toString(): String = value
 }
