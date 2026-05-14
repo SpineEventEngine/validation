@@ -47,6 +47,7 @@ import io.spine.validation.checkPlaceholdersHasValue
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
+@JvmName("templateStringExp")
 public fun templateString(
     template: String,
     placeholders: Map<ErrorPlaceholder, Expression<String>>,
@@ -67,7 +68,6 @@ public fun templateString(
 @Deprecated(
     message = "Please use the overload accepting `io.spine.validation.ErrorPlaceholder`."
 )
-@JvmName("templateStringWithDeprecatedPlaceholders")
 public fun templateString(
     template: String,
     placeholders: Map<io.spine.tools.validation.ErrorPlaceholder, Expression<String>>,
