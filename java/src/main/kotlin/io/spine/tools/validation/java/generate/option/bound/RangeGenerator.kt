@@ -34,12 +34,10 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.call
 import io.spine.tools.compiler.jvm.plus
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
+import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
+import io.spine.tools.validation.bound.RangeField
 import io.spine.tools.validation.java.expression.IntegerClass
 import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
@@ -47,10 +45,12 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.RANGE
-import io.spine.tools.validation.bound.NumericBound.ValueCase
-import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
-import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.tools.validation.bound.RangeField
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
 
 /**
  * The generator for `(range)` option.

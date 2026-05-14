@@ -322,11 +322,9 @@ private fun String.checkPlaceholders(
 
 Catching unknown placeholders here, in the model, is what allows the renderer to assume
 that every placeholder it sees in the projection state has a known meaning. The full
-list of placeholders is enumerated in
-[`ErrorPlaceholder.kt`][error-placeholder]. The runtime library has a deliberately
-duplicated `RuntimeErrorPlaceholder` enum; the duplication is documented in the
-KDoc on `ErrorPlaceholder` and is expected to disappear once the Compiler and the
-runtime share a common base.
+list of placeholders for generated validation code is enumerated in
+[`ErrorPlaceholder.kt`][error-placeholder]. At runtime, `TemplateString` carries
+placeholder keys as strings; the runtime library does not keep a second placeholder enum.
 
 When no custom message is provided, the reaction falls back to the option's
 `(default_message)` annotation read by [`defaultErrorMessage`][default-message]. That
@@ -380,6 +378,6 @@ consumer-facing version of the same SPI is covered by
 [option-name]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/OptionName.kt
 [option-names]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/option/OptionNames.kt
 [bound-pkg]: https://github.com/SpineEventEngine/validation/tree/master/context/src/main/kotlin/io/spine/tools/validation/bound
-[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/ErrorPlaceholder.kt
+[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ErrorPlaceholder.kt
 [default-message]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/DefaultErrorMessage.kt
 [validation-option-spi]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt

@@ -33,7 +33,7 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
-import io.spine.tools.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.TemplateString
 import io.spine.validation.checkPlaceholdersHasValue
 

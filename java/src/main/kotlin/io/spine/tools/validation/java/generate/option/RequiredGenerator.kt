@@ -35,10 +35,7 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.RequiredField
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
@@ -51,9 +48,12 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.option.IF_MISSING
-import io.spine.tools.validation.RequiredField
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.FIELD_PATH
+import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * The generator for `(required)` option.

@@ -33,9 +33,7 @@ import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.tools.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.ChoiceOneof
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.expression.orElse
@@ -47,9 +45,11 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.option.CHOICE
-import io.spine.tools.validation.ChoiceOneof
+import io.spine.validation.ConstraintViolation
+import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.ErrorPlaceholder.GROUP_PATH
+import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
 
 /**
  * The generator for the `(choice)` option.
