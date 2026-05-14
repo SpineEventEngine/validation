@@ -56,6 +56,8 @@ public enum class ErrorPlaceholder(public val value: String) {
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
     MIN_OPERATOR("min.operator"),
+
+    @Deprecated(message = "Use the placeholder reference from Spine Time instead.")
     WHEN_IN("when.in"),
 
     // Placeholders for the `oneof` options.
