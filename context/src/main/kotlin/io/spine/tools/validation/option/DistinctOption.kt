@@ -63,11 +63,11 @@ import io.spine.tools.validation.event.DistinctFieldDiscovered
 import io.spine.tools.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.tools.validation.event.distinctFieldDiscovered
 import io.spine.tools.validation.event.ifHasDuplicatesOptionDiscovered
-import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated as `(distinct)`.

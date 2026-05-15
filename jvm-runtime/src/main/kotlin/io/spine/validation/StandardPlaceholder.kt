@@ -27,7 +27,7 @@
 package io.spine.validation
 
 /**
- * A template placeholder that can be used in error messages.
+ * The standard set of [Placeholder]s that can be used in error messages.
  *
  * Enumerates placeholder names that can be used within Protobuf definitions.
  * Each validation option declares the supported placeholders. Take a look at
@@ -36,7 +36,7 @@ package io.spine.validation
  * The enum is used by the compiler model and Java renderer when validating and rendering
  * built-in option error messages.
  */
-public enum class ErrorPlaceholder(public val value: String) {
+public enum class StandardPlaceholder(override val value: String) : Placeholder {
 
     // Common placeholders.
     FIELD_PATH("field.path"),
@@ -70,7 +70,7 @@ public enum class ErrorPlaceholder(public val value: String) {
 }
 
 @Deprecated(
-    message = "Please use `ErrorPlaceholder` instead.",
-    replaceWith = ReplaceWith("ErrorPlaceholder")
+    message = "Please use `StandardPlaceholder` instead.",
+    replaceWith = ReplaceWith("StandardPlaceholder")
 )
-public typealias RuntimeErrorPlaceholder = ErrorPlaceholder
+public typealias RuntimeErrorPlaceholder = StandardPlaceholder

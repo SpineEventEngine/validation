@@ -45,12 +45,12 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.validation.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.RANGE_VALUE
 
 /**
  * The generator for `(range)` option.
@@ -113,7 +113,7 @@ private class GenerateRange(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+    ): Map<Placeholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_VALUE to StringClass.call("valueOf", fieldValue),
         FIELD_TYPE to StringLiteral(fieldType.name),

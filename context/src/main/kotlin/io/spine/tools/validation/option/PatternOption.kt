@@ -54,12 +54,12 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.event.PatternFieldDiscovered
 import io.spine.tools.validation.event.patternFieldDiscovered
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
-import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.StandardPlaceholder.REGEX_PATTERN
 
 /**
  * Controls whether a field should be validated with the `(pattern)` option.

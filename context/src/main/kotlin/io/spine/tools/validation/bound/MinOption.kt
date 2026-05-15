@@ -48,12 +48,12 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MIN
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
-import io.spine.validation.ErrorPlaceholder.MIN_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.MIN_OPERATOR
+import io.spine.validation.StandardPlaceholder.MIN_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * A reaction to add a validation rule to a type whenever the `(min)` field option

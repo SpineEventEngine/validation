@@ -67,13 +67,13 @@ import io.spine.tools.validation.option.PATTERN
 import io.spine.tools.validation.option.isRepeatedString
 import io.spine.tools.validation.option.isSingularString
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.validation.ErrorPlaceholder.REGEX_MODIFIERS
-import io.spine.validation.ErrorPlaceholder.REGEX_PATTERN
+import io.spine.validation.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.StandardPlaceholder.REGEX_PATTERN
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -250,7 +250,7 @@ private class GeneratePattern(private val view: PatternField) {
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<String>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
+    ): Map<Placeholder, Expression<String>> = mapOf(
         FIELD_PATH to fieldPath.joinToString(),
         FIELD_VALUE to fieldValue,
         FIELD_TYPE to StringLiteral(fieldType.name),

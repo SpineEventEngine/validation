@@ -63,11 +63,11 @@ import io.spine.tools.validation.event.IfSetAgainOptionDiscovered
 import io.spine.tools.validation.event.SetOnceFieldDiscovered
 import io.spine.tools.validation.event.ifSetAgainOptionDiscovered
 import io.spine.tools.validation.event.setOnceFieldDiscovered
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated with the `(set_once)` option.

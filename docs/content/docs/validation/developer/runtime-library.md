@@ -27,7 +27,7 @@ Five groups of types live in the runtime library:
 | Violation Protobuf     | `ValidationError`, `ConstraintViolation`, `TemplateString`                       | The structured shape of a violation report.                                                             |
 | Exception              | `ValidationException`                                                            | Thrown by `Builder.build()` when validation fails.                                                      |
 | Markers                | `@Validated`, `@NonValidated`                                                    | Documentary annotations placed on `build()` and `buildPartial()` return types; not retained at runtime. |
-| Validator extension    | `MessageValidator`, `ValidatorRegistry`, `DetectedViolation`, `ErrorPlaceholder` | Runtime SPI for attaching custom checks to a message type, including third-party messages.              |
+| Validator extension    | `MessageValidator`, `ValidatorRegistry`, `DetectedViolation`, `Placeholder`      | Runtime SPI for attaching custom checks to a message type, including third-party messages.              |
 
 Two utility entry points round the surface out: the static method `Validate.check(message)`
 and the Kotlin extensions `M.checkValid()` and `M.copy { … }` in
@@ -189,7 +189,7 @@ every problem in one pass.
 generator emits and every reader resolves. Substitution happens via
 `TemplateString.format()` (in Kotlin, [`TemplateStringExts.kt`][template-string-exts]) or
 the static `TemplateStrings.format(...)` (in Java). The placeholder names the runtime
-itself fills in are enumerated by [`ErrorPlaceholder`][error-placeholder]
+itself fills in are enumerated by [`StandardPlaceholder`][standard-placeholder]
 — `field.path`, `field.value`, `field.type`, `message.type`, `parent.type`, plus
 option-specific entries such as `regex.pattern` and `range.value`.
 
@@ -385,5 +385,5 @@ in `:context` and `:java`: anything that *can* be decided at build time *should*
 [exception-factory]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/java/io/spine/validation/ExceptionFactory.java
 [message-extensions]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt
 [template-string-exts]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt
-[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ErrorPlaceholder.kt
+[standard-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/StandardPlaceholder.kt
 [timestamp-validator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt

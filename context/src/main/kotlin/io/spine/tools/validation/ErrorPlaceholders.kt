@@ -34,7 +34,7 @@ import io.spine.tools.compiler.ast.OneofGroup
 import io.spine.tools.compiler.ast.Span
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
-import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.Placeholder
 import io.spine.validation.extractPlaceholders
 
 /**
@@ -47,7 +47,7 @@ import io.spine.validation.extractPlaceholders
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     message: MessageType,
     file: File,
     option: String
@@ -69,7 +69,7 @@ internal fun String.checkPlaceholders(
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     oneof: OneofGroup,
     file: File,
     option: String
@@ -91,7 +91,7 @@ internal fun String.checkPlaceholders(
  * @param option The name of the option with which the message template was specified.
  */
 public fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     field: Field,
     file: File,
     option: String
@@ -108,7 +108,7 @@ public fun String.checkPlaceholders(
  * set of the [supported] placeholders, and reports a compilation error if so.
  */
 private fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     declaration: String,
     span: Span,
     file: File,
@@ -132,7 +132,7 @@ private fun String.checkPlaceholders(
  */
 private fun missingPlaceholders(
     template: String,
-    placeholders: Set<ErrorPlaceholder>
+    placeholders: Set<Placeholder>
 ): Set<String> {
     val requested = extractPlaceholders(template)
     val provided = placeholders.map { it.value }

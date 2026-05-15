@@ -36,11 +36,11 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.GoesCustomMessage
 import io.spine.test.tools.validate.GoesDefaultMessage
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.GOES_COMPANION
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows

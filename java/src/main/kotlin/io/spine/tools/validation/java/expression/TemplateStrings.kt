@@ -33,7 +33,7 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
-import io.spine.validation.ErrorPlaceholder
+import io.spine.validation.Placeholder
 import io.spine.validation.TemplateString
 import io.spine.validation.checkPlaceholdersHasValue
 
@@ -41,8 +41,8 @@ import io.spine.validation.checkPlaceholdersHasValue
  * Yields an expression that creates a new instance of [TemplateString].
  *
  * Note that this method differs from the one provided by the API module
- * in that it accepts placeholder keys as [ErrorPlaceholder]. This enum
- * contains placeholder keys for built-in options.
+ * in that it accepts placeholder keys as [Placeholder]. The standard
+ * placeholder keys for built-in options are provided by [io.spine.validation.StandardPlaceholder].
  *
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
@@ -50,7 +50,7 @@ import io.spine.validation.checkPlaceholdersHasValue
 @JvmName("templateStringExp")
 public fun templateString(
     template: String,
-    placeholders: Map<ErrorPlaceholder, Expression<String>>,
+    placeholders: Map<Placeholder, Expression<String>>,
     optionName: String
 ): Expression<TemplateString> =
     withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)
