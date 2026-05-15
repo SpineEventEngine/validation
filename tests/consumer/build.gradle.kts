@@ -49,8 +49,12 @@ spine {
 
 dependencies {
     spineCompiler(project(":java"))
-    spineCompiler(project(":tests:extensions"))
-    implementation(project(":tests:extensions"))
+    @Suppress("AvoidDuplicateDependencies") // The subproject is used in different configurations.
+    run {
+        val testsExtensions = project(":tests:extensions")
+        spineCompiler(testsExtensions)
+        implementation(testsExtensions)
+    }
     implementation(project(":tests:consumer-dependency"))
     implementation(Time.lib)
     testImplementation(TestLib.lib)
