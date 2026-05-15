@@ -46,7 +46,6 @@ import io.spine.string.TemplateString
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
-@JvmName("templateStringExp")
 public fun templateString(
     template: String,
     placeholders: Map<Placeholder, Expression<String>>,
