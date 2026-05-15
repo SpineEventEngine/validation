@@ -58,32 +58,6 @@ public fun templateString(
 /**
  * Yields an expression that creates a new instance of [TemplateString].
  *
- * This overload accepts the deprecated placeholders from the former
- * `io.spine.tools.validation` package.
- *
- * @param placeholders The supported placeholders and their values.
- * @param optionName The name of the option, which declared the provided [placeholders].
- */
-@Suppress("DEPRECATION")
-@Deprecated(
-    message = "Please use the overload accepting `io.spine.validation.ErrorPlaceholder`."
-)
-public fun templateString(
-    template: String,
-    placeholders: Map<io.spine.tools.validation.ErrorPlaceholder, Expression<String>>,
-    optionName: String
-): Expression<TemplateString> {
-    val runtimePlaceholders = placeholders.mapKeys { it.key.toRuntime() }
-    return withStringPlaceholders(
-        template,
-        runtimePlaceholders.mapKeys { it.key.value },
-        optionName
-    )
-}
-
-/**
- * Yields an expression that creates a new instance of [TemplateString].
- *
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
