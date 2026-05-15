@@ -34,7 +34,7 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.tools.compiler.jvm.packToAny
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.TemplateString
+import io.spine.string.TemplateString
 
 /**
  * Yields an expression that creates a new instance of [ConstraintViolation]

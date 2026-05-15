@@ -35,9 +35,9 @@ import io.spine.base.fieldPath
 import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
-import io.spine.validation.TemplateString
+import io.spine.string.TemplateString
 import io.spine.validation.ValidatorRegistry
-import io.spine.validation.templateString
+import io.spine.string.templateString
 
 /**
  * Validates [com.google.protobuf.Timestamp] messages, treating all instances as invalid

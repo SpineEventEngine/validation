@@ -31,7 +31,7 @@ import com.google.protobuf.Message
 import io.spine.testing.TestValues.randomString
 import io.spine.validation.NonValidated
 import io.spine.validation.Validate.violationsOf
-import io.spine.validation.format
+import io.spine.string.format
 import io.spine.tools.validation.java.given.Fish
 import io.spine.tools.validation.java.given.Meal
 import io.spine.tools.validation.java.given.Sauce

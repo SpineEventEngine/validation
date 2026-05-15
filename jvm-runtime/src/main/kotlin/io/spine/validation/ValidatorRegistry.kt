@@ -33,6 +33,7 @@ import com.google.protobuf.Message
 import io.spine.annotation.VisibleForTesting
 import io.spine.base.FieldPath
 import io.spine.protobuf.TypeConverter
+import io.spine.string.TemplateString
 import io.spine.type.TypeName
 import java.lang.reflect.ParameterizedType
 import java.util.*

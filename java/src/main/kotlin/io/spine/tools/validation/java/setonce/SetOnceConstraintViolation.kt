@@ -38,7 +38,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.option.IF_SET_AGAIN
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.Placeholder
+import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
 import io.spine.validation.StandardPlaceholder.FIELD_PROPOSED_VALUE
 import io.spine.validation.StandardPlaceholder.FIELD_TYPE

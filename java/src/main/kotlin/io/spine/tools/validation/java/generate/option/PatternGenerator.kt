@@ -67,7 +67,7 @@ import io.spine.tools.validation.option.PATTERN
 import io.spine.tools.validation.option.isRepeatedString
 import io.spine.tools.validation.option.isSingularString
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.Placeholder
+import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
 import io.spine.validation.StandardPlaceholder.FIELD_TYPE
 import io.spine.validation.StandardPlaceholder.FIELD_VALUE

@@ -34,9 +34,9 @@ import io.spine.tools.validation.test.EarphonesValidator.Companion.ValidEarphone
 import io.spine.validation.DetectedViolation
 import io.spine.validation.FieldViolation
 import io.spine.validation.MessageValidator
-import io.spine.validation.TemplateString
+import io.spine.string.TemplateString
 import io.spine.validation.ValidatorRegistry
-import io.spine.validation.templateString
+import io.spine.string.templateString
 
 /**
  * Validates [Earphones] messages, treating all instances as invalid

@@ -32,6 +32,7 @@ import com.google.protobuf.util.Timestamps
 import com.google.protobuf.util.Timestamps.MAX_VALUE
 import com.google.protobuf.util.Timestamps.MIN_VALUE
 import io.spine.base.fieldPath
+import io.spine.string.templateString
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
 import io.spine.validation.StandardPlaceholder.RANGE_VALUE
 

@@ -26,6 +26,8 @@
 
 package io.spine.validation
 
+import io.spine.string.Placeholder
+
 /**
  * The standard set of [Placeholder]s that can be used in error messages.
  *

@@ -57,7 +57,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.validation.ConstraintViolation
 import io.spine.validation.DetectedViolation
-import io.spine.validation.TemplateString
+import io.spine.string.TemplateString
 
 /**
  * A fully qualified Java class name of a validator class.

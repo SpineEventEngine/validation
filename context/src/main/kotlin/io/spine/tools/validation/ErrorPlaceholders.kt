@@ -34,8 +34,8 @@ import io.spine.tools.compiler.ast.OneofGroup
 import io.spine.tools.compiler.ast.Span
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
-import io.spine.validation.Placeholder
-import io.spine.validation.extractPlaceholders
+import io.spine.string.Placeholder
+import io.spine.string.extractPlaceholders
 
 /**
  * Checks if this [String] contains placeholders that are not present in the given

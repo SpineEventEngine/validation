@@ -37,7 +37,7 @@ import io.kotest.matchers.string.shouldContain
 import io.spine.type.toJson
 import io.spine.validation.ConstraintViolation
 import io.spine.validation.ValidationException
-import io.spine.validation.formatUnsafe
+import io.spine.string.formatUnsafe
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.fail

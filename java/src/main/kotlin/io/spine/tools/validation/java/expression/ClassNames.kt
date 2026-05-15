@@ -43,7 +43,7 @@ import io.spine.type.KnownTypes
 import io.spine.type.TypeName
 import io.spine.type.TypeUrl
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.TemplateString
+import io.spine.string.TemplateString
 import io.spine.validation.ValidatableMessage
 import io.spine.validation.ValidationError
 import java.util.*

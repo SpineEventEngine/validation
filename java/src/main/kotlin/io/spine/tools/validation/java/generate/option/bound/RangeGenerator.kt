@@ -45,7 +45,7 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.Placeholder
+import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
 import io.spine.validation.StandardPlaceholder.FIELD_TYPE
 import io.spine.validation.StandardPlaceholder.FIELD_VALUE

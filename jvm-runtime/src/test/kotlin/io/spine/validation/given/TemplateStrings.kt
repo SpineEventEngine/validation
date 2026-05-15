@@ -26,8 +26,8 @@
 
 package io.spine.validation.given
 
-import io.spine.validation.TemplateString
-import io.spine.validation.templateString
+import io.spine.string.TemplateString
+import io.spine.string.templateString
 
 /**
  * Creates a new [TemplateString] with the given [value], which does not

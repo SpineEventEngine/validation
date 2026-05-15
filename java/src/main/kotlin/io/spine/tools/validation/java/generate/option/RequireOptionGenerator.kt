@@ -50,7 +50,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.tools.validation.option.REQUIRE
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.Placeholder
+import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.MESSAGE_TYPE
 import io.spine.validation.StandardPlaceholder.REQUIRE_FIELDS
 

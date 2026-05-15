@@ -28,7 +28,7 @@ package io.spine.validation.test
 
 import io.kotest.matchers.shouldBe
 import io.spine.validation.ValidationException
-import io.spine.validation.format
+import io.spine.string.format
 import io.spine.tools.validation.test.money.Usd
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
