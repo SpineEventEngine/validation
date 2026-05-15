@@ -35,7 +35,6 @@ import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
 import io.spine.string.Placeholder
 import io.spine.string.TemplateString
-import io.spine.string.checkPlaceholdersHasValue
 
 /**
  * Yields an expression that creates a new instance of [TemplateString].
@@ -82,3 +81,55 @@ public fun withStringPlaceholders(
         .chainPutAll("placeholderValue", placeholderEntries)
         .chainBuild()
 }
+
+/**
+ * Makes sure that each placeholder within the [template] string is present
+ * in the [placeholders] set.
+ *
+ * @param template The template with placeholders like `${something}`.
+ * @param placeholders The list with placeholder values.
+ * @param lazyMessage The message to use in [IllegalArgumentException] if the check fails.
+ */
+private fun checkPlaceholdersHasValue(
+    template: String,
+    placeholders: Set<String>,
+    lazyMessage: (List<String>) -> String =
+        { "Missing value for the following template placeholders: `$it`." }
+) {
+    val neededPlaceholders = extractPlaceholders(template)
+    val missing = mutableListOf<String>()
+    for (placeholder in neededPlaceholders) {
+        if (!placeholders.contains(placeholder)) {
+            missing.add(placeholder)
+        }
+    }
+    if (missing.isNotEmpty()) {
+        throw IllegalArgumentException(lazyMessage(missing))
+    }
+}
+
+/**
+ * Makes sure that each placeholder within the [template] string has a value
+ * in [placeholders] map.
+ *
+ * @param template The template with placeholders like `${something}`.
+ * @param placeholders The map containing placeholders (without curly braces and the dollar sign)
+ *  and their values.
+ * @param lazyMessage The message to use in [IllegalArgumentException] if the check fails.
+ */
+private fun checkPlaceholdersHasValue(
+    template: String,
+    placeholders: Map<String, Any>,
+    lazyMessage: (List<String>) -> String =
+        { "Missing value for the following template placeholders: `$it`." }
+): Unit = checkPlaceholdersHasValue(template, placeholders.keys, lazyMessage)
+
+/**
+ * Extracts all placeholders used within this [template] string.
+ */
+private fun extractPlaceholders(template: String): Set<String> =
+    PLACEHOLDERS.findAll(template)
+        .map { it.groupValues[1] }
+        .toSet()
+
+private val PLACEHOLDERS = Regex("\\$\\{([^}]+)}")
