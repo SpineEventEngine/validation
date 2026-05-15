@@ -53,7 +53,7 @@ public fun templateString(
     placeholders: Map<Placeholder, Expression<String>>,
     optionName: String
 ): Expression<TemplateString> =
-    withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)
+    withStringPlaceholders(template, placeholders.mapKeys { it.key.name }, optionName)
 
 /**
  * Yields an expression that creates a new instance of [TemplateString].

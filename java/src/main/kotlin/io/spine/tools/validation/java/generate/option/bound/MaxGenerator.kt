@@ -102,11 +102,11 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
         typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        MAX_VALUE to view.max.withFieldValue(bound),
-        MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to StringClass.call("valueOf", fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        MAX_VALUE.value to view.max.withFieldValue(bound),
+        MAX_OPERATOR.value to StringLiteral(if (isExclusive) "<" else "<=")
     )
 }

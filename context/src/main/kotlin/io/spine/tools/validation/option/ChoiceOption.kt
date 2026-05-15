@@ -128,6 +128,6 @@ internal class ChoiceGroupView : View<OneofRef, ChoiceOneof, ChoiceOneof.Builder
 }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    GROUP_PATH,
-    PARENT_TYPE,
+    GROUP_PATH.value,
+    PARENT_TYPE.value,
 )

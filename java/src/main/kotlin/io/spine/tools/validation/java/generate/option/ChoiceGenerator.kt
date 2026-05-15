@@ -111,7 +111,7 @@ private class GenerateChoice(private val view: ChoiceOneof) {
         groupPath: Expression<FieldPath>,
         typeName: Expression<String>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        GROUP_PATH to groupPath.joinToString(),
-        PARENT_TYPE to typeName
+        GROUP_PATH.value to groupPath.joinToString(),
+        PARENT_TYPE.value to typeName
     )
 }

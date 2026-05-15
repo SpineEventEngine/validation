@@ -119,7 +119,7 @@ private fun String.checkPlaceholders(
     Compilation.check(missing.isEmpty(), file, span) {
         "The $declaration specifies an error message for the `($option)` option using unsupported" +
                 " placeholders: `$missing`. Supported placeholders are the following:" +
-                " `${supported.map { it.value }}`."
+                " `${supported.map { it.name }}`."
     }
 }
 
@@ -133,12 +133,11 @@ private fun String.checkPlaceholders(
 private fun missingPlaceholders(
     template: String,
     placeholders: Set<Placeholder>
-): Set<String> {
+): Set<Placeholder> {
     val requested = extractPlaceholders(template)
-    val provided = placeholders.map { it.value }
-    val missing = mutableSetOf<String>()
+    val missing = mutableSetOf<Placeholder>()
     for (placeholder in requested) {
-        if (!provided.contains(placeholder)) {
+        if (!placeholders.contains(placeholder)) {
             missing.add(placeholder)
         }
     }

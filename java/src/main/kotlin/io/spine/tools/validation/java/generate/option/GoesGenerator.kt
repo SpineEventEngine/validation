@@ -127,10 +127,10 @@ private class GenerateGoes(
         typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        GOES_COMPANION to StringLiteral(view.companion.name.value)
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        GOES_COMPANION.value to StringLiteral(view.companion.name.value)
     )
 }

@@ -161,9 +161,9 @@ private val SUPPORTED_PRIMITIVES = listOf(
 )
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    GOES_COMPANION,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    GOES_COMPANION.value,
+    PARENT_TYPE.value,
 )

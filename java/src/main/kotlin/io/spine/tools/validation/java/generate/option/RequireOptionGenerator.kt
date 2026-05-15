@@ -142,8 +142,8 @@ private class GenerateRequire(
     }
 
     private fun supportedPlaceholders(): Map<Placeholder, Expression<String>> = mapOf(
-        MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
-        REQUIRE_FIELDS to StringLiteral(view.specifiedGroups)
+        MESSAGE_TYPE.value to StringLiteral(view.id.qualifiedName),
+        REQUIRE_FIELDS.value to StringLiteral(view.specifiedGroups)
     )
 
     private companion object {

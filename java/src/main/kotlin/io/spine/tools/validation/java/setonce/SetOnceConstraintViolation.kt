@@ -90,10 +90,10 @@ internal class SetOnceConstraintViolation(
         currentValue: Expression<String>,
         newValue: Expression<String>
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to StringLiteral(fieldName),
-        FIELD_TYPE to StringLiteral(fieldType),
-        FIELD_VALUE to currentValue,
-        FIELD_PROPOSED_VALUE to newValue,
-        PARENT_TYPE to declaringType
+        FIELD_PATH.value to StringLiteral(fieldName),
+        FIELD_TYPE.value to StringLiteral(fieldType),
+        FIELD_VALUE.value to currentValue,
+        FIELD_PROPOSED_VALUE.value to newValue,
+        PARENT_TYPE.value to declaringType
     )
 }

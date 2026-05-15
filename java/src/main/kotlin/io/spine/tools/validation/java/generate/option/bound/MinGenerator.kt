@@ -102,11 +102,11 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        MIN_VALUE to view.min.withFieldValue(bound),
-        MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to StringClass.call("valueOf", fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        MIN_VALUE.value to view.min.withFieldValue(bound),
+        MIN_OPERATOR.value to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }

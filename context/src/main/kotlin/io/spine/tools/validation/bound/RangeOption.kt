@@ -226,9 +226,9 @@ private fun RangeOptionMetadata.checkRelation(lower: KNumericBound, upper: KNume
 private val DELIMITER = Regex("""(?<=[\p{Alnum}_])\s?\.\.\s?(?=[\p{Alnum}-+_])""")
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    PARENT_TYPE,
-    RANGE_VALUE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    PARENT_TYPE.value,
+    RANGE_VALUE.value,
 )

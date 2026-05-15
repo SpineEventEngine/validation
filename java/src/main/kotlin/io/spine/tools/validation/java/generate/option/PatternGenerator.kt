@@ -251,12 +251,12 @@ private class GeneratePattern(private val view: PatternField) {
         typeName: Expression<String>,
         fieldValue: Expression<String>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldValue,
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        REGEX_PATTERN to StringLiteral(restoreProtobufEscapes(view.pattern)),
-        REGEX_MODIFIERS to StringLiteral(restoreProtobufEscapes("${view.modifier}")),
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to fieldValue,
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        REGEX_PATTERN.value to StringLiteral(restoreProtobufEscapes(view.pattern)),
+        REGEX_MODIFIERS.value to StringLiteral(restoreProtobufEscapes("${view.modifier}")),
     )
 }
 

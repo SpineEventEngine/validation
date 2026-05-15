@@ -107,10 +107,10 @@ internal class MaxFieldView : View<FieldRef, MaxField, MaxField.Builder>() {
 }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    MAX_OPERATOR,
-    MAX_VALUE,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    MAX_OPERATOR.value,
+    MAX_VALUE.value,
+    PARENT_TYPE.value,
 )

@@ -180,10 +180,10 @@ private class GenerateDistinct(private val view: DistinctField) {
         fieldValue: Expression<*>,
         duplicates: Expression<*>
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        FIELD_DUPLICATES to fieldType.stringValueOf(duplicates)
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        FIELD_DUPLICATES.value to fieldType.stringValueOf(duplicates)
     )
 }

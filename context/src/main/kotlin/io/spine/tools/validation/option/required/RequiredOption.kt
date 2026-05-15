@@ -154,9 +154,9 @@ private fun checkFieldType(field: Field, file: File) =
     }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    PARENT_TYPE.value,
 )
 
 /**

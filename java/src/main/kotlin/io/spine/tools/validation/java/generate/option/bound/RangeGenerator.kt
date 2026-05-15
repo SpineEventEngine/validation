@@ -114,11 +114,11 @@ private class GenerateRange(
         typeName: Expression<String>,
         fieldValue: Expression<*>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        RANGE_VALUE to withFieldValue()
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to StringClass.call("valueOf", fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        RANGE_VALUE.value to withFieldValue()
     )
 
     /**

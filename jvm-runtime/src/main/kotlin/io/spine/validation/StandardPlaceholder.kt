@@ -38,41 +38,33 @@ import io.spine.string.Placeholder
  * The enum is used by the compiler model and Java renderer when validating and rendering
  * built-in option error messages.
  */
-public enum class StandardPlaceholder(override val value: String) : Placeholder {
+public enum class StandardPlaceholder(public val value: Placeholder) {
 
     // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    MESSAGE_TYPE("message.type"),
-    PARENT_TYPE("parent.type"),
+    FIELD_PATH(Placeholder("field.path")),
+    FIELD_VALUE(Placeholder("field.value")),
+    FIELD_TYPE(Placeholder("field.type")),
+    MESSAGE_TYPE(Placeholder("message.type")),
+    PARENT_TYPE(Placeholder("parent.type")),
 
     // Placeholders for the field options.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value"),
-    MAX_VALUE("max.value"),
-    MAX_OPERATOR("max.operator"),
-    MIN_VALUE("min.value"),
-    MIN_OPERATOR("min.operator"),
+    REGEX_PATTERN(Placeholder("regex.pattern")),
+    REGEX_MODIFIERS(Placeholder("regex.modifiers")),
+    GOES_COMPANION(Placeholder("goes.companion")),
+    FIELD_PROPOSED_VALUE(Placeholder("field.proposed_value")),
+    FIELD_DUPLICATES(Placeholder("field.duplicates")),
+    RANGE_VALUE(Placeholder("range.value")),
+    MAX_VALUE(Placeholder("max.value")),
+    MAX_OPERATOR(Placeholder("max.operator")),
+    MIN_VALUE(Placeholder("min.value")),
+    MIN_OPERATOR(Placeholder("min.operator")),
 
     @Deprecated(message = "Use the placeholder reference from Spine Time instead.")
-    WHEN_IN("when.in"),
+    WHEN_IN(Placeholder("when.in")),
 
     // Placeholders for the `oneof` options.
-    GROUP_PATH("group.path"),
+    GROUP_PATH(Placeholder("group.path")),
 
     // Placeholder for the message options.
-    REQUIRE_FIELDS("require.fields");
-
-    override fun toString(): String = value
+    REQUIRE_FIELDS(Placeholder("require.fields"));
 }
-
-@Deprecated(
-    message = "Please use `StandardPlaceholder` instead.",
-    replaceWith = ReplaceWith("StandardPlaceholder")
-)
-public typealias RuntimeErrorPlaceholder = StandardPlaceholder

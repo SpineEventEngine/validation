@@ -101,6 +101,6 @@ internal class RequireMessageView : View<TypeName, RequireMessage, RequireMessag
 }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    MESSAGE_TYPE,
-    REQUIRE_FIELDS,
+    MESSAGE_TYPE.value,
+    REQUIRE_FIELDS.value,
 )

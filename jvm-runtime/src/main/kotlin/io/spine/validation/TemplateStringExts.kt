@@ -44,18 +44,18 @@ import io.spine.validation.StandardPlaceholder.REGEX_PATTERN
  * 3. [PARENT_TYPE].
  */
 public fun TemplateString.Builder.withField(field: FieldDeclaration): TemplateString.Builder =
-    putPlaceholderValue(FIELD_PATH.value, field.name().value)
-        .putPlaceholderValue(FIELD_TYPE.value, field.javaTypeName())
-        .putPlaceholderValue(PARENT_TYPE.value, field.declaringType().name().value)
+    putPlaceholderValue(FIELD_PATH.value.name, field.name().value)
+        .putPlaceholderValue(FIELD_TYPE.value.name, field.javaTypeName())
+        .putPlaceholderValue(PARENT_TYPE.value.name, field.declaringType().name().value)
 
 /**
  * Fills in the value for [GOES_COMPANION] placeholder.
  */
 public fun TemplateString.Builder.withCompanion(field: FieldDeclaration): TemplateString.Builder =
-    putPlaceholderValue(GOES_COMPANION.value, field.name().value)
+    putPlaceholderValue(GOES_COMPANION.value.name, field.name().value)
 
 /**
  * Fills in the value for [REGEX_PATTERN] placeholder.
  */
 public fun TemplateString.Builder.withRegex(regex: String): TemplateString.Builder =
-    putPlaceholderValue(REGEX_PATTERN.value, regex)
+    putPlaceholderValue(REGEX_PATTERN.value.name, regex)

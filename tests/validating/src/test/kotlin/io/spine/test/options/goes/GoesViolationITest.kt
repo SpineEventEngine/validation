@@ -94,11 +94,11 @@ private fun Builder.assertConstraintViolation(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            FIELD_PATH to fieldName,
-            FIELD_VALUE to value.asPlaceholderValue(),
-            FIELD_TYPE to fieldType,
-            PARENT_TYPE to parentType,
-            GOES_COMPANION to COMPANION_FIELD,
+            FIELD_PATH.value to fieldName,
+            FIELD_VALUE.value to value.asPlaceholderValue(),
+            FIELD_TYPE.value to fieldType,
+            PARENT_TYPE.value to parentType,
+            GOES_COMPANION.value to COMPANION_FIELD,
         ).mapKeys { it.key.toString() }
 
         typeName shouldBe parentType

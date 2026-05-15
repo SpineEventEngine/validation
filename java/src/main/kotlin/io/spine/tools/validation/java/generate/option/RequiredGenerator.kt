@@ -117,8 +117,8 @@ private class GenerateRequired(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
     ): Map<Placeholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_TYPE to StringLiteral(field.type.name),
-        PARENT_TYPE to typeName
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_TYPE.value to StringLiteral(field.type.name),
+        PARENT_TYPE.value to typeName
     )
 }

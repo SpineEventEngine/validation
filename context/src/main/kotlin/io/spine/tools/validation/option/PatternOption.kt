@@ -141,10 +141,10 @@ public val FieldType.isSingularString: Boolean
     get() = primitive == TYPE_STRING
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    PARENT_TYPE,
-    REGEX_MODIFIERS,
-    REGEX_PATTERN,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    PARENT_TYPE.value,
+    REGEX_MODIFIERS.value,
+    REGEX_PATTERN.value,
 )
