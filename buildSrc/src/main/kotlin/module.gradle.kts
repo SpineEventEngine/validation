@@ -170,6 +170,8 @@ fun Module.forceConfigurations() {
                     Base.environment,
                     Protobuf.compiler,
                     Time.lib,
+                    Time.javaExtensions,
+                    Time.kotlinExtensions,
                     TestLib.lib,
                     ToolBase.gradlePluginApi,
                     ToolBase.jvmTools,

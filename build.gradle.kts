@@ -129,6 +129,7 @@ allprojects {
                 Roaster.jdt,
                 Time.lib,
                 Time.javaExtensions,
+                Time.kotlinExtensions,
                 ToolBase.lib,
                 ToolBase.pluginBase,
                 Validation.javaBundle,
