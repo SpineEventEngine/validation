@@ -74,3 +74,5 @@ dependencies {
 }
 
 forceSpineBase()
+
+patchGeneratedTemplateString(upstreamTask = "generateProto")

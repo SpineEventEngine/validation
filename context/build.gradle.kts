@@ -65,3 +65,5 @@ afterEvaluate {
     val launchSpineCompiler by tasks.getting
     kspKotlin.dependsOn(launchSpineCompiler)
 }
+
+patchGeneratedTemplateString(upstreamTask = "launchSpineCompiler")
