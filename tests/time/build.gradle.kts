@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
+import io.spine.dependency.boms.BomsPlugin
+import io.spine.dependency.local.Logging
+import io.spine.dependency.local.TestLib
+import io.spine.dependency.local.Time
+import io.spine.gradle.report.license.LicenseReporter
+
+buildscript {
+    standardSpineSdkRepositories()
+    dependencies {
+        classpath(io.spine.dependency.local.Time.gradlePlugin)
     }
 }
 
-rootProject.name = "validation"
+plugins {
+    java
+    `java-library`
+    kotlin("jvm")
+    id("module-testing")
+}
+apply(plugin = "io.spine.time")
+apply<BomsPlugin>()
+LicenseReporter.generateReportIn(project)
 
-include(
-    "context",
-    "context-tests",
-    "gradle-plugin",
-    "java",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:time",
-    ":tests:vanilla",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)
+spine {
+    compiler {
+        plugins(
+            // Suppress warnings in the generated code.
+            "io.spine.tools.compiler.jvm.annotation.SuppressWarningsAnnotation\$Plugin",
+            "io.spine.validation.java.JavaValidationPlugin",
+        )
+    }
+}
+
+dependencies {
+    spineCompiler(project(":java"))
+    spineCompiler(Time.validation)
+
+    implementation(Time.lib)
+    implementation(Time.javaExtensions)
+
+    testImplementation(Logging.lib)
+    testImplementation(TestLib.lib)
+}
+
+configureTaskDependencies()

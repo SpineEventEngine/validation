@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+package io.spine.test.validation.time
+
+import io.spine.validation.ValidationException
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+
+internal fun assertValidationFails(executable: () -> Unit) {
+    assertThrows<ValidationException> { executable() }
 }
 
-rootProject.name = "validation"
-
-include(
-    "context",
-    "context-tests",
-    "gradle-plugin",
-    "java",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:time",
-    ":tests:vanilla",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)
+internal fun assertValidationPasses(executable: () -> Unit) {
+    assertDoesNotThrow(executable)
+}
