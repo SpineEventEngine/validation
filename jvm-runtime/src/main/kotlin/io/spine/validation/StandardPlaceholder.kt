@@ -67,4 +67,12 @@ public enum class StandardPlaceholder(public val value: Placeholder) {
 
     // Placeholder for the message options.
     REQUIRE_FIELDS(Placeholder("require.fields"));
+
+    /**
+     * The placeholder text as it appears in a template string (e.g., `${field.path}`).
+     *
+     * Shortcut for [value].[placed][Placeholder.placed].
+     */
+    public val placed: String
+        get() = value.placed
 }
