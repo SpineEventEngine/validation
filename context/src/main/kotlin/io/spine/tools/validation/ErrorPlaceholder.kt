@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.tools.validation
 
 /**
  * A template placeholder that can be used in error messages.
@@ -36,6 +36,10 @@ package io.spine.validation
  * The enum is used by the compiler model and Java renderer when validating and rendering
  * built-in option error messages.
  */
+@Deprecated(
+    message = "Please use `io.spine.validation.ErrorPlaceholder` instead.",
+    replaceWith = ReplaceWith("ErrorPlaceholder", "io.spine.validation.ErrorPlaceholder")
+)
 public enum class ErrorPlaceholder(public val value: String) {
 
     // Common placeholders.
@@ -56,8 +60,6 @@ public enum class ErrorPlaceholder(public val value: String) {
     MAX_OPERATOR("max.operator"),
     MIN_VALUE("min.value"),
     MIN_OPERATOR("min.operator"),
-
-    @Deprecated(message = "Use the placeholder reference from Spine Time instead.")
     WHEN_IN("when.in"),
 
     // Placeholders for the `oneof` options.
@@ -66,11 +68,11 @@ public enum class ErrorPlaceholder(public val value: String) {
     // Placeholder for the message options.
     REQUIRE_FIELDS("require.fields");
 
+    /**
+     * Converts this placeholder to its runtime counterpart.
+     */
+    public fun toRuntime(): io.spine.validation.ErrorPlaceholder =
+        io.spine.validation.ErrorPlaceholder.valueOf(name)
+
     override fun toString(): String = value
 }
-
-@Deprecated(
-    message = "Please use `ErrorPlaceholder` instead.",
-    replaceWith = ReplaceWith("ErrorPlaceholder")
-)
-public typealias RuntimeErrorPlaceholder = ErrorPlaceholder
