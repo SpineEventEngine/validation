@@ -30,6 +30,7 @@ import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.spine.option.OptionsProto
+import io.spine.string.format
 import io.spine.test.validate.CustomMessageRequiredByteStringFieldValue
 import io.spine.test.validate.CustomMessageRequiredEnumFieldValue
 import io.spine.test.validate.CustomMessageRequiredMsgFieldValue

@@ -29,6 +29,7 @@ package io.spine.validation
 import com.google.protobuf.Message
 import com.google.protobuf.doubleValue
 import io.kotest.matchers.string.shouldContain
+import io.spine.string.format
 import io.spine.test.validate.MaxExclusive
 import io.spine.test.validate.MaxInclusive
 import io.spine.test.validate.MinExclusive

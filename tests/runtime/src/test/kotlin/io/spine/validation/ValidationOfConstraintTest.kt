@@ -31,6 +31,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotBeEmpty
+import io.spine.string.format
 import io.spine.validation.Validate.violationsOf
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows

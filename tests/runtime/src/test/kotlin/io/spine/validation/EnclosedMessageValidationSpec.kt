@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.kotest.matchers.string.shouldContain
+import io.spine.string.format
 import io.spine.test.validate.PatternStringFieldValue
 import io.spine.test.validate.ValidateEnclosed
 import io.spine.test.validate.ValidateWithRequiredString
