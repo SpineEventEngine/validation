@@ -269,7 +269,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>core-jvm-plugins</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
@@ -284,7 +284,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>time-validation</artifactId>
-    <version>2.0.0-SNAPSHOT.236</version>
+    <version>2.0.0-SNAPSHOT.240</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
