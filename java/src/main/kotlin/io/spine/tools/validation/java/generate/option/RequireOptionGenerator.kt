@@ -50,9 +50,9 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
 import io.spine.tools.validation.option.REQUIRE
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.MESSAGE_TYPE
-import io.spine.validation.ErrorPlaceholder.REQUIRE_FIELDS
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.MESSAGE_TYPE
+import io.spine.validation.StandardPlaceholder.REQUIRE_FIELDS
 
 /**
  * The generator for the `(require)` option.
@@ -141,9 +141,9 @@ private class GenerateRequire(
         return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
 
-    private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
-        REQUIRE_FIELDS to StringLiteral(view.specifiedGroups)
+    private fun supportedPlaceholders(): Map<Placeholder, Expression<String>> = mapOf(
+        MESSAGE_TYPE.value to StringLiteral(view.id.qualifiedName),
+        REQUIRE_FIELDS.value to StringLiteral(view.specifiedGroups)
     )
 
     private companion object {

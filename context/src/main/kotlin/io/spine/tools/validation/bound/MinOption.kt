@@ -48,12 +48,12 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.option.MIN
 import io.spine.tools.validation.option.RANGE
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
-import io.spine.validation.ErrorPlaceholder.MIN_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.MIN_OPERATOR
+import io.spine.validation.StandardPlaceholder.MIN_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * A reaction to add a validation rule to a type whenever the `(min)` field option
@@ -107,10 +107,10 @@ internal class MinFieldView : View<FieldRef, MinField, MinField.Builder>() {
 }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    MIN_OPERATOR,
-    MIN_VALUE,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    MIN_OPERATOR.value,
+    MIN_VALUE.value,
+    PARENT_TYPE.value,
 )

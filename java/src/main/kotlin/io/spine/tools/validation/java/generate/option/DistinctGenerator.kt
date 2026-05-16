@@ -61,12 +61,12 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.option.PATTERN
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_DUPLICATES
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * The generator for the `(distinct)` option.
@@ -179,11 +179,11 @@ private class GenerateDistinct(private val view: DistinctField) {
         typeName: Expression<String>,
         fieldValue: Expression<*>,
         duplicates: Expression<*>
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        FIELD_DUPLICATES to fieldType.stringValueOf(duplicates)
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        FIELD_DUPLICATES.value to fieldType.stringValueOf(duplicates)
     )
 }

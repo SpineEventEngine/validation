@@ -27,6 +27,7 @@
 package io.spine.tools.validation.test
 
 import io.spine.server.query.select
+import io.spine.string.Placeholder
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
@@ -36,7 +37,7 @@ import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.stringValueOf
 import io.spine.tools.validation.java.expression.stringify
-import io.spine.tools.validation.java.expression.withStringPlaceholders
+import io.spine.tools.validation.java.expression.templateString
 import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
@@ -101,12 +102,12 @@ private class GenerateCurrency(private val view: CurrencyMessage) {
     ): Expression<ConstraintViolation> {
         val typeNameStr = typeName.stringify()
         val placeholders = supportedPlaceholders(minorValue)
-        val errorMessage = withStringPlaceholders(view.errorMessage, placeholders, CURRENCY)
+        val errorMessage = templateString(view.errorMessage, placeholders, CURRENCY)
         return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
 
     private fun supportedPlaceholders(
         minorValue: Expression<Int>
-    ): Map<String, Expression<String>> =
-        mapOf("minor.value" to minorField.stringValueOf(minorValue))
+    ): Map<Placeholder, Expression<String>> =
+        mapOf(Placeholder("minor.value") to minorField.stringValueOf(minorValue))
 }

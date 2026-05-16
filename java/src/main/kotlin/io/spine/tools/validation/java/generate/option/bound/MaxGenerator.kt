@@ -44,13 +44,13 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.MAX
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.MAX_OPERATOR
-import io.spine.validation.ErrorPlaceholder.MAX_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.MAX_OPERATOR
+import io.spine.validation.StandardPlaceholder.MAX_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * The generator for the `(max)` option.
@@ -101,12 +101,12 @@ private class GenerateMax(private val view: MaxField) : BoundedFieldGenerator(vi
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        MAX_VALUE to view.max.withFieldValue(bound),
-        MAX_OPERATOR to StringLiteral(if (isExclusive) "<" else "<=")
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to StringClass.call("valueOf", fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        MAX_VALUE.value to view.max.withFieldValue(bound),
+        MAX_OPERATOR.value to StringLiteral(if (isExclusive) "<" else "<=")
     )
 }

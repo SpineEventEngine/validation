@@ -32,8 +32,9 @@ import com.google.protobuf.util.Timestamps
 import com.google.protobuf.util.Timestamps.MAX_VALUE
 import com.google.protobuf.util.Timestamps.MIN_VALUE
 import io.spine.base.fieldPath
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.RANGE_VALUE
+import io.spine.string.templateString
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.RANGE_VALUE
 
 /**
  * Validates [Timestamp] messages.
@@ -66,10 +67,10 @@ public class TimestampValidator : MessageValidator<Timestamp> {
 private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
     message = templateString {
         withPlaceholders =
-            "The ${FIELD_PATH.value} value is out of range" +
-                    " (${RANGE_VALUE.value}): $seconds."
-        placeholderValue.put(FIELD_PATH.value, "seconds")
-        placeholderValue.put(RANGE_VALUE.value,
+            "The ${FIELD_PATH.value.name} value is out of range" +
+                    " (${RANGE_VALUE.value.name}): $seconds."
+        placeholderValue.put(FIELD_PATH.value.name, "seconds")
+        placeholderValue.put(RANGE_VALUE.value.name,
             "${MIN_VALUE.seconds}..${MAX_VALUE.seconds}")
 
     },
@@ -84,10 +85,10 @@ private fun invalidSeconds(seconds: Long): FieldViolation = FieldViolation(
  */
 private fun invalidNanos(nanos: Int): FieldViolation = FieldViolation(
     message = templateString {
-        withPlaceholders = "The ${FIELD_PATH.value} value is out of range" +
-                ":  (${RANGE_VALUE.value})$nanos."
-        placeholderValue.put(FIELD_PATH.value, "nanos")
-        placeholderValue.put(RANGE_VALUE.value, "0..${MAX_VALUE.nanos}")
+        withPlaceholders = "The ${FIELD_PATH.value.name} value is out of range" +
+                ":  (${RANGE_VALUE.value.name})$nanos."
+        placeholderValue.put(FIELD_PATH.value.name, "nanos")
+        placeholderValue.put(RANGE_VALUE.value.name, "0..${MAX_VALUE.nanos}")
     },
     fieldPath = fieldPath {
         fieldName.add("nanos")

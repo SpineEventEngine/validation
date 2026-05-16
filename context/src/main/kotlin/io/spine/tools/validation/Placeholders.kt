@@ -34,8 +34,8 @@ import io.spine.tools.compiler.ast.OneofGroup
 import io.spine.tools.compiler.ast.Span
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.check
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.extractPlaceholders
+import io.spine.string.Placeholder
+import io.spine.string.Placeholder.Companion.extractPlaceholders
 
 /**
  * Checks if this [String] contains placeholders that are not present in the given
@@ -47,7 +47,7 @@ import io.spine.validation.extractPlaceholders
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     message: MessageType,
     file: File,
     option: String
@@ -69,7 +69,7 @@ internal fun String.checkPlaceholders(
  * @param option The name of the option with which the message template was specified.
  */
 internal fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     oneof: OneofGroup,
     file: File,
     option: String
@@ -91,7 +91,7 @@ internal fun String.checkPlaceholders(
  * @param option The name of the option with which the message template was specified.
  */
 public fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     field: Field,
     file: File,
     option: String
@@ -108,7 +108,7 @@ public fun String.checkPlaceholders(
  * set of the [supported] placeholders, and reports a compilation error if so.
  */
 private fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     declaration: String,
     span: Span,
     file: File,
@@ -119,7 +119,7 @@ private fun String.checkPlaceholders(
     Compilation.check(missing.isEmpty(), file, span) {
         "The $declaration specifies an error message for the `($option)` option using unsupported" +
                 " placeholders: `$missing`. Supported placeholders are the following:" +
-                " `${supported.map { it.value }}`."
+                " `${supported.map { it.name }}`."
     }
 }
 
@@ -132,13 +132,12 @@ private fun String.checkPlaceholders(
  */
 private fun missingPlaceholders(
     template: String,
-    placeholders: Set<ErrorPlaceholder>
-): Set<String> {
+    placeholders: Set<Placeholder>
+): Set<Placeholder> {
     val requested = extractPlaceholders(template)
-    val provided = placeholders.map { it.value }
-    val missing = mutableSetOf<String>()
+    val missing = mutableSetOf<Placeholder>()
     for (placeholder in requested) {
-        if (!provided.contains(placeholder)) {
+        if (!placeholders.contains(placeholder)) {
             missing.add(placeholder)
         }
     }

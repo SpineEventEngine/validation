@@ -298,13 +298,13 @@ not free-form. Each option declares the placeholders it supports, and the reacti
 validates the template before the event is emitted:
 
 <embed-code
-  file="$context/src/main/kotlin/io/spine/tools/validation/ErrorPlaceholders.kt"
+  file="$context/src/main/kotlin/io/spine/tools/validation/Placeholders.kt"
   start="private fun String.checkPlaceholders"
   end="^\}">
 </embed-code>
 ```kotlin
 private fun String.checkPlaceholders(
-    supported: Set<ErrorPlaceholder>,
+    supported: Set<Placeholder>,
     declaration: String,
     span: Span,
     file: File,
@@ -315,7 +315,7 @@ private fun String.checkPlaceholders(
     Compilation.check(missing.isEmpty(), file, span) {
         "The $declaration specifies an error message for the `($option)` option using unsupported" +
                 " placeholders: `$missing`. Supported placeholders are the following:" +
-                " `${supported.map { it.value }}`."
+                " `${supported.map { it.name }}`."
     }
 }
 ```
@@ -323,7 +323,7 @@ private fun String.checkPlaceholders(
 Catching unknown placeholders here, in the model, is what allows the renderer to assume
 that every placeholder it sees in the projection state has a known meaning. The full
 list of placeholders for generated validation code is enumerated in
-[`ErrorPlaceholder.kt`][error-placeholder]. At runtime, `TemplateString` carries
+[`StandardPlaceholder.kt`][standard-placeholder]. At runtime, `TemplateString` carries
 placeholder keys as strings; the runtime library does not keep a second placeholder enum.
 
 When no custom message is provided, the reaction falls back to the option's
@@ -378,6 +378,6 @@ consumer-facing version of the same SPI is covered by
 [option-name]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/OptionName.kt
 [option-names]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/option/OptionNames.kt
 [bound-pkg]: https://github.com/SpineEventEngine/validation/tree/master/context/src/main/kotlin/io/spine/tools/validation/bound
-[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ErrorPlaceholder.kt
+[standard-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/StandardPlaceholder.kt
 [default-message]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/DefaultErrorMessage.kt
 [validation-option-spi]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/ValidationOption.kt

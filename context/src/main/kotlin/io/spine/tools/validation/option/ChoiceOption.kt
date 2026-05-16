@@ -49,8 +49,8 @@ import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
 import io.spine.tools.validation.event.ChoiceOneofDiscovered
 import io.spine.tools.validation.event.choiceOneofDiscovered
-import io.spine.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.GROUP_PATH
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a `oneof` group should be validated with the `(choice)` option.
@@ -128,6 +128,6 @@ internal class ChoiceGroupView : View<OneofRef, ChoiceOneof, ChoiceOneof.Builder
 }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    GROUP_PATH,
-    PARENT_TYPE,
+    GROUP_PATH.value,
+    PARENT_TYPE.value,
 )

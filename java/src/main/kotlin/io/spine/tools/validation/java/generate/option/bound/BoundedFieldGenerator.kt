@@ -68,7 +68,7 @@ import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
+import io.spine.string.Placeholder
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
@@ -170,7 +170,7 @@ internal abstract class BoundedFieldGenerator(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>>
+    ): Map<Placeholder, Expression<String>>
 
     /**
      * Returns a number expression for this [NumericBound].

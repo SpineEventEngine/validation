@@ -44,13 +44,13 @@ import io.spine.tools.validation.java.expression.joinToString
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.MIN
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.MIN_OPERATOR
-import io.spine.validation.ErrorPlaceholder.MIN_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.MIN_OPERATOR
+import io.spine.validation.StandardPlaceholder.MIN_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * The generator for `(min)` option.
@@ -101,12 +101,12 @@ private class GenerateMin(private val view: MinField) : BoundedFieldGenerator(vi
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to StringClass.call("valueOf", fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        MIN_VALUE to view.min.withFieldValue(bound),
-        MIN_OPERATOR to StringLiteral(if (isExclusive) ">" else ">=")
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to StringClass.call("valueOf", fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        MIN_VALUE.value to view.min.withFieldValue(bound),
+        MIN_OPERATOR.value to StringLiteral(if (isExclusive) ">" else ">=")
     )
 }

@@ -46,7 +46,7 @@ object CoreJvmCompiler {
     /**
      * The version used to in the build classpath.
      */
-    const val dogfoodingVersion = "2.0.0-SNAPSHOT.063"
+    const val dogfoodingVersion = "2.0.0-SNAPSHOT.064"
 
     /**
      * The version to be used for integration tests.

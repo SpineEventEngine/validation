@@ -24,10 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.validation
+
+import io.spine.string.Placeholder
 
 /**
- * A template placeholder that can be used in error messages.
+ * The standard set of [Placeholder]s that can be used in error messages.
  *
  * Enumerates placeholder names that can be used within Protobuf definitions.
  * Each validation option declares the supported placeholders. Take a look at
@@ -36,43 +38,41 @@ package io.spine.tools.validation
  * The enum is used by the compiler model and Java renderer when validating and rendering
  * built-in option error messages.
  */
-@Deprecated(
-    message = "Please use `io.spine.validation.ErrorPlaceholder` instead.",
-    replaceWith = ReplaceWith("ErrorPlaceholder", "io.spine.validation.ErrorPlaceholder")
-)
-public enum class ErrorPlaceholder(public val value: String) {
+public enum class StandardPlaceholder(public val value: Placeholder) {
 
     // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    MESSAGE_TYPE("message.type"),
-    PARENT_TYPE("parent.type"),
+    FIELD_PATH(Placeholder("field.path")),
+    FIELD_VALUE(Placeholder("field.value")),
+    FIELD_TYPE(Placeholder("field.type")),
+    MESSAGE_TYPE(Placeholder("message.type")),
+    PARENT_TYPE(Placeholder("parent.type")),
 
     // Placeholders for the field options.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value"),
-    MAX_VALUE("max.value"),
-    MAX_OPERATOR("max.operator"),
-    MIN_VALUE("min.value"),
-    MIN_OPERATOR("min.operator"),
-    WHEN_IN("when.in"),
+    REGEX_PATTERN(Placeholder("regex.pattern")),
+    REGEX_MODIFIERS(Placeholder("regex.modifiers")),
+    GOES_COMPANION(Placeholder("goes.companion")),
+    FIELD_PROPOSED_VALUE(Placeholder("field.proposed_value")),
+    FIELD_DUPLICATES(Placeholder("field.duplicates")),
+    RANGE_VALUE(Placeholder("range.value")),
+    MAX_VALUE(Placeholder("max.value")),
+    MAX_OPERATOR(Placeholder("max.operator")),
+    MIN_VALUE(Placeholder("min.value")),
+    MIN_OPERATOR(Placeholder("min.operator")),
+
+    @Deprecated(message = "Use the placeholder reference from Spine Time instead.")
+    WHEN_IN(Placeholder("when.in")),
 
     // Placeholders for the `oneof` options.
-    GROUP_PATH("group.path"),
+    GROUP_PATH(Placeholder("group.path")),
 
     // Placeholder for the message options.
-    REQUIRE_FIELDS("require.fields");
+    REQUIRE_FIELDS(Placeholder("require.fields"));
 
     /**
-     * Converts this placeholder to its runtime counterpart.
+     * The placeholder text as it appears in a template string (e.g., `${field.path}`).
+     *
+     * Shortcut for [value].[placed][Placeholder.placed].
      */
-    public fun toRuntime(): io.spine.validation.ErrorPlaceholder =
-        io.spine.validation.ErrorPlaceholder.valueOf(name)
-
-    override fun toString(): String = value
+    public val placed: String
+        get() = value.placed
 }

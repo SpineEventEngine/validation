@@ -37,7 +37,7 @@ import io.spine.testing.TestValues.randomString
 import io.spine.validation.ValidationException
 import io.spine.validation.ValidationOfConstraintTest
 import io.spine.validation.ValidationOfConstraintTest.Companion.VALIDATION_SHOULD
-import io.spine.validation.format
+import io.spine.string.format
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

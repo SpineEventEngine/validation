@@ -30,7 +30,7 @@ import com.google.protobuf.Message
 import io.kotest.matchers.string.shouldContain
 import io.spine.protobuf.AnyPacker
 import io.spine.protobuf.pack
-import io.spine.validation.formatUnsafe
+import io.spine.string.formatUnsafe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

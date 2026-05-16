@@ -403,7 +403,7 @@ runtime change is required for the average new option.
 A new option needs runtime work in three cases:
 
 - **It introduces a new error placeholder.** Add the placeholder to
-  [`ErrorPlaceholder`][error-placeholder] in `:jvm-runtime`, then use it from the reaction
+  [`StandardPlaceholder`][standard-placeholder] in `:jvm-runtime`, then use it from the reaction
   and generator. This shared enum update is required, but no additional runtime logic or
   `TemplateString` schema change is needed because the runtime stores placeholder keys as strings.
 - **It needs a shared runtime helper.** If the option's generated code would otherwise
@@ -530,7 +530,7 @@ too.
 [views-proto]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/proto/spine/validation/views.proto
 [validation-plugin]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/ValidationPlugin.kt
 [default-message]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/DefaultErrorMessage.kt
-[error-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/context/src/main/kotlin/io/spine/tools/validation/ErrorPlaceholder.kt
+[standard-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/StandardPlaceholder.kt
 [option-generator-pkg]: https://github.com/SpineEventEngine/validation/tree/master/java/src/main/kotlin/io/spine/tools/validation/java/generate/option
 [java-validation-renderer]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/JavaValidationRenderer.kt
 [set-once-renderer]: https://github.com/SpineEventEngine/validation/blob/master/java/src/main/kotlin/io/spine/tools/validation/java/setonce/SetOnceRenderer.kt

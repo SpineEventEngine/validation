@@ -41,11 +41,11 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Tests [ConstraintViolation][io.spine.validation.ConstraintViolation]s created by `(set_once)`.
@@ -100,11 +100,11 @@ private fun <T : Any> Builder.assertConstraintViolation(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            FIELD_PATH to fieldName,
-            FIELD_TYPE to fieldType,
-            FIELD_VALUE to fieldValue1.asPlaceholderValue(),
-            FIELD_PROPOSED_VALUE to fieldValue2.asPlaceholderValue(),
-            PARENT_TYPE to parentType
+            FIELD_PATH.value to fieldName,
+            FIELD_TYPE.value to fieldType,
+            FIELD_VALUE.value to fieldValue1.asPlaceholderValue(),
+            FIELD_PROPOSED_VALUE.value to fieldValue2.asPlaceholderValue(),
+            PARENT_TYPE.value to parentType
         ).mapKeys { it.key.toString() }
 
         typeName shouldBe parentType

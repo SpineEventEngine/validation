@@ -63,11 +63,11 @@ import io.spine.tools.validation.event.IfSetAgainOptionDiscovered
 import io.spine.tools.validation.event.SetOnceFieldDiscovered
 import io.spine.tools.validation.event.ifSetAgainOptionDiscovered
 import io.spine.tools.validation.event.setOnceFieldDiscovered
-import io.spine.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated with the `(set_once)` option.
@@ -178,9 +178,9 @@ private fun checkFieldType(field: Field, file: File) =
 private fun FieldType.isSupported(): Boolean = !isList && !isMap
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_PROPOSED_VALUE,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_PROPOSED_VALUE.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    PARENT_TYPE.value,
 )

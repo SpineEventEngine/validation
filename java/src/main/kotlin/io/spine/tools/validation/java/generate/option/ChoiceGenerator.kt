@@ -47,9 +47,9 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.option.CHOICE
 import io.spine.validation.ConstraintViolation
-import io.spine.validation.ErrorPlaceholder
-import io.spine.validation.ErrorPlaceholder.GROUP_PATH
-import io.spine.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.GROUP_PATH
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * The generator for the `(choice)` option.
@@ -110,8 +110,8 @@ private class GenerateChoice(private val view: ChoiceOneof) {
     private fun supportedPlaceholders(
         groupPath: Expression<FieldPath>,
         typeName: Expression<String>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        GROUP_PATH to groupPath.joinToString(),
-        PARENT_TYPE to typeName
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        GROUP_PATH.value to groupPath.joinToString(),
+        PARENT_TYPE.value to typeName
     )
 }
