@@ -298,7 +298,7 @@ not free-form. Each option declares the placeholders it supports, and the reacti
 validates the template before the event is emitted:
 
 <embed-code
-  file="$context/src/main/kotlin/io/spine/tools/validation/ErrorPlaceholders.kt"
+  file="$context/src/main/kotlin/io/spine/tools/validation/Placeholders.kt"
   start="private fun String.checkPlaceholders"
   end="^\}">
 </embed-code>
@@ -315,7 +315,7 @@ private fun String.checkPlaceholders(
     Compilation.check(missing.isEmpty(), file, span) {
         "The $declaration specifies an error message for the `($option)` option using unsupported" +
                 " placeholders: `$missing`. Supported placeholders are the following:" +
-                " `${supported.map { it.value }}`."
+                " `${supported.map { it.name }}`."
     }
 }
 ```
