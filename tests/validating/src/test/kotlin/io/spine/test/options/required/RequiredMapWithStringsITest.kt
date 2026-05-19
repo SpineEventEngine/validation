@@ -44,6 +44,12 @@ internal class RequiredMapWithStringsITest {
         assertViolation(instance, "contains_a_non_empty_string_value")
     }
 
+    /**
+     * Disabled until the semantics of an "empty" map entry for `(required)`
+     * is finalised.
+     *
+     * See [issue #305](https://github.com/SpineEventEngine/validation/issues/305).
+     */
     @Test
     @Disabled("temporarily until the issue with empty entries is finalised")
     fun `prohibit an entry with empty string`() {
