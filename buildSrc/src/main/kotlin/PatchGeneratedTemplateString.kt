@@ -27,8 +27,6 @@
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.register
 
 /**
  * Registers a `patchGeneratedTemplateString` task in the project, which replaces
