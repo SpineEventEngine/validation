@@ -46,6 +46,15 @@ internal fun assertValidationException(builder: Message.Builder): ConstraintViol
     return error.constraintViolationList[0]
 }
 
+@CanIgnoreReturnValue
+internal fun assertValidationExceptions(builder: Message.Builder): List<ConstraintViolation> {
+    val exception = assertThrows<ValidationException> {
+        builder.build()
+    }
+    val error = exception.asMessage()
+    return error.constraintViolationList
+}
+
 internal fun assertNoException(builder: Message.Builder) {
     try {
         assertDoesNotThrow {

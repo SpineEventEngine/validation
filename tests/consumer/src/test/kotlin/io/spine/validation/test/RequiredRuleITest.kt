@@ -72,12 +72,9 @@ internal class RequiredRuleITest {
     fun `reject a list contains only default values`() {
         val builder = Blizzard.newBuilder()
             .addSnowflake(Snowflake.getDefaultInstance())
-        val exception = assertThrows<ValidationException> {
-            builder.build()
-        }
-        val error = exception.asMessage()
+
         // Two properties of `Snowflake` are required, so we expect two violations.
-        error.constraintViolationList shouldHaveSize 2
+        assertValidationExceptions(builder) shouldHaveSize 2
     }
 
     @Test
@@ -99,12 +96,9 @@ internal class RequiredRuleITest {
                     .setVertices(3)
             )
             .addSnowflake(Snowflake.getDefaultInstance())
-        val exception = assertThrows<ValidationException> {
-            builder.build()
-        }
-        val error = exception.asMessage()
-        // Two properties of the 2nd `Snowflake` are required, so we expect two violations.
-        error.constraintViolationList shouldHaveSize 2
+
+        // Two properties of `Snowflake` are required, so we expect two violations.
+        assertValidationExceptions(builder) shouldHaveSize 2
     }
 }
 
