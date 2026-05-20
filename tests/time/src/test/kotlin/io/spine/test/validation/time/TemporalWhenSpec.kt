@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @DisplayName("If used with `Temporal`, `(when)` constraint should")
-@Disabled("Until Spine Time migrates to the new Validation `Placeholder` API.")
 internal class TemporalWhenSpec {
 
     @Nested inner class
