@@ -44,7 +44,7 @@ internal class RequiredRepeatedEnumITest {
         assertViolation(instance, field)
     }
 
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
+    @Test
     @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
     fun `prohibit all items with zero-index enum item value`() {
         val allZero = Collections.newBuilder()
@@ -56,7 +56,7 @@ internal class RequiredRepeatedEnumITest {
         assertViolation(allZero, field, "cannot contain default values")
     }
 
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
+    @Test
     @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
     fun `prohibit even one zero-index enum item value`() {
         val instance = Collections.newBuilder()
