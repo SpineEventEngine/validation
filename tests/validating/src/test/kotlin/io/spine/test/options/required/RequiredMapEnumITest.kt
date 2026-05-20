@@ -26,43 +26,58 @@
 
 package io.spine.test.options.required
 
-import io.spine.test.tools.validate.Collections
+import io.spine.test.tools.validate.MapWithEnumValues
 import io.spine.test.tools.validate.UltimateChoice
+import io.spine.tools.validation.assertions.assertValid
 import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`(required)` option in a repeated enum field should")
-internal class RequiredRepeatedEnumITest {
+@DisplayName("`(required)` option in a map field with enum values should")
+internal class RequiredMapEnumITest {
 
-    private val field = "at_least_one_piece_of_meat"
+    private val field = "meat"
 
     @Test
-    fun `require at least one item`() {
-        val instance = Collections.newBuilder()
+    fun `require at least one entry`() {
+        val instance = MapWithEnumValues.newBuilder()
         assertViolation(instance, field)
     }
 
+    /**
+     * An entry whose value is the zero-index enum item is treated as missing —
+     * analogously to how the zero-index enum item is rejected for a singular
+     * `(required)` enum field.
+     */
     @Test
-    fun `prohibit all items with zero-index enum item value`() {
-        val allZero = Collections.newBuilder()
-            .putNotEmptyMapOfInts(42, 314)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-            .putContainsANonEmptyStringValue("  ", "   ")
-            .addNotEmptyListOfLongs(42L)
+    fun `prohibit all entries with zero-index enum item value`() {
+        val allZero = MapWithEnumValues.newBuilder()
+            .putMeat("a", UltimateChoice.VEGETABLE)
+            .putMeat("b", UltimateChoice.VEGETABLE)
         assertViolation(allZero, field)
     }
 
     @Test
     fun `prohibit even one zero-index enum item value`() {
-        val instance = Collections.newBuilder()
-            .putContainsANonEmptyStringValue("111", "222")
-            .addNotEmptyListOfLongs(0L)
-            .putNotEmptyMapOfInts(0, 0)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
-            .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
+        val instance = MapWithEnumValues.newBuilder()
+            .putMeat("a", UltimateChoice.FISH)
+            .putMeat("b", UltimateChoice.CHICKEN)
+            .putMeat("c", UltimateChoice.VEGETABLE)
         assertViolation(instance, field)
+    }
+
+    @Test
+    fun `allow entries with non-zero enum values`() {
+        val instance = MapWithEnumValues.newBuilder()
+            .putMeat("a", UltimateChoice.FISH)
+            .putMeat("b", UltimateChoice.CHICKEN)
+        assertValid(instance)
+    }
+
+    @Test
+    fun `allow an entry with the empty key as long as the value is non-zero`() {
+        val instance = MapWithEnumValues.newBuilder()
+            .putMeat("", UltimateChoice.FISH)
+        assertValid(instance)
     }
 }
