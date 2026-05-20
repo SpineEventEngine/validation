@@ -31,11 +31,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.string.format
 import io.spine.string.formatUnsafe
-import io.spine.validation.ValidationException
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(required)` rule should")
 internal class RequiredRuleITest {
@@ -73,8 +70,11 @@ internal class RequiredRuleITest {
         val builder = Blizzard.newBuilder()
             .addSnowflake(Snowflake.getDefaultInstance())
 
-        // Two properties of `Snowflake` are required, so we expect two violations.
-        assertValidationExceptions(builder) shouldHaveSize 2
+        // We should have three violations:
+        //  - One violation is expected because of the default value of `Snowflake`.
+        //  - Two properties of `Snowflake` are required,
+        //    so we expect two violations because of `(validate)`.
+        assertValidationExceptions(builder) shouldHaveSize 3
     }
 
     @Test
@@ -97,8 +97,9 @@ internal class RequiredRuleITest {
             )
             .addSnowflake(Snowflake.getDefaultInstance())
 
-        // Two properties of `Snowflake` are required, so we expect two violations.
-        assertValidationExceptions(builder) shouldHaveSize 2
+        // Again, three violations: one for being a default message plus
+        // two for properties of the `Snowflake` because we validate it too.
+        assertValidationExceptions(builder) shouldHaveSize 3
     }
 }
 

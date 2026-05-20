@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ package io.spine.test.options.required
 import io.spine.test.tools.validate.Collections
 import io.spine.test.tools.validate.UltimateChoice
 import io.spine.tools.validation.assertions.assertViolation
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -44,8 +43,7 @@ internal class RequiredRepeatedEnumITest {
         assertViolation(instance, field)
     }
 
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
-    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
+    @Test
     fun `prohibit all items with zero-index enum item value`() {
         val allZero = Collections.newBuilder()
             .putNotEmptyMapOfInts(42, 314)
@@ -53,11 +51,10 @@ internal class RequiredRepeatedEnumITest {
             .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
             .putContainsANonEmptyStringValue("  ", "   ")
             .addNotEmptyListOfLongs(42L)
-        assertViolation(allZero, field, "cannot contain default values")
+        assertViolation(allZero, field)
     }
 
-    @Test // https://github.com/SpineEventEngine/mc-java/issues/119
-    @Disabled("Until we finalize the behavior of the `required` constraint on repeated enums")
+    @Test
     fun `prohibit even one zero-index enum item value`() {
         val instance = Collections.newBuilder()
             .putContainsANonEmptyStringValue("111", "222")
@@ -66,6 +63,6 @@ internal class RequiredRepeatedEnumITest {
             .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
             .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
             .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-        assertViolation(instance, field, "default values")
+        assertViolation(instance, field)
     }
 }

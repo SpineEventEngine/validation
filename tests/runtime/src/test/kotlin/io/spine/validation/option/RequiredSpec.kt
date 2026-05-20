@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,18 +116,19 @@ internal class RequiredSpec : ValidationOfConstraintTest() {
     )
 
     @Test
-    fun `accept 'repeated' and 'required' field with default message entries`() {
-        // One valid value, one default instance. We do not validate deeper.
-        assertValid {
+    fun `require non-default messages in 'repeated' with 'required'`() {
+        assertDoesNotBuild {
+            // Two default instances.
+            repeatedRequiredStringValue {
+                value.add(StringValue.getDefaultInstance())
+                value.add(StringValue.getDefaultInstance())
+            }
+        }
+        assertDoesNotBuild {
             repeatedRequiredStringValue {
                 value.add(newStringValue()) // valid value
                 value.add(StringValue.getDefaultInstance()) // empty value
             }
-        }
-        // Two default instances.
-        repeatedRequiredStringValue {
-            value.add(StringValue.getDefaultInstance())
-            value.add(StringValue.getDefaultInstance())
         }
     }
 
