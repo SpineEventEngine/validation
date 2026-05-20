@@ -28,6 +28,7 @@ package io.spine.tools.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.server.query.select
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_BYTES
 import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
 import io.spine.tools.compiler.ast.Type
 import io.spine.tools.compiler.ast.TypeName
@@ -148,6 +149,8 @@ private class GenerateRequired(
      *
      *  - `string` — an empty string is "missing", analogously to how an empty
      *    string is rejected for a singular `(required) string` field.
+     *  - `bytes` — an empty byte sequence is "missing", analogously to how
+     *    an empty payload is rejected for a singular `(required) bytes` field.
      *  - any message type — the default instance is "missing", analogously
      *    to a singular `(required)` message field.
      *  - any enum type — the zero-index enum item is "missing", analogously
@@ -155,6 +158,8 @@ private class GenerateRequired(
      */
     private fun elementMissingCheck(type: Type): String? = when {
         type.isPrimitive && type.primitive == TYPE_STRING -> "String::isEmpty"
+        type.isPrimitive && type.primitive == TYPE_BYTES ->
+            "com.google.protobuf.ByteString::isEmpty"
         type.isMessage -> "v -> v.equals(v.getDefaultInstanceForType())"
         type.isEnum -> "e -> e.getNumber() == 0"
         else -> null

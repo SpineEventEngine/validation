@@ -75,6 +75,11 @@ message MapWithEnumValues {
     map<string, UltimateChoice> meat = 1 [(required) = true];
 }
 
+message MapWithBytesValues {
+
+    map<string, bytes> payload = 1 [(required) = true];
+}
+
 enum UltimateChoice {
 
     VEGETABLE = 0;
