@@ -36,9 +36,8 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.MethodDeclaration
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.tools.validation.ErrorPlaceholder.MESSAGE_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.REQUIRE_FIELDS
+import io.spine.tools.validation.FieldGroup
+import io.spine.tools.validation.RequireMessage
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
@@ -49,10 +48,11 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.mangled
-import io.spine.validation.ConstraintViolation
-import io.spine.tools.validation.FieldGroup
 import io.spine.tools.validation.option.REQUIRE
-import io.spine.tools.validation.RequireMessage
+import io.spine.validation.ConstraintViolation
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.MESSAGE_TYPE
+import io.spine.validation.StandardPlaceholder.REQUIRE_FIELDS
 
 /**
  * The generator for the `(require)` option.
@@ -141,9 +141,9 @@ private class GenerateRequire(
         return constraintViolation(errorMessage, typeNameStr, fieldPath = null, fieldValue = null)
     }
 
-    private fun supportedPlaceholders(): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        MESSAGE_TYPE to StringLiteral(view.id.qualifiedName),
-        REQUIRE_FIELDS to StringLiteral(view.specifiedGroups)
+    private fun supportedPlaceholders(): Map<Placeholder, Expression<String>> = mapOf(
+        MESSAGE_TYPE.value to StringLiteral(view.id.qualifiedName),
+        REQUIRE_FIELDS.value to StringLiteral(view.specifiedGroups)
     )
 
     private companion object {

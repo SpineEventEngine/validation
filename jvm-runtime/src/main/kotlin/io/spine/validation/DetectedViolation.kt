@@ -27,6 +27,7 @@
 package io.spine.validation
 
 import io.spine.base.FieldPath
+import io.spine.string.TemplateString
 
 /**
  * Abstract base for violations detected by [MessageValidator]s.

@@ -34,15 +34,16 @@ import io.spine.tools.compiler.jvm.ClassName
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.newBuilder
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PROPOSED_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.templateString
-import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.option.IF_SET_AGAIN
+import io.spine.validation.ConstraintViolation
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_PROPOSED_VALUE
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Builds a [ConstraintViolation] instance for the given field.
@@ -88,11 +89,11 @@ internal class SetOnceConstraintViolation(
     private fun supportedPlaceholders(
         currentValue: Expression<String>,
         newValue: Expression<String>
-    ) = mapOf(
-        FIELD_PATH to StringLiteral(fieldName),
-        FIELD_TYPE to StringLiteral(fieldType),
-        FIELD_VALUE to currentValue,
-        FIELD_PROPOSED_VALUE to newValue,
-        PARENT_TYPE to declaringType
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        FIELD_PATH.value to StringLiteral(fieldName),
+        FIELD_TYPE.value to StringLiteral(fieldType),
+        FIELD_VALUE.value to currentValue,
+        FIELD_PROPOSED_VALUE.value to newValue,
+        PARENT_TYPE.value to declaringType
     )
 }

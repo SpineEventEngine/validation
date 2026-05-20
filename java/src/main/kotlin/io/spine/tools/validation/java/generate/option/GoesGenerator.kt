@@ -36,12 +36,7 @@ import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.field
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.GOES_COMPANION
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.GoesField
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.joinToString
@@ -56,9 +51,14 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.validation.ConstraintViolation
 import io.spine.tools.validation.option.GOES
-import io.spine.tools.validation.GoesField
+import io.spine.validation.ConstraintViolation
+import io.spine.string.Placeholder
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.GOES_COMPANION
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * The generator for the `(goes)` option.
@@ -126,11 +126,11 @@ private class GenerateGoes(
         fieldPath: Expression<FieldPath>,
         typeName: Expression<String>,
         fieldValue: Expression<*>,
-    ): Map<ErrorPlaceholder, Expression<String>> = mapOf(
-        FIELD_PATH to fieldPath.joinToString(),
-        FIELD_VALUE to fieldType.stringValueOf(fieldValue),
-        FIELD_TYPE to StringLiteral(fieldType.name),
-        PARENT_TYPE to typeName,
-        GOES_COMPANION to StringLiteral(view.companion.name.value)
+    ): Map<Placeholder, Expression<String>> = mapOf(
+        FIELD_PATH.value to fieldPath.joinToString(),
+        FIELD_VALUE.value to fieldType.stringValueOf(fieldValue),
+        FIELD_TYPE.value to StringLiteral(fieldType.name),
+        PARENT_TYPE.value to typeName,
+        GOES_COMPANION.value to StringLiteral(view.companion.name.value)
     )
 }

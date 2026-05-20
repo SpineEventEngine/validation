@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ import io.spine.test.options.set
 import io.spine.test.options.asPlaceholderValue
 import io.spine.test.tools.validate.GoesCustomMessage
 import io.spine.test.tools.validate.GoesDefaultMessage
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_PATH
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_TYPE
-import io.spine.validation.RuntimeErrorPlaceholder.FIELD_VALUE
-import io.spine.validation.RuntimeErrorPlaceholder.GOES_COMPANION
-import io.spine.validation.RuntimeErrorPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.GOES_COMPANION
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 import io.spine.validation.ValidationException
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.assertThrows
@@ -94,11 +94,11 @@ private fun Builder.assertConstraintViolation(
     with(violation) {
         message.withPlaceholders shouldBe template(field.index + 1)
         message.placeholderValueMap shouldContainExactly mapOf(
-            FIELD_PATH to fieldName,
-            FIELD_VALUE to value.asPlaceholderValue(),
-            FIELD_TYPE to fieldType,
-            PARENT_TYPE to parentType,
-            GOES_COMPANION to COMPANION_FIELD,
+            FIELD_PATH.value to fieldName,
+            FIELD_VALUE.value to value.asPlaceholderValue(),
+            FIELD_TYPE.value to fieldType,
+            PARENT_TYPE.value to parentType,
+            GOES_COMPANION.value to COMPANION_FIELD,
         ).mapKeys { it.key.toString() }
 
         typeName shouldBe parentType

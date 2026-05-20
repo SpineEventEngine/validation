@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,52 +24,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.validation
+package io.spine.validation
+
+import io.spine.string.Placeholder
 
 /**
- * A template placeholder that can be used in error messages.
+ * The standard set of [Placeholder]s that can be used in error messages.
  *
  * Enumerates placeholder names that can be used within Protobuf definitions.
  * Each validation option declares the supported placeholders. Take a look at
  * `options.proto` for examples.
  *
- * ### Important Note
- *
- * We have the same items in this enum as in `io.spine.validation.RuntimeErrorPlaceholder`
- * in the runtime library, which is exactly as this one. Please keep them in sync.
- * This duplication is done intentionally to prevent clash between the runtime library,
- * which is added to the classpath of the Compiler, and the runtime library, which is part
- * of the Compiler itself because it is a part of Spine. As we complete our migration
- * of validation to codegen, the runtime library will either be significantly simplified,
- * or even its content may be moved to `base`. Then, the duplicate enum should be removed.
+ * The enum is used by the compiler model and Java renderer when validating and rendering
+ * built-in option error messages.
  */
-public enum class ErrorPlaceholder(public val value: String) {
+public enum class StandardPlaceholder(public val value: Placeholder) {
 
     // Common placeholders.
-    FIELD_PATH("field.path"),
-    FIELD_VALUE("field.value"),
-    FIELD_TYPE("field.type"),
-    MESSAGE_TYPE("message.type"),
-    PARENT_TYPE("parent.type"),
+    FIELD_PATH(Placeholder("field.path")),
+    FIELD_VALUE(Placeholder("field.value")),
+    FIELD_TYPE(Placeholder("field.type")),
+    MESSAGE_TYPE(Placeholder("message.type")),
+    PARENT_TYPE(Placeholder("parent.type")),
 
     // Placeholders for the field options.
-    REGEX_PATTERN("regex.pattern"),
-    REGEX_MODIFIERS("regex.modifiers"),
-    GOES_COMPANION("goes.companion"),
-    FIELD_PROPOSED_VALUE("field.proposed_value"),
-    FIELD_DUPLICATES("field.duplicates"),
-    RANGE_VALUE("range.value"),
-    MAX_VALUE("max.value"),
-    MAX_OPERATOR("max.operator"),
-    MIN_VALUE("min.value"),
-    MIN_OPERATOR("min.operator"),
-    WHEN_IN("when.in"),
+    REGEX_PATTERN(Placeholder("regex.pattern")),
+    REGEX_MODIFIERS(Placeholder("regex.modifiers")),
+    GOES_COMPANION(Placeholder("goes.companion")),
+    FIELD_PROPOSED_VALUE(Placeholder("field.proposed_value")),
+    FIELD_DUPLICATES(Placeholder("field.duplicates")),
+    RANGE_VALUE(Placeholder("range.value")),
+    MAX_VALUE(Placeholder("max.value")),
+    MAX_OPERATOR(Placeholder("max.operator")),
+    MIN_VALUE(Placeholder("min.value")),
+    MIN_OPERATOR(Placeholder("min.operator")),
+
+    @Deprecated(message = "Use the placeholder reference from Spine Time instead.")
+    WHEN_IN(Placeholder("when.in")),
 
     // Placeholders for the `oneof` options.
-    GROUP_PATH("group.path"),
+    GROUP_PATH(Placeholder("group.path")),
 
     // Placeholder for the message options.
-    REQUIRE_FIELDS("require.fields");
+    REQUIRE_FIELDS(Placeholder("require.fields"));
 
-    override fun toString(): String = value
+    /**
+     * The placeholder text as it appears in a template string (e.g., `${field.path}`).
+     *
+     * Shortcut for [value].[placed][Placeholder.placed].
+     */
+    public val placed: String
+        get() = value.placed
 }

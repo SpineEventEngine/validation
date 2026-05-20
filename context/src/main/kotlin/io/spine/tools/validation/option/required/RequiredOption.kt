@@ -52,21 +52,21 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.RequiredField
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultErrorMessage
-import io.spine.tools.validation.option.checkPrimaryApplied
-import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
-import io.spine.tools.validation.option.IF_MISSING
-import io.spine.tools.validation.option.REQUIRED
-import io.spine.tools.validation.RequiredField
 import io.spine.tools.validation.event.IfMissingOptionDiscovered
 import io.spine.tools.validation.event.RequiredFieldDiscovered
 import io.spine.tools.validation.event.ifMissingOptionDiscovered
 import io.spine.tools.validation.event.requiredFieldDiscovered
+import io.spine.tools.validation.option.IF_MISSING
+import io.spine.tools.validation.option.REQUIRED
+import io.spine.tools.validation.option.checkPrimaryApplied
+import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated as `(required)`.
@@ -154,9 +154,9 @@ private fun checkFieldType(field: Field, file: File) =
     }
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    PARENT_TYPE,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    PARENT_TYPE.value,
 )
 
 /**

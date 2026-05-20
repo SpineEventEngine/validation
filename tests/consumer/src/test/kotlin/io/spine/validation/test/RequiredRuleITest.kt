@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,16 @@
 
 package io.spine.validation.test
 
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.spine.validation.format
-import io.spine.validation.formatUnsafe
+import io.spine.string.format
+import io.spine.string.formatUnsafe
+import io.spine.validation.ValidationException
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 @DisplayName("`(required)` rule should")
 internal class RequiredRuleITest {
@@ -66,11 +69,12 @@ internal class RequiredRuleITest {
     )
 
     @Test
-    @Disabled("Until we propagate the `validate` option property to collection elements.")
     fun `reject a list contains only default values`() {
         val builder = Blizzard.newBuilder()
             .addSnowflake(Snowflake.getDefaultInstance())
-        assertValidationException(builder)
+
+        // Two properties of `Snowflake` are required, so we expect two violations.
+        assertValidationExceptions(builder) shouldHaveSize 2
     }
 
     @Test
@@ -84,7 +88,6 @@ internal class RequiredRuleITest {
     )
 
     @Test
-    @Disabled("Until we propagate the `validate` option property to collection elements.")
     fun `reject if a list contains at least one default value`() {
         val builder = Blizzard.newBuilder()
             .addSnowflake(
@@ -93,7 +96,9 @@ internal class RequiredRuleITest {
                     .setVertices(3)
             )
             .addSnowflake(Snowflake.getDefaultInstance())
-        assertValidationException(builder)
+
+        // Two properties of `Snowflake` are required, so we expect two violations.
+        assertValidationExceptions(builder) shouldHaveSize 2
     }
 }
 

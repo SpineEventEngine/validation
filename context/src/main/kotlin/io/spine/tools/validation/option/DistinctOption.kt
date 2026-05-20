@@ -55,19 +55,19 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_DUPLICATES
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
+import io.spine.tools.validation.DistinctField
 import io.spine.tools.validation.OPTION_NAME
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultErrorMessage
-import io.spine.tools.validation.DistinctField
 import io.spine.tools.validation.event.DistinctFieldDiscovered
 import io.spine.tools.validation.event.IfHasDuplicatesOptionDiscovered
 import io.spine.tools.validation.event.distinctFieldDiscovered
 import io.spine.tools.validation.event.ifHasDuplicatesOptionDiscovered
+import io.spine.validation.StandardPlaceholder.FIELD_DUPLICATES
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
 
 /**
  * Controls whether a field should be validated as `(distinct)`.
@@ -176,9 +176,9 @@ private fun checkFieldType(field: Field, file: File) =
 private fun FieldType.isSupported(): Boolean = isMap || isList
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_DUPLICATES,
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    PARENT_TYPE,
+    FIELD_DUPLICATES.value,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    PARENT_TYPE.value,
 )

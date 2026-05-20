@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,51 +33,58 @@ import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.StringLiteral
 import io.spine.tools.compiler.jvm.mapExpression
 import io.spine.tools.compiler.jvm.newBuilder
-import io.spine.tools.validation.ErrorPlaceholder
-import io.spine.validation.TemplateString
-import io.spine.validation.checkPlaceholdersHasValue
+import io.spine.string.Placeholder
+import io.spine.string.TemplateString
+import io.spine.string.joinQuoted
 
 /**
  * Yields an expression that creates a new instance of [TemplateString].
  *
  * Note that this method differs from the one provided by the API module
- * in that it accepts placeholder keys as [ErrorPlaceholder]. This enum
- * contains placeholder keys for built-in options.
+ * in that it accepts placeholder keys as [Placeholder]. The standard
+ * placeholder keys for built-in options are provided by [io.spine.validation.StandardPlaceholder].
  *
  * @param placeholders The supported placeholders and their values.
  * @param optionName The name of the option, which declared the provided [placeholders].
  */
 public fun templateString(
     template: String,
-    placeholders: Map<ErrorPlaceholder, Expression<String>>,
-    optionName: String
-): Expression<TemplateString> =
-    withStringPlaceholders(template, placeholders.mapKeys { it.key.value }, optionName)
-
-/**
- * Yields an expression that creates a new instance of [TemplateString].
- *
- * @param placeholders The supported placeholders and their values.
- * @param optionName The name of the option, which declared the provided [placeholders].
- */
-public fun withStringPlaceholders(
-    template: String,
-    placeholders: Map<String, Expression<String>>,
+    placeholders: Map<Placeholder, Expression<String>>,
     optionName: String
 ): Expression<TemplateString> {
-    checkPlaceholdersHasValue(template, placeholders) { missingKeys ->
-        "Unexpected error message placeholders `$missingKeys` specified for the `($optionName)`" +
-                " option. The available placeholders: `${placeholders.keys}`. Please make sure" +
-                " that the code that verifies the message placeholders and its code generator" +
-                " operate with the same set of placeholders."
+    checkPlaceholdersHasValue(template, placeholders.keys) { missing ->
+        "Unexpected error message placeholders ${missing.joinQuoted()} specified for" +
+                " the `($optionName)` option." +
+                " The available placeholders: ${placeholders.keys.joinQuoted()}." +
+                " Please make sure that the code that verifies the message placeholders and" +
+                " its code generator operate with the same set of placeholders."
     }
     val placeholderEntries = mapExpression(
         StringClass, StringClass,
-        placeholders.mapKeys { StringLiteral(it.key) }
+        placeholders.mapKeys { StringLiteral(it.key.name) }
     )
     val escapedTemplate = restoreProtobufEscapes(template)
     return TemplateStringClass.newBuilder()
         .chainSet("withPlaceholders", StringLiteral(escapedTemplate))
         .chainPutAll("placeholderValue", placeholderEntries)
         .chainBuild()
+}
+
+/**
+ * Makes sure that each placeholder within the [template] string is present
+ * in the [placeholders] set.
+ *
+ * @param template The template with placeholders like `${something}`.
+ * @param placeholders The set of available placeholders.
+ */
+private fun checkPlaceholdersHasValue(
+    template: String,
+    placeholders: Set<Placeholder>,
+    lazyMessage: (List<Placeholder>) -> String
+) {
+    val needed = Placeholder.extractPlaceholders(template)
+    val missing = needed.filter { it !in placeholders }
+    if (missing.isNotEmpty()) {
+        throw IllegalArgumentException(lazyMessage(missing))
+    }
 }

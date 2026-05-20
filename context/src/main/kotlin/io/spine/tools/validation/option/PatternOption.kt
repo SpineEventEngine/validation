@@ -48,18 +48,18 @@ import io.spine.tools.compiler.ast.unpack
 import io.spine.tools.compiler.check
 import io.spine.tools.compiler.plugin.Reaction
 import io.spine.tools.compiler.plugin.View
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_PATH
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.FIELD_VALUE
-import io.spine.tools.validation.ErrorPlaceholder.PARENT_TYPE
-import io.spine.tools.validation.ErrorPlaceholder.REGEX_MODIFIERS
-import io.spine.tools.validation.ErrorPlaceholder.REGEX_PATTERN
 import io.spine.tools.validation.OPTION_NAME
+import io.spine.tools.validation.PatternField
 import io.spine.tools.validation.checkPlaceholders
 import io.spine.tools.validation.defaultMessage
-import io.spine.tools.validation.PatternField
 import io.spine.tools.validation.event.PatternFieldDiscovered
 import io.spine.tools.validation.event.patternFieldDiscovered
+import io.spine.validation.StandardPlaceholder.FIELD_PATH
+import io.spine.validation.StandardPlaceholder.FIELD_TYPE
+import io.spine.validation.StandardPlaceholder.FIELD_VALUE
+import io.spine.validation.StandardPlaceholder.PARENT_TYPE
+import io.spine.validation.StandardPlaceholder.REGEX_MODIFIERS
+import io.spine.validation.StandardPlaceholder.REGEX_PATTERN
 
 /**
  * Controls whether a field should be validated with the `(pattern)` option.
@@ -141,10 +141,10 @@ public val FieldType.isSingularString: Boolean
     get() = primitive == TYPE_STRING
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
-    FIELD_PATH,
-    FIELD_TYPE,
-    FIELD_VALUE,
-    PARENT_TYPE,
-    REGEX_MODIFIERS,
-    REGEX_PATTERN,
+    FIELD_PATH.value,
+    FIELD_TYPE.value,
+    FIELD_VALUE.value,
+    PARENT_TYPE.value,
+    REGEX_MODIFIERS.value,
+    REGEX_PATTERN.value,
 )
