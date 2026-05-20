@@ -114,18 +114,30 @@ private class GenerateRequired(
      * For a `map<K, string>` field, an entry with an empty-string value is also
      * treated as missing — analogously to how an empty string in a `(required)`
      * `string` field is rejected.
+     *
+     * For a `map<K, M>` field with a message-typed value, an entry whose value is
+     * the default instance of `M` is treated as missing — analogously to how the
+     * default instance is rejected for a singular `(required)` message field.
      */
     private fun missingCondition(): Expression<Boolean> {
         val isDefault = field.hasDefaultValue()
-        val mapType = field.type.takeIf { it.isMap }?.map
-        val valueType = mapType?.valueType
-        if (valueType != null && valueType.isPrimitive && valueType.primitive == TYPE_STRING) {
-            val mapGetter = message.field(field).getter<Map<*, String>>()
-            return Expression(
-                "$isDefault || $mapGetter.values().stream().anyMatch(String::isEmpty)"
-            )
+        val valuesCheck = mapValueMissingCheck() ?: return isDefault
+        val mapGetter = message.field(field).getter<Map<*, *>>()
+        return Expression("$isDefault || $mapGetter.values().stream().anyMatch($valuesCheck)")
+    }
+
+    /**
+     * Returns the Java predicate (a `Predicate<V>` source fragment) that
+     * detects a "missing" entry value for this map field, or `null` if the
+     * field is not a supported map type for per-value checks.
+     */
+    private fun mapValueMissingCheck(): String? {
+        val valueType = field.type.takeIf { it.isMap }?.map?.valueType ?: return null
+        return when {
+            valueType.isPrimitive && valueType.primitive == TYPE_STRING -> "String::isEmpty"
+            valueType.isMessage -> "v -> v.equals(v.getDefaultInstanceForType())"
+            else -> null
         }
-        return isDefault
     }
 
     private fun violation(
