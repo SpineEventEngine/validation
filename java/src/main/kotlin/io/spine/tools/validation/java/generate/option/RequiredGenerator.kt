@@ -28,13 +28,16 @@ package io.spine.tools.validation.java.generate.option
 
 import io.spine.base.FieldPath
 import io.spine.server.query.select
+import io.spine.tools.compiler.ast.PrimitiveType.TYPE_STRING
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.isMap
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.JavaValueConverter
 import io.spine.tools.compiler.jvm.ReadVar
 import io.spine.tools.compiler.jvm.StringLiteral
+import io.spine.tools.compiler.jvm.field
 import io.spine.tools.validation.RequiredField
 import io.spine.tools.validation.java.expression.EmptyFieldCheck
 import io.spine.tools.validation.java.expression.constraintViolation
@@ -43,6 +46,7 @@ import io.spine.tools.validation.java.expression.orElse
 import io.spine.tools.validation.java.expression.resolve
 import io.spine.tools.validation.java.expression.stringify
 import io.spine.tools.validation.java.expression.templateString
+import io.spine.tools.validation.java.generate.MessageScope.message
 import io.spine.tools.validation.java.generate.OptionGeneratorWithConverter
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
@@ -92,7 +96,7 @@ private class GenerateRequired(
     fun code(): SingleOptionCode {
         val constraint = CodeBlock(
             """
-            if (${field.hasDefaultValue()}) {
+            if (${missingCondition()}) {
                 var fieldPath = ${parentPath.resolve(field.name)};
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"))};
@@ -101,6 +105,27 @@ private class GenerateRequired(
             """.trimIndent()
         )
         return SingleOptionCode(constraint)
+    }
+
+    /**
+     * Returns the boolean expression that evaluates to `true` when the field
+     * is considered missing.
+     *
+     * For a `map<K, string>` field, an entry with an empty-string value is also
+     * treated as missing — analogously to how an empty string in a `(required)`
+     * `string` field is rejected.
+     */
+    private fun missingCondition(): Expression<Boolean> {
+        val isDefault = field.hasDefaultValue()
+        val mapType = field.type.takeIf { it.isMap }?.map
+        val valueType = mapType?.valueType
+        if (valueType != null && valueType.isPrimitive && valueType.primitive == TYPE_STRING) {
+            val mapGetter = message.field(field).getter<Map<*, String>>()
+            return Expression(
+                "$isDefault || $mapGetter.values().stream().anyMatch(String::isEmpty)"
+            )
+        }
+        return isDefault
     }
 
     private fun violation(

@@ -31,7 +31,6 @@ import io.spine.test.tools.validate.UltimateChoice
 import io.spine.tools.validation.assertions.assertInvalid
 import io.spine.tools.validation.assertions.assertValid
 import io.spine.tools.validation.assertions.assertViolation
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -45,20 +44,38 @@ internal class RequiredMapWithStringsITest {
     }
 
     /**
-     * Disabled until the semantics of an "empty" map entry for `(required)`
-     * is finalised.
-     *
-     * See [issue #305](https://github.com/SpineEventEngine/validation/issues/305).
+     * An entry with an empty-string value is treated as missing — analogously
+     * to how an empty string in a `(required)` `string` field is rejected.
      */
     @Test
-    @Disabled("temporarily until the issue with empty entries is finalised")
-    fun `prohibit an entry with empty string`() {
+    fun `prohibit an entry with the empty value`() {
         val empty = Collections.newBuilder()
             .putContainsANonEmptyStringValue("", "")
             .putNotEmptyMapOfInts(111, 314)
             .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
             .addNotEmptyListOfLongs(42L)
-        assertInvalid(empty)
+        assertViolation(empty, "contains_a_non_empty_string_value")
+    }
+
+    @Test
+    fun `prohibit an entry with the empty value even if its key is non-empty`() {
+        val instance = Collections.newBuilder()
+            .addNotEmptyListOfLongs(42L)
+            .putContainsANonEmptyStringValue(" ", "")
+            .putNotEmptyMapOfInts(0, 0)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
+        assertViolation(instance, "contains_a_non_empty_string_value")
+    }
+
+    @Test
+    fun `prohibit a map that mixes a valid entry with an empty-value entry`() {
+        val instance = Collections.newBuilder()
+            .putContainsANonEmptyStringValue("foo", "bar")
+            .putContainsANonEmptyStringValue("x", "")
+            .putNotEmptyMapOfInts(111, 314)
+            .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
+            .addNotEmptyListOfLongs(42L)
+        assertInvalid(instance)
     }
 
     @Test
@@ -73,10 +90,10 @@ internal class RequiredMapWithStringsITest {
     }
 
     @Test
-    fun `allow an entry with the empty key and non-empty value`() {
+    fun `allow an entry with the empty key as long as the value is non-empty`() {
         val instance = Collections.newBuilder()
             .addNotEmptyListOfLongs(42L)
-            .putContainsANonEmptyStringValue("", " ")
+            .putContainsANonEmptyStringValue("", "v")
             .putNotEmptyMapOfInts(0, 0)
             .addAtLeastOnePieceOfMeat(UltimateChoice.CHICKEN)
         assertValid(instance)
