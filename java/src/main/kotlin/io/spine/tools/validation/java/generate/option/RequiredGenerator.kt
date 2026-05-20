@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,9 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
-import io.spine.tools.validation.option.IF_MISSING
+import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.validation.ConstraintViolation
+import io.spine.tools.validation.option.IF_MISSING
 import io.spine.validation.ErrorPlaceholder
 import io.spine.validation.ErrorPlaceholder.FIELD_PATH
 import io.spine.validation.ErrorPlaceholder.FIELD_TYPE
@@ -71,6 +72,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
+            .filter { it.subject.type.isSupported() }
             .map { GenerateRequired(it, converter).code() }
 }
 
