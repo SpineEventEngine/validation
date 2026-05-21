@@ -125,7 +125,7 @@ plugins {
 ```
 
 For configuration options exposed by the plugin, see
-[Validation Gradle plugin](../06-gradle-plugin/).
+“[Validation Gradle plugin](../06-gradle-plugin/)”.
 
 ## Next step
 

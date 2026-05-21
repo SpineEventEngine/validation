@@ -166,11 +166,11 @@ The page is structured as follows. Each H2 maps to one user need.
       `01-getting-started/adding-to-build.md` to the new page.
 - [x] Add the sidenav entry under `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml`
       (right after `05-custom-validation`).
-- [ ] Run the doc preview (Hugo) locally and verify:
+- [x] Run the doc preview (Hugo) locally and verify:
   - the new section appears after *Custom validation*;
   - all relative links resolve;
   - the page renders without shortcode errors.
-- [ ] Apply the `writer` / `review-docs` skills before opening the PR.
+- [x] Apply the `writer` / `review-docs` skills before opening the PR.
 - [ ] ~~Version bump (per `pre-pr`)~~ — not needed on this branch; the
       `address-issues` branch owns the version bump for the merged change set.
 
@@ -217,3 +217,8 @@ PR grows too large, split — but ship the docs page with at least
   `warnings { unsignedFields }` ships from the sibling `address-issues` branch
   (task `warnings-suppression`). No version bump here — the merged change set
   on `address-issues` will own it.
+- 2026-05-21 — Hugo preview built cleanly (57 pages, no shortcode errors);
+  `review-docs` skill pass applied: typographic curly quotes around page-/section-
+  title link text on the new page and on the forward link in `adding-to-build.md`;
+  terminology gloss tightened ("so it runs"); trailing whitespace stripped
+  on the `enabled` description. Final Hugo re-build verified clean.

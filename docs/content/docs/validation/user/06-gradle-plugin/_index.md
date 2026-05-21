@@ -11,23 +11,23 @@ describes what the plugin does and how to configure it through the
 `validation { ... }` extension.
 
 If you only need to install the plugin, see
-[Adding to build](../01-getting-started/adding-to-build.md); this page focuses
-on configuration.
+“[Adding to build](../01-getting-started/adding-to-build.md)”; this page
+focuses on configuration.
 
 
 ## What the plugin does
 
 When applied under the ID `io.spine.validation`, the plugin:
 
-- registers the Validation plugin to Spine Compiler so the Validation Compiler
-  runs as part of code generation;
+- registers the Validation plugin to Spine Compiler so it runs as part of
+  code generation;
 - adds the Validation JVM runtime as an `implementation` dependency;
 - transitively applies the [Protobuf Gradle plugin][protobuf-gradle] and the
   Spine Compiler Gradle plugin so users do not have to apply either manually.
 
 The plugin can be added directly or pulled in through the CoreJvm toolchain;
 both modes end up integrating the same Validation Compiler. See
-[Adding Gradle plugins to the build][adding-plugins] for the install steps.
+“[Adding Gradle plugins to the build][adding-plugins]” for the install steps.
 
 
 ## Configuration via the extension
@@ -58,7 +58,7 @@ evaluation. Toggles are written in positive polarity (`enabled = true`,
 
 Type: `Property<Boolean>`. Default: `true`.
 
-Controls whether the Validation plugin to Spine Compiler is registered. 
+Controls whether the Validation plugin to Spine Compiler is registered.
 When set to `false`, code generation for validation rules is skipped:
 
 ```kotlin
