@@ -26,7 +26,9 @@
 
 package io.spine.tools.validation.java.generate.option.bound
 
+import io.spine.annotation.VisibleForTesting
 import io.spine.base.FieldPath
+import io.spine.string.Placeholder
 import io.spine.string.camelCase
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.FieldType
@@ -68,7 +70,7 @@ import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
-import io.spine.string.Placeholder
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
@@ -120,11 +122,9 @@ internal abstract class BoundedFieldGenerator(
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
     private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
-        // TODO:2025-05-12:yevhenii.nadtochii: Enable reporting back when we decide upon the format.
-        //  Issue: https://github.com/SpineEventEngine/validation/issues/227.
-        // if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
-        //     unsignedIntegerWarning(view.file, field.span)
-        // }
+        if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
+            unsignedIntegerWarning(view.file, field.span)
+        }
         return CodeBlock(
             """
             if (${isOutOfBounds(value)}) {
@@ -217,15 +217,16 @@ internal abstract class BoundedFieldGenerator(
     }
 }
 
-@Suppress("unused") // https://github.com/SpineEventEngine/validation/issues/227
 private fun unsignedIntegerWarning(file: File, span: Span) =
-    Compilation.warning(file, span) {
-        "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
-                " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
-                " Operations on unsigned values rely on static utility methods from" +
-                " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
-                " when dealing with unsigned values outside of these methods, as Java" +
-                " treats all primitive integers as signed."
+    UnsignedIntegerWarnings.report(file, span) {
+        Compilation.warning(file, span) {
+            "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
+                    " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
+                    " Operations on unsigned values rely on static utility methods from" +
+                    " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
+                    " when dealing with unsigned values outside of these methods, as Java" +
+                    " treats all primitive integers as signed."
+        }
     }
 
 @Suppress("MaxLineLength") // Long links.
@@ -233,4 +234,30 @@ private object Docs {
     const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
     const val UNSIGNED_API =
         "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
+}
+
+/**
+ * Reports unsigned-integer warnings once per source location.
+ */
+internal object UnsignedIntegerWarnings {
+
+    private val reported = ConcurrentHashMap.newKeySet<String>()
+
+    fun report(file: File, span: Span, warning: () -> Unit) {
+        report(key(file, span), warning)
+    }
+
+    @VisibleForTesting
+    fun report(key: String, warning: () -> Unit) {
+        if (reported.add(key)) {
+            warning()
+        }
+    }
+
+    @VisibleForTesting
+    fun clear() {
+        reported.clear()
+    }
+
+    private fun key(file: File, span: Span): String = "$file:$span"
 }
