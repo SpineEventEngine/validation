@@ -36,6 +36,7 @@ import io.spine.testing.compiler.pipelineParams
 import io.spine.testing.compiler.withRequestFile
 import io.spine.testing.compiler.withSettingsDir
 import io.spine.tools.code.SourceSetName
+import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.params.WorkingDirectory
 import io.spine.tools.compiler.protobuf.field
 import io.spine.tools.validation.given.EntityWithInt32Id
@@ -58,7 +59,7 @@ internal class AssumedRequiredIdSpec {
         val output = compile(descriptor)
         val field = descriptor.field("id")
 
-        output shouldNotContain field.fullName
+        output shouldNotContain field.qualifiedName
         output shouldNotContain "should not be declared as `(required)`"
         output shouldNotContain "assumed to be required"
     }
