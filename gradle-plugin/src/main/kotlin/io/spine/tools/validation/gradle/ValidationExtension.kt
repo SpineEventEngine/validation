@@ -28,14 +28,14 @@ package io.spine.tools.validation.gradle
 
 import javax.inject.Inject
 import org.gradle.api.Action
-import org.gradle.api.Project
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 
 /**
  * The extension added to the [RootExtension][io.spine.tools.gradle.root.RootExtension]
  * by the [ValidationGradlePlugin].
  */
-public abstract class ValidationExtension @Inject public constructor(project: Project) {
+public abstract class ValidationExtension @Inject public constructor(objects: ObjectFactory) {
 
     /**
      * Tells if Validation compiler is enabled in the project.
@@ -43,12 +43,12 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
      * Defaults to `true`. Set to `false` to disable validation code generation
      * for this project, while keeping the runtime dependency.
      */
-    public val enabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+    public val enabled: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
      * Configuration for the Java target of the Validation Compiler.
      */
-    public val java: Java = project.objects.newInstance(Java::class.java)
+    public val java: Java = objects.newInstance(Java::class.java)
 
     init {
         enabled.convention(true)
@@ -69,7 +69,7 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
      * Holds per-target settings consumed by the
      * `io.spine.tools.validation.java.JavaValidationRenderer`.
      */
-    public abstract class Java @Inject public constructor(project: Project) {
+    public abstract class Java @Inject public constructor(objects: ObjectFactory) {
 
         /**
          * Per-kind toggles for warnings emitted by the Java target of the
@@ -88,7 +88,7 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
          * }
          * ```
          */
-        public val warnings: Warnings = project.objects.newInstance(Warnings::class.java)
+        public val warnings: Warnings = objects.newInstance(Warnings::class.java)
 
         /**
          * Configures per-kind warning toggles using a Gradle DSL block.
@@ -111,7 +111,7 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
          * Spine Compiler settings directory, so the renderer never has to
          * distinguish "field absent" from "field set to `false`".
          */
-        public abstract class Warnings @Inject public constructor(project: Project) {
+        public abstract class Warnings @Inject public constructor(objects: ObjectFactory) {
 
             /**
              * Whether to emit the "unsigned integer types are not supported
@@ -123,7 +123,7 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
              * handling has been considered.
              */
             public val unsignedFields: Property<Boolean> =
-                project.objects.property(Boolean::class.java)
+                objects.property(Boolean::class.java)
 
             init {
                 unsignedFields.convention(true)

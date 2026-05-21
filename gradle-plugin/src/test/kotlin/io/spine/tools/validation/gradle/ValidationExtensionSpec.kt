@@ -55,7 +55,7 @@ internal class ValidationExtensionSpec {
     @BeforeEach
     fun setUp() {
         project = ProjectBuilder.builder().build()
-        extension = project.objects.newInstance(ValidationExtension::class.java, project)
+        extension = project.objects.newInstance(ValidationExtension::class.java)
     }
 
     @Test
