@@ -2,7 +2,7 @@
 slug: warnings-suppression
 branch: address-issues
 owner: claude
-status: draft
+status: in-progress
 started: 2026-05-21
 related-tasks:
   - docs-validation-gradle-plugin-page
@@ -102,7 +102,6 @@ validation `.proto` files:
       bool unsigned_fields = 1;  // default true
   }
   ```
-  *(open question on polarity in proto — see below)*
 
 ### 3. Write side (Gradle plugin)
 
