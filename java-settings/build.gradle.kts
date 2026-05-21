@@ -25,6 +25,7 @@
  */
 
 import io.spine.dependency.local.Base
+import io.spine.dependency.local.Spine
 
 plugins {
     module
@@ -33,7 +34,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "io.spine"
+group = Spine.toolsGroup
 
 dependencies {
     api(Base.lib)
