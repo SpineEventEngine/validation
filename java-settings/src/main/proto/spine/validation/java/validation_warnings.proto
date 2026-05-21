@@ -50,12 +50,6 @@ option java_multiple_files = true;
 message ValidationWarnings {
 
     // Emit the "unsigned integer types are not supported in Java" warning
-    // for `uint32`/`uint64` fields constrained by `(range)`, `(min)`, or
-    // `(max)`.
-    //
-    // Set to `false` in the Gradle DSL via
-    // `validation.java.warnings.unsignedFields` to keep the build console
-    // clean when unsigned integers are used intentionally.
-    //
+    // for `uint32`/`uint64` fields constrained by `(range)`, `(min)`, or `(max)`.
     bool unsigned_fields = 1;
 }
