@@ -24,32 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-    }
+import io.spine.dependency.local.Base
+
+plugins {
+    module
+    `build-proto-model`
+    id("io.spine.generated-sources")
+    id("maven-publish")
 }
 
-rootProject.name = "validation"
+group = "io.spine"
 
-include(
-    "context",
-    "context-tests",
-    "gradle-plugin",
-    "java",
-    "java-settings",
-    "jvm-runtime",
-    "java-bundle",
-    ":tests",
-    ":tests:extensions",
-    ":tests:consumer",
-    ":tests:consumer-dependency",
-    ":tests:runtime",
-    ":tests:time",
-    ":tests:vanilla",
-    ":tests:validating",
-    ":tests:validator",
-    ":tests:validator-dependency",
-    "docs"
-)
+dependencies {
+    api(Base.lib)
+}
+
+forceSpineBase()

@@ -75,13 +75,19 @@ generation on and off, and keeps the runtime API available — for example, for
 [validators](../04-validators/) registered via `MessageValidator`, which do not
 rely on generated checks.
 
-### `warnings { ... }`
+### `java { ... }`
 
-Nested block. Suppresses warnings emitted by the Validation Compiler on a
-per-kind basis. Each property is positive: `true` means the warning is emitted
-(the default); set it to `false` to silence the corresponding warning.
+Nested block. Holds configuration specific to the Java target of the Validation
+Compiler — currently the per-kind warning toggles.
 
-#### `unsignedFields`
+#### `java.warnings { ... }`
+
+Nested block. Suppresses warnings emitted by the Java target of the Validation
+Compiler on a per-kind basis. Each property is positive: `true` means the
+warning is emitted (the default); set it to `false` to silence the corresponding
+warning.
+
+##### `unsignedFields`
 
 Type: `Property<Boolean>`. Default: `true`.
 
@@ -92,8 +98,10 @@ Java"* warning emitted for `uint32` and `uint64` fields that carry `(range)`,
 ```kotlin
 spine {
     validation {
-        warnings {
-            unsignedFields = false
+        java {
+            warnings {
+                unsignedFields = false
+            }
         }
     }
 }

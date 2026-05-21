@@ -21,8 +21,10 @@ Success criteria:
    ```kotlin
    spine {
        validation {
-           warnings {
-               unsignedFields = false
+           java {
+               warnings {
+                   unsignedFields = false
+               }
            }
        }
    }
@@ -53,19 +55,27 @@ Success criteria:
   renderer reads. The renderer is the natural reader: it already owns the
   per-build lifecycle (`UnsignedIntegerWarnings.clear()` on each `render()`)
   and composes the generators that emit the warning.
+- **Settings home:** the new top-level module `:java-settings` hosts the proto
+  schema (`ValidationWarnings`). Both `:java` (renderer side) and
+  `:gradle-plugin` (writer side) depend on it. Proto package
+  `spine.validation.java`; Java package `io.spine.tools.validation.settings`.
 
 ## Design
 
 ### 1. User-facing DSL
 
 Nested DSL on `ValidationExtension`, positive polarity (each property is "is this
-warning enabled", default `true`):
+warning enabled", default `true`). The Java-target settings live under a
+dedicated `java { ... }` block so that other targets (e.g. Kotlin, JS) can be
+added later without breaking the namespace:
 
 ```kotlin
 spine {
     validation {
-        warnings {
-            unsignedFields = false   // suppress
+        java {
+            warnings {
+                unsignedFields = false   // suppress
+            }
         }
     }
 }
@@ -73,35 +83,38 @@ spine {
 
 Implementation:
 
-- The nested `warnings { ... }` block lives **inside `ValidationExtension`** —
-  not as a sibling top-level class. Concretely: a nested `abstract class
-  Warnings @Inject constructor(project: Project)` declared inside
-  `ValidationExtension`, with `unsignedFields: Property<Boolean>` (default
-  `true`).
-- `ValidationExtension` exposes a `warnings: ValidationExtension.Warnings`
-  property (created via the host project's `ObjectFactory`) plus a
-  `warnings(Action<ValidationExtension.Warnings>)` method so the block
+- The nested `java { ... }` block lives **inside `ValidationExtension`** —
+  not as a sibling top-level class. Concretely: a nested
+  `abstract class Java @Inject constructor(project: Project)` declared inside
+  `ValidationExtension`, with a `warnings: Warnings` property and a
+  `warnings(Action<Warnings>)` method for the block syntax.
+- The `Warnings` class is nested inside `Java` (also abstract, `@Inject`-
+  constructed), with `unsignedFields: Property<Boolean>` (default `true`).
+- `ValidationExtension` exposes a `java: Java` property (created via the host
+  project's `ObjectFactory`) plus a `java(Action<Java>)` method so the block
   syntax works.
 
 ### 2. Settings proto
 
-New proto under the shared validation proto tree, alongside the other
-validation `.proto` files:
+Lives in the new top-level `:java-settings` module — a proto-only module
+that hosts settings consumed by `JavaValidationRenderer`. Both `:java` and
+`:gradle-plugin` depend on this module.
 
-- **Location:** `context/src/main/proto/spine/validation/validation_warnings.proto`
-  (same directory as `events.proto`, `views.proto`, `field_group.proto`, etc.).
-  File name mirrors the top-level type name `ValidationWarnings`.
+- **Location:** `java-settings/src/main/proto/spine/validation/java/validation_warnings.proto`.
+  File name mirrors the top-level type name `ValidationWarnings`; directory
+  layout matches the proto package (`spine/validation/java`).
 - **Schema:**
   ```proto
   syntax = "proto3";
-  package spine.validation;
+  package spine.validation.java;
   option java_package = "io.spine.tools.validation.settings";
   option java_outer_classname = "ValidationWarningsProto";
   option java_multiple_files = true;
 
-  // Per-kind toggles for warnings emitted by the Validation Compiler.
-  // Each field defaults to `true` (warning enabled) when the proto is absent
-  // or the field is unset; setting `false` suppresses the warning.
+  // Per-kind toggles for warnings emitted by the Java target of the
+  // Validation Compiler. Each field defaults to `true` (warning enabled)
+  // when the proto is absent or the field is unset; setting `false`
+  // suppresses the warning.
   message ValidationWarnings {
       // Emit the "unsigned integer types are not supported in Java" warning
       // for `uint32`/`uint64` fields with `(range)`, `(min)`, or `(max)`.
@@ -113,11 +126,14 @@ validation `.proto` files:
 
 In `ValidationGradlePlugin.configureValidation()`:
 
-- After collecting values from the new `warnings` block, build a
-  `ValidationWarnings` message.
-- Register it via the Spine Compiler `Settings` API for the consumer
-  `JavaValidationRenderer::class.java.canonicalName`
-  (= `io.spine.tools.validation.java.JavaValidationRenderer`).
+- The plugin depends on `:java-settings`, so it builds a strongly-typed
+  `ValidationWarnings` message — no JSON-by-hand.
+- After collecting values from the new `validation.java.warnings { ... }`
+  block, the plugin writes the message in `Format.ProtoBinary` to the Spine
+  Compiler settings directory for the consumer
+  `io.spine.tools.validation.java.JavaValidationRenderer`.
+- The consumer ID is kept as a string literal — the plugin must not depend
+  on `:java` (renderer module), only on `:java-settings`.
 - Always write the settings (every flag is explicit on the read side; see §6).
 
 ### 4. Read side (Spine Compiler renderer)
@@ -184,47 +200,48 @@ will route through `UnsignedIntegerWarnings`, so the file is touched anyway.
 
 ## Plan
 
-- [ ] Confirm open questions with reviewer (see below).
-- [x] **Proto:** add `context/src/main/proto/spine/validation/validation_warnings.proto`
-      next to the other validation protos; no new sourceset needed.
-- [x] **Extension:** add a nested `warnings { ... }` block **inside**
-      `ValidationExtension` (no sibling `WarningsExtension` class). Implement
-      it as a private nested `abstract class Warnings @Inject
-      constructor(project: Project)` with `unsignedFields:
-      Property<Boolean>` defaulting to `true`, plus a
-      `warnings(Action<Warnings>)` method on the host extension.
-- [ ] **Gradle plugin:** in `ValidationGradlePlugin.configureValidation()`,
-      compose `ValidationWarnings` from the extension and always register it
-      with the Compiler settings registry (so every flag is explicit on the
-      read side).
-- [ ] **Read side:** make `JavaValidationRenderer` load `ValidationWarnings`
-      via `LoadsSettings` (consumer ID =
-      `io.spine.tools.validation.java.JavaValidationRenderer`); thread the
-      resolved settings down to the bound generators (`RangeGenerator`,
-      `MinGenerator`, `MaxGenerator`) so `BoundedFieldGenerator` can gate
-      `unsignedIntegerWarning()` on `warnings.unsignedFields`.
+- [x] **New module:** add `:java-settings` (top-level, proto-only) with its
+      own `build.gradle.kts` (mimics `:jvm-runtime` minus the runtime
+      dependencies) and a `src/main/proto/spine/validation/java/` source
+      tree. Registered in root `settings.gradle.kts`.
+- [x] **Proto move:** `git mv` the `validation_warnings.proto` from
+      `:context` to `:java-settings`; switch proto package to
+      `spine.validation.java`; keep Java package
+      `io.spine.tools.validation.settings`.
+- [x] **Dependencies:** `:java` and `:gradle-plugin` declare
+      `project(":java-settings")` so both compile against the typed
+      `ValidationWarnings` message.
+- [x] **Extension:** restructure `ValidationExtension` DSL so the warnings
+      block is nested under a `java { ... }` block:
+      `validation.java.warnings.unsignedFields`. Both `Java` and `Warnings`
+      are nested `abstract @Inject` classes inside `ValidationExtension`,
+      per the team-memory rule on nested Gradle DSLs.
+- [x] **Gradle plugin:** in `ValidationGradlePlugin.configureValidation()`,
+      build a typed `ValidationWarnings` message from
+      `validation.java.warnings` and write it in `Format.ProtoBinary` to the
+      Spine Compiler settings directory (the renderer never has to
+      distinguish "field absent" from "field set to `false`").
+- [ ] **Read side (already in place):** `JavaValidationRenderer` loads
+      `ValidationWarnings` via `LoadsSettings` and calls
+      `UnsignedIntegerWarnings.setEnabled(...)` on every render. Verify it
+      still compiles after the proto move (Java package unchanged).
 - [x] **Refactor:** extract `UnsignedIntegerWarnings` from
       `BoundedFieldGenerator.kt` into its own file
-      `UnsignedIntegerWarnings.kt` in the same package; update imports in
-      `BoundedFieldGenerator.kt`, `JavaValidationRenderer.kt`, and any other
-      callers. Leave the `private fun unsignedIntegerWarning(...)` helper
-      where it is. *(Done in commit `817b6b5823` on this branch.)*
+      `UnsignedIntegerWarnings.kt` in the same package. *(Done in commit
+      `817b6b5823` on this branch.)*
 - [ ] **Tests:**
   - Unit test on `BoundedFieldGenerator`: with `unsigned_fields=false`,
     `unsignedIntegerWarning()` is not invoked (use `UnsignedIntegerWarningsSpec`
     as the existing reference).
   - Integration test in `gradle-plugin/`: a Gradle build that sets
-    `warnings { unsignedFields = false }` produces no warning line in
-    the compiler output for a proto fixture with `uint32 + (range)`.
-  - Regression test: default behavior unchanged when no `warnings` block is
+    `java { warnings { unsignedFields = false } }` produces no warning line
+    in the compiler output for a proto fixture with `uint32 + (range)`.
+  - Regression test: default behavior unchanged when no `java` block is
     present.
-- [ ] **Docs:** update KDoc on `ValidationExtension` and its nested
-      `Warnings` class to show the `warnings { unsignedFields }` block.
-      User-facing site documentation is owned by the sibling task
-      [`docs-validation-gradle-plugin-page`](docs-validation-gradle-plugin-page.md);
-      that plan covers the new
-      `06-gradle-plugin/_index.md` page (placed after *Custom validation* in
-      the navigation) and includes a section for `warnings { unsignedFields }`.
+- [x] **Docs:** update KDoc on `ValidationExtension` and its nested
+      `Java`/`Warnings` classes plus the user-facing
+      `06-gradle-plugin/_index.md` to reflect the new
+      `validation.java.warnings.unsignedFields` path.
 - [ ] **Version bump:** required for the PR per `pre-pr` skill.
 - [ ] **Verification:** run the build/check command per
       `.agents/running-builds.md`.
@@ -261,3 +278,13 @@ for documentation work._
   `validation_warnings.proto` to match the top-level type name
   `ValidationWarnings`. `java_outer_classname` updated to
   `ValidationWarningsProto` accordingly.
+- 2026-05-21 — introduced top-level `:java-settings` module as the home of
+  Java-renderer settings. `git mv`d `validation_warnings.proto` from
+  `:context` to `:java-settings`; switched proto package to
+  `spine.validation.java`. `:java` and `:gradle-plugin` both depend on
+  `:java-settings`. Plugin now writes the typed `ValidationWarnings`
+  message in `Format.ProtoBinary` instead of a hand-built JSON literal.
+- 2026-05-21 — DSL restructured: warnings block now lives under a nested
+  `java { ... }` block — `validation.java.warnings.unsignedFields` — so
+  future non-Java targets can have their own sub-blocks without crowding
+  the top-level `validation { ... }` namespace.

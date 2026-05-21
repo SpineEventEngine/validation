@@ -26,7 +26,7 @@
 
 syntax = "proto3";
 
-package spine.validation;
+package spine.validation.java;
 
 import "spine/options.proto";
 
@@ -35,7 +35,8 @@ option java_package = "io.spine.tools.validation.settings";
 option java_outer_classname = "ValidationWarningsProto";
 option java_multiple_files = true;
 
-// Per-kind toggles for warnings emitted by the Validation Compiler.
+// Per-kind toggles for warnings emitted by the Java target of
+// the Validation Compiler.
 //
 // The Gradle plugin writes this message to the Compiler settings directory.
 // Each flag is independent and defaults to `true` (warning enabled) on the
@@ -52,9 +53,9 @@ message ValidationWarnings {
     // for `uint32`/`uint64` fields constrained by `(range)`, `(min)`, or
     // `(max)`.
     //
-    // Set to `false` in the Gradle DSL via `validation.warnings.unsignedFields`
-    // to keep the build console clean when unsigned integers are used
-    // intentionally.
+    // Set to `false` in the Gradle DSL via
+    // `validation.java.warnings.unsignedFields` to keep the build console
+    // clean when unsigned integers are used intentionally.
     //
     bool unsigned_fields = 1;
 }

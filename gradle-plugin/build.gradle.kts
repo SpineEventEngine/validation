@@ -89,6 +89,7 @@ dependencies {
     implementation(Compiler.pluginLib)
     implementation(Compiler.gradleApi)
     implementation(ToolBase.jvmTools)
+    implementation(project(":java-settings"))
 }
 
 // Change the `artifactId` to have the `validation-` prefix.
