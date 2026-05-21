@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,8 +53,6 @@ import io.spine.tools.validation.bound.NumericBound.ValueCase.INT32_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.INT64_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.tools.validation.java.expression.IntegerClass
-import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
@@ -67,7 +65,6 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
-import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
 import java.util.concurrent.ConcurrentHashMap
@@ -122,8 +119,8 @@ internal abstract class BoundedFieldGenerator(
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
     private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
-        if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
-            unsignedIntegerWarning(view.file, field.span)
+        if (boundPrimitive == UINT32_VALUE || boundPrimitive == UINT64_VALUE) {
+            unsignedIntegerWarning(view.file, field.span, boundPrimitive)
         }
         return CodeBlock(
             """
@@ -132,7 +129,7 @@ internal abstract class BoundedFieldGenerator(
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), value)};
                 $violations.add(violation);
-            }    
+            }
             """.trimIndent()
         )
     }
@@ -217,27 +214,53 @@ internal abstract class BoundedFieldGenerator(
     }
 }
 
-private fun unsignedIntegerWarning(file: File, span: Span) =
-    UnsignedIntegerWarnings.report(file, span) {
-        Compilation.warning(file, span) {
-            "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
-                    " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
-                    " Operations on unsigned values rely on static utility methods from" +
-                    " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
-                    " when dealing with unsigned values outside of these methods, as Java" +
-                    " treats all primitive integers as signed."
-        }
+private fun unsignedIntegerWarning(
+    file: File,
+    span: Span,
+    boundPrimitive: NumericBound.ValueCase
+) = UnsignedIntegerWarnings.report(file, span) {
+    val javaClass: Class<*> = when (boundPrimitive) {
+        UINT32_VALUE -> Integer::class.java
+        UINT64_VALUE -> java.lang.Long::class.java
+        else -> error(
+            "`unsignedIntegerWarning` called with unsupported bound primitive `$boundPrimitive`."
+        )
     }
+    val unsignedApi = Docs.unsignedApi(javaClass)
+    Compilation.warning(file, span) {
+        "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
+                " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
+                " Operations on unsigned values rely on static utility methods from" +
+                " `${javaClass.name}` ($unsignedApi). Be cautious when dealing with" +
+                " unsigned values outside of these methods, as Java treats all primitive" +
+                " integers as signed."
+    }
+}
 
 @Suppress("MaxLineLength") // Long links.
 private object Docs {
     const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
-    const val UNSIGNED_API =
-        "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
+
+    /**
+     * The Javadoc URL of the unsigned-integer API on the [javaClass]
+     * (either `Integer` or `Long`), pinned to the JDK that runs the code generator.
+     *
+     * The JDK feature version is taken from [Runtime.version], so that the link points
+     * to the same Java version that compiles and runs the validation tools.
+     */
+    fun unsignedApi(javaClass: Class<*>): String {
+        val jdk = Runtime.version().feature()
+        return "https://docs.oracle.com/en/java/javase/" +
+                "$jdk/docs/api/java.base/java/lang/${javaClass.simpleName}.html"
+    }
 }
 
 /**
  * Reports unsigned-integer warnings once per source location.
+ *
+ * The deduplication set is process-wide. Callers MUST invoke [clear] at the start
+ * of every compilation run; otherwise, in a long-running Gradle daemon, the set
+ * carries over between builds and silently suppresses warnings on subsequent runs.
  */
 internal object UnsignedIntegerWarnings {
 
@@ -254,7 +277,12 @@ internal object UnsignedIntegerWarnings {
         }
     }
 
-    @VisibleForTesting
+    /**
+     * Drops all recorded source locations.
+     *
+     * Must be invoked before each compilation pass starts so that daemon-resident
+     * state does not leak between Gradle builds and silently suppress warnings.
+     */
     fun clear() {
         reported.clear()
     }
