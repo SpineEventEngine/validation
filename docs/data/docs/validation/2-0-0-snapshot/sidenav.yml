@@ -78,6 +78,8 @@
           file_path: user/05-custom-validation/pass-to-compiler
         - page: Summary
           file_path: user/05-custom-validation/summary
+    - page: Validation Gradle plugin
+      file_path: user/06-gradle-plugin
 
 - page: Validation developer guide
   key: developer
