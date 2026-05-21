@@ -66,4 +66,32 @@ internal class UnsignedIntegerWarningsSpec {
 
         reports shouldBe 2
     }
+
+    @Test
+    fun `suppress all reports when disabled`() {
+        var reports = 0
+        UnsignedIntegerWarnings.setEnabled(false)
+
+        UnsignedIntegerWarnings.report("location-1") {
+            reports++
+        }
+        UnsignedIntegerWarnings.report("location-2") {
+            reports++
+        }
+
+        reports shouldBe 0
+    }
+
+    @Test
+    fun `reset 'enabled' to true on clear`() {
+        var reports = 0
+        UnsignedIntegerWarnings.setEnabled(false)
+        UnsignedIntegerWarnings.clear()
+
+        UnsignedIntegerWarnings.report("location-1") {
+            reports++
+        }
+
+        reports shouldBe 1
+    }
 }
