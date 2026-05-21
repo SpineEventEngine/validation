@@ -212,6 +212,7 @@ internal abstract class BoundedFieldGenerator(
     }
 }
 
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") // We refer to Java API in this context.
 private fun unsignedIntegerWarning(
     file: File,
     span: Span,
