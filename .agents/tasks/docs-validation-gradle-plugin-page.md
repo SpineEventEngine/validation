@@ -149,25 +149,30 @@ The page is structured as follows. Each H2 maps to one user need.
 
 ## Plan
 
-- [ ] Confirm:
-  - section title (`Validation Gradle plugin` vs. another wording?),
+- [x] Confirm:
+  - section title (`Validation Gradle plugin` vs. another wording?) —
+    using `Validation Gradle plugin` (lean from open questions);
   - whether `06-gradle-plugin/_index.md` (section directory) is preferred
-    over a single `06-gradle-plugin.md` file at the parent level. Default:
+    over a single `06-gradle-plugin.md` file at the parent level — chose
     section directory, matching the existing layout.
-- [ ] Create `docs/content/docs/validation/user/06-gradle-plugin/` with
+- [x] Create `docs/content/docs/validation/user/06-gradle-plugin/` with
       `_index.md` carrying the outline above. Content tied to the
       *current* `ValidationExtension` shape:
-  - includes `enabled` (covered today),
-  - includes `warnings { unsignedFields }` (covered once
-    `warnings-suppression` merges).
-- [ ] Add the forward link from
+  - includes `enabled` (covered today);
+  - includes `warnings { unsignedFields }` — the DSL change itself ships
+    from the sibling [`warnings-suppression`](warnings-suppression.md)
+    branch (`address-issues`); this worktree is docs-only.
+- [x] Add the forward link from
       `01-getting-started/adding-to-build.md` to the new page.
-- [ ] Run the doc preview (Hugo) locally and verify:
+- [x] Add the sidenav entry under `docs/data/docs/validation/2-0-0-snapshot/sidenav.yml`
+      (right after `05-custom-validation`).
+- [x] Run the doc preview (Hugo) locally and verify:
   - the new section appears after *Custom validation*;
   - all relative links resolve;
   - the page renders without shortcode errors.
-- [ ] Apply the `writer` / `review-docs` skills before opening the PR.
-- [ ] Version bump (per `pre-pr`).
+- [x] Apply the `writer` / `review-docs` skills before opening the PR.
+- [ ] ~~Version bump (per `pre-pr`)~~ — not needed on this branch; the
+      `address-issues` branch owns the version bump for the merged change set.
 
 ## Sequencing
 
@@ -204,3 +209,16 @@ PR grows too large, split — but ship the docs page with at least
 ## Log
 
 - 2026-05-21 — drafted, awaiting review
+- 2026-05-21 — created `docs/content/docs/validation/user/06-gradle-plugin/_index.md`
+  with the `enabled` and `warnings { unsignedFields }` sections per the outline;
+  added forward link from `01-getting-started/adding-to-build.md`; added sidenav
+  entry. Hugo preview and `writer`/`review-docs` skill runs remain. This
+  worktree carries the docs-only changes; the DSL/proto/renderer work for
+  `warnings { unsignedFields }` ships from the sibling `address-issues` branch
+  (task `warnings-suppression`). No version bump here — the merged change set
+  on `address-issues` will own it.
+- 2026-05-21 — Hugo preview built cleanly (57 pages, no shortcode errors);
+  `review-docs` skill pass applied: typographic curly quotes around page-/section-
+  title link text on the new page and on the forward link in `adding-to-build.md`;
+  terminology gloss tightened ("so it runs"); trailing whitespace stripped
+  on the `enabled` description. Final Hugo re-build verified clean.
