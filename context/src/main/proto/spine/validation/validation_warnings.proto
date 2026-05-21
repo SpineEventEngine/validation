@@ -1,0 +1,60 @@
+/*
+ * Copyright 2026, TeamDev. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.validation;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.tools.validation.settings";
+option java_outer_classname = "WarningsSettingsProto";
+option java_multiple_files = true;
+
+// Per-kind toggles for warnings emitted by the Validation Compiler.
+//
+// The Gradle plugin writes this message to the Compiler settings directory.
+// Each flag is independent and defaults to `true` (warning enabled) on the
+// DSL side; the Gradle plugin always writes an explicit value, so the
+// renderer never has to distinguish "field absent" from "field set to false".
+//
+// If no settings file is present at all (e.g., the renderer is invoked
+// outside of the Validation Gradle plugin), the renderer treats every flag
+// as enabled — preserving the historical "always warn" behavior.
+//
+message ValidationWarnings {
+
+    // Emit the "unsigned integer types are not supported in Java" warning
+    // for `uint32`/`uint64` fields constrained by `(range)`, `(min)`, or
+    // `(max)`.
+    //
+    // Set to `false` in the Gradle DSL via `validation.warnings.unsignedFields`
+    // to keep the build console clean when unsigned integers are used
+    // intentionally.
+    //
+    bool unsigned_fields = 1;
+}
