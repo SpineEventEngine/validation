@@ -64,7 +64,7 @@ When set to `false`, code generation for validation rules is skipped:
 ```kotlin
 spine {
     validation {
-        enabled = false
+        enabled.set(false)
     }
 }
 ```
@@ -90,7 +90,7 @@ spine {
     validation {
         java {
             warnings {
-                unsignedFields = false
+                unsignedFields.set(false)
             }
         }
     }
