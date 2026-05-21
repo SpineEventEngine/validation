@@ -34,20 +34,6 @@ import org.gradle.api.provider.Property
 /**
  * The extension added to the [RootExtension][io.spine.tools.gradle.root.RootExtension]
  * by the [ValidationGradlePlugin].
- *
- * Configure it under the `spine` block:
- * ```
- * spine {
- *     validation {
- *         enabled = true
- *         java {
- *             warnings {
- *                 unsignedFields = false
- *             }
- *         }
- *     }
- * }
- * ```
  */
 public abstract class ValidationExtension @Inject public constructor(project: Project) {
 
@@ -61,19 +47,6 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
 
     /**
      * Configuration for the Java target of the Validation Compiler.
-     *
-     * Configure via the nested [java] block:
-     * ```
-     * spine {
-     *     validation {
-     *         java {
-     *             warnings {
-     *                 unsignedFields = false
-     *             }
-     *         }
-     *     }
-     * }
-     * ```
      */
     public val java: Java = project.objects.newInstance(Java::class.java)
 
@@ -103,12 +76,12 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
          * Validation Compiler.
          *
          * Configure via the nested [warnings] block:
-         * ```
+         * ```kotlin
          * spine {
          *     validation {
          *         java {
          *             warnings {
-         *                 unsignedFields = false
+         *                 unsignedFields.set(false)
          *             }
          *         }
          *     }
