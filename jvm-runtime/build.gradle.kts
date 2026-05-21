@@ -29,6 +29,7 @@
 import io.spine.dependency.lib.AutoService
 import io.spine.dependency.lib.AutoServiceKsp
 import io.spine.dependency.local.Base
+import io.spine.dependency.local.Spine
 import io.spine.dependency.local.TestLib
 import io.spine.gradle.publish.SpinePublishing
 import io.spine.gradle.publish.StandardJavaPublicationHandler
@@ -61,7 +62,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "io.spine"
+group = Spine.group
 
 dependencies {
     ksp(AutoServiceKsp.processor)

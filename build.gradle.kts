@@ -33,6 +33,7 @@ import io.spine.dependency.local.Base
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
+import io.spine.dependency.local.Spine
 import io.spine.dependency.local.Time
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
@@ -103,7 +104,7 @@ spinePublishing {
 allprojects {
     apply(from = "$rootDir/version.gradle.kts")
     repositories.standardToSpineSdk()
-    group = "io.spine.tools"
+    group = Spine.toolsGroup
     version = extra["validationVersion"]!!
 
     configurations.all {

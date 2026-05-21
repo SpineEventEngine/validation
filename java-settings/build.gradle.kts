@@ -34,8 +34,6 @@ plugins {
     id("maven-publish")
 }
 
-group = Spine.toolsGroup
-
 dependencies {
     api(Base.lib)
 }
