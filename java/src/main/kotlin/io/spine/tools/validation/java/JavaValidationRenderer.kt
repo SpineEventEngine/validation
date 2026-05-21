@@ -37,6 +37,7 @@ import io.spine.tools.compiler.jvm.render.findClass
 import io.spine.tools.compiler.jvm.render.findMessageTypes
 import io.spine.tools.compiler.render.SourceFile
 import io.spine.tools.compiler.render.SourceFileSet
+import io.spine.tools.compiler.settings.loadSettings
 import io.spine.tools.validation.java.generate.MessageValidationCode
 import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.ValidationCodeInjector
@@ -51,6 +52,7 @@ import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
 import io.spine.tools.validation.java.generate.option.bound.UnsignedIntegerWarnings
+import io.spine.tools.validation.settings.ValidationWarnings
 
 /**
  * The main Java renderer of the validation library.
@@ -79,6 +81,7 @@ internal class JavaValidationRenderer(
         // Reset deduplication state so daemon-resident entries from a prior build
         // do not silently suppress warnings emitted by the current render pass.
         UnsignedIntegerWarnings.clear()
+        UnsignedIntegerWarnings.setEnabled(unsignedFieldsWarningEnabled())
 
         findMessageTypes()
             .forEach { message ->
@@ -87,6 +90,22 @@ internal class JavaValidationRenderer(
                 file.render(code)
             }
     }
+
+    /**
+     * Returns whether the "unsigned integer types are not supported in Java"
+     * warning should be emitted in the current compilation.
+     *
+     * The Validation Gradle plugin writes a [ValidationWarnings] settings file
+     * with the user-configured value. If the file is missing (e.g., the
+     * renderer is invoked outside the Gradle plugin), the historical default
+     * — warning on — is preserved.
+     */
+    private fun unsignedFieldsWarningEnabled(): Boolean =
+        if (settingsAvailable()) {
+            loadSettings<ValidationWarnings>().unsignedFields
+        } else {
+            true
+        }
 
     /**
      * Returns code generators for the built-in options.
