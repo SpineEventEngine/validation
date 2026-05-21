@@ -78,9 +78,7 @@ public abstract class ValidationExtension @Inject public constructor(project: Pr
     }
 
     /**
-     * Configures per-kind warning toggles using a Gradle DSL block.
-     *
-     * Equivalent to mutating [warnings] directly.
+     * Configures the [warnings] block by applying [action].
      */
     public fun warnings(action: Action<Warnings>) {
         action.execute(warnings)
