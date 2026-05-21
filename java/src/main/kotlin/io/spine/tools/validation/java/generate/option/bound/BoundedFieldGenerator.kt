@@ -26,7 +26,6 @@
 
 package io.spine.tools.validation.java.generate.option.bound
 
-import io.spine.annotation.VisibleForTesting
 import io.spine.base.FieldPath
 import io.spine.string.Placeholder
 import io.spine.string.camelCase
@@ -67,7 +66,6 @@ import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
@@ -255,37 +253,3 @@ private object Docs {
     }
 }
 
-/**
- * Reports unsigned-integer warnings once per source location.
- *
- * The deduplication set is process-wide. Callers MUST invoke [clear] at the start
- * of every compilation run; otherwise, in a long-running Gradle daemon, the set
- * carries over between builds and silently suppresses warnings on subsequent runs.
- */
-internal object UnsignedIntegerWarnings {
-
-    private val reported = ConcurrentHashMap.newKeySet<String>()
-
-    fun report(file: File, span: Span, warning: () -> Unit) {
-        report(key(file, span), warning)
-    }
-
-    @VisibleForTesting
-    fun report(key: String, warning: () -> Unit) {
-        if (reported.add(key)) {
-            warning()
-        }
-    }
-
-    /**
-     * Drops all recorded source locations.
-     *
-     * Must be invoked before each compilation pass starts so that daemon-resident
-     * state does not leak between Gradle builds and silently suppress warnings.
-     */
-    fun clear() {
-        reported.clear()
-    }
-
-    private fun key(file: File, span: Span): String = "$file:$span"
-}
