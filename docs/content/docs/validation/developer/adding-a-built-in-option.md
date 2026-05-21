@@ -334,6 +334,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
+            .filter { it.subject.type.isSupported() }
             .map { GenerateRequired(it, converter).code() }
 }
 ```
