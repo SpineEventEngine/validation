@@ -84,6 +84,7 @@ spinePublishing {
     modules = setOf(
         "context",
         "java",
+        "java-settings",
         "java-bundle",
         "jvm-runtime",
     )
