@@ -34,13 +34,31 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Reports unsigned-integer warnings once per source location.
  *
- * The deduplication set is process-wide. Callers MUST invoke [clear] at the start
- * of every compilation run; otherwise, in a long-running Gradle daemon, the set
- * carries over between builds and silently suppresses warnings on subsequent runs.
+ * The deduplication set and the [enabled] flag are process-wide. Callers MUST
+ * invoke [clear] at the start of every compilation run; otherwise, in a
+ * long-running Gradle daemon, the set carries over between builds and silently
+ * suppresses warnings on subsequent runs.
+ *
+ * Whether warnings are emitted at all is controlled by [enabled], which the
+ * `JavaValidationRenderer` sets from the `ValidationWarnings` settings written
+ * by the Validation Gradle plugin. When disabled, [report] becomes a no-op.
  */
 internal object UnsignedIntegerWarnings {
 
     private val reported = ConcurrentHashMap.newKeySet<String>()
+
+    @Volatile
+    private var enabled: Boolean = true
+
+    /**
+     * Turns reporting on or off for the current compilation pass.
+     *
+     * Reset to `true` by [clear]; the renderer calls [setEnabled] after [clear]
+     * to apply the user-configured value from `ValidationWarnings.unsignedFields`.
+     */
+    fun setEnabled(enabled: Boolean) {
+        this.enabled = enabled
+    }
 
     fun report(file: File, span: Span, warning: () -> Unit) {
         report(key(file, span), warning)
@@ -48,19 +66,24 @@ internal object UnsignedIntegerWarnings {
 
     @VisibleForTesting
     fun report(key: String, warning: () -> Unit) {
+        if (!enabled) {
+            return
+        }
         if (reported.add(key)) {
             warning()
         }
     }
 
     /**
-     * Drops all recorded source locations.
+     * Drops all recorded source locations and restores the default
+     * "warnings on" state.
      *
      * Must be invoked before each compilation pass starts so that daemon-resident
      * state does not leak between Gradle builds and silently suppress warnings.
      */
     fun clear() {
         reported.clear()
+        enabled = true
     }
 
     private fun key(file: File, span: Span): String = "$file:$span"

@@ -27,9 +27,12 @@
 package io.spine.tools.validation.gradle
 
 import com.google.protobuf.gradle.ProtobufPlugin
+import io.spine.format.Format
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
+import io.spine.tools.compiler.gradle.api.compilerWorkingDir
 import io.spine.tools.compiler.gradle.plugin.Extension
+import io.spine.tools.compiler.params.WorkingDirectory
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
@@ -71,6 +74,7 @@ private fun Project.configureValidation() {
                 val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
                 plugins.set(ordered)
             }
+            writeValidationWarningsSettings()
         }
     }
     // We add the dependency on runtime anyway for the following reasons:
@@ -83,6 +87,36 @@ private fun Project.configureValidation() {
     //
     addDependency("implementation", ValidationSdk.jvmRuntime)
 }
+
+/**
+ * Writes the per-kind warning toggles configured via the `validation.warnings`
+ * DSL block as a settings file for the Spine Compiler renderer that emits
+ * them — `io.spine.tools.validation.java.JavaValidationRenderer`.
+ *
+ * The file is always written (every flag is explicit), so the renderer never
+ * has to distinguish "field absent" from "field set to `false`".
+ */
+private fun Project.writeValidationWarningsSettings() {
+    val warnings = validationExtension.warnings
+    val unsignedFields = warnings.unsignedFields.get()
+    val json = """{"unsignedFields": $unsignedFields}"""
+    val workingDir = WorkingDirectory(compilerWorkingDir.asFile.toPath())
+    workingDir.settingsDirectory.write(
+        VALIDATION_RENDERER_CONSUMER_ID,
+        Format.ProtoJson,
+        json
+    )
+}
+
+/**
+ * Canonical class name of the Spine Compiler renderer that reads
+ * `ValidationWarnings` via `LoadsSettings`.
+ *
+ * Kept as a string literal because the Validation Gradle plugin does not
+ * depend on the `:java` module that hosts the renderer class.
+ */
+private const val VALIDATION_RENDERER_CONSUMER_ID: String =
+    "io.spine.tools.validation.java.JavaValidationRenderer"
 
 /**
  * The extension added by [ValidationGradlePlugin].
