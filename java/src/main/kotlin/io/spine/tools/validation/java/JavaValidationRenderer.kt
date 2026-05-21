@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ import io.spine.tools.validation.java.generate.option.ValidateGenerator
 import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
+import io.spine.tools.validation.java.generate.option.bound.UnsignedIntegerWarnings
 
 /**
  * The main Java renderer of the validation library.
@@ -74,6 +75,10 @@ internal class JavaValidationRenderer(
         if (!sources.hasJavaRoot) {
             return
         }
+
+        // Reset deduplication state so daemon-resident entries from a prior build
+        // do not silently suppress warnings emitted by the current render pass.
+        UnsignedIntegerWarnings.clear()
 
         findMessageTypes()
             .forEach { message ->
