@@ -75,25 +75,15 @@ generation on and off, and keeps the runtime API available — for example, for
 [validators](../04-validators/) registered via `MessageValidator`, which do not
 rely on generated checks.
 
-### `java { ... }`
+### Suppressing warnings
 
-Nested block. Holds configuration specific to the Java target of the Validation
-Compiler — currently the per-kind warning toggles.
+The Validation Compiler currently generates only Java code, so warning
+suppression toggles live under `java.warnings`. Each toggle is positive:
+`true` keeps the warning emitted (the default); `false` silences it.
 
-#### `java.warnings { ... }`
-
-Nested block. Suppresses warnings emitted by the Java target of the Validation
-Compiler on a per-kind basis. Each property is positive: `true` means the
-warning is emitted (the default); set it to `false` to silence the corresponding
-warning.
-
-##### `unsignedFields`
-
-Type: `Property<Boolean>`. Default: `true`.
-
-When `false`, suppresses the *"unsigned integer types are not supported in
-Java"* warning emitted for `uint32` and `uint64` fields that carry `(range)`,
-`(min)`, or `(max)`:
+The only toggle today, `unsignedFields`, controls the *"unsigned integer types
+are not supported in Java"* warning emitted for `uint32` and `uint64` fields
+that carry `(range)`, `(min)`, or `(max)`:
 
 ```kotlin
 spine {
@@ -107,10 +97,9 @@ spine {
 }
 ```
 
-The warning highlights a real Java limitation: `uint32` and `uint64` values are
-stored in signed `int` and `long` fields, so range checks have to handle the
-sign bit explicitly. Turn the warning off only after reading it once and
-accepting the trade-off for the affected fields.
+`uint32` and `uint64` values are stored in signed `int` and `long` fields, so
+range checks have to handle the sign bit explicitly. Turn the warning off only
+after accepting that trade-off for the affected fields.
 
 
 ## What's next
