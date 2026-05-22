@@ -138,3 +138,10 @@ __pycache__/
 
 # Claude working files
 /.claude/worktrees/
+
+# Auto-downloaded Lychee binary used by the `link-check-docs` skill.
+/.agents/skills/link-check-docs/.cache/
+
+# Lychee link-checker cache (created by the `link-check-docs` skill and
+# the `proof-links` workflow when run locally).
+.lycheecache
