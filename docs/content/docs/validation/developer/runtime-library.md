@@ -185,7 +185,7 @@ first failure; it appends to a `List<ConstraintViolation>` and only at the end d
 whether to wrap the list in a `ValidationError`. This is what lets the runtime report
 every problem in one pass.
 
-`TemplateString` (in [`error_message.proto`][error-message-proto]) is the format every
+`TemplateString` (in [`template_string.proto`][tempalte-string-proto]) is the format every
 generator emits and every reader resolves. Substitution happens via
 `TemplateString.format()` (in Kotlin, [`TemplateStringExts.kt`][template-string-exts]) or
 the static `TemplateStrings.format(...)` (in Java). The placeholder names the runtime
@@ -379,11 +379,11 @@ in `:context` and `:java`: anything that *can* be decided at build time *should*
 [validator-registry]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/ValidatorRegistry.kt
 [detected-violation]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/DetectedViolation.kt
 [validation-error-proto]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/proto/spine/validation/validation_error.proto
-[error-message-proto]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/proto/spine/validation/error_message.proto
 [violation-text]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/java/io/spine/validation/ViolationText.java
 [validate-class]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/java/io/spine/validation/Validate.java
 [exception-factory]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/java/io/spine/validation/ExceptionFactory.java
 [message-extensions]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/MessageExtensions.kt
+[template-string-proto]: https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/string/template_string.proto
 [template-string-exts]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TemplateStringExts.kt
 [standard-placeholder]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/StandardPlaceholder.kt
 [timestamp-validator]: https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/kotlin/io/spine/validation/TimestampValidator.kt
