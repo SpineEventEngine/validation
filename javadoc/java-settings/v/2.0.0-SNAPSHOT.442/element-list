@@ -1,0 +1,5 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.tools.validation.settings/ValidationWarnings.Builder///PointingToDeclaration/io/spine/tools/validation/settings/ValidationWarnings.Builder.html
+$dokka.location:io.spine.tools.validation.settings/ValidationWarningsKt.Dsl///PointingToDeclaration/io/spine/tools/validation/settings/ValidationWarningsKt.Dsl.html
+io.spine.tools.validation.settings
