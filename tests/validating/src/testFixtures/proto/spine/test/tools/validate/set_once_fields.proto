@@ -102,7 +102,7 @@ message StudentSetOnceFalse {
 }
 
 // Tests that the constraint works with an external message type imported
-// from a dependency (`google.protobuf.Timestamp`).`
+// from a dependency (`google.protobuf.Timestamp`).
 message Measurement {
     google.protobuf.Timestamp timestamp = 1 [(set_once) = true];
 }
