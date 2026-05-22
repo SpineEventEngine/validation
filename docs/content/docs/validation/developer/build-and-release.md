@@ -47,7 +47,7 @@ through Gradle's `extra` properties:
   end="val validationVersion">
 </embed-code>
 ```kotlin
-val validationVersion by extra("2.0.0-SNAPSHOT.440")
+val validationVersion by extra("2.0.0-SNAPSHOT.443")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
@@ -72,6 +72,7 @@ spinePublishing {
     modules = setOf(
         "context",
         "java",
+        "java-settings",
         "java-bundle",
         "jvm-runtime",
     )

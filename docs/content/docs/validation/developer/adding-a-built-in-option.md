@@ -200,6 +200,7 @@ internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
+        checkFieldIsNotEmpty(field, file)
 
         if (!event.option.boolValue) {
             return ignore()
