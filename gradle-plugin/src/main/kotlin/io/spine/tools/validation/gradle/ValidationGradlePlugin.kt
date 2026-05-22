@@ -27,13 +27,17 @@
 package io.spine.tools.validation.gradle
 
 import com.google.protobuf.gradle.ProtobufPlugin
+import io.spine.format.Format
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
+import io.spine.tools.compiler.gradle.api.compilerWorkingDir
 import io.spine.tools.compiler.gradle.plugin.Extension
+import io.spine.tools.compiler.params.WorkingDirectory
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
 import io.spine.tools.meta.MavenArtifact
+import io.spine.tools.validation.settings.ValidationWarnings
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.kotlin.dsl.apply
@@ -71,6 +75,7 @@ private fun Project.configureValidation() {
                 val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
                 plugins.set(ordered)
             }
+            writeValidationWarningsSettings()
         }
     }
     // We add the dependency on runtime anyway for the following reasons:
@@ -83,6 +88,39 @@ private fun Project.configureValidation() {
     //
     addDependency("implementation", ValidationSdk.jvmRuntime)
 }
+
+/**
+ * Writes the per-kind warning toggles configured via the
+ * `validation.java.warnings` DSL block as a settings file for the Spine
+ * Compiler renderer that emits them —
+ * `io.spine.tools.validation.java.JavaValidationRenderer`.
+ *
+ * The file is always written (every flag is explicit), so the renderer never
+ * has to distinguish "field absent" from "field set to `false`".
+ */
+private fun Project.writeValidationWarningsSettings() {
+    val warnings = validationExtension.java.warnings
+    val message = ValidationWarnings.newBuilder()
+        .setUnsignedFields(warnings.unsignedFields.get())
+        .build()
+    val workingDir = WorkingDirectory(compilerWorkingDir.asFile.toPath())
+    workingDir.settingsDirectory.write(
+        VALIDATION_RENDERER_CONSUMER_ID,
+        Format.ProtoBinary,
+        message.toByteArray()
+    )
+}
+
+/**
+ * Canonical class name of the Spine Compiler renderer that reads
+ * [ValidationWarnings] via `LoadsSettings`.
+ *
+ * Kept as a string literal because the Validation Gradle plugin does not
+ * depend on the `:java` module that hosts the renderer class — only on the
+ * `:java-settings` module that hosts the proto type.
+ */
+private const val VALIDATION_RENDERER_CONSUMER_ID: String =
+    "io.spine.tools.validation.java.JavaValidationRenderer"
 
 /**
  * The extension added by [ValidationGradlePlugin].

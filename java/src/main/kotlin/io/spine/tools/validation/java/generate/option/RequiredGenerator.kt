@@ -55,6 +55,7 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
+import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.tools.validation.option.IF_MISSING
 import io.spine.validation.ConstraintViolation
 import io.spine.string.Placeholder
@@ -78,6 +79,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
         allRequiredFields
             .filter { it.id.type == type }
+            .filter { it.subject.type.isSupported() }
             .map { GenerateRequired(it, converter).code() }
 }
 

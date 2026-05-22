@@ -55,6 +55,7 @@ apply(plugin = "io.spine.core-jvm")
 dependencies {
     api(Compiler.jvm)
     api(project(":context"))
+    api(project(":java-settings"))
     api(project(":jvm-runtime"))
     ksp(AutoServiceKsp.processor)
     compileOnly(AutoService.annotations)

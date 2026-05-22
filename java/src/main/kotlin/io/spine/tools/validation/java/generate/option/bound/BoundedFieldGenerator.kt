@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
 package io.spine.tools.validation.java.generate.option.bound
 
 import io.spine.base.FieldPath
+import io.spine.string.Placeholder
 import io.spine.string.camelCase
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.FieldType
@@ -51,8 +52,6 @@ import io.spine.tools.validation.bound.NumericBound.ValueCase.INT32_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.INT64_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT32_VALUE
 import io.spine.tools.validation.bound.NumericBound.ValueCase.UINT64_VALUE
-import io.spine.tools.validation.java.expression.IntegerClass
-import io.spine.tools.validation.java.expression.LongClass
 import io.spine.tools.validation.java.expression.StringClass
 import io.spine.tools.validation.java.expression.constraintViolation
 import io.spine.tools.validation.java.expression.orElse
@@ -65,10 +64,8 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.java.generate.option.bound.Docs.SCALAR_TYPES
-import io.spine.tools.validation.java.generate.option.bound.Docs.UNSIGNED_API
 import io.spine.type.TypeName
 import io.spine.validation.ConstraintViolation
-import io.spine.string.Placeholder
 
 /**
  * An abstract base for field generators that restrict the range of numeric fields.
@@ -120,11 +117,9 @@ internal abstract class BoundedFieldGenerator(
      * of [ConstraintViolation] and adds it to the [violations] list.
      */
     private fun checkWithinBounds(value: Expression<Number>): CodeBlock {
-        // TODO:2025-05-12:yevhenii.nadtochii: Enable reporting back when we decide upon the format.
-        //  Issue: https://github.com/SpineEventEngine/validation/issues/227.
-        // if (boundPrimitive in listOf(UINT32_VALUE, UINT64_VALUE)) {
-        //     unsignedIntegerWarning(view.file, field.span)
-        // }
+        if (boundPrimitive == UINT32_VALUE || boundPrimitive == UINT64_VALUE) {
+            unsignedIntegerWarning(view.file, field.span, boundPrimitive)
+        }
         return CodeBlock(
             """
             if (${isOutOfBounds(value)}) {
@@ -132,7 +127,7 @@ internal abstract class BoundedFieldGenerator(
                 var typeName =  ${parentName.orElse(declaringType)};
                 var violation = ${violation(ReadVar("fieldPath"), ReadVar("typeName"), value)};
                 $violations.add(violation);
-            }    
+            }
             """.trimIndent()
         )
     }
@@ -217,20 +212,45 @@ internal abstract class BoundedFieldGenerator(
     }
 }
 
-@Suppress("unused") // https://github.com/SpineEventEngine/validation/issues/227
-private fun unsignedIntegerWarning(file: File, span: Span) =
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN") // We refer to Java API in this context.
+private fun unsignedIntegerWarning(
+    file: File,
+    span: Span,
+    boundPrimitive: NumericBound.ValueCase
+) = UnsignedIntegerWarnings.report(file, span) {
+    val javaClass: Class<*> = when (boundPrimitive) {
+        UINT32_VALUE -> Integer::class.java
+        UINT64_VALUE -> java.lang.Long::class.java
+        else -> error(
+            "`unsignedIntegerWarning` called with unsupported bound primitive `$boundPrimitive`."
+        )
+    }
+    val unsignedApi = Docs.unsignedApi(javaClass)
     Compilation.warning(file, span) {
         "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
                 " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
                 " Operations on unsigned values rely on static utility methods from" +
-                " `$IntegerClass` and `$LongClass` classes ($UNSIGNED_API). Be cautious" +
-                " when dealing with unsigned values outside of these methods, as Java" +
-                " treats all primitive integers as signed."
+                " `${javaClass.name}` ($unsignedApi). Be cautious when dealing with" +
+                " unsigned values outside of these methods, as Java treats all primitive" +
+                " integers as signed."
     }
+}
 
 @Suppress("MaxLineLength") // Long links.
 private object Docs {
     const val SCALAR_TYPES = "https://protobuf.dev/programming-guides/proto3/#scalar"
-    const val UNSIGNED_API =
-        "https://www.baeldung.com/java-unsigned-arithmetic#the-unsigned-integer-api"
+
+    /**
+     * The Javadoc URL of the unsigned-integer API on the [javaClass]
+     * (either `Integer` or `Long`), pinned to the JDK that runs the code generator.
+     *
+     * The JDK feature version is taken from [Runtime.version], so that the link points
+     * to the same Java version that compiles and runs the validation tools.
+     */
+    fun unsignedApi(javaClass: Class<*>): String {
+        val jdk = Runtime.version().feature()
+        return "https://docs.oracle.com/en/java/javase/" +
+                "$jdk/docs/api/java.base/java/lang/${javaClass.simpleName}.html"
+    }
 }
+

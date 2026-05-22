@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@
  */
 
 import io.spine.dependency.lib.Protobuf
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.Compiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation
@@ -82,9 +83,13 @@ gradlePlugin {
 dependencies {
     compileOnly(gradleKotlinDsl())
     implementation(Protobuf.GradlePlugin.lib)
+    implementation(Base.format)
+    implementation(Compiler.api)
+    implementation(Compiler.params)
     implementation(Compiler.pluginLib)
     implementation(Compiler.gradleApi)
     implementation(ToolBase.jvmTools)
+    implementation(project(":java-settings"))
 }
 
 // Change the `artifactId` to have the `validation-` prefix.

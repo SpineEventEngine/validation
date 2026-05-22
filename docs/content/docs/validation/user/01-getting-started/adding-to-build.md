@@ -90,7 +90,7 @@ Add the Validation plugin to the build.
 ```kotlin
 plugins {
     module
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.433"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.440"
 }
 ```
 
@@ -123,6 +123,9 @@ plugins {
     id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.065"
 }
 ```
+
+For configuration options exposed by the plugin, see
+“[Validation Gradle plugin](../06-gradle-plugin/)”.
 
 ## Next step
 

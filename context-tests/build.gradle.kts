@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -47,6 +47,12 @@ dependencies {
 
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(Compiler.testlib)
+    // The Java-side renderer (`JavaValidationPlugin`) and its settings
+    // (`ValidationWarnings`) are needed by `UnsignedFieldWarningSpec` to
+    // drive the warning emitted by
+    // `JavaValidationRenderer` -> `BoundedFieldGenerator` end-to-end.
+    testImplementation(project(":java"))
+    testImplementation(project(":java-settings"))
 
     testFixturesImplementation(Compiler.api)
     testFixturesImplementation(Compiler.testlib)
