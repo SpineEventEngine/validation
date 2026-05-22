@@ -1,5 +1,7 @@
 github.com/SpineEventEngine/site-commons v0.0.0-20260507130158-84db050dfe11 h1:NTO0ua9IaaO6xmn9m11i4IJjciPXhxKTW+/pAKTOlZw=
 github.com/SpineEventEngine/site-commons v0.0.0-20260507130158-84db050dfe11/go.mod h1:tkAl4StIREKmz9r5PiJtuDhvwMMkFXKWcaTyxhIikho=
+github.com/SpineEventEngine/site-commons v0.0.0-20260522171914-2a606d89558f h1:yF43XTDNj+w1S0fLA/XhrWMrhAoDpqPB7gmc4mUF/9Q=
+github.com/SpineEventEngine/site-commons v0.0.0-20260522171914-2a606d89558f/go.mod h1:tkAl4StIREKmz9r5PiJtuDhvwMMkFXKWcaTyxhIikho=
 github.com/gohugoio/hugo-mod-bootstrap-scss/v5 v5.20300.20800 h1:j5myhhzYwIHTr5ctK96Elfgp5uRROvrlTzYwwe1nF8o=
 github.com/gohugoio/hugo-mod-bootstrap-scss/v5 v5.20300.20800/go.mod h1:P5GGyhdxi00C5zW7vkRo/IS532gZY/YS2TS395Xaxho=
 github.com/gohugoio/hugo-mod-jslibs-dist/popperjs/v2 v2.21100.20000/go.mod h1:mFberT6ZtcchrsDtfvJM7aAH2bDKLdOnruUHl0hlapI=
