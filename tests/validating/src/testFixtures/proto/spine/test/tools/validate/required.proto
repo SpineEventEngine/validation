@@ -35,7 +35,6 @@ option java_package = "io.spine.test.tools.validate";
 option java_outer_classname = "RequiredProto";
 option java_multiple_files = true;
 
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
 message Singulars {
@@ -58,11 +57,6 @@ message Collections {
     map<string, string> contains_a_non_empty_string_value = 3 [(required) = true];
 
     repeated UltimateChoice at_least_one_piece_of_meat = 4 [(required) = true];
-}
-
-message AlwaysInvalid {
-
-    google.protobuf.Empty impossible = 1 [(required) = true];
 }
 
 message MapWithMessageValues {

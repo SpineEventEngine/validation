@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ syntax = "proto3";
 
 package spine.validation.stubs;
 
+import "google/protobuf/empty.proto";
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
@@ -67,4 +68,22 @@ message IfMissingWithInvalidPlaceholders {
 // Applies `(if_missing)` without the `(required)` option.
 message IfMissingWithoutRequired {
     string value = 1 [(if_missing).error_msg = "The `value` must be set."];
+}
+
+// Provides a singular `google.protobuf.Empty` field with the inapplicable
+// `(required)` option.
+message RequiredEmptyField {
+    google.protobuf.Empty value = 1 [(.required) = true];
+}
+
+// Provides a `repeated google.protobuf.Empty` field with the inapplicable
+// `(required)` option.
+message RequiredRepeatedEmpty {
+    repeated google.protobuf.Empty value = 1 [(.required) = true];
+}
+
+// Provides a `map<_, google.protobuf.Empty>` field with the inapplicable
+// `(required)` option.
+message RequiredMapWithEmptyValue {
+    map<string, google.protobuf.Empty> value = 1 [(.required) = true];
 }

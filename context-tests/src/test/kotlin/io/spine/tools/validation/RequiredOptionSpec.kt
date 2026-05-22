@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,14 @@ import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.protobuf.field
 import io.spine.tools.validation.given.RequiredBoolField
 import io.spine.tools.validation.given.RequiredDoubleField
+import io.spine.tools.validation.given.RequiredEmptyField
 import io.spine.tools.validation.given.RequiredIntField
+import io.spine.tools.validation.given.RequiredMapWithEmptyValue
+import io.spine.tools.validation.given.RequiredRepeatedEmpty
 import io.spine.tools.validation.given.RequiredSignedInt
 import io.spine.tools.validation.option.REQUIRED
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @DisplayName("`RequiredReaction` should")
@@ -73,8 +77,40 @@ internal class RequiredReactionSpec : CompilationErrorTest() {
         val field = message.field("temperature")
         error.message shouldContain unsupportedFieldType(field)
     }
+
+    @Nested inner class
+    `reject option on 'google_protobuf_Empty' fields` {
+
+        @Test
+        fun `when singular`() {
+            val message = RequiredEmptyField.getDescriptor()
+            val error = assertCompilationFails(message)
+            val field = message.field("value")
+            error.message shouldContain rejectsEmpty(field)
+        }
+
+        @Test
+        fun `when 'repeated'`() {
+            val message = RequiredRepeatedEmpty.getDescriptor()
+            val error = assertCompilationFails(message)
+            val field = message.field("value")
+            error.message shouldContain rejectsEmpty(field)
+        }
+
+        @Test
+        fun `when used as a 'map' value`() {
+            val message = RequiredMapWithEmptyValue.getDescriptor()
+            val error = assertCompilationFails(message)
+            val field = message.field("value")
+            error.message shouldContain rejectsEmpty(field)
+        }
+    }
 }
 
 private fun unsupportedFieldType(field: Field) =
     "The field type `${field.type.name}` of the `${field.qualifiedName}` is not supported" +
             " by the `($REQUIRED)` option."
+
+private fun rejectsEmpty(field: Field) =
+    "The field `${field.qualifiedName}` of type `${field.type.name}` cannot be marked" +
+            " as `($REQUIRED)` because `google.protobuf.Empty` has no fields"

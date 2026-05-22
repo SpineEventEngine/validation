@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@
 package io.spine.test.options.required
 
 import com.google.protobuf.ByteString
-import com.google.protobuf.Empty
 import io.spine.base.Identifier
-import io.spine.test.tools.validate.AlwaysInvalid
 import io.spine.test.tools.validate.Enclosed
 import io.spine.test.tools.validate.Singulars
 import io.spine.test.tools.validate.UltimateChoice
@@ -55,24 +53,5 @@ internal class RequiredMessageITest {
             .setNotDefault(Enclosed.newBuilder().setValue(Identifier.newUuid()))
             .setNotEmptyString(" ")
         assertValid(singulars)
-    }
-
-    /**
-     * This function tests that the validation fails on the option applied
-     * to the field with the type [Empty].
-     *
-     * We should do more and
-     * [raise compile-time error](https://github.com/SpineEventEngine/validation/issues/146).
-     */
-    @Test
-    fun `not be applied to the type 'Empty'`() {
-        val fieldName = "impossible"
-
-        val unset = AlwaysInvalid.newBuilder()
-        assertViolation(unset, fieldName)
-
-        val set = AlwaysInvalid.newBuilder()
-            .setImpossible(Empty.getDefaultInstance())
-        assertViolation(set, fieldName)
     }
 }

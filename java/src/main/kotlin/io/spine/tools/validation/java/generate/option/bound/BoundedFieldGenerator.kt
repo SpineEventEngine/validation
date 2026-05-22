@@ -227,12 +227,14 @@ private fun unsignedIntegerWarning(
     }
     val unsignedApi = Docs.unsignedApi(javaClass)
     Compilation.warning(file, span) {
-        "Unsigned integer types are not supported in Java. The Protobuf compiler uses" +
-                " signed integers to represent unsigned types in Java ($SCALAR_TYPES)." +
-                " Operations on unsigned values rely on static utility methods from" +
-                " `${javaClass.name}` ($unsignedApi). Be cautious when dealing with" +
-                " unsigned values outside of these methods, as Java treats all primitive" +
-                " integers as signed."
+        """
+        Unsigned integer types are not supported in Java.
+        The Protobuf compiler uses signed integers to represent unsigned types in Java.
+        See: $SCALAR_TYPES
+        Operations on unsigned values rely on static utility methods from `${javaClass.name}`.
+        See: $unsignedApi
+        Be cautious when dealing with unsigned values outside of these methods, as Java treats all primitive integers as signed.
+        """.trimIndent()
     }
 }
 

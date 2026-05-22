@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@
 package io.spine.test.options.setonce
 
 import com.google.protobuf.ByteString
+import com.google.protobuf.Timestamp
+import com.google.protobuf.util.Timestamps
 import io.spine.test.tools.validate.Name
 import io.spine.test.tools.validate.YearOfStudy
 import io.spine.test.tools.validate.name
@@ -49,6 +51,9 @@ object SetOnceTestEnv {
 
     val JACK: Name = name { value = "Jack" }
     val DONALD: Name = name { value = "Donald" }
+
+    val BIRTHDAY1: Timestamp = Timestamps.fromSeconds(1_000_000_000L)
+    val BIRTHDAY2: Timestamp = Timestamps.fromSeconds(1_700_000_000L)
 
     const val SHORT_HEIGHT: Double = 1.55
     const val TALL_HEIGHT: Double = 1.88
