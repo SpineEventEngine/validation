@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ValidationExtension 2.0.0-SNAPSHOT.440 API </title>
+    <title>Java 2.0.0-SNAPSHOT.440 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">io.spine.tools.validation.gradle</a></div>
-        <h2 title="Class ValidationExtension" class="title">Class ValidationExtension</h2>
+        <h2 title="Class ValidationExtension.Java" class="title">Class ValidationExtension.Java</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,10 +114,10 @@ var pathtoroot = "../../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public abstract class <span class="typeNameLabel"><a href=ValidationExtension.html>ValidationExtension</a></span>
+public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Java.html>ValidationExtension.Java</a></span>
 
                     </pre>
-                    <div class="block"><p>The extension added to the RootExtension by the <a href=ValidationGradlePlugin.html>ValidationGradlePlugin</a>.</p></div>
+                    <div class="block"><p>Configuration for the Java target of the Validation Compiler.</p><p>Holds per-target settings consumed by the <code>io.spine.tools.validation.java.JavaValidationRenderer</code>.</p></div>
 
                     <dl>
 
@@ -151,9 +151,9 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                                         
                                         <tr class="altColor">
                                             <td class="colFirst"><code>public abstract class</code></td>
-                                            <th class="colSecond" scope="row"><code><a href="ValidationExtension.Java.html">ValidationExtension.Java</a></span></code>
+                                            <th class="colSecond" scope="row"><code><a href="ValidationExtension.Java.Warnings.html">ValidationExtension.Java.Warnings</a></span></code>
                                             </th>
-                                            <td class="colLast"><p>Configuration for the Java target of the Validation Compiler.</p><p>Holds per-target settings consumed by the <code>io.spine.tools.validation.java.JavaValidationRenderer</code>.</p></td>
+                                            <td class="colLast"><p>Holds the per-kind warning toggles for the Java target of the Validation Compiler.</p><p>Each property defaults to <code>true</code> — the warning is emitted. Set a property to <code>false</code> to suppress the warning in the build output without disabling validation itself.</p><p>The Validation Gradle plugin always writes these values to the Spine Compiler settings directory, so the renderer never has to distinguish &quot;field absent&quot; from &quot;field set to <code>false</code>&quot;.</p></td>
                                         </tr>
                                         
                                     </table>
@@ -180,20 +180,8 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>public final static <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html>String</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#NAME>NAME</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt;</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#enabled>enabled</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=ValidationExtension.Java.html>ValidationExtension.Java</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#java>java</a></code></th>
+                                            <td class="colFirst"><code>private final <a href=ValidationExtension.Java.Warnings.html>ValidationExtension.Java.Warnings</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#warnings>warnings</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -223,7 +211,7 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ValidationExtension(org.gradle.api.model.ObjectFactory)">ValidationExtension</a></span>(ObjectFactory objects)</code></th>
+                                                        href="#ValidationExtension.Java(org.gradle.api.model.ObjectFactory)">ValidationExtension.Java</a></span>(ObjectFactory objects)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -277,27 +265,19 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt;</code>
+                                            <td class="colFirst"><code>final <a href=ValidationExtension.Java.Warnings.html>ValidationExtension.Java.Warnings</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#getEnabled()>getEnabled</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#getWarnings()>getWarnings</a>() </code>
                                             </th>
-                                            <td class="colLast">Tells if Validation compiler is enabled in the project.</td>
+                                            <td class="colLast">Per-kind toggles for warnings emitted by the Java target of the Validation Compiler.</td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=ValidationExtension.Java.html>ValidationExtension.Java</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#getJava()>getJava</a>() </code>
-                                            </th>
-                                            <td class="colLast">Configuration for the Java target of the Validation Compiler.</td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.html#java(org.gradle.api.Action)>java</a>(Action&lt;<a href=ValidationExtension.Java.html>ValidationExtension.Java</a>&gt; action) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#warnings(org.gradle.api.Action)>warnings</a>(Action&lt;<a href=ValidationExtension.Java.Warnings.html>ValidationExtension.Java.Warnings</a>&gt; action) </code>
                                             </th>
-                                            <td class="colLast">Configures the Java target of the Validation Compiler using a Gradle DSL block.</td>
+                                            <td class="colLast">Configures per-kind warning toggles using a Gradle DSL block.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -331,11 +311,11 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="ValidationExtension(org.gradle.api.model.ObjectFactory)"></a>
+                                <a name="ValidationExtension.Java(org.gradle.api.model.ObjectFactory)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>ValidationExtension</h4>
-                                        <pre>ValidationExtension(ObjectFactory objects)</pre>
+                                        <h4>ValidationExtension.Java</h4>
+                                        <pre>ValidationExtension.Java(ObjectFactory objects)</pre>
                                         <div class="block"></div>
                                         
                                     </li>
@@ -354,16 +334,24 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getEnabled()">
+                                <a id="getWarnings()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getEnabled</h4>
-                                        <pre class="methodSignature"> final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt; <a href=ValidationExtension.html#getEnabled()>getEnabled</a>()</pre>
-                                        <div class="block"><p>Tells if Validation compiler is enabled in the project.</p><p>Defaults to <code>true</code>. Set to <code>false</code> to disable validation code generation for this project, while keeping the runtime dependency.</p></div>
+                                        <h4>getWarnings</h4>
+                                        <pre class="methodSignature"> final <a href=ValidationExtension.Java.Warnings.html>ValidationExtension.Java.Warnings</a> <a href=ValidationExtension.Java.html#getWarnings()>getWarnings</a>()</pre>
+                                        <div class="block"><p>Per-kind toggles for warnings emitted by the Java target of the Validation Compiler.</p><p>Configure via the nested <a href=ValidationExtension.Java.html#warnings>warnings</a> block:</p><pre><code>spine {
+    validation {
+        java {
+            warnings {
+                unsignedFields.set(false)
+            }
+        }
+    }
+}</code></pre></div>
 
                                         <dl>
 
@@ -377,39 +365,16 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.ht
                                     </li>
                                 </ul>
                                 
-                                <a id="getJava()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getJava</h4>
-                                        <pre class="methodSignature"> final <a href=ValidationExtension.Java.html>ValidationExtension.Java</a> <a href=ValidationExtension.html#getJava()>getJava</a>()</pre>
-                                        <div class="block"><p>Configuration for the Java target of the Validation Compiler.</p></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="java(org.gradle.api.Action)">
+                                <a id="warnings(org.gradle.api.Action)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>java</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html>Unit</a> <a href=ValidationExtension.html#java(org.gradle.api.Action)>java</a>(Action&lt;<a href=ValidationExtension.Java.html>ValidationExtension.Java</a>&gt; action)</pre>
-                                        <div class="block"><p>Configures the Java target of the Validation Compiler using a Gradle DSL block.</p><p>Equivalent to mutating java directly.</p></div>
+                                        <h4>warnings</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html>Unit</a> <a href=ValidationExtension.Java.html#warnings(org.gradle.api.Action)>warnings</a>(Action&lt;<a href=ValidationExtension.Java.Warnings.html>ValidationExtension.Java.Warnings</a>&gt; action)</pre>
+                                        <div class="block"><p>Configures per-kind warning toggles using a Gradle DSL block.</p><p>Equivalent to mutating <a href=ValidationExtension.Java.html#warnings(org.gradle.api.Action)>warnings</a> directly.</p></div>
 
                                         <dl>
 
