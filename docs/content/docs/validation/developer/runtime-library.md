@@ -185,7 +185,7 @@ first failure; it appends to a `List<ConstraintViolation>` and only at the end d
 whether to wrap the list in a `ValidationError`. This is what lets the runtime report
 every problem in one pass.
 
-`TemplateString` (in [`template_string.proto`][tempalte-string-proto]) is the format every
+`TemplateString` (in [`template_string.proto`][template-string-proto]) is the format every
 generator emits and every reader resolves. Substitution happens via
 `TemplateString.format()` (in Kotlin, [`TemplateStringExts.kt`][template-string-exts]) or
 the static `TemplateStrings.format(...)` (in Java). The placeholder names the runtime
