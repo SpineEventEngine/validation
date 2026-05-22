@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +42,13 @@ import io.spine.server.tuple.EitherOf2
 import io.spine.tools.compiler.Compilation
 import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.FieldRef
+import io.spine.tools.compiler.ast.FieldType
 import io.spine.tools.compiler.ast.File
+import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.ast.boolValue
 import io.spine.tools.compiler.ast.event.FieldOptionDiscovered
+import io.spine.tools.compiler.ast.isList
+import io.spine.tools.compiler.ast.isMap
 import io.spine.tools.compiler.ast.name
 import io.spine.tools.compiler.ast.qualifiedName
 import io.spine.tools.compiler.ast.ref
@@ -75,11 +79,13 @@ import io.spine.validation.StandardPlaceholder.PARENT_TYPE
  * [RequiredFieldDiscovered] event if the following conditions are met:
  *
  * 1. The field type is supported by the option.
- * 2. The option value is `true`.
+ * 2. The field type is not `google.protobuf.Empty`, nor a `repeated` of `Empty`,
+ *    nor a `map` with `Empty` values.
+ * 3. The option value is `true`.
  *
- * If (1) is violated, the reaction reports a compilation error.
+ * If (1) or (2) is violated, the reaction reports a compilation error.
  *
- * Violation of (2) means that the `(required)` option is applied correctly,
+ * Violation of (3) means that the `(required)` option is applied correctly,
  * but effectively disabled. [RequiredFieldDiscovered] is not emitted for
  * disabled options. In this case, the reaction emits [NoReaction] meaning
  * that the option is ignored.
@@ -98,6 +104,7 @@ internal class RequiredReaction : Reaction<FieldOptionDiscovered>() {
         val field = event.subject
         val file = event.file
         checkFieldType(field, file)
+        checkFieldIsNotEmpty(field, file)
 
         if (!event.option.boolValue) {
             return ignore()
@@ -152,6 +159,27 @@ private fun checkFieldType(field: Field, file: File) =
                 " by the `($REQUIRED)` option. Supported field types: messages, enums," +
                 " strings, bytes, repeated, and maps."
     }
+
+private fun checkFieldIsNotEmpty(field: Field, file: File) =
+    Compilation.check(!field.type.refersToEmpty(), file, field.span) {
+        "The field `${field.qualifiedName}` of type `${field.type.name}` cannot be marked" +
+                " as `($REQUIRED)` because `google.protobuf.Empty` has no fields and its" +
+                " instances are always equal to the default value."
+    }
+
+/**
+ * Tells if this [FieldType] is `google.protobuf.Empty`, a `repeated` of `Empty`,
+ * or a `map` with `Empty` values.
+ */
+private fun FieldType.refersToEmpty(): Boolean = when {
+    isMessage -> message.isProtobufEmpty
+    isList -> list.isMessage && list.message.isProtobufEmpty
+    isMap -> map.valueType.isMessage && map.valueType.message.isProtobufEmpty
+    else -> false
+}
+
+private val TypeName.isProtobufEmpty: Boolean
+    get() = packageName == "google.protobuf" && simpleName == "Empty"
 
 private val SUPPORTED_PLACEHOLDERS = setOf(
     FIELD_PATH.value,
