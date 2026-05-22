@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 syntax = "proto3";
 
 package spine.test.tools.validate;
@@ -35,6 +36,7 @@ option java_outer_classname = "SetOnceFieldsProto";
 option java_multiple_files = true;
 
 import "spine/test/tools/validate/set_once_values.proto";
+import "google/protobuf/timestamp.proto";
 
 // Tests that the constraint works with all supported field types.
 message StudentSetOnce {
@@ -97,4 +99,10 @@ message StudentSetOnceFalse {
     bool has_medals = 15 [(set_once) = false];
     bytes signature = 16 [(set_once) = false];
     YearOfStudy year_of_study = 17 [(set_once) = false];
+}
+
+// Tests that the constraint works with an external message type imported
+// from a dependency (`google.protobuf.Timestamp`).`
+message Measurement {
+    google.protobuf.Timestamp timestamp = 1 [(set_once) = true];
 }

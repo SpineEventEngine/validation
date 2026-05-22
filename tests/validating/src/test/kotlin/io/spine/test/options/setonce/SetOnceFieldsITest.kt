@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@
 package io.spine.test.options.setonce
 
 import com.google.protobuf.ByteString.copyFromUtf8
+import io.spine.test.options.setonce.SetOnceTestEnv.BIRTHDAY1
+import io.spine.test.options.setonce.SetOnceTestEnv.BIRTHDAY2
 import io.spine.test.options.setonce.SetOnceTestEnv.DONALD
 import io.spine.test.options.setonce.SetOnceTestEnv.EIGHTY_KG
 import io.spine.test.options.setonce.SetOnceTestEnv.FIFTY_KG
@@ -41,7 +43,9 @@ import io.spine.test.options.setonce.SetOnceTestEnv.STUDENT1
 import io.spine.test.options.setonce.SetOnceTestEnv.STUDENT2
 import io.spine.test.options.setonce.SetOnceTestEnv.THIRD_YEAR
 import io.spine.test.options.setonce.SetOnceTestEnv.YES
+import io.spine.test.tools.validate.Measurement
 import io.spine.test.tools.validate.StudentSetOnce
+import io.spine.test.tools.validate.measurement
 import io.spine.test.tools.validate.studentSetOnce
 import io.spine.tools.validation.assertions.assertValidationFails
 import io.spine.tools.validation.assertions.assertValidationPasses
@@ -659,6 +663,119 @@ internal class SetOnceFieldsITest {
                 .build()
         }
     }
+
+    /**
+     * Tests `(set_once)` constraint when the field type is an external message
+     * imported from a dependency, e.g. `google.protobuf.Timestamp`.
+     */
+    @Nested inner class
+    `prohibit overriding non-default external message` {
+
+        private val measurementBefore = measurement { timestamp = BIRTHDAY1 }
+        private val measurementAfter = measurement { timestamp = BIRTHDAY2 }
+
+        @Test
+        fun `by value`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .setTimestamp(BIRTHDAY2)
+        }
+
+        @Test
+        fun `by builder`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .setTimestamp(BIRTHDAY2.toBuilder())
+        }
+
+        @Test
+        fun `by reflection`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .setField(measurementField("timestamp"), BIRTHDAY2)
+        }
+
+        @Test
+        fun `by field merge`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .mergeTimestamp(BIRTHDAY2)
+        }
+
+        @Test
+        fun `by message merge`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .mergeFrom(measurementAfter)
+        }
+
+        @Test
+        fun `by bytes merge`() = assertValidationFails {
+            measurementBefore.toBuilder()
+                .mergeFrom(measurementAfter.toByteArray())
+        }
+    }
+
+    @Nested inner class
+    `allow overriding default and same-value external 'Timestamp'` {
+
+        private val emptyMeasurement = measurement {  }
+        private val measurementAfter = measurement { timestamp = BIRTHDAY2 }
+
+        @Test
+        fun `by value`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .setTimestamp(BIRTHDAY2)
+                .setTimestamp(BIRTHDAY2)
+                .build()
+        }
+
+        @Test
+        fun `by builder`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .setTimestamp(BIRTHDAY2.toBuilder())
+                .setTimestamp(BIRTHDAY2.toBuilder())
+                .build()
+        }
+
+        @Test
+        fun `by reflection`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .setField(measurementField("timestamp"), BIRTHDAY2)
+                .setField(measurementField("timestamp"), BIRTHDAY2)
+                .build()
+        }
+
+        @Test
+        fun `by field merge`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .mergeTimestamp(BIRTHDAY2)
+                .mergeTimestamp(BIRTHDAY2)
+                .build()
+        }
+
+        @Test
+        fun `by message merge`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .mergeFrom(measurementAfter)
+                .mergeFrom(measurementAfter)
+                .build()
+        }
+
+        @Test
+        fun `by bytes merge`() = assertValidationPasses {
+            emptyMeasurement.toBuilder()
+                .mergeFrom(measurementAfter.toByteArray())
+                .mergeFrom(measurementAfter.toByteArray())
+                .build()
+        }
+
+        @Test
+        fun `after clearing`() = assertValidationPasses {
+            measurementAfter.toBuilder()
+                .clearTimestamp()
+                .setTimestamp(BIRTHDAY2)
+                .build()
+        }
+    }
 }
 
 private fun field(fieldName: String) = StudentSetOnce.getDescriptor().findFieldByName(fieldName)
+
+private fun measurementField(fieldName: String) =
+    Measurement.getDescriptor().findFieldByName(fieldName)
