@@ -138,7 +138,7 @@ are:
 - [`validation_error.proto`](https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/proto/spine/validation/validation_error.proto)
   — defines `ValidationError` and `ConstraintViolation`, the structured shape of violation
   reports.
-- [`error_message.proto`](https://github.com/SpineEventEngine/validation/blob/master/jvm-runtime/src/main/proto/spine/validation/error_message.proto)
+- [`template_string.proto`](https://github.com/SpineEventEngine/base-libraries/blob/master/base/src/main/proto/spine/string/template_string.proto)
   — defines `TemplateString`, the placeholder format used by error messages.
 
 The runtime library does not parse `.proto` files, does not maintain a rule registry, and
