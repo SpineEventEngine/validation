@@ -62,7 +62,7 @@ repo.
   Lychee glob `'docs/public/**/*.html'`; `paths:` filter on `pull_request`
   for `['docs/**', '.github/workflows/check-links.yml', 'lychee.toml']`.
 - [ ] Preserve pinned versions: `HUGO_VERSION=0.161.1`,
-  `LYCHEE_VERSION_TAG=v0.15.1`. Preserve both caches.
+  `LYCHEE_VERSION_TAG=lychee-v0.24.2`. Preserve both caches.
 
 ### 4. Create `check-links` skill
 
