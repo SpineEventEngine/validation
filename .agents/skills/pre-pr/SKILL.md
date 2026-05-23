@@ -61,9 +61,9 @@ Execute the steps in order. If a step fails, stop, write a `FAIL` sentinel
   - **proto** — any `*.proto` file changed.
   - **code** — any `*.kt`, `*.kts`, or `*.java` file changed.
   - **docs** — any `*.md` file or doc-only edits inside sources changed.
-  - **site** — any file under `docs/**` changed (independent of **docs**;
-    triggers the Hugo link check; pure `README.md` edits or KDoc-only
-    changes do *not* count as **site**).
+  - **site** — any file under `docs/**` changed, or `lychee.toml` changed
+    (independent of **docs**; triggers the Hugo link check; pure `README.md`
+    edits or KDoc-only changes do *not* count as **site**).
   - **deps** — any file under `buildSrc/src/main/kotlin/io/spine/dependency/`
     changed.
 

@@ -7,7 +7,7 @@ description: >
   grouped by source Markdown page. Use locally before pushing changes that
   touch `docs/**`, when CI's `Check Links` job fails, or whenever the user
   asks to "check doc links". Read-only with respect to the project sources.
-  Does **not** cover Javadoc/KDoc — a separate skill will handle that.
+  Does **not** cover Javadoc/KDoc (out of scope for this skill).
 ---
 
 # Check links in the Hugo docs (repo-specific)
@@ -60,7 +60,7 @@ The skill needs four binaries:
 | Tool   | Purpose                                  | Install hint                  |
 |--------|------------------------------------------|-------------------------------|
 | Hugo   | Build and serve the site                 | `brew install hugo` (extended)|
-| Node   | Hugo theme dependencies (`npm install`)  | `brew install node`           |
+| Node   | Hugo theme dependencies (`npm ci`)       | `brew install node`           |
 | npm    | Same                                     | bundled with Node             |
 | Lychee | Link checker                             | `brew install lychee`         |
 
@@ -82,7 +82,8 @@ sentinel (step 8), and report the failure with the next action.
 
 Run `git diff <base>...HEAD --name-only` (default `<base>` = `master` unless
 the user provides another). If the change set has **no** files under `docs/**`
-and the user did not explicitly ask, decline and exit cleanly.
+and no changes to `lychee.toml`, and the user did not explicitly ask, decline
+and exit cleanly.
 
 ### 2. Preflight binaries
 
