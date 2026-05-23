@@ -12,7 +12,7 @@ The Spine `validation` repo's Hugo site under `docs/` accumulates link rot
 silently. A concrete example: `docs/content/docs/validation/developer/runtime-library.md`
 references `error_message.proto` at a path that no longer exists in this repo —
 the `TemplateString` type it describes actually lives in the sibling
-`SpineEventEngine/base` repo. The same broken reference appears in
+`SpineEventEngine/base-libraries` repo. The same broken reference appears in
 `architecture.md`. We need both a local pre-push check and a CI gate, mirroring
 the well-tested setup in the sibling `spine.io` repo
 (`/Users/sanders/Projects/Spine/spine.io/lychee.toml`,
@@ -41,7 +41,7 @@ repo.
 - [ ] Verify the canonical GitHub URL for `template_string.proto` by browsing
   `https://github.com/SpineEventEngine/base-libraries/tree/master/src/main/proto/spine/string/`.
 - [ ] In `runtime-library.md`: update the `[error-message-proto]` reference
-  definition to point at the `SpineEventEngine/base` URL. Rename the
+  definition to point at the `SpineEventEngine/base-libraries` URL. Rename the
   reference id to `[template-string-proto]` and the prose mention from
   "`error_message.proto`" to "`template_string.proto`".
 - [ ] In `architecture.md`: same fix.
@@ -59,17 +59,17 @@ repo.
 - [ ] Create `.github/workflows/check-links.yml`, adapted from
   `/Users/sanders/Projects/Spine/spine.io/.github/workflows/check-links.yml`.
 - [ ] Diffs vs. source: `working-directory` → `docs`/`docs/_preview`;
-  Lychee glob `'docs/public/**/*.html'`; `paths:` filter on `pull_request`
+  Lychee glob `'docs/_preview/public/**/*.html'`; `paths:` filter on `pull_request`
   for `['docs/**', '.github/workflows/check-links.yml', 'lychee.toml']`.
 - [ ] Preserve pinned versions: `HUGO_VERSION=0.161.1`,
-  `LYCHEE_VERSION_TAG=v0.15.1`. Preserve both caches.
+  `LYCHEE_VERSION_TAG=lychee-v0.24.2`. Preserve both caches.
 
 ### 4. Create `check-links` skill
 
 - [ ] New file: `.agents/skills/check-links/SKILL.md`.
 - [ ] Procedure: scope check → preflight binaries (Lychee prefer-installed,
   fallback to download) → install deps → Hugo build → Hugo serve on port
-  1414 → Lychee against `docs/public/**/*.html` → tear down → report grouped
+  1414 → Lychee against `docs/_preview/public/**/*.html` → tear down → report grouped
   by source `.md` → sentinel `.git/check-links.ok` on PASS.
 
 ### 5. Wire into `pre-pr` skill
