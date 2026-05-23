@@ -90,7 +90,7 @@ and exit cleanly.
 - `hugo version` → must succeed; capture the version. If missing, stop with
   Must-fix: "Install Hugo extended (`brew install hugo`)." If installed but
   older than the workflow's `HUGO_VERSION` (parse with
-  `grep -E '^\s+HUGO_VERSION:' .github/workflows/check-links.yml | sed -E 's/.*: *"?([^"]+)"?$/\1/'`), warn but
+  `grep -E '^[[:space:]]+HUGO_VERSION:' .github/workflows/check-links.yml | sed -E 's/.*: *"?([^"]+)"?$/\1/'`), warn but
   continue.
 - `node -v` and `npm -v` → must succeed. If missing, stop with Must-fix:
   "Install Node (`brew install node`) at the major version pinned by
@@ -101,7 +101,7 @@ and exit cleanly.
      from CI:
      ```bash
      LYCHEE_VERSION_TAG=$(
-       grep -E '^\s+LYCHEE_VERSION_TAG:' .github/workflows/check-links.yml \
+       grep -E '^[[:space:]]+LYCHEE_VERSION_TAG:' .github/workflows/check-links.yml \
          | sed -E 's/.*: *"?([^"]+)"?$/\1/'
      )
      ```
