@@ -25,8 +25,9 @@ repo.
 
 ## Decisions (approved 2026-05-22)
 
-- **Lychee binary** — prefer installed, fall back to auto-download pinned
-  `v0.15.1` into `.agents/skills/check-links/.cache/lychee/`.
+- **Lychee binary** — prefer installed, fall back to auto-download the version
+  pinned by `LYCHEE_VERSION_TAG` in `check-links.yml` into
+  `.agents/skills/check-links/.cache/lychee/`.
 - **`pre-pr` wiring** — yes, wire it in.
 - **Hugo server port** — 1414 (avoid clashing with developer's default 1313).
 
@@ -38,7 +39,7 @@ repo.
   `docs/content/docs/validation/developer/runtime-library.md`,
   `docs/content/docs/validation/developer/architecture.md`.
 - [ ] Verify the canonical GitHub URL for `template_string.proto` by browsing
-  `https://github.com/SpineEventEngine/base/tree/master/src/main/proto/spine/string/`.
+  `https://github.com/SpineEventEngine/base-libraries/tree/master/src/main/proto/spine/string/`.
 - [ ] In `runtime-library.md`: update the `[error-message-proto]` reference
   definition to point at the `SpineEventEngine/base` URL. Rename the
   reference id to `[template-string-proto]` and the prose mention from

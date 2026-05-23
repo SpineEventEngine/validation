@@ -93,7 +93,8 @@ and exit cleanly.
   `grep -E '^\s+HUGO_VERSION:' .github/workflows/check-links.yml | sed -E 's/.*: *"?([^"]+)"?$/\1/'`), warn but
   continue.
 - `node -v` and `npm -v` → must succeed. If missing, stop with Must-fix:
-  "Install Node 20+ (`brew install node`)."
+  "Install Node (`brew install node`) at the major version pinned by
+  `node-version:` in `.github/workflows/check-links.yml`."
 - `lychee --version` → if it succeeds, record the path and version.
 - If `lychee` is missing:
   1. Read the canonical pin from the workflow file so the skill cannot drift
