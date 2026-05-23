@@ -12,7 +12,7 @@ The Spine `validation` repo's Hugo site under `docs/` accumulates link rot
 silently. A concrete example: `docs/content/docs/validation/developer/runtime-library.md`
 references `error_message.proto` at a path that no longer exists in this repo —
 the `TemplateString` type it describes actually lives in the sibling
-`SpineEventEngine/base` repo. The same broken reference appears in
+`SpineEventEngine/base-libraries` repo. The same broken reference appears in
 `architecture.md`. We need both a local pre-push check and a CI gate, mirroring
 the well-tested setup in the sibling `spine.io` repo
 (`/Users/sanders/Projects/Spine/spine.io/lychee.toml`,
