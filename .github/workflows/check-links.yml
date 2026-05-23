@@ -14,6 +14,9 @@ env:
   HUGO_VERSION: 0.161.1
   LYCHEE_RELEASE: "lychee-x86_64-unknown-linux-gnu.tar.gz"
   LYCHEE_VERSION_TAG: "lychee-v0.24.2"
+  # SHA256 of the above tarball, pinned at download time. Update alongside
+  # LYCHEE_VERSION_TAG whenever the binary is upgraded.
+  LYCHEE_SHA256: "1f4e0ef7f6554a6ed33dd7ac144fb2e1bbed98598e7af973042fc5cd43951c9a"
   # Force Hugo to write its module cache where the cache step actually
   # restores from. Hugo's default on Linux is `~/.cache/hugo_cache`
   # (or `$TMPDIR/hugo_cache_$USER`), neither of which matches the
@@ -114,6 +117,11 @@ jobs:
           repository: "lycheeverse/lychee"
           tag: ${{ env.LYCHEE_VERSION_TAG }}
           fileName: ${{ env.LYCHEE_RELEASE }}
+
+      - name: Verify Lychee checksum
+        if: hashFiles('lychee/lychee') == ''
+        run: |
+          echo "${{ env.LYCHEE_SHA256 }}  ${{ env.LYCHEE_RELEASE }}" | sha256sum --check --strict
 
       # The v0.24.2 tarball contains a top-level directory
       # (e.g. `lychee-x86_64-unknown-linux-gnu/lychee`), so `--strip-components=1`
