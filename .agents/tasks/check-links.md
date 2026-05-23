@@ -40,8 +40,8 @@ repo.
   `docs/content/docs/validation/developer/architecture.md`.
 - [ ] Verify the canonical GitHub URL for `template_string.proto` by browsing
   `https://github.com/SpineEventEngine/base-libraries/tree/master/src/main/proto/spine/string/`.
-- [ ] In `runtime-library.md`: update the `[error-message-proto]` reference
-  definition to point at the `SpineEventEngine/base` URL. Rename the
+- [ ] In `runtime-library.md`: update the broken `error_message.proto` link to point at
+  the `SpineEventEngine/base-libraries` URL for `template_string.proto`. Rename the
   reference id to `[template-string-proto]` and the prose mention from
   "`error_message.proto`" to "`template_string.proto`".
 - [ ] In `architecture.md`: same fix.
