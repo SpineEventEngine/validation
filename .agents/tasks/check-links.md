@@ -59,7 +59,7 @@ repo.
 - [ ] Create `.github/workflows/check-links.yml`, adapted from
   `/Users/sanders/Projects/Spine/spine.io/.github/workflows/check-links.yml`.
 - [ ] Diffs vs. source: `working-directory` → `docs`/`docs/_preview`;
-  Lychee glob `'docs/public/**/*.html'`; `paths:` filter on `pull_request`
+  Lychee glob `'docs/_preview/public/**/*.html'`; `paths:` filter on `pull_request`
   for `['docs/**', '.github/workflows/check-links.yml', 'lychee.toml']`.
 - [ ] Preserve pinned versions: `HUGO_VERSION=0.161.1`,
   `LYCHEE_VERSION_TAG=lychee-v0.24.2`. Preserve both caches.
