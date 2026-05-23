@@ -69,7 +69,7 @@ repo.
 - [ ] New file: `.agents/skills/check-links/SKILL.md`.
 - [ ] Procedure: scope check → preflight binaries (Lychee prefer-installed,
   fallback to download) → install deps → Hugo build → Hugo serve on port
-  1414 → Lychee against `docs/public/**/*.html` → tear down → report grouped
+  1414 → Lychee against `docs/_preview/public/**/*.html` → tear down → report grouped
   by source `.md` → sentinel `.git/check-links.ok` on PASS.
 
 ### 5. Wire into `pre-pr` skill
