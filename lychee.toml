@@ -42,8 +42,8 @@ exclude = [
 # Exclude these filesystem paths from getting checked.
 exclude_path = []
 
-# Check links inside `<code>` and `<pre>` blocks as well
-# as Markdown code blocks.
+# Do NOT check links inside `<code>` and `<pre>` blocks or
+# Markdown code blocks (verbatim/code sections are excluded).
 include_verbatim = false
 
 # Verbose program output
