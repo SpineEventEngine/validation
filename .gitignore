@@ -138,6 +138,7 @@ __pycache__/
 
 # Claude working files
 /.claude/worktrees/
+/.claude/settings.local.json
 
 # Auto-downloaded Lychee binary used by the `check-links` skill.
 /.agents/skills/check-links/.cache/
