@@ -44,7 +44,7 @@ plugins {
 LicenseReporter.generateReportIn(project)
 
 spine {
-    validation.java.warnings.unsigedFields.set(false)
+    validation.java.warnings.unsignedFields.set(false)
 }
 
 dependencies {

@@ -34,9 +34,14 @@ plugins {
     `java-library`
     kotlin("jvm")
     id("module-testing")
+    id("io.spine.validation")
 }
 apply<BomsPlugin>()
 LicenseReporter.generateReportIn(project)
+
+spine {
+    validation.java.warnings.unsignedFields.set(false)
+}
 
 dependencies {
     testImplementation(Logging.lib)
