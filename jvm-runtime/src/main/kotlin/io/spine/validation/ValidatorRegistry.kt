@@ -32,6 +32,7 @@ import com.google.errorprone.annotations.ThreadSafe
 import com.google.protobuf.Message
 import io.spine.annotation.VisibleForTesting
 import io.spine.base.FieldPath
+import io.spine.base.fieldPath
 import io.spine.protobuf.TypeConverter
 import io.spine.string.TemplateString
 import io.spine.type.TypeName
@@ -215,10 +216,7 @@ public object ValidatorRegistry {
                     .toBuilder()
                     .putPlaceholderValue(VALIDATOR_PLACEHOLDER, k)
                     .build()
-                typeName = if (parentName != null)
-                    parentName.value
-                else
-                    TypeName.of(message).value
+                typeName = parentName?.value ?: TypeName.of(message).value
                 fieldPath = if (v.fieldPath != null) {
                     parentPath.toBuilder()
                         .addAllFieldName(v.fieldPath.fieldNameList)
