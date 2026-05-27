@@ -1,18 +1,19 @@
-<!-- Template — copy to a sibling repo's .agents/project.md and fill in the
-     sections below. In the config repo itself this file is a template only. -->
-
-# Project: <name>
+# Project: Validation
 
 ## Overview
 
-*One paragraph: what this repo is, what problem it solves, and its role in the
-Spine SDK organisation.*
+Validation is a Spine SDK JVM library that provides the project's validation
+model and related integration points. Its role in the organisation is to define
+and expose validation behaviour in a reusable form so other modules can apply
+consistent validation rules and report validation results through a stable API.
 
 ## Architecture
 
-*Role in the org: library / tool / Gradle plugin / application.
-Key patterns, public API boundaries, and constraints specific to this repo.*
+This repository is a library module. Its public surface should stay focused on
+validation concepts, rule execution, and result/reporting types that other Spine
+SDK components can depend on without pulling in application-specific behaviour.
+Keep implementation details behind the library boundary, prefer additive changes
+to public APIs, and preserve compatibility for downstream JVM consumers.
 
-<!-- JVM projects: uncomment the line below after seeding this file.
-Read [`.agents/jvm-project.md`](jvm-project.md) for build stack, coding style, tests, and versioning.
--->
+Read [`.agents/jvm-project.md`](jvm-project.md) for build stack, coding style,
+tests, and versioning.
