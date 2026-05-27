@@ -34,6 +34,7 @@ import io.spine.dependency.local.CoreJvmCompiler
 import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
+import io.spine.dependency.local.Validation.gradlePluginModule
 import io.spine.gradle.report.license.LicenseReporter
 
 buildscript {
@@ -64,7 +65,6 @@ allprojects {
                     ToolBase.jvmTools,
                     ToolBase.gradlePluginApi,
                     ToolBase.psiJava,
-                    "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
                 )
             }
         }
@@ -117,6 +117,10 @@ fun Project.applyPlugins() {
 
                 // Use the current version of Java runtime in the generated code of tests.
                 substitute(module(runtimeModule)).using(project(":jvm-runtime"))
+
+                // Use the Validation Gradle plugin from this project instead of
+                // the version used in CoreJvm Compiler.
+                substitute(module(gradlePluginModule)).using(project(":gradle-plugin"))
             }
             forcedCompiler.forEach { force(it) }
         }

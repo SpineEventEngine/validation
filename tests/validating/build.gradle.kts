@@ -39,8 +39,13 @@ plugins {
     `java-test-fixtures`
     kotlin("jvm")
     id("module-testing")
+    id("io.spine.validation")
 }
 LicenseReporter.generateReportIn(project)
+
+spine {
+    validation.java.warnings.unsigedFields.set(false)
+}
 
 dependencies {
     testFixturesAnnotationProcessor(AutoService.processor)
