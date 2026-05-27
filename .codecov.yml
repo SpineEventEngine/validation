@@ -12,13 +12,12 @@ coverage:
     - "**/test/**/*"
   status:
     # https://docs.codecov.com/docs/github-checks#yaml-configuration-for-github-checks-and-codecov
-    patch: false
+    patch: off
     # https://docs.codecov.com/docs/commit-status
     project:
       default:
         target: auto
         threshold: 0.05%
-        base: auto
         paths:
           - "**/src/main/**"
         if_ci_failed: error
