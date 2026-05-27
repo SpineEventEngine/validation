@@ -36,8 +36,9 @@ jobs:
         uses: actions/checkout@v4
 
       # Detect the Hugo site root (`docs/` or `site/`) by looking for a Hugo
-      # config file. Hugo config may live directly in the site root or in a
-      # `config/` or `config/_default/` subdirectory (both layouts are valid).
+      # config file. Hugo config may live directly in the site root, in the
+      # `_preview/` subtree, or in a `config/` or `config/_default/`
+      # subdirectory (all layouts are valid).
       # Outputs `present=true|false` and `work_dir` (the directory where
       # `npm ci` / `hugo` commands should run — either `$dir/_preview` for
       # repos that use a separate preview sub-tree, or `$dir` for repos whose
@@ -50,6 +51,7 @@ jobs:
         run: |
           for dir in docs site; do
             for cfg in hugo.toml hugo.yaml \
+                       _preview/hugo.toml _preview/hugo.yaml \
                        config/hugo.toml config/hugo.yaml \
                        config/_default/hugo.toml config/_default/hugo.yaml; do
               if [ -f "$dir/$cfg" ]; then
