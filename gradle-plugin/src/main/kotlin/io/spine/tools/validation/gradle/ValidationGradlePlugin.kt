@@ -38,6 +38,7 @@ import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
 import io.spine.tools.meta.MavenArtifact
 import io.spine.tools.validation.settings.ValidationWarnings
+import io.spine.type.toJson
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.kotlin.dsl.apply
@@ -106,8 +107,8 @@ private fun Project.writeValidationWarningsSettings() {
     val workingDir = WorkingDirectory(compilerWorkingDir.asFile.toPath())
     workingDir.settingsDirectory.write(
         VALIDATION_RENDERER_CONSUMER_ID,
-        Format.ProtoBinary,
-        message.toByteArray()
+        Format.ProtoJson,
+        message.toJson()
     )
 }
 
