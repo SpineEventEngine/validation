@@ -20,7 +20,7 @@ coverage:
         threshold: 0.05%
         base: auto
         paths:
-          - "src"
+          - "**/src/main/**"
         if_ci_failed: error
         informational: false
         only_pulls: true
