@@ -1,0 +1,1 @@
+var packageSearchIndex = [{"l":"io.spine.validation","url":"io/spine/validation/package-summary.html"}, {"l":"io.spine.validate","url":"io/spine/validate/package-summary.html"}, {"l":"All packages","url":"index.html"}]
