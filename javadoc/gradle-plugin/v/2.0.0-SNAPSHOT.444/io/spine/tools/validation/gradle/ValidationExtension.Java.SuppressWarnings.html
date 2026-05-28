@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>Java 2.0.0-SNAPSHOT.444 API </title>
+    <title>SuppressWarnings 2.0.0-SNAPSHOT.444 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">io.spine.tools.validation.gradle</a></div>
-        <h2 title="Class ValidationExtension.Java" class="title">Class ValidationExtension.Java</h2>
+        <h2 title="Class ValidationExtension.Java.SuppressWarnings" class="title">Class ValidationExtension.Java.SuppressWarnings</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,10 +114,10 @@ var pathtoroot = "../../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Java.html>ValidationExtension.Java</a></span>
+public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a></span>
 
                     </pre>
-                    <div class="block"><p>Configuration for the Java target of the Validation Compiler.</p><p>Holds per-target settings consumed by the <code>io.spine.tools.validation.java.JavaValidationRenderer</code>.</p></div>
+                    <div class="block"><p>Holds the per-kind warning suppression toggles for the Java target of the Validation Compiler.</p><p>Each property defaults to <code>false</code> — the warning is emitted. Set a property to <code>true</code> to silence the warning in the build output without disabling validation itself.</p></div>
 
                     <dl>
 
@@ -149,13 +149,6 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public abstract class</code></td>
-                                            <th class="colSecond" scope="row"><code><a href="ValidationExtension.Java.SuppressWarnings.html">ValidationExtension.Java.SuppressWarnings</a></span></code>
-                                            </th>
-                                            <td class="colLast"><p>Holds the per-kind warning suppression toggles for the Java target of the Validation Compiler.</p><p>Each property defaults to <code>false</code> — the warning is emitted. Set a property to <code>true</code> to silence the warning in the build output without disabling validation itself.</p></td>
-                                        </tr>
-                                        
                                     </table>
                                 </div>
                             </li>
@@ -180,8 +173,8 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#suppressWarnings>suppressWarnings</a></code></th>
+                                            <td class="colFirst"><code>private final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.SuppressWarnings.html#unsignedFields>unsignedFields</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -211,7 +204,7 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ValidationExtension.Java(org.gradle.api.model.ObjectFactory)">ValidationExtension.Java</a></span>(ObjectFactory objects)</code></th>
+                                                        href="#ValidationExtension.Java.SuppressWarnings(org.gradle.api.model.ObjectFactory)">ValidationExtension.Java.SuppressWarnings</a></span>(ObjectFactory objects)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -265,19 +258,11 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final <a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a></code>
+                                            <td class="colFirst"><code>final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#getSuppressWarnings()>getSuppressWarnings</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.SuppressWarnings.html#getUnsignedFields()>getUnsignedFields</a>() </code>
                                             </th>
-                                            <td class="colLast">Per-kind toggles for suppressing warnings emitted by the Java target of the Validation Compiler.</td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidationExtension.Java.html#suppressWarnings(org.gradle.api.Action)>suppressWarnings</a>(Action&lt;<a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a>&gt; action) </code>
-                                            </th>
-                                            <td class="colLast">Configures per-kind warning suppression toggles using a Gradle DSL block.</td>
+                                            <td class="colLast">Suppress the &quot;unsigned integer types are not supported in Java&quot; warning for <code>uint32</code>/<code>uint64</code> fields constrained by <code>(range)</code>, <code>(min)</code>, or <code>(max)</code>.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -311,11 +296,11 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="ValidationExtension.Java(org.gradle.api.model.ObjectFactory)"></a>
+                                <a name="ValidationExtension.Java.SuppressWarnings(org.gradle.api.model.ObjectFactory)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>ValidationExtension.Java</h4>
-                                        <pre>ValidationExtension.Java(ObjectFactory objects)</pre>
+                                        <h4>ValidationExtension.Java.SuppressWarnings</h4>
+                                        <pre>ValidationExtension.Java.SuppressWarnings(ObjectFactory objects)</pre>
                                         <div class="block"></div>
                                         
                                     </li>
@@ -334,47 +319,16 @@ public abstract class <span class="typeNameLabel"><a href=ValidationExtension.Ja
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getSuppressWarnings()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getSuppressWarnings</h4>
-                                        <pre class="methodSignature"> final <a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a> <a href=ValidationExtension.Java.html#getSuppressWarnings()>getSuppressWarnings</a>()</pre>
-                                        <div class="block"><p>Per-kind toggles for suppressing warnings emitted by the Java target of the Validation Compiler.</p><p>Configure via the nested <a href=ValidationExtension.Java.html#suppressWarnings>suppressWarnings</a> block:</p><pre><code>spine {
-    validation {
-        java {
-            suppressWarnings {
-                unsignedFields.set(true)
-            }
-        }
-    }
-}</code></pre></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="suppressWarnings(org.gradle.api.Action)">
+                                <a id="getUnsignedFields()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>suppressWarnings</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html>Unit</a> <a href=ValidationExtension.Java.html#suppressWarnings(org.gradle.api.Action)>suppressWarnings</a>(Action&lt;<a href=ValidationExtension.Java.SuppressWarnings.html>ValidationExtension.Java.SuppressWarnings</a>&gt; action)</pre>
-                                        <div class="block"><p>Configures per-kind warning suppression toggles using a Gradle DSL block.</p><p>Equivalent to mutating <a href=ValidationExtension.Java.html#suppressWarnings(org.gradle.api.Action)>suppressWarnings</a> directly.</p></div>
+                                        <h4>getUnsignedFields</h4>
+                                        <pre class="methodSignature"> final Property&lt;<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html>Boolean</a>&gt; <a href=ValidationExtension.Java.SuppressWarnings.html#getUnsignedFields()>getUnsignedFields</a>()</pre>
+                                        <div class="block"><p>Suppress the &quot;unsigned integer types are not supported in Java&quot; warning for <code>uint32</code>/<code>uint64</code> fields constrained by <code>(range)</code>, <code>(min)</code>, or <code>(max)</code>.</p><p>Defaults to <code>false</code>. Set to <code>true</code> to silence the warning when unsigned integers are used intentionally and the Java-side handling has been considered.</p></div>
 
                                         <dl>
 
