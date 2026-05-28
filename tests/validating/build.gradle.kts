@@ -43,9 +43,9 @@ plugins {
 }
 LicenseReporter.generateReportIn(project)
 
-//spine {
-//    validation.java.suppressWarnings.unsignedFields.set(true)
-//}
+spine {
+    validation.java.suppressWarnings.unsignedFields.set(true)
+}
 
 dependencies {
     testFixturesAnnotationProcessor(AutoService.processor)
