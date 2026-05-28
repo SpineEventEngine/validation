@@ -72,53 +72,51 @@ public abstract class ValidationExtension @Inject public constructor(objects: Ob
     public abstract class Java @Inject public constructor(objects: ObjectFactory) {
 
         /**
-         * Per-kind toggles for warnings emitted by the Java target of the
-         * Validation Compiler.
+         * Per-kind toggles for suppressing warnings emitted by the Java
+         * target of the Validation Compiler.
          *
-         * Configure via the nested [warnings] block:
+         * Configure via the nested [suppressWarnings] block:
          * ```kotlin
          * spine {
          *     validation {
          *         java {
-         *             warnings {
-         *                 unsignedFields.set(false)
+         *             suppressWarnings {
+         *                 unsignedFields.set(true)
          *             }
          *         }
          *     }
          * }
          * ```
          */
-        public val warnings: Warnings = objects.newInstance(Warnings::class.java)
+        public val suppressWarnings: SuppressWarnings =
+            objects.newInstance(SuppressWarnings::class.java)
 
         /**
-         * Configures per-kind warning toggles using a Gradle DSL block.
+         * Configures per-kind warning suppression toggles using a Gradle DSL block.
          *
-         * Equivalent to mutating [warnings] directly.
+         * Equivalent to mutating [suppressWarnings] directly.
          */
-        public fun warnings(action: Action<Warnings>) {
-            action.execute(warnings)
+        public fun suppressWarnings(action: Action<SuppressWarnings>) {
+            action.execute(suppressWarnings)
         }
 
         /**
-         * Holds the per-kind warning toggles for the Java target of the
-         * Validation Compiler.
+         * Holds the per-kind warning suppression toggles for the Java target
+         * of the Validation Compiler.
          *
-         * Each property defaults to `true` — the warning is emitted. Set a
-         * property to `false` to suppress the warning in the build output
+         * Each property defaults to `false` — the warning is emitted. Set a
+         * property to `true` to silence the warning in the build output
          * without disabling validation itself.
-         *
-         * The Validation Gradle plugin always writes these values to the
-         * Spine Compiler settings directory, so the renderer never has to
-         * distinguish "field absent" from "field set to `false`".
          */
-        public abstract class Warnings @Inject public constructor(objects: ObjectFactory) {
+        public abstract class SuppressWarnings
+        @Inject public constructor(objects: ObjectFactory) {
 
             /**
-             * Whether to emit the "unsigned integer types are not supported
-             * in Java" warning for `uint32`/`uint64` fields constrained by
-             * `(range)`, `(min)`, or `(max)`.
+             * Suppress the "unsigned integer types are not supported in Java"
+             * warning for `uint32`/`uint64` fields constrained by `(range)`,
+             * `(min)`, or `(max)`.
              *
-             * Defaults to `true`. Set to `false` to silence the warning when
+             * Defaults to `false`. Set to `true` to silence the warning when
              * unsigned integers are used intentionally and the Java-side
              * handling has been considered.
              */
@@ -126,7 +124,7 @@ public abstract class ValidationExtension @Inject public constructor(objects: Ob
                 objects.property(Boolean::class.java)
 
             init {
-                unsignedFields.convention(true)
+                unsignedFields.convention(false)
             }
         }
     }

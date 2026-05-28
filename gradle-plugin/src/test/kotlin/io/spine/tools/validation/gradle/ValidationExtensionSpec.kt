@@ -27,7 +27,9 @@
 package io.spine.tools.validation.gradle
 
 import io.kotest.matchers.shouldBe
-import io.spine.tools.validation.settings.ValidationWarnings
+import io.spine.tools.validation.settings.JavaValidationRendererSettings
+import io.spine.tools.validation.settings.javaValidationRendererSettings
+import io.spine.tools.validation.settings.suppressWarnings
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -37,14 +39,14 @@ import org.junit.jupiter.api.Test
 
 /**
  * Exercises the user-facing surface of [ValidationExtension] — specifically
- * the nested `java { warnings { unsignedFields } }` DSL added so users can
- * silence per-kind warnings from the Java target of the Validation Compiler.
+ * the nested `java { suppressWarnings { unsignedFields } }` DSL added so users
+ * can silence per-kind warnings from the Java target of the Validation Compiler.
  *
  * These tests cover the DSL alone (instantiation via `ObjectFactory`,
  * defaults, both property-setter and block-syntax forms). The downstream
- * write to the Spine Compiler settings directory is exercised via a
- * focused round-trip through the typed `ValidationWarnings` proto that the
- * Gradle plugin builds from these property values.
+ * write to the Spine Compiler settings directory is exercised via a focused
+ * round-trip through the typed [JavaValidationRendererSettings] proto that
+ * the Gradle plugin builds from these property values.
  */
 @DisplayName("`ValidationExtension` should")
 internal class ValidationExtensionSpec {
@@ -64,49 +66,56 @@ internal class ValidationExtensionSpec {
     }
 
     @Test
-    fun `expose a 'java' sub-extension with a 'warnings' block`() {
-        extension.java.warnings.unsignedFields.get() shouldBe true
+    fun `expose a 'java' sub-extension with a 'suppressWarnings' block defaulting to off`() {
+        extension.java.suppressWarnings.unsignedFields.get() shouldBe false
     }
 
     @Test
     fun `allow suppressing 'unsignedFields' via direct property access`() {
-        extension.java.warnings.unsignedFields.set(false)
+        extension.java.suppressWarnings.unsignedFields.set(true)
 
-        extension.java.warnings.unsignedFields.get() shouldBe false
+        extension.java.suppressWarnings.unsignedFields.get() shouldBe true
     }
 
     @Test
     fun `allow suppressing 'unsignedFields' via the nested DSL block`() {
         extension.java(Action { java ->
-            java.warnings(Action { warnings ->
-                warnings.unsignedFields.set(false)
+            java.suppressWarnings(Action { warnings ->
+                warnings.unsignedFields.set(true)
             })
         })
 
-        extension.java.warnings.unsignedFields.get() shouldBe false
+        extension.java.suppressWarnings.unsignedFields.get() shouldBe true
     }
 
     @Test
-    fun `build a 'ValidationWarnings' proto reflecting the DSL value when suppressed`() {
-        extension.java(Action { java ->
-            java.warnings(Action { warnings ->
-                warnings.unsignedFields.set(false)
-            })
-        })
+    fun `build a 'JavaValidationRendererSettings' reflecting the DSL value when suppressed`() {
+        extension.java { java ->
+            java.suppressWarnings { warnings ->
+                warnings.unsignedFields.set(true)
+            }
+        }
 
-        val message = ValidationWarnings.newBuilder()
-            .setUnsignedFields(extension.java.warnings.unsignedFields.get())
-            .build()
+        val message = buildSettings(extension)
 
-        message.unsignedFields shouldBe false
+        message.suppressWarnings.unsignedFields shouldBe true
     }
 
     @Test
-    fun `build a 'ValidationWarnings' proto reflecting the DSL value by default`() {
-        val message = ValidationWarnings.newBuilder()
-            .setUnsignedFields(extension.java.warnings.unsignedFields.get())
-            .build()
+    fun `build a 'JavaValidationRendererSettings' proto reflecting the DSL value by default`() {
+        val message = buildSettings(extension)
 
-        message.unsignedFields shouldBe true
+        message.suppressWarnings.unsignedFields shouldBe false
     }
+
+    /**
+     * Builds the [JavaValidationRendererSettings] proto from the DSL values in
+     * the same shape that the Validation Gradle plugin produces at task time.
+     */
+    private fun buildSettings(extension: ValidationExtension): JavaValidationRendererSettings =
+        javaValidationRendererSettings {
+            suppressWarnings = suppressWarnings {
+                unsignedFields = extension.java.suppressWarnings.unsignedFields.get()
+            }
+        }
 }

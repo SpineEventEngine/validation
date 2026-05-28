@@ -40,8 +40,9 @@ import java.util.concurrent.ConcurrentHashMap
  * suppresses warnings on subsequent runs.
  *
  * Whether warnings are emitted at all is controlled by [enabled], which the
- * `JavaValidationRenderer` sets from the `ValidationWarnings` settings written
- * by the Validation Gradle plugin. When disabled, [report] becomes a no-op.
+ * `JavaValidationRenderer` sets from the `JavaValidationRendererSettings`
+ * settings written by the Validation Gradle plugin. When disabled, [report]
+ * becomes a no-op.
  */
 internal object UnsignedIntegerWarnings {
 
@@ -54,7 +55,8 @@ internal object UnsignedIntegerWarnings {
      * Turns reporting on or off for the current compilation pass.
      *
      * Reset to `true` by [clear]; the renderer calls [setEnabled] after [clear]
-     * to apply the user-configured value from `ValidationWarnings.unsignedFields`.
+     * to apply the user-configured value from
+     * `JavaValidationRendererSettings.suppressWarnings.unsignedFields`.
      */
     fun setEnabled(enabled: Boolean) {
         this.enabled = enabled

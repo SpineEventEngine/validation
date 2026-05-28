@@ -38,7 +38,7 @@ The plugin registers an extension named `validation` under the project-wide
 ```kotlin
 spine {
     validation {
-        // All defaults: validation is enabled; all warnings are emitted.
+        // All defaults: validation is enabled; no warnings are suppressed.
     }
 }
 ```
@@ -48,8 +48,9 @@ behavior. Use `validation { ... }` only when you need to turn something on or of
 
 The DSL uses lazy `Property<T>` values throughout, so settings can be combined
 with other plugins and resolved at configuration time without forcing eager
-evaluation. Toggles are written in positive polarity (`enabled = true`,
-`unsignedFields = true`), matching the way the warning is described in build output.
+evaluation. `enabled` is written in positive polarity (`enabled = true` keeps
+code generation on), while suppression toggles under `java.suppressWarnings`
+are negative — `unsignedFields = true` silences the corresponding warning.
 
 
 ## Properties
@@ -78,8 +79,8 @@ rely on generated checks.
 ### Suppressing warnings
 
 The Validation Compiler currently generates only Java code, so warning
-suppression toggles live under `java.warnings`. Each toggle is positive:
-`true` keeps the warning emitted (the default); `false` silences it.
+suppression toggles live under `java.suppressWarnings`. Each toggle is
+negative: `false` keeps the warning emitted (the default); `true` silences it.
 
 The only toggle today, `unsignedFields`, controls the *"unsigned integer types
 are not supported in Java"* warning emitted for `uint32` and `uint64` fields
@@ -89,8 +90,8 @@ that carry `(range)`, `(min)`, or `(max)`:
 spine {
     validation {
         java {
-            warnings {
-                unsignedFields.set(false)
+            suppressWarnings {
+                unsignedFields.set(true)
             }
         }
     }
@@ -98,7 +99,7 @@ spine {
 ```
 
 `uint32` and `uint64` values are stored in signed `int` and `long` fields, so
-range checks have to handle the sign bit explicitly. Turn the warning off only
+range checks have to handle the sign bit explicitly. Suppress the warning only
 after accepting that trade-off for the affected fields.
 
 

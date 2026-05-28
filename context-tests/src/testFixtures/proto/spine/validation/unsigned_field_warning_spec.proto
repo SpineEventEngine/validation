@@ -36,10 +36,11 @@ option java_outer_classname = "UnsignedFieldWarningSpecProto";
 option java_multiple_files = true;
 
 // A message used by `UnsignedFieldWarningSpec` to verify that the
-// `validation.java.warnings.unsignedFields` flag, written by the Validation
-// Gradle plugin as `ValidationWarnings`, correctly toggles the
-// "unsigned integer types are not supported in Java" warning emitted by
-// `JavaValidationRenderer` -> `BoundedFieldGenerator` during code generation.
+// `validation.java.suppressWarnings.unsignedFields` flag, written by the
+// Validation Gradle plugin as `JavaValidationRendererSettings`, correctly
+// toggles the "unsigned integer types are not supported in Java" warning
+// emitted by `JavaValidationRenderer` -> `BoundedFieldGenerator` during
+// code generation.
 message UnsignedWithRange {
 
     // A `uint32` field constrained by `(range)` — the exact shape that

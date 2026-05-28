@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,9 @@ plugins {
 }
 LicenseReporter.generateReportIn(project)
 
-spine {
-    validation.java.warnings.unsignedFields.set(false)
-}
+//spine {
+//    validation.java.suppressWarnings.unsignedFields.set(true)
+//}
 
 dependencies {
     testFixturesAnnotationProcessor(AutoService.processor)
