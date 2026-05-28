@@ -39,9 +39,9 @@ plugins {
 apply<BomsPlugin>()
 LicenseReporter.generateReportIn(project)
 
-//spine {
-//    validation.java.suppressWarnings.unsignedFields.set(true)
-//}
+spine {
+    validation.java.suppressWarnings.unsignedFields.set(true)
+}
 
 dependencies {
     testImplementation(Logging.lib)
