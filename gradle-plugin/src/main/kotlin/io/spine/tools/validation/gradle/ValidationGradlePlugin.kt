@@ -32,6 +32,7 @@ import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.api.compilerWorkingDir
 import io.spine.tools.compiler.gradle.plugin.Extension
+import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
 import io.spine.tools.compiler.params.WorkingDirectory
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
@@ -76,7 +77,17 @@ private fun Project.configureValidation() {
                 val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
                 plugins.set(ordered)
             }
-            writeValidationWarningsSettings()
+            // Register the settings write as a `doFirst` action on every
+            // `LaunchSpineCompiler` task rather than writing during `afterEvaluate`.
+            // Writing at configuration time is not enough: a preceding `clean`
+            // task (which runs during execution) deletes `build/` — including
+            // the settings file — before the compiler task can read it.
+            val theProject = this
+            tasks.withType(LaunchSpineCompiler::class.java).configureEach { task ->
+                task.doFirst {
+                    theProject.writeValidationWarningsSettings()
+                }
+            }
         }
     }
     // We add the dependency on runtime anyway for the following reasons:
@@ -96,8 +107,10 @@ private fun Project.configureValidation() {
  * Compiler renderer that emits them —
  * `io.spine.tools.validation.java.JavaValidationRenderer`.
  *
- * The file is always written (every flag is explicit), so the renderer never
- * has to distinguish "field absent" from "field set to `false`".
+ * Called as a `doFirst` action on every [LaunchSpineCompiler] task so that
+ * the file is written during task execution — after any preceding `clean` task
+ * has finished deleting the build directory — and is guaranteed to be present
+ * when the Spine Compiler subprocess reads the settings directory.
  */
 private fun Project.writeValidationWarningsSettings() {
     val warnings = validationExtension.java.warnings
