@@ -41,6 +41,7 @@ option java_multiple_files = true;
 // settings directory before the renderer runs, so user-configured values
 // from the `validation { java { ... } }` DSL block reach the renderer
 // running in the Spine Compiler subprocess.
+//
 message JavaValidationRendererSettings {
 
     // Per-kind warning suppression toggles.
@@ -54,6 +55,7 @@ message JavaValidationRendererSettings {
 // corresponding warning; the proto3 default `false` keeps the warning
 // emitted, which matches the renderer's "warn unless told otherwise"
 // behavior when no settings are present at all.
+//
 message SuppressWarnings {
 
     // Suppress the "unsigned integer types are not supported in Java"
