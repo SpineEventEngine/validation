@@ -32,24 +32,34 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
 option java_package = "io.spine.tools.validation.settings";
-option java_outer_classname = "ValidationWarningsProto";
+option java_outer_classname = "JavaValidationRendererSettingsProto";
 option java_multiple_files = true;
 
-// Per-kind toggles for warnings emitted by the Java target of
-// the Validation Compiler.
+// Settings consumed by `io.spine.tools.validation.java.JavaValidationRenderer`.
 //
-// The Gradle plugin writes this message to the Compiler settings directory.
-// Each flag is independent and defaults to `true` (warning enabled) on the
-// DSL side; the Gradle plugin always writes an explicit value, so the
-// renderer never has to distinguish "field absent" from "field set to false".
+// The Validation Gradle plugin writes this message to the Spine Compiler
+// settings directory before the renderer runs, so user-configured values
+// from the `validation { java { ... } }` DSL block reach the renderer
+// running in the Spine Compiler subprocess.
 //
-// If no settings file is present at all (e.g., the renderer is invoked
-// outside of the Validation Gradle plugin), the renderer treats every flag
-// as enabled — preserving the historical "always warn" behavior.
-//
-message ValidationWarnings {
+message JavaValidationRendererSettings {
 
-    // Emit the "unsigned integer types are not supported in Java" warning
-    // for `uint32`/`uint64` fields constrained by `(range)`, `(min)`, or `(max)`.
+    // Per-kind warning suppression toggles.
+    SuppressWarnings suppress_warnings = 1;
+}
+
+// Per-kind toggles for suppressing warnings emitted by the Java target
+// of the Validation Compiler.
+//
+// Each flag is independent. A flag set to `true` suppresses the
+// corresponding warning; the proto3 default `false` keeps the warning
+// emitted, which matches the renderer's "warn unless told otherwise"
+// behavior when no settings are present at all.
+//
+message SuppressWarnings {
+
+    // Suppress the "unsigned integer types are not supported in Java"
+    // warning for `uint32`/`uint64` fields constrained by `(range)`,
+    // `(min)`, or `(max)`.
     bool unsigned_fields = 1;
 }

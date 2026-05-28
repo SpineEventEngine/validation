@@ -215,10 +215,7 @@ public object ValidatorRegistry {
                     .toBuilder()
                     .putPlaceholderValue(VALIDATOR_PLACEHOLDER, k)
                     .build()
-                typeName = if (parentName != null)
-                    parentName.value
-                else
-                    TypeName.of(message).value
+                typeName = parentName?.value ?: TypeName.of(message).value
                 fieldPath = if (v.fieldPath != null) {
                     parentPath.toBuilder()
                         .addAllFieldName(v.fieldPath.fieldNameList)

@@ -48,8 +48,8 @@ dependencies {
     testImplementation(Logging.testLib)?.because("We need `tapConsole`.")
     testImplementation(Compiler.testlib)
     // The Java-side renderer (`JavaValidationPlugin`) and its settings
-    // (`ValidationWarnings`) are needed by `UnsignedFieldWarningSpec` to
-    // drive the warning emitted by
+    // (`JavaValidationRendererSettings`) are needed by `UnsignedFieldWarningSpec`
+    // to drive the warning emitted by
     // `JavaValidationRenderer` -> `BoundedFieldGenerator` end-to-end.
     testImplementation(project(":java"))
     testImplementation(project(":java-settings"))

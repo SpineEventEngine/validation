@@ -42,7 +42,9 @@ import io.spine.tools.compiler.params.WorkingDirectory
 import io.spine.tools.compiler.settings.SettingsDirectory
 import io.spine.tools.validation.given.UnsignedWithRange
 import io.spine.tools.validation.java.JavaValidationPlugin
-import io.spine.tools.validation.settings.ValidationWarnings
+import io.spine.tools.validation.settings.JavaValidationRendererSettings
+import io.spine.tools.validation.settings.SuppressWarnings
+import io.spine.type.toJson
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import org.junit.jupiter.api.BeforeAll
@@ -54,9 +56,9 @@ import org.junit.jupiter.api.io.TempDir
  * Verifies that the "unsigned integer types are not supported in Java"
  * warning, emitted by `JavaValidationRenderer` -> `BoundedFieldGenerator`
  * during code generation, is correctly toggled by the
- * `ValidationWarnings.unsigned_fields` setting written by the Validation
- * Gradle plugin from the `validation.java.warnings.unsignedFields` DSL
- * property.
+ * `JavaValidationRendererSettings.suppress_warnings.unsigned_fields` setting
+ * written by the Validation Gradle plugin from the
+ * `validation.java.suppressWarnings.unsignedFields` DSL property.
  *
  * The test drives the real Spine Compiler pipeline (via [PipelineSetup])
  * against a proto fixture with a `uint32` field constrained by `(range)`
@@ -77,18 +79,18 @@ internal class UnsignedFieldWarningSpec {
     }
 
     @Test
-    fun `emit the warning when 'unsignedFields' is 'true'`() {
+    fun `emit the warning when 'unsignedFields' suppression is 'false'`() {
         val output = compile(UnsignedWithRange.getDescriptor()) {
-            writeValidationWarnings(unsignedFields = true)
+            writeSettings(suppressUnsignedFields = false)
         }
 
         output shouldContain WARNING_TEXT
     }
 
     @Test
-    fun `not emit the warning when 'unsignedFields' is 'false'`() {
+    fun `not emit the warning when 'unsignedFields' suppression is 'true'`() {
         val output = compile(UnsignedWithRange.getDescriptor()) {
-            writeValidationWarnings(unsignedFields = false)
+            writeSettings(suppressUnsignedFields = true)
         }
 
         output shouldNotContain WARNING_TEXT
@@ -125,19 +127,23 @@ internal class UnsignedFieldWarningSpec {
     }
 
     /**
-     * Writes a [ValidationWarnings] settings file for the
+     * Writes a [JavaValidationRendererSettings] settings file for the
      * `JavaValidationRenderer` consumer, mirroring exactly what the
      * Validation Gradle plugin does when the user configures
-     * `validation.java.warnings.unsignedFields`.
+     * `validation.java.suppressWarnings.unsignedFields`.
      */
-    private fun SettingsDirectory.writeValidationWarnings(unsignedFields: Boolean) {
-        val message = ValidationWarnings.newBuilder()
-            .setUnsignedFields(unsignedFields)
+    private fun SettingsDirectory.writeSettings(suppressUnsignedFields: Boolean) {
+        val message = JavaValidationRendererSettings.newBuilder()
+            .setSuppressWarnings(
+                SuppressWarnings.newBuilder()
+                    .setUnsignedFields(suppressUnsignedFields)
+                    .build()
+            )
             .build()
         write(
             JAVA_VALIDATION_RENDERER_CONSUMER_ID,
-            Format.ProtoBinary,
-            message.toByteArray()
+            Format.ProtoJson,
+            message.toJson()
         )
     }
 
@@ -145,8 +151,8 @@ internal class UnsignedFieldWarningSpec {
 
         /**
          * Canonical class name of the renderer that reads
-         * [ValidationWarnings] — the Spine Compiler `LoadsSettings`
-         * consumer ID.
+         * [JavaValidationRendererSettings] — the Spine Compiler
+         * `LoadsSettings` consumer ID.
          */
         private const val JAVA_VALIDATION_RENDERER_CONSUMER_ID: String =
             "io.spine.tools.validation.java.JavaValidationRenderer"

@@ -138,7 +138,6 @@ __pycache__/
 
 # Claude working files
 /.claude/worktrees/
-/.claude/settings.local.json
 
 # Auto-downloaded Lychee binary used by the `check-links` skill.
 /.agents/skills/check-links/.cache/
@@ -146,3 +145,10 @@ __pycache__/
 # Lychee link-checker cache (created by the `check-links` skill and
 # the `Check Links` workflow when run locally).
 .lycheecache
+
+# Hugo docs preview site build artifacts (used by the `check-links`
+# skill and the `Check Links` workflow in repos that contain a
+# `docs/_preview` Hugo site).
+docs/_preview/node_modules/
+docs/_preview/public/
+docs/_preview/resources/

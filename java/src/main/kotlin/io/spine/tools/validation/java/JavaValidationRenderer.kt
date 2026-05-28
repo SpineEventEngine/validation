@@ -52,7 +52,7 @@ import io.spine.tools.validation.java.generate.option.bound.MaxGenerator
 import io.spine.tools.validation.java.generate.option.bound.MinGenerator
 import io.spine.tools.validation.java.generate.option.bound.RangeGenerator
 import io.spine.tools.validation.java.generate.option.bound.UnsignedIntegerWarnings
-import io.spine.tools.validation.settings.ValidationWarnings
+import io.spine.tools.validation.settings.JavaValidationRendererSettings
 
 /**
  * The main Java renderer of the validation library.
@@ -95,14 +95,14 @@ internal class JavaValidationRenderer(
      * Returns whether the "unsigned integer types are not supported in Java"
      * warning should be emitted in the current compilation.
      *
-     * The Validation Gradle plugin writes a [ValidationWarnings] settings file
-     * with the user-configured value. If the file is missing (e.g., the
-     * renderer is invoked outside the Gradle plugin), the historical default
-     * — warning on — is preserved.
+     * The Validation Gradle plugin writes a [JavaValidationRendererSettings]
+     * settings file with the user-configured suppression flag. If the file is
+     * missing (e.g., the renderer is invoked outside the Gradle plugin), the
+     * default — warning on — is preserved.
      */
     private fun unsignedFieldsWarningEnabled(): Boolean =
         if (settingsAvailable()) {
-            loadSettings<ValidationWarnings>().unsignedFields
+            !loadSettings<JavaValidationRendererSettings>().suppressWarnings.unsignedFields
         } else {
             true
         }
