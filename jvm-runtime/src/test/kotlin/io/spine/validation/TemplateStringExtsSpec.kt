@@ -72,7 +72,7 @@ internal class TemplateStringExtsSpec {
         val template = io.spine.string.TemplateString.newBuilder()
             .withRegex(pattern)
             .build()
-        
+
         template.placeholderValueMap shouldContain (REGEX_PATTERN.value.name to pattern)
     }
 }
