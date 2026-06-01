@@ -39,6 +39,7 @@ import io.spine.type.TypeName
 import java.util.ServiceLoader
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -46,6 +47,14 @@ import org.junit.jupiter.api.assertDoesNotThrow
 
 @DisplayName("`ValidatorRegistry` should")
 internal class ValidatorRegistrySpec {
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun cleanRegistry() {
+            ValidatorRegistry.clear()
+        }
+    }
 
     @BeforeEach
     fun setUp() {

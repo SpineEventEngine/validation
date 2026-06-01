@@ -73,7 +73,6 @@ buildscript {
 }
 
 plugins {
-    base
     idea
     `gradle-doctor`
     id("project-report")
