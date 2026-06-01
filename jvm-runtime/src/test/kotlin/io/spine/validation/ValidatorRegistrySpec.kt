@@ -36,10 +36,9 @@ import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.string.templateString
 import io.spine.type.TypeName
-import java.util.ServiceLoader
+import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
