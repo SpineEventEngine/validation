@@ -62,7 +62,7 @@ internal class TemplateStringExtsSpec {
         val template = io.spine.string.TemplateString.newBuilder()
             .withCompanion(secondsField)
             .build()
-        
+
         template.placeholderValueMap shouldContain (GOES_COMPANION.value.name to "seconds")
     }
 
