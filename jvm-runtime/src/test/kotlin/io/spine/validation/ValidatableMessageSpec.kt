@@ -26,6 +26,7 @@
 
 package io.spine.validation
 
+import com.google.protobuf.AbstractMessage
 import com.google.protobuf.Descriptors
 import com.google.protobuf.Empty
 import com.google.protobuf.Message
@@ -55,7 +56,7 @@ internal class ValidatableMessageSpec {
 /**
  * A stub implementation of [ValidatableMessage] for testing the default [validate] method.
  */
-private class StubValidatableMessage : ValidatableMessage, com.google.protobuf.AbstractMessage() {
+private class StubValidatableMessage : AbstractMessage(), ValidatableMessage {
 
     var capturedPath: FieldPath? = null
     var capturedName: TypeName? = null
