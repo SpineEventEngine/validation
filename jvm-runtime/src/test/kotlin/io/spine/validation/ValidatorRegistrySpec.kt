@@ -26,13 +26,16 @@
 
 package io.spine.validation
 
+import com.google.protobuf.Int64Value
 import com.google.protobuf.Timestamp
 import com.google.protobuf.timestamp
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.spine.base.FieldPath
 import io.spine.string.templateString
+import io.spine.type.TypeName
 import java.util.ServiceLoader
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -203,6 +206,49 @@ internal class ValidatorRegistrySpec {
             executor.shutdown()
             executor.awaitTermination(1, TimeUnit.MINUTES)
         }
+    }
+
+    @Test
+    fun `report violations with parent path and name`() {
+        val validator = AlwaysInvalidTimestampValidator()
+        ValidatorRegistry.add(Timestamp::class, validator)
+
+        val timestamp = timestamp { seconds = 100 }
+        val parentPath = FieldPath.newBuilder().addFieldName("some_parent_field").build()
+        val parentName = TypeName.of("spine.test.ParentMessage")
+
+        val violations = ValidatorRegistry.validate(timestamp, parentPath, parentName)
+
+        violations shouldHaveSize 1
+        val violation = violations[0]
+        violation.typeName shouldBe parentName.value
+        violation.fieldPath shouldBe parentPath
+    }
+
+    @Test
+    fun `report violations with custom field path and value`() {
+        val fieldPath = FieldPath.newBuilder().addFieldName("seconds").build()
+        val fieldValue = Int64Value.of(100)
+        val validator = object : MessageValidator<Timestamp> {
+            override fun validate(message: Timestamp): List<DetectedViolation> {
+                return listOf(FieldViolation(
+                    templateString { withPlaceholders = "Invalid field" },
+                    fieldPath,
+                    fieldValue
+                ))
+            }
+        }
+        ValidatorRegistry.add(Timestamp::class, validator)
+
+        val timestamp = timestamp { seconds = 100 }
+        val parentPath = FieldPath.newBuilder().addFieldName("parent").build()
+
+        val violations = ValidatorRegistry.validate(timestamp, parentPath, null)
+
+        violations shouldHaveSize 1
+        val violation = violations[0]
+        violation.fieldPath.fieldNameList shouldContainExactly listOf("parent", "seconds")
+        violation.fieldValue.unpack(Int64Value::class.java) shouldBe fieldValue
     }
 }
 
