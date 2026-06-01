@@ -27,13 +27,11 @@
 package io.spine.validation
 
 import com.google.protobuf.AbstractMessage
-import com.google.protobuf.Descriptors
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.Empty
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
-import com.google.protobuf.Any as ProtoAny
 import com.google.protobuf.Timestamp
 import com.google.protobuf.UnknownFieldSet
 import com.google.protobuf.timestamp
@@ -44,11 +42,12 @@ import io.spine.base.FieldPath
 import io.spine.protobuf.AnyPacker
 import io.spine.string.templateString
 import io.spine.type.TypeName
-import java.util.Optional
+import java.util.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import com.google.protobuf.Any as ProtoAny
 
 @DisplayName("`Validate` should")
 internal class ValidateSpec {

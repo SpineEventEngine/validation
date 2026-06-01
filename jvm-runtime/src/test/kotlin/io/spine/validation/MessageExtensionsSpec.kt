@@ -27,7 +27,6 @@
 package io.spine.validation
 
 import com.google.protobuf.AbstractMessage
-import com.google.protobuf.Descriptors
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.Message
@@ -37,7 +36,7 @@ import com.google.protobuf.UnknownFieldSet
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.type.TypeName
-import java.util.Optional
+import java.util.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

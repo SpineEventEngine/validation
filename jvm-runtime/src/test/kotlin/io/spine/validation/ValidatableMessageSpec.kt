@@ -36,7 +36,7 @@ import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.spine.base.FieldPath
 import io.spine.type.TypeName
-import java.util.Optional
+import java.util.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

@@ -27,7 +27,6 @@
 package io.spine.validation
 
 import com.google.protobuf.AbstractMessage
-import com.google.protobuf.Descriptors
 import com.google.protobuf.Descriptors.Descriptor
 import com.google.protobuf.Descriptors.FieldDescriptor
 import com.google.protobuf.Message
