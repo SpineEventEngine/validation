@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,45 +26,27 @@
 
 package io.spine.validation
 
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.spine.base.Errors
-import io.spine.protobuf.unpackKnownType
-import io.spine.validation.given.plainString
+import io.spine.base.fieldPath
+import io.spine.string.templateString
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("`ValidationException` should")
-internal class ValidationExceptionSpec {
+@DisplayName("detected violations should")
+internal class DetectedViolationSpec {
 
     @Test
-    fun `provide 'ValidationError'`() {
-        val violations = listOf(
-                constraintViolation {
-                    typeName = "example.org/example.Type"
-                    message = plainString("Test error")
-                }
-            )
-        val exception = ValidationException(violations)
-        val expected = validationError { constraintViolation.addAll(violations) }
+    fun `allow field violations without field value`() {
+        val message = templateString { withPlaceholders = "Invalid field" }
+        val path = fieldPath {
+            fieldName.add("field")
+        }
 
-        exception.asMessage() shouldBe expected
-    }
+        val violation = FieldViolation(message, path)
 
-    @Test
-    fun `convert 'ValidationException' into an error`() {
-        val violation = ConstraintViolation.newBuilder().build()
-        val exception = ValidationException(violation)
-        val error = Errors.fromThrowable(exception)
-
-        error.details.unpackKnownType() shouldBe exception.asMessage()
-    }
-
-    @Test
-    @Suppress("DEPRECATION")
-    fun `provide deprecated validation error view`() {
-        val violation = ConstraintViolation.newBuilder().build()
-        val exception = ValidationException(violation)
-
-        exception.asValidationError() shouldBe exception.asMessage()
+        violation.message shouldBe message
+        violation.fieldPath shouldBe path
+        violation.fieldValue.shouldBeNull()
     }
 }
