@@ -48,14 +48,6 @@ import org.junit.jupiter.api.assertDoesNotThrow
 @DisplayName("`ValidatorRegistry` should")
 internal class ValidatorRegistrySpec {
 
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun cleanRegistry() {
-            ValidatorRegistry.clear()
-        }
-    }
-
     @BeforeEach
     fun setUp() {
         ValidatorRegistry.clear()
