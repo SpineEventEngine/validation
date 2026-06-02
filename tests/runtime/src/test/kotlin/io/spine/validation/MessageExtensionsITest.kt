@@ -35,8 +35,15 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+/**
+ * This is a small set of integration tests for extension functions
+ * working on compiled Protobuf messages.
+ *
+ * There is a "sister" test suite under `jvm-runtime` module,
+ * which tests the same extensions but on stubs.
+ */
 @DisplayName("Validation extensions for `Message` should")
-internal class MessageExtensionsSpec {
+internal class MessageExtensionsITest {
 
     @Nested
     inner class `Check if the message is valid` {

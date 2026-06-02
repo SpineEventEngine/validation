@@ -40,7 +40,7 @@ import java.util.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("message validation extensions should")
+@DisplayName("Validation extensions for `Message` should")
 internal class MessageExtensionsSpec {
 
     @Test
