@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,27 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.gradle.report.coverage
+package io.spine.validation
 
-import java.io.File
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
+import io.spine.base.fieldPath
+import io.spine.string.templateString
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-/**
- * Utilities for filtering the groups of `File`s.
- */
-internal object FileFilter {
+@DisplayName("detected violations should")
+internal class DetectedViolationSpec {
 
-    /**
-     * Excludes the generated files from this file collection, leaving only those which were
-     * created by human beings.
-     */
-    fun producedByHuman(files: Iterable<File>): Iterable<File> {
-        return files.filter { !it.isGenerated }
-    }
+    @Test
+    fun `allow field violations without field value`() {
+        val message = templateString { withPlaceholders = "Invalid field" }
+        val path = fieldPath {
+            fieldName.add("field")
+        }
 
-    /**
-     * Filters this file collection so that only generated files are present.
-     */
-    fun generatedOnly(files: Iterable<File>): Iterable<File> {
-        return files.filter { it.isGenerated }
+        val violation = FieldViolation(message, path)
+
+        violation.message shouldBe message
+        violation.fieldPath shouldBe path
+        violation.fieldValue.shouldBeNull()
     }
 }

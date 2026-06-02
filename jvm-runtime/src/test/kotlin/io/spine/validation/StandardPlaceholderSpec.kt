@@ -13,10 +13,6 @@
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
@@ -24,31 +20,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.gradle.report.coverage
+package io.spine.validation
 
-/**
- * File extensions.
- */
-internal enum class FileExtension(val value: String) {
+import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
-    /**
-     * Extension of a Java source file.
-     */
-    JAVA_SOURCE(".java"),
+@DisplayName("`StandardPlaceholder` should")
+internal class StandardPlaceholderSpec {
 
-    /**
-     * Extension of a Kotlin source file.
-     */
-    KOTLIN_SOURCE(".kt"),
-
-    /**
-     * Extension of a Java compiled file.
-     */
-    COMPILED_CLASS(".class");
-
-    /**
-     * The number of symbols in the extension.
-     */
-    val length: Int
-        get() = this.value.length
+    @Test
+    fun `expose placeholder text`() {
+        StandardPlaceholder.FIELD_PATH.placed shouldBe "\${field.path}"
+    }
 }

@@ -28,8 +28,11 @@ package io.spine.validation.diags
 
 import com.google.common.testing.NullPointerTester
 import com.google.protobuf.Timestamp
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.spine.base.Field
+import io.spine.option.IfMissingOption
+import io.spine.option.OptionsProto
 import io.spine.type.TypeName
 import io.spine.validation.ViolationText
 import io.spine.validation.constraintViolation
@@ -69,5 +72,22 @@ internal class ViolationTextSpec {
 
         text shouldContain ViolationText.of(first).toString()
         text shouldContain ViolationText.of(second).toString()
+    }
+
+    @Test
+    fun `return custom error message if present`() {
+        val customMsg = "Custom error message"
+        val option = IfMissingOption.getDefaultInstance()
+        ViolationText.errorMessage(option, customMsg) shouldBe customMsg
+    }
+
+    @Test
+    fun `return default error message if custom is empty`() {
+        val option = IfMissingOption.getDefaultInstance()
+        val defaultMsg = option.descriptorForType
+            .options
+            .getExtension(OptionsProto.defaultMessage)
+
+        ViolationText.errorMessage(option, "") shouldBe defaultMsg
     }
 }

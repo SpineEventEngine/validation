@@ -67,6 +67,21 @@ internal class TimestampValidatorSpec {
     }
 
     @Test
+    fun `detect seconds above the maximum timestamp`() {
+        val secondsValue = 253402300800L // One second after the maximum.
+        val timestamp = timestamp {
+            seconds = secondsValue
+        }
+
+        val violations = validator.validate(timestamp)
+
+        violations shouldHaveSize 1
+        val violation = violations[0] as FieldViolation
+        violation.fieldPath!!.fieldNameList shouldBe listOf("seconds")
+        violation.fieldValue shouldBe secondsValue
+    }
+
+    @Test
     fun `detect an invalid timestamp with nanos out of range`() {
         val nanosValue = 1_000_000_000
         val timestamp = timestamp {

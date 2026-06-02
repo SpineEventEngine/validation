@@ -64,7 +64,7 @@ plugins {
     pmd
     id("dokka-setup")
     `maven-publish`
-    jacoco
+    id("org.jetbrains.kotlinx.kover")
     id("project-report")
     id("pmd-settings")
 }

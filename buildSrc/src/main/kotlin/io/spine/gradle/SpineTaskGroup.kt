@@ -1,11 +1,11 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Redistribution and use in source and/or binary forms, with or without
  * modification, must retain the above copyright notice and the following
@@ -24,34 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.validation
+package io.spine.gradle
 
-import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.spine.test.validate.Meal
-import io.spine.test.validate.Meat
-import io.spine.test.validate.meal
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-
-@DisplayName("Validation extensions for `Message` should")
-internal class MessageExtensionsSpec {
-
-    @Nested
-    inner class `Check if the message is valid` {
-
-        @Test
-        fun `returning 'this' if so`() {
-            val meal = meal { meat = Meat.getDefaultInstance() }
-            meal.checkValid() shouldBeSameInstanceAs meal
-        }
-
-        @Test
-        fun `throwing 'ValidationException' if not`() {
-            assertThrows<ValidationException> {
-                Meal.getDefaultInstance().checkValid()
-            }
-        }
-    }
+/**
+ * The Gradle task group used by every custom task registered or
+ * configured by Spine SDK code.
+ *
+ * Setting `group = SpineTaskGroup.name` on every Spine-specific task
+ * keeps them listed together under `spine` in `./gradlew tasks` and
+ * in the IntelliJ IDEA Gradle tool window. See
+ * `.agents/skills/gradle-review/spine-task-conventions.md` in the
+ * `config` repository for the full convention and rationale.
+ *
+ * Example:
+ * ```
+ * tasks.register("generateSpineModel") {
+ *     group = SpineTaskGroup.name
+ *     description = "Generates Spine model classes from .proto definitions"
+ * }
+ * ```
+ */
+object SpineTaskGroup {
+    const val name = "spine"
 }

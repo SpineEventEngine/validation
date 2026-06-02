@@ -40,7 +40,7 @@ import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.PublishingRepos
 import io.spine.gradle.publish.spinePublishing
 import io.spine.gradle.repo.standardToSpineSdk
-import io.spine.gradle.report.coverage.JacocoConfig
+import io.spine.gradle.report.coverage.KoverConfig
 import io.spine.gradle.report.license.LicenseReporter
 import io.spine.gradle.report.pom.PomGenerator
 
@@ -73,8 +73,8 @@ buildscript {
 }
 
 plugins {
+    base
     idea
-    jacoco
     `gradle-doctor`
     id("project-report")
 }
@@ -139,6 +139,6 @@ allprojects {
     }
 }
 
-JacocoConfig.applyTo(project)
+KoverConfig.applyTo(rootProject)
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)

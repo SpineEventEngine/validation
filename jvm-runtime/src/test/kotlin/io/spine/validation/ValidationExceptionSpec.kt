@@ -58,4 +58,13 @@ internal class ValidationExceptionSpec {
 
         error.details.unpackKnownType() shouldBe exception.asMessage()
     }
+
+    @Test
+    @Suppress("DEPRECATION")
+    fun `provide deprecated validation error view`() {
+        val violation = ConstraintViolation.newBuilder().build()
+        val exception = ValidationException(violation)
+
+        exception.asValidationError() shouldBe exception.asMessage()
+    }
 }
