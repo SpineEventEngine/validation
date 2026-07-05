@@ -42,7 +42,7 @@ import java.util.List;
  * {@link #buildPartial()} to make the intent explicit.
  *
  * <p>To check the current content of the builder for validity without
- * building the message, use {@link #validate()}.
+ * obtaining the built message, use {@link #validate()}.
  *
  * @param <M>
  *         the type of the message to build
@@ -87,7 +87,7 @@ public interface ValidatingBuilder<M extends Message> extends Message.Builder {
      *
      * <p>Calling this method does not modify the content of this builder.
      *
-     * <p>If the message under construction does not support validation, i.e. does not
+     * <p>If the message under construction does not support validation, i.e., does not
      * implement {@link ValidatableMessage}, its content is considered valid.
      *
      * @return the violations of the constraints declared in Protobuf,
