@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ package io.spine.dependency.boms
 import io.gitlab.arturbosch.detekt.getSupportedKotlinVersion
 import io.spine.dependency.DependencyWithBom
 import io.spine.dependency.diagSuffix
+import io.spine.dependency.isDokka
 import io.spine.dependency.kotlinx.Coroutines
 import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.test.JUnit
@@ -39,7 +40,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ConfigurationContainer
 
 /**
- * The plugin which forces versions of platforms declared in the [Boms] object.
+ * The plugin that forces versions of platforms declared in the [Boms] object.
  *
  * Versions are enforced via the
  * [org.gradle.api.artifacts.dsl.DependencyHandler.enforcedPlatform] call
@@ -88,7 +89,7 @@ class BomsPlugin : Plugin<Project>  {
                 applyBoms(project, Boms.core + Boms.testing)
             }
 
-            matching { !supportsBom(it.name) }.all {
+            matching { !supportsBom(it.name) && !it.isDokka }.all {
                 resolutionStrategy.eachDependency {
                     if (requested.group == Kotlin.group) {
                         val kotlinVersion = Kotlin.runtimeVersion
@@ -170,7 +171,7 @@ private fun supportsBom(name: String) =
 private fun Project.forceArtifacts() =
     configurations.all {
         resolutionStrategy {
-            if (!isDetekt) {
+            if (!isDetekt && !isDokka) {
                 val rs = this@resolutionStrategy
                 val project = this@forceArtifacts
                 val cfg = this@all

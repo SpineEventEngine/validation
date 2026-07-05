@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ abstract class Dependency {
      *
      * @param project The project in which the artifacts are forced. Used for logging.
      * @param cfg The configuration for which the artifacts are forced.  Used for logging.
-     * @param rs The resolution strategy which forces the artifacts.
+     * @param rs The resolution strategy that forces the artifacts.
      */
     fun forceArtifacts(project: Project, cfg: Configuration, rs: ResolutionStrategy) {
         artifacts.values.forEach {
@@ -90,7 +90,7 @@ abstract class Dependency {
 }
 
 /**
- * A dependency which declares a Maven Bill of Materials (BOM).
+ * A dependency that declares a Maven Bill of Materials (BOM).
  *
  * @see <a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Bill_of_Materials_.28BOM.29_POMs">
  * Maven Bill of Materials</a>
@@ -111,6 +111,16 @@ abstract class DependencyWithBom : Dependency() {
 fun Configuration.diagSuffix(project: Project): String =
     "the configuration `$name` in the project: `${project.path}`."
 
+/**
+ * Tells if this configuration belongs to Dokka's own generator/plugin classpath.
+ *
+ * Dokka resolves these `dokka*` configurations using dependency versions pinned by
+ * Dokka itself (for example, Jackson or Kotlin), which legitimately differ from the
+ * project's. Forcing the project's versions onto them breaks `dokkaGenerate`, so such
+ * configurations must be excluded from the project's version forcing.
+ */
+val Configuration.isDokka: Boolean
+    get() = name.startsWith("dokka")
 
 private fun ResolutionStrategy.forceWithLogging(
     project: Project,
