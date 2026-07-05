@@ -25,6 +25,7 @@
  */
 
 import io.spine.dependency.boms.BomsPlugin
+import io.spine.dependency.local.Base
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.TestLib
 import io.spine.gradle.report.license.LicenseReporter
@@ -44,6 +45,7 @@ spine {
 }
 
 dependencies {
+    testImplementation(Base.lib)
     testImplementation(Logging.lib)
     testImplementation(TestLib.lib)
 }

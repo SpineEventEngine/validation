@@ -30,7 +30,6 @@ import com.google.common.testing.NullPointerTester
 import com.google.protobuf.Message
 import io.kotest.matchers.shouldBe
 import io.spine.base.Time
-import io.spine.code.proto.FieldContext
 import io.spine.string.templateString
 import io.spine.testing.UtilityClassTest
 import org.junit.jupiter.api.DisplayName
@@ -42,7 +41,6 @@ internal class ValidateUtilitySpec : UtilityClassTest<Validate>(Validate::class.
     override fun configure(tester: NullPointerTester) {
         super.configure(tester)
         tester.setDefault(Message::class.java, Time.currentTime())
-            .setDefault(FieldContext::class.java, FieldContext.empty())
     }
 
     @Test
