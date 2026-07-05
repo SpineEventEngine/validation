@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,10 @@
 package io.spine.test
 
 import com.google.protobuf.Message
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.spine.test.protobuf.CardNumber
 import io.spine.validation.NonValidated
@@ -51,7 +53,7 @@ internal class JavaMessageSmokeTest {
         CardNumber.newBuilder().setDigits("0000 0000 0000 0000")
 
     /**
-     * The builder which should case error on `build()`.
+     * The builder which should cause an error on `build()`.
      */
     private val invalid: CardNumber.Builder =
         CardNumber.newBuilder().setDigits("zazazazazazaz")
@@ -79,6 +81,28 @@ internal class JavaMessageSmokeTest {
         assertThrows<ValidationException> {
             check(number)
         }
+    }
+
+    @Test
+    fun `report no violations via 'validate()' when the builder content is valid`() {
+        valid.validate().shouldBeEmpty()
+    }
+
+    @Test
+    fun `report violations via 'validate()' without throwing when the content is invalid`() {
+        val violations = assertDoesNotThrow {
+            invalid.validate()
+        }
+        violations.shouldNotBeEmpty()
+    }
+
+    @Test
+    fun `keep the builder content intact when probing via 'validate()'`() {
+        val digitsBefore = invalid.digits
+
+        invalid.validate()
+
+        invalid.digits shouldBe digitsBefore
     }
 
     @Test
