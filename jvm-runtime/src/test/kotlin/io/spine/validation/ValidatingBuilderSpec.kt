@@ -29,41 +29,84 @@ package io.spine.validation
 import com.google.protobuf.Empty
 import com.google.protobuf.Message
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.shouldBe
+import io.spine.base.FieldPath
+import io.spine.string.templateString
+import io.spine.type.TypeName
+import java.util.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 /**
  * Unit tests for the [validate][ValidatingBuilder.validate] default method.
  *
- * The valid and invalid cases are covered against real generated builders in
- * the `tests/validating` module. This spec covers the remaining branch of the
- * contract — a builder whose product does not implement [ValidatableMessage] —
- * which a generated [ValidatingBuilder] can never reach (its product is always
- * a [ValidatableMessage]), and so requires a minimal hand-written builder.
+ * The method probes the builder's product: it collects the violations reported
+ * by a [ValidatableMessage], and treats a product that does not support
+ * validation as valid. Real generated builders always produce a
+ * [ValidatableMessage], so these tests use minimal stubs to cover each branch of
+ * the contract in isolation — including the non-[ValidatableMessage] case that a
+ * generated builder can never reach. The valid and invalid cases are also
+ * verified end-to-end against generated code in the `tests/validating` module.
  */
 @DisplayName("`ValidatingBuilder.validate()` should")
 internal class ValidatingBuilderSpec {
 
+    private val violation = constraintViolation {
+        message = templateString { withPlaceholders = "The field is required." }
+    }
+
+    @Test
+    fun `report no violations when the validatable product is valid`() {
+        val builder = StubBuilder(StubValidatable(emptyList()))
+
+        builder.validate().shouldBeEmpty()
+    }
+
+    @Test
+    fun `report the violations of an invalid validatable product without throwing`() {
+        val builder = StubBuilder(StubValidatable(listOf(violation)))
+
+        val violations = assertDoesNotThrow { builder.validate() }
+
+        violations shouldBe listOf(violation)
+    }
+
     @Test
     fun `treat a product without validation support as valid`() {
-        val builder: ValidatingBuilder<Message> = NonValidatableBuilder()
+        val builder = StubBuilder(Empty.getDefaultInstance())
 
         builder.validate().shouldBeEmpty()
     }
 }
 
 /**
- * A minimal [ValidatingBuilder] whose product is a plain [Message] that does
- * not implement [ValidatableMessage].
- *
- * All [Message.Builder] members are delegated to a real [Empty] builder; only
- * [build] and [buildPartial] are overridden to return the plain message the
- * test needs.
+ * A minimal [ValidatingBuilder] that yields the given [product] from both
+ * [build] and [buildPartial]; all other [Message.Builder] members are delegated
+ * to a real [Empty] builder.
  */
-private class NonValidatableBuilder(
+private class StubBuilder(
+    private val product: Message,
     private val delegate: Message.Builder = Empty.newBuilder()
 ) : Message.Builder by delegate, ValidatingBuilder<Message> {
 
-    override fun build(): Message = Empty.getDefaultInstance()
-    override fun buildPartial(): Message = Empty.getDefaultInstance()
+    override fun build(): Message = product
+    override fun buildPartial(): Message = product
+}
+
+/**
+ * A minimal [ValidatableMessage] reporting the given [violations] from its
+ * [validate] method; all [Message] members are delegated to a plain [Empty].
+ */
+private class StubValidatable(
+    private val violations: List<ConstraintViolation>,
+    private val delegate: Message = Empty.getDefaultInstance()
+) : Message by delegate, ValidatableMessage {
+
+    override fun validate(parentPath: FieldPath, parentName: TypeName?): Optional<ValidationError> =
+        if (violations.isEmpty()) {
+            Optional.empty()
+        } else {
+            Optional.of(validationError { constraintViolation.addAll(violations) })
+        }
 }
