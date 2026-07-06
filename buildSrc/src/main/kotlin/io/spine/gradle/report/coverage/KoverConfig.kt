@@ -28,6 +28,7 @@ package io.spine.gradle.report.coverage
 
 import io.spine.dependency.test.Jacoco
 import io.spine.dependency.test.Kover
+import io.spine.gradle.testing.COMPILER_COVERAGE_DIR
 import io.spine.gradle.testing.TESTKIT_COVERAGE_DIR
 import java.io.File
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
@@ -104,6 +105,13 @@ private const val KOTLIN_FILE_CLASS_SUFFIX: String = "Kt"
  *    the probe level against each module's actual bytecode: a line hit both
  *    in-process and out-of-process is counted once. Summing pre-aggregated XML
  *    reports instead would double-count such lines.
+ *  - Feeds the JaCoCo execution data produced by the forked Spine Compiler JVMs
+ *    (see [io.spine.gradle.testing.enableSpineCompilerCoverage]) into the **root**
+ *    `total` report as `additionalBinaryReports`. This credits the code-generation
+ *    plugins in the `java` and `context` modules — renderers and generators that
+ *    run out-of-process in the compiler fork and are otherwise reported at ~0%.
+ *    Fed only at the root: Codecov ingests the root report, whose aggregation owns
+ *    those classes, so a per-module feed would be redundant.
  *
  * This is the Kover-based successor to the deprecated JaCoCo-based
  * coverage aggregation pipeline. The behaviour mirrors what
@@ -198,6 +206,7 @@ class KoverConfig private constructor(
                         onCheck.set(true)
                     }
                     additionalBinaryReports.addAll(rootTestKitExecFilesProvider())
+                    additionalBinaryReports.addAll(rootCompilerExecFilesProvider())
                 }
                 filters {
                     excludes {
@@ -240,6 +249,27 @@ class KoverConfig private constructor(
             rootProject.subprojects.asSequence()
                 .filter { it.pluginManager.hasPlugin(Kover.id) }
                 .flatMap { testKitExecFiles(it).asSequence() }
+                .toList()
+        }
+
+    /**
+     * Lazy `Provider` of the JaCoCo execution-data files produced by the forked
+     * Spine Compiler JVMs across every subproject.
+     *
+     * These files credit the out-of-process execution of compiler plugins — the
+     * renderers and generators in the `java` and `context` modules — to the root
+     * coverage rollup. Unlike the TestKit files, they are collected from **all**
+     * subprojects regardless of whether the producing module applies Kover: the
+     * exec is produced by a test module's `launch*SpineCompiler` task, but the
+     * classes it credits belong to the aggregated production modules. Resolved at
+     * task-graph time, after the launch tasks have written them.
+     *
+     * @see io.spine.gradle.testing.enableSpineCompilerCoverage
+     */
+    private fun rootCompilerExecFilesProvider(): Provider<Iterable<File>> =
+        rootProject.provider {
+            rootProject.subprojects.asSequence()
+                .flatMap { compilerExecFiles(it).asSequence() }
                 .toList()
         }
 
@@ -293,6 +323,23 @@ class KoverConfig private constructor(
  */
 private fun testKitExecFiles(project: Project): List<File> {
     val dir = project.layout.buildDirectory.dir(TESTKIT_COVERAGE_DIR).get().asFile
+    if (!dir.isDirectory) {
+        return emptyList()
+    }
+    return dir.listFiles { file -> file.isFile && file.extension == "exec" }
+        ?.sorted()
+        ?: emptyList()
+}
+
+/**
+ * Returns the JaCoCo execution-data (`.exec`) files written by the forked Spine
+ * Compiler JVMs of the [project], or an empty list if the module produced none.
+ *
+ * The files reside under `build/`[COMPILER_COVERAGE_DIR] and are created when a
+ * module opts in via [io.spine.gradle.testing.enableSpineCompilerCoverage].
+ */
+private fun compilerExecFiles(project: Project): List<File> {
+    val dir = project.layout.buildDirectory.dir(COMPILER_COVERAGE_DIR).get().asFile
     if (!dir.isDirectory) {
         return emptyList()
     }

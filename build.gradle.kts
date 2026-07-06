@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import io.spine.gradle.repo.standardToSpineSdk
 import io.spine.gradle.report.coverage.KoverConfig
 import io.spine.gradle.report.license.LicenseReporter
 import io.spine.gradle.report.pom.PomGenerator
+import io.spine.gradle.testing.enableSpineCompilerCoverage
 
 buildscript {
     standardSpineSdkRepositories()
@@ -140,5 +141,14 @@ allprojects {
 }
 
 KoverConfig.applyTo(rootProject)
+
+// Attach the JaCoCo agent to the forked Spine Compiler JVMs so that the
+// out-of-process execution of code-generation plugins (the `java` and `context`
+// modules' renderers and generators) is credited to the root coverage report.
+// A no-op for modules that run no `launch*SpineCompiler` task.
+subprojects {
+    enableSpineCompilerCoverage()
+}
+
 LicenseReporter.mergeAllReports(project)
 PomGenerator.applyTo(project)
