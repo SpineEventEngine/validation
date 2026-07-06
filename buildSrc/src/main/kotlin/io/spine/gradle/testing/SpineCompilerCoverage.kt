@@ -27,7 +27,6 @@
 package io.spine.gradle.testing
 
 import io.spine.dependency.test.Jacoco
-import java.util.concurrent.atomic.AtomicBoolean
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.JavaExec
@@ -35,7 +34,8 @@ import org.gradle.kotlin.dsl.withType
 
 /**
  * Configures the `launch*SpineCompiler` tasks of this project so that the JaCoCo
- * agent is attached to the forked JVM that runs the Spine Compiler.
+ * agent is attached to the forked JVM that runs the Spine Compiler, and the
+ * resulting execution data is captured as a task output.
  *
  * The Spine Compiler executes plugin code — renderers, option generators, and
  * ProtoData plugins such as `JavaValidationPlugin` — in a **separate JVM** spawned
@@ -46,34 +46,35 @@ import org.gradle.kotlin.dsl.withType
  *
  * For every such launch task, this method:
  *
- *  1. Resolves the standalone JaCoCo agent JAR pinned to [Jacoco.version] through a
- *     dedicated [AGENT_CONFIGURATION] configuration.
+ *  1. Resolves the standalone JaCoCo agent JAR ([Jacoco.agent]) through a dedicated
+ *     [AGENT_CONFIGURATION] configuration.
  *  2. Attaches
- *     `-javaagent:<agent>=destfile=build/`[COMPILER_COVERAGE_DIR]`/<task>.exec,append=true`
- *     to the forked JVM. A per-task destination file keeps the launch variants
- *     (main, test, test-fixtures) from clobbering one another.
- *  3. Wipes the exec directory at most once per build invocation, from the `doFirst`
- *     of the first launch task that actually executes, so stale coverage from a
- *     previous run does not accumulate. A `doFirst` action (rather than a `dependsOn`
- *     clean task) runs only when the task truly executes: an `UP-TO-DATE` launch keeps
- *     the previous `.exec`, which the report then still credits.
- *  4. Marks the launch tasks non-cacheable. The agent's `.exec` is flushed
- *     out-of-process on JVM shutdown, *after* the task action completes, so it cannot
- *     be a declared task output. Were the task left cacheable, a cache hit would
- *     restore the generated sources but no `.exec`, dropping the coverage.
+ *     `-javaagent:<agent>=destfile=build/`[COMPILER_COVERAGE_DIR]`/<task>.exec,append=false`
+ *     to the forked JVM. Each launch variant (main, test, test-fixtures) writes its
+ *     own per-task file, and `append=false` makes every run overwrite it, so a
+ *     re-run never accumulates a previous run's probes.
+ *  3. Declares that `.exec` file as a **task output**, which keeps the launch tasks
+ *     cacheable. A `JavaExec` task blocks until the forked JVM exits, and the agent
+ *     flushes the exec on that exit — so the file is already on disk when the task
+ *     action returns and *can* be a declared output. Declaring it lets Gradle's
+ *     build cache store and restore it, so the coverage survives both an
+ *     `UP-TO-DATE` skip (the file stays on disk from the previous run) and a
+ *     `FROM-CACHE` hit (the file is restored from the cache). This is the key
+ *     difference from [enableTestKitCoverage], whose TestKit worker daemon flushes
+ *     its exec only *after* the `Test` task completes and therefore cannot declare
+ *     it — which is why that helper must instead disable caching.
  *
- * The agent is attached and the destination file computed from a `doFirst` action —
- * the same approach [enableTestKitCoverage] uses for TestKit workers — rather than a
- * `jvmArgumentProviders` entry, so the two coverage helpers stay structurally
- * identical and neither contributes untracked task inputs.
+ * The agent is attached from a `doFirst` action rather than a `jvmArgumentProviders`
+ * entry so that its absolute path stays out of the task's input fingerprint: the
+ * exec content depends on the compiler's own inputs (which drive what code runs), so
+ * keying up-to-dateness and the cache on those inputs is exactly right.
  *
  * The produced `.exec` files are merged into the **root** Kover report by
  * [io.spine.gradle.report.coverage.KoverConfig]. Only classes the root aggregation
  * owns (the `java` and `context` modules' renderers/generators) are credited from
- * them; a Kover report is scoped to its own classes, and the compiler loads those
- * classes as their original, un-relocated artifacts, so JaCoCo's class IDs match.
- * The agent emits binary execution data because Kover merges binary data at the
- * probe level — see `KoverConfig` for why binary, not XML.
+ * them; the compiler loads those classes as their original, un-relocated artifacts,
+ * so JaCoCo's class IDs match. The agent emits binary execution data because Kover
+ * merges binary data at the probe level — see `KoverConfig` for why binary, not XML.
  *
  * The method is idempotent and may be called on every subproject; it is a no-op for
  * modules that declare no `launch*SpineCompiler` task.
@@ -83,34 +84,25 @@ fun Project.enableSpineCompilerCoverage() {
         isCanBeConsumed = false
         isCanBeResolved = true
     }
-    dependencies.add(agent.name, "org.jacoco:org.jacoco.agent:${Jacoco.version}:runtime")
+    dependencies.add(agent.name, Jacoco.agent)
 
     val agentPath = agent.elements.map { it.single().asFile.absolutePath }
     val execDir = layout.buildDirectory.dir(COMPILER_COVERAGE_DIR)
 
-    // Wiped at most once per build invocation, by the first launch task that actually
-    // executes — see the KDoc above for why this is a guarded `doFirst` wipe rather
-    // than a `dependsOn` clean task.
-    val cleaned = AtomicBoolean(false)
-
     val launchTasks = tasks.withType<JavaExec>().matching { it.isSpineCompilerLaunchTask() }
 
     launchTasks.configureEach {
-        inputs.files(agent).withPropertyName(AGENT_CONFIGURATION)
-        outputs.cacheIf(
-            "The Spine Compiler coverage exec is produced out-of-process and cannot " +
-                    "be a declared task output; a cache hit would drop it."
-        ) { false }
+        val taskName = name
+        val execFile = execDir.map { it.file("$taskName.exec") }
+        // Captured as a task output so the build cache stores and restores it —
+        // see the KDoc for why a synchronous `JavaExec` can declare its agent exec
+        // while a TestKit worker cannot.
+        outputs.file(execFile)
         doFirst {
-            val dir = execDir.get().asFile
-            if (cleaned.compareAndSet(false, true)) {
-                dir.deleteRecursively()
-            }
-            dir.mkdirs()
-            val execFile = dir.resolve("$name.exec")
+            val file = execFile.get().asFile
+            file.parentFile.mkdirs()
             jvmArgs(
-                "-javaagent:${agentPath.get()}=destfile=${execFile.absolutePath}," +
-                        "append=true,output=file"
+                "-javaagent:${agentPath.get()}=destfile=${file.absolutePath},append=false"
             )
         }
     }
@@ -157,11 +149,10 @@ internal const val COMPILER_COVERAGE_DIR: String = "jacoco-compiler"
 
 /**
  * The name of the dedicated, resolvable configuration that holds the standalone
- * JaCoCo agent JAR (`org.jacoco:org.jacoco.agent:<version>:runtime`) attached to
- * the forked Spine Compiler JVMs.
+ * JaCoCo agent JAR ([Jacoco.agent]) attached to the forked Spine Compiler JVMs.
  *
  * The configuration is hidden and non-consumable; it exists only to resolve the
- * agent JAR and to register it as an input of the launch tasks.
+ * agent JAR.
  */
 private const val AGENT_CONFIGURATION: String = "spineCompilerJacocoAgent"
 

@@ -84,7 +84,7 @@ fun Project.enableTestKitCoverage() {
         isCanBeConsumed = false
         isCanBeResolved = true
     }
-    dependencies.add(agent.name, "org.jacoco:org.jacoco.agent:${Jacoco.version}:runtime")
+    dependencies.add(agent.name, Jacoco.agent)
 
     val agentPath = agent.elements.map { it.single().asFile.absolutePath }
     val execDir = layout.buildDirectory.dir(TESTKIT_COVERAGE_DIR)
