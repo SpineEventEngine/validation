@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@
 package io.spine.dependency.lib
 
 /**
- * Commons CLI is a transitive dependency which we don't use directly.
+ * Commons CLI is a transitive dependency that we don't use directly.
  * We `force` it in [forceVersions].
  *
  * [Commons CLI](https://commons.apache.org/proper/commons-cli/)
  */
 @Suppress("unused", "ConstPropertyName")
 object CommonsCli {
-    private const val version = "1.5.0"
+    private const val version = "1.11.0"
     const val lib = "commons-cli:commons-cli:$version"
 }

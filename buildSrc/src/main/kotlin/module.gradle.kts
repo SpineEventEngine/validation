@@ -99,7 +99,6 @@ fun Module.addDependencies() {
     dependencies {
         ErrorProne.apply {
             errorprone(core)
-            errorproneJavac(javacPlugin)
         }
         api(JSpecify.annotations)
     }
