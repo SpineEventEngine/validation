@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -1106,14 +1106,14 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -1607,6 +1607,9 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1803,28 +1806,31 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 ## Compile, tests, and tooling
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:07 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:58 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -2864,14 +2870,14 @@ This report was generated on **Mon Jul 06 16:20:07 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -3977,14 +3983,14 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
@@ -4008,6 +4014,9 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -4031,14 +4040,14 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:07 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:58 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java-settings:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-java-settings:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -4838,14 +4847,14 @@ This report was generated on **Mon Jul 06 16:20:07 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -5665,14 +5674,14 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -6162,6 +6171,9 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6350,14 +6362,14 @@ This report was generated on **Mon Jul 06 16:20:12 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -6656,6 +6668,9 @@ This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using
      * **Project URL:** [http://functionaljava.org/](http://functionaljava.org/)
      * **License:** [The BSD3 License](https://github.com/functionaljava/functionaljava/blob/master/etc/LICENCE)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6811,14 +6826,14 @@ This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:11 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -7274,6 +7289,9 @@ This report was generated on **Mon Jul 06 16:20:11 WEST 2026** using
      * **Project URL:** [http://functionaljava.org/](http://functionaljava.org/)
      * **License:** [The BSD3 License](https://github.com/functionaljava/functionaljava/blob/master/etc/LICENCE)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7429,14 +7447,14 @@ This report was generated on **Mon Jul 06 16:20:11 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:13 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -7805,6 +7823,9 @@ This report was generated on **Mon Jul 06 16:20:13 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7993,14 +8014,14 @@ This report was generated on **Mon Jul 06 16:20:13 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:19 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:59:00 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-time:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-time:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8238,6 +8259,9 @@ This report was generated on **Mon Jul 06 16:20:19 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -8422,14 +8446,14 @@ This report was generated on **Mon Jul 06 16:20:19 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8829,6 +8853,9 @@ This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9033,14 +9060,14 @@ This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:24 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
@@ -9566,6 +9593,9 @@ This report was generated on **Mon Jul 06 16:20:24 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9770,14 +9800,14 @@ This report was generated on **Mon Jul 06 16:20:24 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:14 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -9899,6 +9929,9 @@ This report was generated on **Mon Jul 06 16:20:14 WEST 2026** using
      * **Project URL:** [https://checkerframework.org/](https://checkerframework.org/)
      * **License:** [The MIT License](https://opensource.org/licenses/MIT)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -10010,14 +10043,14 @@ This report was generated on **Mon Jul 06 16:20:14 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:09 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.447`
+# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.448`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -10252,6 +10285,9 @@ This report was generated on **Mon Jul 06 16:20:09 WEST 2026** using
 1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
      * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -10360,6 +10396,6 @@ This report was generated on **Mon Jul 06 16:20:09 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 16:20:10 WEST 2026** using 
+This report was generated on **Mon Jul 06 18:58:59 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
