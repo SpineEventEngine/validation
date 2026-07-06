@@ -9,7 +9,7 @@ See [README.md](README.md) for the format and routing rules.
 
 ## Project (durable context & rationale)
 
-*(no entries yet)*
+- [codegen-coverage-blind-spot](project/codegen-coverage-blind-spot.md) — Why the `java`/`context` codegen modules report ~0% coverage — they run out-of-process in the forked Spine Compiler JVM, which JaCoCo/Kover do not instrument.
 
 ## Reference (external systems)
 
