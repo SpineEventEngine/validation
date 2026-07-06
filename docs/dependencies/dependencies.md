@@ -1610,6 +1610,12 @@ This report was generated on **Mon Jul 06 21:17:50 WEST 2026** using
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.15.
      * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
 
+1.  **Group** : org.jacoco. **Name** : org.jacoco.core. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
+1.  **Group** : org.jacoco. **Name** : org.jacoco.report. **Version** : 0.8.15.
+     * **License:** [EPL-2.0](https://www.eclipse.org/legal/epl-2.0/)
+
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
      * **Project URL:** [http://www.jetbrains.org](http://www.jetbrains.org)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1794,7 +1800,22 @@ This report was generated on **Mon Jul 06 21:17:50 WEST 2026** using
      * **Project URL:** [https://github.com/ota4j-team/opentest4j](https://github.com/ota4j-team/opentest4j)
      * **License:** [The Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1.  **Group** : org.ow2.asm. **Name** : asm. **Version** : 9.10.1.
+     * **Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1.  **Group** : org.ow2.asm. **Name** : asm. **Version** : 9.8.
+     * **Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.ow2.asm. **Name** : asm-commons. **Version** : 9.10.1.
+     * **Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
+     * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
+     * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1.  **Group** : org.ow2.asm. **Name** : asm-tree. **Version** : 9.10.1.
      * **Project URL:** [http://asm.ow2.io/](http://asm.ow2.io/)
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1806,7 +1827,7 @@ This report was generated on **Mon Jul 06 21:17:50 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jul 06 21:17:55 WEST 2026** using 
+This report was generated on **Mon Jul 06 23:00:19 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
