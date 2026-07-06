@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Implementation base for generated message builders.
  *
- * <p>This interface defines a method {@link #build()} which validates the built message
+ * <p>This interface defines a method {@link #build()} that validates the built message
  * before returning it to the user.
  *
  * <p>If a user specifically needs to skip validation, they should use
@@ -74,9 +74,9 @@ public interface ValidatingBuilder<M extends Message> extends Message.Builder {
     /**
      * Probes the current content of this builder for validity.
      *
-     * <p>The content is validated in place — including content which is already
+     * <p>The content is validated in place — including content that is already
      * invalid, e.g., assembled from untrusted input or restored via
-     * {@link Message#toBuilder() toBuilder()} from a message which no longer
+     * {@link Message#toBuilder() toBuilder()} from a message that no longer
      * satisfies its constraints.
      *
      * <p>Unlike {@link #build()}, this method does not throw
