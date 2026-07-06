@@ -15,5 +15,5 @@ SDK components can depend on without pulling in application-specific behaviour.
 Keep implementation details behind the library boundary, prefer additive changes
 to public APIs, and preserve compatibility for downstream JVM consumers.
 
-Read [`.agents/jvm-project.md`](jvm-project.md) for build stack, coding style,
+Read [`.agents/guidelines/jvm-project.md`](../.agents/guidelines/jvm-project.md) for build stack, coding style,
 tests, and versioning.
