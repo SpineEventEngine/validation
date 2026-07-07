@@ -44,6 +44,7 @@ import io.spine.gradle.report.coverage.KoverConfig
 import io.spine.gradle.report.license.LicenseReporter
 import io.spine.gradle.report.pom.PomGenerator
 import io.spine.gradle.testing.enableSpineCompilerCoverage
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 
 buildscript {
     standardSpineSdkRepositories()
@@ -141,6 +142,23 @@ allprojects {
 }
 
 KoverConfig.applyTo(rootProject)
+
+// Exclude the Protobuf test fixtures of `:context-tests` from the aggregated
+// coverage report. That module applies Kover so its in-process compilation tests
+// credit `:context` production classes, but its fixtures generate into the
+// `io.spine.tools.validation.given` package. `KoverConfig` only excludes
+// generated classes discovered under `main` source sets, not `testFixtures`, so
+// these generated fixtures are filtered out here to keep them out of the figures
+// Codecov ingests.
+extensions.configure<KoverProjectExtension> {
+    reports {
+        filters {
+            excludes {
+                classes("io.spine.tools.validation.given.**")
+            }
+        }
+    }
+}
 
 // Attach the JaCoCo agent to the forked Spine Compiler JVMs so that the
 // out-of-process execution of code-generation plugins (the `java` and `context`

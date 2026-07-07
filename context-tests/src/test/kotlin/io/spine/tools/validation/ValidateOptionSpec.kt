@@ -24,7 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.validation
+
+import io.kotest.matchers.string.shouldContain
+import io.spine.tools.compiler.ast.name
+import io.spine.tools.compiler.ast.qualifiedName
+import io.spine.tools.validation.given.ValidateOnNonMessageField
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+
 /**
- * The version of the Validation library to publish.
+ * Tests the field-type check performed by
+ * [ValidateReaction][io.spine.tools.validation.option.ValidateReaction], which
+ * rejects the `(validate)` option on fields that are not messages (or repeated
+ * of messages, or maps with message values).
  */
-extra.set("validationVersion", "2.0.0-SNAPSHOT.449")
+@DisplayName("`ValidateReaction` should reject the `(validate)` option")
+internal class ValidateOptionSpec : CompilationErrorTest() {
+
+    @Test
+    fun `applied to a non-message field`() =
+        assertCompilationFails(ValidateOnNonMessageField::class) { field ->
+            shouldContain(field.qualifiedName)
+            shouldContain(field.type.name)
+            shouldContain("is not supported by the")
+            shouldContain("Supported field types")
+        }
+}

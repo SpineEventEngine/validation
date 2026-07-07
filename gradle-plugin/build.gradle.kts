@@ -82,6 +82,10 @@ gradlePlugin {
 
 dependencies {
     compileOnly(gradleKotlinDsl())
+    // Needed at test runtime too: applying the plugin under `ProjectBuilder`
+    // exercises the Spine Compiler Gradle plugin, which references
+    // `org.gradle.kotlin.dsl` extensions.
+    testImplementation(gradleKotlinDsl())
     implementation(Protobuf.GradlePlugin.lib)
     implementation(Base.format)
     implementation(Compiler.api)

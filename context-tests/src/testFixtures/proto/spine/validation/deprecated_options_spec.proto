@@ -24,7 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The version of the Validation library to publish.
- */
-extra.set("validationVersion", "2.0.0-SNAPSHOT.449")
+syntax = "proto3";
+
+package spine.validation.stubs;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.tools.validation.given";
+option java_outer_classname = "DeprecatedOptionsSpecProto";
+option java_multiple_files = true;
+
+// Uses the deprecated `(is_required)` oneof option, which the validation
+// compiler reports with a deprecation warning.
+message WithDeprecatedIsRequired {
+    oneof choice {
+        option (is_required) = true;
+
+        string first = 1;
+        string second = 2;
+    }
+}
+
+// Uses the deprecated `(if_invalid)` field option, which the validation
+// compiler reports with a deprecation warning.
+message WithDeprecatedIfInvalid {
+    IfInvalidPayload value = 1 [(if_invalid).error_msg = "The value is invalid."];
+}
+
+// A message type referenced by `WithDeprecatedIfInvalid`.
+message IfInvalidPayload {
+    string content = 1;
+}

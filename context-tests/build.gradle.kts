@@ -37,6 +37,10 @@ plugins {
     protobuf
     `java-test-fixtures`
     prototap
+    // Apply Kover so that the in-process compilation tests of this module credit
+    // coverage to the `:context` (and other) production classes they exercise.
+    // `KoverConfig` at the root folds this module into the aggregated report.
+    id("org.jetbrains.kotlinx.kover")
 }
 LicenseReporter.generateReportIn(project)
 

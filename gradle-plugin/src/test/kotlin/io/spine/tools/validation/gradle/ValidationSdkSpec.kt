@@ -24,7 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.validation.gradle
+
+import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+
 /**
- * The version of the Validation library to publish.
+ * Verifies the Maven coordinates and the compiler-plugin class name exposed by
+ * [ValidationSdk], which the Validation Gradle plugin uses to wire user projects.
  */
-extra.set("validationVersion", "2.0.0-SNAPSHOT.449")
+@DisplayName("`ValidationSdk` should")
+internal class ValidationSdkSpec {
+
+    @Test
+    fun `expose the JVM runtime artifact`() {
+        ValidationSdk.jvmRuntime.group shouldBe "io.spine"
+        ValidationSdk.jvmRuntime.name shouldBe "spine-validation-jvm-runtime"
+    }
+
+    @Test
+    fun `expose the Java codegen bundle artifact`() {
+        ValidationSdk.javaCodegenBundle.group shouldBe "io.spine.tools"
+        ValidationSdk.javaCodegenBundle.name shouldBe "validation-java-bundle"
+    }
+
+    @Test
+    fun `expose the fully qualified name of the Java compiler plugin`() {
+        ValidationSdk.javaCompilerPlugin shouldBe
+                "io.spine.tools.validation.java.JavaValidationPlugin"
+    }
+}
