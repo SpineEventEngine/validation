@@ -43,11 +43,11 @@ through Gradle's `extra` properties:
 
 <embed-code
   file="$root/version.gradle.kts"
-  start="val validationVersion"
-  end="val validationVersion">
+  start="validationVersion"
+  end="validationVersion">
 </embed-code>
 ```kotlin
-val validationVersion by extra("2.0.0-SNAPSHOT.446")
+extra.set("validationVersion", "2.0.0-SNAPSHOT.449")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
