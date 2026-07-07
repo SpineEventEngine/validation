@@ -15,7 +15,6 @@ $dokka.location:io.spine.tools.validation.bound.event/MaxFieldDiscovered.Field.S
 $dokka.location:io.spine.tools.validation.bound.event/MaxFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/bound/event/MaxFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.bound.event/MaxFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/bound/event/MaxFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.bound.event/MaxFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/bound/event/MaxFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.bound.event/MaxFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/event/MaxFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Field.FieldField.html
@@ -31,7 +30,6 @@ $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field.S
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.bound.event/MinFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/event/MinFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Field.FieldField.html
@@ -47,7 +45,6 @@ $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.bound.event/RangeFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/event/RangeFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound/MaxField.Builder///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.Builder.html
 $dokka.location:io.spine.tools.validation.bound/MaxField.Column///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.Column.html
 $dokka.location:io.spine.tools.validation.bound/MaxField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.Field.DocField.html
@@ -66,7 +63,6 @@ $dokka.location:io.spine.tools.validation.bound/MaxField.Field.TypeNameField///P
 $dokka.location:io.spine.tools.validation.bound/MaxField.Field///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.Field.html
 $dokka.location:io.spine.tools.validation.bound/MaxField.Query///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.Query.html
 $dokka.location:io.spine.tools.validation.bound/MaxField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/bound/MaxField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation.bound/MaxFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/MaxFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound/MinField.Builder///PointingToDeclaration/io/spine/tools/validation/bound/MinField.Builder.html
 $dokka.location:io.spine.tools.validation.bound/MinField.Column///PointingToDeclaration/io/spine/tools/validation/bound/MinField.Column.html
 $dokka.location:io.spine.tools.validation.bound/MinField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/bound/MinField.Field.DocField.html
@@ -85,10 +81,8 @@ $dokka.location:io.spine.tools.validation.bound/MinField.Field.TypeNameField///P
 $dokka.location:io.spine.tools.validation.bound/MinField.Field///PointingToDeclaration/io/spine/tools/validation/bound/MinField.Field.html
 $dokka.location:io.spine.tools.validation.bound/MinField.Query///PointingToDeclaration/io/spine/tools/validation/bound/MinField.Query.html
 $dokka.location:io.spine.tools.validation.bound/MinField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/bound/MinField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation.bound/MinFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/MinFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound/NumericBound.Builder///PointingToDeclaration/io/spine/tools/validation/bound/NumericBound.Builder.html
 $dokka.location:io.spine.tools.validation.bound/NumericBound.ValueCase///PointingToDeclaration/io/spine/tools/validation/bound/NumericBound.ValueCase.html
-$dokka.location:io.spine.tools.validation.bound/NumericBoundKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/NumericBoundKt.Dsl.html
 $dokka.location:io.spine.tools.validation.bound/RangeField.Builder///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.Builder.html
 $dokka.location:io.spine.tools.validation.bound/RangeField.Column///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.Column.html
 $dokka.location:io.spine.tools.validation.bound/RangeField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.Field.DocField.html
@@ -107,7 +101,6 @@ $dokka.location:io.spine.tools.validation.bound/RangeField.Field.TypeNameField//
 $dokka.location:io.spine.tools.validation.bound/RangeField.Field///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.Field.html
 $dokka.location:io.spine.tools.validation.bound/RangeField.Query///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.Query.html
 $dokka.location:io.spine.tools.validation.bound/RangeField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/bound/RangeField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation.bound/RangeFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/bound/RangeFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field.OneofGroupField///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Field.OneofGroupField.html
@@ -116,7 +109,6 @@ $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field.Oneo
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field.SpanField///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Field.SpanField.html
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/ChoiceOneofDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/ChoiceOneofDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Field.FieldField.html
@@ -129,7 +121,6 @@ $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field.Sp
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/DistinctFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/DistinctFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/DistinctFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Field.FieldField.html
@@ -142,25 +133,21 @@ $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field.SpanFi
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/GoesFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/GoesFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/GoesFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscovered.Field.FieldNameField///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscovered.Field.FieldNameField.html
 $dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscovered.Field.FieldRefField///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscovered.Field.FieldRefField.html
 $dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/IfHasDuplicatesOptionDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/IfHasDuplicatesOptionDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscovered.Field.FieldNameField///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscovered.Field.FieldNameField.html
 $dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscovered.Field.FieldRefField///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscovered.Field.FieldRefField.html
 $dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/IfMissingOptionDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/IfMissingOptionDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscovered.Field.FieldNameField///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscovered.Field.FieldNameField.html
 $dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscovered.Field.FieldRefField///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscovered.Field.FieldRefField.html
 $dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/IfSetAgainOptionDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/IfSetAgainOptionDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Field.FieldField.html
@@ -174,12 +161,9 @@ $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field.Spa
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/PatternFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/PatternFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/PatternFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/RequireMessageDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/RequireMessageDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/RequireMessageDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/RequireMessageDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/RequireMessageDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/RequireMessageDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/RequireMessageDiscoveredKt.Dsl.GroupProxy///PointingToDeclaration/io/spine/tools/validation/event/RequireMessageDiscoveredKt.Dsl.GroupProxy.html
-$dokka.location:io.spine.tools.validation.event/RequireMessageDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/RequireMessageDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Field.FieldField.html
@@ -192,7 +176,6 @@ $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field.Sp
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/RequiredFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/RequiredFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/RequiredFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Field.FieldField.html
@@ -205,7 +188,6 @@ $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field.Spa
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/SetOnceFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/SetOnceFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Builder///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Builder.html
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field.DocField///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Field.DocField.html
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field.FieldField///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Field.FieldField.html
@@ -218,7 +200,6 @@ $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field.Sp
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field.TypeField///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Field.TypeField.html
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation.event/ValidateFieldDiscovered.Field///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscovered.Field.html
-$dokka.location:io.spine.tools.validation.event/ValidateFieldDiscoveredKt.Dsl///PointingToDeclaration/io/spine/tools/validation/event/ValidateFieldDiscoveredKt.Dsl.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Builder///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.Builder.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Column///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.Column.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Field.DocField///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.Field.DocField.html
@@ -230,7 +211,6 @@ $dokka.location:io.spine.tools.validation/ChoiceOneof.Field.TypeNameField///Poin
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Field///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.Field.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Query///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.Query.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/ChoiceOneof.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/ChoiceOneofKt.Dsl///PointingToDeclaration/io/spine/tools/validation/ChoiceOneofKt.Dsl.html
 $dokka.location:io.spine.tools.validation/DistinctField.Builder///PointingToDeclaration/io/spine/tools/validation/DistinctField.Builder.html
 $dokka.location:io.spine.tools.validation/DistinctField.Column///PointingToDeclaration/io/spine/tools/validation/DistinctField.Column.html
 $dokka.location:io.spine.tools.validation/DistinctField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/DistinctField.Field.DocField.html
@@ -246,10 +226,7 @@ $dokka.location:io.spine.tools.validation/DistinctField.Field.TypeNameField///Po
 $dokka.location:io.spine.tools.validation/DistinctField.Field///PointingToDeclaration/io/spine/tools/validation/DistinctField.Field.html
 $dokka.location:io.spine.tools.validation/DistinctField.Query///PointingToDeclaration/io/spine/tools/validation/DistinctField.Query.html
 $dokka.location:io.spine.tools.validation/DistinctField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/DistinctField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/DistinctFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/DistinctFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation/FieldGroup.Builder///PointingToDeclaration/io/spine/tools/validation/FieldGroup.Builder.html
-$dokka.location:io.spine.tools.validation/FieldGroupKt.Dsl.FieldProxy///PointingToDeclaration/io/spine/tools/validation/FieldGroupKt.Dsl.FieldProxy.html
-$dokka.location:io.spine.tools.validation/FieldGroupKt.Dsl///PointingToDeclaration/io/spine/tools/validation/FieldGroupKt.Dsl.html
 $dokka.location:io.spine.tools.validation/GoesField.Builder///PointingToDeclaration/io/spine/tools/validation/GoesField.Builder.html
 $dokka.location:io.spine.tools.validation/GoesField.Column///PointingToDeclaration/io/spine/tools/validation/GoesField.Column.html
 $dokka.location:io.spine.tools.validation/GoesField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/GoesField.Field.DocField.html
@@ -265,7 +242,6 @@ $dokka.location:io.spine.tools.validation/GoesField.Field.TypeNameField///Pointi
 $dokka.location:io.spine.tools.validation/GoesField.Field///PointingToDeclaration/io/spine/tools/validation/GoesField.Field.html
 $dokka.location:io.spine.tools.validation/GoesField.Query///PointingToDeclaration/io/spine/tools/validation/GoesField.Query.html
 $dokka.location:io.spine.tools.validation/GoesField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/GoesField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/GoesFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/GoesFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation/PatternField.Builder///PointingToDeclaration/io/spine/tools/validation/PatternField.Builder.html
 $dokka.location:io.spine.tools.validation/PatternField.Column///PointingToDeclaration/io/spine/tools/validation/PatternField.Column.html
 $dokka.location:io.spine.tools.validation/PatternField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/PatternField.Field.DocField.html
@@ -282,15 +258,12 @@ $dokka.location:io.spine.tools.validation/PatternField.Field.TypeNameField///Poi
 $dokka.location:io.spine.tools.validation/PatternField.Field///PointingToDeclaration/io/spine/tools/validation/PatternField.Field.html
 $dokka.location:io.spine.tools.validation/PatternField.Query///PointingToDeclaration/io/spine/tools/validation/PatternField.Query.html
 $dokka.location:io.spine.tools.validation/PatternField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/PatternField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/PatternFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/PatternFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation/RequireMessage.Builder///PointingToDeclaration/io/spine/tools/validation/RequireMessage.Builder.html
 $dokka.location:io.spine.tools.validation/RequireMessage.Column///PointingToDeclaration/io/spine/tools/validation/RequireMessage.Column.html
 $dokka.location:io.spine.tools.validation/RequireMessage.Field.TypeNameField///PointingToDeclaration/io/spine/tools/validation/RequireMessage.Field.TypeNameField.html
 $dokka.location:io.spine.tools.validation/RequireMessage.Field///PointingToDeclaration/io/spine/tools/validation/RequireMessage.Field.html
 $dokka.location:io.spine.tools.validation/RequireMessage.Query///PointingToDeclaration/io/spine/tools/validation/RequireMessage.Query.html
 $dokka.location:io.spine.tools.validation/RequireMessage.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/RequireMessage.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/RequireMessageKt.Dsl.GroupProxy///PointingToDeclaration/io/spine/tools/validation/RequireMessageKt.Dsl.GroupProxy.html
-$dokka.location:io.spine.tools.validation/RequireMessageKt.Dsl///PointingToDeclaration/io/spine/tools/validation/RequireMessageKt.Dsl.html
 $dokka.location:io.spine.tools.validation/RequiredField.Builder///PointingToDeclaration/io/spine/tools/validation/RequiredField.Builder.html
 $dokka.location:io.spine.tools.validation/RequiredField.Column///PointingToDeclaration/io/spine/tools/validation/RequiredField.Column.html
 $dokka.location:io.spine.tools.validation/RequiredField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/RequiredField.Field.DocField.html
@@ -306,7 +279,6 @@ $dokka.location:io.spine.tools.validation/RequiredField.Field.TypeNameField///Po
 $dokka.location:io.spine.tools.validation/RequiredField.Field///PointingToDeclaration/io/spine/tools/validation/RequiredField.Field.html
 $dokka.location:io.spine.tools.validation/RequiredField.Query///PointingToDeclaration/io/spine/tools/validation/RequiredField.Query.html
 $dokka.location:io.spine.tools.validation/RequiredField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/RequiredField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/RequiredFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/RequiredFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation/SetOnceField.Builder///PointingToDeclaration/io/spine/tools/validation/SetOnceField.Builder.html
 $dokka.location:io.spine.tools.validation/SetOnceField.Column///PointingToDeclaration/io/spine/tools/validation/SetOnceField.Column.html
 $dokka.location:io.spine.tools.validation/SetOnceField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/SetOnceField.Field.DocField.html
@@ -322,7 +294,6 @@ $dokka.location:io.spine.tools.validation/SetOnceField.Field.TypeNameField///Poi
 $dokka.location:io.spine.tools.validation/SetOnceField.Field///PointingToDeclaration/io/spine/tools/validation/SetOnceField.Field.html
 $dokka.location:io.spine.tools.validation/SetOnceField.Query///PointingToDeclaration/io/spine/tools/validation/SetOnceField.Query.html
 $dokka.location:io.spine.tools.validation/SetOnceField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/SetOnceField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/SetOnceFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/SetOnceFieldKt.Dsl.html
 $dokka.location:io.spine.tools.validation/ValidateField.Builder///PointingToDeclaration/io/spine/tools/validation/ValidateField.Builder.html
 $dokka.location:io.spine.tools.validation/ValidateField.Column///PointingToDeclaration/io/spine/tools/validation/ValidateField.Column.html
 $dokka.location:io.spine.tools.validation/ValidateField.Field.DocField///PointingToDeclaration/io/spine/tools/validation/ValidateField.Field.DocField.html
@@ -338,7 +309,6 @@ $dokka.location:io.spine.tools.validation/ValidateField.Field.TypeNameField///Po
 $dokka.location:io.spine.tools.validation/ValidateField.Field///PointingToDeclaration/io/spine/tools/validation/ValidateField.Field.html
 $dokka.location:io.spine.tools.validation/ValidateField.Query///PointingToDeclaration/io/spine/tools/validation/ValidateField.Query.html
 $dokka.location:io.spine.tools.validation/ValidateField.QueryBuilder///PointingToDeclaration/io/spine/tools/validation/ValidateField.QueryBuilder.html
-$dokka.location:io.spine.tools.validation/ValidateFieldKt.Dsl///PointingToDeclaration/io/spine/tools/validation/ValidateFieldKt.Dsl.html
 io.spine.tools.validation
 io.spine.tools.validation.bound
 io.spine.tools.validation.bound.event
