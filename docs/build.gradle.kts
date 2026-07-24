@@ -36,7 +36,7 @@ LicenseReporter.generateReportIn(project)
 val updateValidationPluginVersion =
         tasks.register<UpdatePluginVersion>("updateValidationPluginVersion") {
     directory.set(file("$projectDir/_examples/"))
-    val validationVersion: String by rootProject.extra
+    val validationVersion = rootProject.extra["validationVersion"] as String
     version.set(validationVersion)
     pluginId.set("io.spine.validation")
     kotlinVersion.set(Kotlin.version)
@@ -49,21 +49,21 @@ val updateCoreJvmPluginVersion = tasks.register<UpdatePluginVersion>("updateCore
     kotlinVersion.set(Kotlin.version)
 }
 
-val updatePluginVersions by tasks.registering {
+val updatePluginVersions = tasks.register("updatePluginVersions") {
     dependsOn(updateValidationPluginVersion, updateCoreJvmPluginVersion)
 }
 
 /**
  * Installs the Node.js dependencies required for building the site.
  */
-val installDependencies by tasks.registering(Exec::class) {                    
+val installDependencies = tasks.register<Exec>("installDependencies") {
     commandLine("$projectDir/_script/install-dependencies")
 }
 
 /**
  * Builds and runs the site locally.
  */
-val runSite by tasks.registering(Exec::class) {
+tasks.register<Exec>("runSite") {
     dependsOn(installDependencies)
     commandLine("$projectDir/_script/hugo-serve")
 }
@@ -71,7 +71,7 @@ val runSite by tasks.registering(Exec::class) {
 /**
  * Builds the site without starting the server.
  */
-val buildSite by tasks.registering(Exec::class) {
+tasks.register<Exec>("buildSite") {
     dependsOn(installDependencies)
     commandLine("$projectDir/_script/hugo-build")
 }
@@ -79,7 +79,7 @@ val buildSite by tasks.registering(Exec::class) {
 /**
  * Embeds the code samples into pages of the site.
  */
-val embedCode by tasks.registering(Exec::class) {
+tasks.register<Exec>("embedCode") {
     dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/embed-code")
 }
@@ -87,12 +87,12 @@ val embedCode by tasks.registering(Exec::class) {
 /**
  * Verifies that the source code samples embedded into the pages are up-to-date.
  */
-val checkSamples by tasks.registering(Exec::class) {
+tasks.register<Exec>("checkSamples") {
     dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/check-samples")
 }
 
-val publishAllToMavenLocal by tasks.registering {
+val publishAllToMavenLocal = tasks.register("publishAllToMavenLocal") {
     dependsOn(
         rootProject.allprojects.flatMap { p ->
             p.tasks.withType(PublishToMavenLocal::class.java).toList()
@@ -107,7 +107,7 @@ val examplesDir = "$projectDir/_examples"
 // E.g., the example projects these tasks do `clean build`.
 val buildAll = "buildAll"
 
-val buildExamples by tasks.registering(RunGradle::class) {
+val buildExamples = tasks.register<RunGradle>("buildExamples") {
     directory = examplesDir
     task(buildAll)
     dependsOn(publishAllToMavenLocal)

@@ -42,7 +42,7 @@ val moduleArtifactId = "validation-gradle-plugin"
 
 apply(from = "$rootDir/version.gradle.kts")
 
-val validationVersion: String by extra
+val validationVersion = extra["validationVersion"] as String
 
 artifactMeta {
     artifactId.set(moduleArtifactId)
@@ -108,7 +108,7 @@ afterEvaluate {
         }
     }
 
-    val sourcesJar by tasks.getting(Jar::class)
-    val writeArtifactMeta by tasks.getting
+    val sourcesJar = tasks.getByName<Jar>("sourcesJar")
+    val writeArtifactMeta = tasks.getByName("writeArtifactMeta")
     sourcesJar.dependsOn(writeArtifactMeta)
 }

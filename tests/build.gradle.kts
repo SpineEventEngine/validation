@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,5 +130,5 @@ fun Project.applyPlugins() {
 // Temporarily disable this task for this parent Gradle project.
 // The tasks in its children still should execute fine.
 // See more [here](https://github.com/jk1/Gradle-License-Report/issues/337).
-val generateLicenseReport by tasks.getting
+val generateLicenseReport = tasks.getByName("generateLicenseReport")
 generateLicenseReport.enabled = false

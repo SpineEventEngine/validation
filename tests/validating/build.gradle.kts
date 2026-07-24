@@ -81,6 +81,6 @@ afterEvaluate {
     }
 }
 
-val testFixturesJar by tasks.getting(Jar::class) {
+tasks.getByName<Jar>("testFixturesJar") {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

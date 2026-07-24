@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,12 +51,12 @@ configurations.all {
 // Set explicit dependency for the `kspKotlin` task to avoid the Gradle warning
 // on missing explicit dependency.
 project.afterEvaluate {
-    val launchSpineCompiler by tasks.getting
-    val kspKotlin by tasks.getting {
+    val launchSpineCompiler = tasks.getByName("launchSpineCompiler")
+    val kspKotlin = tasks.getByName("kspKotlin") {
         dependsOn(launchSpineCompiler)
     }
     @Suppress("unused")
-    val compileKotlin by tasks.getting {
+    val compileKotlin = tasks.getByName("compileKotlin") {
         dependsOn(kspKotlin)
     }
 }
