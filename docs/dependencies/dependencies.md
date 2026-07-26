@@ -1,9 +1,9 @@
 
 
-# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-context:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -12,42 +12,42 @@
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -76,7 +76,7 @@
      * **Project URL:** [https://github.com/google/gson](https://github.com/google/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -228,7 +228,7 @@
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -237,47 +237,47 @@
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -351,11 +351,11 @@
      * **Project URL:** [https://goo.gle/ksp](https://goo.gle/ksp)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotation](https://errorprone.info/error_prone_annotation)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -363,16 +363,15 @@
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_check_api](https://errorprone.info/error_prone_check_api)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_core](https://errorprone.info/error_prone_core)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -383,7 +382,7 @@
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.19.1.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.27.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.3.
@@ -1106,17 +1105,17 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:05 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-context-tests:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1125,42 +1124,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1341,7 +1340,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1350,42 +1349,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1426,8 +1425,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -1827,14 +1825,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-docs:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 ## Compile, tests, and tooling
@@ -1844,17 +1842,17 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:03 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-gradle-plugin:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1863,37 +1861,37 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1918,7 +1916,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson](https://github.com/google/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2070,7 +2068,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2079,42 +2077,42 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2172,11 +2170,11 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotation](https://errorprone.info/error_prone_annotation)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2184,16 +2182,15 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_check_api](https://errorprone.info/error_prone_check_api)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_core](https://errorprone.info/error_prone_core)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -2204,7 +2201,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.19.1.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.27.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.3.
@@ -2891,17 +2888,17 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:05 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-java:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2910,42 +2907,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2974,7 +2971,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson](https://github.com/google/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3126,7 +3123,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3135,47 +3132,47 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3249,11 +3246,11 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://goo.gle/ksp](https://goo.gle/ksp)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotation](https://errorprone.info/error_prone_annotation)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -3261,16 +3258,15 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_check_api](https://errorprone.info/error_prone_check_api)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_core](https://errorprone.info/error_prone_core)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -3281,7 +3277,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.19.1.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.27.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.3.
@@ -4004,14 +4000,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:05 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-java-bundle:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : org.jetbrains. **Name** : annotations. **Version** : 13.0.
@@ -4061,14 +4057,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:03 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-java-settings:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-java-settings:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -4079,7 +4075,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson](https://github.com/google/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4135,7 +4131,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -4144,22 +4140,22 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -4205,11 +4201,11 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotation](https://errorprone.info/error_prone_annotation)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4217,16 +4213,15 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_check_api](https://errorprone.info/error_prone_check_api)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_core](https://errorprone.info/error_prone_core)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -4237,7 +4232,7 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.19.1.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.27.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.3.
@@ -4868,14 +4863,14 @@ This report was generated on **Tue Jul 07 17:33:51 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:05 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine:spine-validation-jvm-runtime:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -4886,7 +4881,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/google/gson](https://github.com/google/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -4942,7 +4937,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -4951,22 +4946,22 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-xml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -5020,11 +5015,11 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://goo.gle/ksp](https://goo.gle/ksp)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotation](https://errorprone.info/error_prone_annotation)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -5032,16 +5027,15 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_check_api](https://errorprone.info/error_prone_check_api)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.36.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.42.0.
      * **Project URL:** [https://errorprone.info/error_prone_core](https://errorprone.info/error_prone_core)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -5052,7 +5046,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.19.1.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.27.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.3.
@@ -5695,17 +5689,17 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:05 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-consumer:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -5714,42 +5708,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -5930,7 +5924,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -5939,42 +5933,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6019,8 +6013,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -6383,14 +6376,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-consumer-dependency:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -6457,7 +6450,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6466,42 +6459,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6558,8 +6551,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.3.
@@ -6847,17 +6839,17 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-extensions:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -6866,42 +6858,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7082,7 +7074,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7091,42 +7083,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7179,8 +7171,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.3.
@@ -7468,14 +7459,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-runtime:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -7542,7 +7533,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7551,42 +7542,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -7647,8 +7638,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -8035,14 +8025,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-time:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-time:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8109,7 +8099,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -8118,27 +8108,27 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -8159,8 +8149,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -8467,14 +8456,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-validating:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -8541,7 +8530,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -8550,42 +8539,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -8661,8 +8650,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -9081,17 +9069,17 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-validator:2.0.0-SNAPSHOT.460`
 
 ## Runtime
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9100,42 +9088,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9316,7 +9304,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9325,42 +9313,42 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.dataformat. **Name** : jackson-dataformat-yaml. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-dataformats-text](https://github.com/FasterXML/jackson-dataformats-text)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jsr310. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-kotlin. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-module-kotlin](https://github.com/FasterXML/jackson-module-kotlin)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -9417,8 +9405,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -9821,14 +9808,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-validator-dependency:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -9907,8 +9894,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.guava. **Name** : failureaccess. **Version** : 1.0.3.
@@ -10064,14 +10050,14 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.450`
+# Dependencies of `io.spine.tools:validation-vanilla:2.0.0-SNAPSHOT.460`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -10138,7 +10124,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests, and tooling
-1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson. **Name** : jackson-bom. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-bom](https://github.com/FasterXML/jackson-bom)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -10147,27 +10133,27 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-core. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-core](https://github.com/FasterXML/jackson-core)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.core. **Name** : jackson-databind. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson](https://github.com/FasterXML/jackson)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-guava. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-datatypes-collections](https://github.com/FasterXML/jackson-datatypes-collections)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.datatype. **Name** : jackson-datatype-jdk8. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.0.
+1.  **Group** : com.fasterxml.jackson.module. **Name** : jackson-module-parameter-names. **Version** : 2.22.1.
      * **Project URL:** [https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names](https://github.com/FasterXML/jackson-modules-java8/jackson-module-parameter-names)
      * **License:** [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -10188,8 +10174,7 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
      * **Project URL:** [https://errorprone.info/error_prone_annotations](https://errorprone.info/error_prone_annotations)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.36.0.
-     * **Project URL:** [https://errorprone.info/error_prone_type_annotations](https://errorprone.info/error_prone_type_annotations)
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.42.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.7.4.
@@ -10417,6 +10402,6 @@ This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue Jul 07 17:33:52 WEST 2026** using 
+This report was generated on **Sat Jul 25 18:34:04 WEST 2026** using 
 [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under 
 [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
