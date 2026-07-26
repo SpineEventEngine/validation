@@ -55,8 +55,7 @@ project.afterEvaluate {
     val kspKotlin = tasks.getByName("kspKotlin") {
         dependsOn(launchSpineCompiler)
     }
-    @Suppress("unused")
-    val compileKotlin = tasks.getByName("compileKotlin") {
+    tasks.getByName("compileKotlin") {
         dependsOn(kspKotlin)
     }
 }

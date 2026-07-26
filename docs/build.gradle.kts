@@ -60,33 +60,25 @@ val installDependencies = tasks.register<Exec>("installDependencies") {
     commandLine("$projectDir/_script/install-dependencies")
 }
 
-/**
- * Builds and runs the site locally.
- */
+// Builds and runs the site locally.
 tasks.register<Exec>("runSite") {
     dependsOn(installDependencies)
     commandLine("$projectDir/_script/hugo-serve")
 }
 
-/**
- * Builds the site without starting the server.
- */
+// Builds the site without starting the server.
 tasks.register<Exec>("buildSite") {
     dependsOn(installDependencies)
     commandLine("$projectDir/_script/hugo-build")
 }
 
-/**
- * Embeds the code samples into pages of the site.
- */
+// Embeds the code samples into pages of the site.
 tasks.register<Exec>("embedCode") {
     dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/embed-code")
 }
 
-/**
- * Verifies that the source code samples embedded into the pages are up-to-date.
- */
+// Verifies that the source code samples embedded into the pages are up-to-date.
 tasks.register<Exec>("checkSamples") {
     dependsOn(updatePluginVersions)
     commandLine("$projectDir/_script/check-samples")
