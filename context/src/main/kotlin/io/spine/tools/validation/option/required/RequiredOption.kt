@@ -32,7 +32,6 @@ import io.spine.core.Where
 import io.spine.option.IfMissingOption
 import io.spine.option.OptionsProto.ifMissing
 import io.spine.option.OptionsProto.required
-import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React

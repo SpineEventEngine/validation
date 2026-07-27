@@ -27,7 +27,6 @@
 package io.spine.tools.validation.test
 
 import io.spine.core.Subscribe
-import io.spine.server.entity.alter
 import io.spine.tools.compiler.ast.TypeName
 import io.spine.tools.compiler.plugin.View
 import io.spine.tools.validation.test.money.CurrencyMessage

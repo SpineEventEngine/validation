@@ -59,9 +59,8 @@ spine {
 
 // The Spine Compiler uses output from the KSP task.
 project.afterEvaluate {
-    val kspKotlin by tasks.getting
-    @Suppress("unused")
-    val launchSpineCompiler by tasks.getting {
+    val kspKotlin = tasks.getByName("kspKotlin")
+    tasks.getByName("launchSpineCompiler") {
         dependsOn(kspKotlin)
     }
 }

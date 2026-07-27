@@ -32,7 +32,6 @@ import io.spine.core.Where
 import io.spine.option.IfHasDuplicatesOption
 import io.spine.option.OptionsProto.distinct
 import io.spine.option.OptionsProto.ifHasDuplicates
-import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React

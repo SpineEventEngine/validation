@@ -30,7 +30,6 @@ import io.spine.core.External
 import io.spine.core.Subscribe
 import io.spine.core.Where
 import io.spine.option.ChoiceOption
-import io.spine.server.entity.alter
 import io.spine.server.event.Just
 import io.spine.server.event.NoReaction
 import io.spine.server.event.React

@@ -44,7 +44,7 @@ plugins {
 LicenseReporter.generateReportIn(project)
 
 afterEvaluate {
-    val kspKotlin by tasks.getting
-    val launchSpineCompiler by tasks.getting
+    val kspKotlin = tasks.getByName("kspKotlin")
+    val launchSpineCompiler = tasks.getByName("launchSpineCompiler")
     kspKotlin.dependsOn(launchSpineCompiler)
 }
