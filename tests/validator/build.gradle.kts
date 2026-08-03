@@ -29,6 +29,13 @@ import io.spine.gradle.report.license.LicenseReporter
 
 buildscript {
     forceCodegenPlugins()
+    configurations.all {
+        resolutionStrategy {
+            force(
+                io.spine.dependency.lib.JetBrainsAnnotations.lib,
+            )
+        }
+    }
 }
 
 plugins {

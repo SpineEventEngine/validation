@@ -53,6 +53,7 @@ buildscript {
             force(
                 // Make sure we have the right Protobuf Runtime.
                 io.spine.dependency.lib.Protobuf.javaLib,
+                io.spine.dependency.lib.JetBrainsAnnotations.lib,
                 io.spine.dependency.local.Logging.grpcContext,
             )
         }
