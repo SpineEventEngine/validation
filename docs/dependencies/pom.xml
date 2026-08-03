@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>validation</artifactId>
-<version>2.0.0-SNAPSHOT.460</version>
+<version>2.0.0-SNAPSHOT.461</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -74,43 +74,43 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine</groupId>
     <artifactId>spine-validation-jvm-runtime</artifactId>
-    <version>2.0.0-SNAPSHOT.450</version>
+    <version>2.0.0-SNAPSHOT.460</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-api</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-backend</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-gradle-api</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-gradle-plugin</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-jvm</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-params</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -200,7 +200,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-testlib</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
     <scope>test</scope>
   </dependency>
   <dependency>
@@ -267,12 +267,12 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-cli-all</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>compiler-protoc-plugin</artifactId>
-    <version>2.0.0-SNAPSHOT.063</version>
+    <version>2.0.0-SNAPSHOT.064</version>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
@@ -297,7 +297,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>validation-java-bundle</artifactId>
-    <version>2.0.0-SNAPSHOT.450</version>
+    <version>2.0.0-SNAPSHOT.460</version>
   </dependency>
   <dependency>
     <groupId>net.sourceforge.pmd</groupId>
