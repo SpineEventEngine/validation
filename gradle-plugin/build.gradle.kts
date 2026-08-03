@@ -86,14 +86,23 @@ dependencies {
     // exercises the Spine Compiler Gradle plugin, which references
     // `org.gradle.kotlin.dsl` extensions.
     testImplementation(gradleKotlinDsl())
-    implementation(Protobuf.GradlePlugin.lib)
-    implementation(Base.format)
-    implementation(Compiler.api)
-    implementation(Compiler.params)
-    implementation(Compiler.pluginLib)
-    implementation(Compiler.gradleApi)
-    implementation(ToolBase.jvmTools)
-    implementation(project(":java-settings"))
+
+    arrayOf(
+        Protobuf.GradlePlugin.lib,
+        Base.format,
+        Compiler.api,
+        Compiler.params,
+        Compiler.pluginLib,
+        Compiler.gradleApi,
+        ToolBase.jvmTools
+    ).forEach {
+        implementation(it) {
+            excludeJetBrainsAnnotations()
+        }
+    }
+    implementation(project(":java-settings")) {
+        excludeJetBrainsAnnotations()
+    }
 }
 
 // Change the `artifactId` to have the `validation-` prefix.

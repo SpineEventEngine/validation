@@ -47,7 +47,7 @@ through Gradle's `extra` properties:
   end="validationVersion">
 </embed-code>
 ```kotlin
-extra.set("validationVersion", "2.0.0-SNAPSHOT.449")
+extra.set("validationVersion", "2.0.0-SNAPSHOT.461")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
