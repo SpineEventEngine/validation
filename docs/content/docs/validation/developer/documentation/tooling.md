@@ -107,7 +107,7 @@ relevant declarations are in `docs/_preview/package.json`:
 "devDependencies": {
   "@fullhuman/postcss-purgecss": "^7.0.2",
   "autoprefixer": "^10.4.22",
-  "postcss": "^8.5.10",
+  "postcss": "^8.5.23",
   "postcss-cli": "^11.0.1",
   "postcss-discard-comments": "^7.0.5"
 }
