@@ -1,0 +1,22 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.tools.validation.gradle////PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/index.html
+$dokka.location:io.spine.tools.validation.gradle/Meta///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-meta/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Companion///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-companion/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Companion/NAME/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-companion/-n-a-m-e.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java.SuppressWarnings///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/-suppress-warnings/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java.SuppressWarnings/SuppressWarnings/#org.gradle.api.model.ObjectFactory/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/-suppress-warnings/-suppress-warnings.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java.SuppressWarnings/unsignedFields/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/-suppress-warnings/unsigned-fields.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java/Java/#org.gradle.api.model.ObjectFactory/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/-java.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java/suppressWarnings/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/suppress-warnings.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension.Java/suppressWarnings/#org.gradle.api.Action[io.spine.tools.validation.gradle.ValidationExtension.Java.SuppressWarnings]/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-java/suppress-warnings.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/ValidationExtension/#org.gradle.api.model.ObjectFactory/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/-validation-extension.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/enabled/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/enabled.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/java/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/java.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationExtension/java/#org.gradle.api.Action[io.spine.tools.validation.gradle.ValidationExtension.Java]/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-extension/java.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/index.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/ValidationGradlePlugin/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/-validation-gradle-plugin.html
+$dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/apply/#org.gradle.api.Project/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/apply.html
+io.spine.tools.validation.gradle
