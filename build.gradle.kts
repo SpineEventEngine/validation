@@ -26,17 +26,9 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.KotlinPoet
-import io.spine.dependency.lib.Roaster
-import io.spine.dependency.local.Base
-import io.spine.dependency.local.Compiler
-import io.spine.dependency.local.CoreJvm
 import io.spine.dependency.local.Logging
 import io.spine.dependency.local.Spine
-import io.spine.dependency.local.Time
-import io.spine.dependency.local.ToolBase
-import io.spine.dependency.local.Validation
 import io.spine.gradle.publish.PublishingRepos
 import io.spine.gradle.publish.spinePublishing
 import io.spine.gradle.repo.standardToSpineSdk
@@ -115,28 +107,9 @@ allprojects {
         exclude(group = "io.spine", module = "spine-logging-backend")
 
         resolutionStrategy {
-            @Suppress("DEPRECATION") // `Kotlin.stdLibJdk7` is a transitive dependency.
             force(
-                Base.lib,
-                Compiler.api,
-                Compiler.backend,
-                Compiler.gradleApi,
-                Compiler.jvm,
-                Compiler.params,
-                Compiler.pluginLib,
-                CoreJvm.client,
-                CoreJvm.server,
-                Grpc.bom,
                 KotlinPoet.lib,
                 Logging.lib,
-                Roaster.api,
-                Roaster.jdt,
-                Time.lib,
-                Time.javaExtensions,
-                Time.kotlinExtensions,
-                ToolBase.lib,
-                ToolBase.pluginBase,
-                Validation.javaBundle,
             )
         }
     }
