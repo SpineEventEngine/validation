@@ -29,9 +29,12 @@ import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
 import io.spine.dependency.build.Ksp
+import io.spine.dependency.lib.Caffeine
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Jackson
+import io.spine.dependency.lib.JacksonV2
 import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJvm
@@ -82,7 +85,6 @@ project.run {
     configureKotlin(javaVersion)
 
     configureTaskDependencies()
-    dependTestOnJvmRuntime()
     configureProtoc()
     setupDocPublishing()
 }
@@ -105,37 +107,6 @@ fun Module.addDependencies() {
 }
 
 /**
- * Sets dependencies on `:jvm-runtime-bundle:shadowJar` for Java-related modules,
- * unless it's ":jvm-runtime-bundle" itself.
- *
- * The dependencies are set for the tasks:
- *   1. `test`
- *   2. `launchProtoData`
- *   3. `launchTestProtoData`
- *   4. `pmdMain`.
- */
-fun Module.dependTestOnJvmRuntime() {
-    val javaBundleModule = ":jvm-runtime"
-    if (!name.startsWith(":java") || name == javaBundleModule) {
-        return
-    }
-
-    afterEvaluate {
-        val test: Task by tasks.getting
-        val javaBundleJar = project(javaBundleModule).tasks.findByName("shadowJar")
-
-        fun String.dependOn(task: Task) = tasks.findByName(this)?.dependsOn(task)
-
-        javaBundleJar?.let {
-            test.dependsOn(it)
-            "launchProtoData".dependOn(it)
-            "launchTestProtoData".dependOn(it)
-            "pmdMain".dependOn(it)
-        }
-    }
-}
-
-/**
  * Forces versions of dependencies and excludes Protobuf Light.
  */
 fun Module.forceConfigurations() {
@@ -145,49 +116,28 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
-                dependencySubstitution {
-                    // Substitute the legacy artifact coordinates with the new `ToolBase.lib` alias.
-                    substitute(module("io.spine.tools:spine-tool-base")).using(module(ToolBase.lib))
-                }
-
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.DataFormat.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+
+                JacksonV2.Core.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.Module.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.Junior.forceArtifacts(project, this@all, this@resolutionStrategy)
 
                 force(
-                    Jackson.bom,
+                    Caffeine.lib,
                     Jackson.annotations,
                     JUnit.bom,
                     Kotlin.bom,
-                    Kotlin.Compiler.embeddable,
                     Kotlin.scriptRuntime,
-                    Reflect.lib,
+                    KotlinPoet.lib,
                     Base.annotations,
                     Base.lib,
                     Base.format,
                     Base.environment,
-                    Protobuf.compiler,
                     Time.lib,
-                    Time.javaExtensions,
-                    Time.kotlinExtensions,
-                    TestLib.lib,
-                    ToolBase.gradlePluginApi,
-                    ToolBase.jvmTools,
-                    ToolBase.lib,
-                    ToolBase.intellijPlatform,
-                    ToolBase.intellijPlatformJava,
-                    ToolBase.psiJava,
-                    ToolBase.protobufSetupPlugins,
-                    Logging.libJvm,
-                    Logging.testLib,
-                    Logging.grpcContext,
-                    CoreJvm.server,
-                    CoreJvm.serverTestLib,
+                    Logging.lib,
                     Validation.runtime,
-                    Dokka.BasePlugin.lib,
-                    "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
                 )
             }
 
