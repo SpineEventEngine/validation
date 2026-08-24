@@ -35,6 +35,7 @@ import io.spine.dependency.local.ToolBase
 import io.spine.dependency.local.Validation.javaBundleModule
 import io.spine.dependency.local.Validation.runtimeModule
 import io.spine.dependency.local.Validation.gradlePluginModule
+import io.spine.dependency.local.Logging
 import io.spine.gradle.report.license.LicenseReporter
 
 buildscript {
@@ -72,6 +73,8 @@ allprojects {
                     ToolBase.jvmTools,
                     ToolBase.gradlePluginApi,
                     ToolBase.psiJava,
+
+                    Logging.lib,
                 )
             }
         }

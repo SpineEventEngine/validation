@@ -101,18 +101,6 @@ allprojects {
     repositories.standardToSpineSdk()
     group = Spine.toolsGroup
     version = extra["validationVersion"]!!
-
-    configurations.all {
-        exclude(group = "io.spine", module = "spine-flogger-api")
-        exclude(group = "io.spine", module = "spine-logging-backend")
-
-        resolutionStrategy {
-            force(
-                KotlinPoet.lib,
-                Logging.lib,
-            )
-        }
-    }
 }
 
 KoverConfig.applyTo(rootProject)

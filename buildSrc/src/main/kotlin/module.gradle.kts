@@ -34,6 +34,7 @@ import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Jackson
 import io.spine.dependency.lib.JacksonV2
 import io.spine.dependency.lib.Kotlin
+import io.spine.dependency.lib.KotlinPoet
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.CoreJvm
@@ -156,36 +157,18 @@ fun Module.forceConfigurations() {
 
                 force(
                     Caffeine.lib,
-                    Jackson.bom,
                     Jackson.annotations,
                     JUnit.bom,
                     Kotlin.bom,
-                    Kotlin.Compiler.embeddable,
                     Kotlin.scriptRuntime,
-                    Reflect.lib,
+                    KotlinPoet.lib,
                     Base.annotations,
                     Base.lib,
                     Base.format,
                     Base.environment,
-                    Protobuf.compiler,
                     Time.lib,
-                    Time.javaExtensions,
-                    Time.kotlinExtensions,
-                    TestLib.lib,
-                    ToolBase.gradlePluginApi,
-                    ToolBase.jvmTools,
-                    ToolBase.intellijPlatform,
-                    ToolBase.intellijPlatformJava,
-                    ToolBase.psiJava,
-                    ToolBase.protobufSetupPlugins,
-                    Logging.libJvm,
-                    Logging.testLib,
-                    Logging.grpcContext,
-                    CoreJvm.server,
-                    CoreJvm.serverTestLib,
+                    Logging.lib,
                     Validation.runtime,
-                    Dokka.BasePlugin.lib,
-                    "io.spine.validation:spine-validation-java-runtime:2.0.0-SNAPSHOT.360",
                 )
             }
 
