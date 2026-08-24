@@ -29,8 +29,10 @@ import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
 import io.spine.dependency.build.Ksp
+import io.spine.dependency.lib.Caffeine
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Jackson
+import io.spine.dependency.lib.JacksonV2
 import io.spine.dependency.lib.Kotlin
 import io.spine.dependency.lib.Protobuf
 import io.spine.dependency.local.Base
@@ -121,15 +123,14 @@ fun Module.dependTestOnJvmRuntime() {
     }
 
     afterEvaluate {
-        val test: Task by tasks.getting
         val javaBundleJar = project(javaBundleModule).tasks.findByName("shadowJar")
 
         fun String.dependOn(task: Task) = tasks.findByName(this)?.dependsOn(task)
 
         javaBundleJar?.let {
-            test.dependsOn(it)
-            "launchProtoData".dependOn(it)
-            "launchTestProtoData".dependOn(it)
+            tasks.test.configure {
+                dependsOn(it)
+            }
             "pmdMain".dependOn(it)
         }
     }
@@ -145,18 +146,16 @@ fun Module.forceConfigurations() {
 
         all {
             resolutionStrategy {
-                dependencySubstitution {
-                    // Substitute the legacy artifact coordinates with the new `ToolBase.lib` alias.
-                    substitute(module("io.spine.tools:spine-tool-base")).using(module(ToolBase.lib))
-                }
-
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.DataFormat.forceArtifacts(project, this@all, this@resolutionStrategy)
-                Jackson.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+
+                JacksonV2.Core.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.Module.forceArtifacts(project, this@all, this@resolutionStrategy)
+                JacksonV2.Junior.forceArtifacts(project, this@all, this@resolutionStrategy)
 
                 force(
+                    Caffeine.lib,
                     Jackson.bom,
                     Jackson.annotations,
                     JUnit.bom,
@@ -175,7 +174,6 @@ fun Module.forceConfigurations() {
                     TestLib.lib,
                     ToolBase.gradlePluginApi,
                     ToolBase.jvmTools,
-                    ToolBase.lib,
                     ToolBase.intellijPlatform,
                     ToolBase.intellijPlatformJava,
                     ToolBase.psiJava,

@@ -43,7 +43,7 @@ dependencies {
 configurations.all {
     resolutionStrategy.force(
         with(CoreJvmCompiler) {
-            pluginLib(version)
+            gradlePlugin(version)
         }
     )
 }

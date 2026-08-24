@@ -43,7 +43,7 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
 
     dependencies {
         CoreJvmCompiler.run {
-            classpath(pluginLib(version))
+            classpath(gradlePlugin(version))
         }
         spineCompiler.run {
             classpath(pluginLib(version))
@@ -59,7 +59,7 @@ fun ScriptHandlerScope.forceCodegenPlugins() {
             spineCompiler.backend,
             spineCompiler.protocPlugin,
 
-            CoreJvmCompiler.pluginsArtifact
+            CoreJvmCompiler.compilerPlugins
         )
     }
  }

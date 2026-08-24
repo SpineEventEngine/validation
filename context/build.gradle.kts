@@ -43,7 +43,7 @@ buildscript {
         spineCompiler.run {
             classpath(pluginLib(dogfoodingVersion))
         }
-        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
+        classpath(io.spine.dependency.local.CoreJvmCompiler.gradlePlugin)
     }
 }
 

@@ -41,7 +41,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath(io.spine.dependency.local.CoreJvmCompiler.pluginLib)
+        classpath(io.spine.dependency.local.CoreJvmCompiler.gradlePlugin)
     }
 }
 
