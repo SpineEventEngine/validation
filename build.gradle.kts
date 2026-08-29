@@ -45,6 +45,10 @@ buildscript {
             force(
                 // Make sure we have the right Protobuf Runtime.
                 io.spine.dependency.lib.Protobuf.javaLib,
+                // Floor artifacts request the pre-refresh versions of these.
+                io.spine.dependency.kotlinx.Coroutines.bom,
+                io.spine.dependency.kotlinx.AtomicFu.lib,
+                io.spine.dependency.lib.Caffeine.lib,
                 io.spine.dependency.lib.JetBrainsAnnotations.lib,
                 io.spine.dependency.local.Logging.grpcContext,
             )

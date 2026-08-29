@@ -29,6 +29,8 @@ import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
 import io.spine.dependency.build.Ksp
+import io.spine.dependency.kotlinx.AtomicFu
+import io.spine.dependency.kotlinx.Coroutines
 import io.spine.dependency.lib.Caffeine
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Jackson
@@ -126,6 +128,11 @@ fun Module.forceConfigurations() {
 
                 force(
                     Caffeine.lib,
+                    // `Coroutines.forceArtifacts` (where present) covers the
+                    // modules list but not the BOM itself.
+                    Coroutines.bom,
+                    AtomicFu.lib,
+                    Protobuf.javaLib,
                     Jackson.annotations,
                     JUnit.bom,
                     Kotlin.bom,
