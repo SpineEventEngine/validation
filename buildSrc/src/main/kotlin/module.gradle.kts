@@ -128,6 +128,10 @@ fun Module.forceConfigurations() {
 
                 force(
                     Caffeine.lib,
+                    // The refreshed compiler pins the current Time while
+                    // floor artifacts still request the previous one.
+                    Time.lib,
+                    Time.javaExtensions,
                     // `Coroutines.forceArtifacts` (where present) covers the
                     // modules list but not the BOM itself.
                     Coroutines.bom,
