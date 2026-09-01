@@ -121,6 +121,22 @@ fun Module.forceConfigurations() {
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
 
+                // The plugin-managed `spineCompiler` classpath honours
+                // resolution rules but not `force`, so the Jackson families
+                // are aligned by rule as well. The published CoreJvm Compiler
+                // floor requests the previous patch of both generations.
+                // `jackson-annotations` keeps its own version line and is left
+                // to the value the dependency object declares.
+                eachDependency {
+                    if (requested.group.startsWith("com.fasterxml.jackson")
+                        && requested.name != "jackson-annotations") {
+                        useVersion(JacksonV2.version)
+                    }
+                    if (requested.group.startsWith("tools.jackson")) {
+                        useVersion(Jackson.version)
+                    }
+                }
+
                 JacksonV2.Core.forceArtifacts(project, this@all, this@resolutionStrategy)
                 JacksonV2.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
                 JacksonV2.Module.forceArtifacts(project, this@all, this@resolutionStrategy)
