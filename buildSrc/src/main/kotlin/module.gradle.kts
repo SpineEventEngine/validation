@@ -117,23 +117,39 @@ fun Module.forceConfigurations() {
         excludeProtobufLite()
 
         all {
+            // NB: no `isDokka` guard, unlike the `jvm-module` and `kmp-module`
+            // convention plugins. Dokka's generator runtime transitively
+            // requests an `io.spine:spine-base` version that is no longer
+            // published, and these forces are what rewrite it to one that is.
+            // Excluding `dokka*` here fails `dokkaGenerate` outright.
             resolutionStrategy {
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
 
-                // The plugin-managed `spineCompiler` classpath honours
-                // resolution rules but not `force`, so the Jackson families
-                // are aligned by rule as well. The published CoreJvm Compiler
-                // floor requests the previous patch of both generations.
-                // `jackson-annotations` keeps its own version line and is left
-                // to the value the dependency object declares.
+                // The published CoreJvm Compiler floor requests the previous
+                // patch of both Jackson generations. The plugin-managed
+                // `spineCompiler` classpath honours resolution rules but not
+                // `force`, so the alignment is expressed as a rule; it also
+                // supersedes the `forceArtifacts` calls below, which reach a
+                // subset of the same coordinates at the same versions.
+                //
+                // `jackson-annotations` is pinned to its own line rather than
+                // excluded: the 2.x value would name an artifact that was
+                // never published, and leaving it unmanaged would exempt the
+                // one Jackson artifact this rule exists to reach.
                 eachDependency {
-                    if (requested.group.startsWith("com.fasterxml.jackson")
-                        && requested.name != "jackson-annotations") {
-                        useVersion(JacksonV2.version)
+                    val aligned = when {
+                        requested.name == "jackson-annotations" ->
+                            Jackson.annotationsVersion
+                        requested.group.startsWith(JacksonV2.group) ->
+                            JacksonV2.version
+                        requested.group.startsWith(Jackson.group) ->
+                            Jackson.version
+                        else -> null
                     }
-                    if (requested.group.startsWith("tools.jackson")) {
-                        useVersion(Jackson.version)
+                    aligned?.let {
+                        useVersion(it)
+                        because("`spineCompiler` honours rules, not `force`.")
                     }
                 }
 
@@ -144,12 +160,8 @@ fun Module.forceConfigurations() {
 
                 force(
                     Caffeine.lib,
-                    // The refreshed compiler pins the current Time while
-                    // floor artifacts still request the previous one.
-                    Time.lib,
-                    Time.javaExtensions,
-                    // `Coroutines.forceArtifacts` (where present) covers the
-                    // modules list but not the BOM itself.
+                    // `Coroutines.forceArtifacts` in `BomsPlugin` covers the
+                    // modules list but not the BOM artifact itself.
                     Coroutines.bom,
                     AtomicFu.lib,
                     Protobuf.javaLib,
@@ -162,7 +174,10 @@ fun Module.forceConfigurations() {
                     Base.lib,
                     Base.format,
                     Base.environment,
+                    // The refreshed compiler pins the current Time while
+                    // floor artifacts still request the previous one.
                     Time.lib,
+                    Time.javaExtensions,
                     Logging.lib,
                     Validation.runtime,
                 )
