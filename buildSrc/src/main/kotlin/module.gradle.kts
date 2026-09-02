@@ -149,7 +149,10 @@ fun Module.forceConfigurations() {
                     }
                     aligned?.let {
                         useVersion(it)
-                        because("`spineCompiler` honours rules, not `force`.")
+                        because(
+                            "The published CoreJvm Compiler floor requests" +
+                                " the previous Jackson patch."
+                        )
                     }
                 }
 
