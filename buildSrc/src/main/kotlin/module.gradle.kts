@@ -29,6 +29,8 @@ import io.spine.dependency.build.Dokka
 import io.spine.dependency.build.ErrorProne
 import io.spine.dependency.build.JSpecify
 import io.spine.dependency.build.Ksp
+import io.spine.dependency.kotlinx.AtomicFu
+import io.spine.dependency.kotlinx.Coroutines
 import io.spine.dependency.lib.Caffeine
 import io.spine.dependency.lib.Grpc
 import io.spine.dependency.lib.Jackson
@@ -115,9 +117,44 @@ fun Module.forceConfigurations() {
         excludeProtobufLite()
 
         all {
+            // NB: no `isDokka` guard, unlike the `jvm-module` and `kmp-module`
+            // convention plugins. Dokka's generator runtime transitively
+            // requests an `io.spine:spine-base` version that is no longer
+            // published, and these forces are what rewrite it to one that is.
+            // Excluding `dokka*` here fails `dokkaGenerate` outright.
             resolutionStrategy {
                 Grpc.forceArtifacts(project, this@all, this@resolutionStrategy)
                 Ksp.forceArtifacts(project, this@all, this@resolutionStrategy)
+
+                // The published CoreJvm Compiler floor requests the previous
+                // patch of both Jackson generations. The plugin-managed
+                // `spineCompiler` classpath honours resolution rules but not
+                // `force`, so the alignment is expressed as a rule; it also
+                // supersedes the `forceArtifacts` calls below, which reach a
+                // subset of the same coordinates at the same versions.
+                //
+                // `jackson-annotations` is pinned to its own line rather than
+                // excluded: the 2.x value would name an artifact that was
+                // never published, and leaving it unmanaged would exempt the
+                // one Jackson artifact this rule exists to reach.
+                eachDependency {
+                    val aligned = when {
+                        requested.name == "jackson-annotations" ->
+                            Jackson.annotationsVersion
+                        requested.group.startsWith(JacksonV2.group) ->
+                            JacksonV2.version
+                        requested.group.startsWith(Jackson.group) ->
+                            Jackson.version
+                        else -> null
+                    }
+                    aligned?.let {
+                        useVersion(it)
+                        because(
+                            "The published CoreJvm Compiler floor requests" +
+                                " the previous Jackson patch."
+                        )
+                    }
+                }
 
                 JacksonV2.Core.forceArtifacts(project, this@all, this@resolutionStrategy)
                 JacksonV2.DataType.forceArtifacts(project, this@all, this@resolutionStrategy)
@@ -126,6 +163,11 @@ fun Module.forceConfigurations() {
 
                 force(
                     Caffeine.lib,
+                    // `Coroutines.forceArtifacts` in `BomsPlugin` covers the
+                    // modules list but not the BOM artifact itself.
+                    Coroutines.bom,
+                    AtomicFu.lib,
+                    Protobuf.javaLib,
                     Jackson.annotations,
                     JUnit.bom,
                     Kotlin.bom,
@@ -135,7 +177,10 @@ fun Module.forceConfigurations() {
                     Base.lib,
                     Base.format,
                     Base.environment,
+                    // The refreshed compiler pins the current Time while
+                    // floor artifacts still request the previous one.
                     Time.lib,
+                    Time.javaExtensions,
                     Logging.lib,
                     Validation.runtime,
                 )
