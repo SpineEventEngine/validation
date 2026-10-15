@@ -1,43 +1,37 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.gradle.publish
 
 import DocumentationSettings
 import LicenseSettings
+import io.spine.gradle.SpineTaskGroup
 import io.spine.gradle.artifactId
 import io.spine.gradle.isSnapshot
 import io.spine.gradle.repo.Repository
 import io.spine.gradle.report.pom.InceptionYear
+import java.util.Locale
+import java.util.concurrent.Callable
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.invocation.BuildInvocationDetails
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.maven.tasks.PublishToMavenRepository
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.kotlin.dsl.withType
 
 /**
  * The name of the Maven Publishing Gradle plugin.
@@ -110,7 +104,7 @@ sealed class PublicationHandler(
     }
 
     /**
-     * Either handles publications already declared in the associated [project]
+     * Either handles the publications of the associated [project]
      * or creates new ones.
      */
     abstract fun handlePublications()
@@ -143,13 +137,8 @@ sealed class PublicationHandler(
      * current artifact ID is `logging-jvm` (set by the KMP plugin), the resulting
      * artifact ID will be `spine-logging-jvm`.
      *
-     * The Apache Software License 2.0 is set as the only license
-     * under which the published artifact is distributed via [LicenseSettings].
-     *
-     * The source control management attributes are obtained from [DocumentationSettings].
-     *
-     * @see LicenseSettings
-     * @see DocumentationSettings
+     * The attributes describing the project as a whole are set
+     * by [copyProjectWideAttributes].
      */
     protected fun MavenPublication.copyProjectAttributes() {
         groupId = project.group.toString()
@@ -173,6 +162,29 @@ sealed class PublicationHandler(
         }
         version = project.version.toString()
         pom.description.set(project.description)
+        copyProjectWideAttributes()
+    }
+
+    /**
+     * Sets the POM attributes of this [MavenPublication] that describe
+     * the [project] as a whole, rather than the published artifact.
+     *
+     * The inception year of Spine is taken from [InceptionYear].
+     *
+     * The Apache Software License 2.0 is set as the only license
+     * under which the published artifact is distributed via [LicenseSettings].
+     *
+     * The source control management attributes are obtained from [DocumentationSettings].
+     *
+     * Unlike [copyProjectAttributes], this function leaves the coordinates and
+     * the description of the publication intact. So, it also applies to a publication
+     * that identifies something other than the artifact of the project,
+     * such as a Gradle plugin marker.
+     *
+     * @see LicenseSettings
+     * @see DocumentationSettings
+     */
+    protected fun MavenPublication.copyProjectWideAttributes() {
         pom.inceptionYear.set(InceptionYear.value)
         pom.licenses {
             license {
@@ -270,18 +282,55 @@ sealed class PublicationHandler(
 }
 
 /**
- * Adds a Maven repository to the project specifying credentials, if they are
- * [available][Repository.credentials] from the root project.
+ * Adds a Maven repository to the project.
+ *
+ * The credentials of the repository, if they are [available][Repository.credentials]
+ * from the root project, are supplied only when a task publishing to it is about
+ * to run (see [supplyCredentials]).
  */
 private fun RepositoryHandler.register(project: Project, repository: Repository) {
     val isSnapshot = project.version.toString().isSnapshot()
-    val credentials = repository.credentials(project.rootProject)
-    maven {
+    val target = maven {
         name = repository.name(isSnapshot)
         url = project.uri(repository.target(isSnapshot))
-        credentials {
-            username = credentials?.username
-            password = credentials?.password
+    }
+    project.supplyCredentials(target, repository)
+}
+
+/**
+ * Registers a supplier task that sets the credentials of the [target] repository
+ * to those of the [source] one, and makes each task publishing to [target]
+ * depend on the supplier task.
+ *
+ * Obtaining the credentials may start an external process, e.g., `gcloud`
+ * for [CloudArtifactRegistry]. Gradle deprecates starting one at configuration time,
+ * and builds that do not publish should not obtain the credentials at all.
+ * An action of the publishing task cannot supply them, either: the task validates
+ * them before running any of its actions. Hence, the publishing task depends on
+ * the supplier task, which sets them on the repository rather than producing an output.
+ */
+private fun Project.supplyCredentials(target: MavenArtifactRepository, source: Repository) {
+    // Captured at configuration time: the action must not reach the project
+    // through its task, as Gradle deprecates calling `Task.project` at execution time.
+    val rootProject = rootProject
+    val repoName = target.name.replaceFirstChar { it.titlecase(Locale.ROOT) }
+    val supplier = tasks.register("supply${repoName}Credentials") {
+        group = SpineTaskGroup.name
+        description = "Obtains the credentials for publishing to the `${target.name}` repository"
+        notCompatibleWithConfigurationCache(
+            "Gradle does not support explicit repository credentials with the configuration cache."
+        )
+        doLast {
+            val credentials = source.credentials(rootProject)
+            target.credentials {
+                username = credentials?.username
+                password = credentials?.password
+            }
         }
+    }
+    tasks.withType<PublishToMavenRepository>().configureEach {
+        // The `maven-publish` plugin may assign the repository after this action runs,
+        // so the dependency is resolved later, when Gradle builds the task graph.
+        dependsOn(Callable { if (repository === target) supplier else null })
     }
 }

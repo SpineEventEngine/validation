@@ -1,27 +1,15 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.dependency.lib
@@ -29,5 +17,31 @@ package io.spine.dependency.lib
 // https://www.bouncycastle.org/java.html
 @Suppress("unused", "ConstPropertyName")
 object BouncyCastle {
-    const val libPkcsJdk15 = "org.bouncycastle:bcpkix-jdk15on:1.68"
+
+    /**
+     * The PKIX library, pinned to `bcpkix-jdk15on:1.70`, the last release of
+     * the `-jdk15on` artifacts.
+     *
+     * Newer releases are published as `bcpkix-jdk18on`. They carry the same
+     * `org.bouncycastle` classes, yet Gradle sees them as a different module
+     * and resolves no conflict between the two.
+     *
+     * The [IntelliJ Platform][IntelliJ.version] stays at `213.7172.53` for now.
+     * Its `ide-impl` module depends on the `-jdk15on` artifacts through two paths:
+     *
+     *  - `marketplace-zip-signer:0.1.3` requires `bcpkix-jdk15on:1.64`.
+     *  - `remote-dev-util` requires `bcpg-jdk15on:1.69`, which requires
+     *    `bcprov-jdk15on:1.69`.
+     *
+     * Staying on `-jdk15on` lets Gradle resolve `bcpkix-jdk15on` and
+     * `bcprov-jdk15on` to `1.70`, the version of this library. With
+     * `bcpkix-jdk18on` instead, a project that also has the IntelliJ Platform
+     * on its classpath would get two copies of the BouncyCastle classes.
+     *
+     * The two paths also disagree on the version. That is why `tool-base`
+     * leaves BouncyCastle out of the POM of its IntelliJ Platform uber JAR.
+     *
+     * Revisit this pin when [IntelliJ.version] changes.
+     */
+    const val libPkcsJdk15 = "org.bouncycastle:bcpkix-jdk15on:1.70"
 }

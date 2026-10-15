@@ -1,27 +1,15 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.gradle.repo
@@ -41,6 +29,10 @@ import org.gradle.api.Project
  * @param credentialsFile The path to the file that contains the credentials for the registry.
  * @param credentialValues The function to obtain an instance of [Credentials] from
  *   a Gradle [Project], if [credentialsFile] is not specified.
+ *   Publishing calls it only at execution time, so it may start an external process.
+ *   It may be called several times for each published module, but never concurrently.
+ *   It must not wait for the state of any project, e.g., resolve a configuration:
+ *   the calls hold a lock that the tasks of all projects share.
  */
 data class Repository(
     private val name: String,
@@ -52,6 +44,11 @@ data class Repository(
 
     companion object {
         val regex = Regex("[A-Za-z0-9_\\-.]+")
+
+        /**
+         * Serializes obtaining the credentials of all repositories (see [credentials]).
+         */
+        private val credentialsLock = Any()
     }
 
     init {
@@ -88,13 +85,22 @@ data class Repository(
      * If the credentials are represented by a `.properties` file, reads the file and parses
      * the credentials. The file must have properties `user.name` and `user.password`, which store
      * the username and the password for the Maven repository auth.
+     *
+     * Call this function from a task action rather than at configuration time:
+     * obtaining the credentials may start an external process, such as `gcloud`.
+     *
+     * The calls are serialized. Tasks of several projects may call it at once, and
+     * obtaining the credentials may write files that other calls share, e.g.,
+     * the GitHub Packages token unpacked into the build directory of the given project.
      */
-    fun credentials(project: Project): Credentials? = when {
-        credentialValues != null -> credentialValues.invoke(project)
-        credentialsFile != null -> credsFromFile(credentialsFile, project)
-        else -> throw IllegalArgumentException(
-            "Credentials file or a supplier function should be passed."
-        )
+    fun credentials(project: Project): Credentials? = synchronized(credentialsLock) {
+        when {
+            credentialValues != null -> credentialValues.invoke(project)
+            credentialsFile != null -> credsFromFile(credentialsFile, project)
+            else -> throw IllegalArgumentException(
+                "Credentials file or a supplier function should be passed."
+            )
+        }
     }
 
     private fun credsFromFile(fileName: String, project: Project): Credentials? {
