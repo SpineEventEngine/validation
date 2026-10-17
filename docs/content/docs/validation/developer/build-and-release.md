@@ -235,19 +235,12 @@ That is the destination consumers reach when they write
 
 Publication is automated by the
 [`publish.yml`][publish-workflow] GitHub Actions workflow, which runs on every
-push to `master` after PR checks have already verified the build:
-
-<embed-code
-  file="$root/.github/workflows/publish.yml"
-  start="- name: Publish artifacts to Maven"
-  end="run: ./gradlew publish">
-</embed-code>
-```yaml
-- name: Publish artifacts to Maven
-  # Since we're in the `master` branch already, this means that tests of a PR passed.
-  # So, no need to run the tests again when publishing.
-  run: ./gradlew publish -x test --stacktrace
-```
+push to `master` after PR checks have already verified the build. The workflow
+comes from `config`: it calls the reusable
+[`publishing.yml`][publishing-workflow] workflow at the `config` commit this
+repository pins. That workflow runs
+`./gradlew publish publicationChecksums -x test` and attests the published
+artifacts.
 
 `-x test` relies on the per-PR build to keep publication fast. Every merge to
 `master` emits a new version of the artifacts for downstream consumers to
@@ -297,6 +290,7 @@ release across every downstream tool that resolves it by name.
 [validation-gradle-plugin]: https://github.com/SpineEventEngine/validation/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/ValidationGradlePlugin.kt
 [gradle-plugin-meta]: https://github.com/SpineEventEngine/validation/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/Meta.kt
 [publish-workflow]: https://github.com/SpineEventEngine/validation/blob/master/.github/workflows/publish.yml
+[publishing-workflow]: https://github.com/SpineEventEngine/config/blob/master/.github/workflows/publishing.yml
 [shadow]: https://gradleup.com/shadow/
 [github-packages-validation]: https://github.com/SpineEventEngine/validation/packages
 [gradle-plugin-portal]: https://plugins.gradle.org/plugin/io.spine.validation
