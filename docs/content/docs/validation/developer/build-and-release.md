@@ -47,7 +47,7 @@ through Gradle's `extra` properties:
   end="validationVersion">
 </embed-code>
 ```kotlin
-extra.set("validationVersion", "2.0.0-SNAPSHOT.462")
+extra.set("validationVersion", "2.0.0-SNAPSHOT.465")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
@@ -235,12 +235,13 @@ That is the destination consumers reach when they write
 
 Publication is automated by the
 [`publish.yml`][publish-workflow] GitHub Actions workflow, which runs on every
-push to `master` after PR checks have already verified the build. The workflow
-comes from `config`: it calls the reusable
-[`publishing.yml`][publishing-workflow] workflow at the `config` commit this
-repository pins. That workflow runs
-`./gradlew publish publicationChecksums -x test` and attests the published
-artifacts.
+push to `master` after PR checks have already verified the build. The file is
+distributed by the shared `config` repository and is a thin caller of its
+reusable [`publishing.yml`][publishing-workflow] workflow, which it references
+at the `config` commit this repository pins as a submodule. The reusable
+workflow publishes the artifacts with
+`./gradlew publish publicationChecksums -x test`, and a separate job then
+attests them.
 
 `-x test` relies on the per-PR build to keep publication fast. Every merge to
 `master` emits a new version of the artifacts for downstream consumers to
