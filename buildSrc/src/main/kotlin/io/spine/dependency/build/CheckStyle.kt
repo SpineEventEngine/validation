@@ -1,27 +1,15 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.dependency.build
@@ -37,10 +25,19 @@ object CheckStyle {
     /**
      * The version to be used in the project.
      *
-     * `10.12.1` is the last version in `10.12.0`, which does not introduce
-     * capability conflict over `google-collections` with Guava.
+     * `12.3.1` is the last release that runs on Java 17, which our builds use
+     * to run Checkstyle. `13.0.0` and later require Java 21.
+     *
+     * `12.3.1` depends on Doxia, which Checkstyle uses only to generate its own
+     * website. Through Doxia, it brings two versions each of `commons-lang3` and
+     * `httpcore`. `forceVersions()` enables `failOnVersionConflict()` in the
+     * `checkstyle` configuration too, so Gradle would reject the graph.
+     * [CheckStyleConfig][io.spine.gradle.checkstyle.CheckStyleConfig] therefore
+     * excludes the `org.apache.maven.doxia` group from the `checkstyle` configuration.
+     * Releases from `13.11.0` on no longer depend on Doxia, so the exclusion can go
+     * once we run Checkstyle on Java 21.
      *
      * @see <a href="https://checkstyle.sourceforge.io/releasenotes.html">Checkstyle</a>
      */
-    const val version = "10.12.1"
+    const val version = "12.3.1"
 }

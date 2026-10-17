@@ -1,27 +1,15 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 @file:Suppress("unused")
@@ -33,6 +21,7 @@ import io.spine.gradle.SpineTaskGroup
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.PublishToMavenLocal
 
 /**
@@ -155,8 +144,27 @@ class IncrementGuard : Plugin<Project> {
             group = SpineTaskGroup.name
             description = "Verifies that the project version was incremented before publishing"
             repository = CloudArtifactRegistry.repository
+            rootDir.set(target.rootDir)
+            // Resolved lazily: publications and their coordinates are configured
+            // after the task is created, some of them in `afterEvaluate`.
+            artifactPaths.set(target.provider { target.publishedArtifactPaths() })
             onlyIf {
-                mustVerify(shouldCheckVersion(), Build.ci, it.publishesToMavenLocal())
+                mustVerify(
+                    ciPullRequest = shouldCheckVersion(),
+                    onCi = Build.ci,
+                    localPublish = publishesToMavenLocal.get()
+                )
+            }
+        }
+
+        // The `onlyIf` spec above runs at execution time, when it must not call `Task.project`
+        // to reach the task graph. So the graph is scanned for this project's Maven Local
+        // publishing at configuration time, once it is known. The result is kept in a task
+        // property, which a configuration cache entry stores along with the task.
+        target.gradle.taskGraph.whenReady {
+            val graph = this
+            checkVersion.configure {
+                publishesToMavenLocal.set(localPublishPlanned(graph.allTasks, target))
             }
         }
 
@@ -193,18 +201,28 @@ class IncrementGuard : Plugin<Project> {
 }
 
 /**
- * Tells whether the current build is going to publish this task's project to
- * Maven Local.
+ * Obtains the paths in a Maven repository to the artifacts this project publishes,
+ * such as `io/spine/spine-base`.
  *
- * Integration tests in this and sibling projects consume freshly built artifacts
- * from `~/.m2`. Publishing them under a version that already exists would let those
- * tests pick up a stale artifact, so the version increment must be verified before
- * any local publication runs.
+ * The paths are taken from the coordinates of the Maven publications of the project,
+ * rather than computed from its name. So they cover the
+ * [tool artifact prefix][SpinePublishing.toolArtifactPrefix], an `artifactId` set by
+ * a module with [custom publishing][SpinePublishing.modulesWithCustomPublishing], and
+ * every publication of a module that has several, such as a Kotlin Multiplatform one.
  *
- * Only this task's own project is considered: a sibling module's local publish in
- * the same invocation must not trigger this module's check. The predicate is
- * evaluated lazily as a task `onlyIf` spec, by which point the execution
- * [task graph][org.gradle.api.execution.TaskExecutionGraph] is fully populated.
+ * Plugin markers are included. A marker is a publication of its own, which may be
+ * uploaded without the plugin it points to, e.g., by a publish that failed halfway.
+ *
+ * The result is empty for a project that publishes nothing.
  */
-private fun Task.publishesToMavenLocal(): Boolean =
-    IncrementGuard.localPublishPlanned(project.gradle.taskGraph.allTasks, project)
+private fun Project.publishedArtifactPaths(): Set<String> =
+    mavenPublications()
+        .map { it.repositoryPath }
+        .toSet()
+
+/**
+ * The path to the artifact of this publication in a Maven repository,
+ * such as `io/spine/spine-base`.
+ */
+private val MavenPublication.repositoryPath: String
+    get() = "${groupId.replace('.', '/')}/$artifactId"

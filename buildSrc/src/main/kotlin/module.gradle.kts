@@ -177,6 +177,7 @@ fun Module.forceConfigurations() {
                     Base.lib,
                     Base.format,
                     Base.environment,
+                    Reflect.lib,
                     // The refreshed compiler pins the current Time while
                     // floor artifacts still request the previous one.
                     Time.lib,
