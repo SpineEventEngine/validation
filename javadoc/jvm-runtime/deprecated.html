@@ -115,21 +115,21 @@ var pathtoroot = "";
                             
                                 <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validate/FieldAwareMessage.html">io.spine.validate.FieldAwareMessage</a>
+                                        <a href="io/spine/validate/ValidatableMessage.html">io.spine.validate.ValidatableMessage</a>
                                     </th>
                                     <td class="colLast">Provided for backward compatibility.</td>
                                 </tr>
                             
                                 <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validate/ValidatableMessage.html">io.spine.validate.ValidatableMessage</a>
+                                        <a href="io/spine/validate/ValidatingBuilder.html">io.spine.validate.ValidatingBuilder</a>
                                     </th>
                                     <td class="colLast">Provided for backward compatibility.</td>
                                 </tr>
                             
                                 <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validate/ValidatingBuilder.html">io.spine.validate.ValidatingBuilder</a>
+                                        <a href="io/spine/validate/FieldAwareMessage.html">io.spine.validate.FieldAwareMessage</a>
                                     </th>
                                     <td class="colLast">Provided for backward compatibility.</td>
                                 </tr>
@@ -175,7 +175,7 @@ var pathtoroot = "";
                             
                                 <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ValidatingBuilder.html#vBuild()">io.spine.validation.vBuild()</a>
+                                        <a href="io/spine/validate/ValidatingBuilder.html#vBuild()">io.spine.validation.vBuild()</a>
                                     </th>
                                     <td class="colLast">Constructs the message and <a href=io/spine/validation/Validate.html>validates</a> it according to the constraints declared in Protobuf.</td>
                                 </tr>
@@ -189,106 +189,13 @@ var pathtoroot = "";
                             
                                 <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getMsgFormat()">io.spine.validation.getMsgFormat()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getMsgFormatBytes()">io.spine.validation.getMsgFormatBytes()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="altColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamList()">io.spine.validation.getParamList()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamCount()">io.spine.validation.getParamCount()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="altColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParam(int)">io.spine.validation.getParam(int)</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamBytes(int)">io.spine.validation.getParamBytes(int)</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
-</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="altColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationList()">io.spine.validation.getViolationList()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
-of `field_path` field.
-</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolation(int)">io.spine.validation.getViolation(int)</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
-of `field_path` field.
-</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="altColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationCount()">io.spine.validation.getViolationCount()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
-of `field_path` field.
-</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationOrBuilderList()">io.spine.validation.getViolationOrBuilderList()</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
-of `field_path` field.
-</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="altColor">
-                                    <th class="colDeprecatedItemName" scope="row">
-                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationOrBuilder(int)">io.spine.validation.getViolationOrBuilder(int)</a>
-                                    </th>
-                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
-of `field_path` field.
-</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
-                                </tr>
-                            
-                                <tr class="rowColor">
-                                    <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getMsgFormat()">io.spine.validation.getMsgFormat()</a>
                                     </th>
                                     <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getMsgFormatBytes()">io.spine.validation.getMsgFormatBytes()</a>
                                     </th>
@@ -296,7 +203,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#setMsgFormat(java.lang.String)">io.spine.validation.setMsgFormat(java.lang.String)</a>
                                     </th>
@@ -304,7 +211,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#clearMsgFormat()">io.spine.validation.clearMsgFormat()</a>
                                     </th>
@@ -312,7 +219,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#setMsgFormatBytes(com.google.protobuf.ByteString)">io.spine.validation.setMsgFormatBytes(com.google.protobuf.ByteString)</a>
                                     </th>
@@ -320,7 +227,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getParamList()">io.spine.validation.getParamList()</a>
                                     </th>
@@ -328,7 +235,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getParamCount()">io.spine.validation.getParamCount()</a>
                                     </th>
@@ -336,7 +243,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getParam(int)">io.spine.validation.getParam(int)</a>
                                     </th>
@@ -344,7 +251,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getParamBytes(int)">io.spine.validation.getParamBytes(int)</a>
                                     </th>
@@ -352,7 +259,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#setParam(int,java.lang.String)">io.spine.validation.setParam(int,java.lang.String)</a>
                                     </th>
@@ -360,7 +267,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addParam(java.lang.String)">io.spine.validation.addParam(java.lang.String)</a>
                                     </th>
@@ -368,7 +275,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addAllParam(java.lang.Iterable)">io.spine.validation.addAllParam(java.lang.Iterable)</a>
                                     </th>
@@ -376,7 +283,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#clearParam()">io.spine.validation.clearParam()</a>
                                     </th>
@@ -384,7 +291,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addParamBytes(com.google.protobuf.ByteString)">io.spine.validation.addParamBytes(com.google.protobuf.ByteString)</a>
                                     </th>
@@ -392,7 +299,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationList()">io.spine.validation.getViolationList()</a>
                                     </th>
@@ -401,7 +308,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationCount()">io.spine.validation.getViolationCount()</a>
                                     </th>
@@ -410,7 +317,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolation(int)">io.spine.validation.getViolation(int)</a>
                                     </th>
@@ -419,7 +326,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#setViolation(int,io.spine.validation.ConstraintViolation)">io.spine.validation.setViolation(int,io.spine.validation.ConstraintViolation)</a>
                                     </th>
@@ -428,7 +335,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#setViolation(int,io.spine.validation.ConstraintViolation.Builder)">io.spine.validation.setViolation(int,io.spine.validation.ConstraintViolation.Builder)</a>
                                     </th>
@@ -437,7 +344,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolation(io.spine.validation.ConstraintViolation)">io.spine.validation.addViolation(io.spine.validation.ConstraintViolation)</a>
                                     </th>
@@ -446,7 +353,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolation(int,io.spine.validation.ConstraintViolation)">io.spine.validation.addViolation(int,io.spine.validation.ConstraintViolation)</a>
                                     </th>
@@ -455,7 +362,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolation(io.spine.validation.ConstraintViolation.Builder)">io.spine.validation.addViolation(io.spine.validation.ConstraintViolation.Builder)</a>
                                     </th>
@@ -464,7 +371,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolation(int,io.spine.validation.ConstraintViolation.Builder)">io.spine.validation.addViolation(int,io.spine.validation.ConstraintViolation.Builder)</a>
                                     </th>
@@ -473,7 +380,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addAllViolation(java.lang.Iterable)">io.spine.validation.addAllViolation(java.lang.Iterable)</a>
                                     </th>
@@ -482,7 +389,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#clearViolation()">io.spine.validation.clearViolation()</a>
                                     </th>
@@ -491,7 +398,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#removeViolation(int)">io.spine.validation.removeViolation(int)</a>
                                     </th>
@@ -500,7 +407,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationBuilder(int)">io.spine.validation.getViolationBuilder(int)</a>
                                     </th>
@@ -509,7 +416,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationOrBuilder(int)">io.spine.validation.getViolationOrBuilder(int)</a>
                                     </th>
@@ -518,7 +425,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationOrBuilderList()">io.spine.validation.getViolationOrBuilderList()</a>
                                     </th>
@@ -527,7 +434,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolationBuilder()">io.spine.validation.addViolationBuilder()</a>
                                     </th>
@@ -536,7 +443,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#addViolationBuilder(int)">io.spine.validation.addViolationBuilder(int)</a>
                                     </th>
@@ -545,7 +452,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.Builder.html#getViolationBuilderList()">io.spine.validation.getViolationBuilderList()</a>
                                     </th>
@@ -554,7 +461,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getMsgFormat()">io.spine.validation.getMsgFormat()</a>
                                     </th>
@@ -562,7 +469,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getMsgFormatBytes()">io.spine.validation.getMsgFormatBytes()</a>
                                     </th>
@@ -570,7 +477,7 @@ of `field_path` field.
 </code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getParamList()">io.spine.validation.getParamList()</a>
                                     </th>
@@ -578,7 +485,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getParamCount()">io.spine.validation.getParamCount()</a>
                                     </th>
@@ -586,7 +493,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getParam(int)">io.spine.validation.getParam(int)</a>
                                     </th>
@@ -594,7 +501,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getParamBytes(int)">io.spine.validation.getParamBytes(int)</a>
                                     </th>
@@ -602,7 +509,7 @@ of `field_path` field.
 </code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getViolationList()">io.spine.validation.getViolationList()</a>
                                     </th>
@@ -611,7 +518,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getViolationOrBuilderList()">io.spine.validation.getViolationOrBuilderList()</a>
                                     </th>
@@ -620,7 +527,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getViolationCount()">io.spine.validation.getViolationCount()</a>
                                     </th>
@@ -629,7 +536,7 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="altColor">
+                                <tr class="rowColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getViolation(int)">io.spine.validation.getViolation(int)</a>
                                     </th>
@@ -638,9 +545,102 @@ of `field_path` field.
 </code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
                                 </tr>
                             
-                                <tr class="rowColor">
+                                <tr class="altColor">
                                     <th class="colDeprecatedItemName" scope="row">
                                         <a href="io/spine/validation/ConstraintViolation.html#getViolationOrBuilder(int)">io.spine.validation.getViolationOrBuilder(int)</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getMsgFormat()">io.spine.validation.getMsgFormat()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="altColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getMsgFormatBytes()">io.spine.validation.getMsgFormatBytes()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>string msg_format = 1 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamList()">io.spine.validation.getParamList()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="altColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamCount()">io.spine.validation.getParamCount()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParam(int)">io.spine.validation.getParam(int)</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="altColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getParamBytes(int)">io.spine.validation.getParamBytes(int)</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: use `message` field to access the error message.
+</code></pre><code>repeated string param = 2 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationList()">io.spine.validation.getViolationList()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="altColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolation(int)">io.spine.validation.getViolation(int)</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationCount()">io.spine.validation.getViolationCount()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="altColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationOrBuilderList()">io.spine.validation.getViolationOrBuilderList()</a>
+                                    </th>
+                                    <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
+of `field_path` field.
+</code></pre><code>repeated .spine.validation.ConstraintViolation violation = 5 [deprecated = true];</code></td>
+                                </tr>
+                            
+                                <tr class="rowColor">
+                                    <th class="colDeprecatedItemName" scope="row">
+                                        <a href="io/spine/validation/ConstraintViolationOrBuilder.html#getViolationOrBuilder(int)">io.spine.validation.getViolationOrBuilder(int)</a>
                                     </th>
                                     <td class="colLast"><pre><code>Deprecated: all violations are top-level now. Their nesting is reflected in the value
 of `field_path` field.

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ValidatingBuilder 2.0.0-SNAPSHOT.464 API </title>
+    <title>ValidatingBuilder 2.0.0-SNAPSHOT.465 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
@@ -140,7 +140,7 @@ var pathtoroot = "../../../";
 public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>ValidatingBuilder</a>&lt;M extends Message&gt;</span>
  implements Message.Builder
                     </pre>
-                    <div class="block"><p>Implementation base for generated message builders. </p><p>This interface defines a method build that validates the built message before returning it to the user. </p><p>If a user specifically needs to skip validation, they should use buildPartial to make the intent explicit. </p><p>To check the current content of the builder for validity without obtaining the built message, use <a href=ValidatingBuilder.html#validate()>validate</a>.</p></div>
+                    <div class="block"><p>Implementation base for generated message builders. </p><p>This interface defines a method build that validates the built message before returning it to the user. </p><p>If a user specifically needs to skip validation, they should use buildPartial to make the intent explicit. </p><p>To check the current content of the builder for validity without obtaining the built message, use <a href=../validate/ValidatingBuilder.html#validate()>validate</a>.</p></div>
 
                     <dl>
 
@@ -271,7 +271,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                         <tr id="i0" class="altColor">
                                             <td class="colFirst"><code>abstract <a href=ValidatingBuilder.html>M</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidatingBuilder.html#build()>build</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=../validate/ValidatingBuilder.html#build()>build</a>() </code>
                                             </th>
                                             <td class="colLast">Constructs the message and validates it according to the constraints declared in Protobuf.</td>
                                         </tr>
@@ -279,7 +279,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                         <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code>abstract <a href=ValidatingBuilder.html>M</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidatingBuilder.html#buildPartial()>buildPartial</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=../validate/ValidatingBuilder.html#buildPartial()>buildPartial</a>() </code>
                                             </th>
                                             <td class="colLast">Constructs the message with the given fields without validation.</td>
                                         </tr>
@@ -287,7 +287,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                         <tr id="i2" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=ConstraintViolation.html>ConstraintViolation</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidatingBuilder.html#validate()>validate</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=../validate/ValidatingBuilder.html#validate()>validate</a>() </code>
                                             </th>
                                             <td class="colLast">Probes the current content of this builder for validity.</td>
                                         </tr>
@@ -295,7 +295,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                         <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code><a href=ValidatingBuilder.html>M</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ValidatingBuilder.html#vBuild()>vBuild</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=../validate/ValidatingBuilder.html#vBuild()>vBuild</a>() </code>
                                             </th>
                                             <td class="colLast">Constructs the message and <a href=Validate.html>validates</a> it according to the constraints declared in Protobuf.</td>
                                         </tr>
@@ -376,7 +376,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                           >
                                     <li class="blockList">
                                         <h4>build</h4>
-                                        <pre class="methodSignature">@<a href=Validated.html>Validated</a>() abstract <a href=ValidatingBuilder.html>M</a> <a href=ValidatingBuilder.html#build()>build</a>()</pre>
+                                        <pre class="methodSignature">@<a href=Validated.html>Validated</a>() abstract <a href=ValidatingBuilder.html>M</a> <a href=../validate/ValidatingBuilder.html#build()>build</a>()</pre>
                                         <div class="block"><p>Constructs the message and validates it according to the constraints declared in Protobuf.</p></div>
 
                                         <dl>
@@ -402,7 +402,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                           >
                                     <li class="blockList">
                                         <h4>buildPartial</h4>
-                                        <pre class="methodSignature">@<a href=NonValidated.html>NonValidated</a>() abstract <a href=ValidatingBuilder.html>M</a> <a href=ValidatingBuilder.html#buildPartial()>buildPartial</a>()</pre>
+                                        <pre class="methodSignature">@<a href=NonValidated.html>NonValidated</a>() abstract <a href=ValidatingBuilder.html>M</a> <a href=../validate/ValidatingBuilder.html#buildPartial()>buildPartial</a>()</pre>
                                         <div class="block"><p>Constructs the message with the given fields without validation. </p><p>Users should prefer build over this method.</p></div>
 
                                         <dl>
@@ -428,7 +428,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                           >
                                     <li class="blockList">
                                         <h4>validate</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=ConstraintViolation.html>ConstraintViolation</a>&gt; <a href=ValidatingBuilder.html#validate()>validate</a>()</pre>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=ConstraintViolation.html>ConstraintViolation</a>&gt; <a href=../validate/ValidatingBuilder.html#validate()>validate</a>()</pre>
                                         <div class="block"><p>Probes the current content of this builder for validity. </p><p>The content is validated in place — including content that is already invalid, e.g., assembled from untrusted input or restored via toBuilder() from a message that no longer satisfies its constraints. </p><p>Unlike build, this method does not throw <a href=ValidationException.html>ValidationException</a> if the content is invalid. Any constraint violations found are reported via the returned list instead. Unlike buildPartial, which skips validation entirely, this method does run validation, but without handing over a potentially invalid message. </p><p>Calling this method does not modify the content of this builder. </p><p>If the message under construction does not support validation, i.e., does not implement <a href=ValidatableMessage.html>ValidatableMessage</a>, its content is considered valid.</p></div>
 
                                         <dl>
@@ -454,7 +454,7 @@ public interface <span class="typeNameLabel"><a href=ValidatingBuilder.html>Vali
                                           >
                                     <li class="blockList">
                                         <h4>vBuild</h4>
-                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html>Deprecated</a>()@<a href=Validated.html>Validated</a>() <a href=ValidatingBuilder.html>M</a> <a href=ValidatingBuilder.html#vBuild()>vBuild</a>()</pre>
+                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html>Deprecated</a>()@<a href=Validated.html>Validated</a>() <a href=ValidatingBuilder.html>M</a> <a href=../validate/ValidatingBuilder.html#vBuild()>vBuild</a>()</pre>
                                         <div class="block"><p>Constructs the message and <a href=Validate.html>validates</a> it according to the constraints declared in Protobuf.</p></div>
 
                                         <dl>
