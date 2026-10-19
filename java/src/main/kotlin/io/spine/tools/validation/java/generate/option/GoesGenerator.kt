@@ -52,6 +52,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.option.GOES
+import io.spine.tools.validation.sortedByDeclaration
 import io.spine.validation.ConstraintViolation
 import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
@@ -73,7 +74,7 @@ internal class GoesGenerator : OptionGeneratorWithConverter() {
     private val allGoesFields by lazy {
         querying.select<GoesField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

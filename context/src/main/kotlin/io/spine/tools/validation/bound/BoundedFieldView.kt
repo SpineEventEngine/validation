@@ -26,18 +26,13 @@
 
 package io.spine.tools.validation.bound
 
-import io.spine.tools.compiler.ast.Field
 import io.spine.tools.compiler.ast.File
+import io.spine.tools.validation.FieldView
 
 /**
  * A common interface for the bounded numeric field views.
  */
-public interface BoundedFieldView {
-
-    /**
-     * The field in which the option was discovered.
-     */
-    public val subject: Field
+public interface BoundedFieldView : FieldView {
 
     /**
      * The error message template.

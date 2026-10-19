@@ -47,6 +47,7 @@ import "spine/validation/field_group.proto";
 //
 message RequiredField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
@@ -60,6 +61,7 @@ message RequiredField {
 // A view on a field that is marked with `(validate) = true` option.
 message ValidateField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
@@ -70,6 +72,7 @@ message ValidateField {
 // A view of a field that is marked with `(set_once) = true` option.
 message SetOnceField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
@@ -83,6 +86,7 @@ message SetOnceField {
 // A view of a field that is marked with `(pattern)` option.
 message PatternField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
@@ -102,6 +106,7 @@ message PatternField {
 // A view of a field that is marked with `(goes)` option.
 message GoesField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
@@ -118,6 +123,7 @@ message GoesField {
 // A view of a field that is marked with `(distinct) = true` option.
 message DistinctField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 

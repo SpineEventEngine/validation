@@ -66,6 +66,7 @@ import io.spine.tools.validation.java.generate.mangled
 import io.spine.tools.validation.option.PATTERN
 import io.spine.tools.validation.option.isRepeatedString
 import io.spine.tools.validation.option.isSingularString
+import io.spine.tools.validation.sortedByDeclaration
 import io.spine.validation.ConstraintViolation
 import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
@@ -90,7 +91,7 @@ internal class PatternGenerator : OptionGenerator() {
     private val allPatternFields by lazy {
         querying.select<PatternField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

@@ -332,7 +332,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
@@ -348,8 +348,8 @@ The pattern is uniform across the built-ins:
 - Query the projection lazily — `querying` is not available until `inject()` returns,
   see “[The render lifecycle](java-code-generation.md#the-render-lifecycle)”.
 - Filter views by the message type currently being processed.
-- Sort the selected views by `orderOfDeclaration`, so that the generated code is the same
-  from build to build. The views come in no particular order.
+- Sort the selected field views with `sortedByDeclaration()`, so that the generated code
+  is the same from build to build. The views come in no particular order.
 - Delegate per-application code construction to a small helper class
   (`GenerateRequired` here). The helper produces a `CodeBlock` that runs inside the
   validate scope described in “[The validate scope](java-code-generation.md#the-validate-scope)” —

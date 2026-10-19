@@ -42,6 +42,7 @@ import io.spine.tools.compiler.render.SourceFileSet
 import io.spine.tools.validation.java.setonce.SetOnceNumberField.Companion.SupportedNumbers
 import io.spine.tools.validation.option.SET_ONCE
 import io.spine.tools.validation.SetOnceField
+import io.spine.tools.validation.sortedByDeclaration
 
 /**
  * Takes the discovered [SetOnceField]s and modifies their Java builders to make sure
@@ -65,7 +66,7 @@ internal class SetOnceRenderer : JavaRenderer() {
         // the code added to the shared builder methods, such as `mergeFrom()`,
         // goes in the same order from build to build.
         (this as Querying).select<SetOnceField>().all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
             .associateWith { allCompilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
                 val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)

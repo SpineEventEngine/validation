@@ -137,7 +137,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

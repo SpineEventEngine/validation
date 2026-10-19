@@ -45,6 +45,7 @@ import io.spine.tools.validation.java.generate.OptionGenerator
 import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.option.MAX
 import io.spine.string.Placeholder
+import io.spine.tools.validation.sortedByDeclaration
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
 import io.spine.validation.StandardPlaceholder.FIELD_TYPE
 import io.spine.validation.StandardPlaceholder.FIELD_VALUE
@@ -65,7 +66,7 @@ internal class MaxGenerator : OptionGenerator() {
     private val allMaxFields by lazy {
         querying.select<MaxField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

@@ -56,6 +56,7 @@ import io.spine.tools.validation.java.generate.SingleOptionCode
 import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
+import io.spine.tools.validation.sortedByDeclaration
 import org.intellij.lang.annotations.Language
 
 /**
@@ -71,7 +72,7 @@ internal class ValidateGenerator : OptionGeneratorWithConverter() {
     private val allValidateFields by lazy {
         querying.select<ValidateField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

@@ -60,6 +60,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentName
 import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.option.PATTERN
+import io.spine.tools.validation.sortedByDeclaration
 import io.spine.validation.ConstraintViolation
 import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_DUPLICATES
@@ -81,7 +82,7 @@ internal class DistinctGenerator : OptionGenerator() {
     private val allDistinctFields by lazy {
         querying.select<DistinctField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

@@ -57,6 +57,7 @@ import io.spine.tools.validation.java.generate.ValidateScope.parentPath
 import io.spine.tools.validation.java.generate.ValidateScope.violations
 import io.spine.tools.validation.option.required.RequiredFieldSupport.isSupported
 import io.spine.tools.validation.option.IF_MISSING
+import io.spine.tools.validation.sortedByDeclaration
 import io.spine.validation.ConstraintViolation
 import io.spine.string.Placeholder
 import io.spine.validation.StandardPlaceholder.FIELD_PATH
@@ -76,7 +77,7 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
-            .sortedBy { it.subject.orderOfDeclaration }
+            .sortedByDeclaration()
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =
