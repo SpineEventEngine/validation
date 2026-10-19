@@ -77,7 +77,7 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
     comes from `MessageType.oneof_group` of the declaring type.
 - [x] Specs for `mangled()` (deterministic, valid identifier, distinct inputs →
   distinct names) and for the declaration order of generated constraints
-  (`JavaIdentifiersSpec`; `DeclarationOrderITest` in `tests/validating`).
+  (`JavaIdentifiersSpec`; `DeclarationOrderIgTest` in `tests/validating`).
 - [x] Drop the `SecureRandomString` import from Validation.
 - [x] Version bump: shares `.466` with Change 1 (same branch).
 
@@ -114,6 +114,8 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
   replacing per-plugin writers.
 - Deterministic `select().all()` ordering in `compiler`/`core-jvm` for all
   Compiler plugins.
+- Review the names of the integration tests under `tests/` (`*ITest`) against
+  the `XIgTest` convention in `.agents/guidelines/testing.md`.
 
 ## Log
 - 2026-10-19 — analysis done; scope chosen: Validation + CoreJvm writer; plan drafted, awaiting approval.
@@ -139,3 +141,6 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
   before hashing, KDoc wording. `clean build` and `dokkaGenerate` green; determinism
   re-check on the final code: 0 differing files. Kept the module's `ITest` suffix over
   `IgTest` for consistency with its 38 neighbours.
+- 2026-10-19 — Change 2 committed (`58dea9b841`). The new suite renamed to
+  `DeclarationOrderIgTest`: the testing guideline takes precedence over the legacy
+  `ITest` names around it, which are to be reviewed separately (see Follow-ups).

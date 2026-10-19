@@ -46,7 +46,7 @@ import org.junit.jupiter.api.Test
  * the constraints go in another order.
  */
 @DisplayName("Generated constraints should follow the order of declaration, so that")
-internal class DeclarationOrderITest {
+internal class DeclarationOrderIgTest {
 
     @Test
     fun `violations of '(required)' fields go in the order of the fields`() {
