@@ -82,14 +82,6 @@ code-path:
   - name: "docs"
     path: ".."
 docs-path: "../content/docs/"
-code-includes:
-  - ".gitignore"
-  - "**/*.kts"
-  - "**/*.md"
-  - "**/*.proto"
-  - "**/*.java"
-  - "**/*.kt"
-  - "**/*.yml"
 ```
 
 ### Source roots (`code-path`)
@@ -117,12 +109,12 @@ to `docs/_time/`.
 should scan when running `embedCode` or `checkSamples`. Only files under
 this directory are considered for embedding.
 
-### Embeddable file types (`code-includes`)
+### Embeddable file types
 
-The globs under `code-includes` filter which source files the tool will
-read when resolving an `<embed-code>` block. Adding a new file extension
-(for example, `**/*.json` for embedded JSON snippets) means appending it
-to this list.
+The tool does not filter source files by type: an `<embed-code>` block can
+reference any file under a source root. Older releases of `embed-code-go`
+read a `code-includes` list of globs for this; current releases ignore it,
+so the configuration no longer declares one.
 
 ## Embedding syntax on the page side
 
