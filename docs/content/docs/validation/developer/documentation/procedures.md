@@ -118,7 +118,8 @@ commit.
 
 4. Re-embed snippets without running `:docs:embedCode`, because that task
    would move the submodule back to the default remote branch before
-   embedding:
+   embedding. On an Intel Mac, run `./embed-code-macos-x86_64` instead of
+   `./embed-code-macos`:
 
    ```bash
    ./gradlew :docs:updatePluginVersions

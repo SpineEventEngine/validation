@@ -104,7 +104,9 @@ git submodule update --remote --merge --recursive
 ```
 
 so that `_examples/` and `_time/` track their default remote branches. It
-then invokes `embed-code-macos` with `-mode="embed"` and the configuration at
+then invokes the macOS binary matching the host architecture —
+`embed-code-macos` on Apple silicon, `embed-code-macos-x86_64` on Intel —
+with `-mode="embed"` and the configuration at
 `_settings/embed-code.yml`, which rewrites the fenced regions in the Markdown
 pages under `content/` from their source snippets. Run this task manually
 after editing an embedded snippet or after pointing a source root at a new
@@ -115,8 +117,9 @@ recipe.
 ### `checkSamples`
 
 Runs `_script/check-samples`. The script selects `embed-code-linux` when the
-`GITHUB_ACTIONS` environment variable is `true`, and `embed-code-macos`
-otherwise, then invokes it with `-mode="check"`. The tool exits non-zero if
+`GITHUB_ACTIONS` environment variable is `true`, and the macOS binary
+matching the host architecture otherwise, then invokes it with
+`-mode="check"`. The tool exits non-zero if
 any embedded snippet drifts from its source. This task is executed by the
 [Code Embedding][check-code-embedding] GitHub workflow on every pull
 request.

@@ -84,12 +84,15 @@ The tool is consumed as **prebuilt binaries checked into the repository**,
 not as a Go module or downloaded artifact. The binaries live under
 `docs/_bin/`:
 
-| File                       | When it is used                                               |
-|----------------------------|---------------------------------------------------------------|
-| `embed-code-linux`         | `_script/check-samples` when `GITHUB_ACTIONS=true` (CI).      |
-| `embed-code-macos`         | `_script/check-samples` locally; `_script/embed-code` always. Built for Apple silicon (arm64). |
-| `embed-code-macos-x86_64`  | Currently not selected by either script. Built for Intel Macs. |
-| `embed-code-windows.exe`   | Currently not selected by either script.                      |
+| File                       | When it is used                                          |
+|----------------------------|----------------------------------------------------------|
+| `embed-code-linux`         | `_script/check-samples` when `GITHUB_ACTIONS=true` (CI). |
+| `embed-code-macos`         | Both scripts on Apple silicon (arm64) Macs.              |
+| `embed-code-macos-x86_64`  | Both scripts on Intel Macs.                              |
+| `embed-code-windows.exe`   | Currently not selected by either script.                 |
+
+Outside CI, `_script/check-samples` and `_script/embed-code` pick the macOS
+binary by the host architecture reported by `uname -m`.
 
 There is no version string recorded in this repository; the tool prints
 its version when it starts (for example, `Running embed-code v1.2.5.`). The

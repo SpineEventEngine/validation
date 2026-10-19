@@ -18,5 +18,12 @@ git submodule update --remote --merge --recursive
 # Navigate to the folder with embed-code binaries.
 cd _bin
 
+# Use the macOS binary matching the host architecture.
+if [ "$(uname -m)" = "arm64" ]; then
+  TOOL="./embed-code-macos"
+else
+  TOOL="./embed-code-macos-x86_64"
+fi
+
 # Update code samples.
-./embed-code-macos -config-path="../_settings/embed-code.yml" -mode="embed"
+"$TOOL" -config-path="../_settings/embed-code.yml" -mode="embed"
