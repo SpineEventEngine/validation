@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,10 +59,13 @@ internal class MinGenerator : OptionGenerator() {
 
     /**
      * All `(min)` fields in the current compilation process.
+     *
+     * The fields of each message go in the order of declaration.
      */
     private val allMinFields by lazy {
         querying.select<MinField>()
             .all()
+            .sortedBy { it.subject.orderOfDeclaration }
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

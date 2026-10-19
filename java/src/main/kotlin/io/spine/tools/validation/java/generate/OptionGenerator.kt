@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,12 @@ public abstract class OptionGenerator {
     /**
      * Generates validation code for all option applications within the provided
      * message [type].
+     *
+     * The order of the returned code defines the order of this option's constraints
+     * in the generated validation method. Return the code in a stable order, such as
+     * the order of declaration of the fields, so that the generated code stays
+     * the same from build to build. Note that the view states selected via [querying]
+     * come in no particular order.
      *
      * @param type The message to generate code for.
      */

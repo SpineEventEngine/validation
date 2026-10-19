@@ -1,6 +1,6 @@
 ---
 slug: up-to-date-compiler-tasks
-branch: write-settings-before-launch (Change 1)
+branch: write-settings-before-launch (Changes 1–2)
 owner: claude
 status: in-progress
 started: 2026-10-19
@@ -65,16 +65,21 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
 - [x] Version bump.
 
 ### Change 2 — `validation/java`: deterministic generated code
-- [ ] `mangled()`: derive the suffix from SHA-256 of the identifier (JDK
-  `MessageDigest`, base64url, Java-identifier chars only, same length). Keep the
+- [x] `mangled()`: derive the suffix from SHA-256 of the identifier (JDK
+  `MessageDigest`, base64url, Java-identifier chars only, same length: `length`
+  counts digest bytes, as it counted random bytes before). Keep the
   signature; KDoc states that the same identifier yields the same name.
-- [ ] Sort the views each generator selects by declaration order
+- [x] Sort the views each generator selects by declaration order
   (`Field.orderOfDeclaration`; oneof order for `(choice)`), including
   `SetOnceRenderer`.
-- [ ] Specs for `mangled()` (deterministic, valid identifier, distinct inputs →
-  distinct names) and for the declaration order of generated constraints.
-- [ ] Drop the `SecureRandomString` import from Validation.
-- [ ] Version bump (or share the bump if Change 1 and 2 land in one branch).
+  - `(choice)`: the `OneofGroup` in `ChoiceOneof` has no fields (the
+    `OneofOptionDiscovered` event carries only the group header), so the order
+    comes from `MessageType.oneof_group` of the declaring type.
+- [x] Specs for `mangled()` (deterministic, valid identifier, distinct inputs →
+  distinct names) and for the declaration order of generated constraints
+  (`JavaIdentifiersSpec`; `DeclarationOrderITest` in `tests/validating`).
+- [x] Drop the `SecureRandomString` import from Validation.
+- [x] Version bump: shares `.466` with Change 1 (same branch).
 
 ### Change 3 — `core-jvm-compiler/gradle-plugin`: settings writer picks up DSL changes
 (after Validation with Changes 1–2 is published)
@@ -125,3 +130,12 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
   committed (code + specs, then reports + docs). The `config`, `docs/_time`, and `docs/_examples`
   submodule pointers drifted during the session and stay uncommitted: `docs/_examples` was
   rewound to its `master` tip, behind the recorded `align-protobuf-runtime` commit.
+- 2026-10-19 — Change 2 implemented on the same branch (uncommitted). Determinism check over
+  the 9 test-module Compiler tasks that have protos (`--rerun`, `diff -r` of
+  `tests/*/generated`): 0 differing files (52 with the `java/src/main` changes reverted).
+  `DeclarationOrderITest` fails on the old code and passes on the new one.
+- 2026-10-19 — reviews (Kotlin, Spine rules, docs) addressed: a `(min)` case added to
+  `DeclarationOrderITest`, `(choice)` positions looked up with `getValue`, `length` checked
+  before hashing, KDoc wording. `clean build` and `dokkaGenerate` green; determinism
+  re-check on the final code: 0 differing files. Kept the module's `ITest` suffix over
+  `IgTest` for consistency with its 38 neighbours.

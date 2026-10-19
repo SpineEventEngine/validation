@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.string.lowerCamelCase
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.toMessageType
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
@@ -64,10 +65,20 @@ internal class ChoiceGenerator : OptionGenerator() {
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<SingleOptionCode> =
-        allChoiceOneofs
-            .filter { it.id.type == type }
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
+        val choiceOneofs = allChoiceOneofs.filter { it.id.type == type }
+        if (choiceOneofs.isEmpty()) {
+            return emptyList()
+        }
+        // The views do not tell the position of a group in the message,
+        // so the order of declaration comes from the message type.
+        val positions = type.toMessageType(typeSystem).oneofGroupList
+            .withIndex()
+            .associate { (index, group) -> group.name to index }
+        return choiceOneofs
+            .sortedBy { positions.getValue(it.id.name) }
             .map { GenerateChoice(it).code() }
+    }
 }
 
 /**

@@ -70,10 +70,13 @@ internal class RequiredGenerator : OptionGeneratorWithConverter() {
 
     /**
      * All `(required)` fields in the current compilation process.
+     *
+     * The fields of each message go in the order of declaration.
      */
     private val allRequiredFields by lazy {
         querying.select<RequiredField>()
             .all()
+            .sortedBy { it.subject.orderOfDeclaration }
     }
 
     override fun codeFor(type: TypeName): List<SingleOptionCode> =

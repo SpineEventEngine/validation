@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,11 @@ internal class SetOnceRenderer : JavaRenderer() {
         }
 
         val allCompilationMessages = findMessageTypes().associateBy { it.name }
+        // Process the fields of each message in the order of declaration, so that
+        // the code added to the shared builder methods, such as `mergeFrom()`,
+        // goes in the same order from build to build.
         (this as Querying).select<SetOnceField>().all()
+            .sortedBy { it.subject.orderOfDeclaration }
             .associateWith { allCompilationMessages[it.id.type]!! }
             .forEach { (protoField, declaredIn) ->
                 val javaConstraints = javaConstraints(protoField.subject, protoField.errorMessage)
