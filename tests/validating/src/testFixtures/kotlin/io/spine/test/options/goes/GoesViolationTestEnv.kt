@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [io.spine.test.options.goes.GoesViolationITest].
+ * Provides data for parameterized [io.spine.test.options.goes.GoesViolationIgTest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesViolationTestEnv {
@@ -42,8 +42,8 @@ internal object GoesViolationTestEnv {
     /**
      * Test data for the following tests:
      *
-     * 1. [io.spine.test.options.goes.GoesViolationITest.useDefaultErrorMessage].
-     * 1. [io.spine.test.options.goes.GoesViolationITest.useCustomErrorMessage].
+     * 1. [io.spine.test.options.goes.GoesViolationIgTest.useDefaultErrorMessage].
+     * 1. [io.spine.test.options.goes.GoesViolationIgTest.useCustomErrorMessage].
      */
     @JvmStatic
     fun onlyTargetFields() = listOf(

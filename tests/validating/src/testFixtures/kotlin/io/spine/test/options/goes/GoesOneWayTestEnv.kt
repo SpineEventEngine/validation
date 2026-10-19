@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parameterized [GoesOneWayITest][io.spine.test.options.goes.GoesOneWayITest].
+ * Provides data for parameterized [GoesOneWayIgTest][io.spine.test.options.goes.GoesOneWayIgTest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object GoesOneWayTestEnv {
@@ -56,7 +56,7 @@ internal object GoesOneWayTestEnv {
     )
 
     /**
-     * Test data for [io.spine.test.options.goes.GoesOneWayITest.throwIfOnlyTargetFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayIgTest.throwIfOnlyTargetFieldSet].
      */
     @JvmStatic
     fun onlyTargetFields() = fieldValues.map { (messageClass, fieldValue) ->
@@ -66,7 +66,7 @@ internal object GoesOneWayTestEnv {
     }
 
     /**
-     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfOnlyCompanionFieldSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayIgTest.passIfOnlyCompanionFieldSet].
      */
     @JvmStatic
     fun onlyCompanionFields() = fieldValues.map { (messageCLass, companionValue) ->
@@ -75,7 +75,7 @@ internal object GoesOneWayTestEnv {
     }
 
     /**
-     * Test data for [io.spine.test.options.goes.GoesOneWayITest.passIfBothTargetAndCompanionFieldsSet].
+     * Test data for [io.spine.test.options.goes.GoesOneWayIgTest.passIfBothTargetAndCompanionFieldsSet].
      */
     @JvmStatic
     fun bothTargetAndCompanionFields() = fieldValues.flatMap { (messageClass, companionValue) ->

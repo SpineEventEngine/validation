@@ -116,8 +116,7 @@ What sits where:
   test environments used across specs.
 - **`src/test/kotlin/io/spine/test/options/`** — the specs themselves, organised
   by option (`required/`, `goes/`, `setonce/`) or by cross-cutting concern
-  (`ChoiceITest.kt`, `ExternalConstraintITest.kt`,
-  `CustomOptionsLoadingITest.kt`).
+  (`ChoiceIgTest.kt`, `CustomOptionsLoadingIgTest.kt`).
 
 The framework stack is JUnit 5 plus Kotest assertions plus [Google Truth][truth]
 for the classes that already used it. Specs typically build a message, catch
@@ -229,8 +228,9 @@ peers in `:tests:validating`.
 
 A handful of conventions keep specs across the suites consistent:
 
-- **Kotest matchers**, JUnit 5 lifecycle. Specs use the `*Spec` or `*ITest`
-  naming convention; pick the suffix the surrounding directory already uses.
+- **Kotest matchers**, JUnit 5 lifecycle. A unit-test suite for `X` is named
+  `XSpec`; an integration suite is `XIgTest`, where `Ig` stands for
+  “integration”.
 - **Parameterised tests** with `@MethodSource` for per-field-type matrices. The
   built-in option specs in `:tests:validating` and `:tests:runtime` use this
   pattern liberally; copy it rather than handwriting per-type test methods.

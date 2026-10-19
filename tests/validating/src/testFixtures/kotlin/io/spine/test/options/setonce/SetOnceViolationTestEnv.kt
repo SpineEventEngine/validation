@@ -1,5 +1,5 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import org.junit.jupiter.api.Named.named
 import org.junit.jupiter.params.provider.Arguments.arguments
 
 /**
- * Provides data for parametrized [io.spine.test.options.setonce.SetOnceViolationITest].
+ * Provides data for parametrized [io.spine.test.options.setonce.SetOnceViolationIgTest].
  */
 @Suppress("unused") // Data provider for parameterized test.
 internal object SetOnceViolationTestEnv {
@@ -56,8 +56,8 @@ internal object SetOnceViolationTestEnv {
     /**
      * Test data for the following tests:
      *
-     * 1. [io.spine.test.options.setonce.SetOnceViolationITest.useDefaultErrorMessage].
-     * 2. [io.spine.test.options.setonce.SetOnceViolationITest.useCustomErrorMessage].
+     * 1. [io.spine.test.options.setonce.SetOnceViolationIgTest.useDefaultErrorMessage].
+     * 2. [io.spine.test.options.setonce.SetOnceViolationIgTest.useCustomErrorMessage].
      */
     @JvmStatic
     fun allFieldTypesWithTwoDistinctValues() =
