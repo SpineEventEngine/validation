@@ -58,9 +58,8 @@ import org.gradle.work.DisableCachingByDefault
  * rewrite the file, which, in turn, makes `LaunchSpineCompiler` out of date.
  * When the file is deleted (for example, by `clean`), the task writes it again.
  *
- * The task declares only the file it writes as its output. Other plugins write
- * their settings files into the same directory. For example, the CoreJvm Compiler
- * declares the whole directory as an output of its own settings task.
+ * The task declares only the file it writes as its output, not the whole settings
+ * directory, because other plugins write their settings files into the same directory.
  */
 @DisableCachingByDefault(because = "Writing a single small file is as fast as loading it.")
 public abstract class WriteValidationSettings : DefaultTask() {

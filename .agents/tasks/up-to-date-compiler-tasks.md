@@ -118,9 +118,16 @@ Findings (verified 2026-10-19 on Gradle 9.6.1):
   the `XIgTest` convention in `.agents/guidelines/testing.md`.
 
 ## Log
-- 2026-10-19 — analysis done; scope chosen: Validation + CoreJvm writer; plan drafted, awaiting approval.
-- 2026-10-19 — approved; Change 1 started on `write-settings-before-launch` (based on `origin/master`, version `.465`).
-- 2026-10-19 — Change 1 implemented (uncommitted, except the `.466` bump commit). `./gradlew build` and `:gradle-plugin:dokkaGenerate` pass. A standalone consumer of the published `.466` plugin stays `UP-TO-DATE` across `--no-daemon` runs, reruns when the DSL value changes, and works after `clean`; on `.465` the second run reruns with "…JavaValidationRenderer.pb.json has been added". `:docs:embedCode` can't run here (x86-64 binary, no Rosetta); `build-and-release.md` updated by hand.
+- 2026-10-19 — analysis done; scope chosen: Validation + CoreJvm writer; plan drafted, awaiting
+  approval.
+- 2026-10-19 — approved; Change 1 started on `write-settings-before-launch` (based on
+  `origin/master`, version `.465`).
+- 2026-10-19 — Change 1 implemented (uncommitted, except the `.466` bump commit). `./gradlew build`
+  and `:gradle-plugin:dokkaGenerate` pass. A standalone consumer of the published `.466` plugin
+  stays `UP-TO-DATE` across `--no-daemon` runs, reruns when the DSL value changes, and works after
+  `clean`; on `.465` the second run reruns with "…JavaValidationRenderer.pb.json has been added".
+  `:docs:embedCode` can't run here (x86-64 binary, no Rosetta); `build-and-release.md` updated by
+  hand.
 - 2026-10-19 — reviews (Kotlin, Spine rules, Gradle, docs) addressed: the task owns the
   consumer ID and file name, takes an `@Internal` settings directory (set lazily) and
   derives its `@OutputFile`; properties are `internal`; a spec pins the `@Input`/`@OutputFile`

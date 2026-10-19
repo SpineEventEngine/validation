@@ -64,8 +64,9 @@ message MinInDeclarationOrder {
     int32 bravo = 2 [(min).value = "1"];
 }
 
-// Declares `oneof` groups with `(choice).required = true` in an order that differs from both the order of
-// the field numbers and the alphabetical order of the group names.
+// Declares `oneof` groups with `(choice).required = true` in an order that
+// differs from both the order of the field numbers and the alphabetical order
+// of the group names.
 //
 // The violations of the constraints must follow the order of declaration.
 //
