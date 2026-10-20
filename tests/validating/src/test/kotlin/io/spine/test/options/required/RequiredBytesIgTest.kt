@@ -23,7 +23,7 @@ import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required) option set in a `bytes` field should")
+@DisplayName("`(required)` option set in a `bytes` field should")
 internal class RequiredBytesIgTest {
 
     @Test

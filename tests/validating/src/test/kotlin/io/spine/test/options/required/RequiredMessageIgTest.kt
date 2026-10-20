@@ -24,7 +24,7 @@ import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required)` option in a message field should")
+@DisplayName("`(required)` option in a message field should")
 internal class RequiredMessageIgTest {
 
     @Test

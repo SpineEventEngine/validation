@@ -23,7 +23,7 @@ import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required) option in a string field should")
+@DisplayName("`(required)` option in a string field should")
 internal class RequiredStringIgTest {
 
     @Test

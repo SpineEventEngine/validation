@@ -32,7 +32,7 @@ class JavaMessageJavaApiSmokeIgTest {
                     .setDigits("0000 0000 0000 0000");
 
     @Test
-    @DisplayName("throw `NullPointerException` if given 'null' for the parent path")
+    @DisplayName("throw `NullPointerException` if given `null` for the parent path")
     @SuppressWarnings("DataFlowIssue" /* We pass `null` intentionally */)
     void rejectNullParentPath() {
         var message = valid.build();

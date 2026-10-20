@@ -23,7 +23,7 @@ import io.spine.tools.validation.assertions.assertViolation
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@DisplayName("(required)` option in an enum field should")
+@DisplayName("`(required)` option in an enum field should")
 internal class RequiredEnumIgTest {
 
     @Test
