@@ -1,27 +1,15 @@
 /*
- * Copyright 2025, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.tools.validation.java.generate.option
@@ -30,6 +18,7 @@ import io.spine.base.FieldPath
 import io.spine.server.query.select
 import io.spine.string.lowerCamelCase
 import io.spine.tools.compiler.ast.TypeName
+import io.spine.tools.compiler.ast.toMessageType
 import io.spine.tools.compiler.jvm.CodeBlock
 import io.spine.tools.compiler.jvm.Expression
 import io.spine.tools.compiler.jvm.ReadVar
@@ -64,10 +53,20 @@ internal class ChoiceGenerator : OptionGenerator() {
             .all()
     }
 
-    override fun codeFor(type: TypeName): List<SingleOptionCode> =
-        allChoiceOneofs
-            .filter { it.id.type == type }
+    override fun codeFor(type: TypeName): List<SingleOptionCode> {
+        val choiceOneofs = allChoiceOneofs.filter { it.id.type == type }
+        if (choiceOneofs.isEmpty()) {
+            return emptyList()
+        }
+        // The views do not tell the position of a group in the message,
+        // so the order of declaration comes from the message type.
+        val positions = type.toMessageType(typeSystem).oneofGroupList
+            .withIndex()
+            .associate { (index, group) -> group.name to index }
+        return choiceOneofs
+            .sortedBy { positions.getValue(it.id.name) }
             .map { GenerateChoice(it).code() }
+    }
 }
 
 /**

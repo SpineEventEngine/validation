@@ -47,7 +47,7 @@ through Gradle's `extra` properties:
   end="validationVersion">
 </embed-code>
 ```kotlin
-extra.set("validationVersion", "2.0.0-SNAPSHOT.462")
+extra.set("validationVersion", "2.0.0-SNAPSHOT.466")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
@@ -233,25 +233,31 @@ Portal][gradle-plugin-portal] — configured by the `java-gradle-plugin` and
 That is the destination consumers reach when they write
 `id("io.spine.validation")` in their `plugins { … }` block.
 
-Publication is automated by the
-[`publish.yml`][publish-workflow] GitHub Actions workflow, which runs on every
-push to `master` after PR checks have already verified the build:
+Publication is automated by the [`publish.yml`][publish-workflow] GitHub Actions
+workflow, which runs on every push to `master` after PR checks have already
+verified the build:
 
 <embed-code
   file="$root/.github/workflows/publish.yml"
-  start="- name: Publish artifacts to Maven"
-  end="run: ./gradlew publish">
+  start="^on:"
+  end="name: Publish to Maven repositories">
 </embed-code>
 ```yaml
-- name: Publish artifacts to Maven
-  # Since we're in the `master` branch already, this means that tests of a PR passed.
-  # So, no need to run the tests again when publishing.
-  run: ./gradlew publish -x test --stacktrace
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    name: Publish to Maven repositories
 ```
 
-`-x test` relies on the per-PR build to keep publication fast. Every merge to
-`master` emits a new version of the artifacts for downstream consumers to
-refresh against.
+The workflow is a thin caller. The job itself — checkout, credentials, the Gradle
+publication, and the attestation — is the reusable `publishing.yml` workflow
+hosted by the `config` repository, which `publish.yml` references at the commit
+of `config` this repository pins. The job runs `./gradlew publish` with `-x test`,
+relying on the per-PR build to keep publication fast. Every merge to `master`
+emits a new version of the artifacts for downstream consumers to refresh against.
 
 ## Downstream consumers
 
