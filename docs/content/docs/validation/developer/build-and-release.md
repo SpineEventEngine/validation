@@ -233,24 +233,31 @@ Portal][gradle-plugin-portal] — configured by the `java-gradle-plugin` and
 That is the destination consumers reach when they write
 `id("io.spine.validation")` in their `plugins { … }` block.
 
-Publication is automated by the
-[`publish.yml`][publish-workflow] GitHub Actions workflow, which runs on every
-push to `master` after PR checks have already verified the build. It delegates
-to the shared [`publishing.yml`][publishing-workflow] workflow from the `config`
-repository, which publishes the artifacts with:
+Publication is automated by the [`publish.yml`][publish-workflow] GitHub Actions
+workflow, which runs on every push to `master` after PR checks have already
+verified the build:
 
 <embed-code
-  file="$root/config/.github/workflows/publishing.yml"
-  start="run: ./gradlew publish"
-  end="run: ./gradlew publish">
+  file="$root/.github/workflows/publish.yml"
+  start="^on:"
+  end="name: Publish to Maven repositories">
 </embed-code>
 ```yaml
-run: ./gradlew publish publicationChecksums -x test --stacktrace
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    name: Publish to Maven repositories
 ```
 
-`-x test` relies on the per-PR build to keep publication fast. Every merge to
-`master` emits a new version of the artifacts for downstream consumers to
-refresh against.
+The workflow is a thin caller. The job itself — checkout, credentials, the Gradle
+publication, and the attestation — is the reusable `publishing.yml` workflow
+hosted by the `config` repository, which `publish.yml` references at the commit
+of `config` this repository pins. The job runs `./gradlew publish` with `-x test`,
+relying on the per-PR build to keep publication fast. Every merge to `master`
+emits a new version of the artifacts for downstream consumers to refresh against.
 
 ## Downstream consumers
 
@@ -296,7 +303,6 @@ release across every downstream tool that resolves it by name.
 [validation-gradle-plugin]: https://github.com/SpineEventEngine/validation/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/ValidationGradlePlugin.kt
 [gradle-plugin-meta]: https://github.com/SpineEventEngine/validation/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/validation/gradle/Meta.kt
 [publish-workflow]: https://github.com/SpineEventEngine/validation/blob/master/.github/workflows/publish.yml
-[publishing-workflow]: https://github.com/SpineEventEngine/config/blob/master/.github/workflows/publishing.yml
 [shadow]: https://gradleup.com/shadow/
 [github-packages-validation]: https://github.com/SpineEventEngine/validation/packages
 [gradle-plugin-portal]: https://plugins.gradle.org/plugin/io.spine.validation

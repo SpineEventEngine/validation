@@ -1,0 +1,87 @@
+/*
+ * Copyright 2026 CodeMatters, Lda.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
+syntax = "proto3";
+
+package spine.test.tools.validate;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io";
+option java_package = "io.spine.test.tools.validate";
+option java_outer_classname = "DeclarationOrderProto";
+option java_multiple_files = true;
+
+// Declares `(required)` fields in an order that differs from both the order of
+// the field numbers and the alphabetical order of the field names.
+//
+// The violations of the constraints must follow the order of declaration.
+//
+message RequiredInDeclarationOrder {
+    string echo = 5 [(required) = true];
+    string bravo = 2 [(required) = true];
+    string hotel = 8 [(required) = true];
+    string alpha = 1 [(required) = true];
+    string golf = 7 [(required) = true];
+    string charlie = 3 [(required) = true];
+    string foxtrot = 6 [(required) = true];
+    string delta = 4 [(required) = true];
+}
+
+// Declares `(min)` fields in an order that differs from both the order of
+// the field numbers and the alphabetical order of the field names.
+//
+// The violations of the constraints must follow the order of declaration.
+//
+message MinInDeclarationOrder {
+    int32 delta = 4 [(min).value = "1"];
+    int32 alpha = 1 [(min).value = "1"];
+    int32 echo = 5 [(min).value = "1"];
+    int32 charlie = 3 [(min).value = "1"];
+    int32 bravo = 2 [(min).value = "1"];
+}
+
+// Declares `oneof` groups with `(choice).required = true` in an order that
+// differs from both the order of the field numbers and the alphabetical order
+// of the group names.
+//
+// The violations of the constraints must follow the order of declaration.
+//
+message ChoiceInDeclarationOrder {
+
+    oneof charlie {
+        option (.choice).required = true;
+        string charlie_value = 3;
+    }
+
+    oneof alpha {
+        option (.choice).required = true;
+        string alpha_value = 1;
+    }
+
+    oneof echo {
+        option (.choice).required = true;
+        string echo_value = 5;
+    }
+
+    oneof bravo {
+        option (.choice).required = true;
+        string bravo_value = 2;
+    }
+
+    oneof delta {
+        option (.choice).required = true;
+        string delta_value = 4;
+    }
+}

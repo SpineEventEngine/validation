@@ -1,49 +1,35 @@
 /*
- * Copyright 2026, TeamDev. All rights reserved.
+ * Copyright 2026 CodeMatters, Lda.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
  * https://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and/or binary forms, with or without
- * modification, must retain the above copyright notice and the following
- * disclaimer.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 
 package io.spine.tools.validation.gradle
 
 import com.google.protobuf.gradle.ProtobufPlugin
-import io.spine.format.Format
 import io.spine.tools.compiler.gradle.api.addUserClasspathDependency
 import io.spine.tools.compiler.gradle.api.compilerSettings
 import io.spine.tools.compiler.gradle.api.compilerWorkingDir
 import io.spine.tools.compiler.gradle.plugin.Extension
 import io.spine.tools.compiler.gradle.plugin.LaunchSpineCompiler
-import io.spine.tools.compiler.params.WorkingDirectory
+import io.spine.tools.compiler.params.Directories.SETTINGS_SUBDIR
 import io.spine.tools.gradle.DslSpec
 import io.spine.tools.gradle.lib.LibraryPlugin
 import io.spine.tools.gradle.lib.spineExtension
+import io.spine.tools.gradle.task.SpineTaskGroup
 import io.spine.tools.meta.MavenArtifact
-import io.spine.tools.validation.settings.JavaValidationRendererSettings
-import io.spine.tools.validation.settings.javaValidationRendererSettings
-import io.spine.tools.validation.settings.suppressWarnings
-import io.spine.type.toJson
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
+import org.gradle.api.plugins.BasePlugin.CLEAN_TASK_NAME
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.apply
 import io.spine.tools.compiler.gradle.plugin.Plugin as CompilerGradlePlugin
 
@@ -79,16 +65,16 @@ private fun Project.configureValidation() {
                 val ordered = listOf(ValidationSdk.javaCompilerPlugin) + plugins.get()
                 plugins.set(ordered)
             }
-            // Register the settings write as a `doFirst` action on every
-            // `LaunchSpineCompiler` task rather than writing during `afterEvaluate`.
-            // Writing at configuration time is not enough: a preceding `clean`
-            // task (which runs during execution) deletes `build/` — including
-            // the settings file — before the compiler task can read it.
-            val theProject = this
+            // Write the settings in a dedicated task rather than in an action of
+            // `LaunchSpineCompiler`. Gradle fingerprints the inputs of a task before
+            // running any of its actions, so a file written by such an action is
+            // missing from the fingerprint, and `LaunchSpineCompiler` is out of date
+            // on the next build.
+            // The dependency is explicit because the settings directory input of
+            // `LaunchSpineCompiler` does not carry the tasks that write to it.
+            val writeSettings = registerWriteSettingsTask()
             tasks.withType(LaunchSpineCompiler::class.java).configureEach { task ->
-                task.doFirst {
-                    theProject.writeJavaValidationRendererSettings()
-                }
+                task.dependsOn(writeSettings)
             }
         }
     }
@@ -104,40 +90,26 @@ private fun Project.configureValidation() {
 }
 
 /**
- * Writes the [JavaValidationRendererSettings] built from the
- * `validation { java { ... } }` DSL block as a settings file for the
- * `io.spine.tools.validation.java.JavaValidationRenderer` consumer.
- *
- * Called as a `doFirst` action on every [LaunchSpineCompiler] task so that
- * the file is written during task execution — after any preceding `clean` task
- * has finished deleting the build directory — and is guaranteed to be present
- * when the Spine Compiler subprocess reads the settings directory.
+ * Registers the [WriteValidationSettings] task, which writes the settings file
+ * for the `io.spine.tools.validation.java.JavaValidationRenderer` consumer
+ * into the settings directory of the Spine Compiler.
  */
-private fun Project.writeJavaValidationRendererSettings() {
-    val suppress = validationExtension.java.suppressWarnings
-    val message = javaValidationRendererSettings {
-        suppressWarnings = suppressWarnings {
-            unsignedFields = suppress.unsignedFields.get()
-        }
+private fun Project.registerWriteSettingsTask(): TaskProvider<WriteValidationSettings> =
+    tasks.register(WriteValidationSettings.NAME, WriteValidationSettings::class.java) { task ->
+        task.group = SpineTaskGroup.name
+        task.description = "Writes the settings of the Validation Compiler" +
+                " for the Spine Compiler"
+        task.suppressUnsignedFieldsWarnings.set(
+            validationExtension.java.suppressWarnings.unsignedFields
+        )
+        // Obtain the directory lazily so that it reflects the final build directory.
+        task.settingsDirectory.fileProvider(provider {
+            compilerWorkingDir.dir(SETTINGS_SUBDIR).asFile
+        })
+        // `clean` deletes the build directory, which holds the settings file,
+        // so the file must be written after `clean`.
+        task.mustRunAfter(CLEAN_TASK_NAME)
     }
-    val workingDir = WorkingDirectory(compilerWorkingDir.asFile.toPath())
-    workingDir.settingsDirectory.write(
-        VALIDATION_RENDERER_CONSUMER_ID,
-        Format.ProtoJson,
-        message.toJson()
-    )
-}
-
-/**
- * Canonical class name of the Spine Compiler renderer that reads
- * [JavaValidationRendererSettings] via `LoadsSettings`.
- *
- * Kept as a string literal because the Validation Gradle plugin does not
- * depend on the `:java` module that hosts the renderer class — only on the
- * `:java-settings` module that hosts the proto type.
- */
-private const val VALIDATION_RENDERER_CONSUMER_ID: String =
-    "io.spine.tools.validation.java.JavaValidationRenderer"
 
 /**
  * The extension added by [ValidationGradlePlugin].
