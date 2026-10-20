@@ -153,6 +153,7 @@ and is implemented in Kotlin as a `View`:
 ```protobuf
 message RequiredField {
     option (entity).kind = PROJECTION;
+    option (is).java_type = "FieldView";
 
     compiler.FieldRef id = 1;
 
