@@ -14,11 +14,3 @@ code-path:
   - name: "docs"
     path: ".."
 docs-path: "../content/docs/"
-code-includes:
-  - ".gitignore"
-  - "**/*.kts"
-  - "**/*.md"
-  - "**/*.proto"
-  - "**/*.java"
-  - "**/*.kt"
-  - "**/*.yml"

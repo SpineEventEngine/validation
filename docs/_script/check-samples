@@ -17,13 +17,17 @@ fi
 # Navigate to the folder with embed-code binaries.
 cd _bin
 
-# Use the Linux binary for GitHub Actions and macOS binary in other cases.
+# Use the Linux binary for GitHub Actions, and the macOS binary
+# matching the host architecture in other cases.
 if [ "$GITHUB_ACTIONS" = "true" ]; then
   echo "Running in GitHub Action."
   TOOL="./embed-code-linux"
-else
-  echo "Running locally on macOS."
+elif [ "$(uname -m)" = "arm64" ]; then
+  echo "Running locally on macOS (Apple silicon)."
   TOOL="./embed-code-macos"
+else
+  echo "Running locally on macOS (Intel)."
+  TOOL="./embed-code-macos-x86_64"
 fi
 
 # Check code samples.

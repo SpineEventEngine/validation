@@ -118,7 +118,8 @@ commit.
 
 4. Re-embed snippets without running `:docs:embedCode`, because that task
    would move the submodule back to the default remote branch before
-   embedding:
+   embedding. On an Intel Mac, run `./embed-code-macos-x86_64` instead of
+   `./embed-code-macos`:
 
    ```bash
    ./gradlew :docs:updatePluginVersions
@@ -140,8 +141,7 @@ commit.
 
 1. If the source file lives outside the existing source roots in
    [`_settings/embed-code.yml`][embed-code-yml], add a new entry under
-   `code-path` (a `name` plus a path relative to `docs/_bin/`). If the
-   file extension is not yet listed, add a glob under `code-includes`.
+   `code-path` (a `name` plus a path relative to `docs/_bin/`).
 
 2. In the target Markdown page, write an `<embed-code>` element followed
    by an empty fenced code block. For example:
@@ -236,21 +236,32 @@ in this repository.
 ## Updating `embed-code-go`
 
 The tool is consumed as prebuilt binaries under `docs/_bin/`. The
-authoritative copies are published by the upstream project under
-[`embed-code-go/bin`][embed-code-bin]. We do *not* build the tool as
+authoritative copies are published by the upstream project as assets of
+its [GitHub releases][embed-code-releases]. We do *not* build the tool as
 part of the Validation documentation build — see the upstream repository
 for any build, test, or release questions.
 
-1. From [`embed-code-go/bin`][embed-code-bin], download the three
-   binaries on the branch or tag you want to ship:
-   `embed-code-linux`, `embed-code-macos`, `embed-code-windows.exe`.
+1. Download the assets of the release you want to ship, and verify them
+   against the SHA-256 digests shown on the release page:
 
-2. Replace the files of the same names under `docs/_bin/`.
+   ```bash
+   gh release download <tag> --repo SpineEventEngine/embed-code-go
+   ```
+
+2. Unzip the archives, and replace the files under `docs/_bin/` as follows:
+
+   | Release asset                | File under `docs/_bin/`     |
+   |------------------------------|-----------------------------|
+   | `embed-code-linux.zip`       | `embed-code-linux`          |
+   | `embed-code-macos-arm64.zip` | `embed-code-macos`          |
+   | `embed-code-macos-x64.zip`   | `embed-code-macos-x86_64`   |
+   | `embed-code-windows.exe`     | `embed-code-windows.exe`    |
 
 3. Make sure the macOS and Linux binaries are executable:
 
    ```bash
-   chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-linux
+   chmod +x docs/_bin/embed-code-macos docs/_bin/embed-code-macos-x86_64 \
+     docs/_bin/embed-code-linux
    ```
 
 4. Verify that the new binaries still produce the same embedded output
@@ -265,7 +276,7 @@ for any build, test, or release questions.
    before committing.
 
 5. Commit the updated binaries under `docs/_bin/` with a message that
-   names the upstream commit they were pulled from.
+   names the upstream release they were pulled from.
 
 ## Building the documentation locally
 
@@ -314,5 +325,5 @@ for any build, test, or release questions.
 [doc-guidelines]: https://github.com/SpineEventEngine/validation/blob/master/.agents/documentation-guidelines.md
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
-[embed-code-bin]: https://github.com/SpineEventEngine/embed-code-go/tree/master/bin
+[embed-code-releases]: https://github.com/SpineEventEngine/embed-code-go/releases
 [versioning-policy]: https://github.com/SpineEventEngine/documentation/wiki/Versioning
