@@ -1,0 +1,6 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:io.spine.validation/ConstraintViolation.Builder///PointingToDeclaration/io/spine/validation/ConstraintViolation.Builder.html
+$dokka.location:io.spine.validation/ValidationError.Builder///PointingToDeclaration/io/spine/validation/ValidationError.Builder.html
+io.spine.validate
+io.spine.validation
