@@ -19,4 +19,9 @@ $dokka.location:io.spine.tools.validation.gradle/ValidationExtension/java/#org.g
 $dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/index.html
 $dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/ValidationGradlePlugin/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/-validation-gradle-plugin.html
 $dokka.location:io.spine.tools.validation.gradle/ValidationGradlePlugin/apply/#org.gradle.api.Project/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-validation-gradle-plugin/apply.html
+$dokka.location:io.spine.tools.validation.gradle/WriteValidationSettings.Companion///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-write-validation-settings/-companion/index.html
+$dokka.location:io.spine.tools.validation.gradle/WriteValidationSettings.Companion/NAME/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-write-validation-settings/-companion/-n-a-m-e.html
+$dokka.location:io.spine.tools.validation.gradle/WriteValidationSettings///PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-write-validation-settings/index.html
+$dokka.location:io.spine.tools.validation.gradle/WriteValidationSettings/WriteValidationSettings/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-write-validation-settings/-write-validation-settings.html
+$dokka.location:io.spine.tools.validation.gradle/WriteValidationSettings/write/#/PointingToDeclaration/gradle-plugin/io.spine.tools.validation.gradle/-write-validation-settings/write.html
 io.spine.tools.validation.gradle
