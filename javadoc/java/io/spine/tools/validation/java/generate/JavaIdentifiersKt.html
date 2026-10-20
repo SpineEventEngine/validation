@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>JavaIdentifiersKt 2.0.0-SNAPSHOT.465 API </title>
+    <title>JavaIdentifiersKt 2.0.0-SNAPSHOT.466 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -306,10 +306,21 @@ public final class <span class="typeNameLabel"><a href=JavaIdentifiersKt.html>Ja
                                     <li class="blockList">
                                         <h4>mangled</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html>String</a> <a href=JavaIdentifiersKt.html#mangled(java.lang.String,java.lang.Integer)>mangled</a>(<a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html>String</a> javaIdentifier, <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html>Integer</a> length)</pre>
-                                        <div class="block"><p>Returns a Java identifier with an appended hash in the format <code>&lt;javaIdentifier&gt;_&lt;hash&gt;</code>.</p><p>The random hash is filtered to include only valid Java identifier chars. Appending this hash ensures that the generated field or method name does not conflict with existing declarations in the target class.</p></div>
+                                        <div class="block"><p>Returns a Java identifier with an appended hash in the format <code>&lt;javaIdentifier&gt;_&lt;hash&gt;</code>.</p><p>The hash is the URL-safe Base64 encoding of the first length bytes of the SHA-256 digest of the javaIdentifier, filtered to include only valid Java identifier chars. Appending this hash ensures that the generated field or method name does not conflict with existing declarations in the target class.</p><p>For example, <code>mangled(&quot;fooPattern&quot;)</code> returns <code>fooPattern_JfU6lQD8acWPQ</code>.</p><p>The same identifier always yields the same name, so the generated code stays the same from build to build. Since equal identifiers yield equal names, the identifiers passed to this function must be unique within the target class.</p></div>
 
                                         <dl>
 
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>javaIdentifier</code> - The identifier to append the hash to.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>length</code> - The number of digest bytes to encode, from 1 to 32.</dd>
+                                            
+                                            
                                         
 
                                         

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>OptionGenerator 2.0.0-SNAPSHOT.465 API </title>
+    <title>OptionGenerator 2.0.0-SNAPSHOT.466 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -466,7 +466,7 @@ public abstract class <span class="typeNameLabel"><a href=OptionGenerator.html>O
                                     <li class="blockList">
                                         <h4>codeFor</h4>
                                         <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html>List</a>&lt;<a href=SingleOptionCode.html>SingleOptionCode</a>&gt; <a href=OptionGeneratorWithConverter.html#codeFor(io.spine.tools.compiler.ast.TypeName)>codeFor</a>(TypeName type)</pre>
-                                        <div class="block"><p>Generates validation code for all option applications within the provided message <a href=OptionGeneratorWithConverter.html#codeFor(io.spine.tools.compiler.ast.TypeName)>type</a>.</p></div>
+                                        <div class="block"><p>Generates validation code for all option applications within the provided message <a href=OptionGeneratorWithConverter.html#codeFor(io.spine.tools.compiler.ast.TypeName)>type</a>.</p><p>The order of the returned code defines the order of this option's constraints in the generated validation method. Return the code in a stable order, such as the order of declaration of the fields, so that the generated code stays the same from build to build. Note that the view states selected via <a href=OptionGeneratorWithConverter.html#querying>querying</a> come in no particular order.</p></div>
 
                                         <dl>
 
