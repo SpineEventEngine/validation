@@ -589,7 +589,6 @@ $dokka.location:io.spine.tools.validation.bound////PointingToDeclaration/contex
 $dokka.location:io.spine.tools.validation.bound/BoundedFieldView///PointingToDeclaration/context/io.spine.tools.validation.bound/-bounded-field-view/index.html
 $dokka.location:io.spine.tools.validation.bound/BoundedFieldView/errorMessage/#/PointingToDeclaration/context/io.spine.tools.validation.bound/-bounded-field-view/error-message.html
 $dokka.location:io.spine.tools.validation.bound/BoundedFieldView/file/#/PointingToDeclaration/context/io.spine.tools.validation.bound/-bounded-field-view/file.html
-$dokka.location:io.spine.tools.validation.bound/BoundedFieldView/subject/#/PointingToDeclaration/context/io.spine.tools.validation.bound/-bounded-field-view/subject.html
 $dokka.location:io.spine.tools.validation.bound/FieldViewsProto///PointingToDeclaration/context/io.spine.tools.validation.bound/-field-views-proto/index.html
 $dokka.location:io.spine.tools.validation.bound/FieldViewsProto/descriptor/#/PointingToDeclaration/context/io.spine.tools.validation.bound/-field-views-proto/descriptor.html
 $dokka.location:io.spine.tools.validation.bound/FieldViewsProto/registerAllExtensions/#com.google.protobuf.ExtensionRegistry/PointingToDeclaration/context/io.spine.tools.validation.bound/-field-views-proto/register-all-extensions.html
@@ -2678,6 +2677,7 @@ $dokka.location:io.spine.tools.validation////PointingToDeclaration/context/io.s
 $dokka.location:io.spine.tools.validation//OPTION_NAME/#/PointingToDeclaration/context/io.spine.tools.validation/-o-p-t-i-o-n_-n-a-m-e.html
 $dokka.location:io.spine.tools.validation//checkPlaceholders/kotlin.String#kotlin.collections.Set[io.spine.string.Placeholder]#io.spine.tools.compiler.ast.Field#io.spine.tools.compiler.ast.File#kotlin.String/PointingToDeclaration/context/io.spine.tools.validation/check-placeholders.html
 $dokka.location:io.spine.tools.validation//defaultMessage/com.google.protobuf.Descriptors.Descriptor#/PointingToDeclaration/context/io.spine.tools.validation/default-message.html
+$dokka.location:io.spine.tools.validation//sortedByDeclaration/kotlin.collections.Iterable[TypeParam(bounds=[io.spine.tools.validation.FieldView])]#/PointingToDeclaration/context/io.spine.tools.validation/sorted-by-declaration.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Builder///PointingToDeclaration/context/io.spine.tools.validation/-choice-oneof/-builder/index.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Builder/build/#/PointingToDeclaration/context/io.spine.tools.validation/-choice-oneof/-builder/build.html
 $dokka.location:io.spine.tools.validation/ChoiceOneof.Builder/buildPartial/#/PointingToDeclaration/context/io.spine.tools.validation/-choice-oneof/-builder/build-partial.html
@@ -3017,6 +3017,8 @@ $dokka.location:io.spine.tools.validation/FieldGroupProto///PointingToDeclaratio
 $dokka.location:io.spine.tools.validation/FieldGroupProto/descriptor/#/PointingToDeclaration/context/io.spine.tools.validation/-field-group-proto/descriptor.html
 $dokka.location:io.spine.tools.validation/FieldGroupProto/registerAllExtensions/#com.google.protobuf.ExtensionRegistry/PointingToDeclaration/context/io.spine.tools.validation/-field-group-proto/register-all-extensions.html
 $dokka.location:io.spine.tools.validation/FieldGroupProto/registerAllExtensions/#com.google.protobuf.ExtensionRegistryLite/PointingToDeclaration/context/io.spine.tools.validation/-field-group-proto/register-all-extensions.html
+$dokka.location:io.spine.tools.validation/FieldView///PointingToDeclaration/context/io.spine.tools.validation/-field-view/index.html
+$dokka.location:io.spine.tools.validation/FieldView/subject/#/PointingToDeclaration/context/io.spine.tools.validation/-field-view/subject.html
 $dokka.location:io.spine.tools.validation/GoesField.Builder///PointingToDeclaration/context/io.spine.tools.validation/-goes-field/-builder/index.html
 $dokka.location:io.spine.tools.validation/GoesField.Builder/build/#/PointingToDeclaration/context/io.spine.tools.validation/-goes-field/-builder/build.html
 $dokka.location:io.spine.tools.validation/GoesField.Builder/buildPartial/#/PointingToDeclaration/context/io.spine.tools.validation/-goes-field/-builder/build-partial.html
