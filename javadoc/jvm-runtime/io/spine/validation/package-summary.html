@@ -115,9 +115,9 @@ var pathtoroot = "../../../";
 </tr>
 <tbody>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=NonValidated.html>NonValidated</a></th><td class="colLast">Marks a message which may not be valid.</td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=Validated.html>Validated</a></th><td class="colLast">Marks a message which is guaranteed to be valid.</td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=Validated.html>Validated</a></th><td class="colLast">Marks a message which is guaranteed to be valid.</td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=NonValidated.html>NonValidated</a></th><td class="colLast">Marks a message which may not be valid.</td></tr>
 </tbody>
 </table>
 
@@ -145,9 +145,9 @@ var pathtoroot = "../../../";
 
     <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidatingBuilder.html>ValidatingBuilder</a></th><td class="colLast">Implementation base for generated message builders.</td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ConstraintViolationOrBuilder.html>ConstraintViolationOrBuilder</a></th><td class="colLast"></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ValidationErrorOrBuilder.html>ValidationErrorOrBuilder</a></th><td class="colLast"></td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidationErrorOrBuilder.html>ValidationErrorOrBuilder</a></th><td class="colLast"></td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ConstraintViolationOrBuilder.html>ConstraintViolationOrBuilder</a></th><td class="colLast"></td></tr>
 
     <tr class="altColor"><th class="colFirst" scope="row"><a href=MessageValidator.html>MessageValidator</a></th><td class="colLast">A validator for a Protobuf message of type <a href=MessageValidator.html>M</a>.</td></tr>
 </tbody>
@@ -173,25 +173,25 @@ var pathtoroot = "../../../";
 </tr>
 <tbody>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=Validate.html>Validate</a></th><td class="colLast">This class provides general validation routines.</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidationException.html>ValidationException</a></th><td class="colLast">An exception that is thrown if a <code>Message</code> does not pass the validation.</td></tr>
-
     <tr class="altColor"><th class="colFirst" scope="row"><a href=ViolationText.html>ViolationText</a></th><td class="colLast">Provides error diagnostic text for a violation of a validation constraint.</td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ConstraintViolation.Builder.html>Builder</a></th><td class="colLast"><pre><code>Describes the violation of a validation constraint found in a message.
-</code></pre> Protobuf type <code>spine.validation.ConstraintViolation</code></td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=Validate.html>Validate</a></th><td class="colLast">This class provides general validation routines.</td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ConstraintViolation.html>ConstraintViolation</a></th><td class="colLast"><pre><code>Describes the violation of a validation constraint found in a message.
-</code></pre> Protobuf type <code>spine.validation.ConstraintViolation</code></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ValidationException.html>ValidationException</a></th><td class="colLast">An exception that is thrown if a <code>Message</code> does not pass the validation.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidationError.Builder.html>Builder</a></th><td class="colLast"><pre><code>An error indicating that a message did not pass validation.
+</code></pre> Protobuf type <code>spine.validation.ValidationError</code></td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ValidationError.html>ValidationError</a></th><td class="colLast"><pre><code>An error indicating that a message did not pass validation.
+</code></pre> Protobuf type <code>spine.validation.ValidationError</code></td></tr>
 
     <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidationErrorProto.html>ValidationErrorProto</a></th><td class="colLast"></td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ValidationError.Builder.html>Builder</a></th><td class="colLast"><pre><code>An error indicating that a message did not pass validation.
-</code></pre> Protobuf type <code>spine.validation.ValidationError</code></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ConstraintViolation.Builder.html>Builder</a></th><td class="colLast"><pre><code>Describes the violation of a validation constraint found in a message.
+</code></pre> Protobuf type <code>spine.validation.ConstraintViolation</code></td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ValidationError.html>ValidationError</a></th><td class="colLast"><pre><code>An error indicating that a message did not pass validation.
-</code></pre> Protobuf type <code>spine.validation.ValidationError</code></td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ConstraintViolation.html>ConstraintViolation</a></th><td class="colLast"><pre><code>Describes the violation of a validation constraint found in a message.
+</code></pre> Protobuf type <code>spine.validation.ConstraintViolation</code></td></tr>
 
     <tr class="altColor"><th class="colFirst" scope="row"><a href=DetectedViolation.html>DetectedViolation</a></th><td class="colLast">Abstract base for violations detected by <a href=MessageValidator.html>MessageValidator</a>s.</td></tr>
 
