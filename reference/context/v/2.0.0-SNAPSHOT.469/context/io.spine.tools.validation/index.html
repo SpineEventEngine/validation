@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>io.spine.tools.validation</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/custom-styles.css" rel="Stylesheet">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    context
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0-SNAPSHOT.469        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":context/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":context/main"
+                                       data-filter=":context/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    context
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="context::io.spine.tools.validation////PointingToDeclaration//-1429715491">
+  <div class="breadcrumbs"><a href="../../index.html">context</a><span class="delimiter">/</span><span class="current">io.spine.tools.validation</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="428879333%2FClasslikes%2F-1429715491" anchor-label="ChoiceOneof" id="428879333%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-choice-oneof/index.html"><span>Choice</span><wbr></wbr><span><span>Oneof</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="428879333%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-choice-oneof/index.html">ChoiceOneof</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-choice-oneof-or-builder/index.html">ChoiceOneofOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/OneofRef///PointingToDeclaration/">OneofRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a `oneof` group that is marked with `(choice).required = true` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.ChoiceOneof</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1294823397%2FClasslikes%2F-1429715491" anchor-label="ChoiceOneofOrBuilder" id="1294823397%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-choice-oneof-or-builder/index.html"><span>Choice</span><wbr></wbr><span>Oneof</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1294823397%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-choice-oneof-or-builder/index.html">ChoiceOneofOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1590485603%2FClasslikes%2F-1429715491" anchor-label="DistinctField" id="1590485603%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-distinct-field/index.html"><span>Distinct</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1590485603%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-distinct-field/index.html">DistinctField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-distinct-field-or-builder/index.html">DistinctFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a field that is marked with `(distinct) = true` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.DistinctField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="186706215%2FClasslikes%2F-1429715491" anchor-label="DistinctFieldOrBuilder" id="186706215%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-distinct-field-or-builder/index.html"><span>Distinct</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="186706215%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-distinct-field-or-builder/index.html">DistinctFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1846295460%2FClasslikes%2F-1429715491" anchor-label="FieldGroup" id="-1846295460%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-group/index.html"><span>Field</span><wbr></wbr><span><span>Group</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1846295460%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-field-group/index.html">FieldGroup</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-field-group-or-builder/index.html">FieldGroupOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A group of related fields that are supposed to be set together.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.FieldGroup</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="714485582%2FClasslikes%2F-1429715491" anchor-label="FieldGroupOrBuilder" id="714485582%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-group-or-builder/index.html"><span>Field</span><wbr></wbr><span>Group</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="714485582%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-field-group-or-builder/index.html">FieldGroupOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="974668318%2FClasslikes%2F-1429715491" anchor-label="FieldGroupProto" id="974668318%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-group-proto/index.html"><span>Field</span><wbr></wbr><span>Group</span><wbr></wbr><span><span>Proto</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="974668318%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-field-group-proto/index.html">FieldGroupProto</a> : <span data-unresolved-link="com.google.protobuf/GeneratedFile///PointingToDeclaration/">GeneratedFile</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-521116126%2FClasslikes%2F-1429715491" anchor-label="FieldView" id="-521116126%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-view/index.html"><span>Field</span><wbr></wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-521116126%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-field-view/index.html">FieldView</a></div><div class="brief "><p class="paragraph">A common interface for the views of fields marked with a validation option.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1258295677%2FClasslikes%2F-1429715491" anchor-label="GoesField" id="1258295677%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-goes-field/index.html"><span>Goes</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1258295677%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-goes-field/index.html">GoesField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-goes-field-or-builder/index.html">GoesFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a field that is marked with `(goes)` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.GoesField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1938298701%2FClasslikes%2F-1429715491" anchor-label="GoesFieldOrBuilder" id="1938298701%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-goes-field-or-builder/index.html"><span>Goes</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1938298701%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-goes-field-or-builder/index.html">GoesFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1419517527%2FClasslikes%2F-1429715491" anchor-label="PatternField" id="1419517527%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pattern-field/index.html"><span>Pattern</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1419517527%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-pattern-field/index.html">PatternField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-pattern-field-or-builder/index.html">PatternFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a field that is marked with `(pattern)` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.PatternField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-247210061%2FClasslikes%2F-1429715491" anchor-label="PatternFieldOrBuilder" id="-247210061%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pattern-field-or-builder/index.html"><span>Pattern</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-247210061%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-pattern-field-or-builder/index.html">PatternFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1707122746%2FClasslikes%2F-1429715491" anchor-label="RequiredField" id="-1707122746%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-required-field/index.html"><span>Required</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1707122746%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-required-field/index.html">RequiredField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-required-field-or-builder/index.html">RequiredFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view on a field that is recognized as required.
+
+This view applies in the following cases:
+
+1. A field is marked with `(required) = true` option.
+2. A field serves as the ID of a signal message or entity state.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.RequiredField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-460207324%2FClasslikes%2F-1429715491" anchor-label="RequiredFieldOrBuilder" id="-460207324%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-required-field-or-builder/index.html"><span>Required</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-460207324%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-required-field-or-builder/index.html">RequiredFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1994645951%2FClasslikes%2F-1429715491" anchor-label="RequireMessage" id="1994645951%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-require-message/index.html"><span>Require</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1994645951%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-require-message/index.html">RequireMessage</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-require-message-or-builder/index.html">RequireMessageOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/TypeName///PointingToDeclaration/">TypeName</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a message that is marked with `(require)` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.RequireMessage</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1646431925%2FClasslikes%2F-1429715491" anchor-label="RequireMessageOrBuilder" id="-1646431925%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-require-message-or-builder/index.html"><span>Require</span><wbr></wbr><span>Message</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1646431925%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-require-message-or-builder/index.html">RequireMessageOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1082914186%2FClasslikes%2F-1429715491" anchor-label="SetOnceField" id="1082914186%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-set-once-field/index.html"><span>Set</span><wbr></wbr><span>Once</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1082914186%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-set-once-field/index.html">SetOnceField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-set-once-field-or-builder/index.html">SetOnceFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view of a field that is marked with `(set_once) = true` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.SetOnceField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1524068832%2FClasslikes%2F-1429715491" anchor-label="SetOnceFieldOrBuilder" id="1524068832%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-set-once-field-or-builder/index.html"><span>Set</span><wbr></wbr><span>Once</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1524068832%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-set-once-field-or-builder/index.html">SetOnceFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1011852029%2FClasslikes%2F-1429715491" anchor-label="ValidateField" id="1011852029%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validate-field/index.html"><span>Validate</span><wbr></wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1011852029%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-validate-field/index.html">ValidateField</a> : <span data-unresolved-link="com.google.protobuf/GeneratedMessage///PointingToDeclaration/">GeneratedMessage</span>, <a href="-validate-field-or-builder/index.html">ValidateFieldOrBuilder</a>, <span data-unresolved-link="io.spine.validation/ValidatableMessage///PointingToDeclaration/">ValidatableMessage</span>, <a href="-field-view/index.html">FieldView</a>, <span data-unresolved-link="io.spine.base/ProjectionState///PointingToDeclaration/">ProjectionState</span><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.ast/FieldRef///PointingToDeclaration/">FieldRef</span><span class="token operator">&gt; </span></div><div class="brief "><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">A view on a field that is marked with `(validate) = true` option.
+</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div> Protobuf type <code class="lang-java">spine.validation.ValidateField</code></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1222915533%2FClasslikes%2F-1429715491" anchor-label="ValidateFieldOrBuilder" id="1222915533%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validate-field-or-builder/index.html"><span>Validate</span><wbr></wbr><span>Field</span><wbr></wbr><span>Or</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1222915533%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">interface </span><a href="-validate-field-or-builder/index.html">ValidateFieldOrBuilder</a> : <span data-unresolved-link="com.google.protobuf/MessageOrBuilder///PointingToDeclaration/">MessageOrBuilder</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-230883627%2FClasslikes%2F-1429715491" anchor-label="ValidationPlugin" id="-230883627%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-validation-plugin/index.html"><span>Validation</span><wbr></wbr><span><span>Plugin</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-230883627%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-validation-plugin/index.html">ValidationPlugin</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">renderers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.render/Renderer///PointingToDeclaration/">Renderer</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span></span><span class="parameter ">views<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html">Class</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span data-unresolved-link="io.spine.tools.compiler.plugin/View///PointingToDeclaration/">View</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>setOf()<span class="token punctuation">, </span></span><span class="parameter ">viewRepositories<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.plugin/ViewRepository///PointingToDeclaration/">ViewRepository</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>setOf()<span class="token punctuation">, </span></span><span class="parameter ">reactions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.tools.compiler.plugin/Reaction///PointingToDeclaration/">Reaction</span><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>setOf()</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="io.spine.tools.compiler.plugin/Plugin///PointingToDeclaration/">Plugin</span></div><div class="brief "><p class="paragraph">The basic implementation of ProtoData validation plugin, which builds language-agnostic representation of the declared constraints.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-568467577%2FClasslikes%2F-1429715491" anchor-label="ViewsProto" id="-568467577%2FClasslikes%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-views-proto/index.html"><span>Views</span><wbr></wbr><span><span>Proto</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-568467577%2FClasslikes%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="com.google.protobuf/Generated///PointingToDeclaration/"><span class="token annotation builtin">Generated</span></span></div></div><span class="token keyword">class </span><a href="-views-proto/index.html">ViewsProto</a> : <span data-unresolved-link="com.google.protobuf/GeneratedFile///PointingToDeclaration/">GeneratedFile</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1671424583%2FProperties%2F-1429715491" anchor-label="OPTION_NAME" id="1671424583%2FProperties%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-o-p-t-i-o-n_-n-a-m-e.html"><span>OPTION_</span><wbr></wbr><span>NAME</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1671424583%2FProperties%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-o-p-t-i-o-n_-n-a-m-e.html">OPTION_NAME</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Path to the name field in <code class="lang-kotlin">*OptionDiscovered</code> events.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="tableheader">Inherited properties</h2>
+        <div class="table"><a data-name="767564332%2FProperties%2F-1429715491" anchor-label="defaultMessage" id="767564332%2FProperties%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="default-message.html"><span>default</span><wbr></wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="767564332%2FProperties%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">val </span><span data-unresolved-link="com.google.protobuf/Descriptors.Descriptor///PointingToDeclaration/">Descriptors.Descriptor</span><span class="token punctuation">.</span><a href="default-message.html">defaultMessage</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns the default error message from the given option descriptor.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="tableheader">Inherited functions</h2>
+        <div class="table"><a data-name="-1114871028%2FFunctions%2F-1429715491" anchor-label="checkPlaceholders" id="-1114871028%2FFunctions%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="check-placeholders.html"><span>check</span><wbr></wbr><span><span>Placeholders</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1114871028%2FFunctions%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">.</span><a href="check-placeholders.html"><span class="token function">checkPlaceholders</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">supported<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="io.spine.string/Placeholder///PointingToDeclaration/">Placeholder</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">field<span class="token operator">: </span><span data-unresolved-link="io.spine.tools.compiler.ast/Field///PointingToDeclaration/">Field</span><span class="token punctuation">, </span></span><span class="parameter ">file<span class="token operator">: </span><span data-unresolved-link="io.spine.tools.compiler.ast/File///PointingToDeclaration/">File</span><span class="token punctuation">, </span></span><span class="parameter ">option<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Checks if this <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a> contains placeholders that are not present in the given set of the <a href="check-placeholders.html">supported</a> placeholders, and reports a compilation error if so.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1953111138%2FFunctions%2F-1429715491" anchor-label="sortedByDeclaration" id="1953111138%2FFunctions%2F-1429715491" data-filterable-set=":context/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":context/main" data-filterable-set=":context/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="sorted-by-declaration.html"><span>sorted</span><wbr></wbr><span>By</span><wbr></wbr><span><span>Declaration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1953111138%2FFunctions%2F-1429715491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":context/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="sorted-by-declaration.html">V</a><span class="token operator"> : </span><a href="-field-view/index.html">FieldView</a><span class="token operator">&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="sorted-by-declaration.html">V</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="sorted-by-declaration.html"><span class="token function">sortedByDeclaration</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="sorted-by-declaration.html">V</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Sorts these views by the order of declaration of their fields.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>Copyright 2026 CodeMatters, Lda.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
