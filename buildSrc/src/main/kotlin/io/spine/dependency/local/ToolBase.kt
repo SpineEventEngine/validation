@@ -32,7 +32,7 @@ package io.spine.dependency.local
 )
 object ToolBase {
     const val group = Spine.toolsGroup
-    const val version = "2.0.0-SNAPSHOT.426"
+    const val version = "2.0.0-SNAPSHOT.428"
     const val dogfoodingVersion = "2.0.0-SNAPSHOT.426"
 
     const val archive = "$group:archive:$version"
