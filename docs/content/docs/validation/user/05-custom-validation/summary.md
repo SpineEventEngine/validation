@@ -41,7 +41,7 @@ Spine Compiler.
 
 ## What's next
 
-- Explore library internals: [Developer's guide](../../developer/)
+- Explore library internals: [Developer's guide](../../developer/overview-and-audience.md)
 - See the modules that back this pipeline:
   [Key modules](../../developer/key-modules.md)
 

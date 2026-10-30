@@ -241,7 +241,7 @@ A handful of conventions keep specs across the suites consistent:
   behaviour.
 - **Inline comments are welcome in tests.** The general rule against inline
   comments in production code does not apply to specs — see
-  `.agents/documentation-guidelines.md`. Use them to explain non-obvious setup
+  `.agents/guidelines/documentation.md`. Use them to explain non-obvious setup
   in fixtures or to flag the violation shape a spec is asserting.
 - **One concern per spec class.** A spec named after an option covers that
   option; cross-cutting behaviour goes in its own spec. The

@@ -72,7 +72,7 @@ in the Spine Time repository.
 ## What's next
 
 - [Summary](summary.md)
-- [Developer's guide](../06-developers-guide/)
+- [Developer's guide](../../developer/overview-and-audience.md)
 
 [time-gradle-plugin-kt]: https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeGradlePlugin.kt
 [time-validation-kt]: https://github.com/SpineEventEngine/time/blob/master/gradle-plugin/src/main/kotlin/io/spine/tools/time/gradle/TimeValidation.kt
