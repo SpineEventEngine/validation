@@ -225,8 +225,8 @@ block above. The library artifacts and the Gradle plugin go to:
   (`gitHub("validation")` resolves to `maven.pkg.github.com/SpineEventEngine/validation`).
 - Spine's Google Cloud Artifact Registry (`cloudArtifactRegistry`).
 
-The `java-gradle-plugin` plugin publishes the Gradle plugin together with its
-plugin marker artifact, `io.spine.validation:io.spine.validation.gradle.plugin`.
+`java-gradle-plugin` publishes the Gradle plugin together with its plugin
+marker artifact, `io.spine.validation:io.spine.validation.gradle.plugin`.
 Gradle looks up this marker when a consumer writes `id("io.spine.validation")`
 in their `plugins { … }` block. The plugin is not published to the Gradle Plugin
 Portal, so consumers add Spine's repositories to `pluginManagement`, as shown in
