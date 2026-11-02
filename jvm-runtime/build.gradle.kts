@@ -75,3 +75,13 @@ dependencies {
 }
 
 forceSpineBase()
+
+// KSP reads the Java sources that the Protobuf tasks write to `generated/<source set>/java`.
+mapOf(
+    "kspKotlin" to "generateProto",
+    "kspTestKotlin" to "generateTestProto",
+).forEach { (ksp, generateProto) ->
+    tasks.named { it == ksp }.configureEach {
+        dependsOn(generateProto)
+    }
+}
