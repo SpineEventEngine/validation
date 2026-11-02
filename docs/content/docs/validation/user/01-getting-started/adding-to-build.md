@@ -90,7 +90,7 @@ Add the Validation plugin to the build.
 ```kotlin
 plugins {
     module
-    id("io.spine.validation") version "2.0.0-SNAPSHOT.469"
+    id("io.spine.validation") version "2.0.0-SNAPSHOT.470"
 }
 ```
 
@@ -120,7 +120,7 @@ adding Validation directly. CoreJvm brings in the Validation Gradle plugin for y
 ```kotlin
 plugins {
     module
-    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.098"
+    id("io.spine.core-jvm") version "2.0.0-SNAPSHOT.099"
 }
 ```
 

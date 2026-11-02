@@ -9,12 +9,12 @@ headline: Documentation
 This page describes how the Gradle multi-project build is wired, what each
 publishable module produces, and how the resulting artifacts reach downstream
 consumers. It is the contributor-side counterpart to “[Adding Validation to your
-build](../user/01-getting-started/adding-to-build/)” in the User's Guide:
+build](../user/01-getting-started/adding-to-build.md)” in the User's Guide:
 where that page shows how a *consumer* applies the plugin, this page shows how
 the plugin and its dependencies are *produced*.
 
 For day-to-day commands (`./gradlew build`, `./gradlew dokka`, …) see
-[`running-builds.md`][running-builds] in the `.agents/` directory; this page
+[`running-builds.md`][running-builds] in the shared agent guidelines; this page
 focuses on the structure rather than the commands.
 
 ## The multi-project layout
@@ -47,7 +47,7 @@ through Gradle's `extra` properties:
   end="validationVersion">
 </embed-code>
 ```kotlin
-extra.set("validationVersion", "2.0.0-SNAPSHOT.469")
+extra.set("validationVersion", "2.0.0-SNAPSHOT.470")
 ```
 
 The root build script applies this file under `allprojects { … }` and assigns
@@ -199,7 +199,6 @@ flowchart LR
     bundle["<b><code>:java-bundle</code></b><br/>shadow JAR"]
     runtime["<b><code>:jvm-runtime</code></b><br/>runtime library"]
     plugin["<b><code>:gradle-plugin</code></b><br/><code>io.spine.validation</code>"]
-    portal["Gradle Plugin Portal"]
     maven["Maven repositories<br/>(GitHub, GCAR)"]
     consumer["Consumer project"]
 
@@ -207,31 +206,31 @@ flowchart LR
     java --> bundle
     bundle --> maven
     runtime --> maven
-    plugin --> portal
+    plugin --> maven
     plugin -. records coords of .-> bundle
     plugin -. records coords of .-> runtime
-    portal --> consumer
     maven --> consumer
 ```
 
 For consumers, the important release contract is this: they apply the plugin
-from the Gradle Plugin Portal, and that plugin version selects the recorded
-bundle and runtime coordinates resolved from Maven repositories.
+from Spine's Maven repositories, and that plugin version selects the recorded
+bundle and runtime coordinates resolved from the same repositories.
 
 ## Publication destinations
 
 The publication targets are configured in the `spinePublishing { destinations }`
-block above. The library artifacts go to:
+block above. The library artifacts and the Gradle plugin go to:
 
 - The repository's [GitHub Packages registry][github-packages-validation]
   (`gitHub("validation")` resolves to `maven.pkg.github.com/SpineEventEngine/validation`).
 - Spine's Google Cloud Artifact Registry (`cloudArtifactRegistry`).
 
-The Gradle plugin has an additional destination — the [Gradle Plugin
-Portal][gradle-plugin-portal] — configured by the `java-gradle-plugin` and
-`com.gradle.plugin-publish` plugins applied via the publishing convention.
-That is the destination consumers reach when they write
-`id("io.spine.validation")` in their `plugins { … }` block.
+`java-gradle-plugin` publishes the Gradle plugin together with its plugin
+marker artifact, `io.spine.validation:io.spine.validation.gradle.plugin`.
+Gradle looks up this marker when a consumer writes `id("io.spine.validation")`
+in their `plugins { … }` block. The plugin is not published to the Gradle Plugin
+Portal, so consumers add Spine's repositories to `pluginManagement`, as shown in
+“[Adding Validation to your build](../user/01-getting-started/adding-to-build.md)”.
 
 Publication is automated by the [`publish.yml`][publish-workflow] GitHub Actions
 workflow, which runs on every push to `master` after PR checks have already
@@ -267,7 +266,7 @@ Two kinds of downstream consumer pick up Validation artifacts:
   `plugins { … }` block. They never reference `:java-bundle` or `:jvm-runtime`
   directly — the Gradle plugin adds both, and `version.gradle.kts` in *this*
   repository determines which versions they get. The consumer-side flow is
-  documented in “[Adding Validation to your build](../user/01-getting-started/adding-to-build/)”.
+  documented in “[Adding Validation to your build](../user/01-getting-started/adding-to-build.md)”.
 
 - **Tooling projects** that bundle the Validation Compiler into their own
   Spine Compiler distribution. The most prominent example is the
@@ -305,6 +304,5 @@ release across every downstream tool that resolves it by name.
 [publish-workflow]: https://github.com/SpineEventEngine/validation/blob/master/.github/workflows/publish.yml
 [shadow]: https://gradleup.com/shadow/
 [github-packages-validation]: https://github.com/SpineEventEngine/validation/packages
-[gradle-plugin-portal]: https://plugins.gradle.org/plugin/io.spine.validation
 [core-jvm-compiler]: https://github.com/SpineEventEngine/core-jvm-compiler
-[running-builds]: https://github.com/SpineEventEngine/validation/blob/master/.agents/running-builds.md
+[running-builds]: https://github.com/SpineEventEngine/agents/blob/master/guidelines/running-builds.md

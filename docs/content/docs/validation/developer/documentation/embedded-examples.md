@@ -194,7 +194,7 @@ binaries are kept up to date.
 [hello-validation]: https://github.com/spine-examples/hello-validation
 [spine-time]: https://github.com/SpineEventEngine/time
 [embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
-[embed-code-go-embedding]: https://github.com/SpineEventEngine/embed-code-go/blob/master/EMBEDDING.md
+[embed-code-go-embedding]: https://github.com/SpineEventEngine/embed-code-go/blob/master/showcase/embedding/README.md
 [runtime-library]: https://github.com/SpineEventEngine/validation/blob/master/docs/content/docs/validation/developer/runtime-library.md
 [build-and-release]: https://github.com/SpineEventEngine/validation/blob/master/docs/content/docs/validation/developer/build-and-release.md
 [check-code-embedding]: https://github.com/SpineEventEngine/validation/blob/master/.github/workflows/check-code-embedding.yml

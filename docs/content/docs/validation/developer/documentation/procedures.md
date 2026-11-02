@@ -199,8 +199,8 @@ For the underlying mechanics, see "[Embedded examples](embedded-examples.md)".
 3. Preview locally (see "Previewing the documentation locally") and
    click through every internal link.
 
-4. Follow the project documentation guidelines in
-   [`documentation-guidelines.md`][doc-guidelines] — formatting of file
+4. Follow the shared documentation guidelines in
+   [`documentation.md`][doc-guidelines] — formatting of file
    and directory names as code, reference-style external links, no
    widows/runts/orphans/rivers.
 
@@ -322,7 +322,7 @@ for any build, test, or release questions.
 [version-gradle]: https://github.com/SpineEventEngine/validation/blob/master/version.gradle.kts
 [core-jvm-compiler-dep]: https://github.com/SpineEventEngine/validation/blob/master/buildSrc/src/main/kotlin/io/spine/dependency/local/CoreJvmCompiler.kt
 [embed-code-yml]: https://github.com/SpineEventEngine/validation/blob/master/docs/_settings/embed-code.yml
-[doc-guidelines]: https://github.com/SpineEventEngine/validation/blob/master/.agents/documentation-guidelines.md
+[doc-guidelines]: https://github.com/SpineEventEngine/agents/blob/master/guidelines/documentation.md
 [theme-updates]: https://github.com/SpineEventEngine/site-commons#theme-updates
 [embed-code-go]: https://github.com/SpineEventEngine/embed-code-go
 [embed-code-releases]: https://github.com/SpineEventEngine/embed-code-go/releases
