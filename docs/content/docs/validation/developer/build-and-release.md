@@ -9,7 +9,7 @@ headline: Documentation
 This page describes how the Gradle multi-project build is wired, what each
 publishable module produces, and how the resulting artifacts reach downstream
 consumers. It is the contributor-side counterpart to “[Adding Validation to your
-build](../user/01-getting-started/adding-to-build/)” in the User's Guide:
+build](../user/01-getting-started/adding-to-build.md)” in the User's Guide:
 where that page shows how a *consumer* applies the plugin, this page shows how
 the plugin and its dependencies are *produced*.
 
@@ -230,7 +230,7 @@ marker artifact, `io.spine.validation:io.spine.validation.gradle.plugin`.
 Gradle looks up this marker when a consumer writes `id("io.spine.validation")`
 in their `plugins { … }` block. The plugin is not published to the Gradle Plugin
 Portal, so consumers add Spine's repositories to `pluginManagement`, as shown in
-“[Adding Validation to your build](../user/01-getting-started/adding-to-build/)”.
+“[Adding Validation to your build](../user/01-getting-started/adding-to-build.md)”.
 
 Publication is automated by the [`publish.yml`][publish-workflow] GitHub Actions
 workflow, which runs on every push to `master` after PR checks have already
@@ -266,7 +266,7 @@ Two kinds of downstream consumer pick up Validation artifacts:
   `plugins { … }` block. They never reference `:java-bundle` or `:jvm-runtime`
   directly — the Gradle plugin adds both, and `version.gradle.kts` in *this*
   repository determines which versions they get. The consumer-side flow is
-  documented in “[Adding Validation to your build](../user/01-getting-started/adding-to-build/)”.
+  documented in “[Adding Validation to your build](../user/01-getting-started/adding-to-build.md)”.
 
 - **Tooling projects** that bundle the Validation Compiler into their own
   Spine Compiler distribution. The most prominent example is the
