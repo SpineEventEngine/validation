@@ -80,6 +80,14 @@ gradlePlugin {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force(
+            ToolBase.jvmTools
+        )
+    }
+}
+
 dependencies {
     compileOnly(gradleKotlinDsl())
     // Needed at test runtime too: applying the plugin under `ProjectBuilder`
