@@ -31,7 +31,6 @@ import io.spine.dependency.lib.Guava
 import io.spine.dependency.lib.JavaPoet
 import io.spine.dependency.lib.JavaX
 import io.spine.dependency.lib.Protobuf
-import io.spine.dependency.lib.Roaster
 import io.spine.dependency.local.Base
 import io.spine.dependency.local.BaseTypes
 import io.spine.dependency.local.Change
@@ -57,7 +56,6 @@ dependencies {
             Protobuf.group,
             ErrorProne.group,
             Grpc.group /* Available via the Compiler backend. */,
-            Roaster.group /* Available via `tool-base`. */,
         ).forEach {
             exclude(group = it)
         }
